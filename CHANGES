@@ -1,8 +1,8 @@
 Version 0.1.0
- - make script executable
- - Added version numbering script
- - Added basic configuration support files for Apache and PHP
- - Loaded mockups
- - Initial project setup
- - Initial commit
+* 0f42e3a -  make script executable (2 minutes ago) <Vito Librarius>
+* 4dd5ceb -  Added version numbering script (2 minutes ago) <Vito Librarius>
+* ae4fca3 -  Added basic configuration support files for Apache and PHP (4 minutes ago) <Vito Librarius>
+* e06e4de -  (origin/master, origin/HEAD) Loaded mockups (15 hours ago) <Vito Librarius>
+* 2ae8e53 -  Initial project setup (25 hours ago) <Vito Librarius>
+* 8e7fa04 -  Initial commit (25 hours ago) <Vito Librarius>
 

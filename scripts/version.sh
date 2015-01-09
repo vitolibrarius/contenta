@@ -63,7 +63,7 @@ else
     if [ "$RESPONSE" = "y" ]; then
         echo "0.1.0" > VERSION
         echo "Version 0.1.0" > CHANGES
-        git log --pretty=format:" - %s" >> CHANGES
+        git log --graph --pretty=format:'%h - %d %s (%cr) <%an>' --abbrev-commit >> CHANGES
         echo "" >> CHANGES
         echo "" >> CHANGES
         git add VERSION CHANGES
