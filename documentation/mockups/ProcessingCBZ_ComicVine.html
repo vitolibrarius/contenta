@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Contenta - ComicVine</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="application.css" />
+
+	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+	<script type="text/javascript" src="application.js"></script>
+
+	<!-- Custom component stylesheets and scripts -->
+	<!--meta http-equiv="refresh" content="5" -->
+
+	<style type="text/css">
+
+
+	</style>
+
+</head>
+<body>
+
+<div id="container">
+	<header>
+		<div class='title-box'>
+			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
+			<nav>
+				<a href="BasicPage.html" id="menu-icon"></a>
+				<ul>
+					<li><a href="Admin.html">Admin</a></li>
+					<li><a href="Logs.html">Logs</a></li>
+					<li><a href="Series.html">Series</a></li>
+					<li><a href="#">Profile</a></li>
+				</ul>
+			</nav>
+			<div class="clear-both"></div>
+		</div>
+	</header>
+
+	<div id="content">
+	<h2>Processing</h2>
+
+	<section class="feedback success">
+		<p class="item">Group RedBlade has released dvdrip of 2013 movie “Canopy”. Enjoy!</pre></p>
+	</section>
+
+	<section class="feedback error">
+		<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
+		<p class="item">Uncaught exception: Traceback (most recent call last</p>
+	</section>
+
+	<section class="main">
+		<div><!-- container -->
+			<div style=""><!-- top -->
+				<div style="padding:15px; display:inline-block;"><!-- left -->
+					<img class="thumbnail cbz" src="img/large_02.jpeg" />
+					<div>
+						<a href="#" name="19de2fce5fe0db5638924b685d7cf3a6" id="format_check" class="btn">Check Format</a>
+						<a href="#" name="19de2fce5fe0db5638924b685d7cf3a6" id="delete" class="btn">Delete</a><br>
+						<a href="ProcessingCBZ_Manual1_series.html" name="19de2fce5fe0db5638924b685d7cf3a6" id="manual" class="btn">Manual Processing</a>
+						<a href="#openLogs" name="19de2fce5fe0db5638924b685d7cf3a6" id="logs" class="btn">Logs</a>
+
+						<div id="openLogs" class="modalDialog">
+							<div>
+								<a href="#close" title="Close" class="close">X</a>
+
+			<div class="log_container">
+			<div class="log_row warning">
+				<span class="log_date">Oct 30, 2014 14:30</span>
+				<span class="log_level">warning	</span>
+				<span class="log_msg">Failed to find issue</span>
+			</div>
+			<div class="log_row info">
+				<span class="log_date">Oct 30, 2014 14:30</span>
+				<span class="log_level">info	</span>
+				<span class="log_msg">queryForSeries - Search Failed</span>
+			</div>
+			<div class="log_row error">
+				<span class="log_date">Oct 30, 2014 14:30</span>
+				<span class="log_level">error	</span>
+				<span class="log_msg">Requesting: http://www.comicvine.com/api/search/?api_key=[key]&format=json&resources=volume&query=Steampunk+Battlestar+Galactica+1880&field_list=name,id,start_year,publisher,image,description,count_of_issues</span>
+			</div>
+			<div class="log_row error">
+				<span class="log_date">Oct 30, 2014 14:30</span>
+				<span class="log_level">error	</span>
+				<span class="log_msg">Requesting: http://www.comicvine.com/api/search/?api_key=[key]&format=json&resources=volume&query=Steampunk+Battlestar+Galactica+1880&field_list=name,id,start_year,publisher,image,description,count_of_issues</span>
+			</div>
+			</div>
+
+								<div style="clear:both;"></div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div style="display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
+					<form name="publication_edit" style="margin-left: auto;margin-right: auto; max-width: 600px;">
+						<fieldset>
+							<legend><h3 class="path">Justice League United - 02 - 2014.cbz</h3></legend>
+
+							<div class="half">
+								<label>File Size</label>
+								<input type="text" value="36.4 Mb" disabled/>
+							</div>
+
+							<div class="half omega">
+								<label>Pages</label>
+								<input type="text" value="15" disabled/>
+							</div>
+							<br />
+
+							<label for="series">Series Name</label>
+							<input type="text" id="series" placeholder="Justice League United"/>
+
+							<div class="third">
+								<label for="volume">Volume</label>
+								<input type="text" id="volume" placeholder=""/>
+							</div>
+
+							<div class="third">
+								<label for="issue">Issue</label>
+								<input type="text" id="issue" placeholder="01"/>
+							</div>
+
+							<div class="third omega">
+								<label for="year">Published Year</label>
+								<input type="text" id="year" placeholder="2014"/>
+							</div>
+							<br />
+
+							<label>&nbsp; </label>
+							<input type="button" onclick="ajaxFunction()" value="Search"/>
+
+						</fieldset>
+					</form>
+				</div>
+			</div>
+
+			<div style=""> <!-- bottom -->
+				<div class="mediaData">
+					<table>
+						<tbody>
+						<tr>
+							<th>Issue</th>
+							<th>Published</th>
+							<th>Name</th>
+							<th></th>
+						</tr>
+						<tr>
+							<td class="issue">0</td>
+							<td class="published">
+								<img src="img/issue_7006.png" class="thumbnail" /><br />
+								<nobr>2009-01-01</nobr>
+							</td>
+							<td class="name">
+									<h3>
+									<a target="comicvine" href="#"><img class="icon" src="../../public/img/comicvine.png" alt=""></a>
+									Justice League Canada</h3>
+									<h4>Part 1 of 5</h4>
+									<span>
+									<p style=""><em>Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada!</em></p><p style=""><em>In the aftermath of FOREVER EVIL, Adam Strange is caught up in an adventure across the far reaches of the cosmos that will unite an unexpected team of heroes including Supergirl, Hawkman, Green Arrow, Stargirl, Martian Manhunter and Animal Man – but if they’re on the team, who exactly is Canadian? Plus: Don’t miss the debut of a new Canadian hero who will have a huge effect on the group!</em></p></span>
+							</td>
+							<td><a class="btn" href="Processing.html">Accept</a></td>
+						</tr>
+						<tr>
+							<td class="issue">2</td>
+							<td class="published">
+								<img src="http://static.comicvine.com/uploads/scale_avatar/6/67663/2168583-02.jpg" class="icon"><br>
+								<nobr>2009-01-01</nobr>
+							</td>
+							<td class="name">
+									<h3>
+									<a target="comicvine" href="#"><img class="icon" src="../../public/img/comicvine.png" alt=""></a>
+										30 Days of Night: 30 Days 'Til Death</h3>
+									<h4>Hunger Pangs</h4>
+									<span>
+									<p style=""><em><span style="display: block; font-size: 12px; color: #999;"><p style=""><em>The Elder's death squad hits the shores of America bringing a wave of butchery that will have even the most bloodthirsty vampire's knees knocking. Meanwhile, in Buffalo New York, Rufus's plans to blend in hit a snag when his nightly feedings begin to attract too much attention. On top of that, he may have bitten off more than he can chew with the now cleaned-up Sarafina, whose big mouth is getting Rufus in one awkward situation after another. Going cold turkey on blood is a near impossible task for any vampire, but on top of that having to be nice to his neighbors? Something's got to break. Find out what in chapter two of David Lapham's 30 Days tale, 'Hunger Pangs.'</em></p></span>
+							</td>
+							<td><a class="btn" href="Processing.html">Accept</a></td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div><!-- container -->
+
+	</section>
+
+	<footer>
+	</footer>
+</div>
+</body>
+</html>
+

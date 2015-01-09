@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Contenta - Login</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="application.css" />
+	<link rel="stylesheet" href="Login.css" />
+
+	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+	<script type="text/javascript" src="application.js"></script>
+
+	<!-- Custom component stylesheets and scripts -->
+	<!--meta http-equiv="refresh" content="5" -->
+
+</head>
+<body>
+
+<div id="container">
+	<header>
+		<div class='title-box'>
+			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
+			<nav>
+				<a href="BasicPage.html" id="menu-icon"></a>
+				<ul>
+					<li><a href="Admin.html">Admin</a></li>
+					<li><a href="Logs.html">Logs</a></li>
+					<li><a href="Series.html">Series</a></li>
+					<li><a href="#">Profile</a></li>
+				</ul>
+			</nav>
+			<div class="clear-both"></div>
+		</div>
+	</header>
+
+	<div id="content">
+	<h2>Login</h2>
+
+	<section class="feedback success">
+		<p class="item">Group RedBlade has released dvdrip of 2013 movie “Canopy”. Enjoy!</pre></p>
+	</section>
+
+	<section class="feedback error">
+		<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
+		<p class="item">Uncaught exception: Traceback (most recent call last</p>
+	</section>
+
+	<section class="main">
+		<form name='login'  style="display:block; margin: 40px auto; width: 200px;">
+			<fieldset>
+			<legend>Login</legend>
+			<label for='username'>Username</label>
+			<input type='text' id='username' placeholder="JohnDoe"/>
+			<br />
+
+			<label for='password'>Password</label>
+			<input type='password' id='password' placeholder=""/>
+			<br />
+
+			<label>&nbsp; </label>
+			<input type='button' onclick='ajaxFunction()' value='Login'/>
+			</fieldset>
+		</form>
+
+<div id="marquee">
+	<div class="photobanner">
+		<img class="first" src="img/thumb_01.jpg" />
+		<img src="img/thumb_20.jpg" />
+		<img src="img/thumb_20.jpg" />
+		<img src="img/thumb_20.jpg" />
+		<img src="img/thumb_20.jpg" />
+		<img src="img/thumb_20.jpg" />
+		<img src="img/thumb_435.jpg" />
+		<img src="img/thumb_435.jpg" />
+		<img src="img/thumb_435.jpg" />
+		<img src="img/thumb_435.jpg" />
+		<img src="img/thumb_435.jpg" />
+		<img src="img/thumb_01.jpg" />
+		<img src="img/thumb_01.jpg" />
+		<img src="img/thumb_01.jpg" />
+		<img src="img/thumb_01.jpg" />
+		<img src="img/thumb_01.jpg" />
+	</div>
+</div>
+
+	</section>
+
+	</div>
+
+	<footer>
+	</footer>
+</div>
+</body>
+</html>
+

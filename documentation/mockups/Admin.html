@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Contenta - Admin</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="application.css" />
+
+	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+	<script type="text/javascript" src="application.js"></script>
+
+	<!-- Custom component stylesheets and scripts -->
+	<!--meta http-equiv="refresh" content="5" -->
+
+</head>
+<body>
+
+<div id="container">
+	<header>
+		<div class='title-box'>
+			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
+			<nav>
+				<a href="BasicPage.html" id="menu-icon"></a>
+				<ul>
+					<li><a href="Admin.html">Admin</a></li>
+					<li><a href="Logs.html">Logs</a></li>
+					<li><a href="Series.html">Series</a></li>
+					<li><a href="#">Profile</a></li>
+				</ul>
+			</nav>
+			<div class="clear-both"></div>
+		</div>
+	</header>
+
+	<div id="content">
+	<h2>Admin</h2>
+
+	<section class="feedback success">
+		<p class="item">Group RedBlade has released dvdrip of 2013 movie “Canopy”. Enjoy!</pre></p>
+	</section>
+
+	<section class="feedback error">
+		<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
+		<p class="item">Uncaught exception: Traceback (most recent call last</p>
+	</section>
+
+	<section class="main">
+
+		<div class="mediaData">
+			<table>
+				<tbody><tr>
+					<th><a href="#"><div class="titleBox">Users</div></a></th>
+					<td><p>User List and administration</p></td>
+				</tr>
+				<tr>
+					<th><a href="#"><div class="titleBox">New Users</div></a></th>
+					<td><p>Register new users</p></td>
+				</tr>
+				<tr>
+					<th><a href="Logs.html"><div class="titleBox">Logs</div></a></th>
+					<td><p>Log search and reporting</p></td>
+				</tr>
+				<tr>
+					<th><a href="Processing.html"><div class="titleBox">Processing</div></a></th>
+					<td><p>Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content.</p></td>
+				</tr>
+				<tr>
+					<th><a href="Upload.html"><div class="titleBox">Upload</div></a></th>
+					<td><p>Upload new content for indexing and display.</p></td>
+				</tr>
+				<tr>
+					<th><a href="#"><div class="titleBox">Tools</div></a></th>
+					<td><p>Manually run some processing tools.</p></td>
+				</tr>
+			</tbody></table>
+		</div>
+
+	</section>
+
+	</div>
+
+	<footer>
+	</footer>
+</div>
+</body>
+</html>
+

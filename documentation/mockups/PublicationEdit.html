@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Contenta - Edit Publication </title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="application.css" />
+	<link rel="stylesheet" href="select2.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/ui-lightness/jquery-ui.css" />
+
+	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+	<script type="text/javascript" src="select2.min.js"></script>
+	<script type="text/javascript" src="application.js"></script>
+
+	<!-- Custom component stylesheets and scripts -->
+	<!--meta http-equiv="refresh" content="5" -->
+	<script>
+		$(document).ready(function() {
+			$("#series").select2( { width: 'resolve' } );
+			$( "#publishdate" ).datepicker();
+		});
+	</script>
+
+</head>
+<body>
+
+<div id="container">
+	<header>
+		<div class="title-box">
+			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
+			<nav>
+				<a href="BasicPage.html" id="menu-icon"></a>
+				<ul>
+					<li><a href="Admin.html">Admin</a></li>
+					<li><a href="Logs.html">Logs</a></li>
+					<li><a href="Series.html">Series</a></li>
+					<li><a href="#">Profile</a></li>
+				</ul>
+			</nav>
+			<div class="clear-both"></div>
+		</div>
+	</header>
+
+	<div id="content">
+	<h2>Publication Edit</h2>
+
+	<section class="feedback success">
+		<p class="item">Group RedBlade has released dvdrip of 2013 movie “Canopy”. Enjoy!</pre></p>
+	</section>
+
+	<section class="feedback error">
+		<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
+		<p class="item">Uncaught exception: Traceback (most recent call last</p>
+	</section>
+
+	<section class="main">
+		<div style="float:left; margin:10px;">
+			<img class="thumbnail cbz" src="img/issue_7006.png" /><br>
+			<div class="actions">
+				<div class="flag"></div>
+				<div class="favorite"></div>
+			</div>
+		</div>
+
+		<form name="publication_edit" style="margin-left: auto;margin-right: auto; width: auto;">
+			<fieldset>
+			<legend>Publication Details</legend>
+
+			<div>
+				<label for="name">Name</label>
+				<input type="text" id="name" placeholder="The one where batman seems dark"/>
+			</div>
+
+			<div>
+				<label for="series">Series</label>
+				<select id="series">
+					<option value="1" selected>Batman</option>
+					<option value="2">Batman Begins</option>
+					<option value="3">Batman Unbound</option>
+					<option value="4">Batman 2.0</option>
+					<option value="5">Batgirl</option>
+				</select>
+			</div>
+
+			<div>
+				<label for="desc">Description</label>
+				<textarea type="text" id="desc" placeholder="2000">Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada! </textarea>
+			</div>
+
+			<div class="half">
+				<label for="issues">Publish Date</label>
+				<input type="text" id="publishdate" placeholder="11/04/2014"/>
+			</div>
+
+			<div class="half omega">
+				<label for="issue">Issue Number</label>
+				<input type="text" id="issue" placeholder="1"/>
+			</div>
+			<br />
+			<br />
+
+			<div>
+				<label for="path">Path</label>
+				<span id="path" class="path">
+					<span class="publisher_path">DC-Comics</span>
+					<span class="series_path">/publication/Justice-League-United/2014</span>
+					<span class="publication_path">/4-Justice-League-Canada-Conclusion</span>
+				</span>
+			</div>
+
+			<div class="half">
+					<input type="reset" onclick="ajaxFunction()" value="Reset"/>
+			</div>
+			<div class="half omega">
+					<input type="submit" onclick="ajaxFunction()" value="Save"/>
+			</div>
+
+			</fieldset>
+
+
+		</form>
+
+	</section>
+
+	</div>
+
+	<footer>
+	</footer>
+</div>
+</body>
+</html>
+

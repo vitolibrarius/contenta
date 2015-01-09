@@ -1,0 +1,79 @@
+.card {
+	display: inline-block;
+	position: relative;
+	width: 225px;
+	margin: 8px;
+	padding: 4px;
+	vertical-align: top;
+	background-color: #eee;
+	box-shadow: 2px 2px 4px #aaa;
+	border:1px solid #ccc;
+}
+
+.card:hover { 
+	background-color: #ddf;
+}
+
+.card .feature {
+	display: block;
+	position:relative;
+	margin-bottom: .2em;
+}
+
+.card .feature .feature_top_left {
+	display: inline-block;
+}
+
+.card .feature .feature_top_right  {
+	display: inline-block;
+}
+
+.card .feature .feature_top_right > div {
+	display: block;
+}
+
+.card .feature .feature_top_right_top {
+	display: inline;
+	position:absolute; 
+	top:0;
+	right: 0;
+}
+
+
+.card .feature .feature_top_right_bottom {
+	display: inline;
+	position:absolute; 
+	bottom:0;
+	right: 0;
+}
+
+
+.card .feature .details {
+	display: inline;
+	position:absolute; 
+	top:60px;
+	right: 0;
+}
+
+.card .feature .details span {
+	display: block;
+}
+
+.card .feature .details span.year {
+	font-size: 18px;
+}
+
+.card .caption {
+	display: block;
+	padding-top: 8px;
+	border-top: 2px groove #888;
+}
+
+.card .caption em {
+	font-weight: bold;
+	color:red;
+}
+
+.card .caption:empty {
+	border-top-style: hidden;
+}

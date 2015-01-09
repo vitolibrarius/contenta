@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Contenta</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="application.css" />
+
+	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="application.js"></script>
+
+	<!-- Custom component stylesheets and scripts -->
+	<!--meta http-equiv="refresh" content="5" -->
+<style>
+
+
+</style>
+
+</head>
+<body>
+
+<div id="container">
+	<header>
+		<div class='title-box'>
+			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
+			<nav>
+				<a href="BasicPage.html" id="menu-icon"></a>
+				<ul>
+					<li><a href="Admin.html">Admin</a></li>
+					<li><a href="Logs.html">Logs</a></li>
+					<li><a href="Series.html">Series</a></li>
+					<li><a href="#">Profile</a></li>
+				</ul>
+			</nav>
+			<div class="clear-both"></div>
+		</div>
+	</header>
+
+	<div id="content">
+
+	<section class="main">
+
+<style type="text/css">
+
+</style>
+
+	<form name="publication_edit" style="margin-left: auto;margin-right: auto; width: auto;">
+		<fieldset>
+			<legend><h3 class="path">Justice League United - 02 - 2014.cbz</h3></legend>
+
+			<div>
+				<label for="series">Series Name
+					<span>(only letters and numbers, 2 to 64 characters)</span>
+				</label>
+				<input type="text" id="series" placeholder="Justice League United"/>
+			</div>
+
+			<div class="half">
+				<label for="issue">Issue
+					<span>(only letters and numbers, 2 to 64 characters)</span>
+				</label>
+				<input type="text" id="issue" placeholder="01"/>
+			</div>
+
+			<div class="half omega">
+				<label for="year">Published Year</label>
+				<input type="text" id="year" placeholder="2014"/>
+			</div>
+			<br />
+
+			<div>
+				<label for="publisher">Publisher</label>
+				<select id="publisher">
+					<option value="1" data-foo="pub_3.png" selected>DC Comics</option>
+					<option value="2" data-foo="pub_7.jpeg">Marvel</option>
+					<option value="3" data-foo="pub_11.jpeg" >Image</option>
+					<option value="4" data-foo="pub_63.jpeg" >whatever</option>
+					<option value="5" data-foo="pub_63.jpeg" >None</option>
+				</select>
+			</div>
+			<br />
+
+			<label for='password'>Password</label>
+			<input type='password' id='password' placeholder=""/>
+			<br />
+
+			<div class="third">
+				<label for="issue">Issue</label>
+				<input type="text" id="issue" placeholder="01"/>
+			</div>
+			<div class="third">
+				<label for="issue">Issue</label>
+				<input type="text" id="issue" placeholder="01"/>
+			</div>
+
+			<div class="third omega">
+				<label for="year">Published Year</label>
+				<input type="text" id="year" placeholder="2014"/>
+			</div>
+			<br />
+
+	<div class="half">
+		<label class="checkbox" for="check1">Checkbox No. 1</label>
+		<input type="checkbox" name="check" value="check1">
+
+		<label class="checkbox" for="check2">Checkbox No. 2</label>
+		<input type="checkbox" name="check" value="check2">
+	</div>
+
+	<div class="half omega">
+		<label class="radio" for="male">Male</label>
+		<input id="male" type="radio" name="gender" value="male">
+
+		<label class="radio" for="female">Female</label>
+		<input id="female" type="radio" name="gender" value="female">
+	</div>
+
+	<br />
+	<div>
+			<label for="desc">Description</label>
+			<textarea type="text" id="desc" placeholder="2000">Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada! </textarea>
+	</div>
+			<div class="half">
+					<input type="reset" onclick="ajaxFunction()" value="Reset"/>
+			</div>
+
+			<div class="half omega">
+					<input type="submit" onclick="ajaxFunction()" value="Save"/>
+			</div>
+			</fieldset>
+		</form>
+
+	</section>
+
+	</div>
+
+	<footer>
+	</footer>
+</div>
+</body>
+</html>
+

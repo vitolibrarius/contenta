@@ -1,0 +1,391 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Contenta - Logs</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="application.css" />
+
+	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+	<script type="text/javascript" src="application.js"></script>
+
+	<!-- Custom component stylesheets and scripts -->
+	<!--meta http-equiv="refresh" content="5" -->
+
+</head>
+<body>
+
+<div id="container">
+	<header>
+		<div class='title-box'>
+			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
+			<nav>
+				<a href="BasicPage.html" id="menu-icon"></a>
+				<ul>
+					<li><a href="Admin.html">Admin</a></li>
+					<li><a href="Logs.html">Logs</a></li>
+					<li><a href="Series.html">Series</a></li>
+					<li><a href="#">Profile</a></li>
+				</ul>
+			</nav>
+			<div class="clear-both"></div>
+		</div>
+	</header>
+
+	<div id="content">
+		<h2>Logs</h2>
+
+	<section class="feedback success">
+		<p class="item">Group RedBlade has released dvdrip of 2013 movie “Canopy”. Enjoy!</pre></p>
+	</section>
+
+	<section class="feedback error">
+		<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
+		<p class="item">Uncaught exception: Traceback (most recent call last</p>
+	</section>
+
+	<section class="main">
+
+		<form name='logFilter' style="margin-left: auto;margin-right: auto; width: auto;">
+			<fieldset>
+				<legend>Filter Logs</legend>
+
+			<div id="show_hidden" class="show_hidden">
+				<label for='showfilter'>Filter</label>
+				<a href="javascript:void(0)" id="showfilter" class="showfilter btn"
+					onclick="$('#collapse').css('display','block'); $('#show_hidden').css('display','none');return false;">Show</a>
+			</div>
+
+			<div id="collapse" class="collapse">
+				<label for='level'>Level</label>
+				<select id='level'>
+					<option value="any" selected>Any</option>
+					<option value="info">Info</option>
+					<option value="warning">Warning</option>
+					<option value="error">Error</option>
+					<option value="fatal">Fatal</option>
+				</select>
+				<br />
+
+				<label for='trace'>Trace</label>
+				<input type='text' id='trace' placeholder="Trace Name"/>
+				<label for='trace_id'></label>
+				<input type='text' id='trace_id' placeholder="Unique Trace Id"/>
+				<br />
+
+				<label for='context'>Context</label>
+				<input type='text' id='context' placeholder="Context name"/>
+				<label for='context_id'></label>
+				<input type='text' id='context_id' placeholder="Unique Context id" />
+				<br />
+
+				<label for='message'>Message</label>
+				<input type='text' id='message' placeholder="log message content" />
+				<br />
+
+				<label>&nbsp; </label>
+				<input type='button' onclick='ajaxFunction()' value='Query Logs'/>
+			</div>
+			</fieldset>
+		</form>
+
+  <div class="mediaData">
+	<table class="Log">
+	  <tbody>
+		<tr>
+		  <th>Date</th>
+
+		  <th>Level</th>
+
+		  <th>Trace</th>
+
+		  <th>Context</th>
+
+		  <th>Message</th>
+		</tr>
+
+		<tr class="info">
+		  <td rowspan="2"><nobr>Oct 21, 2014</nobr><br />
+		  <nobr>20:03</nobr></td>
+
+		  <td rowspan="2">info</td>
+
+		  <td>login/login</td>
+
+		  <td>david</td>
+
+		  <td rowspan="2" class="message">User logged in</td>
+		</tr>
+
+		<tr class="info">
+		  <td></td>
+
+		  <td>1</td>
+		</tr>
+
+		<tr class="info">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">info</td>
+
+		  <td>upload/service</td>
+
+		  <td>CBRProcessor</td>
+
+		  <td rowspan="2" class="message">processingData end</td>
+		</tr>
+
+		<tr class="info">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>3ae66eb66b60913dbb55d1cf7f0d551b</td>
+		</tr>
+
+		<tr class="warning">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">warning</td>
+
+		  <td>upload/service</td>
+
+		  <td>CBRProcessor</td>
+
+		  <td rowspan="2" class="message">CBZ File loaded, (purging)</td>
+		</tr>
+
+		<tr class="warning">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>3ae66eb66b60913dbb55d1cf7f0d551b</td>
+		</tr>
+
+		<tr class="warning">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">warning</td>
+
+		  <td>upload/service</td>
+
+		  <td></td>
+
+		  <td rowspan="2" class="message">Initial (Edge of Spider-Verse 005 (2014)
+		  (Digital) (Darkness-Empire).cbz) Upload success</td>
+		</tr>
+
+		<tr class="warning">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td></td>
+		</tr>
+
+		<tr class="warning">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">warning</td>
+
+		  <td>upload/service</td>
+
+		  <td>ImportProcessor</td>
+
+		  <td rowspan="2" class="message">removing processing directory
+		  /volume2/contentaRepository/_processing_/d6c2e59de64ccc84d52d02b59a28aff2</td>
+		</tr>
+
+		<tr class="warning">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>d6c2e59de64ccc84d52d02b59a28aff2</td>
+		</tr>
+
+		<tr class="info">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">info</td>
+
+		  <td>upload/service</td>
+
+		  <td>ImportProcessor</td>
+
+		  <td rowspan="2" class="message">Importing Edge of Spider-Verse 005 (2014)
+		  (Digital) (Darkness-Empire).cbz</td>
+		</tr>
+
+		<tr class="info">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>d6c2e59de64ccc84d52d02b59a28aff2</td>
+		</tr>
+
+		<tr class="info">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">info</td>
+
+		  <td>upload/service</td>
+
+		  <td>ComicVineProcessor</td>
+
+		  <td rowspan="2" class="message">Requesting:
+		  http://www.comicvine.com/api/volume/4050-76863/?api_key=[key]&amp;format=json</td>
+		</tr>
+
+		<tr class="info">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>d6c2e59de64ccc84d52d02b59a28aff2</td>
+		</tr>
+
+		<tr class="info">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">info</td>
+
+		  <td>upload/service</td>
+
+		  <td>ComicVineProcessor</td>
+
+		  <td rowspan="2" class="message">Requesting:
+		  http://www.comicvine.com/api/issues/?api_key=[key]&amp;format=json&amp;filter=volume:76863,issue_number:5&amp;field_list=id,volume,issue_number,name,image,cover_date,site_detail_url,description</td>
+		</tr>
+
+		<tr class="info">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>d6c2e59de64ccc84d52d02b59a28aff2</td>
+		</tr>
+
+		<tr class="info">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">info</td>
+
+		  <td>upload/service</td>
+
+		  <td>ComicVineProcessor</td>
+
+		  <td rowspan="2" class="message">Requesting:
+		  http://www.comicvine.com/api/search/?api_key=[key]&amp;format=json&amp;resources=volume&amp;query=edge+AND+of+AND+spider+AND+verse&amp;field_list=name,id,start_year,publisher,image,description,count_of_issues</td>
+		</tr>
+
+		<tr class="info">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>d6c2e59de64ccc84d52d02b59a28aff2</td>
+		</tr>
+
+		<tr class="warning">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">warning</td>
+
+		  <td>upload/service</td>
+
+		  <td>CBZProcessor</td>
+
+		  <td rowspan="2" class="message">processingData start</td>
+		</tr>
+
+		<tr class="warning">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>d6c2e59de64ccc84d52d02b59a28aff2</td>
+		</tr>
+
+		<tr class="info">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">info</td>
+
+		  <td>upload/service</td>
+
+		  <td>CBRProcessor</td>
+
+		  <td rowspan="2" class="message">processingData start</td>
+		</tr>
+
+		<tr class="info">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>3ae66eb66b60913dbb55d1cf7f0d551b</td>
+		</tr>
+
+		<tr class="info">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">info</td>
+
+		  <td>upload/service</td>
+
+		  <td>CBRProcessor</td>
+
+		  <td rowspan="2" class="message">processingData end</td>
+		</tr>
+
+		<tr class="info">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>750bd945c8de89e1ea9b48d3235518ab</td>
+		</tr>
+
+		<tr class="warning">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">warning</td>
+
+		  <td>upload/service</td>
+
+		  <td>CBRProcessor</td>
+
+		  <td rowspan="2" class="message">CBZ File loaded, (purging)</td>
+		</tr>
+
+		<tr class="warning">
+		  <td>1f1c8eeedc9b1de8a211000007d80ad8</td>
+
+		  <td>750bd945c8de89e1ea9b48d3235518ab</td>
+		</tr>
+
+		<tr class="warning">
+		  <td rowspan="2"><nobr>Oct 20, 2014</nobr><br />
+		  <nobr>20:49</nobr></td>
+
+		  <td rowspan="2">warning</td>
+
+		  <td>upload/service</td>
+
+		  <td></td>
+
+		  <td rowspan="2" class="message">Initial (Loki Agent of Asgard 007 (2014)
+		  (Digital) (Zone-Empire).cbz) Upload success</td>
+		</tr>
+		</tbody>
+		</table>
+		</div>
+
+	</section>
+
+	</div>
+
+	<footer>
+	</footer>
+</div>
+</body>
+</html>
+

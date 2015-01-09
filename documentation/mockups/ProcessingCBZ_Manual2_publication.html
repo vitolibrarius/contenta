@@ -1,0 +1,409 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Contenta - Manual Import</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="application.css" />
+	<link rel="stylesheet" href="Series.css" />
+	<link rel="stylesheet" href="select2.css" />
+
+	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+	<script type="text/javascript" src="select2.min.js"></script>
+	<script type="text/javascript" src="application.js"></script>
+
+	<!-- Custom component stylesheets and scripts -->
+	<script>
+		function format(state) {
+			if (!state.id) return state.text; // optgroup
+			var originalOption = state.element;
+
+			return "<img class='icon' src='img/" + $(originalOption).data('foo') + "' /> " + state.text;
+		}
+		$(document).ready(function() { $("#publisher").select2({
+			formatResult: format,
+			formatSelection: format,
+			width: 'resolve',
+			escapeMarkup: function(m) { return m; }
+			})
+		});
+	</script>
+
+</head>
+<body>
+
+<div id="container">
+	<header>
+		<div class='title-box'>
+			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
+			<nav>
+				<a href="BasicPage.html" id="menu-icon"></a>
+				<ul>
+					<li><a href="Admin.html">Admin</a></li>
+					<li><a href="Logs.html">Logs</a></li>
+					<li><a href="Series.html">Series</a></li>
+					<li><a href="#">Profile</a></li>
+				</ul>
+			</nav>
+			<div class="clear-both"></div>
+		</div>
+	</header>
+
+	<div id="content">
+	<h2>Processing</h2>
+
+	<section class="feedback success">
+		<p class="item">Group RedBlade has released dvdrip of 2013 movie “Canopy”. Enjoy!</pre></p>
+	</section>
+
+	<section class="feedback error">
+		<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
+		<p class="item">Uncaught exception: Traceback (most recent call last</p>
+	</section>
+
+	<section class="main">
+		<div><!-- container -->
+			<div style=""><!-- top -->
+				<div style="padding:15px; display:inline-block;"><!-- left -->
+					<img class="thumbnail cbz" src="img/large_02.jpeg" />
+					<div>
+						<a href="#" name="19de2fce5fe0db5638924b685d7cf3a6" id="format_check" class="btn">Check Format</a>
+						<a href="#" name="19de2fce5fe0db5638924b685d7cf3a6" id="delete" class="btn">Delete</a><br>
+						<a href="ProcessingCBZ_ComicVine.html" name="19de2fce5fe0db5638924b685d7cf3a6" id="comicvine" class="btn">Search ComicVine</a>
+						<a href="#openLogs" name="19de2fce5fe0db5638924b685d7cf3a6" id="logs" class="btn">Logs</a>
+
+						<div id="openLogs" class="modalDialog">
+							<div>
+								<a href="#close" title="Close" class="close">X</a>
+
+			<div class="log_container">
+			<div class="log_row warning">
+				<span class="log_date">Oct 30, 2014 14:30</span>
+				<span class="log_level">warning	</span>
+				<span class="log_msg">Failed to find issue</span>
+			</div>
+			<div class="log_row info">
+				<span class="log_date">Oct 30, 2014 14:30</span>
+				<span class="log_level">info	</span>
+				<span class="log_msg">queryForSeries - Search Failed</span>
+			</div>
+			<div class="log_row error">
+				<span class="log_date">Oct 30, 2014 14:30</span>
+				<span class="log_level">error	</span>
+				<span class="log_msg">Requesting: http://www.comicvine.com/api/search/?api_key=[key]&format=json&resources=volume&query=Steampunk+Battlestar+Galactica+1880&field_list=name,id,start_year,publisher,image,description,count_of_issues</span>
+			</div>
+			<div class="log_row error">
+				<span class="log_date">Oct 30, 2014 14:30</span>
+				<span class="log_level">error	</span>
+				<span class="log_msg">Requesting: http://www.comicvine.com/api/search/?api_key=[key]&format=json&resources=volume&query=Steampunk+Battlestar+Galactica+1880&field_list=name,id,start_year,publisher,image,description,count_of_issues</span>
+			</div>
+			</div>
+
+								<div style="clear:both;"></div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div style="display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
+
+					<form name="publication_edit" style="margin-left: auto;margin-right: auto; max-width: 600px;">
+						<fieldset>
+
+					<figure class="card">
+						<div class="feature">
+							<div class="feature_top">
+								<div class="feature_top_left">
+									<img class="thumbnail cbz" src="img/thumb_20.jpg" />
+								</div>
+								<div class="feature_top_right">
+									<div class="feature_top_right_top">
+										<img class="icon publisher" src="img/pub_63.jpeg" />
+									</div>
+									<div class="feature_top_right_middle">
+										<span class="details">
+											<span class="year">2001</span>
+											<span class="issues">3 / 6 Issues</span>
+										</span>
+									</div>
+									<div class="feature_top_right_bottom">
+										<div class="actions">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="clear"/>
+						<figcaption class="caption"><em>caption title</em>
+						Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly military drone on the target slowly closes. With time running out, the soldiers begin to question what the real motives are behind the ordered lethal attack</figcaption>
+					</figure>
+
+							<legend><h3 class="path">Justice League United - 02 - 2014.cbz</h3></legend>
+
+							<div class="half">
+								<label>File Size</label>
+								<input type="text" value="36.4 Mb" disabled/>
+							</div>
+
+							<div class="half omega">
+								<label>Pages</label>
+								<input type="text" value="15" disabled/>
+							</div>
+							<br />
+						</fieldset>
+					</form>
+				</div>
+			</div>
+
+			<div style=""> <!-- bottom -->
+
+			<ul class="tabs">
+				<li><a href="#tab1">Existing Publications</a></li>
+				<li><a href="#tab2">Create New Publication</a></li>
+			</ul>
+
+			<div class="tab-content" id="tab1">
+
+				<div class="mediaData">
+					<table>
+						<tbody><tr>
+							<th>Issue</th>
+							<th>Published</th>
+							<th>Name</th>
+							<th></th>
+							<th></th>
+						</tr>
+						<tr>
+							<td class="issue">
+								0 <br>
+								<div class="actions">
+								</div>
+							</td>
+							<td class="published">
+								<img src="img/issue_7006.png" class="thumbnail"><br>
+								<nobr>Jun 30, 2014</nobr>
+							</td>
+							<td class="name"><h4>Justice League Canada, Part 1 of 5</h4><span><p style=""><em>Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada!</em></p><p style=""><em>In the aftermath of FOREVER EVIL, Adam Strange is caught up in an adventure across the far reaches of the cosmos that will unite an unexpected team of heroes including Supergirl, Hawkman, Green Arrow, Stargirl, Martian Manhunter and Animal Man – but if they’re on the team, who exactly is Canadian? Plus: Don’t miss the debut of a new Canadian hero who will have a huge effect on the group!</em></p></span>				</td>
+							<td>
+								<div class="media epub">
+									<div class="media_detail">
+										<div class="format">epub</div>
+										<div class="size">35 Mb</div>
+									</div>
+									<div class="actions">
+										<div class="download"><a href="#"><img src="img/download.png" />&nbsp;</a></div>
+										<div class="slideshow"><a href="#"><img src="img/slideshow.png" />&nbsp;</a></div>
+									</div>
+								</div>
+							</td>
+							<td>
+								<a class="btn" href="Processing.html">Accept</a>
+							</td>
+
+
+
+						</tr>
+									<tr>
+							<td class="issue">1<br>
+								<div class="actions">
+								</div></td>
+							<td class="published">
+								<img src="img/issue_7006.png" class="thumbnail"><br>
+								<nobr>Jul 31, 2014</nobr>				</td>
+							<td class="name"><h4>Justice League Canada, Part 2 of 5</h4><span><p style=""><em>In Canada, the team of Animal Man, Green Arrow, Martian Manhunter and Stargirl is joined by Adam Strange to fight an unstoppable forced called the Unimaginable.</em></p></span>				</td>
+							<td>
+								<div class="media cbz">
+									<div class="media_detail">
+										<div class="format">cbz</div>
+										<div class="size">350.5 Mb</div>
+									</div>
+									<div class="actions">
+										<div class="download"><a href="#"><img src="img/download.png" /></a></div>
+										<div class="slideshow"><a href="#"><img src="img/slideshow.png" /></a></div>
+									</div>
+								</div>
+							</td>
+							<td>
+								<a class="btn" href="Processing.html">Accept</a>
+							</td>
+
+
+
+						</tr>
+									<tr>
+							<td class="issue">2<br>
+								<div class="actions">
+								</div></td>
+							<td class="published">
+								<img src="img/issue_7006.png" class="thumbnail"><br>
+								<nobr>Aug 31, 2014</nobr>				</td>
+							<td class="name"><h4>Justice League Canada, Part 3 of 5</h4><span><p style=""><em>It’s all out battle issue as Hawkman has a showdown with Lobo as the League is teleported to Rann to face the shape-changing alien called Byth! This looks like a job for Supergirl!</em></p></span>				</td>
+							<td>
+								<div class="media epub">
+									<div class="media_detail">
+										<div class="format">epub</div>
+										<div class="size">35 Mb</div>
+									</div>
+									<div class="actions">
+										<div class="download"><a href="#"><img src="img/download.png" /></a></div>
+										<div class="slideshow"><a href="#"><img src="img/slideshow.png" /></a></div>
+									</div>
+								</div>
+							</td>
+							<td>
+								<a class="btn" href="Processing.html">Accept</a>
+							</td>
+
+
+
+						</tr>
+									<tr>
+							<td class="issue">3<br>
+								<div class="actions">
+								</div></td>
+							<td class="published">
+								<img src="img/issue_7006.png" class="thumbnail"><br>
+								<nobr>Sep 30, 2014</nobr>				</td>
+							<td class="name"><h4>Justice League Canada, Part 4 of 5</h4><span><p style=""><em>So many questions hang over this nascent team. Will Hawkman sacrifice himself to save Rann, one of Thanagar’s enemies? Will Alanna and Adam ever be reunited? Can Miiyahbin face her fears and become the hero she’s meant to be? And the answer to all of this spells death for one of them.</em></p></span>				</td>
+							<td>
+								<div class="media epub">
+									<div class="media_detail">
+										<div class="format">epub</div>
+										<div class="size">35 Mb</div>
+									</div>
+									<div class="actions">
+										<div class="download"><a href="#"><img src="img/download.png" /></a></div>
+										<div class="slideshow"><a href="#"><img src="img/slideshow.png" /></a></div>
+									</div>
+								</div>
+							</td>
+							<td>
+								<a class="btn" href="Processing.html">Accept</a>
+							</td>
+
+
+
+						</tr>
+									<tr>
+							<td class="issue">4<br>
+								<div class="actions">
+								</div></td>
+							<td class="published">
+								<img src="img/issue_7006.png" class="thumbnail"><br>
+								<nobr>Oct 31, 2014</nobr>				</td>
+							<td class="name"><h4>Justice League Canada, Conclusion</h4><span><p style=""><em>Justice League Canada’s first adventure comes to an explosive end!</em></p></span>				</td>
+							<td>
+								<div class="media epub">
+									<div class="media_detail">
+										<div class="format">epub</div>
+										<div class="size">35 Mb</div>
+									</div>
+									<div class="actions">
+										<div class="download"><a href="#"><img src="img/download.png" /></a></div>
+										<div class="slideshow"><a href="#"><img src="img/slideshow.png" /></a></div>
+									</div>
+								</div>
+								<div class="media cbz">
+									<div class="media_detail">
+										<div class="format">cbz</div>
+										<div class="size">35 Mb</div>
+									</div>
+									<div class="actions">
+										<div class="download"><a href="#"><img src="img/download.png" /></a></div>
+										<div class="slideshow"><a href="#"><img src="img/slideshow.png" /></a></div>
+									</div>
+								</div>
+							</td>
+							<td>
+								<a class="btn" href="Processing.html">Accept</a>
+							</td>
+
+
+
+						</tr>
+						<tr class="no-media">
+							<td class="issue">400<br>
+								<div class="actions">
+								</div></td>
+							<td class="published">
+								<img src="img/issue_7006.png" class="thumbnail"><br>
+								<nobr>Oct 31, 2014</nobr>				</td>
+							<td class="name">
+								<h4>Justice League Canada, Conclusion</h4><span><p style=""><em>Justice League Canada’s first adventure comes to an explosive end!</em></p></span>
+							</td>
+							<td>
+							</td>
+							<td>
+								<a class="btn" href="Processing.html">Accept</a>
+							</td>
+
+
+						</tr>
+					</tbody>
+				</table>
+
+				</div>
+			</div> <!-- tab 1 -->
+
+			<div class="tab-content" id="tab2">
+
+				<form name="publication_edit" style="margin-left: auto;margin-right: auto; width: auto;">
+					<fieldset>
+					<legend>Publication Details</legend>
+
+					<div>
+						<label for="series">Series</label>
+						<input type="text" id="series" value="Batman" disabled/>
+					</div>
+
+					<div>
+						<label for="name">Name</label>
+						<input type="text" id="name" placeholder="The one where batman seems dark"/>
+					</div>
+
+					<div>
+						<label for="desc">Description</label>
+						<textarea type="text" id="desc" placeholder="2000">Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada! </textarea>
+					</div>
+
+					<div class="half">
+						<label for="issues">Publish Date</label>
+						<input type="text" id="publishdate" placeholder="11/04/2014"/>
+					</div>
+
+					<div class="half omega">
+						<label for="issue">Issue Number</label>
+						<input type="text" id="issue" placeholder="1"/>
+					</div>
+					<br />
+					<br />
+
+					<div class="half">
+							<input type="reset" onclick="ajaxFunction()" value="Reset"/>
+					</div>
+					<div class="half omega">
+							<input type="submit" onclick="ajaxFunction()" value="Save"/>
+					</div>
+
+					</fieldset>
+
+
+				</form>
+			</div> <!-- tab 2 -->
+
+			</div><!-- bottom -->
+		</div><!-- container -->
+
+	</section>
+
+	<footer>
+	</footer>
+</div>
+</body>
+</html>
+

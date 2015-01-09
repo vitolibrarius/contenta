@@ -119,7 +119,7 @@ header nav a:hover {
 	display: hidden;
 	width: 30px;
 	height: 30px;
-	background: #4C8FEC url(../public/img/menu-icon.png) center;
+	background: #4C8FEC url(../../public/img/menu-icon.png) center;
 }
 
 a#menu-icon {
