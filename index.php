@@ -1,14 +1,32 @@
 <?php
 
-require 'application/config/config.php';
+	$system_path = dirname(__FILE__);
+	if (realpath($system_path) !== FALSE)
+	{
+		$system_path = realpath($system_path).'/';
+	}
 
-is_dir(DATA_PATH) || mkdir(DATA_PATH, 0777, true) || die('Failed to create database directory ' . DATA_PATH); 
-is_dir(MEDIA_PATH) || mkdir(MEDIA_PATH, 0777, true) || die('Failed to create media directory ' . MEDIA_PATH); 
+	define('SYSTEM_PATH', str_replace("\\", "/", $system_path));
 
-require 'application/config/autoload.php';
-require 'application/config/common.php';
-require 'application/config/errors.php';
+	require SYSTEM_PATH .'application/config/bootstrap.php';
+	require SYSTEM_PATH .'application/config/autoload.php';
+	require SYSTEM_PATH .'application/config/common.php';
+	require SYSTEM_PATH .'application/config/errors.php';
 
-$app = new Application();
+
+	try {
+		$config = Config::instance();
+		$app = new Application();
+	}
+	catch (Exception $exception) {
+		echo "<!doctype html><html><head></head><body>";
+		$ex_class = get_class($exception);
+
+		echo "<h1>Error</h1>";
+		echo "<div class='error'><p>" . $exception->getMessage() . "</p>";
+		echo "<pre>" . $exception . "</pre></div>";
+		echo "</body></html>";
+	}
+
 
 ?>

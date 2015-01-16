@@ -1,5 +1,8 @@
 <?php
 
+// guard to ensure basic configuration is loaded
+defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
+
 	function exceptionHandler($exception)
 	{
 		try {
@@ -49,7 +52,7 @@
 
 	set_exception_handler('exceptionHandler');
 
-	function shutdown($msg) 
+	function shutdown($msg)
 	{
 		try {
 			Logger::instance()->fatal($msg);
@@ -59,8 +62,8 @@
 		}
 		die($msg);
 	}
-	
-	function shutdownHandler() 
+
+	function shutdownHandler()
 	{
 		try {
 			# Getting last error
@@ -79,7 +82,7 @@
 			print get_class($e)." thrown within the shutdown handler. Message: ".$e->getMessage()." on line ".$e->getLine();
 		}
 	}
-	 
+
 	# Registering shutdown function
 	register_shutdown_function('shutdownHandler');
 
@@ -101,14 +104,14 @@
 		}
 		return $json_errors[$code];
 	}
-	
-	function zipFileErrMsg($errno) 
+
+	function zipFileErrMsg($errno)
 	{
 		// using constant name as a string to make this function PHP4 compatible
 		$zipFileFunctionsErrors = array(
 			'ZIPARCHIVE::ER_MULTIDISK' => 'Multi-disk zip archives not supported.',
 			'ZIPARCHIVE::ER_RENAME' => 'Renaming temporary file failed.',
-			'ZIPARCHIVE::ER_CLOSE' => 'Closing zip archive failed', 
+			'ZIPARCHIVE::ER_CLOSE' => 'Closing zip archive failed',
 			'ZIPARCHIVE::ER_SEEK' => 'Seek error',
 			'ZIPARCHIVE::ER_READ' => 'Read error',
 			'ZIPARCHIVE::ER_WRITE' => 'Write error',
@@ -116,17 +119,17 @@
 			'ZIPARCHIVE::ER_ZIPCLOSED' => 'Containing zip archive was closed',
 			'ZIPARCHIVE::ER_NOENT' => 'No such file.',
 			'ZIPARCHIVE::ER_EXISTS' => 'File already exists',
-			'ZIPARCHIVE::ER_OPEN' => 'Can\'t open file', 
-			'ZIPARCHIVE::ER_TMPOPEN' => 'Failure to create temporary file.', 
+			'ZIPARCHIVE::ER_OPEN' => 'Can\'t open file',
+			'ZIPARCHIVE::ER_TMPOPEN' => 'Failure to create temporary file.',
 			'ZIPARCHIVE::ER_ZLIB' => 'Zlib error',
-			'ZIPARCHIVE::ER_MEMORY' => 'Memory allocation failure', 
+			'ZIPARCHIVE::ER_MEMORY' => 'Memory allocation failure',
 			'ZIPARCHIVE::ER_CHANGED' => 'Entry has been changed',
-			'ZIPARCHIVE::ER_COMPNOTSUPP' => 'Compression method not supported.', 
+			'ZIPARCHIVE::ER_COMPNOTSUPP' => 'Compression method not supported.',
 			'ZIPARCHIVE::ER_EOF' => 'Premature EOF',
 			'ZIPARCHIVE::ER_INVAL' => 'Invalid argument',
 			'ZIPARCHIVE::ER_NOZIP' => 'Not a zip archive',
 			'ZIPARCHIVE::ER_INTERNAL' => 'Internal error',
-			'ZIPARCHIVE::ER_INCONS' => 'Zip archive inconsistent', 
+			'ZIPARCHIVE::ER_INCONS' => 'Zip archive inconsistent',
 			'ZIPARCHIVE::ER_REMOVE' => 'Can\'t remove file',
 			'ZIPARCHIVE::ER_DELETED' => 'Entry has been deleted',
 		);

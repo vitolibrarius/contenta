@@ -1,5 +1,8 @@
 <?php
 
+// guard to ensure basic configuration is loaded
+defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
+
 /**
  * the auto-loading function, which will be called every time a file "is missing"
  * NOTE: don't get confused, this is not "__autoload", the now deprecated function
@@ -12,7 +15,13 @@ function autoload($class) {
 	// if file does not exist in LIBS_PATH folder [set it in config/config.php]
 	if (file_exists(LIBS_PATH . $namesp_class . ".php")) {
 		require LIBS_PATH . $namesp_class . ".php";
-	} 
+	}
+	else if (file_exists(MODELS_PATH . $namesp_class . ".php")) {
+		require MODELS_PATH . $namesp_class . ".php";
+	}
+	else if (file_exists(PROCESSOR_PATH . $namesp_class . ".php")) {
+		require PROCESSOR_PATH . $namesp_class . ".php";
+	}
 }
 
 // spl_autoload_register defines the function that is called every time a file is missing. as we created this
@@ -49,16 +58,5 @@ function loadProcessor($name, $file)
 
 		require_once $path;
 		return new $match($file);
-	}
-}
-
-function loadConnector($name, $endpoint)
-{
-	$path = CONNECTOR_PATH . strtolower($name) . '_connector.php';
-
-	if (file_exists($path)) {
-		require_once $path;
-		$connectorName = ucwords($name) . 'EndpointConnector';
-		return new $connectorName( $endpoint );
 	}
 }

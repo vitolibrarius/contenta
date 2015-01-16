@@ -1,5 +1,11 @@
 <?php
 
+// guard to ensure basic configuration is loaded
+defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
+
+require_once SYSTEM_PATH . 'application/config/common_arrays.php';
+require_once SYSTEM_PATH . 'application/config/common_filesystem.php';
+
 function callerClassAndMethod($currentFunction = '')
 {
 	$trace = debug_backtrace();
@@ -14,21 +20,6 @@ function callerClassAndMethod($currentFunction = '')
 	return $caller;
 }
 
-function findPathForTool($tool)
-{
-	if (exec('which /usr/bin/' . $tool) != null) {
-		return '/usr/bin/' . $tool;
-	}
-	else if (exec('which /usr/local/bin/' . $tool)) {
-		return '/usr/local/bin/' . $tool;
-	}
-	else if (exec('which /usr/syno/bin/' . $tool)) {
-		return '/usr/syno/bin/' . $tool;
-	}
-
-	return false;
-}
-
 function startsWith($haystack, $needle)
 {
 	return $needle === "" || strpos($haystack, $needle) === 0;
@@ -36,73 +27,6 @@ function startsWith($haystack, $needle)
 function endsWith($haystack, $needle)
 {
 	return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
-}
-
-function appendPath($path, $extension)
-{
-	if ( startsWith( $extension, DIRECTORY_SEPARATOR ) )
-	{
-		$extension = substr($extension, 1);
-	}
-
-	if ( endsWith($path, DIRECTORY_SEPARATOR) )
-	{
-		return $path .  $extension;
-	}
-
-	return $path . DIRECTORY_SEPARATOR . $extension;
-}
-
-function makePath($elements, $sanitize = false) {
-	$path = "";
-	if ( is_array($elements) ) {
-		switch (count($elements)) {
-			case 0:
-				break;
-
-			case 1:
-				$path = (string)$elements[0];
-				break;
-
-			default:
-				foreach ($elements as $key => $value) {
-					if ($sanitize == true) {
-						$value = sanitize_filename((string)$value, 100, false, false);
-					}
-					$path = appendPath( $path, (string)$value );
-				}
-				break;
-		}
-	}
-	else {
-		if ($sanitize == true) {
-			$path = sanitize_filename((string)$elements, 100, false, false);
-		}
-		else {
-			$path = (string)$elements;
-		}
-	}
-	return $path;
-}
-
-function makeUniqueDirectory( $root, $elements )
-{
-	if ( is_dir($root) ) {
-		$path = makePath($elements, true);
-		$index = 0;
-		$working = $path;
-		$full = appendPath($root, $working);
-		while ( file_exists($full) == true)
-		{
-			$index = $index + 1;
-			$working = $path . sprintf( ' - 0x%02x', $index);
-			$full = appendPath($root, $working);
-		}
-		return (mkdir($full , 0755 , true) ? $working : null);
-	}
-
-	Logger::logError("Unable to find root path '" . (string)$root . "'", "Common", "makeUniqueDirectory");
-	return null;
 }
 
 function zipFileList($path)
@@ -145,125 +69,6 @@ function classNames($file)
 		}
 	}
 	return $classNames;
-}
-
-function file_ext_strip($filename)
-{
-	return preg_replace('/\.[^.]*$/', '', $filename);
-}
-
-function file_ext($filename)
-{
-	return strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-}
-
-function find_entry_with_name($dir, $name)
-{
-	if ( is_dir($dir) )
-	{
-		foreach (scandir($dir) as $file)
-		{
-			if ($file == '.' || $file == '..') continue;
-			if ($file === $name)
-			{
-				return $dir . DIRECTORY_SEPARATOR . $file;
-			}
-			else if (is_dir($dir . DIRECTORY_SEPARATOR . $file) === true)
-			{
-				$success = find_entry_with_name($dir . DIRECTORY_SEPARATOR . $file, $name);
-				if ( isset($success) === true )
-				{
-					return $success;
-				}
-			}
-		}
-	}
-
-	return null;
-}
-
-function find_entry_with_extension($dir, $ext)
-{
-	if ( is_dir($dir) )
-	{
-		foreach (scandir($dir) as $file)
-		{
-			if ($file == '.' || $file == '..') continue;
-			if (file_ext($file) === $ext)
-			{
-				return $dir . DIRECTORY_SEPARATOR . $file;
-			}
-			else if (is_dir($dir . DIRECTORY_SEPARATOR . $file) === true)
-			{
-				$success = find_entry_with_extension($dir . DIRECTORY_SEPARATOR . $file, $ext);
-				if ( isset($success) === true )
-				{
-					return $success;
-				}
-			}
-		}
-	}
-
-	return null;
-}
-
-function recursive_copy($src, $dst, $purgeDestination = false)
-{
-	if (file_exists($dst) ) {
-		if ( $purgeDestination == false || destroy_dir($dst) == false ) {
-			return false;
-		}
-	}
-
-	if (is_dir($src)) {
-		is_dir($dst) || mkdir($dst, 0755, true) || die('Failed to create destination directory ' . $dst);
-
-		foreach (scandir($src) as $file) {
-			if ($file == '.' || $file == '..') continue;
-			if ( is_dir($file) ) {
-				if ( recusive_copy( appendPath($src, $file), appendPath($dst, basename($file)))  == false ) {
-					return false;
-				}
-			}
-			else {
-				if ( @copy( appendPath($src, $file), appendPath($dst, $file)) == false ) {
-					return false;
-				}
-			}
-		}
-	}
-	else if (file_exists($src)) {
-		if ( @copy($src, $dst) == false ) {
-			return false;
-		}
-	}
-	return true;
-}
-
-function destroy_dir($dir)
-{
-	if (file_exists($dir)) {
-		if (!is_dir($dir) || is_link($dir)) return unlink($dir);
-		foreach (scandir($dir) as $file)
-		{
-			if ($file == '.' || $file == '..') continue;
-			if (!destroy_dir($dir . DIRECTORY_SEPARATOR . $file))
-			{
-				chmod($dir . DIRECTORY_SEPARATOR . $file, 0777);
-				if (!destroy_dir($dir . DIRECTORY_SEPARATOR . $file)) return false;
-			};
-		}
-		return rmdir($dir);
-	}
-	return true;
-}
-
-function randomPath()
-{
-	$hi = sprintf( '%04x', mt_rand(0, 65535));
-	$mid = sprintf( '%04x',	bindec(substr_replace(sprintf('%016b', mt_rand(0, 65535)), '0100', 11, 4)));
-	$low = sprintf( '%08x', mt_rand());
-	return $hi . DIRECTORY_SEPARATOR . $mid . DIRECTORY_SEPARATOR . $low;
 }
 
 function uuid()
