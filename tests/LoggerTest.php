@@ -14,16 +14,13 @@
 	require SYSTEM_PATH .'application/libs/Config.php';
 
 	try {
-
 		$config = Config::instance();
 
-		echo "Internet/appname = " . $config->get("Internet/appname") . PHP_EOL;
+		// override the logger type
+		$config->setValue("Logger/type", "Print") || die("Failed to change the configured logger");
 
-		echo "Repository/path = " . Config::Get("Repository/path") . PHP_EOL;
-		echo "Repository/dir_permission = " . $config->get("Repository/dir_permission", '0755') . PHP_EOL;
-		echo "Repository/file_permission = " . $config->get("Repository/file_permission", '0644') . PHP_EOL;
+		Logger::logWarning( "Test log", basename(__FILE__), "cool" );
 
-		echo "Repository/NoSuchValue = " . $config->get("Repository/NoSuchValue", 'Default') . PHP_EOL;
 	}
 	catch (Exception $e) {
 		echo "Error :" . $e . PHP_EOL;

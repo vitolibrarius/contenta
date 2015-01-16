@@ -28,14 +28,44 @@ class Config
 		return self::$instance;
 	}
 
+	/**
+	 * gets/returns the value of a specific key of the config
+	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
+	 * @return mixed
+	 */
+	public static function Get($key, $default = '')
+	{
+		return self::instance()->getValue($key, $default);
+	}
+
+	/**
+	 * gets/returns the absolute path value of a specific key of the config.
+	 * @param mixed $key Usually a string, key may be separated using '/', so 'Repository/path', the key must end with "path"
+	 * @return string path or raise exception
+	 */
+	public static function GetPath($key, $default)
+	{
+		return self::instance()->absolutePathValue($key, $default);
+	}
+
+	/**
+	 * gets/returns the value of a specific key of the config
+	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
+	 * @return mixed
+	 */
+	public function GetInteger($key, $default = 0)
+	{
+		return self::instance()->getIntegerValue($key, $default);
+	}
+
 	final public static function dirMask()
 	{
-		return self::$instance->getInteger("Repository/dir_permission", 0755);
+		return self::instance()->getIntegerValue("Repository/dir_permission", 0755);
 	}
 
 	final public static function fileMask()
 	{
-		return self::$instance->getInteger("Repository/file_permission", 0644);
+		return self::instance()->getIntegerValue("Repository/file_permission", 0644);
 	}
 
 	private function initialize()
@@ -66,7 +96,6 @@ class Config
 		$cache_path = $this->cacheDirectory();
 		$processing_path = $this->processingDirectory();
 
-
 		return true;
 	}
 
@@ -75,10 +104,20 @@ class Config
 	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
 	 * @return mixed
 	 */
-	public function get($key, $default = '')
+	public function getValue($key, $default = '')
 	{
 		$value = valueForKeypath($key, $this->configuration);
 		return (is_null($value) ? $default : $value);
+	}
+
+	public function setValue($key, $value)
+	{
+		$newConfiguration = setValueForKeypath($key, $value, $this->configuration);
+		if ( is_array($newConfiguration) ) {
+			$this->configuration = $newConfiguration;
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -86,15 +125,43 @@ class Config
 	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
 	 * @return mixed
 	 */
-	public function getInteger($key, $default = 0)
+	public function getIntegerValue($key, $default = 0)
 	{
-		$value = $this->get($key, $default);
+		$value = $this->getValue($key, $default);
 		return (is_null($value) ? $default : intval($value));
+	}
+
+	/**
+	 * gets/returns the absolute path value of a specific key of the config.
+	 * @param mixed $key Usually a string, key may be separated using '/', so 'Repository/path', the key must end with "path"
+	 * @return string path or raise exception
+	 */
+	public function absolutePathValue($key, $default)
+	{
+		if ( isset($key) && strlen($key) > 0) {
+			if ( "Repository" === $key || "Repository/path" == $key ) {
+				return $this->repositoryDirectory();
+			}
+			else {
+				if ( endsWith($key, "path") == false ) {
+					$key = appendPath( $key, "path" );
+				}
+
+				$path = $this->getValue( $key, $default );
+				if ($path[0] != '/') {
+					// cache is relative to the repo
+					$repo_base_path = $this->repositoryDirectory();
+					$path = appendPath( $repo_base_path, $path );
+				}
+				return $path;
+			}
+		}
+		return null;
 	}
 
 	public function repositoryDirectory()
 	{
-		$repo_base_path = $this->get("Repository/path");
+		$repo_base_path = $this->getValue("Repository/path");
 		makeRequiredDirectory($repo_base_path, 'Repository base');
 		return $repo_base_path;
 	}
@@ -109,26 +176,14 @@ class Config
 
 	public function cacheDirectory()
 	{
-		$cache_path = $this->get("Repository/cache", "_cache_");
-		if ($cache_path[0] != '/') {
-			// cache is relative to the repo
-			$repo_base_path = $this->repositoryDirectory();
-			$cache_path = appendPath( $repo_base_path, $cache_path );
-		}
-
+		$cache_path = $this->absolutePathValue("Repository/cache", "_cache_");
 		makeRequiredDirectory($cache_path, 'cache');
 		return $cache_path;
 	}
 
 	public function processingDirectory()
 	{
-		$processing_path = $this->get("Repository/processing", "_processing_");
-		if ($processing_path[0] != '/') {
-			// processing is relative to the repo
-			$repo_base_path = $this->repositoryDirectory();
-			$processing_path = appendPath( $repo_base_path, $processing_path );
-		}
-
+		$processing_path = $this->absolutePathValue("Repository/processing", "_processing_");
 		makeRequiredDirectory($processing_path, 'processing');
 		return $processing_path;
 	}
