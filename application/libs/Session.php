@@ -43,6 +43,39 @@ class Session
 		return $default;
 	}
 
+	public static function clearAllFeedback()
+	{
+		Session::set('feedback_positive', null);
+		Session::set('feedback_negative', null);
+	}
+
+	public static function negativeFeedback()
+	{
+		return Session::get('feedback_negative', null);
+	}
+
+	public static function addNegativeFeedback($message = null)
+	{
+		if ( is_string($message) ) {
+			$_SESSION["feedback_negative"][] = $message;
+		}
+	}
+
+	public static function positiveFeedback()
+	{
+		return Session::get('feedback_positive', null);
+	}
+
+	public static function addPositiveFeedback($message = null)
+	{
+		if ( is_string($message) ) {
+			$_SESSION["feedback_positive"][] = $message;
+		}
+		else {
+			$_SESSION["feedback_negative"][] = var_export($message, true);
+		}
+	}
+
 	/**
 	 * deletes the session (= logs the user out)
 	 */

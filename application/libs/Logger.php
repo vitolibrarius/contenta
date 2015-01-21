@@ -33,24 +33,31 @@ abstract class Logger implements LoggerInterface {
 	final public static function instance()
 	{
 		static $instance = null;
-		if ( null == $instance ) {
+		if ( Logger::$catastrophicFail ) {
+			$instance = new loggers\PrintLogger();
+		}
+		else if ( null == $instance ) {
 			try {
-				$loggerClass = 'loggers\\' . Config::Get("Logger/type", "Print") . 'Logger';
+				$loggerClass = 'loggers\\' . Config::Get("Logging/type", "Print") . 'Logger';
 				$instance = new $loggerClass();
 			}
 			catch (Exception $e) {
 				Logger::$catastrophicFail = true;
 				$instance = new loggers\PrintLogger();
 				$instance->error( get_class($e) . " thrown within the Log Constructor. Message: " . $e->getMessage() . " on line " . $e->getLine() );
-				$instance->error( "Failed to construct logger for '" . Config::Get("Logger/type") . "'" );
+				$instance->error( "Failed to construct logger for '" . Config::Get("Logging/type") . "'" );
 			}
-		}
-		else if ( Logger::$catastrophicFail ) {
-			$instance = new PrintLogger();
 		}
 
 		return $instance;
 	}
+
+	final public static function resetInstance()
+	{
+		$instance = null;
+		$catastrophicFail = false;
+	}
+
 
 	final public static function logToFile($message, $context = null, $context_id = null) {
 		$log = new FileLogger();
@@ -67,6 +74,30 @@ abstract class Logger implements LoggerInterface {
 
 	final public static function logError($message, $context = null, $context_id = null) {
 		return Logger::instance()->error( $message, $context, $context_id );
+	}
+
+	final public static function logSQLError( $clazz = 'Model', $method = 'unknown', $pdocode, $pdoError, $sql, $params = null)
+	{
+		$msg = 'PDO Error(' . $pdocode . ') ' . $pdoError . ' for [' . $sql . '] ' . (isset($params) ? var_export($params, true) : 'No Parameters');
+		return Logger::instance()->error( $msg, $clazz, $method );
+	}
+
+	final public static function logException($exception) {
+		if ( is_a($exception, 'Exception') ) {
+			return Logger::instance()->error(
+				get_class($exception)." thrown. Message: " . $exception->getMessage() . " Backtrace " . $exception->getTraceAsString(),
+				"File",
+				$exception->getFile() . ":" . $exception->getLine()
+			);
+		}
+		else {
+			return Logger::instance()->error(
+				get_class($exception)." thrown? Message: " . var_export($exception, true),
+				"File",
+				null
+			);
+
+		}
 	}
 
 	final public static function logFatal($message, $context = null, $context_id = null) {

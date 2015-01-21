@@ -365,10 +365,9 @@ if (!function_exists('http_response_code')) {
 function currentVersionNumber()
 {
 	$versionNum = '0.0.0';
-	$pos = strpos(__FILE__, WEB_DIR) + strlen(WEB_DIR);
-	$versionPath = appendPath(substr(__FILE__, 0, $pos), 'VERSION');
+	$versionPath = appendPath( SYSTEM_PATH, 'VERSION');
 	if ( file_exists($versionPath) ) {
-		$versionNum = file_get_contents($versionPath);
+		$versionNum = trim(file_get_contents($versionPath));
 	}
 	return $versionNum;
 }

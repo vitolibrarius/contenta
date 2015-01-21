@@ -9,7 +9,7 @@ class FileLogger extends \Logger
 	public function __construct()
 	{
 		if ($this->logfilehandle == null) {
-			$base_path = $Config::GetPath("Logging/path", null);
+			$base_path = \Config::GetPath("Logging/path", null);
 			if ( strlen($base_path) == 0 ) {
 				throw new \LogFileOpenErrorException('No path set in configuration for logging');
 			}
@@ -31,7 +31,7 @@ class FileLogger extends \Logger
 		$this->closeLogFile();
 		$this->logfilehandle = @fopen($logfile,"a");
 		if ( ! $this->logfilehandle )
-			throw new \LogFileOpenErrorException('Could not open Logfile in append-mode');
+			throw new \LogFileOpenErrorException('Could not open Logfile in append-mode (' . $logfile . ')');
 	}
 
 	private function writeToLogFile($message)

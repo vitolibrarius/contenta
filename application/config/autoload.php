@@ -3,6 +3,8 @@
 // guard to ensure basic configuration is loaded
 defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
+class ClassNotFoundException extends Exception {}
+
 /**
  * the auto-loading function, which will be called every time a file "is missing"
  * NOTE: don't get confused, this is not "__autoload", the now deprecated function
@@ -22,6 +24,9 @@ function autoload($class) {
 	else if (file_exists(PROCESSOR_PATH . $namesp_class . ".php")) {
 		require PROCESSOR_PATH . $namesp_class . ".php";
 	}
+	else {
+	    throw new ClassNotFoundException($class);
+	}
 }
 
 // spl_autoload_register defines the function that is called every time a file is missing. as we created this
@@ -39,7 +44,7 @@ function loadModel($name)
 		// all models have names like "LoginModel"
 		$modelName = ucwords($name) . 'Model';
 		// return the new model object while passing the database connection to the model
-		return new $modelName(Database::instance());
+		return new $modelName(\Database::instance());
 	}
 }
 
@@ -54,7 +59,7 @@ function loadProcessor($name, $file)
 	if (file_exists($path)) {
 		$classNames = classNames($path);
 		$processorName = strtolower($name . 'Processor');
-		$match = $classNames[$processorName];
+		$match = 'processors\\' . $classNames[$processorName];
 
 		require_once $path;
 		return new $match($file);

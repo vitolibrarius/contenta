@@ -42,7 +42,7 @@ class Application
 			}
 
 			Logger::instance()->setTrace( $traceName, $traceParam );
-	
+
 			// check for controller: does such a controller exist ?
 			if (file_exists(CONTROLLER_PATH . $this->url_controller . '.php')) {
 				// if so, then load this file and create this controller
@@ -66,7 +66,7 @@ class Application
 						}
 					} else {
 						// redirect user to error page (there's a controller for that)
-						header('location: ' . WEB_DIR . '/error/index');
+						header('location: ' . Config::Web('/error/index'));
 					}
 				} else {
 					// default/fallback: call the index() method of a selected controller
@@ -75,7 +75,7 @@ class Application
 			// obviously mistyped controller name, therefore show 404
 			} else {
 				// redirect user to error page (there's a controller for that)
-				header('location: ' . WEB_DIR . '/error/index');
+				header('location: ' . Config::Web('/error/index'));
 			}
 		// if url_controller is empty, simply show the main page (index/index)
 		} else {
@@ -93,14 +93,15 @@ class Application
 	{
 		if (isset($_GET['url'])) {
 			$url = rtrim($_GET['url'], '/');
-			
-			// remove the WEB_DIR prefix
-			if ( null !== WEB_DIR ) 
+
+			// remove the Config::Web() prefix
+			$web_dir = Config::Web();
+			if ( null !== $web_dir )
 			{
-				if (substr($url, 0, strlen(WEB_DIR)) == WEB_DIR) 
+				if (substr($url, 0, strlen($web_dir)) == $web_dir)
 				{
-					$url = substr($url, strlen($WEB_DIR));
-				} 
+					$url = substr($url, strlen($web_dir));
+				}
 			}
 
 			// split URL
@@ -120,6 +121,6 @@ class Application
 
 		print_r( '<br/>$_GET[url]  ' . $_GET['url'] );
 
-		echo '</div>'; 
+		echo '</div>';
 	}
 }

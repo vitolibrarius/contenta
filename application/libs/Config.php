@@ -48,6 +48,27 @@ class Config
 		return self::instance()->absolutePathValue($key, $default);
 	}
 
+	public static function GetRepository()
+	{
+		return self::instance()->repositoryDirectory();
+	}
+
+	public static function GetMedia()
+	{
+		return self::instance()->mediaDirectory();
+	}
+
+	public static function GetCache()
+	{
+		return self::instance()->cacheDirectory();
+	}
+
+	public static function GetProcessing()
+	{
+		return self::instance()->processingDirectory();
+	}
+
+
 	/**
 	 * gets/returns the value of a specific key of the config
 	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
@@ -66,6 +87,29 @@ class Config
 	final public static function fileMask()
 	{
 		return self::instance()->getIntegerValue("Repository/file_permission", 0644);
+	}
+
+	final public static function AppName()
+	{
+		return self::instance()->getValue("Internet/appname", "Contenta");
+	}
+
+	final public static function Web($path = null)
+	{
+		$web = self::instance()->getValue("Internet/web_dir", "contenta");
+		if ( is_string($path) && strlen($path) > 0 ) {
+			return appendPath($web, $path);
+		}
+		return $web;
+	}
+
+	final public static function Url($path = null)
+	{
+		$web = self::instance()->getValue("Internet/web_url", "http://localhost/contenta");
+		if ( is_string($path) && strlen($path) > 0 ) {
+			return appendPath($web, $path);
+		}
+		return $web;
 	}
 
 	private function initialize()
