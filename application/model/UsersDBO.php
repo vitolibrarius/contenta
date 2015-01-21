@@ -23,7 +23,7 @@ class UsersDBO extends DataObject
 	public $password_reset_timestamp;
 
 	public function isAdmin() {
-		return (isset($this->account_type) && $this->account_type === 'admin');
+		return (isset($this->account_type) && $this->account_type === Users::AdministratorRole);
 	}
 
 	public function recordLoginFrom($ip) {

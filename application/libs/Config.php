@@ -97,6 +97,10 @@ class Config
 	final public static function Web($path = null)
 	{
 		$web = self::instance()->getValue("Internet/web_dir", "contenta");
+		if ( is_string($web) && startsWith( '/', $web ) == false ) {
+			$web = '/' . $web;
+		}
+
 		if ( is_string($path) && strlen($path) > 0 ) {
 			return appendPath($web, $path);
 		}
@@ -187,10 +191,6 @@ class Config
 				return $this->repositoryDirectory();
 			}
 			else {
-				if ( endsWith($key, "path") == false ) {
-					$key = appendPath( $key, "path" );
-				}
-
 				$path = $this->getValue( $key, $default );
 				if ($path[0] != '/') {
 					// cache is relative to the repo
@@ -200,7 +200,7 @@ class Config
 				return $path;
 			}
 		}
-		return null;
+		return $default;
 	}
 
 	public function repositoryDirectory()

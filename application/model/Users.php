@@ -7,6 +7,9 @@ use \Model as Model;
 
 class Users extends Model
 {
+	const AdministratorRole = "admin";
+	const StandardRole = "standard";
+
 	const TABLE = 'users';
 
 	const id = 'id';
@@ -30,7 +33,7 @@ class Users extends Model
 	public function sortOrder() { return array(Users::name); }
 
 	public function userTypes() {
-		return array( "standard" => "Standard", "admin" => "Administrator");
+		return array( Users::StandardRole => "Standard", Users::AdministratorRole => "Administrator");
 
 	}
 
@@ -44,9 +47,14 @@ class Users extends Model
 		);
 	}
 
-	public function allUsers()
+	public function allUsers($role = null)
 	{
-		return $this->fetchAll(Users::TABLE, $this->allColumns(), null, array(Users::name));
+		$qualifier = null;
+		if ( isset($role) ) {
+			$qualifier = array(Users::account_type => $role );
+		}
+
+		return $this->fetchAll(Users::TABLE, $this->allColumns(), $qualifier, array(Users::name));
 	}
 
 	public function user($id)

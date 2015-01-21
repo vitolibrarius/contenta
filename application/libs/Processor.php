@@ -10,14 +10,16 @@ abstract class Processor
 	{
 		isset($guid) || die('Processor unique id missing.');
 
-		$root = Config::GetProcessing();
-		$type = str_replace("Processor", "", get_class($this));
-		$working = appendPath($root, $type);
-		makeRequiredDirectory($working, 'processing subdirectory for ' . $type);
+		$reflect = new ReflectionClass($this);
 
-		$this->workingDir = appendPath($working, $guid);
 		$this->guid = $guid;
-		$this->type = $type;
+		$this->type = $reflect->getShortName();
+
+		$root = Config::GetProcessing();
+		$processingRoot = appendPath($root, $this->type );
+		makeRequiredDirectory($processingRoot, 'processing subdirectory for ' . get_class($this));
+
+		$this->workingDir = appendPath($processingRoot, $guid);
 	}
 
 	public function workingDirectory()

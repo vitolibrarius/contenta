@@ -71,7 +71,6 @@ class Migration_1 extends Migrator
 	public function sqlite_postUpgrade()
 	{
 		$users_model = new Users(Database::instance());
-		$defaultUser = $users_model->createUserIfMissing('vito', 'omega1Zulu!', 'vitolibrarius@gmail.com', 'admin');
-
+		$vito = $users_model->createUserIfMissing('vito', 'omega1Zulu!', 'vitolibrarius@gmail.com', Users::AdministratorRole);
 	}
 }

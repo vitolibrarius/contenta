@@ -30,9 +30,15 @@ class Version extends Model
 		 );
 	}
 
+	function latestVersion()
+	{
+		$onlyOne = $this->fetchAll(Version::TABLE, $this->allColumnNames(), null, $this->sortOrder(), 1 );
+		return (is_array($onlyOne) ? $onlyOne[0] : false );
+	}
+
 	function versions()
 	{
-		return $this->fetchAll(Version::TABLE, $this->allColumnNames(), null, array(Version::name));
+		return $this->fetchAll(Version::TABLE, $this->allColumnNames(), null, $this->sortOrder() );
 	}
 
 	function versionForCode($name)

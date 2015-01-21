@@ -25,6 +25,8 @@ abstract class Logger implements LoggerInterface {
 	private $currentTrace;
 	private $currentTraceId;
 
+	private static $instance = null;
+
 	private static $catastrophicFail = false;
 	public static function catastrophicFailure() {
 		Logger::$catastrophicFail = true;
@@ -32,29 +34,28 @@ abstract class Logger implements LoggerInterface {
 
 	final public static function instance()
 	{
-		static $instance = null;
 		if ( Logger::$catastrophicFail ) {
-			$instance = new loggers\PrintLogger();
+			Logger::$instance = new loggers\PrintLogger();
 		}
-		else if ( null == $instance ) {
+		else if ( null == Logger::$instance ) {
 			try {
 				$loggerClass = 'loggers\\' . Config::Get("Logging/type", "Print") . 'Logger';
-				$instance = new $loggerClass();
+				Logger::$instance = new $loggerClass();
 			}
 			catch (Exception $e) {
 				Logger::$catastrophicFail = true;
-				$instance = new loggers\PrintLogger();
-				$instance->error( get_class($e) . " thrown within the Log Constructor. Message: " . $e->getMessage() . " on line " . $e->getLine() );
-				$instance->error( "Failed to construct logger for '" . Config::Get("Logging/type") . "'" );
+				Logger::$instance = new loggers\PrintLogger();
+				Logger::$instance->error( get_class($e) . " thrown within the Log Constructor. Message: " . $e->getMessage() . " on line " . $e->getLine() );
+				Logger::$instance->error( "Failed to construct logger for '" . Config::Get("Logging/type") . "'" );
 			}
 		}
 
-		return $instance;
+		return Logger::$instance;
 	}
 
 	final public static function resetInstance()
 	{
-		$instance = null;
+		Logger::$instance = null;
 		$catastrophicFail = false;
 	}
 

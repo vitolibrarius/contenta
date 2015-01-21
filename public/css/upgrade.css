@@ -1,0 +1,42 @@
+.change_log {
+	width:80%;
+	height:400px;
+	margin-left: auto;
+	margin-right:auto;
+	overflow:scroll;
+	padding:5px;
+	background-color: #eee;
+	box-shadow: 2px 2px 4px #aaa;
+	border:1px solid #ccc;
+
+}
+
+pre {
+    white-space: pre-wrap;       /* CSS 3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.config table {
+	width: 90%;
+}
+
+.config th {
+	width: 25%;
+}
+.config .problem {
+	color: red;
+	font-weight:bold;
+}
+
+.config em {
+	color: blue;
+	font-weight:bold;
+}
+
+.config a {
+	color: lightblue;
+	font-weight:bold;
+}

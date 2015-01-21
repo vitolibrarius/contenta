@@ -21,26 +21,20 @@
 			$app = new Application();
 		}
 		else {
+			$controller = "Upgrade";
+			$action = "showUpgradeOptions";
 
-			echo "<!doctype html><html><head></head><body>";
-			echo "<h1>Error</h1>";
-			echo "<div class='error'><p>Database not ready</p>";
-			echo "<pre>There are missing tables, please check your configuration and re-run the migration</pre></div>";
+			if (isset($_GET['url'])) {
+				$url = rtrim($_GET['url'], '/');
+				$url = filter_var($url, FILTER_SANITIZE_URL);
+				$url = explode('/', $url);
+				if ( isset($url[0], $url[1]) && $url[0] === $controller ) {
+					$action = $url[1];
+				}
+			}
 
-			$config->setValue("Logging/type", "File") || die("Failed to change the configured logger");
-			$config->setValue("Logging/path", "logs/migrations") || die("Failed to change the configured logging path");
-			Logger::resetInstance();
-			echo "<pre>Logging\n" . var_export(Config::Get("Logging"), true) . "\n";
-
-			$user_model = Model::Named("Users");
-			var_dump($user_model);
-
-			$processor = new processor\Migration(currentVersionNumber());
-			$processor->processData();
-
-			echo "\nDone</pre>";
-
-			echo "</body></html>";
+			$upgrader = Controller::Named($controller);
+			$upgrader->{$action}();
 		}
 	}
 	catch (Exception $exception) {

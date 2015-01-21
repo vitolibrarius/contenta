@@ -3,9 +3,6 @@
 // guard to ensure basic configuration is loaded
 defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
-require_once SYSTEM_PATH . 'application/config/common_arrays.php';
-require_once SYSTEM_PATH . 'application/config/common_filesystem.php';
-
 function callerClassAndMethod($currentFunction = '')
 {
 	$trace = debug_backtrace();
@@ -18,6 +15,11 @@ function callerClassAndMethod($currentFunction = '')
 		$caller = array_shift($trace);
 	}
 	return $caller;
+}
+
+function isset_default($variable, $default = null)
+{
+	return (isset($variable) ? $variable : $default);
 }
 
 function startsWith($haystack, $needle)
@@ -380,3 +382,17 @@ function currentVersionHash()
 	}
 	return "Error";
 }
+
+function currentChangeLog()
+{
+	$change_log = '';
+	$path = appendPath( SYSTEM_PATH, 'CHANGES');
+	if ( file_exists($path) ) {
+		$change_log = trim(file_get_contents($path));
+	}
+	return $change_log;
+}
+
+/** load these addition common functions after the base collection are loaded */
+require_once SYSTEM_PATH . 'application/config/common_arrays.php';
+require_once SYSTEM_PATH . 'application/config/common_filesystem.php';

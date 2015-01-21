@@ -25,19 +25,46 @@ function findPathForTool($tool)
 	return false;
 }
 
-function appendPath($path, $extension)
+function appendPath()
 {
-	if ( startsWith( $extension, DIRECTORY_SEPARATOR ) )
-	{
-		$extension = substr($extension, 1);
-	}
+    $finalPath = '';
+    $args = func_get_args();
+    $paths = array();
+    foreach ($args as $arg) {
+        $paths = array_merge($paths, (array)$arg);
+    }
 
-	if ( endsWith($path, DIRECTORY_SEPARATOR) )
-	{
-		return $path .  $extension;
+    $path_count = count($paths);
+    for ( $idx = 0; $idx < $path_count; $idx++) {
+		$item = $paths[$idx];
+        if ($idx != 0 && $item[0] == DIRECTORY_SEPARATOR)  {
+        	$item = substr($item, 1);
+        }
+        if ($idx != ($path_count - 1) && substr($item, -1) == DIRECTORY_SEPARATOR) {
+        	$item = substr($item, 0, -1);
+        }
+		$finalPath .= $item;
+        if ($idx != ($path_count - 1)) {
+        	$finalPath .= DIRECTORY_SEPARATOR;
+		}
 	}
+    return $finalPath;
+}
 
-	return $path . DIRECTORY_SEPARATOR . $extension;
+function sanitizedPath()
+{
+    $args = func_get_args();
+    $paths = array();
+    foreach ($args as $arg) {
+        $paths = array_merge($paths, (array)$arg);
+    }
+
+    $paths = array_map( function($str) {
+    	$trim = trim($str, DIRECTORY_SEPARATOR);
+    	return sanitize_filename((string)$trim, 100, false, false);
+    }, $paths);
+    $paths = array_filter($paths);
+    return implode(DIRECTORY_SEPARATOR, $paths);
 }
 
 function makeRequiredDirectory($path, $purpose = 'unknown')
@@ -53,42 +80,10 @@ function makeRequiredDirectory($path, $purpose = 'unknown')
 		die('Failed to create ' . $purpose . ' directory ' . $path);
 }
 
-function makePath($elements, $sanitize = false) {
-	$path = "";
-	if ( is_array($elements) ) {
-		switch (count($elements)) {
-			case 0:
-				break;
-
-			case 1:
-				$path = (string)$elements[0];
-				break;
-
-			default:
-				foreach ($elements as $key => $value) {
-					if ($sanitize == true) {
-						$value = sanitize_filename((string)$value, 100, false, false);
-					}
-					$path = appendPath( $path, (string)$value );
-				}
-				break;
-		}
-	}
-	else {
-		if ($sanitize == true) {
-			$path = sanitize_filename((string)$elements, 100, false, false);
-		}
-		else {
-			$path = (string)$elements;
-		}
-	}
-	return $path;
-}
-
 function makeUniqueDirectory( $root, $elements )
 {
 	if ( is_dir($root) ) {
-		$path = makePath($elements, true);
+		$path = sanitizedPath($elements);
 		$index = 0;
 		$working = $path;
 		$full = appendPath($root, $working);

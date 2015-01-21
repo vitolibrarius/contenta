@@ -16,14 +16,14 @@ class Migrator
 		$version_model = new Version(Database::instance());
 		$patch_model = new Patch(Database::instance());
 
-		echo "Current version " . $versionNum . PHP_EOL;
+		Logger::logInfo( "Migrating application to version " . currentVersionNumber(),	"Migrator", "Upgrade" );
 
 		$number = 0;
 		$continue = true;
 		while ( $continue == true ) {
 			try {
 				$migrationClass = 'migration\\Migration_' . $number;
-				echo "Trying " . $migrationClass . PHP_EOL;
+				Logger::logInfo( "Trying " . $migrationClass ,	"Migrator", "Upgrade" );
 
 				$worker = new $migrationClass(Database::instance(), $scratchDirectory);
 				Logger::logInfo( "$migrationClass", "Migration", $migrationClass);
@@ -44,7 +44,6 @@ class Migrator
 				}
 			}
 			catch (Exception $e) {
-					echo $e->getMessage();
 				if ( is_a( $e, "ClassNotFoundException" ) && $e->getMessage() === $migrationClass ) {
 					// this marks the end of the Migration
 					$continue = false;
