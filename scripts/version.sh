@@ -43,7 +43,7 @@ if [ -f VERSION ]; then
 	echo "Will set new version to be $INPUT_STRING"
 	echo $INPUT_STRING > VERSION
 	echo "Version $INPUT_STRING:" > tmpfile
-	git log --graph --pretty=format:'%h - %d %s (%cr) <%an>' --abbrev-commit "v$BASE_STRING"...HEAD >> tmpfile
+	git log --graph --pretty=format:'%h - %d %s (%cd) <%an>' --abbrev-commit "v$BASE_STRING"...HEAD >> tmpfile
 	echo "" >> tmpfile
 	echo "" >> tmpfile
 	cat CHANGES >> tmpfile
@@ -63,7 +63,7 @@ else
 	if [ "$RESPONSE" = "y" ]; then
 		echo "0.1.0" > VERSION
 		echo "Version 0.1.0" > CHANGES
-		git log --graph --pretty=format:'%h - %d %s (%cr) <%an>' --abbrev-commit >> CHANGES
+		git log --graph --pretty=format:'%h - %d %s (%cd) <%an>' --abbrev-commit >> CHANGES
 		echo "" >> CHANGES
 		echo "" >> CHANGES
 		git add VERSION CHANGES
