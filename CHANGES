@@ -1,18 +1,17 @@
 Version 0.1.1:
-* 9bde189 -  (HEAD, master) Working on different autoloading techniques and namespaces for the classes.  Implementing a migration pattern tied to the project version to keep the database in step with the code. (59 seconds ago) <Vito Librarius>
-* c196b93 -  Added Logger class to collect system messages (5 days ago) <Vito Librarius>
-* 0851bf1 -  Added basic Config class (5 days ago) <Vito Librarius>
-* 032de82 -  added additional comment (6 days ago) <Vito Librarius>
-* 8d379d5 -  added pattern for basic configuration (6 days ago) <Vito Librarius>
-* 4a24e6a -  (origin/master, origin/HEAD) New read content (10 days ago) <Vito Librarius>
-* a586a87 -  Base classes for application startup (10 days ago) <Vito Librarius>
-* ee9432d -  Changed log format for version CHANGES (11 days ago) <Vito Librarius>
+* 9bde189 -  (HEAD, master) Working on different autoloading techniques and namespaces for the classes.  Implementing a migration pattern tied to the project version to keep the database in step with the code. (Tue Jan 20 17:06:58 2015 -0700) <Vito Librarius>
+* c196b93 -  Added Logger class to collect system messages (Thu Jan 15 21:55:38 2015 -0700) <Vito Librarius>
+* 0851bf1 -  Added basic Config class (Thu Jan 15 20:59:15 2015 -0700) <Vito Librarius>
+* 032de82 -  added additional comment (Wed Jan 14 11:32:49 2015 -0700) <Vito Librarius>
+* 8d379d5 -  added pattern for basic configuration (Wed Jan 14 11:20:55 2015 -0700) <Vito Librarius>
+* 4a24e6a -  (origin/master, origin/HEAD) New read content (Sat Jan 10 11:13:13 2015 -0700) <Vito Librarius>
+* a586a87 -  Base classes for application startup (Sat Jan 10 10:02:02 2015 -0700) <Vito Librarius>
+* ee9432d -  Changed log format for version CHANGES (Fri Jan 9 13:03:00 2015 -0700) <Vito Librarius>
 
 Version 0.1.0
-* 0f42e3a -  make script executable (2 minutes ago) <Vito Librarius>
-* 4dd5ceb -  Added version numbering script (2 minutes ago) <Vito Librarius>
-* ae4fca3 -  Added basic configuration support files for Apache and PHP (4 minutes ago) <Vito Librarius>
-* e06e4de -  (origin/master, origin/HEAD) Loaded mockups (15 hours ago) <Vito Librarius>
-* 2ae8e53 -  Initial project setup (25 hours ago) <Vito Librarius>
-* 8e7fa04 -  Initial commit (25 hours ago) <Vito Librarius>
-
+* 0f42e3a -  make script executable (Fri Jan 9 12:58:50 2015 -0700) <Vito Librarius>
+* 4dd5ceb -  Added version numbering script (Fri Jan 9 12:58:11 2015 -0700) <Vito Librarius>
+* ae4fca3 -  Added basic configuration support files for Apache and PHP (Fri Jan 9 12:56:52 2015 -0700) <Vito Librarius>
+* e06e4de -  Loaded mockups (Thu Jan 8 21:52:30 2015 -0700) <Vito Librarius>
+* 2ae8e53 -  Initial project setup (Thu Jan 8 12:21:53 2015 -0700) <Vito Librarius>
+* 8e7fa04 -  Initial commit (Thu Jan 8 12:03:18 2015 -0700) <Vito Librarius>
