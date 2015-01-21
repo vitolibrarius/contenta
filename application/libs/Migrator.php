@@ -16,13 +16,15 @@ class Migrator
 		$version_model = new Version(Database::instance());
 		$patch_model = new Patch(Database::instance());
 
-		echo "Current version " . $versionNum;
+		echo "Current version " . $versionNum . PHP_EOL;
 
 		$number = 0;
 		$continue = true;
 		while ( $continue == true ) {
 			try {
 				$migrationClass = 'migration\\Migration_' . $number;
+				echo "Trying " . $migrationClass . PHP_EOL;
+
 				$worker = new $migrationClass(Database::instance(), $scratchDirectory);
 				Logger::logInfo( "$migrationClass", "Migration", $migrationClass);
 

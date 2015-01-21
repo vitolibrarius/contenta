@@ -62,19 +62,4 @@ class Database extends PDO
 		}
 		return false;
 	}
-
-	static $verified = null;
-	public function verifyDatabaseolf() {
-		if ( Database::$verified == null ) {
-			Database::$verified = true;
-			foreach (Model::AllModelNames() as $key => $modelName) {
-				$model = loadModel($modelName);
-				if ( is_null($model) || $model->pragma_TableInfo($model->tableName()) == false ) {
-					Database::$verified = false;
-					break;
-				}
-			}
-		}
-		return Database::$verified;
-	}
 }

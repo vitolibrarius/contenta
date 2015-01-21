@@ -1,5 +1,7 @@
 <?php
 
+use \Database as Database;
+
 interface EditableModelInterface {
 	/* Form editing support methods */
 	public function attributesFor($object);
@@ -77,7 +79,13 @@ abstract class Model
 			);
 	}
 
-	public function __construct(\Database $db)
+	public static function Named($name)
+	{
+		$className = "model\\" . $name;
+		return new $className(Database::instance());
+	}
+
+	public function __construct(Database $db)
 	{
 		isset($db) || die("No database object");
 		$this->db = $db;

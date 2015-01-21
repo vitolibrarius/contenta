@@ -10,8 +10,7 @@
 	define('APPLICATION_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR);
 
 	require APPLICATION_PATH .'config/bootstrap.php';
-//	require APPLICATION_PATH .'config/autoload.php';
- 	require APPLICATION_PATH .'libs/AutoLoader.php';
+	require APPLICATION_PATH .'config/autoload.php';
 	require APPLICATION_PATH .'config/common.php';
 	require APPLICATION_PATH .'config/errors.php';
 
@@ -22,6 +21,7 @@
 			$app = new Application();
 		}
 		else {
+
 			echo "<!doctype html><html><head></head><body>";
 			echo "<h1>Error</h1>";
 			echo "<div class='error'><p>Database not ready</p>";
@@ -31,6 +31,9 @@
 			$config->setValue("Logging/path", "logs/migrations") || die("Failed to change the configured logging path");
 			Logger::resetInstance();
 			echo "<pre>Logging\n" . var_export(Config::Get("Logging"), true) . "\n";
+
+			$user_model = Model::Named("Users");
+			var_dump($user_model);
 
 			$processor = new processor\Migration(currentVersionNumber());
 			$processor->processData();

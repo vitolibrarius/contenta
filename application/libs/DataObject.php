@@ -23,7 +23,7 @@
 
 		public function model()
 		{
-			return loadModel($this->modelName());
+			return Model::Named($this->modelName());
 		}
 
 		public function __toString()

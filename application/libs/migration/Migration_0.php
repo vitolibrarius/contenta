@@ -22,7 +22,7 @@ class Migration_0 extends Migrator
 			throw new Exception('No path set in configuration for sqlite database');
 		}
 		$db_file = appendPath($db_path, "contenta.sqlite" );
-		$backupDatabase = appendPath($db_path, "contenta.Migration_0." . date('Y-m-d.H-i-s') . ".backup");
+		$backupDatabase = appendPath($this->scratch, "contenta.Migration_0." . date('Y-m-d.H-i-s') . ".backup");
 		file_exists($db_file) == false || copy($db_file, $backupDatabase) || die('Failed to backup ' . $db_file);
 	}
 
@@ -66,6 +66,8 @@ class Migration_0 extends Migrator
 			throw new MigrationFailedException("Error creating Migration table");
 		}
 		Logger::logInfo( "Created table " . Patch::TABLE, "Migration", Patch::TABLE);
+
+		return true;
 	}
 
 	public function sqlite_postUpgrade()

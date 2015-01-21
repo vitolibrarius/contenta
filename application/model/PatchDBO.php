@@ -5,7 +5,7 @@ namespace model;
 use \DataObject as DataObject;
 use \Model as Model;
 
-class PatchDBO extends \DataObject
+class PatchDBO extends DataObject
 {
 	public $name;
 	public $created;
