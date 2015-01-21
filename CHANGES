@@ -1,3 +1,13 @@
+Version 0.1.1:
+* 9bde189 -  (HEAD, master) Working on different autoloading techniques and namespaces for the classes.  Implementing a migration pattern tied to the project version to keep the database in step with the code. (59 seconds ago) <Vito Librarius>
+* c196b93 -  Added Logger class to collect system messages (5 days ago) <Vito Librarius>
+* 0851bf1 -  Added basic Config class (5 days ago) <Vito Librarius>
+* 032de82 -  added additional comment (6 days ago) <Vito Librarius>
+* 8d379d5 -  added pattern for basic configuration (6 days ago) <Vito Librarius>
+* 4a24e6a -  (origin/master, origin/HEAD) New read content (10 days ago) <Vito Librarius>
+* a586a87 -  Base classes for application startup (10 days ago) <Vito Librarius>
+* ee9432d -  Changed log format for version CHANGES (11 days ago) <Vito Librarius>
+
 Version 0.1.0
 * 0f42e3a -  make script executable (2 minutes ago) <Vito Librarius>
 * 4dd5ceb -  Added version numbering script (2 minutes ago) <Vito Librarius>
