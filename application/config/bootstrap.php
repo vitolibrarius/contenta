@@ -10,17 +10,6 @@ ini_set("display_errors", 1);
 // Set default timezone
 date_default_timezone_set('Canada/Mountain');
 
-
-/**
- * Configuration for: Folders
- * Here you define where your folders are. Unless you have renamed them, there's no need to change this.
- */
-define('LIBS_PATH', 		'application/libs/');
-define('CONTROLLER_PATH',	'application/controllers/');
-define('MODELS_PATH',		'application/models/');
-define('PROCESSOR_PATH',	'application/processors/');
-define('VIEWS_PATH',		'application/views/');
-
 /**
  * http://stackoverflow.com/q/9618217/1114320
  * php.net/manual/en/function.setcookie.php

@@ -17,8 +17,13 @@
 		}
 
 		public function modelName() {
-			$className = get_called_class();
-			return substr($className, 0, strpos($className, 'DBO'));
+			$reflect = new ReflectionClass($this);
+			return substr($reflect->getShortName(), 0, strpos($reflect->getShortName(), 'DBO'));
+		}
+
+		public function tableName()
+		{
+			return $this->model()->tableName();
 		}
 
 		public function model()

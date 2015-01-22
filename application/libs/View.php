@@ -1,5 +1,10 @@
 <?php
 
+// guard to ensure basic configuration is loaded
+defined('APPLICATION_PATH') || exit("APPLICATION_PATH not found.");
+
+define( 'VIEWS_PATH', APPLICATION_PATH . '/views/' );
+
 /**
  * Class View
  *

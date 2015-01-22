@@ -1,6 +1,9 @@
 <?php
 
 use \Session as Session;
+use \Model as Model;
+use \Localized as Localized;
+use model\Users as Users;
 
 /**
  * Class Auth
@@ -38,4 +41,108 @@ class Auth
 		http_response_code(401); // Not Authorized
 		throw new Exception("Not authorized", 1);
 	}
+
+	public static function login()
+	{
+		// we do negative-first checks here
+		if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
+			Session::addNegativeFeedback(Localized::Get("Auth/USERNAME_FIELD_EMPTY", "Username field was empty."));
+			return false;
+		}
+		if (!isset($_POST['user_password']) OR empty($_POST['user_password'])) {
+			Session::addNegativeFeedback(Localized::Get("Auth/PASSWORD_FIELD_EMPTY", "Password field was empty."));
+			return false;
+		}
+
+		$user_model = Model::Named("Users");
+		$user = $user_model->userByName($_POST['user_name']);
+		if ( $user == false )
+		{
+			Session::addNegativeFeedback(Localized::Get("Auth/LOGIN_FAILED", "Login failed."));
+			return false;
+		}
+
+		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
+		if (($user->failed_logins >= 3) AND ($user->last_failed_login > (time()-30))) {
+			Session::addNegativeFeedback(Localized::Get("Auth/PASSWORD_WRONG_3_TIMES",
+				"You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again."));
+			return false;
+		}
+
+		Session::addPositiveFeedback( var_export($user, true));
+
+		$VERIFIED_PASSWORD = false;
+		if ( PHP_VERSION_ID > 50500 )
+		{
+// 			$hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+// 			$password_hash = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+			$VERIFIED_PASSWORD = password_verify($_POST['user_password'], $user->password_hash);
+		}
+		else if (hash(HASH_DEFAULT_ALGO, $_POST['user_password']) === $user->password_hash)
+		{
+			$VERIFIED_PASSWORD = true;
+		}
+
+		if ($VERIFIED_PASSWORD == true)
+		{
+			if ($user->active != 1) {
+				Session::addNegativeFeedback(Localized::Get("Auth/ACCOUNT_NOT_ACTIVE", "Your account is not activated." ));
+				return false;
+			}
+
+			// login process, write the user data into session
+			Session::init();
+			Session::set('user_logged_in', true);
+			Session::set('user_id', $user->id);
+			Session::set('user_name', $user->name);
+			Session::set('user_email', $user->email);
+			Session::set('user_account_type', $user->account_type);
+
+			// reset the failed login counter for that user (if necessary)
+			$user_model->clearFailedLogin($user);
+
+			// generate integer-timestamp for saving of last-login date
+			$user_model->stampLoginTimestamp($user);
+
+			// if user has checked the "remember me" checkbox, then write cookie
+			if (isset($_POST['user_rememberme'])) {
+
+				// generate 64 char random string and update database
+				$random_token_string = $user_model->generateRememberMeToken($user);
+
+				// generate cookie string that consists of user id, random string and combined hash of both
+				$cookie_string_first_part = $user->id . ':' . $random_token_string;
+				$cookie_string_hash = hash('sha256', $cookie_string_first_part);
+				$cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
+
+				// set cookie
+				$domain = "." . parse_url(Config::Url(), PHP_URL_HOST);
+				setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", $domain);
+			}
+
+			// return true to make clear the login was successful
+			return true;
+
+		} else {
+			// increment the failed login counter for that user
+			$user_model->increaseFailedLogin($user);
+
+			// feedback message
+			Session::addNegativeFeedback(Localized::Get("Auth/PASSWORD_WRONG", "Unable to authenticate." ));
+			return false;
+		}
+
+		// default return
+		return false;
+	}
+
+	public static function deleteCookie()
+	{
+		$domain = "." . parse_url(Config::Url(), PHP_URL_HOST);
+		// set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
+		// that's obviously the best practice to kill a cookie via php
+		// @see http://stackoverflow.com/a/686166/1114320
+		setcookie('rememberme', false, time() - (3600 * 3650), WEB_DIR . '/', $domain);
+	}
+
 }

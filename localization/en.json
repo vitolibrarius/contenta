@@ -1,0 +1,9 @@
+{
+    "Auth": {
+        "USERNAME_FIELD_EMPTY": "Username field was empty.",
+        "PASSWORD_FIELD_EMPTY": "Password field was empty.",
+        "LOGIN_FAILED": "Login failed.",
+        "PASSWORD_WRONG": "Unable to authenticate.",
+        "PASSWORD_WRONG_3_TIMES": "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again."
+    }
+}

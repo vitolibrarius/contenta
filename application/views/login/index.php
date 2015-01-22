@@ -1,5 +1,5 @@
 <form style="display:block; width:200px; margin-left:auto; margin-right:auto;" name='login'
-	action="<?php echo Config::Web( isset_default($this->loginActionPath, '/login/login') )?>" method="post">
+	action="<?php echo Config::Web( (isset($this->loginActionPath) ? $this->loginActionPath : '/Login/login') )?>" method="post">
 	<fieldset>
 	<legend>Login</legend>
 

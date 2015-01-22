@@ -12,14 +12,6 @@ use processor\Migration as Migration;
 
 class Upgrade extends Controller
 {
-	/**
-	 * Construct this object by extending the basic Controller class
-	 */
-	function __construct()
-	{
-		parent::__construct();
-	}
-
 	function showUpgradeOptions()
 	{
 		$user_model = Model::Named("Users");
