@@ -27,13 +27,13 @@ class UsersDBO extends DataObject
 	}
 
 	public function recordLoginFrom($ip) {
-		$join_model = Model::Named('UserNetworkJoin');
+		$join_model = Model::Named('User_Network');
 		$join = $join_model->createForIP($this, $ip);
 		return $join;
 	}
 
 	public function allLoginIP() {
-		$join_model = Model::Named('UserNetworkJoin');
+		$join_model = Model::Named('User_Network');
 		$array = $join_model->allForUser($this);
 		return $array;
 	}

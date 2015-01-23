@@ -44,6 +44,7 @@ class Migration_2 extends Migrator
 			Logger::logSQLError('LogLevel', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
 			throw new MigrationFailedException("Error creating LogLevel table");
 		}
+		Logger::logInfo( "Created table " . LogLevel::TABLE, "Migration", LogLevel::TABLE);
 
 		$sql = "CREATE TABLE IF NOT EXISTS " . Log::TABLE
 				. " ( "
@@ -65,6 +66,8 @@ class Migration_2 extends Migrator
 			Logger::logSQLError('Log', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
 			throw new MigrationFailedException("Error creating LogLevel table");
 		}
+
+		Logger::logInfo( "Created table " . Log::TABLE, "Migration", Log::TABLE);
 
 		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . LogLevel::TABLE . '_idindex on ' . LogLevel::TABLE . '(' . LogLevel::id . ')');
 		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . LogLevel::TABLE . '_nameindex on ' . LogLevel::TABLE . '(' . LogLevel::name . ')');
