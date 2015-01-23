@@ -62,23 +62,6 @@ abstract class Model
 
 	const TO_ONE_TYPE = 'toOneRelationship';
 
-	public static function AllModelNames() {
-		return array(
-				'Log',
-				'User',
-				'EndpointType', 'Endpoint', 'Nzb',
-				'Character', 'CharacterAlias',
-				'Publisher', 'PublisherAlias',
-				'Series', 'SeriesAlias',
-				'Publication',
-				'Media',
-				'Network',
-				'Tag', 'TagJoin',
-				'UserNetworkJoin', 'UserMediaJoin', 'UserSeriesJoin',
-				'SeriesCharacterJoin'
-			);
-	}
-
 	public static function Named($name)
 	{
 		$className = "model\\" . $name;
