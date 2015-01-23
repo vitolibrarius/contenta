@@ -1,6 +1,6 @@
-<?php if (isset($this->latestVersion) == false
-		|| strlen($this->latestVersion) == 0
-		|| $this->latestVersion != currentVersionNumber()) : ?>
+<?php if (isset($this->latestVersion, $this->latestVersion->code) == false
+		|| strlen($this->latestVersion->code) == 0
+		|| $this->latestVersion->code != currentVersionNumber()) : ?>
 <div class="paging">
 	<ul>
 		<li><a href="#openConfirm">Upgrade to <?php echo currentVersionNumber(); ?></a></li>
@@ -33,9 +33,10 @@
 			<th>Application Version</th>
 			<td>
 				<?php
-					if (isset($this->latestVersion) == false
-						|| strlen($this->latestVersion) == 0
-						|| $this->latestVersion != currentVersionNumber())
+					$status = "";
+					if (isset($this->latestVersion, $this->latestVersion->code) == false
+						|| strlen($this->latestVersion->code) == 0
+						|| $this->latestVersion->code != currentVersionNumber())
 					{
 						$status = "problem";
 					}
@@ -45,11 +46,14 @@
 				?>
 			</td>
 			<td><span>
-				<?php if (isset($this->latestVersion) == false
-					|| strlen($this->latestVersion) == 0
-					|| $this->latestVersion != currentVersionNumber()) : ?>
-
-						Your database is not up to date, please review your configuration and run the migration processor.
+				<?php if (isset($this->latestVersion, $this->latestVersion->code) == false
+					|| strlen($this->latestVersion->code) == 0) : ?>
+					<p>You database does not appear to be initialized.  Please review your configuration and run the migration processor.</p>
+				<?php elseif ($this->latestVersion->code != currentVersionNumber()) : ?>
+					<p>Your database is not up to date, please review your configuration and run the migration processor.</p>
+					<p>Current upgrade level is: <php echo $this->latestVersion->code; ?>.</p>
+				<?php else : ?>
+					<p>Your database is up to date</p>
 				<?php endif; ?>
 			</span></td>
 		</tr>
@@ -65,7 +69,7 @@
 				<?php if ($iniMemory < 65536): ?>
 					<p>Your current PHP memory limit seems low.  Please consider raising it.</p>
 
-					<p>The easiest way to resolve this file is to use the <em>php_contenta.ini</em> file included in the
+					<p>The easiest way to resolve this file is to use the <em>.htaccess</em> file included in the
 					application root directory.  Please read the
 					<a href="https://github.com/vitolibrarius/contenta/wiki/Configuration">Wiki</a> for more details.
 					</p>
@@ -91,7 +95,7 @@
 					issue will manifest as a <em>400 - No file selected</em> error when PHP discards the POST before the
 					application can process it.</p>
 
-					<p>The easiest way to resolve this file is to use the <em>php_contenta.ini</em> file included in the
+					<p>The easiest way to resolve this file is to use the <em>.htaccess</em> file included in the
 					application root directory.  Please read the
 					<a href="https://github.com/vitolibrarius/contenta/wiki/Configuration">Wiki</a> for more details.
 					</p>

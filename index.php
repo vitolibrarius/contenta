@@ -22,7 +22,7 @@
 		}
 		else {
 			$controller = "Upgrade";
-			$action = "showUpgradeOptions";
+			$action = "index";
 
 			if (isset($_GET['url'])) {
 				$url = rtrim($_GET['url'], '/');

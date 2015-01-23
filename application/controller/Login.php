@@ -5,6 +5,7 @@ namespace controller;
 use \Controller as Controller;
 use \Session as Session;
 use \Auth as Auth;
+use \Config as Config;
 
 
 class Login extends Controller

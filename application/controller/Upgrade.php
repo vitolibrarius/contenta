@@ -12,7 +12,7 @@ use processor\Migration as Migration;
 
 class Upgrade extends Controller
 {
-	function showUpgradeOptions()
+	function index()
 	{
 		$user_model = Model::Named("Users");
 		$adminUsers = $user_model->allUsers(Users::AdministratorRole);
@@ -20,7 +20,7 @@ class Upgrade extends Controller
 
 		if ( is_array($adminUsers) == false || count($adminUsers) == 0) {
 			// no users, show the options
-			$this->view->latest = $latest;
+			$this->view->latestVersion = $latest;
 			$this->view->render('/upgrade/index');
 		}
 		else if (Session::get('user_logged_in') == false) {
@@ -28,11 +28,12 @@ class Upgrade extends Controller
 			$this->view->loginActionPath = "/Upgrade/login";
 			$this->view->render('/login/index');
 		}
-		else if ( Session::get('user_account_type') == Users::AdministratorRole ) {
+		else if ( Session::get('user_account_type') != Users::AdministratorRole ) {
 			Session::addNegativeFeedback("Not authorized to perform upgrade actions");
 			$this->view->render('/error/index');
 		}
 		else {
+			$this->view->latestVersion = $latest;
 			$this->view->render('/upgrade/index');
 		}
 	}
@@ -41,7 +42,6 @@ class Upgrade extends Controller
 	{
 		$user_model = Model::Named("Users");
 		$adminUsers = $user_model->allUsers(Users::AdministratorRole);
-		$latest = Model::Named("Version")->latestVersion();
 
 		if ( is_array($adminUsers) == false || count($adminUsers) == 0) {
 			// no users, just do it
@@ -56,7 +56,7 @@ class Upgrade extends Controller
 			$this->view->loginActionPath = "/Upgrade/login";
 			$this->view->render('/login/index');
 		}
-		else if ( Session::get('user_account_type') == Users::AdministratorRole ) {
+		else if ( Session::get('user_account_type') != Users::AdministratorRole ) {
 			Session::addNegativeFeedback("Not authorized to perform upgrade actions");
 			$this->view->render('/error/index');
 		}
