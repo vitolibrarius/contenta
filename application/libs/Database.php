@@ -58,7 +58,7 @@ class Database extends PDO
 		$statement = $this->prepare($sql);
 		if ($statement && $statement->execute(array(":code" => $versionNum))) {
 			$version = $statement->fetch();
-			return true;
+			return ($version != false);
 		}
 		return false;
 	}

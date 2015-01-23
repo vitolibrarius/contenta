@@ -51,7 +51,7 @@
 					<p>You database does not appear to be initialized.  Please review your configuration and run the migration processor.</p>
 				<?php elseif ($this->latestVersion->code != currentVersionNumber()) : ?>
 					<p>Your database is not up to date, please review your configuration and run the migration processor.</p>
-					<p>Current upgrade level is: <php echo $this->latestVersion->code; ?>.</p>
+					<p>Current upgrade level is: <?php echo $this->latestVersion->code; ?>.</p>
 				<?php else : ?>
 					<p>Your database is up to date</p>
 				<?php endif; ?>
