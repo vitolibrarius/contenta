@@ -14,7 +14,37 @@ class View
 {
 	function __construct($title = '')
 	{
-		$this->viewTitle = $title;
+		$this->controllerName = $title;
+	}
+
+	public function globalLabel( $key, $default = null )
+	{
+		return Localized::Get( "GLOBAL/" . $key, (is_null($default) ? $key : $default));
+	}
+
+	public function localizedLabel( $key, $default = null )
+	{
+		return Localized::Get( $this->controllerName . "/" . $key, (is_null($default) ? $key : $default));
+	}
+
+	/**
+	 * get the title of this view using localizable values, unless an override value has been set
+	 */
+	public function viewTitle()
+	{
+		if ( isset($this->viewTitle) )  {
+			return $this->viewTitle;
+		}
+
+		return $this->localizedLabel( "title", $this->controllerName );
+	}
+
+	/**
+	 * sets the title of this view using non-localizable values.  For example, Publication/issue/user name values
+	 */
+	public function setViewTitle($key)
+	{
+		$this->viewTitle = $key;
 	}
 
 	public function addStylesheet($path = null) {
@@ -240,4 +270,11 @@ abstract public function attributePlaceholder($object, $attr);
 		}
 		return $ret;
 	}
+
+	/**
+	 * common label values
+	 */
+	public function saveButton() { return $this->globalLabel("saveButton", "Save"); }
+	public function cancelButton() { return $this->globalLabel("cancelButton", "Cancel"); }
+	public function deleteButton() { return $this->globalLabel("deleteButton", "Delete"); }
 }

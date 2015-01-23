@@ -5,5 +5,28 @@
         "LOGIN_FAILED": "Login failed.",
         "PASSWORD_WRONG": "Unable to authenticate.",
         "PASSWORD_WRONG_3_TIMES": "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again."
+    },
+    "Upgrade": {
+        "title": "Upgrade",
+        "Current Configuration": "Current Configuration",
+        "Application Version": "Application Version",
+        "PHP Memory": "PHP Memory",
+        "PHP POST size": "PHP POST size",
+        "PHP Upload Filesize": "PHP Upload Filesize"
+    },
+    "Admin": {
+        "title": "Admin"
+    },
+    "Index": {
+        "title": "Index"
+    },
+    "GLOBAL": {
+        "AdminMenu": "Admin",
+        "LogsMenu": "Logs",
+        "SeriesMenu": "Series",
+        "ProfileMenu": "Profile"
+    },
+    "Error": {
+        "title": "Error"
     }
 }

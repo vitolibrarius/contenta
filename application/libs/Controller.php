@@ -35,4 +35,9 @@ class Controller
 		return new $className();
 	}
 
+	public function name()
+	{
+		$reflect = new ReflectionClass($this);
+		return new View($reflect->getShortName());
+	}
 }

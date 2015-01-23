@@ -3,6 +3,7 @@
 use \Session as Session;
 use \Model as Model;
 use \Localized as Localized;
+use \Config as Config;
 use model\Users as Users;
 
 /**
@@ -21,7 +22,7 @@ class Auth
 		// redirect user to login page
 		if (!isset($_SESSION['user_logged_in'])) {
 			Session::destroy();
-			header('location: ' . WEB_DIR . '/login');
+			header('location: ' . Config::Web('/login'));
 			return false;
 		}
 
@@ -136,6 +137,45 @@ class Auth
 		return false;
 	}
 
+	function loginWithCookie()
+	{
+		$user_model = Model::Named("Users");
+		$login_successful = false;
+		$cookie = isset($_COOKIE['rememberme']) ? $_COOKIE['rememberme'] : '';
+		if ($cookie)
+		{
+			// check cookie's contents, check if cookie contents belong together
+			list ($user_id, $token, $hash) = explode(':', $cookie);
+			if ($hash === hash('sha256', $user_id . ':' . $token) AND (empty($token) == false))
+			{
+				$user = $user_model->userByToken($user_id, $token);
+				if ( $user != false )
+				{
+					Session::init();
+					Session::set('user_logged_in', true);
+					Session::set('user_id', $user->id);
+					Session::set('user_name', $user->name);
+					Session::set('user_email', $user->email);
+					Session::set('user_account_type', $user->account_type);
+
+					$user_model->stampLoginTimestamp($user);
+					Logger::logInfo("User logged In (cookie)", Session::get('user_name'), Session::get('user_id'));
+
+					$login_successful = true;
+				}
+			}
+		}
+
+		if ($login_successful == false)
+		{
+			Logger::logError("Cookie invalid", 'cookie', $cookie);
+
+			// delete the invalid cookie to prevent infinite login loops
+			$this->deleteCookie();
+		}
+		return $login_successful;
+	}
+
 	public static function deleteCookie()
 	{
 		$domain = "." . parse_url(Config::Url(), PHP_URL_HOST);
@@ -144,5 +184,4 @@ class Auth
 		// @see http://stackoverflow.com/a/686166/1114320
 		setcookie('rememberme', false, time() - (3600 * 3650), WEB_DIR . '/', $domain);
 	}
-
 }

@@ -67,48 +67,19 @@ class Login extends Controller
 	 */
 	function loginWithCookie()
 	{
-		$user_model = loadModel('User');
-		$login_successful = false;
-		$cookie = isset($_COOKIE['rememberme']) ? $_COOKIE['rememberme'] : '';
-		if ($cookie)
-		{
-			// check cookie's contents, check if cookie contents belong together
-			list ($user_id, $token, $hash) = explode(':', $cookie);
-			if ($hash === hash('sha256', $user_id . ':' . $token) AND (empty($token) == false))
-			{
-				$user = $user_model->userByToken($user_id, $token);
-				if ( $user != false )
-				{
-					Session::init();
-					Session::set('user_logged_in', true);
-					Session::set('user_id', $user->id);
-					Session::set('user_name', $user->name);
-					Session::set('user_email', $user->email);
-					Session::set('user_account_type', $user->account_type);
-
-					$_SESSION["feedback_positive"][] = FEEDBACK_COOKIE_LOGIN_SUCCESSFUL;
-					$user_model->stampLoginTimestamp($user);
-					$login_successful = true;
-				}
+		if ( Auth::loginWithCookie() == true ) {
+			if ( Session::get('user_account_type') == 'admin' ) {
+				header('location: ' . Config::Web('/admin/index'));
+			}
+			else {
+				header('location: ' . Config::Web('/index'));
 			}
 		}
-
-		if ($login_successful)
-		{
-			Logger::logInfo("User logged In", Session::get('user_name'), Session::get('user_id'));
-			header('location: ' . WEB_DIR . '/index/index');
-		}
-		else
-		{
-			Logger::logError("Cookie invalid", 'cookie', $cookie);
-
-			$_SESSION["feedback_negative"][] = FEEDBACK_COOKIE_INVALID;
-
-			// delete the invalid cookie to prevent infinite login loops
-			$this->deleteCookie();
+		else {
+			Session::addNegativeFeedback(Localized::Get("Auth/COOKIE_INVALID", "Your remember-me-cookie is invalid." ));
 
 			// if NO, then move user to login/index (login form) (this is a browser-redirection, not a rendered view)
-			header('location: ' . WEB_DIR . '/login/index');
+			header('location: ' . Config::Web('/login'));
 		}
 	}
 }

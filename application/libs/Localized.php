@@ -47,9 +47,9 @@ class Localized
 	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
 	 * @return mixed
 	 */
-	public static function Get($key, $default = '')
+	public static function Get($key, $default = null)
 	{
-		return self::instance()->getValue($key, $default);
+		return self::instance()->getValue($key, (is_null($default) ? $key : $default));
 	}
 
 	public function __construct($lang)
@@ -70,7 +70,6 @@ class Localized
 	{
 		if ( Config::Get("Debug/localized") == true && $this->metadata->isMeta($key) == false) {
 			$success = $this->metadata->setMeta($key, $default);
-			Session::addNegativeFeedback("save metadata was " . $success );
 		}
 		return $this->metadata->getMeta($key, $default);
 	}

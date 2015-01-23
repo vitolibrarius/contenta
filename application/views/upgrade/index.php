@@ -3,14 +3,14 @@
 		|| $this->latestVersion->code != currentVersionNumber()) : ?>
 <div class="paging">
 	<ul>
-		<li><a href="#openConfirm">Upgrade to <?php echo currentVersionNumber(); ?></a></li>
+		<li><a href="#openConfirm"><?php echo $this->localizedLabel("Upgrade to") . ' ' . currentVersionNumber(); ?></a></li>
 	</ul>
 </div>
 
 <div id="openConfirm" class="modalDialog">
 	<div>
 		<a href="#close" title="Close" class="close">X</a>
-		<h2>Confirm Upgrade</h2>
+		<h2><?php echo $this->localizedLabel("Confirm Upgrade"); ?></h2>
 		<div style="width:100%; overflow:hidden;">
 			<div style="float:left ; width:20%;">
 				<img src="<?php echo Config::Web('/public/img/Logo_sm.png'); ?>" class="icon">
@@ -25,12 +25,12 @@
 </div>
 <?php endif; ?>
 
-<h2>Current Configuration</h2>
+<h2><?php echo $this->localizedLabel("Current Configuration"); ?></h2>
 
 <div class="mediaData config">
 	<table>
 		<tr>
-			<th>Application Version</th>
+			<th><?php echo $this->localizedLabel("Application Version"); ?></th>
 			<td>
 				<?php
 					$status = "";
@@ -58,7 +58,7 @@
 			</span></td>
 		</tr>
 		<tr>
-			<th>PHP Memory</th>
+			<th><?php echo $this->localizedLabel("PHP Memory"); ?></th>
 			<td><?php
 					$iniMemory = convertToBytes(ini_get('memory_limit')) / 1024;
 					echo "<span class='" . (($iniMemory < 65536) ? "problem" : "") . "'>"
@@ -77,7 +77,7 @@
 			</span></td>
 		</tr>
 		<tr>
-			<th>PHP POST size</th>
+			<th><?php echo $this->localizedLabel("PHP POST size"); ?></th>
 			<td><?php
 					$iniMaxPost = convertToBytes(ini_get('post_max_size')) / 1024;
 					$iniMaxFile = convertToBytes(ini_get('upload_max_filesize')) / 1024;
@@ -103,7 +103,7 @@
 			</span></td>
 		</tr>
 		<tr>
-			<th>PHP Upload Filesize</th>
+			<th><?php echo $this->localizedLabel("PHP Upload Filesize"); ?></th>
 			<td><?php
 					echo "<span class='" . (($iniMaxFile < 65536) ? "problem" : "") . "'>"
 						. ini_get('upload_max_filesize') . "</span>";

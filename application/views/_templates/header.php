@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title><?php echo Config::AppName(); ?> - <?php echo $this->viewTitle; ?></title>
+	<title><?php echo Config::AppName(); ?> - <?php echo $this->viewTitle(); ?></title>
 
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -60,16 +60,16 @@
 
 					if (Session::get('user_account_type') === model\Users::AdministratorRole )
 					{
-						$menu->add( 'Admin', '/admin/index');
-						$menu->add( 'Logs', '/admin/loglist');
+						$menu->add( $this->globalLabel("AdminMenu", "Admin"), '/admin/index');
+						$menu->add( $this->globalLabel("LogsMenu", "Logs"), '/admin/loglist');
 					}
-					$menu->add( 'Series', '/series/index' );
-					$menu->add( 'Profile', '/profile/index' );
+					$menu->add( $this->globalLabel("SeriesMenu", "Series"), '/series/index' );
+					$menu->add( $this->globalLabel("ProfileMenu", "Profile"), '/profile/index' );
 				}
 
 				if (Session::get('user_logged_in') == false)
 				{
-					$menu->add('Login', '/login/index');
+					$menu->add($this->globalLabel("LoginMenu", "Login"), '/login/index');
 				}
 
 				$menu->current = 'level-three.php';
@@ -82,7 +82,7 @@
 	</header>
 
 	<div id="content">
-		<h1><?php echo $this->viewTitle; ?></h1>
+		<h1><?php echo $this->viewTitle(); ?></h1>
 
 		<!-- echo out the system feedback (error and success messages) -->
 		<?php $this->renderFeedbackMessages(); ?>
