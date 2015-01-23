@@ -61,7 +61,7 @@
 					if (Session::get('user_account_type') === model\Users::AdministratorRole )
 					{
 						$menu->add( $this->globalLabel("AdminMenu", "Admin"), '/admin/index');
-						$menu->add( $this->globalLabel("LogsMenu", "Logs"), '/admin/loglist');
+						$menu->add( $this->globalLabel("LogsMenu", "Logs"), '/logs/index');
 					}
 					$menu->add( $this->globalLabel("SeriesMenu", "Series"), '/series/index' );
 					$menu->add( $this->globalLabel("ProfileMenu", "Profile"), '/profile/index' );

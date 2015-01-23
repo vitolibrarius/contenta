@@ -25,6 +25,14 @@ function findPathForTool($tool)
 	return false;
 }
 
+function shortendPath($path = '', $numComponents = 3 )
+{
+	$parts = explode(DIRECTORY_SEPARATOR, $path);
+	$numComponents = min(count($parts), $numComponents);
+	$parts = array_slice($parts, (count($parts) - $numComponents), $numComponents);
+	return implode(DIRECTORY_SEPARATOR, $parts);
+}
+
 function appendPath()
 {
     $finalPath = '';

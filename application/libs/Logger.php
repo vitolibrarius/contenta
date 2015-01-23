@@ -84,12 +84,42 @@ abstract class Logger implements LoggerInterface {
 	}
 
 	final public static function logException($exception) {
-		if ( is_a($exception, 'Exception') ) {
-			return Logger::instance()->error(
-				get_class($exception)." thrown. Message: " . $exception->getMessage() . " Backtrace " . $exception->getTraceAsString(),
-				"File",
-				$exception->getFile() . ":" . $exception->getLine()
+		if ( is_a($exception, '\Exception') ) {
+			// these are our templates
+			$traceline = "#%s %s(%s): %s(%s)";
+			$msg = "'%s' with message '%s' in %s:%s\nStack trace:\n%s";
+
+			// alter your trace as you please, here
+			$trace = $exception->getTrace();
+			foreach ($trace as $key => $stackPoint) {
+				// I'm converting arguments to their type
+				// (prevents passwords from ever getting logged as anything other than 'string')
+				$trace[$key]['args'] = array_map('gettype', $trace[$key]['args']);
+			}
+
+			// build your tracelines
+			$result = array();
+			foreach ($trace as $key => $stackPoint) {
+				$result[] = sprintf(
+					$traceline,
+					$key,
+					shortendPath($stackPoint['file'], 3),
+					$stackPoint['line'],
+					$stackPoint['function'],
+					implode(', ', $stackPoint['args'])
+				);
+			}
+
+			// write tracelines into main template
+			$msg = sprintf(
+				$msg,
+				get_class($exception),
+				$exception->getMessage(),
+				shortendPath($exception->getFile(), 3),
+				$exception->getLine(),
+				implode("\n", $result)
 			);
+			return Logger::instance()->error( $msg,	shortendPath($exception->getFile(), 3), $exception->getLine());
 		}
 		else {
 			return Logger::instance()->error(

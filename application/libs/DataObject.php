@@ -36,11 +36,11 @@
 			return $this->modelName() . ' (' . $this->pkValue() . ')';
 		}
 
-		public function formattedDate( $key ) {
+		public function formattedDate( $key, $format = 'M d, Y' ) {
 			if (isset($key, $this->{$key})) {
 				$val = $this->{$key};
 				if ( is_numeric($val) ) {
-					return date('M d, Y', $this->{$key});
+					return date($format, $this->{$key});
 				}
 
 				return $val;

@@ -191,14 +191,7 @@ div.span_container_row .break {
 .log_row.error {background-color:#F9CACA;}
 .log_row.fatal {background-color:#ec7492;}
 .log_date {  white-space: nowrap; }
-.log_msg {
-	-ms-word-break: break-all;
-	word-break: break-all;
-	word-break: break-word;
-	-webkit-hyphens: auto;
-	-moz-hyphens: auto;
-	hyphens: auto;
-}
+.log_msg { white-space: pre-wrap; }
 
 /* Tabs */
 .tabs {
