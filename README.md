@@ -38,3 +38,5 @@ Thats enough to start ..
 
 [logo]: https://raw.githubusercontent.com/vitolibrarius/contenta/master/public/img/Logo_sm.png "Contenta"
 [comicvine]: http://www.comicvine.com
+
+- vito
