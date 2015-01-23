@@ -1,0 +1,94 @@
+<?php
+
+namespace migration;
+
+use \Migrator as Migrator;
+use \MigrationFailedException as MigrationFailedException;
+use \Config as Config;
+use \Logger as Logger;
+use \Model as Model;
+use \Database as Database;
+
+use model\Users as Users;
+use model\LogLevel as LogLevel;
+use model\Log as Log;
+
+
+class Migration_2 extends Migrator
+{
+	public function sqlite_preUpgrade()
+	{
+		// backup sqlite database file
+		$db_path = Config::GetPath("Database/path", null);
+		if ( strlen($db_path) == 0 ) {
+			throw new Exception('No path set in configuration for sqlite database');
+		}
+		$db_file = appendPath($db_path, "contenta.sqlite" );
+		$backupDatabase = appendPath($this->scratch, "contenta.Migration_2." . date('Y-m-d.H-i-s') . ".backup");
+		file_exists($db_file) == false || copy($db_file, $backupDatabase) || die('Failed to backup ' . $db_file);
+	}
+
+	public function sqlite_upgrade()
+	{
+		$sql = "CREATE TABLE IF NOT EXISTS " . LogLevel::TABLE
+				. " ( "
+				. LogLevel::id . " INTEGER, "
+				. LogLevel::code . " TEXT PRIMARY KEY, "
+				. LogLevel::name . " TEXT COLLATE NOCASE "
+				. ")";
+
+		$statement = $this->db->prepare($sql);
+		if ($statement == false || $statement->execute() == false) {
+			$errPoint = ($statement ? $statement : $this->db);
+			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+			Logger::logSQLError('LogLevel', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
+			throw new MigrationFailedException("Error creating LogLevel table");
+		}
+
+		$sql = "CREATE TABLE IF NOT EXISTS " . Log::TABLE
+				. " ( "
+				. Log::id . " INTEGER PRIMARY KEY,  "
+				. Log::trace . " TEXT, "
+				. Log::trace_id . " TEXT, "
+				. Log::context . " TEXT, "
+				. Log::context_id . " TEXT, "
+				. Log::level . " TEXT, "
+				. Log::message . " TEXT, "
+				. Log::created . " INTEGER, "
+				. "FOREIGN KEY (" . Log::level . ") REFERENCES " . LogLevel::TABLE . "(" . LogLevel::code . ")"
+				. ")";
+
+		$statement = $this->db->prepare($sql);
+		if ($statement == false || $statement->execute() == false) {
+			$errPoint = ($statement ? $statement : $this->db);
+			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+			Logger::logSQLError('Log', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
+			throw new MigrationFailedException("Error creating LogLevel table");
+		}
+
+		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . LogLevel::TABLE . '_idindex on ' . LogLevel::TABLE . '(' . LogLevel::id . ')');
+		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . LogLevel::TABLE . '_nameindex on ' . LogLevel::TABLE . '(' . LogLevel::name . ')');
+	}
+
+	public function sqlite_postUpgrade()
+	{
+		$log_level_model = Model::Named("LogLevel");
+		$log_levels = array(
+			'info' => 'INFO',
+			'warning' => 'WARNING',
+			'error' => 'ERROR',
+			'fatal' => 'FATAL'
+		);
+		foreach ($log_levels as $code => $name) {
+			if ($log_level_model->logLevelForCode($code) == false)
+			{
+				$newObjId = $log_level_model->createObj(LogLevel::TABLE, array(
+					LogLevel::id => array_search($code, array_keys($log_levels)),
+					LogLevel::code => $code,
+					LogLevel::name => $name
+					)
+				);
+			}
+		}
+	}
+}

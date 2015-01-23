@@ -12,7 +12,9 @@
         "Application Version": "Application Version",
         "PHP Memory": "PHP Memory",
         "PHP POST size": "PHP POST size",
-        "PHP Upload Filesize": "PHP Upload Filesize"
+        "PHP Upload Filesize": "PHP Upload Filesize",
+        "Upgrade to": "Upgrade to",
+        "Confirm Upgrade": "Confirm Upgrade"
     },
     "Admin": {
         "title": "Admin"
