@@ -19,7 +19,7 @@ class Version extends Model
 
 	public function tableName() { return Version::TABLE; }
 	public function tablePK() { return Version::id; }
-	public function sortOrder() { return array(Version::code); }
+	public function sortOrder() { return array( 'desc' => array(Version::code)); }
 
 	public function allColumnNames()
 	{
