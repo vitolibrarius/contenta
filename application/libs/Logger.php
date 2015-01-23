@@ -103,9 +103,9 @@ abstract class Logger implements LoggerInterface {
 				$result[] = sprintf(
 					$traceline,
 					$key,
-					shortendPath($stackPoint['file'], 3),
-					$stackPoint['line'],
-					$stackPoint['function'],
+					(isset($stackPoint['file']) ? shortendPath($stackPoint['file'], 3) : ''),
+					(isset($stackPoint['line']) ? $stackPoint['line'] : ''),
+					(isset($stackPoint['function']) ? $stackPoint['function'] : ''),
 					implode(', ', $stackPoint['args'])
 				);
 			}
