@@ -1,3 +1,19 @@
+Version 0.1.2:
+*   5cce973 -  (HEAD, origin/master, origin/HEAD, master) Merge branch 'master' of github-as-vito:vitolibrarius/contenta (Fri Jan 23 09:29:29 2015 -0700) <Vito Librarius>
+|\  
+| * d635ff4 -  Update README.md (Thu Jan 22 20:50:13 2015 -0700) <Vito Librarius>
+* | 97bb2b3 -  UI for searching database logs (Fri Jan 23 09:24:56 2015 -0700) <Vito Librarius>
+* | 7e4f984 -  Added Logging to database (Fri Jan 23 08:24:14 2015 -0700) <Vito Librarius>
+* | ddf29d2 -  Added support for more localization in each view (Thu Jan 22 21:38:24 2015 -0700) <Vito Librarius>
+* | ac1de7f -  moved the php configuration items into the .htaccess file.  Updated the configuration content to match this technique (Thu Jan 22 20:26:16 2015 -0700) <Vito Librarius>
+|/  
+* e3a06a0 -  Added authentication and tested with default user (Wed Jan 21 18:13:12 2015 -0700) <Vito Librarius>
+* d07715a -  missed file (Wed Jan 21 14:34:07 2015 -0700) <Vito Librarius>
+* b54523c -  Added UI workflow to manage initial configuration review and version upgrade data migration (Wed Jan 21 14:33:55 2015 -0700) <Vito Librarius>
+* 39ae111 -  Changed log to show absolute dates (Wed Jan 21 10:26:58 2015 -0700) <Vito Librarius>
+* c918052 -  Change log should not show relative dates (Tue Jan 20 22:33:27 2015 -0700) <Vito Librarius>
+* 09d215e -  Added migration for Users table.  Settled on a simpler function for autoloading classes. (Tue Jan 20 20:20:41 2015 -0700) <Vito Librarius>
+
 Version 0.1.1:
 * 9bde189 -  (HEAD, master) Working on different autoloading techniques and namespaces for the classes.  Implementing a migration pattern tied to the project version to keep the database in step with the code. (Tue Jan 20 17:06:58 2015 -0700) <Vito Librarius>
 * c196b93 -  Added Logger class to collect system messages (Thu Jan 15 21:55:38 2015 -0700) <Vito Librarius>
