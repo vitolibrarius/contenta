@@ -16,6 +16,16 @@
 
 	try {
  		$config = Config::instance();
+ 		if ( $config->absolutePathValue( "Logging/path", null) != null ) {
+ 			$ini_error_log = ini_get("error_log");
+ 			$proposed_error_log =  appendPath($config->absolutePathValue( "Logging/path" ), "script.log");
+ 			if ( $ini_error_log != $proposed_error_log ) {
+ 				if (is_file($proposed_error_log) || touch( $proposed_error_log )) {
+	 				ini_set("error_log", $proposed_error_log );
+ 				}
+ 			}
+ 		}
+
 		$database = Database::instance();
 		if ( $database->verifyDatabase() == true ) {
 			$app = new Application();
