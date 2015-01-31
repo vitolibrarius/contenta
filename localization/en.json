@@ -14,7 +14,8 @@
         "PHP POST size": "PHP POST size",
         "PHP Upload Filesize": "PHP Upload Filesize",
         "Upgrade to": "Upgrade to",
-        "Confirm Upgrade": "Confirm Upgrade"
+        "Confirm Upgrade": "Confirm Upgrade",
+        "PHP error log": "PHP error log"
     },
     "Admin": {
         "title": "Admin"
@@ -26,7 +27,8 @@
         "AdminMenu": "Admin",
         "LogsMenu": "Logs",
         "SeriesMenu": "Series",
-        "ProfileMenu": "Profile"
+        "ProfileMenu": "Profile",
+        "LoginMenu": "Login"
     },
     "Error": {
         "title": "Error"
@@ -34,5 +36,8 @@
     "Logs": {
         "title": "Logs",
         "Show Filters": "Show Filters"
+    },
+    "Login": {
+        "title": "Login"
     }
 }

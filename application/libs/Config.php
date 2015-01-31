@@ -43,7 +43,7 @@ class Config
 	 * @param mixed $key Usually a string, key may be separated using '/', so 'Repository/path', the key must end with "path"
 	 * @return string path or raise exception
 	 */
-	public static function GetPath($key, $default)
+	public static function GetPath($key, $default = null)
 	{
 		return self::instance()->absolutePathValue($key, $default);
 	}
@@ -184,7 +184,7 @@ class Config
 	 * @param mixed $key Usually a string, key may be separated using '/', so 'Repository/path', the key must end with "path"
 	 * @return string path or raise exception
 	 */
-	public function absolutePathValue($key, $default)
+	public function absolutePathValue($key, $default = null)
 	{
 		if ( isset($key) && strlen($key) > 0) {
 			if ( "Repository" === $key || "Repository/path" == $key ) {

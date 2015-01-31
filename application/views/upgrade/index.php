@@ -58,6 +58,26 @@
 			</span></td>
 		</tr>
 		<tr>
+			<th><?php echo $this->localizedLabel("PHP error log"); ?></th>
+			<td>
+				<?php
+					$status = "";
+					echo "<span class='" . $status . "'>" . ini_get("error_log") . '</span><br>';
+				?>
+			</td>
+			<td><span>
+					<p>You can alter this value by either editing the full path defined in <em>.htaccess</em>
+						or by setting a configuration value for <em>Logging/path</em></p>
+<pre>----- in .htaccess
+php_value error_log /var/log/php-scripts.log
+</pre>
+<pre>----- in contenta.ini
+[Logging]
+path=logs  (results in $repositoryRoot/logs/script.log)
+</pre>
+			</span></td>
+		</tr>
+		<tr>
 			<th><?php echo $this->localizedLabel("PHP Memory"); ?></th>
 			<td><?php
 					$iniMemory = convertToBytes(ini_get('memory_limit')) / 1024;
