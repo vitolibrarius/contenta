@@ -30,7 +30,7 @@ class Auth
 	}
 
 	public static function requireRole($role = null) {
-		if (isset($role) == false) {
+		if (isset($role) == false  || $role == null) {
 			return true;
 		}
 
