@@ -1,6 +1,7 @@
 .card {
 	display: inline-block;
 	position: relative;
+	min-height:200px;
 	width: 225px;
 	margin: 8px;
 	padding: 4px;
@@ -18,6 +19,10 @@
 	display: block;
 	position:relative;
 	margin-bottom: .2em;
+}
+
+.card .feature .feature_top {
+	min-height:160px;
 }
 
 .card .feature .feature_top_left {
