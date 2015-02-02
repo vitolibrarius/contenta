@@ -20,6 +20,7 @@
 	-o-transition: all 0.5s ease;
 	-ms-transition: all 0.5s ease;
 	transition: all 0.5s ease;
+	height: 168px;
 }
 
 .photobanner img:hover {
@@ -46,10 +47,10 @@
 
 @keyframes "bannermove" {
  0% {
-	margin-left: 0px;
+    margin-left: 0px;
  }
  100% {
-	margin-left: -520px;
+    margin-left: -520px;
  }
 
 }
