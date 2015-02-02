@@ -9,6 +9,7 @@
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="public/css/application.css" />
+	<link rel="stylesheet" href="public/css/Admin.css" />
 
 	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
 	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
@@ -51,34 +52,64 @@
 
 	<section class="main">
 
-		<div class="mediaData">
-			<table>
-				<tbody><tr>
-					<th><a href="#"><div class="titleBox">Users</div></a></th>
-					<td><p>User List and administration</p></td>
-				</tr>
-				<tr>
-					<th><a href="#"><div class="titleBox">New Users</div></a></th>
-					<td><p>Register new users</p></td>
-				</tr>
-				<tr>
-					<th><a href="Logs.html"><div class="titleBox">Logs</div></a></th>
-					<td><p>Log search and reporting</p></td>
-				</tr>
-				<tr>
-					<th><a href="Processing.html"><div class="titleBox">Processing</div></a></th>
-					<td><p>Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content.</p></td>
-				</tr>
-				<tr>
-					<th><a href="Upload.html"><div class="titleBox">Upload</div></a></th>
-					<td><p>Upload new content for indexing and display.</p></td>
-				</tr>
-				<tr>
-					<th><a href="#"><div class="titleBox">Tools</div></a></th>
-					<td><p>Manually run some processing tools.</p></td>
-				</tr>
-			</tbody></table>
+	<div class="admin_group">
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="public/img/admin-users.png">
+			</div>
+			<div class="admin_card_item">
+				<a href="#">Users</a>
+				<p>User List and administration</p>
+			</div>
+			<div class="admin_card_item">
+				<a href="#">Add User</a>
+				<p>Register new users</p>
+			</div>
 		</div>
+
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="public/img/admin-processing.png">
+			</div>
+			<div class="admin_card_item">
+				<a href="#">Upload</a>
+				<p>Upload new media content</p>
+			</div>
+			<div class="admin_card_item">
+				<a href="Processing.html">Repair Processing</a>
+				<p>Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content</p>
+			</div>
+		</div>
+
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="public/img/admin-publications.png">
+			</div>
+			<div class="admin_card_item">
+				<a href="#">Series</a>
+				<p>Flagged series</p>
+			</div>
+			<div class="admin_card_item">
+				<a href="#">Publications</a>
+				<p>Flagged issues</p>
+			</div>
+		</div>
+
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="public/img/admin-network.png">
+			</div>
+			<div class="admin_card_item">
+				<a href="#">Endpoints</a>
+				<p>Configured network endpoints (RSS, ComicVine, ..)</p>
+			</div>
+			<div class="admin_card_item">
+				<a href="#">Add New Endpoint</a>
+				<p>Create a new connection</p>
+			</div>
+		</div>
+
+	</div>
 
 	</section>
 

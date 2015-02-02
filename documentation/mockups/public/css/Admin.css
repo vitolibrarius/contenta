@@ -1,0 +1,44 @@
+.admin_group {
+	text-align: center;
+}
+
+.admin_card {
+	display: inline-block;
+	position: relative;
+	width: 225px;
+	margin: 10px;
+	vertical-align: top;
+	background-color: #eee;
+	box-shadow: 2px 2px 4px #aaa;
+	border:1px solid #ccc;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.admin_card_top img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.admin_card_item {
+	border-top:2px groove white;
+	padding: 4px;
+	margin-top: 4px;
+}
+
+.admin_card_item:hover {
+	background-color: #ddf;
+}
+
+.admin_card_item a {
+	font-size: 1.2em;
+	font-weight: bold;
+	display:block;
+}
+
+.admin_card_item p {
+	font-size: 0.8em;
+	margin: 0px;
+}
