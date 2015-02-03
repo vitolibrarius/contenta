@@ -1,3 +1,13 @@
+Version 0.1.4:
+* d5be86d -  (HEAD, master) Added columns to endpoint_type (Tue Feb 3 16:08:43 2015 -0700) <Vito Librarius>
+* 4abe4da -  Added repeatable pattern for model editing. (Tue Feb 3 16:07:30 2015 -0700) <Vito Librarius>
+* 45ebeda -  Nudging mockup css to match production (Mon Feb 2 14:11:30 2015 -0700) <Vito Librarius>
+* ef19c63 -  (origin/master, origin/HEAD) New admin page mockup (Sun Feb 1 20:29:14 2015 -0700) <Vito Librarius>
+* f13b5a6 -  rearranging the mockup resources to match the application layout.  Allows for easier diff of changes (Sun Feb 1 12:35:53 2015 -0700) <Vito Librarius>
+* 2112bd1 -  Working on initial edit patterns.  Added an endpoint report view (Sun Feb 1 12:35:04 2015 -0700) <Vito Librarius>
+* f994df6 -  Basic controls for error_log() (Sat Jan 31 13:41:40 2015 -0700) <Vito Librarius>
+* 5c469fc -  sort descending (Fri Jan 23 14:46:40 2015 -0700) <Vito Librarius>
+
 Version 0.1.3:
 * 75f70db -  (HEAD, master) Fixed exception where some of the stack pointers were null (Fri Jan 23 14:43:19 2015 -0700) <Vito Librarius>
 * 7f68f36 -  added tables for Network, EndpointType, Endpoint and User_Network (Fri Jan 23 14:42:50 2015 -0700) <Vito Librarius>
