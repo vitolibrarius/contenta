@@ -1,52 +1,63 @@
-<?php if (isset($this->marquee)): ?>
-<div id="marquee">
-	<div class="photobanner">
-		<?php foreach( $this->marquee as $idx => $src) {
-			echo "<img ";
-			if ($idx == 0) { echo "class='first'"; }
-			echo "src='" . $src . "'/>";
-		}
-		?>
-	</div>
-</div>
-<br>
-<br>
-<?php endif; ?>
-
-<?php if (Session::get('user_logged_in') == true):?>
-
-<div class="span_container">
-	<div class="span_container_row header">
-		<span class="">Feature</span>
-		<span class="">Expected Version</span>
-		<span class="">System Version</span>
-	</div>
-	<div class="span_container_row">
-		<span class="">PHP</span>
-		<span class=""></span>
-		<span class="">
-			<?php
-			if (PHP_VERSION_ID < 57207) {
-				echo '<b style="color:red;">';
-			}
-			echo phpversion();
-			if (PHP_VERSION_ID < 57207) {
-				echo '</b>';
-			}
-			?>
-		</span>
-	</div>
-
-	<?php foreach (get_loaded_extensions() as $key => $extension): ?>
-		<div class="span_container_row">
-			<span class=""><?php echo $extension; ?></span>
-			<span class=""></span>
-			<span class="">
-				<?php echo phpversion($extension) ; ?>
-			</span>
+	<div class="admin_group">
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="<?php echo Config::Web('/public/img/admin-users.png'); ?>">
+			</div>
+			<div class="admin_card_item">
+				<a href="#"><?php echo $this->localizedLabel( "UsersLink", "Users" ); ?></a>
+				<p><?php echo $this->localizedLabel( "UsersLink-desc", "User List and administration" ); ?></p>
+			</div>
+			<div class="admin_card_item">
+				<a href="#"><?php echo $this->localizedLabel( "AddUsersLink", "Add User" ); ?></a>
+				<p><?php echo $this->localizedLabel( "UsersLink-desc", "Register new users" ); ?></p>
+			</div>
 		</div>
-	<?php endforeach; ?>
 
-</div>
-<?php endif; ?>
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="<?php echo Config::Web('/public/img/admin-processing.png'); ?>">
+			</div>
+			<div class="admin_card_item">
+				<a href="#"><?php echo $this->localizedLabel( "UploadLink", "Upload" ); ?></a>
+				<p><?php echo $this->localizedLabel( "UploadLink-desc", "Upload new media content" ); ?></p>
+			</div>
+			<div class="admin_card_item">
+				<a href="Processing.html"><?php echo $this->localizedLabel( "RepairLink", "Repair Processing" ); ?></a>
+				<p><?php echo $this->localizedLabel( "RepairLink-desc",
+					"Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content" );
+				 ?></p>
+			</div>
+		</div>
+
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="<?php echo Config::Web('/public/img/admin-publications.png'); ?>">
+			</div>
+			<div class="admin_card_item">
+				<a href="#">Series</a>
+				<p>Flagged series</p>
+			</div>
+			<div class="admin_card_item">
+				<a href="#">Publications</a>
+				<p>Flagged issues</p>
+			</div>
+		</div>
+
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="<?php echo Config::Web('/public/img/admin-network.png'); ?>">
+			</div>
+			<div class="admin_card_item">
+				<a href="<?php echo Config::Web('/netconfig/index'); ?>">
+					<?php echo $this->localizedLabel( "EndpointsLink", "Endpoints" ); ?></a>
+				<p><?php echo $this->localizedLabel( "EndpointsLink-desc", "Configured network endpoints (RSS, ComicVine, ..)" ); ?></p>
+			</div>
+			<div class="admin_card_item">
+				<a href="<?php echo Config::Web('/netconfig/edit'); ?>">
+					<?php echo $this->localizedLabel( "AddEndpointsLink", "Add New Endpoint" ); ?></a>
+				<p><?php echo $this->localizedLabel( "AddEndpointsLink-desc", "Create a new connection" ); ?></p>
+			</div>
+		</div>
+
+	</div>
 

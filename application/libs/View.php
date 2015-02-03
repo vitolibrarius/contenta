@@ -27,6 +27,13 @@ class View
 		return Localized::Get( $this->controllerName . "/" . $key, (is_null($default) ? $key : $default));
 	}
 
+	public function modelLabel( $table, $attr, $default = null )
+	{
+		$legendKey = appendPath("Model", $table, $attr);
+		$legendValue = ucwords( $attr );
+		return Localized::Get($legendKey, $legendValue);
+	}
+
 	/**
 	 * get the title of this view using localizable values, unless an override value has been set
 	 */
@@ -45,6 +52,11 @@ class View
 	public function setViewTitle($key)
 	{
 		$this->viewTitle = $key;
+	}
+
+	public function setLocalizedViewTitle($key = "title", $default = null)
+	{
+		$this->viewTitle = $this->localizedLabel( $key, $default );
 	}
 
 	public function addStylesheet($path = null) {
@@ -207,33 +219,20 @@ class View
 		return false;
 	}
 
-/* Form editing support methods
-abstract public function attributesFor($object);
-
-abstract public function attributeId($object, $attr);
-abstract public function attributeName($object, $attr);
-
-abstract public function attributeIsEditable($object, $attr);
-abstract public function attributeLabel($object, $attr);
-abstract public function attributeRestrictionMessage($object, $attr);
-abstract public function attributeDefaultValue($object, $attr);
-abstract public function attributeEditPattern($object, $attr);
-abstract public function attributePlaceholder($object, $attr);
-*/
-	public function renderFormField( $type = 'text', $object, $model, $attr, $submittedValue = null )
+	public function renderFormField( $formType = 'text', $object = null, $type = null, $model, $attr, $value = null, $editable = true)
 	{
-		$editPanel = VIEWS_PATH . 'edit/' . $type . 'Component.php';
+		$editPanel = VIEWS_PATH . 'edit/' . $formType . 'Component.php';
 
-		$this->input_id = $model->attributeId($object, $attr);
-		$this->input_name = $model->attributeName($object, $attr);
-		$this->input_label = $model->attributeLabel($object, $attr);
-		$this->input_restriction = $model->attributeRestrictionMessage($object, $attr);
-		$this->input_pattern = $model->attributeEditPattern($object, $attr);
-		$this->input_placeholder = $model->attributePlaceholder($object, $attr);
-		$this->input_options = $model->attributeOptions($object, $attr);
-		$this->input_value = ($submittedValue == null) ?
-			$model->attributeDefaultValue($object, $attr) :
-			$submittedValue;
+		$this->input_id = $model->attributeId($attr);
+		$this->input_name = $model->attributeName($object, $type, $attr);
+		$this->input_label = $model->attributeLabel($object, $type, $attr);
+		$this->input_restriction = $model->attributeRestrictionMessage($object, $type, $attr);
+		$this->input_pattern = $model->attributeEditPattern($object, $type, $attr);
+		$this->input_placeholder = $model->attributePlaceholder($object, $type, $attr);
+		$this->input_options = $model->attributeOptions($object, $type, $attr);
+		$this->input_value = ($value == null) ?
+			$model->attributeDefaultValue($object, $type, $attr) :
+			$value;
 
 		require $editPanel;
 	}
@@ -247,7 +246,7 @@ abstract public function attributePlaceholder($object, $attr);
 				$attr = $components[1];
 				$model = Model::Named($table);
 				if ( $model != null ) {
-					$type = $model->attributeType(null, $attr);
+					$type = $model->attributeType($attr);
 					switch ($type) {
 						case Model::DATE_TYPE:
 							$value = strtotime($value);

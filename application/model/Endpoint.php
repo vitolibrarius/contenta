@@ -39,7 +39,7 @@ class Endpoint extends Model
 	public function allForTypeCode($code = null)
 	{
 		if ( $code != null ) {
-			$type_model = Model::Named('EndpointType');
+			$type_model = Model::Named('Endpoint_Type');
 			$type = $type_model->endpointTypeForCode($code);
 			if ( $type != false ) {
 				return $this->allForType($type);
@@ -87,4 +87,66 @@ class Endpoint extends Model
 		}
 		return false;
 	}
+
+	/* EditableModelInterface */
+
+	public function attributesFor($object = null, $type = null ) {
+		return array(
+			Endpoint::name => Model::TEXT_TYPE,
+			Endpoint::base_url => Model::TEXT_TYPE,
+			Endpoint::api_key => Model::TEXT_TYPE,
+			Endpoint::username => Model::TEXT_TYPE,
+			Endpoint::enabled => Model::FLAG_TYPE,
+			Endpoint::compressed => Model::FLAG_TYPE
+		);
+	}
+
+	public function attributeOptions($object = null, $type = null, $attr) {
+		if ( $attr == Endpoint::type_id ) {
+			$type_model = Model::Named('Endpoint_Type');
+			return $type_model->endpointTypes();
+		}
+		return null;
+	}
+
+	public function attributeIsEditable($object = null, $type = null, $attr) {
+		if ( is_a($object, "model\\EndpointDBO" ) ) {
+			if ( $attr == Endpoint::type_id ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) == false || is_null($object) == true) {
+			if ( isset($type) && is_a($type, "model\\Endpoint_TypeDBO" ) ) {
+				switch ($attr) {
+					case Endpoint::base_url:
+						return $type->api_url;
+					case Endpoint::name:
+						return $type->name;
+					case Endpoint::compressed:
+						return Model::TERTIARY_FALSE;
+					case Endpoint::enabled:
+						return Model::TERTIARY_TRUE;
+				}
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)
+	{
+		if ( $attr == Endpoint::type_id ) {
+			if ( isset($type, $type->comments) && is_a($type, "model\\Endpoint_TypeDBO" ) ) {
+				return $type->comments;
+			}
+		}
+
+		return null;
+	}
+
 }
