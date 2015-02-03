@@ -18,7 +18,18 @@
         "PHP error log": "PHP error log"
     },
     "Admin": {
-        "title": "Admin"
+        "title": "Admin",
+        "UsersLink": "Users",
+        "UsersLink-desc": "User List and administration",
+        "AddUsersLink": "Add User",
+        "UploadLink": "Upload",
+        "UploadLink-desc": "Upload new media content",
+        "RepairLink": "Repair Processing",
+        "RepairLink-desc": "Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content",
+        "EndpointsLink": "Endpoints",
+        "EndpointsLink-desc": "Configured network endpoints (RSS, ComicVine, ..)",
+        "AddEndpointsLink": "Add New Endpoint",
+        "AddEndpointsLink-desc": "Create a new connection"
     },
     "Index": {
         "title": "Index"
@@ -28,7 +39,10 @@
         "LogsMenu": "Logs",
         "SeriesMenu": "Series",
         "ProfileMenu": "Profile",
-        "LoginMenu": "Login"
+        "LoginMenu": "Login",
+        "NextButton": "Next",
+        "ResetButton": "Reset",
+        "SaveButton": "Save"
     },
     "Error": {
         "title": "Error"
@@ -39,5 +53,23 @@
     },
     "Login": {
         "title": "Login"
+    },
+    "Netconfig": {
+        "title": "Network Configuration",
+        "NewRecord": "New Network Configuration",
+        "EditRecord": "Edit Network Configuration",
+        "Network Configuration": "Network Configuration"
+    },
+    "Model": {
+        "endpoint": {
+            "type_id": "Connection Type",
+            "FormLegend": "Endpoint Details",
+            "name": "Name",
+            "base_url": "URL",
+            "api_key": "API Key",
+            "username": "Username",
+            "enabled": "Enabled",
+            "compressed": "Compressed"
+        }
     }
 }

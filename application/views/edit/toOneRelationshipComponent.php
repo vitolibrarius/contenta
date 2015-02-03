@@ -7,7 +7,7 @@
 <label for="<?php echo $this->input_id; ?>">
 <?php echo $this->input_label; ?>
 <?php if ($this->input_restriction != null) {
-	echo '<span style="display: block; font-size: 14px; color: #999;">' . $this->input_restriction .'</span>';
+	echo '<span class="input_restriction">' . $this->input_restriction .'</span>';
 }
 ?>
 </label>

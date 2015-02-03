@@ -2,24 +2,6 @@
 
 use \Database as Database;
 
-interface EditableModelInterface {
-	/* Form editing support methods */
-	public function attributesFor($object);
-
-	public function attributeId($object, $attr);
-	public function attributeName($object, $attr);
-
-	public function attributeIsEditable($object, $attr);
-	public function attributeLabel($object, $attr);
-	public function attributeRestrictionMessage($object, $attr);
-	public function attributeDefaultValue($object, $attr);
-	public function attributeEditPattern($object, $attr);
-	public function attributePlaceholder($object, $attr);
-	public function attributeOptions($object, $attr);
-
-	public function attributeType($object, $attr);
-}
-
 class ValidationException extends Exception
 {
 	private $reasons = null;
@@ -79,15 +61,6 @@ abstract class Model
 	abstract public function tablePK();
 	abstract public function sortOrder();
 	abstract public function allColumnNames();
-
-	public function attributeType($object, $attr)
-	{
-		$attributeArray = $this->attributesFor($object);
-		if ( is_array($attributeArray) && isset($attributeArray[$attr]) ) {
-			return $attributeArray[$attr];
-		}
-		return null;
-	}
 
 	public function allColumns() {
 		return implode(",", $this->allColumnNames() );
@@ -151,8 +124,8 @@ abstract class Model
 		return true;
 	}
 
-	public function updateObject($object, $values) {
-		if (isset($object) && $object != false) {
+	public function updateObject($object = null, $values) {
+		if (isset($object) && is_a($object, "\\DataObject" )) {
 			$model = $object->model();
 			$qual = array( $model->tablePK() => $object->pkValue() );
 			$tableValues = $values[$model->tableName()];
@@ -685,4 +658,42 @@ abstract class Model
 		}
 		return false;
 	}
+
+	public function attributesFor($object = null, $type = null) 				{ return array(); }
+	public function attributeName($object = null, $type = null, $attr)			{ return $this->attributeId($attr); }
+	public function attributeIsEditable($object = null, $type = null, $attr)	{ return true; }
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
+	public function attributeEditPattern($object = null, $type = null, $attr)	{ return null; }
+	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
+	public function attributeOptions($object = null, $type = null, $attr)		{ return null; }
+
+	public function attributeLabel($object = null, $type = null, $attr)
+	{
+		// example key:  Model/endpoint/type_id = type_id
+		$labelKey = "Model/" . $this->tableName() . "/" . $attr;
+		return Localized::Get($labelKey, $attr);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object, $object->{$attr}) && is_null($object->{$attr}) == false) {
+			return $object->{$attr};
+		}
+		return null;
+	}
+
+	public function attributeId($attr)
+	{
+		return $this->tableName() . Model::HTML_ATTR_SEPARATOR . $attr;
+	}
+
+	public function attributeType($attr)
+	{
+		$attributeArray = $this->attributesFor($object);
+		if ( is_array($attributeArray) && isset($attributeArray[$attr]) ) {
+			return $attributeArray[$attr];
+		}
+		return null;
+	}
+
 }

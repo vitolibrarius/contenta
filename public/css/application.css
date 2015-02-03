@@ -424,12 +424,12 @@ label {
 	padding: 4px 0;
 }
 
-label > span {
+.input_restriction {
 	display: block;
-    width: auto;
 	font-size: 11px;
 	color: #999;
 	white-space: normal;
+	margin: 2px 0;
 }
 
 input, select, textarea {
@@ -460,13 +460,13 @@ textarea {
 label.checkbox,
 label.radio {
 	display:inline-block;
+    width:19px;
+    height:19px;
 }
 
 label + input[type="checkbox"],
 label + input[type="radio"] {
-    display:inline-block;
-    width:19px;
-    height:19px;
+    display:block;
 }
 
 input[type="button"],
