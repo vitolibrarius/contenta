@@ -14,9 +14,11 @@ class Endpoint_Type extends Model
 	const code =		'code';
 	const data_type =	'data_type';
 	const site_url =	'site_url';
+	const favicon_url = 'favicon_url';
 	const api_url =		'api_url';
 	const throttle_hits =	'throttle_hits';
 	const throttle_time =	'throttle_time';
+	const comments =		'comments';
 
 	public function __construct(Database $db)
 	{
@@ -31,7 +33,7 @@ class Endpoint_Type extends Model
 	{
 		return array(
 			Endpoint_Type::id, Endpoint_Type::name, Endpoint_Type::code, Endpoint_Type::data_type,
-			Endpoint_Type::site_url, Endpoint_Type::api_url,
+			Endpoint_Type::site_url, Endpoint_Type::api_url, Endpoint_Type::comments. Endpoint_Type::favicon_url,
 			Endpoint_Type::throttle_hits, Endpoint_Type::throttle_time
 		 );
 	}

@@ -39,6 +39,8 @@ class Migration_3 extends Migrator
 				. Endpoint_Type::data_type . " TEXT, "
 				. Endpoint_Type::site_url . " TEXT, "
 				. Endpoint_Type::api_url . " TEXT, "
+				. Endpoint_Type::favicon_url . " TEXT, "
+				. Endpoint_Type::comments . " TEXT, "
 				. Endpoint_Type::throttle_hits . " INTEGER, "
 				. Endpoint_Type::throttle_time . " INTEGER "
 				. ")";
