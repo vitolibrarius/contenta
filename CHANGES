@@ -1,3 +1,6 @@
+Version 0.1.5:
+* a5b3141 -  (HEAD, master) Migration bug fixes (Tue Feb 3 17:11:56 2015 -0700) <Vito Librarius>
+
 Version 0.1.4:
 * d5be86d -  (HEAD, master) Added columns to endpoint_type (Tue Feb 3 16:08:43 2015 -0700) <Vito Librarius>
 * 4abe4da -  Added repeatable pattern for model editing. (Tue Feb 3 16:07:30 2015 -0700) <Vito Librarius>
