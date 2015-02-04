@@ -25,11 +25,10 @@
 				?>
 					<label>Type</label>
 					<div>
-						<span class="input_restriction" style="width:90%; float:left;">
-							ComicVine provides a detailed information source about comics and graphic novels that allow Contenta to automatically load and categorize uploaded media content.  Please see the ComicVine home page for information on abtaining an API key.
-						</span>
+						<span class="input_restriction" style="width:90%; float:left;"><?php echo $realType->comments; ?></span>
 						<a href="<?php echo $realType->site_url; ?>" target="<?php echo $realType->name; ?>">
-							<img style="display:inline; float:right;" src="<?php echo $realType->favicon(); ?>">
+							<img style="display:inline; float:right; max-width: 20px; max-height: 20px;"
+								src="<?php echo $realType->favicon(); ?>">
 						</a>
 					</div>
 					<input class="type" type="text" name="displayType" disabled

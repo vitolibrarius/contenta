@@ -130,41 +130,6 @@ class Migration_3 extends Migrator
 
 	public function sqlite_postUpgrade()
 	{
-		$ept_model = Model::Named("Endpoint_Type");
-		$types = array(
-			array(
-				Endpoint_Type::code => "Newznab",
-				Endpoint_Type::site_url => "http://www.newznab.com",
-				Endpoint_Type::name => "Newsnab (Usenet Indexing Service)",
-				Endpoint_Type::data_type => "NZB Index"
-			),
-			array(
-				Endpoint_Type::code => "RSS",
-				Endpoint_Type::site_url => "http://en.wikipedia.org/wiki/RSS",
-				Endpoint_Type::name => "RSS (NZB posting feed)",
-				Endpoint_Type::data_type => "RSS feed of NZB"
-			),
-			array(
-				Endpoint_Type::code => "ComicVine",
-				Endpoint_Type::site_url => "http://www.comicvine.com",
-				Endpoint_Type::api_url => "http://www.comicvine.com/api",
-				Endpoint_Type::throttle_hits => 200, // max hits per 15 minutes
-				Endpoint_Type::throttle_time => 900,
-				Endpoint_Type::name => "ComicVine (Comic book database)",
-				Endpoint_Type::data_type => "Media Metadata"
-			),
-			array(
-				Endpoint_Type::code => "SABnzbd",
-				Endpoint_Type::site_url => "http://sabnzbd.org",
-				Endpoint_Type::name => "SABnzbd (Open Source Binary Newsreader)",
-				Endpoint_Type::data_type => "Downloader"
-			)
-		);
-		foreach ($types as $dict) {
-			if ($ept_model->endpointTypeForCode($dict[Endpoint_Type::code]) == false) {
-				$newObjId = $ept_model->createObj(Endpoint_Type::TABLE, $dict);
-			}
-		}
 		return true;
 	}
 }

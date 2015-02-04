@@ -124,7 +124,7 @@ abstract class Model
 		return true;
 	}
 
-	public function updateObject($object = null, $values) {
+	public function updateObject($object = null, array $values) {
 		if (isset($object) && is_a($object, "\\DataObject" )) {
 			$model = $object->model();
 			$qual = array( $model->tablePK() => $object->pkValue() );
@@ -689,7 +689,7 @@ abstract class Model
 
 	public function attributeType($attr)
 	{
-		$attributeArray = $this->attributesFor($object);
+		$attributeArray = $this->attributesFor(null);
 		if ( is_array($attributeArray) && isset($attributeArray[$attr]) ) {
 			return $attributeArray[$attr];
 		}
