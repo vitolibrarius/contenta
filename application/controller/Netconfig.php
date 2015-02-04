@@ -42,7 +42,7 @@ class Netconfig extends Controller
 					$this->view->render( '/edit/endpoint' );
 				}
 				else {
-					Session::addNegativeFeedback($this->localizedLabel("Undefined Endpoint"));
+					Session::addNegativeFeedback($this->view->localizedLabel("Undefined Endpoint"));
 					Logger::logError("Invalid endpoint requested " . $netId);
 					$this->view->render('/error/index');
 				}
@@ -75,11 +75,11 @@ class Netconfig extends Controller
 					return;
 				}
 				else {
-					Session::addNegativeFeedback($this->localizedLabel( "Undefined Endpoint Type" ) );
+					Session::addNegativeFeedback($this->view->localizedLabel( "Undefined Endpoint Type" ) );
 				}
 			}
 			else {
-				Session::addNegativeFeedback($this->localizedLabel( "No form values" ));
+				Session::addNegativeFeedback($this->view->localizedLabel( "No form values" ));
 			}
 
 			$this->view->setLocalizedViewTitle("NewRecord", "New Network Configuration");
@@ -100,17 +100,19 @@ class Netconfig extends Controller
 				$netObj = $model->objectForId($netId);
 				if ( $netObj != false ) {
 					$model->updateObject($netObj, $values['endpoint']);
+					Session::addPositiveFeedback($this->view->globalLabel( "Save Completed" ));
 					$this->index();
 				}
 				else {
 					Session::addNegativeFeedback(
-						$this->localizedLabel( "Undefined Endpoint", "Unable to find appropriate Endpoint" ) . " " . $netId );
+						$this->view->localizedLabel( "Undefined Endpoint", "Unable to find appropriate Endpoint" ) . " " . $netId );
 					$this->view->render('/error/index');
 				}
 			}
 			else {
 				$netObj = $model->createObject($values);
 				if ( $netObj != false ) {
+					Session::addPositiveFeedback($this->view->globalLabel( "Save Completed" ));
 					$this->index();
 				}
 				else {

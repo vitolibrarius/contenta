@@ -58,7 +58,8 @@
         "title": "Network Configuration",
         "NewRecord": "New Network Configuration",
         "EditRecord": "Edit Network Configuration",
-        "Network Configuration": "Network Configuration"
+        "Network Configuration": "Network Configuration",
+        "No form values": "No form values"
     },
     "Model": {
         "endpoint": {

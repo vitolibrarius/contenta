@@ -15,7 +15,7 @@ use model\Endpoint as Endpoint;
 use model\Network as Network;
 use model\User_Network as User_Network;
 
-class Migration_3 extends Migrator
+class Migration_4 extends Migrator
 {
 	public function sqlite_preUpgrade()
 	{
@@ -25,7 +25,7 @@ class Migration_3 extends Migrator
 			throw new Exception('No path set in configuration for sqlite database');
 		}
 		$db_file = appendPath($db_path, "contenta.sqlite" );
-		$backupDatabase = appendPath($this->scratch, "contenta.Migration_3." . date('Y-m-d.H-i-s') . ".backup");
+		$backupDatabase = appendPath($this->scratch, "contenta.Migration_4." . date('Y-m-d.H-i-s') . ".backup");
 		file_exists($db_file) == false || copy($db_file, $backupDatabase) || die('Failed to backup ' . $db_file);
 	}
 
@@ -53,6 +53,7 @@ class Migration_3 extends Migrator
 				Endpoint_Type::code => "Newznab",
 				Endpoint_Type::site_url => "http://www.newznab.com",
 				Endpoint_Type::name => "Newsnab (Usenet Indexing Service)",
+				Endpoint_Type::favicon_url => "http://www.newznab.com/favicon.ico",
 				Endpoint_Type::data_type => "NZB Index",
 				Endpoint_Type::comments => "Newznab is a usenet indexing application that many sites employ.  Often you will need to register with the individual sites to obtain an API key allowing you access.  Please check the Newznab home site for more information"
 			),
@@ -73,11 +74,12 @@ class Migration_3 extends Migrator
 				Endpoint_Type::throttle_time => 900,
 				Endpoint_Type::name => "ComicVine (Comic book database)",
 				Endpoint_Type::data_type => "Media Metadata",
-				Endpoint_Type::comments => "ComicVine provides a detailed information source about comics and graphic novels that allow Contenta to automatically load and categorize uploaded media content.  Please see the ComicVine home page for information on abtaining an API key."
+				Endpoint_Type::comments => "ComicVine provides a detailed information source about comics and graphic novels that allow Contenta to automatically load and categorize uploaded media content.  Please see the ComicVine home page for information on obtaining an API key."
 			),
 			array(
 				Endpoint_Type::code => "SABnzbd",
 				Endpoint_Type::site_url => "http://sabnzbd.org",
+				Endpoint_Type::favicon_url => "http://sabnzbd.org/favicon.ico",
 				Endpoint_Type::name => "SABnzbd (Open Source Binary Newsreader)",
 				Endpoint_Type::data_type => "Downloader",
 				Endpoint_Type::comments => "SABnzbd makes Usenet as simple and streamlined as possible to download media content using NZB index files.  You will probably need to install your own copy of Sabnzbd and configure it with your usenet provider.  Please see the Sabnzbd site for more information and installation packages."
@@ -89,7 +91,7 @@ class Migration_3 extends Migrator
 				$newObjId = $ept_model->createObj(Endpoint_Type::TABLE, $dict);
 			}
 			else {
-				$ept_model->updateObject($type, $dict);
+				$ept_model->updateObject($type, array(Endpoint_Type::TABLE => $dict));
 			}
 		}
 		return true;

@@ -33,7 +33,7 @@ class Endpoint_Type extends Model
 	{
 		return array(
 			Endpoint_Type::id, Endpoint_Type::name, Endpoint_Type::code, Endpoint_Type::data_type,
-			Endpoint_Type::site_url, Endpoint_Type::api_url, Endpoint_Type::comments. Endpoint_Type::favicon_url,
+			Endpoint_Type::site_url, Endpoint_Type::api_url, Endpoint_Type::comments, Endpoint_Type::favicon_url,
 			Endpoint_Type::throttle_hits, Endpoint_Type::throttle_time
 		 );
 	}
