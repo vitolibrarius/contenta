@@ -5,6 +5,11 @@ defined('APPLICATION_PATH') || exit("APPLICATION_PATH not found.");
 
 define( 'VIEWS_PATH', APPLICATION_PATH . '/views/' );
 
+use \Session as Session;
+use \Localized as Localized;
+use \Logger as Logger;
+use \Model as Model;
+
 /**
  * Class View
  *
