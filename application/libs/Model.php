@@ -1,6 +1,8 @@
 <?php
 
 use \Database as Database;
+use \Localized as Localized;
+use \Logger as Logger;
 
 class ValidationException extends Exception
 {
