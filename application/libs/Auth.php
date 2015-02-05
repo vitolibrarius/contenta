@@ -171,7 +171,7 @@ class Auth
 			Logger::logError("Cookie invalid", 'cookie', $cookie);
 
 			// delete the invalid cookie to prevent infinite login loops
-			$this->deleteCookie();
+			Auth::deleteCookie();
 		}
 		return $login_successful;
 	}
