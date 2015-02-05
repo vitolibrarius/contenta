@@ -175,9 +175,7 @@ path=logs  (results in $repositoryRoot/logs/script.log)
 				<p>Absolute path to the repository.  Please ensure this path is accessible to the user running the
 				apache process.  Usually <em>_www</em> or <em>http</em></p>
 
-				<p>It looks like you are <em><?php
-					$processUser = posix_getpwuid(posix_geteuid());
-					echo $processUser['name']; ?></em></p>
+				<p>It looks like you are <em><?php echo exec('whoami'); ?></em></p>
 				<p>Media files are stored in <em><?php echo Config::Get("Repository/path"); ?>/media</em></p>
 
 			</span></td>
