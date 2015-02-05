@@ -61,7 +61,7 @@ class Netconfig extends Controller
 			$this->view->addStylesheet("select2.css");
 			$this->view->addScript("select2.min.js");
 
-			$values = $this->view->splitPOSTValues($_POST);
+			$values = splitPOSTValues($_POST);
 			if ( isset($values, $values['endpoint'], $values['endpoint']['type_id']) ) {
 				$model = Model::Named('Endpoint_Type');
 				$type = $model->objectForId($values['endpoint']['type_id']);
@@ -93,7 +93,7 @@ class Netconfig extends Controller
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Endpoint');
-			$values = $this->view->splitPOSTValues($_POST);
+			$values = splitPOSTValues($_POST);
 			$success = true;
 
 			if ( $netId > 0 ) {

@@ -396,3 +396,4 @@ function currentChangeLog()
 /** load these addition common functions after the base collection are loaded */
 require_once SYSTEM_PATH . 'application/config/common_arrays.php';
 require_once SYSTEM_PATH . 'application/config/common_filesystem.php';
+require_once SYSTEM_PATH . 'application/config/common_http.php';

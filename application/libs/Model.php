@@ -39,6 +39,7 @@ abstract class Model
 	const TERTIARY_FALSE = 0;
 
 	const TEXT_TYPE = 'text';
+	const PASSWORD_TYPE = 'password';
 	const TEXTAREA_TYPE = 'textarea';
 	const INT_TYPE = 'number';
 	const DATE_TYPE = 'date';

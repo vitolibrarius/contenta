@@ -47,7 +47,8 @@
         "HelpLink": "Help",
         "AddIssueLink": "Report Problem",
         "Version": "Version",
-        "Save Completed": "Save Completed"
+        "Save Completed": "Save Completed",
+        "LoginButton": "Login"
     },
     "Error": {
         "title": "Error"
@@ -76,6 +77,12 @@
             "username": "Username",
             "enabled": "Enabled",
             "compressed": "Compressed"
+        },
+        "users": {
+            "user_password": "Password",
+            "user_name": "Username (or email)",
+            "user_rememberme": "Keep me logged in (for 2 weeks)",
+            "LoginLegend": "Login"
         }
     }
 }
