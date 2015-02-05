@@ -5,6 +5,7 @@ namespace controller;
 use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
+use \Auth as Auth;
 use \Session as Session;
 use model\Users as Users;
 
@@ -20,6 +21,8 @@ class Admin extends Controller
 	 */
 	function index()
 	{
-		$this->view->render( '/admin/index' );
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->render( '/admin/index' );
+		}
 	}
 }

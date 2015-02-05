@@ -49,7 +49,10 @@ abstract class Model
 
 	public static function Named($name)
 	{
-		$className = "model\\" . $name;
+		// converts table names like "log_level" to "Log_Level" to match the classname
+		$parts = explode("_", $name);
+		$parts = array_map('ucfirst', $parts);
+		$className = "model\\" . implode("_", $parts);
 		return new $className(Database::instance());
 	}
 
