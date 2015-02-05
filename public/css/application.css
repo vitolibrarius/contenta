@@ -52,11 +52,11 @@ header {
 }
 
 #content {
-   padding:10px;
-   padding-top:40px;   /* Height of the header */
-   padding-bottom:60px;   /* Height of the footer */
-   min-height:100%;
-   position:relative;
+	padding:10px;
+	padding-top:40px;   /* Height of the header */
+	padding-bottom:60px;   /* Height of the footer */
+	min-height:100%;
+	position:relative;
 	background: grey;
 	background: -moz-linear-gradient(top, #3981b8, white 75%);
 	background: -webkit-gradient(linear, 0 0, 0 75%, from(#3A81B8), to(white));
@@ -755,6 +755,26 @@ form .omega { margin-right:0;}
   float: left;
   width: 200px;
   margin-left: -200px;
+}
+
+footer > div {
+	width: 30%;
+	display: inline-block;
+	margin: 2px;
+	padding: 3px 6px;
+}
+
+footer > div#github {
+	font-weight: bold;
+}
+
+footer > div#version {
+	text-align: center;
+}
+
+footer > div#version > em {
+	color: grey;
+	font-size: .8em;
 }
 
 /** media overrides */
