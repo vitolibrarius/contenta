@@ -68,6 +68,15 @@ class Config
 		return self::instance()->processingDirectory();
 	}
 
+	public static function GetLog($filename = null)
+	{
+		$logging_dir = self::instance()->loggingDirectory();
+		if ( is_string($filename) && strlen($filename) > 0 ) {
+			return appendPath($logging_dir, $filename);
+		}
+		return $logging_dir;
+	}
+
 
 	/**
 	 * gets/returns the value of a specific key of the config
@@ -77,16 +86,6 @@ class Config
 	public function GetInteger($key, $default = 0)
 	{
 		return self::instance()->getIntegerValue($key, $default);
-	}
-
-	final public static function dirMask()
-	{
-		return self::instance()->getIntegerValue("Repository/dir_permission", 0755);
-	}
-
-	final public static function fileMask()
-	{
-		return self::instance()->getIntegerValue("Repository/file_permission", 0644);
 	}
 
 	final public static function AppName()
@@ -180,6 +179,11 @@ class Config
 	}
 
 	/**
+	 * gets/returns the value of a specific key of the config
+	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
+	 * @return mixed
+	 */
+	/**
 	 * gets/returns the absolute path value of a specific key of the config.
 	 * @param mixed $key Usually a string, key may be separated using '/', so 'Repository/path', the key must end with "path"
 	 * @return string path or raise exception
@@ -230,5 +234,12 @@ class Config
 		$processing_path = $this->absolutePathValue("Repository/processing", "_processing_");
 		makeRequiredDirectory($processing_path, 'processing');
 		return $processing_path;
+	}
+
+	public function loggingDirectory()
+	{
+		$logging_path = $this->absolutePathValue("Logging/path", "logs");
+		makeRequiredDirectory($logging_path, 'logging directory');
+		return $logging_path;
 	}
 }

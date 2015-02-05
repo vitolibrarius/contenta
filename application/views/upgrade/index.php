@@ -206,24 +206,6 @@ path=logs  (results in $repositoryRoot/logs/script.log)
 				<p>Full path is <em><?php echo Config::GetPath("Repository/processing", "-not set-");  ?></em></p>
 			</span></td>
 		</tr>
-		<tr>
-			<th>dir_permission</th>
-			<td>
-				<?php echo Config::Get("Repository/dir_permission"); ?>
-			</td>
-			<td><span>
-				<p>Directory permission to use when new directories are created (defaults to <em>0755</em>).</p>
-			</span></td>
-		</tr>
-		<tr>
-			<th>file_permission</th>
-			<td>
-				<?php echo Config::Get("Repository/file_permission"); ?>
-			</td>
-			<td><span>
-				<p>File permission to use when new files are created (defaults to <em>0644</em>).</p>
-			</span></td>
-		</tr>
 
 		<tr>
 			<th colspan="3">Database</th>

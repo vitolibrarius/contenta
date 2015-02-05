@@ -1,5 +1,8 @@
 <?php
 
+// default permissions for created directories
+define('DIR_PERMS', 0750);
+
 function file_ext_strip($filename)
 {
 	return preg_replace('/\.[^.]*$/', '', $filename);
@@ -84,7 +87,7 @@ function makeRequiredDirectory($path, $purpose = 'unknown')
 		$path = realpath($path) . '/';
 	}
 
-	is_dir($path) || mkdir($path, Config::dirMask(), true) ||
+	is_dir($path) || mkdir($path, DIR_PERMS, true) ||
 		die('Failed to create ' . $purpose . ' directory ' . $path);
 }
 
@@ -101,7 +104,7 @@ function makeUniqueDirectory( $root, $elements )
 			$working = $path . sprintf( ' - 0x%02x', $index);
 			$full = appendPath($root, $working);
 		}
-		return (mkdir($full , 0755 , true) ? $working : null);
+		return (mkdir($full , DIR_PERMS , true) ? $working : null);
 	}
 
 	Logger::logError("Unable to find root path '" . (string)$root . "'", "Common", "makeUniqueDirectory");
@@ -167,7 +170,7 @@ function recursive_copy($src, $dst, $purgeDestination = false)
 	}
 
 	if (is_dir($src)) {
-		is_dir($dst) || mkdir($dst, 0755, true) || die('Failed to create destination directory ' . $dst);
+		is_dir($dst) || mkdir($dst, DIR_PERMS, true) || die('Failed to create destination directory ' . $dst);
 
 		foreach (scandir($src) as $file) {
 			if ($file == '.' || $file == '..') continue;
