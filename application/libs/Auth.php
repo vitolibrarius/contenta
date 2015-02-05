@@ -137,7 +137,7 @@ class Auth
 		return false;
 	}
 
-	function loginWithCookie()
+	public static function loginWithCookie()
 	{
 		$user_model = Model::Named("Users");
 		$login_successful = false;
