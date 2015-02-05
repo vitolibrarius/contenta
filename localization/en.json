@@ -42,7 +42,12 @@
         "LoginMenu": "Login",
         "NextButton": "Next",
         "ResetButton": "Reset",
-        "SaveButton": "Save"
+        "SaveButton": "Save",
+        "WebsiteLink": "Website",
+        "HelpLink": "Help",
+        "AddIssueLink": "Report Problem",
+        "Version": "Version",
+        "Save Completed": "Save Completed"
     },
     "Error": {
         "title": "Error"

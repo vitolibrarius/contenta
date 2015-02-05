@@ -5,7 +5,7 @@ namespace model;
 use \Database as Database;
 use \DataObject as DataObject;
 use \Model as Model;
-use model\LogLevel as LogLevel;
+use model\Log_Level as Log_Level;
 
 class Log extends Model
 {
@@ -28,6 +28,8 @@ class Log extends Model
 	public function tablePK() { return Log::id; }
 	public function sortOrder() { return array("desc" => array(Log::id)); }
 
+	public function dboClassName() { return 'model\\LogDBO'; }
+
 	public function allColumnNames()
 	{
 		return array(
@@ -37,7 +39,7 @@ class Log extends Model
 
 	function create( $level, $message, $traceName = null, $traceId = null, $contextName = null, $contextId = null)
 	{
-		$log_level_model = Model::Named("LogLevel");
+		$log_level_model = Model::Named("Log_Level");
 		$levelObj = $log_level_model->logLevelForCode($level);
 
 		$newObjId = $this->createObj(Log::TABLE, array(
@@ -46,7 +48,7 @@ class Log extends Model
 			Log::trace_id => $traceId,
 			Log::context => $contextName,
 			Log::context_id => $contextId,
-			Log::level => ($levelObj == false ? 'warning' : $levelObj->{LogLevel::code}),
+			Log::level => ($levelObj == false ? 'warning' : $levelObj->{Log_Level::code}),
 			Log::message => $message
 			)
 		);

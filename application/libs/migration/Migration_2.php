@@ -10,7 +10,7 @@ use \Model as Model;
 use \Database as Database;
 
 use model\Users as Users;
-use model\LogLevel as LogLevel;
+use model\Log_Level as Log_Level;
 use model\Log as Log;
 
 
@@ -30,21 +30,21 @@ class Migration_2 extends Migrator
 
 	public function sqlite_upgrade()
 	{
-		$sql = "CREATE TABLE IF NOT EXISTS " . LogLevel::TABLE
+		$sql = "CREATE TABLE IF NOT EXISTS " . Log_Level::TABLE
 				. " ( "
-				. LogLevel::id . " INTEGER, "
-				. LogLevel::code . " TEXT PRIMARY KEY, "
-				. LogLevel::name . " TEXT COLLATE NOCASE "
+				. Log_Level::id . " INTEGER, "
+				. Log_Level::code . " TEXT PRIMARY KEY, "
+				. Log_Level::name . " TEXT COLLATE NOCASE "
 				. ")";
 
 		$statement = $this->db->prepare($sql);
 		if ($statement == false || $statement->execute() == false) {
 			$errPoint = ($statement ? $statement : $this->db);
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			Logger::logSQLError('LogLevel', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-			throw new MigrationFailedException("Error creating LogLevel table");
+			Logger::logSQLError('Log_Level', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
+			throw new MigrationFailedException("Error creating Log_Level table");
 		}
-		Logger::logInfo( "Created table " . LogLevel::TABLE, "Migration", LogLevel::TABLE);
+		Logger::logInfo( "Created table " . Log_Level::TABLE, "Migration", Log_Level::TABLE);
 
 		$sql = "CREATE TABLE IF NOT EXISTS " . Log::TABLE
 				. " ( "
@@ -56,7 +56,7 @@ class Migration_2 extends Migrator
 				. Log::level . " TEXT, "
 				. Log::message . " TEXT, "
 				. Log::created . " INTEGER, "
-				. "FOREIGN KEY (" . Log::level . ") REFERENCES " . LogLevel::TABLE . "(" . LogLevel::code . ")"
+				. "FOREIGN KEY (" . Log::level . ") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
 				. ")";
 
 		$statement = $this->db->prepare($sql);
@@ -64,18 +64,18 @@ class Migration_2 extends Migrator
 			$errPoint = ($statement ? $statement : $this->db);
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			Logger::logSQLError('Log', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-			throw new MigrationFailedException("Error creating LogLevel table");
+			throw new MigrationFailedException("Error creating Log_Level table");
 		}
 
 		Logger::logInfo( "Created table " . Log::TABLE, "Migration", Log::TABLE);
 
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . LogLevel::TABLE . '_idindex on ' . LogLevel::TABLE . '(' . LogLevel::id . ')');
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . LogLevel::TABLE . '_nameindex on ' . LogLevel::TABLE . '(' . LogLevel::name . ')');
+		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Log_Level::TABLE . '_idindex on ' . Log_Level::TABLE . '(' . Log_Level::id . ')');
+		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Log_Level::TABLE . '_nameindex on ' . Log_Level::TABLE . '(' . Log_Level::name . ')');
 	}
 
 	public function sqlite_postUpgrade()
 	{
-		$log_level_model = Model::Named("LogLevel");
+		$log_level_model = Model::Named("Log_Level");
 		$log_levels = array(
 			'info' => 'INFO',
 			'warning' => 'WARNING',
@@ -83,12 +83,12 @@ class Migration_2 extends Migrator
 			'fatal' => 'FATAL'
 		);
 		foreach ($log_levels as $code => $name) {
-			if ($log_level_model->logLevelForCode($code) == false)
+			if ($log_level_model->Log_LevelForCode($code) == false)
 			{
-				$newObjId = $log_level_model->createObj(LogLevel::TABLE, array(
-					LogLevel::id => array_search($code, array_keys($log_levels)),
-					LogLevel::code => $code,
-					LogLevel::name => $name
+				$newObjId = $log_level_model->createObj(Log_Level::TABLE, array(
+					Log_Level::id => array_search($code, array_keys($log_levels)),
+					Log_Level::code => $code,
+					Log_Level::name => $name
 					)
 				);
 			}
