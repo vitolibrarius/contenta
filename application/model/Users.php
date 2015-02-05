@@ -32,6 +32,8 @@ class Users extends Model
 	public function tablePK() { return Users::id; }
 	public function sortOrder() { return array(Users::name); }
 
+	public function dboClassName() { return 'model\\UsersDBO'; }
+
 	public function userTypes() {
 		return array( Users::StandardRole => "Standard", Users::AdministratorRole => "Administrator");
 

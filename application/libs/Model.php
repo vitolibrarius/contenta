@@ -62,6 +62,8 @@ abstract class Model
 	abstract public function sortOrder();
 	abstract public function allColumnNames();
 
+	abstract public function dboClassName();
+
 	public function allColumns() {
 		return implode(",", $this->allColumnNames() );
 	}
@@ -100,11 +102,15 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = 'model\\' . ucwords($this->tableName()) . 'DBO';
-				if (class_exists($dboClassName)) {
-					return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+				$dboClassName = $this->dboClassName();
+				try {
+					if (class_exists($dboClassName)) {
+						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+					}
 				}
-				return $statement->fetchAll();
+				catch ( \ClassNotFoundException $e ) {
+					return $statement->fetchAll();
+				}
 			}
 
 			$caller = callerClassAndMethod('allObjectsForId');
@@ -308,11 +314,15 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = 'model\\' . ucwords($table) . 'DBO';
-				if (class_exists($dboClassName)) {
-					return $statement->fetchObject($dboClassName);
+				$dboClassName = $this->dboClassName();
+				try {
+					if (class_exists($dboClassName)) {
+						return $statement->fetchObject($dboClassName);
+					}
 				}
-				return $statement->fetch();
+				catch ( \ClassNotFoundException $e ) {
+					return $statement->fetch();
+				}
 			}
 
 			$caller = callerClassAndMethod('fetch');
@@ -341,11 +351,15 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute()) {
-				$dboClassName = 'model\\' . ucwords($table) . 'DBO';
-				if (class_exists($dboClassName)) {
-					return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+				$dboClassName = $this->dboClassName();
+				try {
+					if (class_exists($dboClassName)) {
+						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+					}
 				}
-				return $statement->fetchAll();
+				catch ( \ClassNotFoundException $e ) {
+					return $statement->fetchAll();
+				}
 			}
 
 			$caller = callerClassAndMethod('fetchAll');
@@ -383,11 +397,15 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = 'model\\' . ucwords($table) . 'DBO';
-				if (class_exists($dboClassName)) {
-					return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+				$dboClassName = $this->dboClassName();
+				try {
+					if (class_exists($dboClassName)) {
+						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+					}
 				}
-				return $statement->fetchAll();
+				catch ( \ClassNotFoundException $e ) {
+					return $statement->fetchAll();
+				}
 			}
 
 			$caller = callerClassAndMethod('fetchAll');
@@ -431,11 +449,15 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = 'model\\' . ucwords($table) . 'DBO';
-				if (class_exists($dboClassName)) {
-					return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+				$dboClassName = $this->dboClassName();
+				try {
+					if (class_exists($dboClassName)) {
+						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+					}
 				}
-				return $statement->fetchAll();
+				catch ( \ClassNotFoundException $e ) {
+					return $statement->fetchAll();
+				}
 			}
 
 			$caller = callerClassAndMethod('fetchAllLike');
@@ -477,11 +499,15 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = 'model\\' . ucwords($table) . 'DBO';
-				if (class_exists($dboClassName)) {
-					return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+				$dboClassName = $this->dboClassName();
+				try {
+					if (class_exists($dboClassName)) {
+						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+					}
 				}
-				return $statement->fetchAll();
+				catch ( \ClassNotFoundException $e ) {
+					return $statement->fetchAll();
+				}
 			}
 
 			$caller = callerClassAndMethod('fetchAllJoin');
@@ -644,11 +670,15 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = 'model\\' . ucwords($table) . 'DBO';
-				if (class_exists($dboClassName)) {
-					return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+				$dboClassName = $this->dboClassName();
+				try {
+					if (class_exists($dboClassName)) {
+						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+					}
 				}
-				return $statement->fetchAll();
+				catch ( \ClassNotFoundException $e ) {
+					return $statement->fetchAll();
+				}
 			}
 
 			$caller = callerClassAndMethod('fetchAllLike');

@@ -28,6 +28,8 @@ class Endpoint extends Model
 	public function tablePK() { return Endpoint::id; }
 	public function sortOrder() { return array(Endpoint::type_id, Endpoint::name); }
 
+	public function dboClassName() { return 'model\\EndpointDBO'; }
+
 	public function allColumnNames()
 	{
 		return array(

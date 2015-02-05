@@ -9,7 +9,7 @@ use \Session as Session;
 use \Auth as Auth;
 use model\Users as Users;
 use model\Log as Log;
-use model\LogLevel as LogLevel;
+use model\Log_Level as Log_Level;
 
 /**
  * Class Error

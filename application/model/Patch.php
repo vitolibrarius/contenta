@@ -17,6 +17,8 @@ class Patch extends Model
 	public function tablePK() { return Patch::id; }
 	public function sortOrder() { return array(Patch::name); }
 
+	public function dboClassName() { return 'model\\PatchDBO'; }
+
 	public function allColumnNames()
 	{
 		return array(

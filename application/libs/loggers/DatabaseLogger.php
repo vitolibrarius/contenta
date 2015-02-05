@@ -5,7 +5,7 @@ namespace loggers;
 use \Model as Model;
 use \Logger as Logger;
 use model\Log as Log;
-use model\LogLevel as LogLevel;
+use model\Log_Level as Log_Level;
 
 class DatabaseLogger extends Logger
 {
