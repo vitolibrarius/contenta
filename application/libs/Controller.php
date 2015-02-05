@@ -19,11 +19,6 @@ class Controller
 	{
 		Session::init();
 
-		// user has remember-me-cookie ? then try to login with cookie ("remember me" feature)
-		if (!isset($_SESSION['user_logged_in']) && isset($_COOKIE['rememberme'])) {
-			header('location: ' . Config::Web('/login/loginWithCookie') );
-		}
-
 		// create a view object (that does nothing, but provides the view render() method)
 		$reflect = new ReflectionClass($this);
 		$this->view = new View($reflect->getShortName());

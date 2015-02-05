@@ -1,21 +1,21 @@
 <?php if (Session::get('user_logged_in') == false):?>
-		<form name='login' style="display:block; width:200px; margin-left:auto; margin-right:auto;" action="<?php echo Config::Web('/login/login') ?>" method="post">
-			<fieldset>
-			<legend>Login</legend>
+<form name='login' style="display:block; width:200px; margin-left:auto; margin-right:auto;" action="<?php echo Config::Web('/login/login') ?>" method="post">
+	<fieldset>
+	<legend>Login</legend>
 
-			<label for='username'>Username (or email)</label>
-			<input type="text" id='username' placeholder="JohnDoe" name="user_name" required />
+	<label for='username'>Username (or email)</label>
+	<input type="text" id='username' placeholder="JohnDoe" name="user_name" required />
 
-			<label for='password'>Password</label>
-			<input type="password" id='password' placeholder="" name="user_password" required />
+	<label for='password'>Password</label>
+	<input type="password" id='password' placeholder="" name="user_password" required />
 
-			<label class="remember-me-label">Keep me logged in (for 2 weeks)</label>
-			<input type="checkbox" name="user_rememberme" class="remember-me-checkbox" />
+	<label class="remember-me-label">Keep me logged in (for 2 weeks)</label>
+	<input type="checkbox" name="user_rememberme" class="remember-me-checkbox" />
 
-			<label>&nbsp; </label>
-			<input type="submit" class="login-submit-button" />
-			</fieldset>
-		</form>
+	<label>&nbsp; </label>
+	<input type="submit" class="login-submit-button" />
+	</fieldset>
+</form>
 <?php endif; ?>
 
 <?php if (isset($this->marquee)): ?>

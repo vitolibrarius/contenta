@@ -1,24 +1,46 @@
-<form style="display:block; width:200px; margin-left:auto; margin-right:auto;" name='login'
-	action="<?php echo Config::Web( (isset($this->loginActionPath) ? $this->loginActionPath : '/Login/login') )?>" method="post">
-	<fieldset>
-	<legend>Login</legend>
+<div style="padding:15px; display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
+	<form method="post" style="min-width: 380px;" name="login"
+		action="<?php echo Config::Web( (isset($this->loginActionPath) ? $this->loginActionPath : '/Login/login') )?>">
 
-	<label for='username'>Username (or email)</label>
-	<input type="text" id='username' placeholder="JohnDoe" name="user_name" required />
+		<fieldset>
+		<legend><?php echo $this->modelLabel( $this->model->tableName(), "LoginLegend", "Login" ); ?></legend>
 
-	<label for='password'>Password</label>
-	<input type="password" id='password' placeholder="" name="user_password" required />
+		<?php
+			$attrName = "user_name";
+			$attValue = null;
+			if ( isset($_POST, $_POST[$attrName]) ) {
+				$attValue = $_POST[$attrName];
+			}
 
-	<div>
-		<label class="checkbox remember-me-label" for="remember-me-label">Keep me logged in (for 2 weeks)</label>
-		<input type="checkbox" id="remember-me-label" name="user_rememberme" class="remember-me-checkbox" />
-	</div>
+			$this->renderFormField( Model::TEXT_TYPE, null, null, $this->model, $attrName, $attValue);
+		?>
 
+		<?php
+			$attrName = "user_password";
+			$attValue = null;
+			if ( isset($_POST, $_POST[$attrName]) ) {
+				$attValue = $_POST[$attrName];
+			}
 
-	<label>&nbsp; </label>
-	<input type="submit" class="login-submit-button" />
-	</fieldset>
-</form>
+			$this->renderFormField( Model::PASSWORD_TYPE, null, null, $this->model, $attrName, $attValue);
+		?>
+
+		<?php
+			$attrName = "user_rememberme";
+			$attValue = null;
+			if ( isset($_POST, $_POST[$attrName]) ) {
+				$attValue = $_POST[$attrName];
+			}
+
+			$this->renderFormField( Model::FLAG_TYPE, null, null, $this->model, $attrName, $attValue);
+		?>
+
+		<label>&nbsp; </label>
+		<input type="submit" name="edit_submit" value="<?php echo $this->globalLabel("LoginButton", "Login"); ?>" />
+
+		</fieldset>
+	</form>
+</div>
 
 <?php if (isset($this->marquee)): ?>
 <div id="marquee">

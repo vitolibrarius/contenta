@@ -18,12 +18,14 @@ class Auth
 		// initialize the session
 		Session::init();
 
-		// if user is still not logged in, then destroy session, handle user as "not logged in" and
-		// redirect user to login page
-		if (!isset($_SESSION['user_logged_in'])) {
-			Session::destroy();
-			header('location: ' . Config::Web('/login'));
-			return false;
+		// if user is still not logged in, or the user has remember-me-cookie ? then try to login with cookie ("remember me" feature),
+		// if not then destroy session, handle user as "not logged in" and redirect user to login page
+		if ( isset($_SESSION['user_logged_in']) == false) {
+			if (isset($_COOKIE['rememberme']) == false || (Auth::loginWithCookie() == false)) {
+				Session::destroy();
+				header('location: ' . Config::Web('/login') );
+				return false;
+			}
 		}
 
 		return true;
@@ -45,18 +47,26 @@ class Auth
 
 	public static function login()
 	{
-		// we do negative-first checks here
-		if (!isset($_POST['user_name']) OR empty($_POST['user_name'])) {
+		$values = splitPOSTValues($_POST);
+		if ( isset($values, $values['users']) == false ) {
 			Session::addNegativeFeedback(Localized::Get("Auth/USERNAME_FIELD_EMPTY", "Username field was empty."));
 			return false;
 		}
-		if (!isset($_POST['user_password']) OR empty($_POST['user_password'])) {
+
+		$userLogin = $values['users'];
+
+		// we do negative-first checks here
+		if (!isset($userLogin['user_name']) OR empty($userLogin['user_name'])) {
+			Session::addNegativeFeedback(Localized::Get("Auth/USERNAME_FIELD_EMPTY", "Username field was empty."));
+			return false;
+		}
+		if (!isset($userLogin['user_password']) OR empty($userLogin['user_password'])) {
 			Session::addNegativeFeedback(Localized::Get("Auth/PASSWORD_FIELD_EMPTY", "Password field was empty."));
 			return false;
 		}
 
 		$user_model = Model::Named("Users");
-		$user = $user_model->userByName($_POST['user_name']);
+		$user = $user_model->userByName($userLogin['user_name']);
 		if ( $user == false )
 		{
 			Session::addNegativeFeedback(Localized::Get("Auth/LOGIN_FAILED", "Login failed."));
@@ -75,11 +85,9 @@ class Auth
 		$VERIFIED_PASSWORD = false;
 		if ( PHP_VERSION_ID > 50500 )
 		{
-// 			$hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
-// 			$password_hash = password_hash($_POST['user_password'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
-			$VERIFIED_PASSWORD = password_verify($_POST['user_password'], $user->password_hash);
+			$VERIFIED_PASSWORD = password_verify($userLogin['user_password'], $user->password_hash);
 		}
-		else if (hash(HASH_DEFAULT_ALGO, $_POST['user_password']) === $user->password_hash)
+		else if (hash(HASH_DEFAULT_ALGO, $userLogin['user_password']) === $user->password_hash)
 		{
 			$VERIFIED_PASSWORD = true;
 		}
@@ -106,7 +114,7 @@ class Auth
 			$user_model->stampLoginTimestamp($user);
 
 			// if user has checked the "remember me" checkbox, then write cookie
-			if (isset($_POST['user_rememberme'])) {
+			if (isset($userLogin['user_rememberme'])) {
 
 				// generate 64 char random string and update database
 				$random_token_string = $user_model->generateRememberMeToken($user);
@@ -118,7 +126,7 @@ class Auth
 
 				// set cookie
 				$domain = "." . parse_url(Config::Url(), PHP_URL_HOST);
-				setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, "/", $domain);
+				setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, Config::Web('/'), $domain);
 			}
 
 			// return true to make clear the login was successful

@@ -6,6 +6,7 @@ use \Controller as Controller;
 use \Session as Session;
 use \Auth as Auth;
 use \Config as Config;
+use \Model as Model;
 use \Localized as Localized;
 
 
@@ -25,6 +26,7 @@ class Login extends Controller
 			}
 		}
 		else {
+			$this->view->model = Model::Named("Users");
 			$this->view->render('/login/index');
 		}
 	}
@@ -43,6 +45,7 @@ class Login extends Controller
 			}
 		}
 		else {
+			$this->view->model = Model::Named("Users");
 			$this->view->render('/login/index');
 		}
 	}
