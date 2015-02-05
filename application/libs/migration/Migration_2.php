@@ -83,7 +83,7 @@ class Migration_2 extends Migrator
 			'fatal' => 'FATAL'
 		);
 		foreach ($log_levels as $code => $name) {
-			if ($log_level_model->Log_LevelForCode($code) == false)
+			if ($log_level_model->logLevelForCode($code) == false)
 			{
 				$newObjId = $log_level_model->createObj(Log_Level::TABLE, array(
 					Log_Level::id => array_search($code, array_keys($log_levels)),
