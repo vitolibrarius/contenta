@@ -60,7 +60,7 @@ class Login extends Controller
 		Session::destroy();
 
 		// redirect user to base URL
-		header('location: ' . WEB_DIR . '/index/index');
+		header('location: ' . Config::Web('/index/index'));
 	}
 
 	/**
