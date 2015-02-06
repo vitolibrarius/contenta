@@ -1,4 +1,4 @@
-	<h1 style="color: red;">
-		An error has occured.
-	</h1>
+<h1 style="color: red;">
+	<?php echo $this->localizedLabel( "ERROR_LABEL", "An error has occured. ); ?>
+</h1>
 

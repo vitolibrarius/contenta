@@ -13,23 +13,23 @@
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/ui-lightness/jquery-ui.css" />
-	<link rel="stylesheet" href="<?php echo Config::Url('/public/css/application.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/application.css'); ?>" />
 
 	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
 	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-	<script type="text/javascript" src="<?php echo Config::Url('/public/js/application.js'); ?>"></script>
+	<script type="text/javascript" src="<?php echo Config::Web('/public/js/application.js'); ?>"></script>
 
 	<!-- Custom component stylesheets and scripts -->
 <?php
 	if ( isset($this->additionalStyles)) {
 		foreach ($this->additionalStyles as $key => $css) {
-			echo '<link rel="stylesheet" href="' . Config::Url($css) . '" />';
+			echo '<link rel="stylesheet" href="' . Config::Web($css) . '" />';
 		}
 	}
 	if ( isset($this->additionalScripts)) {
 		foreach ($this->additionalScripts as $key => $script) {
-			echo '<script type="text/javascript" src="' . Config::Url($script) . '"></script>';
+			echo '<script type="text/javascript" src="' . Config::Web($script) . '"></script>';
 		}
 	}
 ?>
@@ -46,7 +46,7 @@
 <div id="container">
 	<header>
 		<div class='title-box'>
-			<div id="apptitle"><a href="<?php echo Config::Url() ?>/"><?php echo Config::AppName(); ?></a></div>
+			<div id="apptitle"><a href="<?php echo Config::Web() ?>/"><?php echo Config::AppName(); ?></a></div>
 			<nav>
 				<a href="#" id="menu-icon"></a>
 				<?php
