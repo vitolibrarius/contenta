@@ -376,11 +376,29 @@ function currentVersionNumber()
 
 function currentVersionHash()
 {
-	$shell = utilities\ShellCommand::create('git rev-parse --verify HEAD')->setCaptureOutput(true);
+	$shell = utilities\ShellCommand::create('git rev-parse --verify HEAD');
 	if ( $shell->exec() == 0 ) {
-		return $shell->shellOutputImploded();
+		return $shell->stdout();
 	}
 	return "Error";
+}
+
+function currentRemoteHash()
+{
+	$shell = utilities\ShellCommand::create('git branch');
+	if ( $shell->exec() == 0 ) {
+		$branch = $shell->stdout();
+		$branch = substr($branch, strpos($branch, "* "));
+
+		$shell = utilities\ShellCommand::create("git ls-remote origin " . $branch);
+		if ( $shell->exec() == 0 ) {
+			$hash = $shell->stdout();
+			$array = explode(" ", $hash);
+			return $array[0];
+		}
+	}
+
+	return "Unknown";
 }
 
 function currentChangeLog()

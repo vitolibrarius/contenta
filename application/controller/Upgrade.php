@@ -6,6 +6,7 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Session as Session;
+use \utilities\ShellCommand as ShellCommand;
 use model\Users as Users;
 use processor\Migration as Migration;
 
@@ -66,6 +67,28 @@ class Upgrade extends Controller
 
 			$this->view->logs = $processor->migrationLogs();
 			$this->view->render('/upgrade/completed');
+		}
+	}
+
+	function upgradeEligibility()
+	{
+		$user_model = Model::Named("Users");
+		$adminUsers = $user_model->allUsers(Users::AdministratorRole);
+
+		if ( is_array($adminUsers) == false || count($adminUsers) == 0) {
+			$this->index();
+		}
+		else if (Session::get('user_logged_in') == false) {
+			// not logged in, so show login panel
+			$this->view->loginActionPath = "/Upgrade/login";
+			$this->view->render('/login/index');
+		}
+		else if ( Session::get('user_account_type') != Users::AdministratorRole ) {
+			Session::addNegativeFeedback("Not authorized to perform upgrade actions");
+			$this->view->render('/error/index');
+		}
+		else {
+			$this->view->render('/upgrade/eligibility');
 		}
 	}
 }
