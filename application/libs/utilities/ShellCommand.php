@@ -10,8 +10,9 @@ class ShellCommand
 	protected $commandAsExecuted;
 	protected $paramArray = array();
 
-	protected $capture_output = false;
-	protected $output = null;
+	protected $capture_output = true;
+	protected $std_out = null;
+	protected $std_err = null;
 	protected $return_code = null;
 
 	public static function create( $cmd, $param = null )
@@ -81,14 +82,14 @@ class ShellCommand
 		return $this;
 	}
 
-	public function shellOutput()
+	public function stdout()
 	{
-		return $this->output;
+		return $this->std_out;
 	}
 
-	public function shellOutputImploded($glue = '')
+	public function stderr()
 	{
-		return (is_array($this->output) ? implode($glue, $this->output) : $glue);
+		return $this->std_err;
 	}
 
 	public function return_code()
@@ -103,17 +104,20 @@ class ShellCommand
 		}
 
 		$this->commandAsExecuted = $this->shellEscapedCommand();
-		$this->output = array();
+		$output_spec = array(
+			1 => array('pipe', 'w'),
+			2 => array('pipe', 'w'),
+		);
+		$output = array();
 
-		$pipe = popen($this->commandAsExecuted, 'r');
-		while( feof($pipe) == false ) {
-			$line = trim(fgets($pipe));
-			if ($this->capture_output) {
-				$this->output[] = $line;
-			}
+		$process = proc_open($this->commandAsExecuted, $output_spec, $output);
+		$this->std_out = stream_get_contents($output[1]);
+		$this->std_err = stream_get_contents($output[2]);
+		foreach ($output as $pipe) {
+			fclose($pipe);
 		}
+		$this->return_code = trim(proc_close($process));
 
-		$this->return_code = pclose($pipe);
 		return $this->return_code;
 	}
 }

@@ -29,7 +29,11 @@
         "EndpointsLink": "Endpoints",
         "EndpointsLink-desc": "Configured network endpoints (RSS, ComicVine, ..)",
         "AddEndpointsLink": "Add New Endpoint",
-        "AddEndpointsLink-desc": "Create a new connection"
+        "AddEndpointsLink-desc": "Create a new connection",
+        "VersionLink": "Check Configuration",
+        "VersionLink-desc": "Review current version and configuration values",
+        "UpgradeLink": "Check Version",
+        "UpgradeLink-desc": "Check for new versions of this software and upgrade if necessary."
     },
     "Index": {
         "title": "Index"
