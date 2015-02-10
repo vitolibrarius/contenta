@@ -44,6 +44,53 @@ class Git
 		);
 	}
 
+	protected function checkOwnershipRecursive( $badFilesFound, $ownerid, $directory,  $limit, $exclusions )
+	{
+		if (is_dir($directory)) {
+			foreach (scandir($directory) as $file)
+			{
+				if ($file == '.' || $file == '..') continue;
+
+				$path = $directory . DIRECTORY_SEPARATOR . $file;
+				if ( fileowner($path) != $ownerid && in_array($file, $exclusions) == false) {
+					$badFilesFound[] = $path;
+				}
+
+				if (is_dir($path) === true)
+				{
+					$badFilesFound = $this->checkOwnershipRecursive( $badFilesFound, $ownerid, $path,  $limit, $exclusions );
+				}
+
+				if ( count($badFilesFound) >= $limit ) {
+					return $badFilesFound;
+				}
+			}
+		}
+
+		return $badFilesFound;
+	}
+
+	public function checkRepositoryOwnership( $limit = 10, $exclusions = null )
+	{
+		$uid = 0;
+		if ( function_exists("posix_geteuid") == true ) {
+			$uid = posix_geteuid();
+		}
+		else {
+			$uid = `id -u`;
+		}
+
+		$badFiles = array();
+		$excluded = (is_array($exclusions) ? $exclusions : array());
+
+		$badFiles = $this->checkOwnershipRecursive( $badFiles, $uid, $this->repository,  $limit, $excluded );
+
+		return array(
+			"status" => count($badFiles),
+			"badFiles" => $badFiles
+		);
+	}
+
 	public function status()
 	{
 		return $this->run("status -sb");
@@ -51,6 +98,6 @@ class Git
 
 	public function pull()
 	{
-		return $this->run("pull");
+		return $this->run("pull origin master");
 	}
 }

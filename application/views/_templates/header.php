@@ -3,12 +3,8 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><?php echo Config::AppName(); ?> - <?php echo $this->viewTitle(); ?></title>
 
-	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" type="image/png" href="<?php echo Config::Web('public/img/Logo_favicon.png'); ?>" />
 
 	<!-- CSS -->
@@ -59,7 +55,7 @@
 					$backtr = Session::peekCurrentPage();
 					if (isset( $backtr ) == true)
 					{
-						$menu->add( '<< Back', '/index/back');
+						$menu->add( ' Back', '/index/back');
 					}
 
 					if (Session::get('user_account_type') === model\Users::AdministratorRole )

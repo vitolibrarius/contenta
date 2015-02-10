@@ -11,7 +11,7 @@
 			</div>
 			<div id="version">
 				<?php echo $this->globalLabel("Version"); ?>: <?php echo currentVersionNumber(); ?>
-                <br>
+                <br />
 				<em><?php echo currentVersionHash(); ?></em>
 			</div>
 		</footer>
