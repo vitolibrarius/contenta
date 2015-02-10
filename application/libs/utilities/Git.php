@@ -115,16 +115,18 @@ class Git
 		$base_rev = $this->run("merge-base @ @{u}");
 
 		$commits = $this->jsonRequest('https://api.github.com/repos/vitolibrarius/contenta/commits/master');
-		if ( is_null($commits) == false )
+		if ( isset($commits, $commits['sha']) )
 		{
 			$remote_rev = $commits['sha'];
 			$diffs = $this->jsonRequest('https://api.github.com/repos/vitolibrarius/contenta/compare/'.$local_rev.'...'.$remote_rev);
-            if ( $diffs['total_commits'] > 0 ) {
-            	return "New version available, you are " . $diffs['total_commits'] . " behind.";
-            }
-            else if ($diffs['total_commits'] == 0) {
-            	return Git::UP_TO_DATE;
-            }
+            if ( isset($diffs, $diffs['total_commits']) ) {
+            	if ( $diffs['total_commits'] > 0 ) {
+					return "New version available, you are " . $diffs['total_commits'] . " behind.";
+				}
+				else if ($diffs['total_commits'] == 0) {
+					return Git::UP_TO_DATE;
+				}
+			}
 		}
 
 		return "Unknown version.";
@@ -134,6 +136,11 @@ class Git
 	{
 		if ( is_null($url) == false )
 		{
+			$json = Cache::Fetch( $url, false, Cache::TTL_WEEK );
+			if ( $json != false ) {
+				return $json;
+			}
+
 			if ( function_exists('curl_version') == true) {
 				$cookie = Cache::Fetch( "Cookies-" . $url, "" );
 
@@ -173,6 +180,8 @@ class Git
 				{
 					throw new \Exception(jsonErrorString(json_last_error()));
 				}
+
+				Cache::Store( $url, $json );
 				return $json;
 			}
 		}
