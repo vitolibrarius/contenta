@@ -168,7 +168,6 @@ class Git
 
 			if ( $data != false )
 			{
-				file_put_contents( "/tmp/" . sanitize($url), $data);
 				$json = json_decode($data, true);
 				if ( json_last_error() != 0 )
 				{
