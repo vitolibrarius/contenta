@@ -62,15 +62,6 @@ header {
 	background: -webkit-gradient(linear, 0 0, 0 75%, from(#3A81B8), to(white));
 }
 
-footer {
-   position:absolute;
-   bottom:0;
-   width:100%;
-   margin-top:10px;   /* Height of the footer */
-   height:50px;   /* Height of the footer */
-   background:#6cf;
-}
-
 a {
     color: #2C2F3B;
 	text-decoration: none;
@@ -757,24 +748,49 @@ form .omega { margin-right:0;}
   margin-left: -200px;
 }
 
+footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   margin-top:5px;   /* Height of the footer */
+   height:50px;   /* Height of the footer */
+   background:#6cf;
+}
+
 footer > div {
+/* 	display: inline-block; */
+	vertical-align: baseline;
 	width: 30%;
-	display: inline-block;
-	margin: 2px;
+	margin: 0;
 	padding: 3px 6px;
 }
 
 footer > div#github {
 	font-weight: bold;
+	float: left;
+	text-align: left;
 }
 
 footer > div#version {
 	text-align: center;
+	position: relative;
+	z-index: 999;
+	margin: 0px auto;
 }
 
 footer > div#version > em {
 	color: grey;
 	font-size: .8em;
+}
+
+footer > div#remote {
+	float: right;
+	text-align: right;
+	margin-right: 10px;
+}
+
+footer > div#remote a {
+	font-weight:bold;
 }
 
 /** media overrides */

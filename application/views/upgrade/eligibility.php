@@ -47,6 +47,8 @@
 	$files = $git->checkRepositoryOwnership(10, array("contenta.ini", ".htaccess", ".DS_Store") );
 	$file_test_class = ($files['status'] == 0 ? 'success' : 'failure');
 	$git_test = $git->status();
+	$git_remote_test = $git->remoteStatus();
+	$git_remote_class = ($git_remote_test == 'Up-to-date' ? 'success' : 'failure');
 	$git_test_out = preg_split('/\n|\r/', $git_test['stdout'], -1, PREG_SPLIT_NO_EMPTY);
 	$git_test_class = ($git_test['status'] == 0 && count($git_test_out) == 1 ? 'success' : 'failure');
 	$git_eligible = ($files['status'] == 0 && $git_test['status'] == 0 && count($git_test_out) == 1);
@@ -100,6 +102,20 @@
 						<pre><?php echo $git_test['stdout'] ?></pre>
 						<pre><?php echo $git_test['stderr'] ?></pre>
 					<?php endif; ?>
+				</em></span>
+			</div>
+		</div>
+	</div>
+	</li>
+
+	<li class="<?php echo $git_remote_class; ?>"><div class="test_name">GIT remote repository status</div>
+	<div>
+		<p><em></em></p>
+		<div class="span_container">
+			<div class="span_container_row">
+				<span class="break">Checking status</span>
+				<span class="break"><em>
+						<pre><?php echo $git_remote_test ?></pre>
 				</em></span>
 			</div>
 		</div>

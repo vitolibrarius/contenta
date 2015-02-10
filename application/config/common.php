@@ -378,7 +378,7 @@ function currentVersionHash()
 {
 	$shell = utilities\ShellCommand::create('git rev-parse --verify HEAD');
 	if ( $shell->exec() == 0 ) {
-		return $shell->stdout();
+		return trim($shell->stdout());
 	}
 	return "Error";
 }
