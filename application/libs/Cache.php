@@ -11,6 +11,11 @@ class Cache
 		2days = 172800
 		14 days = 1209600
 	*/
+	const TTL_MINUTE = 60;
+	const TTL_HOUR = 3600;
+	const TTL_DAY = 86400;
+	const TTL_WEEK = 604800;
+
 	const TimeToLive = 1209600;
 	const FILELIST = 'filelist';
 	const CACHE_TTL_MARKER = 'CacheTTLMarker';
@@ -26,10 +31,9 @@ class Cache
 		return self::$instance;
 	}
 
-	final public static function Fetch($key, $default = null)
+	final public static function Fetch($key, $default = null, $customTTL = -1)
 	{
-		$data = self::instance()->fetchCachedValue($key);
-		return ($data == false ? $default : $data );
+		return self::instance()->fetchCachedValue($key, $default, $customTTL);
 	}
 
 	final public static function Store($key, $data = null)
@@ -47,7 +51,7 @@ class Cache
 		return appendPath($partialPath, $shaKey);
 	}
 
-	public function fetchCachedValue($key)
+	public function fetchCachedValue($key, $default = null, $customTTL = -1)
 	{
 		$cache_path = $this->fullpath($key);
 
@@ -56,7 +60,11 @@ class Cache
 			return false;
 		}
 
-		if (filemtime($cache_path) < (time() - Cache::TimeToLive))
+		if ( $customTTL < Cache::TTL_MINUTE ) {
+			$customTTL = Cache::TimeToLive;
+		}
+
+		if (filemtime($cache_path) < (time() - $customTTL))
 		{
 			$this->clear($key);
 			return false;
