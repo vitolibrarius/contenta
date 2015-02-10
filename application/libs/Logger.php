@@ -171,7 +171,7 @@ abstract class Logger implements LoggerInterface {
 		}
 		catch (Exception $e) {
 			Logger::$catastrophicFail = true;
-			$plog = new PrintLogger();
+			$plog = new \loggers\PrintLogger();
 			$plog->_doLog(Logger::INFO, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
@@ -185,7 +185,7 @@ abstract class Logger implements LoggerInterface {
 		}
 		catch (Exception $e) {
 			Logger::$catastrophicFail = true;
-			$plog = new PrintLogger();
+			$plog = new \loggers\PrintLogger();
 			$plog->_doLog(Logger::WARNING, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
@@ -199,7 +199,7 @@ abstract class Logger implements LoggerInterface {
 		}
 		catch (Exception $e) {
 			Logger::$catastrophicFail = true;
-			$plog = new PrintLogger();
+			$plog = new \loggers\PrintLogger();
 			$plog->_doLog(Logger::ERROR, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
@@ -213,7 +213,7 @@ abstract class Logger implements LoggerInterface {
 		}
 		catch (Exception $e) {
 			Logger::$catastrophicFail = true;
-			$plog = new PrintLogger();
+			$plog = new \loggers\PrintLogger();
 			$plog->_doLog(Logger::FATAL, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());

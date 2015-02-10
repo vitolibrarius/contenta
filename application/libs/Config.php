@@ -83,7 +83,7 @@ class Config
 	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
 	 * @return mixed
 	 */
-	public function GetInteger($key, $default = 0)
+	final public static function GetInteger($key, $default = 0)
 	{
 		return self::instance()->getIntegerValue($key, $default);
 	}

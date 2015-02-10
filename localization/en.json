@@ -50,7 +50,7 @@
         "WebsiteLink": "Website",
         "HelpLink": "Help",
         "AddIssueLink": "Report Problem",
-        "Version": "Version",
+        "Release": "Release",
         "Save Completed": "Save Completed",
         "LoginButton": "Login"
     },
