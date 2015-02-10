@@ -41,7 +41,7 @@
 						$status = "problem";
 					}
 
-					echo "<span class='" . $status . "'>" . currentVersionNumber() . '</span><br>';
+					echo "<span class='" . $status . "'>" . currentVersionNumber() . '</span><br />';
 					echo "<span>" . currentVersionHash() . '</span>';
 				?>
 			</td>
@@ -62,7 +62,7 @@
 			<td>
 				<?php
 					$status = "";
-					echo "<span class='" . $status . "'>" . ini_get("error_log") . '</span><br>';
+					echo "<span class='" . $status . "'>" . ini_get("error_log") . '</span><br />';
 				?>
 			</td>
 			<td><span>

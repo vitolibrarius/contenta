@@ -9,8 +9,8 @@
 		?>
 	</div>
 </div>
-<br>
-<br>
+<br />
+<br />
 <?php endif; ?>
 
 <?php if (Session::get('user_logged_in') == true):?>
