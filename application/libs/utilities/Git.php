@@ -142,7 +142,8 @@ class Git
 			}
 
 			if ( function_exists('curl_version') == true) {
-				$cookie = Cache::Fetch( "Cookies-" . $url, "" );
+				$cacheKey = Cache::MakeKey( "Cookies" . parse_url($url, PHP_URL_HOST));
+				$cookie = Cache::Fetch( $cacheKey, "" );
 
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $url);
@@ -167,7 +168,7 @@ class Git
 				if ( $data == false ) {
 					\Logger::logError( 'Error (' . curl_error($ch) . ')', get_class($this), "github update");
 				}
-				Cache::Store( "Cookies-" . $url, $cookie );
+				Cache::Store( $cacheKey, $cookie );
 			}
 			else {
 				$data = file_get_contents($url);
