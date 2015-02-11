@@ -31,6 +31,11 @@ class Cache
 		return self::$instance;
 	}
 
+	final public static function MakeKey(...$teeth)
+	{
+		return join(DIRECTORY_SEPARATOR, $teeth);
+	}
+
 	final public static function Fetch($key, $default = null, $customTTL = -1)
 	{
 		return self::instance()->fetchCachedValue($key, $default, $customTTL);
@@ -45,7 +50,7 @@ class Cache
 	{
 		$rootDir = Config::GetCache();
 		$shaKey = sha1($key);
-		$subDir = substr($shaKey, 0, 2);
+		$subDir = substr($shaKey, 0, 4);
 		$partialPath = appendPath($rootDir, $subDir);
 		is_dir($partialPath) || mkdir($partialPath, 0755, true) || die('Failed to create cache sub-directory ' . $partialPath);
 		return appendPath($partialPath, $shaKey);
