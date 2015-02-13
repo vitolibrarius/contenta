@@ -16,8 +16,11 @@
 	require SYSTEM_PATH .'application/libs/Cache.php';
 
 	try {
-		echo "Sample cache key = " . Cache::MakeKey("Vito", "Librarius", __FILE__) . PHP_EOL;
+		$key = Cache::MakeKey("Vito", "Librarius", __FILE__);
+
+		echo "Sample cache key = " . $key . PHP_EOL;
 	}
 	catch (Exception $e) {
 		echo "Error :" . $e . PHP_EOL;
 	}
+

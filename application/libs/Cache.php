@@ -50,7 +50,7 @@ class Cache
 	{
 		$rootDir = Config::GetCache();
 		$shaKey = sha1($key);
-		$subDir = substr($shaKey, 0, 4);
+		$subDir = substr($shaKey, 0, 2);
 		$partialPath = appendPath($rootDir, $subDir);
 		is_dir($partialPath) || mkdir($partialPath, 0755, true) || die('Failed to create cache sub-directory ' . $partialPath);
 		return appendPath($partialPath, $shaKey);
