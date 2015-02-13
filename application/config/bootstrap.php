@@ -22,3 +22,22 @@ define('COOKIE_DOMAIN', '.localhost');
 
 define("HASH_COST_FACTOR", "10");
 define("HASH_DEFAULT_ALGO", "md5");
+
+$_utf8_specials = array (
+	"UTF8_PENCIL" => '\u270E',
+	"UTF8_BL_HEART" => '\u2665',
+	"UTF8_WH_FLAG" => '\u2690',
+	"UTF8_BL_FLAG" => '\u2691',
+	"UTF8_STAR" => '\u2605',
+	"UTF8_FINGER" => '\u261e',
+	"UTF8_MATH_NULL" => '\u29b0',
+	"UTF8_TRASH" => '\u2425',
+	"UTF8_RECYCLE" => '\u2672',
+	"UTF8_CHECK" => '\u2713',
+	"UTF8_BALLOTX" => '\u2717',
+	"UTF8_RETRY" => '\u21BA'
+);
+
+foreach( $_utf8_specials as $name => $special ) {
+	define( $name, json_decode('"'. $special .'"'));
+}
