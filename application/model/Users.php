@@ -2,8 +2,10 @@
 
 namespace model;
 
+use \Session as Session;
 use \DataObject as DataObject;
 use \Model as Model;
+use \Localized as Localized;
 
 class Users extends Model
 {

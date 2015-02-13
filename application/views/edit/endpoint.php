@@ -1,18 +1,18 @@
 <div><!-- container -->
 	<div><!-- top -->
 		<div style="padding:15px; display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
-			<form method="post" style="min-width: 380px;"
+			<form method="post" style="min-width: 380px;" accept-charset="utf-8"
 				action="<?php echo Config::Web($this->saveAction); ?>/<?php echo (isset($this->object)) ? $this->object->id : null; ?>"
 				name="editForm">
 
 				<fieldset>
 				<legend><?php
 					$legendValue = ucwords( $this->model->tableName()) . " Details";
-					echo $this->modelLabel($this->model->tableName(),"FormLegend", $legendValue); ?>
+					echo Localized::ModelLabel($this->model->tableName(),"FormLegend", $legendValue); ?>
 				</legend>
 
 				<?php if (isset($this->object)) : ?>
-					<label><?php echo $this->modelLabel($this->model->tableName(), "created"); ?></label>
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), "created"); ?></label>
 					<input class="date_input" type="text" name="created" disabled
 						value="<?php if (isset($this->object)) { echo $this->object->formattedDate("created"); } ?>"
 					/>
@@ -53,11 +53,11 @@
 					}
 				?>
 				<div class="half">
-					<input type="submit" name="edit_submit" value="<?php echo $this->globalLabel("SaveButton", "Save"); ?>" />
+					<input type="submit" name="edit_submit" value="<?php echo Localized::GlobalLabel("SaveButton"); ?>" />
 				</div>
 
 				<div class="half omega">
-					<input type="reset"value="<?php echo $this->globalLabel("ResetButton", "Reset"); ?>"/>
+					<input type="reset"value="<?php echo Localized::GlobalLabel("ResetButton"); ?>"/>
 				</div>
 				</fieldset>
 			</form>

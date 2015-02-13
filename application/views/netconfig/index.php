@@ -1,13 +1,13 @@
 <div class="mediaData">
 	<table>
 		<tr>
-			<th><?php echo $this->modelLabel($this->model->tableName(), "type_id" ); ?></th>
-			<th><?php echo $this->modelLabel($this->model->tableName(), "name" ); ?></th>
-			<th><?php echo $this->modelLabel($this->model->tableName(), "base_url" ); ?></th>
-			<th><?php echo $this->modelLabel($this->model->tableName(), "api_key" ); ?></th>
-			<th><?php echo $this->modelLabel($this->model->tableName(), "username" ); ?></th>
-			<th><?php echo $this->modelLabel($this->model->tableName(), "enabled" ); ?></th>
-			<th><?php echo $this->modelLabel($this->model->tableName(), "compressed" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "type_id" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "name" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "base_url" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "api_key" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "username" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "enabled" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "compressed" ); ?></th>
 		</tr>
 	<?php if (is_array($this->endpoints)): ?>
 		<?php foreach($this->endpoints as $key => $value): ?>

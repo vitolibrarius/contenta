@@ -22,20 +22,9 @@ class View
 		$this->controllerName = $title;
 	}
 
-	public function globalLabel( $key, $default = null )
+	public function label( ...$key )
 	{
-		return Localized::Get( "GLOBAL/" . $key, (is_null($default) ? $key : $default));
-	}
-
-	public function localizedLabel( $key, $default = null )
-	{
-		return Localized::Get( $this->controllerName . "/" . $key, (is_null($default) ? $key : $default));
-	}
-
-	public function modelLabel( $table, $attr, $default = null )
-	{
-		$legendKey = appendPath("Model", $table, $attr);
-		return Localized::Get($legendKey, $default);
+		return Localized::Get( $this->controllerName, $key );
 	}
 
 	/**
@@ -47,7 +36,7 @@ class View
 			return $this->viewTitle;
 		}
 
-		return $this->localizedLabel( "title", $this->controllerName );
+		return $this->label( "title" );
 	}
 
 	/**
@@ -58,9 +47,9 @@ class View
 		$this->viewTitle = $key;
 	}
 
-	public function setLocalizedViewTitle($key = "title", $default = null)
+	public function setLocalizedViewTitle($key = "title")
 	{
-		$this->viewTitle = $this->localizedLabel( $key, $default );
+		$this->viewTitle = $this->label( $key );
 	}
 
 	public function addStylesheet($path = null) {
@@ -111,6 +100,8 @@ class View
 			else if ( Session::peekCurrentPage() != $current && count($_POST) == 0 ) {
 				Session::pushCurrentPage($current);
 			}
+
+			header('Content-Type: text/html; charset=utf-8');
 
 			// if filename is "/series/index" this will add custom stylesheets for
 			// "/public/css/series.css" and "/public/css/series/index.css"
@@ -244,7 +235,8 @@ class View
 	/**
 	 * common label values
 	 */
-	public function saveButton() { return $this->globalLabel("saveButton", "Save"); }
-	public function cancelButton() { return $this->globalLabel("cancelButton", "Cancel"); }
-	public function deleteButton() { return $this->globalLabel("deleteButton", "Delete"); }
+	public function saveButton() { return Localized::GlobalLabel("saveButton"); }
+	public function cancelButton() { return Localized::GlobalLabel("cancelButton"); }
+	public function deleteButton() { return Localized::GlobalLabel("deleteButton"); }
+	public function resetButton() { return Localized::GlobalLabel("resetButton"); }
 }

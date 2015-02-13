@@ -7,6 +7,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Session as Session;
 use \Auth as Auth;
+use \Localized as Localized;
 use model\Users as Users;
 use model\Endpoint as Endpoint;
 
@@ -36,19 +37,19 @@ class Netconfig extends Controller
 			if ( $netId > 0 ) {
 				$netObj = $model->objectForId($netId);
 				if ( $netObj != false ) {
-					$this->view->setLocalizedViewTitle("EditRecord", "Edit Network Configuration");
+					$this->view->setLocalizedViewTitle("EditRecord");
 					$this->view->saveAction = "netconfig/save/" . $netId;
 					$this->view->object = $netObj;
 					$this->view->render( '/edit/endpoint' );
 				}
 				else {
-					Session::addNegativeFeedback($this->view->localizedLabel("Undefined Endpoint"));
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ));
 					Logger::logError("Invalid endpoint requested " . $netId);
 					$this->view->render('/error/index');
 				}
 			}
 			else {
-				$this->view->setLocalizedViewTitle("NewRecord", "New Network Configuration");
+				$this->view->setLocalizedViewTitle("NewRecord");
 				$this->view->saveAction = "netconfig/edit_new";
 				$this->view->render( '/edit/endpoint_select_type' );
 			}
@@ -66,7 +67,7 @@ class Netconfig extends Controller
 				$model = Model::Named('Endpoint_Type');
 				$type = $model->objectForId($values['endpoint']['type_id']);
 				if ( is_a($type, "model\\Endpoint_TypeDBO" ) ) {
-					$this->view->setLocalizedViewTitle("NewRecord", "New Network Configuration");
+					$this->view->setLocalizedViewTitle("NewRecord");
 					$this->view->saveAction = "netconfig/save";
 					$this->view->endpoint_type = $type;
 					$this->view->model = Model::Named('Endpoint');
@@ -75,14 +76,14 @@ class Netconfig extends Controller
 					return;
 				}
 				else {
-					Session::addNegativeFeedback($this->view->localizedLabel( "Undefined Endpoint Type" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ));
 				}
 			}
 			else {
-				Session::addNegativeFeedback($this->view->localizedLabel( "No form values" ));
+				Session::addNegativeFeedback(Localized::GlobalLabel( "No form values" ));
 			}
 
-			$this->view->setLocalizedViewTitle("NewRecord", "New Network Configuration");
+			$this->view->setLocalizedViewTitle("NewRecord");
 			$this->view->saveAction = "netconfig/edit_new";
 			$this->view->model = Model::Named('Endpoint');
 			$this->view->render( '/edit/endpoint_select_type' );
@@ -100,24 +101,21 @@ class Netconfig extends Controller
 				$netObj = $model->objectForId($netId);
 				if ( $netObj != false ) {
 					$model->updateObject($netObj, $values['endpoint']);
-					Session::addPositiveFeedback($this->view->globalLabel( "Save Completed" ));
+					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
 					$this->index();
 				}
 				else {
-					Session::addNegativeFeedback(
-						$this->view->localizedLabel( "Undefined Endpoint", "Unable to find appropriate Endpoint" ) . " " . $netId );
+					Session::addNegativeFeedback( Localized::GlobalLabel( "Failed to find request record" ) );
 					$this->view->render('/error/index');
 				}
 			}
 			else {
 				$netObj = $model->createObject($values);
 				if ( $netObj != false ) {
-					Session::addPositiveFeedback($this->view->globalLabel( "Save Completed" ));
+					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
 					$this->index();
 				}
 				else {
-					Session::addNegativeFeedback("values <pre>" . var_export($netObj, true) . "</pre>");
-					Session::addNegativeFeedback("values <pre>" . var_export($values, true) . "</pre>");
 					$this->view->render('/error/index');
 				}
 			}

@@ -1,92 +1,178 @@
 {
-    "Auth": {
-        "USERNAME_FIELD_EMPTY": "Username field was empty.",
-        "PASSWORD_FIELD_EMPTY": "Password field was empty.",
-        "LOGIN_FAILED": "Login failed.",
-        "PASSWORD_WRONG": "Unable to authenticate.",
-        "PASSWORD_WRONG_3_TIMES": "You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again."
+    "Index": {
+        "title": "Home"
     },
-    "Upgrade": {
-        "title": "Upgrade",
-        "Current Configuration": "Current Configuration",
-        "Application Version": "Application Version",
-        "PHP Memory": "PHP Memory",
-        "PHP POST size": "PHP POST size",
-        "PHP Upload Filesize": "PHP Upload Filesize",
-        "Upgrade to": "Upgrade to",
-        "Confirm Upgrade": "Confirm Upgrade",
-        "PHP error log": "PHP error log"
+    "GLOBAL": {
+        "Menu": {
+            "Admin": "Admin",
+            "Logs": "Logs",
+            "Series": "Series",
+            "Profile": "Profile",
+            "Login": "GLOBAL\/Menu\/Login"
+        },
+        "WebsiteLink": "Website",
+        "HelpLink": "Help",
+        "AddIssueLink": "Report Issue",
+        "Release": "Release",
+        "SaveButton": "Save",
+        "ResetButton": "Reset",
+        "NextButton": "Next",
+        "APIButton": "Generate New API Key",
+        "Validation Errors": "Please check your entries and fix the following errors",
+        "Save Completed": "Save Completed",
+        "Modal": {
+            "Confirm Delete": "Confirm Delete"
+        },
+        "DeleteButton": "Delete",
+        "Delete Completed": "Delete Completed",
+        "Error": {
+            "title": "Error"
+        },
+        "MigrateButton": "Migrate",
+        "UpgradeButton": "Upgrade"
     },
     "Admin": {
         "title": "Admin",
-        "UsersLink": "Users",
-        "UsersLink-desc": "User List and administration",
-        "AddUsersLink": "Add User",
-        "UploadLink": "Upload",
-        "UploadLink-desc": "Upload new media content",
-        "RepairLink": "Repair Processing",
-        "RepairLink-desc": "Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content",
-        "EndpointsLink": "Endpoints",
-        "EndpointsLink-desc": "Configured network endpoints (RSS, ComicVine, ..)",
-        "AddEndpointsLink": "Add New Endpoint",
-        "AddEndpointsLink-desc": "Create a new connection",
-        "VersionLink": "Check Configuration",
-        "VersionLink-desc": "Review current version and configuration values",
-        "UpgradeLink": "Check Version",
-        "UpgradeLink-desc": "Check for new versions of this software and upgrade if necessary."
+        "UsersLink": {
+            "name": "Users",
+            "desc": "User List and administration"
+        },
+        "AddUsersLink": {
+            "name": "Add User",
+            "desc": "Create a new user record"
+        },
+        "UploadLink": {
+            "name": "Upload",
+            "desc": "Upload new media content"
+        },
+        "RepairLink": {
+            "name": "Repair Processing",
+            "desc": "Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content"
+        },
+        "EndpointsLink": {
+            "name": "Endpoints",
+            "desc": "Configured network endpoints (RSS, ComicVine, ..)"
+        },
+        "AddEndpointsLink": {
+            "name": "Add Endpoint",
+            "desc": "Create a new network endpoint connection"
+        },
+        "VersionLink": {
+            "name": "Check Configuration",
+            "desc": "Review current version and configuration values"
+        },
+        "UpgradeLink": {
+            "name": "Check Version",
+            "desc": "Check for new versions of this software and upgrade if necessary"
+        },
+        "userlist": {
+            "DeleteDescription": "This will permanently delete the user.",
+            "DeleteConfirmation": "Are you sure you want to continue?"
+        }
     },
-    "Index": {
-        "title": "Index"
-    },
-    "GLOBAL": {
-        "AdminMenu": "Admin",
-        "LogsMenu": "Logs",
-        "SeriesMenu": "Series",
-        "ProfileMenu": "Profile",
-        "LoginMenu": "Login",
-        "NextButton": "Next",
-        "ResetButton": "Reset",
-        "SaveButton": "Save",
-        "WebsiteLink": "Website",
-        "HelpLink": "Help",
-        "AddIssueLink": "Report Problem",
-        "Release": "Release",
-        "Save Completed": "Save Completed",
-        "LoginButton": "Login"
-    },
-    "Error": {
-        "title": "Error"
+    "Model": {
+        "users": {
+            "FormLegend": {
+                "label": "User Details"
+            },
+            "name": {
+                "label": "Name",
+                "restriction": "only letters and numbers, 2 to 64 characters",
+                "USERNAME_FIELD_EMPTY": "Username field was empty"
+            },
+            "email": {
+                "label": "Email",
+                "restriction": "please provide a real email address",
+                "EMAIL_DOES_NOT_FIT_PATTERN": "Please enter a valid email address",
+                "EMAIL_FIELD_EMPTY": "Email field was empty"
+            },
+            "password": {
+                "label": "Password",
+                "restriction": "Please note: using a long sentence as a password is much much safer then something like '!c00lPa$$w0rd'. Have a look this interesting <a href='http:\/\/security.stackexchange.com\/questions\/6095\/xkcd-936-short-complex-password-or-long-dictionary-passphrase'> security.stackoverflow.com<\/a> thread",
+                "PASSWORD_REPEAT_WRONG": "Password and password repeat are not the same",
+                "PASSWORD_TOO_SHORT": "Password has a minimum length of 6 characters",
+                "PASSWORD_FIELD_EMPTY": "Password field was empty"
+            },
+            "password_check": {
+                "label": "Check Password"
+            },
+            "active": {
+                "label": "Active"
+            },
+            "creation_timestamp": {
+                "label": "Created"
+            },
+            "AdditionalLegend": {
+                "label": "Additional"
+            },
+            "api_hash": {
+                "label": "API Key"
+            },
+            "id": {
+                "label": "ID"
+            },
+            "type": {
+                "label": "Access Role"
+            }
+        },
+        "endpoint": {
+            "type_id": {
+                "label": "Connection Type"
+            },
+            "name": {
+                "label": "Name"
+            },
+            "base_url": {
+                "label": "URL"
+            },
+            "api_key": {
+                "label": "API Key"
+            },
+            "username": {
+                "label": "Username"
+            },
+            "enabled": {
+                "label": "Enabled"
+            },
+            "compressed": {
+                "label": "Compressed"
+            },
+            "FormLegend": {
+                "label": "Connection Details"
+            }
+        }
     },
     "Logs": {
         "title": "Logs",
         "Show Filters": "Show Filters"
     },
-    "Login": {
-        "title": "Login"
-    },
     "Netconfig": {
         "title": "Network Configuration",
-        "NewRecord": "New Network Configuration",
-        "EditRecord": "Edit Network Configuration",
-        "Network Configuration": "Network Configuration",
-        "No form values": "No form values"
+        "NewRecord": "New Configuration"
     },
-    "Model": {
-        "endpoint": {
-            "type_id": "Connection Type",
-            "FormLegend": "Endpoint Details",
-            "name": "Name",
-            "base_url": "URL",
-            "api_key": "API Key",
-            "username": "Username",
-            "enabled": "Enabled",
-            "compressed": "Compressed"
+    "Upgrade": {
+        "title": "Upgrade",
+        "Current Configuration": "Current Configuration",
+        "Application Version": "Application Version",
+        "PHP error log": "PHP error log",
+        "PHP Memory": "PHP Memory",
+        "PHP POST size": "PHP POST size",
+        "PHP Upload Filesize": "PHP Upload Filesize",
+        "Confirm Upgrade": "Confirm Upgrade",
+        "Upgrade to": "Upgrade to",
+        "modal": {
+            "Confirm Upgrade": "Confirm Upgrade"
         },
-        "users": {
-            "user_password": "Password",
-            "user_name": "Username (or email)",
-            "user_rememberme": "Keep me logged in (for 2 weeks)",
-            "LoginLegend": "Login"
+        "index": {
+            "MigrateDescription": "This will update your database to support the current version.",
+            "MigrateConfirmation": "Are you sure you are ready to upgrade?"
+        },
+        "eligibility": {
+            "UpgradeDescription": "This will pull the latest changes from the master repository and update your local application.",
+            "UpgradeConfirmation": "Are you sure you are ready to upgrade?"
         }
+    },
+    "Error": {
+        "title": "Error"
     }
 }

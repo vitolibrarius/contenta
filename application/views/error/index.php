@@ -1,4 +1,4 @@
 <h1 style="color: red;">
-	<?php echo $this->localizedLabel( "ERROR_LABEL", "An error has occured." ); ?>
+	<?php echo Localized::GlobalLabel( "Error", "title" ); ?>
 </h1>
 

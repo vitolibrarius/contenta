@@ -57,7 +57,7 @@ function ajaxFunction(){
 	<div id="show_hidden" class="show_hidden">
 		<a href="javascript:void(0)" id="showfilter" class="showfilter btn"
 			onclick="$('#collapse').css('display','block'); $('#show_hidden').css('display','none');return false;">
-				<?php echo $this->localizedLabel("Show Filters"); ?></a>
+				<?php echo $this->label("Show Filters"); ?></a>
 	</div>
 
 	<div id="collapse" class="collapse">

@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title><?php echo Config::AppName(); ?> - <?php echo $this->viewTitle(); ?></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 	<link rel="icon" type="image/png" href="<?php echo Config::Web('public/img/Logo_favicon.png'); ?>" />
 
@@ -60,16 +61,16 @@
 
 					if (Session::get('user_account_type') === model\Users::AdministratorRole )
 					{
-						$menu->add( $this->globalLabel("AdminMenu", "Admin"), '/admin/index');
-						$menu->add( $this->globalLabel("LogsMenu", "Logs"), '/logs/index');
+						$menu->add( Localized::GlobalLabel("Menu", "Admin"), '/admin/index');
+						$menu->add( Localized::GlobalLabel("Menu", "Logs"), '/logs/index');
 					}
-					$menu->add( $this->globalLabel("SeriesMenu", "Series"), '/series/index' );
-					$menu->add( $this->globalLabel("ProfileMenu", "Profile"), '/profile/index' );
+					$menu->add( Localized::GlobalLabel("Menu", "Series"), '/series/index' );
+					$menu->add( Localized::GlobalLabel("Menu", "Profile"), '/profile/index' );
 				}
 
 				if (Session::get('user_logged_in') == false)
 				{
-					$menu->add($this->globalLabel("LoginMenu", "Login"), '/login/index');
+					$menu->add(Localized::GlobalLabel("Menu", "Login"), '/login/index');
 				}
 
 				$menu->current = 'level-three.php';

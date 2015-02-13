@@ -3,7 +3,7 @@
 		action="<?php echo Config::Web( (isset($this->loginActionPath) ? $this->loginActionPath : '/Login/login') )?>">
 
 		<fieldset>
-		<legend><?php echo $this->modelLabel( $this->model->tableName(), "LoginLegend", "Login" ); ?></legend>
+		<legend><?php echo Localized::ModelLabel( $this->model->tableName(), "LoginLegend", "Login" ); ?></legend>
 
 		<?php
 			$attrName = "user_name";
@@ -36,7 +36,7 @@
 		?>
 
 		<label>&nbsp; </label>
-		<input type="submit" name="edit_submit" value="<?php echo $this->globalLabel("LoginButton", "Login"); ?>" />
+		<input type="submit" name="edit_submit" value="<?php echo Localized::GlobalLabel("LoginButton"); ?>" />
 
 		</fieldset>
 	</form>

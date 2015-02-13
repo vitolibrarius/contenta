@@ -4,12 +4,12 @@
 				<img src="<?php echo Config::Web('/public/img/admin-users.png'); ?>">
 			</div>
 			<div class="admin_card_item">
-				<a href="#"><?php echo $this->localizedLabel( "UsersLink", "Users" ); ?></a>
-				<p><?php echo $this->localizedLabel( "UsersLink-desc", "User List and administration" ); ?></p>
+				<a href="<?php echo Config::Web('/Admin/userlist'); ?>"><?php echo $this->label( "UsersLink", "name" ); ?></a>
+				<p><?php echo $this->label( "UsersLink", "desc" ); ?></p>
 			</div>
 			<div class="admin_card_item">
-				<a href="#"><?php echo $this->localizedLabel( "AddUsersLink", "Add User" ); ?></a>
-				<p><?php echo $this->localizedLabel( "UsersLink-desc", "Register new users" ); ?></p>
+				<a href="<?php echo Config::Web('/admin/editUser'); ?>"><?php echo $this->label( "AddUsersLink", "name" ); ?></a>
+				<p><?php echo $this->label( "AddUsersLink", "desc" ); ?></p>
 			</div>
 		</div>
 
@@ -19,14 +19,12 @@
 				<img src="<?php echo Config::Web('/public/img/admin-publications.png'); ?>">
 			</div>
 			<div class="admin_card_item">
-				<a href="#"><?php echo $this->localizedLabel( "UploadLink", "Upload" ); ?></a>
-				<p><?php echo $this->localizedLabel( "UploadLink-desc", "Upload new media content" ); ?></p>
+				<a href="#"><?php echo $this->label( "UploadLink", "name" ); ?></a>
+				<p><?php echo $this->label( "UploadLink", "desc" ); ?></p>
 			</div>
 			<div class="admin_card_item">
-				<a href="#"><?php echo $this->localizedLabel( "RepairLink", "Repair Processing" ); ?></a>
-				<p><?php echo $this->localizedLabel( "RepairLink-desc",
-					"Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content" );
-				 ?></p>
+				<a href="#"><?php echo $this->label( "RepairLink", "name" ); ?></a>
+				<p><?php echo $this->label( "RepairLink", "desc" ); ?></p>
 			</div>
 			<div class="admin_card_item">
 				<a href="#">Series</a>
@@ -44,13 +42,13 @@
 			</div>
 			<div class="admin_card_item">
 				<a href="<?php echo Config::Web('/netconfig/index'); ?>">
-					<?php echo $this->localizedLabel( "EndpointsLink", "Endpoints" ); ?></a>
-				<p><?php echo $this->localizedLabel( "EndpointsLink-desc", "Configured network endpoints (RSS, ComicVine, ..)" ); ?></p>
+					<?php echo $this->label( "EndpointsLink", "name" ); ?></a>
+				<p><?php echo $this->label( "EndpointsLink", "desc" ); ?></p>
 			</div>
 			<div class="admin_card_item">
 				<a href="<?php echo Config::Web('/netconfig/edit'); ?>">
-					<?php echo $this->localizedLabel( "AddEndpointsLink", "Add New Endpoint" ); ?></a>
-				<p><?php echo $this->localizedLabel( "AddEndpointsLink-desc", "Create a new connection" ); ?></p>
+					<?php echo $this->label( "AddEndpointsLink", "name" ); ?></a>
+				<p><?php echo $this->label( "AddEndpointsLink", "desc" ); ?></p>
 			</div>
 		</div>
 
@@ -60,15 +58,13 @@
 			</div>
 			<div class="admin_card_item">
 				<a href="<?php echo Config::Web('/upgrade/index'); ?>">
-					<?php echo $this->localizedLabel( "VersionLink", "Check Configuration" ); ?></a>
-				<p><?php echo $this->localizedLabel( "VersionLink-desc", "Review current version and configuration values" ); ?></p>
+					<?php echo $this->label( "VersionLink", "name" ); ?></a>
+				<p><?php echo $this->label( "VersionLink", "desc" ); ?></p>
 			</div>
 			<div class="admin_card_item">
 				<a href="<?php echo Config::Web('/upgrade/upgradeEligibility'); ?>">
-					<?php echo $this->localizedLabel( "UpgradeLink", "Check Version" ); ?></a>
-				<p><?php echo $this->localizedLabel( "UpgradeLink-desc",
-					"Check for new versions of this software and upgrade if necessary." );
-				 ?></p>
+					<?php echo $this->label( "UpgradeLink", "name" ); ?></a>
+				<p><?php echo $this->label( "UpgradeLink", "desc" ); ?></p>
 			</div>
 		</div>
 
