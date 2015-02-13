@@ -1,36 +1,37 @@
+<script>
+	// Wait until the DOM has loaded before querying the document
+	$(document).ready(function(){
+		var list = $('a.confirm');
+		$('a.confirm').click(function(e){
+			modal.open({
+				heading: '<?php echo $this->label("modal", "Confirm Upgrade"); ?>',
+				img: '<?php echo Config::Web("/public/img/Logo_sm.png"); ?>',
+				description: '<?php echo $this->label( "index", "MigrateDescription"); ?>',
+				confirm: '<?php echo $this->label( "index", "MigrateConfirmation"); ?>',
+				actionLabel: '<?php echo Localized::GlobalLabel("MigrateButton"); ?>',
+				action: '<?php echo Config::Web("/Upgrade/migrate"); ?>'
+			});
+			e.preventDefault();
+		});
+	});
+</script>
+
 <?php if (isset($this->latestVersion, $this->latestVersion->code) == false
 		|| strlen($this->latestVersion->code) == 0
 		|| $this->latestVersion->code != currentVersionNumber()) : ?>
 <div class="paging">
 	<ul>
-		<li><a href="#openConfirm"><?php echo $this->localizedLabel("Upgrade to") . ' ' . currentVersionNumber(); ?></a></li>
+		<li><a class="confirm" href="#"><?php echo $this->label("Upgrade to") . ' ' . currentVersionNumber(); ?></a></li>
 	</ul>
-</div>
-
-<div id="openConfirm" class="modalDialog">
-	<div>
-		<a href="#close" title="Close" class="close">X</a>
-		<h2><?php echo $this->localizedLabel("Confirm Upgrade"); ?></h2>
-		<div style="width:100%; overflow:hidden;">
-			<div style="float:left ; width:20%;">
-				<img src="<?php echo Config::Web('/public/img/Logo_sm.png'); ?>" class="icon">
-			</div>
-			<div style="float:right; width:75%;">
-				Are you sure you are ready to upgrade?
-				<a class="btn" href="<?php echo Config::Web('Upgrade/migrate'); ?>">Upgrade</a>
-			</div>
-		</div>
-		<div style="clear:both;"></div>
-	</div>
 </div>
 <?php endif; ?>
 
-<h2><?php echo $this->localizedLabel("Current Configuration"); ?></h2>
+<h2><?php echo $this->label("Current Configuration"); ?></h2>
 
 <div class="mediaData config">
 	<table>
 		<tr>
-			<th><?php echo $this->localizedLabel("Application Version"); ?></th>
+			<th><?php echo $this->label("Application Version"); ?></th>
 			<td>
 				<?php
 					$status = "";
@@ -58,7 +59,7 @@
 			</span></td>
 		</tr>
 		<tr>
-			<th><?php echo $this->localizedLabel("PHP error log"); ?></th>
+			<th><?php echo $this->label("PHP error log"); ?></th>
 			<td>
 				<?php
 					$status = "";
@@ -78,7 +79,7 @@ path=logs  (results in $repositoryRoot/logs/script.log)
 			</span></td>
 		</tr>
 		<tr>
-			<th><?php echo $this->localizedLabel("PHP Memory"); ?></th>
+			<th><?php echo $this->label("PHP Memory"); ?></th>
 			<td><?php
 					$iniMemory = convertToBytes(ini_get('memory_limit')) / 1024;
 					echo "<span class='" . (($iniMemory < 65536) ? "problem" : "") . "'>"
@@ -97,7 +98,7 @@ path=logs  (results in $repositoryRoot/logs/script.log)
 			</span></td>
 		</tr>
 		<tr>
-			<th><?php echo $this->localizedLabel("PHP POST size"); ?></th>
+			<th><?php echo $this->label("PHP POST size"); ?></th>
 			<td><?php
 					$iniMaxPost = convertToBytes(ini_get('post_max_size')) / 1024;
 					$iniMaxFile = convertToBytes(ini_get('upload_max_filesize')) / 1024;
@@ -123,7 +124,7 @@ path=logs  (results in $repositoryRoot/logs/script.log)
 			</span></td>
 		</tr>
 		<tr>
-			<th><?php echo $this->localizedLabel("PHP Upload Filesize"); ?></th>
+			<th><?php echo $this->label("PHP Upload Filesize"); ?></th>
 			<td><?php
 					echo "<span class='" . (($iniMaxFile < 65536) ? "problem" : "") . "'>"
 						. ini_get('upload_max_filesize') . "</span>";

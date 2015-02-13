@@ -323,31 +323,38 @@ a.btn:hover {
 	left: 0;
 	background: rgba(0,0,0,0.8);
 	z-index: 99999;
-	opacity:0;
 	-webkit-transition: opacity 400ms ease-in;
 	-moz-transition: opacity 400ms ease-in;
 	transition: opacity 400ms ease-in;
-	pointer-events: none;
 }
-.modalDialog:target {
-	opacity:1;
-	pointer-events: auto;
-}
-
 .modalDialog > div {
+	border: 6px solid lightgray;
 	width: 400px;
 	min-height:100px;
 	font-size:13px;
 	position: relative;
 	margin: 10% auto;
-	padding: 5px 20px 13px 20px;
 	border-radius: 10px;
 	background: #fff;
-	background: -moz-linear-gradient(#fff, #999);
-	background: -webkit-linear-gradient(#fff, #999);
-	background: -o-linear-gradient(#fff, #999);
 }
-.close {
+.modalDialog > div > h2 {
+	border-bottom: 2px solid darkgray;
+	background: lightgray;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 10px 4px 4px 4px;
+}
+.modalDialog > div > div {
+	padding: 4px 4px;
+}
+
+.modalDialog > div > div.modal_desc {
+}
+
+.modalDialog > div > div.modal_confirm {
+}
+
+.modalDialog .close {
 	background: #606061;
 	color: #FFFFFF;
 	line-height: 25px;
@@ -558,35 +565,33 @@ form .omega { margin-right:0;}
 	margin:0;
 }
 
-.edit_icon:before {
-	content:"\270E";
+/** utf8 icon classes
+	"UTF8_PENCIL" => '\u270E',
+	"UTF8_BL_HEART" => '\u2665',
+	"UTF8_WH_FLAG" => '\u2690',
+	"UTF8_BL_FLAG" => '\u2691',
+	"UTF8_STAR" => '\u2605',
+	"UTF8_FINGER" => '\u261e',
+	"UTF8_MATH_NULL" => '\u29b0',
+	"UTF8_TRASH" => '\u2425',
+	"UTF8_RECYCLE" => '\u2672',
+	"UTF8_CHECK" => '\u2713',
+	"UTF8_BALLOTX" => '\u2717',
+	"UTF8_RETRY" => '\u21BA'
+*/
+span.icon {
     color: grey;
     font-size: 24px;
 }
+span.icon.true:before	{ content:"\2713"; }
+span.icon.false:before	{ content:"\2717"; }
+span.icon.edit:before	{ content:"\270E"; }
+span.icon.trash:before	{ content:"\2425"; }
+span.icon.recycle:before { content:"\2672"; }
+span.icon.retry:before	{ content:"\21BA"; }
 
-.trash_icon:before {
-	content:"\2672";
-    color: grey;
-    font-size: 24px;
-}
-
-.retry_icon:before {
-	content:"\21BA";
-    color: grey;
-    font-size: 24px;
-}
-
-.favorite_icon.no:before {
-	content:"\2665";
-    color: grey;
-    font-size: 32px;
-}
-
-.favorite_icon.yes:before {
-	content:"\2665";
-    color: red;
-    font-size: 32px;
-}
+span.icon.not_favorite:before	{ content:"\2665"; font-size: 32px; }
+span.icon.favorite:before		{ content:"\2665"; color: red; font-size: 32px; }
 
 .flag_icon.no:before {
 	content:"\2690";
@@ -599,6 +604,7 @@ form .omega { margin-right:0;}
     color: red;
     font-size: 32px;
 }
+
 
 .path {
 	font-family: monospace;

@@ -126,28 +126,26 @@
 	<?php if ( $git_eligible == true ) : ?>
 	<div class="paging">
 		<ul>
-			<li><a href="#openConfirm">Ready to upgrade</a></li>
+			<li><a class="confirm" href="#">Ready to upgrade</a></li>
 		</ul>
 	</div>
 	<?php endif; ?>
 </div>
 
-<div id="openConfirm" class="modalDialog">
-	<div>
-		<a href="#close" title="Close" class="close">X</a>
-		<h2><?php echo $this->localizedLabel("Confirm Upgrade"); ?></h2>
-		<div style="width:100%; overflow:hidden;">
-			<div style="float:left ; width:20%;">
-				<img src="<?php echo Config::Web('/public/img/Logo_sm.png'); ?>" class="icon"></img>
-			</div>
-			<div style="float:right; width:75%;">
-				This will update your application to the current master branch.  You may need to
-				run a data migration after this is complete.<br /><br />
-
-				Are you sure you are ready to upgrade?<br />
-				<a class="btn" href="<?php echo Config::Web('Upgrade/gitPull'); ?>">Upgrade</a>
-			</div>
-		</div>
-		<div style="clear:both;"></div>
-	</div>
-</div>
+<script>
+	// Wait until the DOM has loaded before querying the document
+	$(document).ready(function(){
+		var list = $('a.confirm');
+		$('a.confirm').click(function(e){
+			modal.open({
+				heading: '<?php echo $this->label("modal", "Confirm Upgrade"); ?>',
+				img: '<?php echo Config::Web("/public/img/Logo_sm.png"); ?>',
+				description: '<?php echo $this->label( "eligibility", "UpgradeDescription"); ?>',
+				confirm: '<?php echo $this->label( "eligibility", "UpgradeConfirmation"); ?>',
+				actionLabel: '<?php echo Localized::GlobalLabel("UpgradeButton"); ?>',
+				action: '<?php echo Config::Web("/Upgrade/gitPull"); ?>'
+			});
+			e.preventDefault();
+		});
+	});
+</script>
