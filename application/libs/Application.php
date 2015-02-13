@@ -82,7 +82,7 @@ class Application
 			}
 			catch ( ClassNotFoundException $exception ) {
 				Logger::logException( $exception );
-				Session::addNegativeFeedback( "Unknown URL endpoint " . $controllerClass . "/" . $this->url_action );
+				Session::addNegativeFeedback( "ClassNotFoundException <pre>$exception</pre> " . $controllerClass . "/" . $this->url_action );
 				header('location: ' . Config::Web('/error/index'));
 			}
 			catch ( Exception $e ) {
