@@ -22,9 +22,10 @@ class View
 		$this->controllerName = $title;
 	}
 
-	public function label( ...$key )
+	public function label()
 	{
-		return Localized::Get( $this->controllerName, $key );
+		$teeth = func_get_args();
+		return Localized::Get( $this->controllerName, $teeth );
 	}
 
 	/**

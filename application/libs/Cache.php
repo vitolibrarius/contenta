@@ -31,8 +31,9 @@ class Cache
 		return self::$instance;
 	}
 
-	final public static function MakeKey(...$teeth)
+	final public static function MakeKey()
 	{
+		$teeth = func_get_args();
 		return join(DIRECTORY_SEPARATOR, $teeth);
 	}
 
