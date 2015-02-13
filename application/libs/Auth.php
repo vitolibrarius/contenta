@@ -49,7 +49,7 @@ class Auth
 	{
 		$values = splitPOSTValues($_POST);
 		if ( isset($values, $values['users']) == false ) {
-			Session::addNegativeFeedback(Localized::Get("Auth/USERNAME_FIELD_EMPTY", "Username field was empty."));
+			Session::addNegativeFeedback(Localized::Get("Auth", "USERNAME_FIELD_EMPTY"));
 			return false;
 		}
 
@@ -57,11 +57,11 @@ class Auth
 
 		// we do negative-first checks here
 		if (!isset($userLogin['user_name']) OR empty($userLogin['user_name'])) {
-			Session::addNegativeFeedback(Localized::Get("Auth/USERNAME_FIELD_EMPTY", "Username field was empty."));
+			Session::addNegativeFeedback(Localized::Get("Auth", "USERNAME_FIELD_EMPTY"));
 			return false;
 		}
 		if (!isset($userLogin['user_password']) OR empty($userLogin['user_password'])) {
-			Session::addNegativeFeedback(Localized::Get("Auth/PASSWORD_FIELD_EMPTY", "Password field was empty."));
+			Session::addNegativeFeedback(Localized::Get("Auth", "PASSWORD_FIELD_EMPTY"));
 			return false;
 		}
 
@@ -69,14 +69,13 @@ class Auth
 		$user = $user_model->userByName($userLogin['user_name']);
 		if ( $user == false )
 		{
-			Session::addNegativeFeedback(Localized::Get("Auth/LOGIN_FAILED", "Login failed."));
+			Session::addNegativeFeedback(Localized::Get("Auth", "LOGIN_FAILED"));
 			return false;
 		}
 
 		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
 		if (($user->failed_logins >= 3) AND ($user->last_failed_login > (time()-30))) {
-			Session::addNegativeFeedback(Localized::Get("Auth/PASSWORD_WRONG_3_TIMES",
-				"You have typed in a wrong password 3 or more times already. Please wait 30 seconds to try again."));
+			Session::addNegativeFeedback(Localized::Get("Auth", "PASSWORD_WRONG_3_TIMES"));
 			return false;
 		}
 
@@ -95,7 +94,7 @@ class Auth
 		if ($VERIFIED_PASSWORD == true)
 		{
 			if ($user->active != 1) {
-				Session::addNegativeFeedback(Localized::Get("Auth/ACCOUNT_NOT_ACTIVE", "Your account is not activated." ));
+				Session::addNegativeFeedback(Localized::Get("Auth", "ACCOUNT_NOT_ACTIVE" ));
 				return false;
 			}
 
@@ -137,7 +136,7 @@ class Auth
 			$user_model->increaseFailedLogin($user);
 
 			// feedback message
-			Session::addNegativeFeedback(Localized::Get("Auth/PASSWORD_WRONG", "Unable to authenticate." ));
+			Session::addNegativeFeedback(Localized::Get("Auth", "PASSWORD_WRONG" ));
 			return false;
 		}
 

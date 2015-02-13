@@ -26,6 +26,10 @@ class UsersDBO extends DataObject
 		return (isset($this->account_type) && $this->account_type === Users::AdministratorRole);
 	}
 
+	public function isActive() {
+		return (isset($this->active) && $this->active == 1);
+	}
+
 	public function recordLoginFrom($ip) {
 		$join_model = Model::Named('User_Network');
 		$join = $join_model->createForIP($this, $ip);

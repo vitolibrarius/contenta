@@ -132,42 +132,86 @@ abstract class Model
 		return $this->fetchAll($this->tableName(), $this->allColumns(), null, ($sortColumns == null ? $this->sortOrder() : $sortColumns));
 	}
 
-	public function validateForSave($object, $values) {
-		return true;
+	public function validateForSave($object = null, array $values)
+	{
+		$validationErrors = array();
+
+		$mandatoryKeys = $this->attributesMandatory($object);
+		if ( is_array($mandatoryKeys) == false ) {
+			$mandatoryKeys = array_keys($values);
+		}
+		else {
+			$mandatoryKeys = array_merge_recursive($mandatoryKeys, array_keys($values) );
+		}
+		$mandatoryKeys = array_unique($mandatoryKeys);
+
+		foreach( $mandatoryKeys as $key ) {
+			$function = "validate_" . $key;
+			if (method_exists($this, $function)) {
+				$newvalue = (isset($values[$key]) ? $values[$key] : null);
+				$failure = $this->$function($object, $newvalue);
+				if ( is_null($failure) == false ) {
+					$validationErrors[$key] = $failure;
+				}
+			}
+		}
+		return $validationErrors;
+	}
+
+	public function deleteObject($object = null) {
+		if (isset($object) && is_a($object, "\\DataObject" )) {
+			$model = $object->model();
+			return $this->deleteObj( $object, $model->tableName(), $model->tablePK() );
+		}
+		return false;
 	}
 
 	public function updateObject($object = null, array $values) {
 		if (isset($object) && is_a($object, "\\DataObject" )) {
 			$model = $object->model();
-			$qual = array( $model->tablePK() => $object->pkValue() );
-			$tableValues = $values[$model->tableName()];
-			$validation = $this->validateForSave($object, $tableValues);
 
-			return ($validation != true) ? $validation : $this->update( $model->tableName(), $tableValues, $qual );
+			$allColumns = $model->allColumnNames();
+			if ( is_array($allColumns) && in_array('updated', $allColumns)) {
+				$values['updated'] = time();
+			}
+			$qual = array( $model->tablePK() => $object->pkValue() );
+			$validation = $this->validateForSave($object, $values);
+			if ( count($validation) == 0 ) {
+				// passed validation, remove key/value is not in column list
+				$allkeys = array_keys($values);
+				foreach( $allkeys as $key ) {
+					if ( in_array($key, $allColumns) == false ) {
+						unset($values[$key]);
+					}
+				}
+				return $this->update( $this->tableName(), $values, $qual );
+			}
+			return $validation;
 		}
-		else {
-			return $this->createObject($values);
-		}
+
+		return false;
 	}
 
 	public function createObject($values) {
 		$tableName = $this->tableName();
-		if ( isset($values, $values[$tableName]) ) {
-			$params = array();
-			$tableValues = $values[$tableName];
-			$validation = $this->validateForSave(null, $tableValues);
-
-			foreach ($tableValues as $key => $value) {
-				$params[$key] = $value;
-			}
-
+		if ( isset($values) ) {
 			$allColumns = $this->allColumnNames();
 			if ( is_array($allColumns) && in_array('created', $allColumns)) {
-				$params['created'] = time();
+				$values['created'] = time();
 			}
 
-			$newObjId = $this->createObj($tableName, $params);
-			return ($newObjId != false ? $this->objectForId($newObjId) : false);
+			$validation = $this->validateForSave(null, $values);
+			if ( count($validation) == 0 ) {
+				// passed validation, remove key/value is not in column list
+				$allkeys = array_keys($values);
+				foreach( $allkeys as $key ) {
+					if ( in_array($key, $allColumns) == false ) {
+						unset($values[$key]);
+					}
+				}
+				return $this->createObj( $this->tableName(), $values, $this->tablePK() );
+			}
+			return $validation;
 		}
 
 		return false;
@@ -696,6 +740,7 @@ abstract class Model
 	}
 
 	public function attributesFor($object = null, $type = null) 				{ return array(); }
+	public function attributesMandatory($object = null)				 			{ return array(); }
 	public function attributeName($object = null, $type = null, $attr)			{ return $this->attributeId($attr); }
 	public function attributeIsEditable($object = null, $type = null, $attr)	{ return true; }
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }

@@ -80,7 +80,7 @@ class Login extends Controller
 			}
 		}
 		else {
-			Session::addNegativeFeedback(Localized::Get("Auth/COOKIE_INVALID", "Your remember-me-cookie is invalid." ));
+			Session::addNegativeFeedback(Localized::Get( "Auth", "COOKIE_INVALID" ));
 
 			// if NO, then move user to login/index (login form) (this is a browser-redirection, not a rendered view)
 			header('location: ' . Config::Web('/login'));

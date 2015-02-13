@@ -61,6 +61,13 @@ class Session
 		}
 	}
 
+	public static function addValidationFeedback($message = null)
+	{
+		if ( is_string($message) ) {
+			$_SESSION["feedback_negative"][] = UTF8_STAR . ' ' . $message;
+		}
+	}
+
 	public static function positiveFeedback()
 	{
 		return Session::get('feedback_positive', null);
