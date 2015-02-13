@@ -47,8 +47,9 @@ class Localized
 	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
 	 * @return mixed
 	 */
-	public static function Get(...$keys)
+	public static function Get()
 	{
+		$keys = func_get_args();
 		$teeth = array();
 		foreach( $keys as $akey ) {
 			$teeth = array_merge_recursive($teeth, (array)$akey );
@@ -57,9 +58,10 @@ class Localized
 		return self::instance()->getValue($fullkey);
 	}
 
-	public static function GlobalLabel( ...$keys )
+	public static function GlobalLabel()
 	{
-		return Localized::Get( "GLOBAL", $keys );
+		$teeth = func_get_args();
+		return Localized::Get( "GLOBAL", $teeth );
 	}
 
 	public static function ModelLabel( $table, $attr )
