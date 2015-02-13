@@ -705,9 +705,7 @@ abstract class Model
 
 	public function attributeLabel($object = null, $type = null, $attr)
 	{
-		// example key:  Model/endpoint/type_id = type_id
-		$labelKey = "Model/" . $this->tableName() . "/" . $attr;
-		return Localized::Get($labelKey, $attr);
+		return Localized::ModelLabel($this->tableName(), $attr);
 	}
 
 	public function attributeDefaultValue($object = null, $type = null, $attr)

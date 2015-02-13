@@ -47,9 +47,34 @@ class Localized
 	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
 	 * @return mixed
 	 */
-	public static function Get($key, $default = null)
+	public static function Get(...$keys)
 	{
-		return self::instance()->getValue($key, (is_null($default) ? $key : $default));
+		$teeth = array();
+		foreach( $keys as $akey ) {
+			$teeth = array_merge_recursive($teeth, (array)$akey );
+		}
+		$fullkey = join(DIRECTORY_SEPARATOR, $teeth);
+		return self::instance()->getValue($fullkey);
+	}
+
+	public static function GlobalLabel( ...$keys )
+	{
+		return Localized::Get( "GLOBAL", $keys );
+	}
+
+	public static function ModelLabel( $table, $attr )
+	{
+		return Localized::Get("Model", $table, $attr, "label");
+	}
+
+	public static function ModelValidation( $table, $attr, $validate = 'validation' )
+	{
+		return Localized::Get("Model", $table, $attr, $validate );
+	}
+
+	public static function ModelRestriction( $table, $attr )
+	{
+		return Localized::Get("Model", $table, $attr, "restriction");
 	}
 
 	public function __construct($lang)
@@ -61,16 +86,16 @@ class Localized
 		}
 	}
 
-		/**
+	/**
 	 * gets/returns the value of a specific key of the config
 	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
 	 * @return mixed
 	 */
-	public function getValue($key, $default = '')
+	public function getValue($key)
 	{
 		if ( Config::Get("Debug/localized") == true && $this->metadata->isMeta($key) == false) {
-			$success = $this->metadata->setMeta($key, $default);
+			$success = $this->metadata->setMeta($key, $key);
 		}
-		return $this->metadata->getMeta($key, $default);
+		return $this->metadata->getMeta($key);
 	}
 }
