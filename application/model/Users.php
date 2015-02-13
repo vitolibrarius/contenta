@@ -166,6 +166,68 @@ class Users extends Model
 		return false;
 	}
 
+	public function updateObject($object = null, array $values) {
+		$updates = array();
+		if (isset($object) && is_a($object, "\\model\UsersDBO" )) {
+
+			if ( isset($values[Users::name]) && $values[Users::name] != $object->name ) {
+				$updates[Users::name] = $values[Users::name];
+			}
+
+			if ( isset($values[Users::account_type]) && $values[Users::account_type] != $object->account_type ) {
+				$updates[Users::account_type] = $values[Users::account_type];
+			}
+
+			if ( isset($values[Users::email]) && $values[Users::email] != $object->email ) {
+				$updates[Users::email] = $values[Users::email];
+			}
+
+			if ( isset($values[Users::active]) && $values[Users::active] != $object->isActive()) {
+				$updates[Users::active] = ($values[Users::active]) ? 1 : 0;
+			}
+
+			if ( isset($values['password'], $values['password_check'])
+				&& empty($values['password']) == false && empty($values['password_check']) == false ) {
+				if ( PHP_VERSION_ID > 50500 )
+				{
+					$hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+					$password_hash = password_hash($values['password'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+				}
+				else
+				{
+					$password_hash = hash(HASH_DEFAULT_ALGO, $values['password']);
+				}
+				$updates['password'] = $values['password'];
+				$updates['password_check'] = $values['password_check'];
+				$updates[Users::password_hash] = $password_hash;
+			}
+		}
+
+		return parent::updateObject($object, $updates);
+	}
+
+	public function createObject($values) {
+		if ( isset($values) && isset($values[Users::creation_timestamp]) == false) {
+			$values[Users::creation_timestamp] = time();
+		}
+
+		if ( isset($values['password'], $values['password_check'])
+			&& empty($values['password']) == false && empty($values['password_check']) == false ) {
+			if ( PHP_VERSION_ID > 50500 )
+			{
+				$hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+				$password_hash = password_hash($values['password'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+			}
+			else
+			{
+				$password_hash = hash(HASH_DEFAULT_ALGO, $values['password']);
+			}
+			$values[Users::password_hash] = $password_hash;
+		}
+
+		return parent::createObject($values);
+	}
+
 	public function updateNameAndEmail($userObj, $newname, $newemail )
 	{
 		$changes = array();
@@ -220,90 +282,160 @@ class Users extends Model
 		return false;
 	}
 
-	function validateUsername($username, $newrecord = true)
+	public function validateForSave($object = null, array $values)
 	{
-		$success = false;
+		$validationErrors = parent::validateForSave($object, $values);
+
+		if ( is_null($object) || isset($values, $values[Users::password_hash]) ) {
+			$pswd = (isset($values['password']) ? $values['password'] : null);
+			$chk = (isset($values['password_check']) ? $values['password_check'] : null);
+			$error = $this->validatePassword($object, $pswd, $chk);
+			if ( empty($error) == false ) {
+				$validationErrors['password'] = $error;
+			}
+		}
+		return $validationErrors;
+	}
+
+	function validate_name($object = null, $username)
+	{
 		if (empty($username))
 		{
-			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_FIELD_EMPTY;
+			return Localized::ModelValidation($this->tableName(), Users::name, "USERNAME_FIELD_EMPTY");
 		}
 		elseif (strlen($username) > 64 OR strlen($username) < 2)
 		{
-			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_TOO_SHORT_OR_TOO_LONG;
+			return Localized::ModelValidation($this->tableName(), Users::name, "USERNAME_TOO_SHORT_OR_TOO_LONG");
 		}
 		elseif (!preg_match('/^[a-z\d]{2,64}$/i', $username))
 		{
-			$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_DOES_NOT_FIT_PATTERN;
+			return Localized::ModelValidation($this->tableName(), Users::name, "USERNAME_DOES_NOT_FIT_PATTERN");
 		}
 		else
 		{
 			// make sure username is unique
 			$user = $this->userByName($username);
-			if ( $newrecord == false OR $user == false )
+			if ( is_null($object) == false && $user != false && $user->id != $object->id)
 			{
-				$success = true;
-			}
-			else
-			{
-				$_SESSION["feedback_negative"][] = FEEDBACK_USERNAME_ALREADY_TAKEN;
+				return Localized::ModelValidation($this->tableName(), Users::name, "USERNAME_ALREADY_TAKEN");
 			}
 		}
 
-		return $success;
+		return null;
 	}
 
-	function validatePassword($passwd, $passwdrepeat)
+	function validatePassword($object = null, $passwd = null, $passwdrepeat = null)
 	{
-		$success = false;
 		if (empty($passwd) OR empty($passwdrepeat))
 		{
-			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_FIELD_EMPTY;
+			return Localized::ModelValidation($this->tableName(), "password", "PASSWORD_FIELD_EMPTY");
 		}
 		elseif ($passwd !== $passwdrepeat)
 		{
-			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_REPEAT_WRONG;
+			return Localized::ModelValidation($this->tableName(), "password", "PASSWORD_REPEAT_WRONG");
 		}
 		elseif (strlen($passwd) < 6)
 		{
-			$_SESSION["feedback_negative"][] = FEEDBACK_PASSWORD_TOO_SHORT;
+			return Localized::ModelValidation($this->tableName(), "password", "PASSWORD_TOO_SHORT");
 		}
-		else
-		{
-			$success = true;
-		}
-		return $success;
+		return null;
 	}
 
-	function validateEmail($email, $newrecord = true)
+	function validate_email($object = null, $email)
 	{
-		$success = false;
 		if (empty($email))
 		{
-			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_FIELD_EMPTY;
+			return Localized::ModelValidation($this->tableName(), Users::email, "EMAIL_FIELD_EMPTY");
 		}
 		elseif (strlen($email) > 64 OR strlen($email) < 5)
 		{
-			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_TOO_LONG;
+			return Localized::ModelValidation($this->tableName(), Users::email, "EMAIL_TOO_LONG" );
 		}
 		elseif (!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
-			$_SESSION["feedback_negative"][] = FEEDBACK_EMAIL_DOES_NOT_FIT_PATTERN;
+			return Localized::ModelValidation($this->tableName(), Users::email, "EMAIL_DOES_NOT_FIT_PATTERN" );
 		}
 		else
 		{
 			// make sure email is unique
 			$user = $this->userByName($email);
-			if ( $newrecord == false OR $user == false )
+			if ( is_null($object) == false && $user != false && $user->id != $object->id)
 			{
-				$success = true;
-			}
-			else
-			{
-				$_SESSION["feedback_negative"][] = FEEDBACK_USER_EMAIL_ALREADY_TAKEN;
+				return Localized::ModelValidation($this->tableName(), Users::email, "USER_EMAIL_ALREADY_TAKEN");
 			}
 		}
 
-		return $success;
+		return null;
+	}
+
+	/* EditableModelInterface */
+
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Users::name,
+				Users::email,
+				"password",
+				"password_check"
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
+
+	public function attributesFor($object = null, $type = null ) {
+		return array(
+			Users::name => Model::TEXT_TYPE,
+			Users::email => Model::TEXT_TYPE,
+			"password" => Model::PASSWORD_TYPE,
+			"password_check" => Model::PASSWORD_TYPE,
+			Users::active => Model::FLAG_TYPE,
+		);
+	}
+
+	public function attributeOptions($object = null, $type = null, $attr) {
+		return null;
+	}
+
+	public function attributeIsEditable($object = null, $type = null, $attr) {
+		return true;
+	}
+
+	public function attributeEditPattern($object = null, $type = null, $attr)
+	{
+		if ( $attr == Users::name ) {
+			return "[a-zA-Z0-9]{2,64}";
+		}
+
+		return null;
+	}
+
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)
+	{
+		if ( $attr == Users::name ) {
+			return Localized::ModelRestriction($this->tableName(), $attr );
+		}
+
+		if ( $attr == Users::email ) {
+			return Localized::ModelRestriction($this->tableName(), $attr );
+		}
+
+		if ( $attr == "password" ) {
+			return Localized::ModelRestriction($this->tableName(), $attr );
+		}
+
+		return null;
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) == false || is_null($object) == true) {
+			switch ($attr) {
+				case Users::active:
+					return Model::TERTIARY_TRUE;
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
 	}
 }
 
