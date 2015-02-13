@@ -23,25 +23,14 @@ class Logs extends Controller
 	 */
 	function index()
 	{
-		if (Auth::handleLogin()) {
-			if (Session::get('user_logged_in') != true || Session::get('user_account_type') != 'admin' ) {
-				Logger::logError("User is not authorized", Session::get('user_name'), Session::get('user_id'));
-				http_response_code(401); // Not Authorized
-				throw new Exception("Not authorized", 1);
-			}
-
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->render( '/logs/index');
 		}
 	}
 
 	function log_table()
 	{
-		if (Auth::handleLogin()) {
-			if (Session::get('user_logged_in') != true || Session::get('user_account_type') != 'admin' ) {
-				Logger::logError("User is not authorized", Session::get('user_name'), Session::get('user_id'));
-				http_response_code(401); // Not Authorized
-				throw new Exception("Not authorized", 1);
-			}
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$log_model = Model::Named("Log");
 			$this->view->logArray = $log_model->mostRecentLike(
 				isset($_GET['trace']) ? $_GET['trace'] : null,
@@ -57,7 +46,7 @@ class Logs extends Controller
 
 	function log_inline()
 	{
-		if (Auth::handleLogin()) {
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$log_model = Model::Named("Log");
 			$this->view->logArray = $log_model->mostRecentLike(
 				isset($_GET['trace']) ? $_GET['trace'] : null,
