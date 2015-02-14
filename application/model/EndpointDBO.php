@@ -17,11 +17,11 @@ class EndpointDBO extends DataObject
 	public $compressed;
 
 	public function isEnabled() {
-		return ( (empty($this->enabled) == false) && ($this->enabled == Model::TERTIARY_TRUE) );
+		return (isset($this->enabled) && $this->enabled == 1);
 	}
 
 	public function requiresCompression() {
-		return ( (empty($this->compressed) == false) && ($this->compressed == Model::TERTIARY_TRUE) );
+		return (isset($this->compressed) && $this->compressed == 1);
 	}
 
 	public function displayName() {

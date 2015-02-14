@@ -2,9 +2,10 @@
 
 namespace model;
 
-use \Database as Database;
+use \Session as Session;
 use \DataObject as DataObject;
 use \Model as Model;
+use \Localized as Localized;
 
 class Endpoint extends Model
 {
@@ -17,12 +18,6 @@ class Endpoint extends Model
 	const username =		'username';
 	const enabled =			'enabled';
 	const compressed =		'compressed';
-
-
-	public function __construct(Database $db)
-	{
-		parent::__construct($db);
-	}
 
 	public function tableName() { return Endpoint::TABLE; }
 	public function tablePK() { return Endpoint::id; }
@@ -81,6 +76,18 @@ class Endpoint extends Model
 		return $obj;
 	}
 
+	public function updateObject($object = null, array $values) {
+		if (isset($object) && is_a($object, '\\model\EndpointDBO' )) {
+			$formEnabled = (isset($values[Endpoint::enabled]) ? 1 : 0);
+			$values[Endpoint::enabled] = $formEnabled;
+
+			$formCompressed = (isset($values[Endpoint::compressed]) ? 1 : 0);
+			$values[Endpoint::compressed] = $formCompressed;
+		}
+
+		return parent::updateObject($object, $values);
+	}
+
 	public function deleteRecord($obj)
 	{
 		if ( $obj != false )
@@ -91,6 +98,38 @@ class Endpoint extends Model
 	}
 
 	/* EditableModelInterface */
+	function validate_name($object = null, $value)
+	{
+		if (empty($value))
+		{
+			return Localized::ModelValidation($this->tableName(), Endpoint::name, "FIELD_EMPTY");
+		}
+		elseif (strlen($value) > 64 OR strlen($value) < 5)
+		{
+			return Localized::ModelValidation($this->tableName(), Endpoint::name, "FIELD_TOO_LONG" );
+		}
+		return null;
+	}
+
+	function validate_base_url($object = null, $value)
+	{
+		if (empty($value))
+		{
+			return Localized::ModelValidation($this->tableName(), Endpoint::base_url, "FIELD_EMPTY");
+		}
+		return null;
+	}
+
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Endpoint::name,
+				Endpoint::base_url
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
 	public function attributesFor($object = null, $type = null ) {
 		return array(
@@ -117,7 +156,6 @@ class Endpoint extends Model
 				return false;
 			}
 		}
-
 		return true;
 	}
 

@@ -134,10 +134,12 @@
                 "label": "Connection Type"
             },
             "name": {
-                "label": "Name"
+                "label": "Name",
+                "FIELD_EMPTY": "Name field was empty"
             },
             "base_url": {
-                "label": "URL"
+                "label": "URL",
+                "FIELD_EMPTY": "URL field was empty"
             },
             "api_key": {
                 "label": "API Key"
@@ -162,7 +164,12 @@
     },
     "Netconfig": {
         "title": "Network Configuration",
-        "NewRecord": "New Configuration"
+        "NewRecord": "New Configuration",
+        "index": {
+            "DeleteDescription": "This will permanently delete the endpoint.",
+            "DeleteConfirmation": "Are you sure you want to continue?"
+        },
+        "EditRecord": "Edit Configuration"
     },
     "Upgrade": {
         "title": "Upgrade",

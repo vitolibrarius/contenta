@@ -38,7 +38,7 @@ class Netconfig extends Controller
 				$netObj = $model->objectForId($netId);
 				if ( $netObj != false ) {
 					$this->view->setLocalizedViewTitle("EditRecord");
-					$this->view->saveAction = "netconfig/save/" . $netId;
+					$this->view->saveAction = "netconfig/save";
 					$this->view->object = $netObj;
 					$this->view->render( '/edit/endpoint' );
 				}
@@ -100,9 +100,18 @@ class Netconfig extends Controller
 			if ( $netId > 0 ) {
 				$netObj = $model->objectForId($netId);
 				if ( $netObj != false ) {
-					$model->updateObject($netObj, $values['endpoint']);
-					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-					$this->index();
+					$errors = $model->updateObject($netObj, $values['endpoint']);
+					if ( is_array($errors) ) {
+						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
+						foreach ($errors as $attr => $errMsg ) {
+							Session::addValidationFeedback($errMsg);
+						}
+						$this->edit($netId);
+					}
+					else {
+						Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
+						$this->index();
+					}
 				}
 				else {
 					Session::addNegativeFeedback( Localized::GlobalLabel( "Failed to find request record" ) );
@@ -110,15 +119,47 @@ class Netconfig extends Controller
 				}
 			}
 			else {
-				$netObj = $model->createObject($values);
-				if ( $netObj != false ) {
-					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-					$this->index();
+				$errors = $model->createObject($values['endpoint']);
+				if ( is_array($errors) ) {
+					Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
+					foreach ($errors as $attr => $errMsg ) {
+						Session::addValidationFeedback( $errMsg );
+					}
+					$this->edit_new();
 				}
 				else {
-					$this->view->render('/error/index');
+					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
+					$this->index();
 				}
 			}
 		}
 	}
+
+	function delete($netId = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Endpoint');
+			if ( $netId > 0 ) {
+				$object = $model->objectForId($netId);
+				if ( $object != false ) {
+					$errors = $model->deleteObject($object);
+					if ( $errors == false ) {
+						Session::addNegativeFeedback( Localized::GlobalLabel("Delete Failure") );
+						$this->edit($netId);
+					}
+					else {
+						Session::addPositiveFeedback(Localized::GlobalLabel( "Delete Completed" ));
+					}
+				}
+				else {
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+				}
+			}
+			else {
+				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+			}
+		}
+		$this->index();
+	}
+
 }
