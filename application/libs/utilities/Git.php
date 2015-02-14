@@ -167,10 +167,10 @@ class Git
 				curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
 
 				$data = curl_exec($ch);
-				curl_close($ch);
 				if ( $data == false ) {
-					\Logger::logError( 'Error (' . curl_error($ch) . ')', get_class($this), "github update");
+					\Logger::logError( 'Error (' . curl_error($ch) . ')', get_class($this), $url);
 				}
+				curl_close($ch);
 				Cache::Store( $cacheKey, $cookie );
 			}
 			else {
