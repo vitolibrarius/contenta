@@ -226,7 +226,7 @@ class View
 		$this->input_pattern = $model->attributeEditPattern($object, $type, $attr);
 		$this->input_placeholder = $model->attributePlaceholder($object, $type, $attr);
 		$this->input_options = $model->attributeOptions($object, $type, $attr);
-		$this->input_value = ($value == null) ?
+		$this->input_value = is_null($value) ?
 			$model->attributeDefaultValue($object, $type, $attr) :
 			$value;
 
