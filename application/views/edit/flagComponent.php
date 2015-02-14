@@ -11,7 +11,7 @@
 	<?php if ($this->input_placeholder != null) {
 		echo ' value="' . $this->input_placeholder . '"';
 	} ?>
-	<?php if (intval($this->input_value) > Model::TERTIARY_FALSE ) {
+	<?php if ($this->input_value === 'on' || (intval($this->input_value) > Model::TERTIARY_FALSE )) {
 		echo ' checked';
 	} ?>
 />
