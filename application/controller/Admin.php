@@ -140,4 +140,31 @@ class Admin extends Controller
 		$this->userlist();
 	}
 
+	function additionalUser($uid = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Users');
+			if ( $uid > 0 ) {
+				$userObj = $model->objectForId($uid);
+				if ( $userObj != false ) {
+					if ( isset($_POST, $_POST['generateAPI']) ) {
+						$errors = $model->generateAPIHash($userObj);
+						if ( $errors == false ) {
+							Session::addNegativeFeedback( Localized::ModelValidation($model->tableName(), Users::api_hash, "GenerateError") );
+						}
+					}
+					else {
+						Session::addNegativeFeedback(var_export($_POST, true));
+					}
+				}
+				else {
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+				}
+			}
+			else {
+				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+			}
+		}
+		$this->editUser($uid);
+	}
 }

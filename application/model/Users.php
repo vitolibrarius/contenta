@@ -131,12 +131,17 @@ class Users extends Model
 	}
 
 
-	/**
-	 * Deletes a specific note
-	 * @param int $note_id id of the note
-	 * @return bool feedback (was the note deleted properly ?)
-	 */
-	public function setAPIHash($userObj, $newHash)
+	public function generateAPIHash($userObj = null)
+	{
+		if ( is_a($userObj, "model\\UsersDBO" )) {
+			if ($this->update(Users::TABLE, array( Users::api_hash => uuidShort()), array(Users::id => $userObj->id))) {
+				return $this->refresh($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setAPIHash($userObj, $newHash = null)
 	{
 		if ($this->update(Users::TABLE, array( Users::api_hash => $newHash), array(Users::id => $userObj->id)))
 		{
