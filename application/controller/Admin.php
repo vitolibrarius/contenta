@@ -154,7 +154,7 @@ class Admin extends Controller
 						}
 					}
 					else {
-						Session::addNegativeFeedback(var_export($_POST, true));
+						Session::addNegativeFeedback( "<pre>" . var_export($_POST, true) . "</pre>");
 					}
 				}
 				else {

@@ -24,7 +24,6 @@
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "type" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "api_hash" ); ?></th>
 			<th colspan=2></th>
-
 		</tr>
 	<?php
 		if ($this->users) {
@@ -35,8 +34,8 @@
 					<td>' . $value->email .'</td>
 					<td>' . $value->account_type .'</td>
 					<td>' . $value->api_hash .'</td>
-					<td><a href="'. Config::Web('/admin/editUser/') . $value->id . '"><span class="icon edit"></a></td>
-					<td><a class="confirm" action="'. Config::Web('/admin/editUser/') . $value->id . '" href="#"><span class="icon recycle"></span></a></td>
+					<td><a href="'. Config::Web('/admin/editUser/') . $value->id . '"><span class="icon edit"></span></a></td>
+					<td><a class="confirm" action="'. Config::Web('/admin/deleteUser/') . $value->id . '" href="#"><span class="icon recycle"></span></a></td>
 				</tr>';
 			}
 		} else {

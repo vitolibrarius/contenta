@@ -6,22 +6,12 @@
 				name="editForm">
 
 				<fieldset>
-				<legend><?php
-					$legendValue = ucwords( $this->model->tableName()) . " Details";
-					echo Localized::ModelLabel($this->model->tableName(),"FormLegend", $legendValue); ?>
-				</legend>
-
-				<?php if (isset($this->object)) : ?>
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "created"); ?></label>
-					<input class="date_input" type="text" name="created" disabled
-						value="<?php if (isset($this->object)) { echo $this->object->formattedDate("created"); } ?>"
-					/>
-				<?php endif; ?>
+				<legend><?php echo Localized::ModelLabel($this->model->tableName(),"FormLegend"); ?></legend>
 
 				<?php
 					$realObj = (isset($this->object)) ? $this->object : null;
 					$realType = ( isset($this->object) ? $this->object->type() :
-						isset($this->endpoint_type) ? $this->endpoint_type : null );
+						(isset($this->endpoint_type) ? $this->endpoint_type : null));
 				?>
 					<label>Type</label>
 					<div>
@@ -44,6 +34,9 @@
 						$attValue = null;
 						if ( isset($_POST, $_POST[$attrName]) ) {
 							$attValue = $_POST[$attrName];
+						}
+						else if ( $form_type == Model::FLAG_TYPE && count($_POST) > 0) {
+							$attValue = 0;
 						}
 						else if (isset($this->{$attr})) {
 							$attValue = $this->{$attr};
