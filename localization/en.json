@@ -8,7 +8,7 @@
             "Logs": "Logs",
             "Series": "Series",
             "Profile": "Profile",
-            "Login": "GLOBAL\/Menu\/Login"
+            "Login": "Login"
         },
         "WebsiteLink": "Website",
         "HelpLink": "Help",
@@ -29,7 +29,8 @@
             "title": "Error"
         },
         "MigrateButton": "Migrate",
-        "UpgradeButton": "Upgrade"
+        "UpgradeButton": "Upgrade",
+        "LoginButton": "Login"
     },
     "Admin": {
         "title": "Admin",
@@ -106,13 +107,26 @@
                 "label": "Additional"
             },
             "api_hash": {
-                "label": "API Key"
+                "label": "API Key",
+                "GenerateError": "An error occurred while generating a new API Key"
             },
             "id": {
                 "label": "ID"
             },
             "type": {
                 "label": "Access Role"
+            },
+            "LoginLegend": {
+                "label": "Login"
+            },
+            "user_name": {
+                "label": "Username"
+            },
+            "user_password": {
+                "label": "Password"
+            },
+            "user_rememberme": {
+                "label": "Remember Me (for 2 weeks)"
             }
         },
         "endpoint": {
@@ -174,5 +188,8 @@
     },
     "Error": {
         "title": "Error"
+    },
+    "Login": {
+        "title": "Login"
     }
 }
