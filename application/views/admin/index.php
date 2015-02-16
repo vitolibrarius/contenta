@@ -4,11 +4,11 @@
 				<img src="<?php echo Config::Web('/public/img/admin-users.png'); ?>">
 			</div>
 			<div class="admin_card_item">
-				<a href="<?php echo Config::Web('/Admin/userlist'); ?>"><?php echo $this->label( "UsersLink", "name" ); ?></a>
+				<a href="<?php echo Config::Web('/AdminUsers/userlist'); ?>"><?php echo $this->label( "UsersLink", "name" ); ?></a>
 				<p><?php echo $this->label( "UsersLink", "desc" ); ?></p>
 			</div>
 			<div class="admin_card_item">
-				<a href="<?php echo Config::Web('/admin/editUser'); ?>"><?php echo $this->label( "AddUsersLink", "name" ); ?></a>
+				<a href="<?php echo Config::Web('/AdminUsers/editUser'); ?>"><?php echo $this->label( "AddUsersLink", "name" ); ?></a>
 				<p><?php echo $this->label( "AddUsersLink", "desc" ); ?></p>
 			</div>
 		</div>
@@ -25,6 +25,10 @@
 			<div class="admin_card_item">
 				<a href="#"><?php echo $this->label( "RepairLink", "name" ); ?></a>
 				<p><?php echo $this->label( "RepairLink", "desc" ); ?></p>
+			</div>
+			<div class="admin_card_item">
+				<a href="<?php echo Config::Web('/AdminPublishers/publisherlist'); ?>">Publishers</a>
+				<p>All Publishers</p>
 			</div>
 			<div class="admin_card_item">
 				<a href="#">Series</a>

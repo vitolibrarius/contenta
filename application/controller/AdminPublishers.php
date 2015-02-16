@@ -9,6 +9,7 @@ use \Auth as Auth;
 use \Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
+use controller\Admin as Admin;
 use model\Users as Users;
 use model\Publisher as Publisher;
 
@@ -16,16 +17,15 @@ use model\Publisher as Publisher;
  * Class Admin
  * The index controller
  */
-class Admin extends Controller
+class AdminPublishers extends Admin
 {
-	/**
-	 * Handles what happens when user moves to URL/index/index, which is the same like URL/index or in this
-	 * case even URL (without any controller/action) as this is the default controller-action when user gives no input.
-	 */
-	function index()
+	function publisherlist()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$this->view->render( '/admin/index' );
+			$model = Model::Named('Publisher');
+			$this->view->model = $model;
+			$this->view->list = $model->allObjects();
+			$this->view->render( '/publishers/index');
 		}
 	}
 }
