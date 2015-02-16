@@ -18,30 +18,46 @@ class Migrator
 
 		Logger::logInfo( "Migrating application to version " . currentVersionNumber(),	"Migrator", "Upgrade" );
 
+		$patches = array();
+		$sql = "SELECT * FROM patch";
+		$statement = Database::instance()->prepare($sql);
+		if ($statement && $statement->execute()) {
+			$fetch = $statement->fetchAll();
+			if ( is_array($fetch) ) {
+				foreach( $fetch as $row ) {
+					$patches[] = $row->name;
+				}
+			}
+		}
+
 		$number = 0;
 		$continue = true;
 		while ( $continue == true ) {
 			try {
 				$migrationClass = 'migration\\Migration_' . $number;
-				Logger::logInfo( "Trying " . $migrationClass ,	"Migrator", "Upgrade" );
+				if ( in_array($migrationClass, $patches) == false ) {
+					Logger::logInfo( "Trying " . $migrationClass ,	"Migrator", "Upgrade" );
 
-				$worker = new $migrationClass(Database::instance(), $scratchDirectory);
-				Logger::logInfo( "$migrationClass", "Migration", $migrationClass);
+					$worker = new $migrationClass(Database::instance(), $scratchDirectory);
+					Logger::logInfo( "$migrationClass", "Migration", $migrationClass);
 
-				$continue = $worker->performMigration();
-				if ( $continue == true ) {
-					$version = $version_model->create($versionNum, $versionHash);
-					if ( ($version instanceof VersionDBO ) == false) {
-						throw new MigrationFailedException("Failed to create version record " . var_export($version, true));
+					$continue = $worker->performMigration();
+					if ( $continue == true ) {
+						$version = $version_model->create($versionNum, $versionHash);
+						if ( ($version instanceof VersionDBO ) == false) {
+							throw new MigrationFailedException("Failed to create version record " . var_export($version, true));
+						}
+
+						$patch = $patch_model->create($version, $migrationClass);
+						if ( ($patch instanceof PatchDBO ) == false) {
+							throw new MigrationFailedException("Failed to create migration record " . $migrationClass);
+						}
 					}
-
-					$patch = $patch_model->create($version, $migrationClass);
-					if ( ($patch instanceof PatchDBO ) == false) {
-						throw new MigrationFailedException("Failed to create migration record " . $migrationClass);
-					}
-
-					$number++;
 				}
+				else {
+					Logger::logInfo( "Already completed " . $migrationClass ,	"Migrator", "Upgrade" );
+				}
+				$number++;
 			}
 			catch (Exception $e) {
 				if ( is_a( $e, "ClassNotFoundException" ) && $e->getMessage() === $migrationClass ) {

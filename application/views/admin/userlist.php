@@ -34,8 +34,8 @@
 					<td>' . $value->email .'</td>
 					<td>' . $value->account_type .'</td>
 					<td>' . $value->api_hash .'</td>
-					<td><a href="'. Config::Web('/admin/editUser/') . $value->id . '"><span class="icon edit"></span></a></td>
-					<td><a class="confirm" action="'. Config::Web('/admin/deleteUser/') . $value->id . '" href="#"><span class="icon recycle"></span></a></td>
+					<td><a href="'. Config::Web('/AdminUsers/editUser/') . $value->id . '"><span class="icon edit"></span></a></td>
+					<td><a class="confirm" action="'. Config::Web('/AdminUsers/deleteUser/') . $value->id . '" href="#"><span class="icon recycle"></span></a></td>
 				</tr>';
 			}
 		} else {
