@@ -118,17 +118,19 @@ class AdminUsers extends Admin
 					}
 					else {
 						Session::addPositiveFeedback(Localized::GlobalLabel( "Delete Completed" ));
+						$this->userlist();
 					}
 				}
 				else {
 					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					$this->userlist();
 				}
 			}
 			else {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+				$this->userlist();
 			}
 		}
-		$this->userlist();
 	}
 
 	function additionalUser($uid = 0)
@@ -155,7 +157,7 @@ class AdminUsers extends Admin
 			else {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
 			}
+			$this->editUser($uid);
 		}
-		$this->editUser($uid);
 	}
 }

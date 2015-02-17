@@ -188,5 +188,4 @@ class Endpoint extends Model
 
 		return null;
 	}
-
 }

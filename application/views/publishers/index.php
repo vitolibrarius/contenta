@@ -36,9 +36,12 @@
 					<td><?php echo $value->path; ?></td>
 					<td><?php echo $value->xsource; ?></td>
 					<td><?php echo $value->xurl; ?></td>
-					<td><a href="<?php echo Config::Web('/AdminPublishers/edit_publisher/'. $value->id); ?>"><span class="icon edit" /></a></td>
-					<td><a class="confirm" action="<?php echo Config::Web('/AdminPublishers/delete_publisher/') . $value->id; ?>" href="#">
-						<span class="icon recycle"></span></a>
+					<td><?php if (isset($this->editAction)) : ?>
+						<a href="<?php echo Config::Web( $this->editAction . '/' . $value->id); ?>"><span class="icon edit" /></a>
+						<?php endif; ?></td>
+					<td><?php if (isset($this->deleteAction)) : ?>
+						<a class="confirm" href="#" action="<?php echo Config::Web( $this->deleteAction . '/' . $value->id); ?>"><span class="icon recycle" /></a>
+						<?php endif; ?></td>
 					</td>
 				</tr>
 		<?php endforeach; ?>
