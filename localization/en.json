@@ -155,7 +155,9 @@
         },
         "publisher": {
             "name": {
-                "label": "Name"
+                "label": "Name",
+                "FIELD_EMPTY": "Name field was empty",
+                "FIELD_TOO_LONG": "Name field was either less than 5 characters or more than 255"
             },
             "path": {
                 "label": "Path"
@@ -165,6 +167,9 @@
             },
             "xurl": {
                 "label": "External URL"
+            },
+            "FormLegend": {
+                "label": "Publisher Details"
             }
         }
     },

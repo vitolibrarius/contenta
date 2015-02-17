@@ -100,26 +100,10 @@ class Publisher extends Model
 	{
 		if ( $obj != false )
 		{
-			$tag_join_model = loadModel('TagJoin');
-			if ( $tag_join_model->deleteAllForObject($obj) ) {
-				$publish_alias_model = loadModel('PublisherAlias');
-				if ( $publish_alias_model->deleteAllForPublisher($obj) ) {
-					return $this->deleteObj($obj, Publisher::TABLE, Publisher::id );
-				}
-			}
+			// delete any relationships
+			return $this->deleteObj($obj, Publisher::TABLE, Publisher::id );
 		}
 
-		return false;
-	}
-
-	public function allForAlias($name = 'none')
-	{
-		$alias_model = loadModel("PublisherAlias");
-		$aliases = $alias_model->allForName($name);
-
-		if ( $aliases != false ) {
-			return $this->fetchAllJoin(Publisher::TABLE, $this->allColumns(), Publisher::id, PublisherAlias_Publisher::id, $aliases, null, null);
-		}
 		return false;
 	}
 
@@ -145,6 +129,40 @@ class Publisher extends Model
 			return $this->refresh($obj);
 		}
 		return false;
+	}
+	/* EditableModelInterface */
+	function validate_name($object = null, $value)
+	{
+		if (empty($value))
+		{
+			return Localized::ModelValidation($this->tableName(), Publisher::name, "FIELD_EMPTY");
+		}
+		elseif (strlen($value) > 255 OR strlen($value) < 5)
+		{
+			return Localized::ModelValidation($this->tableName(), Publisher::name, "FIELD_TOO_LONG" );
+		}
+		return null;
+	}
+
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Publisher::name
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
+
+	public function attributesFor($object = null, $type = null ) {
+		return array(
+			Publisher::name => Model::TEXT_TYPE
+		);
+	}
+
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)
+	{
+		return null;
 	}
 }
 
