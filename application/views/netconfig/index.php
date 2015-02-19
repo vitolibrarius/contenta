@@ -38,7 +38,7 @@
 					<td><?php echo $value->username; ?></td>
 					<td><span class="icon <?php echo ($value->compressed ? 'true' : 'false') ?>"></span></td>
 					<td><a href="<?php echo Config::Web('/netconfig/edit/'. $value->id); ?>"><span class="icon edit" /></a></td>
-					<td><a class="confirm" action="'. Config::Web('/netconfig/delete/') . $value->id . '" href="#">
+					<td><a class="confirm" action="<?php echo Config::Web('/netconfig/delete/') . $value->id; ?>" href="#">
 						<span class="icon recycle"></span></a>
 					</td>
 				</tr>

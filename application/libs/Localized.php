@@ -79,6 +79,11 @@ class Localized
 		return Localized::Get("Model", $table, $attr, "restriction");
 	}
 
+	public static function ModelSearch( $table, $attr, $search = 'search' )
+	{
+		return Localized::Get("Model", $table, $attr, $search );
+	}
+
 	public function __construct($lang)
 	{
 		$path = appendPath(LANG_PATH, $lang . ".json" );

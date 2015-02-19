@@ -92,6 +92,7 @@ class View
 	{
 		// page without header and footer, for whatever reason
 		if ($render_without_header_and_footer == true) {
+			$this->renderFeedbackMessages();
 			require VIEWS_PATH . $filename . '.php';
 		} else {
 			$current = htmlentities($_SERVER['REQUEST_URI']);

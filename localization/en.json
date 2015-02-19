@@ -30,7 +30,8 @@
         },
         "MigrateButton": "Migrate",
         "UpgradeButton": "Upgrade",
-        "LoginButton": "Login"
+        "LoginButton": "Login",
+        "SearchButton": "Search"
     },
     "Admin": {
         "title": "Admin",
@@ -170,6 +171,9 @@
             },
             "FormLegend": {
                 "label": "Publisher Details"
+            },
+            "SearchLegend": {
+                "label": "Query ComicVine Publishers"
             }
         }
     },
