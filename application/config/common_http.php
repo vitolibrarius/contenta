@@ -18,6 +18,9 @@ function splitPOSTValues($array) {
 						case Model::INT_TYPE:
 							$value = intval($value);
 							break;
+						case Model::FLAG_TYPE:
+							$value = (($value == 'on') || intval($value) > 0) ? 1 : 0;
+							break;
 						default:
 							break;
 					}
