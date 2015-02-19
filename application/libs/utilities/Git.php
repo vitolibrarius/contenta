@@ -145,7 +145,7 @@ class Git
 			}
 
 			if ( function_exists('curl_version') == true) {
-				$cacheKey = Cache::MakeKey( "Cookies" . parse_url($url, PHP_URL_HOST));
+				$cacheKey = Cache::MakeKey( "Cookies", parse_url($url, PHP_URL_HOST));
 				$cookie = Cache::Fetch( $cacheKey, "" );
 
 				$ch = curl_init();

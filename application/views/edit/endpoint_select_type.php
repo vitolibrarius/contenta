@@ -7,8 +7,7 @@
 
 				<fieldset>
 				<legend><?php
-					$legendValue = ucwords( $this->model->tableName()) . " Details";
-					echo Localized::ModelLabel($this->model->tableName(),"FormLegend", $legendValue); ?>
+					echo Localized::ModelLabel($this->model->tableName(),"FormLegend"); ?>
 				</legend>
 
 				<?php if (isset($this->object) == false) : ?>

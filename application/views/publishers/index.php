@@ -22,6 +22,7 @@
 	-->
 <div class="mediaData">
 	<table>
+	<?php if (is_array($this->list) && count($this->list) > 0 ): ?>
 		<tr>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "name" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "path" ); ?></th>
@@ -29,7 +30,6 @@
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "xurl" ); ?></th>
 			<th colspan=2></th>
 		</tr>
-	<?php if (is_array($this->list)): ?>
 		<?php foreach($this->list as $key => $value): ?>
 			   <tr>
 					<td><?php echo htmlentities($value->name); ?></td>
@@ -46,8 +46,17 @@
 				</tr>
 		<?php endforeach; ?>
 	<?php else: ?>
-		<?php echo 'No publishers yet. Create some !'; ?>
+		<tr>
+			<th colspan="6"><?php echo 'No publishers yet. Create some !'; ?></th>
+		</tr>
 	<?php endif ?>
 
+	<tfoot>
+		<tr>
+			<td colspan="6">
+				<a class="btn" href="<?php echo Config::Web( '/AdminPublishers/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a>
+			</td>
+		</tr>
+	</tfoot>
 	</table>
 </div>
