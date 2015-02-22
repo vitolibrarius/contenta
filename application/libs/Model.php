@@ -74,7 +74,7 @@ abstract class Model
 		return implode(",", $this->allColumnNames() );
 	}
 
-	public function refresh($object)
+	public function refreshObject($object)
 	{
 		$dboClassName = 'model\\' . ucwords($object->tableName()) . 'DBO';
 		if ( $object != false && is_a($object, $dboClassName) ) {

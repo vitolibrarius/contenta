@@ -92,11 +92,11 @@ class User_Network extends Model
 		return false;
 	}
 
-	public function deleteRecord($obj)
+	public function deleteObject($object = null)
 	{
-		if ( $obj != false )
+		if ( $object != false )
 		{
-			return $this->deleteObj($obj, User_Network::TABLE, User_Network::id );
+			return parent::deleteObj($object, User_Network::TABLE, User_Network::id );
 		}
 
 		return false;
@@ -109,7 +109,7 @@ class User_Network extends Model
 		{
 			$array = $this->allForUser($obj);
 			foreach ($array as $key => $value) {
-				if ($this->deleteRecord($value) == false) {
+				if ($this->deleteObject($value) == false) {
 					$success = false;
 					break;
 				}

@@ -4,6 +4,7 @@ namespace model;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
+use \Config as Config;
 
 class Publisher extends Model
 {
@@ -24,7 +25,7 @@ class Publisher extends Model
 	public function tablePK() { return Publisher::id; }
 	public function sortOrder() { return array(Publisher::name); }
 
-	public function dboClassName() { return 'model\\PublisherDBO'; }
+	public function dboClassName() { return "\model\PublisherDBO"; }
 
 	public function allColumnNames()
 	{
@@ -37,11 +38,6 @@ class Publisher extends Model
 
 	public function UnknownPublisher() {
 		return $this->findExternalOrCreate( '-= Unknown Publisher =-', '-unknown-', 'UNKNOWN', null );
-	}
-
-	public function publisher($id = 0)
-	{
-		return $this->fetch(Publisher::TABLE, $this->allColumns(), array(Publisher::id => $id));
 	}
 
 	public function objectForExternal($xid = 'none', $xsrc = 'none')
@@ -79,7 +75,7 @@ class Publisher extends Model
 	public function create( $name, $xid = null, $xsrc = null, $xurl = null)
 	{
 		if ( isset($name) && strlen($name)) {
-			$newObjId = $this->createObj(Publisher::TABLE, array(
+			$newObjId = $this->createObject( array(
 				Publisher::created => time(),
 				Publisher::name => $name,
 				Publisher::path => null,
@@ -88,20 +84,30 @@ class Publisher extends Model
 				Publisher::xurl => $xurl,
 				Publisher::xsource => $xsrc,
 				Publisher::xid => $xid,
-				Publisher::xupdated => null
+				Publisher::xupdated => (is_null($xid) ? null : time())
 				)
 			);
 		}
 
-		return ((isset($newObjId) && $newObjId != false) ? $this->publisher($newObjId) : false);
+		return ((isset($newObjId) && $newObjId != false) ? $this->objectForId($newObjId) : false);
 	}
 
-	public function deleteRecord($obj)
+	public function createObject($values)
 	{
-		if ( $obj != false )
+		if ( isset($values) && (isset($values[Publisher::path]) == false || is_null($values[Publisher::path])) ) {
+			$path = makeUniqueDirectory( Config::GetMedia(), $values[Publisher::name] );
+			$values[Publisher::path] = $path;
+		}
+
+		return parent::createObject($values);
+	}
+
+	public function deleteObject($object = null)
+	{
+		if ( $object != false )
 		{
 			// delete any relationships
-			return $this->deleteObj($obj, Publisher::TABLE, Publisher::id );
+			return $this->deleteObj($object, Publisher::TABLE, Publisher::id );
 		}
 
 		return false;
@@ -126,7 +132,7 @@ class Publisher extends Model
 				array(Publisher::id => $obj->id)
 			);
 
-			return $this->refresh($obj);
+			return $this->refreshObject($obj);
 		}
 		return false;
 	}

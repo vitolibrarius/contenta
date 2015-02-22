@@ -88,11 +88,11 @@ class Endpoint extends Model
 		return parent::updateObject($object, $values);
 	}
 
-	public function deleteRecord($obj)
+	public function deleteObject($object = null)
 	{
-		if ( $obj != false )
+		if ( $object != false )
 		{
-			return $this->deleteObj($obj, Endpoint::TABLE, Endpoint::id );
+			return parent::deleteObj($object, Endpoint::TABLE, Endpoint::id );
 		}
 		return false;
 	}
