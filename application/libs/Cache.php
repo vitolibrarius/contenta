@@ -37,6 +37,11 @@ class Cache
 		return join(DIRECTORY_SEPARATOR, $teeth);
 	}
 
+	final public static function Clear($key)
+	{
+		return self::instance()->clearCachedValue($key);
+	}
+
 	final public static function Fetch($key, $default = null, $customTTL = -1)
 	{
 		return self::instance()->fetchCachedValue($key, $default, $customTTL);
