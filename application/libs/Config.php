@@ -93,15 +93,22 @@ class Config
 		return self::instance()->getValue("Internet/appname", "Contenta");
 	}
 
-	final public static function Web($path = null)
+	final public static function Web()
 	{
+		$keys = func_get_args();
+		$teeth = array();
+		foreach( $keys as $akey ) {
+			$teeth = array_merge_recursive($teeth, (array)$akey );
+		}
+		$fullkey = join(DIRECTORY_SEPARATOR, $teeth);
+
 		$web = self::instance()->getValue("Internet/web_dir", "contenta");
 		if ( is_string($web) && startsWith( '/', $web ) == false ) {
 			$web = '/' . $web;
 		}
 
-		if ( is_string($path) && strlen($path) > 0 ) {
-			return appendPath($web, $path);
+		if ( is_string($fullkey) && strlen($fullkey) > 0 ) {
+			return appendPath($web, $fullkey);
 		}
 		return $web;
 	}
