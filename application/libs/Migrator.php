@@ -63,6 +63,9 @@ class Migrator
 				if ( is_a( $e, "ClassNotFoundException" ) && $e->getMessage() === $migrationClass ) {
 					// this marks the end of the Migration
 					$continue = false;
+
+					// ensure the version is created, even if the patches are already completed in previous versions
+					$version = $version_model->create($versionNum, $versionHash);
 				}
 				else {
 					// something else?

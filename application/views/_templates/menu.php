@@ -49,7 +49,7 @@ class Menu {
 		$this->items[] = array
 		(
 			'title'	=> $title,
-			'url'	  => Config::Url($url),
+			'url'	  => Config::Web($url),
 			'children' => is_object($children) ? $children->items : NULL,
 		);
 
