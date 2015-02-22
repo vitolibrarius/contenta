@@ -9,6 +9,7 @@ use utilities\ShellCommand as ShellCommand;
 class Git
 {
 	const UP_TO_DATE = "Up-to-date";
+	const UNCOMMITTED = "Uncommitted Changes";
 
 	protected static $binary = '/usr/bin/git';
 	protected $repository = null;
@@ -75,15 +76,15 @@ class Git
 
 	public function checkUpgradeEligibility()
 	{
-		$local_results = $this->status();
-		$remote_results =
-		$ownership_results = $this->checkRepositoryOwnership(10, array("contenta.ini", ".htaccess", ".DS_Store") );
-
-	$file_test_class = ($files['status'] == 0 ? 'success' : 'failure');
-	$git_test = $git->status();
-	$git_test_out = preg_split('/\n|\r/', $git_test['stdout'], -1, PREG_SPLIT_NO_EMPTY);
-	$git_test_class = ($git_test['status'] == 0 && count($git_test_out) == 1 ? 'success' : 'failure');
-	$git_eligible = ($files['status'] == 0 && $git_test['status'] == 0 && count($git_test_out) == 1);
+// 		$local_results = $this->status();
+// 		$remote_results =
+// 		$ownership_results = $this->checkRepositoryOwnership(10, array("contenta.ini", ".htaccess", ".DS_Store") );
+//
+// 	$file_test_class = ($files['status'] == 0 ? 'success' : 'failure');
+// 	$git_test = $git->status();
+// 	$git_test_out = preg_split('/\n|\r/', $git_test['stdout'], -1, PREG_SPLIT_NO_EMPTY);
+// 	$git_test_class = ($git_test['status'] == 0 && count($git_test_out) == 1 ? 'success' : 'failure');
+// 	$git_eligible = ($files['status'] == 0 && $git_test['status'] == 0 && count($git_test_out) == 1);
 
 	}
 
@@ -110,9 +111,21 @@ class Git
 
 	public function remoteStatus()
 	{
+		$status = $this->status();
+		$statusLines = explode("\n", str_replace("\r", '', $status['stdout']));
+		if ( $status['status'] == 0 && is_array($statusLines)) {
+			if ( count($statusLines) == 1 && preg_match("/\[(.*?)\]/", $statusLines[0], $aheadBehind) > 0) {
+				return $aheadBehind;
+			}
+			else if ( count($statusLines) > 1) {
+				return Git::UNCOMMITTED;
+			}
+		}
+
+		// check remote version
 		$local_rev = $this->currentHash();
-		$x_rev = $this->run("rev-parse @{u}");
-		$base_rev = $this->run("merge-base @ @{u}");
+// 		$x_rev = $this->run("rev-parse @{u}");
+// 		$base_rev = $this->run("merge-base @ @{u}");
 
 		$commits = $this->jsonRequest('https://api.github.com/repos/vitolibrarius/contenta/commits/master');
 		if ( isset($commits, $commits['sha']) )
