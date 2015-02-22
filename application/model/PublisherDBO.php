@@ -6,7 +6,10 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Config as Config;
 
-class PublisherDBO extends DataObject
+use model\Endpoint as Endpoint;
+use model\Publisher as Publisher;
+
+class PublisherDBO extends DataObject implements \Image_Interface
 {
 	public $name;
 	public $created;
@@ -23,10 +26,43 @@ class PublisherDBO extends DataObject
 		return $this->name;
 	}
 
+	public function hasIcons()
+	{
+		return ($this->smallIconPath() != null) && ($this->largeIconPath() != null);
+	}
+
+	public function saveSmallIcon( $url )
+	{
+		if ( isset($url) ) {
+			$filename = downloadImage($url, $this->fullpath(), "SmallIcon" );
+			if ( empty($filename) == false ) {
+				$this->small_icon_name = $filename;
+				if ( $this->model()->updateObject( $this, array( Publisher::small_icon_name => $filename )) ) {
+					return $this->model()->refreshObject($this);
+				}
+			}
+		}
+		return false;
+	}
+
+	public function saveLargeIcon( $url )
+	{
+		if ( isset($url) ) {
+			$filename = downloadImage($url, $this->fullpath(), "LargeIcon" );
+			if ( empty($filename) == false ) {
+				$this->large_icon_name = $filename;
+				if ( $this->model()->updateObject( $this, array( Publisher::large_icon_name => $filename )) ) {
+					return $this->model()->refreshObject($this);
+				}
+			}
+		}
+		return false;
+	}
+
 	public function smallIconPath($path = null)
 	{
-		if (isset($this->{PublisherModel::small_icon_name}) && strlen($this->{PublisherModel::small_icon_name}) > 0) {
-			$working = appendPath($this->fullpath(), $this->{PublisherModel::small_icon_name});
+		if (isset($this->{Publisher::small_icon_name}) && strlen($this->{Publisher::small_icon_name}) > 0) {
+			$working = appendPath($this->fullpath(), $this->{Publisher::small_icon_name});
 			if ( file_exists($working) == true && is_file($working) == true)
 			{
 				return $working;
@@ -37,8 +73,8 @@ class PublisherDBO extends DataObject
 
 	public function largeIconPath($path = null)
 	{
-		if (isset($this->{PublisherModel::large_icon_name}) && strlen($this->{PublisherModel::large_icon_name}) > 0) {
-			$working = appendPath($this->fullpath(), $this->{PublisherModel::large_icon_name});
+		if (isset($this->{Publisher::large_icon_name}) && strlen($this->{Publisher::large_icon_name}) > 0) {
+			$working = appendPath($this->fullpath(), $this->{Publisher::large_icon_name});
 			if ( file_exists($working) == true && is_file($working) == true)
 			{
 				return $working;
@@ -48,13 +84,18 @@ class PublisherDBO extends DataObject
 	}
 
 	public function fullpath() {
-		if ( isset($this->path) == false || strlen($this->path) == 0) {
-			$model = loadModel('Publisher');
-			$this->path = makeUniqueDirectory( Config::GetMedia(), $this->name );
-			$model->updateObject($this, array( PublisherModel::TABLE => array(PublisherModel::path => $this->path)));
+		return appendPath(Config::GetMedia(), $this->path);
+	}
+
+	public function externalEndpoint()
+	{
+		if ( isset( $this->xsource) ) {
+			$ep_model = Model::Named('Endpoint');
+			$points = $ep_model->allForTypeCode($this->xsource);
+			if ( is_array($points) && count($points) > 0) {
+				return $points[0];
+			}
 		}
-		$fullpath = appendPath(Config::GetMedia(), $this->path);
-		is_dir($fullpath) || mkdir($fullpath, 0755, true) || die('Failed to create directory ' . $fullpath);
-		return $fullpath;
+		return null;
 	}
 }

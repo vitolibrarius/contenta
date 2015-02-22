@@ -31,7 +31,8 @@
         "MigrateButton": "Migrate",
         "UpgradeButton": "Upgrade",
         "LoginButton": "Login",
-        "SearchButton": "Search"
+        "SearchButton": "Search",
+        "RefreshFromEndpoint": "Refresh From Endpoint"
     },
     "Admin": {
         "title": "Admin",
@@ -174,6 +175,18 @@
             },
             "SearchLegend": {
                 "label": "Query ComicVine Publishers"
+            },
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "xupdated": {
+                "label": "Last Update from Endpoint"
+            },
+            "small_icon_name": {
+                "label": "Icon"
+            },
+            "large_icon_name": {
+                "label": "Thumbnail"
             }
         }
     },

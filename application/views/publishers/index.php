@@ -24,6 +24,7 @@
 	<table>
 	<?php if (is_array($this->list) && count($this->list) > 0 ): ?>
 		<tr>
+			<th></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "name" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "path" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "xsource" ); ?></th>
@@ -32,6 +33,11 @@
 		</tr>
 		<?php foreach($this->list as $key => $value): ?>
 			   <tr>
+					<td>
+						<?php if ( $value->hasIcons() ): ?>
+							<img src="<?php echo Config::Web( "Image", "icon", $this->model->tableName(), $value->id); ?>" />
+						<?php endif; ?>
+					</td>
 					<td><?php echo htmlentities($value->name); ?></td>
 					<td><?php echo $value->path; ?></td>
 					<td><?php echo $value->xsource; ?></td>
@@ -47,13 +53,13 @@
 		<?php endforeach; ?>
 	<?php else: ?>
 		<tr>
-			<th colspan="6"><?php echo 'No publishers yet. Create some !'; ?></th>
+			<th colspan="7"><?php echo 'No publishers yet. Create some !'; ?></th>
 		</tr>
 	<?php endif ?>
 
 	<tfoot>
 		<tr>
-			<td colspan="6">
+			<td colspan="7">
 				<a class="btn" href="<?php echo Config::Web( '/AdminPublishers/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a>
 			</td>
 		</tr>
