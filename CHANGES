@@ -1,3 +1,48 @@
+Version 0.1.6:
+* e302b9a -  (HEAD, origin/master, origin/HEAD, master) Import publisher from comic vine, including some tiny icons (Sat Feb 21 17:19:49 2015 -1000) <Vito Librarius>
+* 5e35c8b -  ComicVine Connector support (Sat Feb 21 17:18:29 2015 -1000) <Vito Librarius>
+* 65074e8 -  small interface changes for cache and config (Sat Feb 21 17:17:59 2015 -1000) <Vito Librarius>
+* cd4e99e -  standardizing on deleteObject(), refreshObject(), createObject() ... (Sat Feb 21 17:16:59 2015 -1000) <Vito Librarius>
+* 2934e1a -  minor typos fixed (Wed Feb 18 14:17:17 2015 -1000) <Vito Librarius>
+* 7a1070b -  POST values support for FLAG datatypes (Wed Feb 18 14:15:18 2015 -1000) <Vito Librarius>
+* ec22232 -  added edit and delete functionality for publishers. (Tue Feb 17 10:01:29 2015 -1000) <Vito Librarius>
+* 7577049 -  added admin for users (Mon Feb 16 15:19:17 2015 -0700) <Vito Librarius>
+* 35474dd -  added publisher (Mon Feb 16 15:18:53 2015 -0700) <Vito Librarius>
+* 46412ee -  fixed defect where the curl handle was released before the error message was logged (Fri Feb 13 20:42:57 2015 -0700) <Vito Librarius>
+* 082d3d5 -  Added edit and delete flows to endpoints.  Added validation to endpoints (Fri Feb 13 20:42:18 2015 -0700) <Vito Librarius>
+* 719dcc4 -  small defect in checkbox.  was losing the current value every time the form submitted (Fri Feb 13 20:41:03 2015 -0700) <Vito Librarius>
+* e94b50b -  Added functions to generate new API Key (Fri Feb 13 18:58:53 2015 -0700) <Vito Librarius>
+* 5b77364 -  Synology (at least mine) is PHP version 5.3, so the new VARGS technique does not work. (Fri Feb 13 10:11:51 2015 -0700) <Vito Librarius>
+* ef8a8cb -  Fleshed out new editing pattern including automated validation method calls (Thu Feb 12 21:42:23 2015 -0700) <Vito Librarius>
+* c974eec -  Added new modal panel javascript object so the panel can be more dynamic (Thu Feb 12 21:41:44 2015 -0700) <Vito Librarius>
+* 6e18ca0 -  reduced the subdirectory buckets from 4 HEX (4096 subdirectories) to just 2 HEX (256 subdirs) (Thu Feb 12 21:39:06 2015 -0700) <Vito Librarius>
+* e5b7432 -  Migrated to use a consistent interface on the Localized class rather than sprinkling little helper functions in the View and Model classes. (Thu Feb 12 21:37:58 2015 -0700) <Vito Librarius>
+* 5606cd0 -  Switched to more consistent Auth functions (Thu Feb 12 21:34:11 2015 -0700) <Vito Librarius>
+* dbcb3de -  Useful UTF8 icons that can just be appended to the output.  Still it would probably be better to stick to CSS (Thu Feb 12 21:31:27 2015 -0700) <Vito Librarius>
+* 8bad5f2 -  ignore any copy (Thu Feb 12 21:30:27 2015 -0700) <Vito Librarius>
+* 1305287 -  Better debug message, have to think about what to do when a v1 is nearing ready, but for now this prints more details given that the ClassNotFound exception can happen anywhere. (Thu Feb 12 21:30:12 2015 -0700) <Vito Librarius>
+* 719df51 -  Added standard way to create cache keys (Tue Feb 10 17:07:29 2015 -0700) <Vito Librarius>
+* 3132184 -  Added caching of the github status responses (Tue Feb 10 12:51:53 2015 -0700) <Vito Librarius>
+* bcc9b5f -  Added support for custom TTL for cache fetch.  So individual uses can cache values that live for less than the default 2 weeks (Tue Feb 10 12:51:24 2015 -0700) <Vito Librarius>
+* 972a5a1 -  Debugging logic fails in prod with "open_basedir restriction in effect" (Tue Feb 10 12:15:12 2015 -0700) <Vito Librarius>
+* 32495ab -  Added basic Cache control object and additions git upgrade tests to evaluate the current remote status. (Tue Feb 10 12:12:51 2015 -0700) <Vito Librarius>
+* 0dc32be -  Git update using shell commands.  My synology does not have the php posix functions so rather than try to install them, I tried to work around them on the theory others may have similar configurations. (Mon Feb 9 21:55:11 2015 -0700) <Vito Librarius>
+* a0c4304 -  Updated ShellCommand to capture stderr and stdout as separate values.  Added Git class for software updating (Fri Feb 6 16:47:51 2015 -0700) <Vito Librarius>
+* 02667fc -  Some small adjustments to localization (Thu Feb 5 20:19:05 2015 -0700) <Vito Librarius>
+* 9de3c25 -  Small bug fixes.  Admin page should require login before access (Thu Feb 5 12:53:04 2015 -0700) <Vito Librarius>
+* 7ce58a4 -  Removed configuration option for dirMask and fileMask.  Converting ini file values back and forth to octal proved more trouble than it was worth. (Thu Feb 5 12:20:48 2015 -0700) <Vito Librarius>
+* 9a76424 -  Filename must match class name. (Thu Feb 5 11:12:36 2015 -0700) <Vito Librarius>
+* fd9a7dc -  Changed login form to use edit components and localization. (Thu Feb 5 10:15:40 2015 -0700) <Vito Librarius>
+* bde0010 -  Use of undefined constant WEB_DIR (Wed Feb 4 22:12:59 2015 -0700) <Vito Librarius>
+* ba075dc -  Synology error 'ClassNotFoundException' with message 'controller\Localized' (Wed Feb 4 22:10:22 2015 -0700) <Vito Librarius>
+* d659d36 -  Oh synology, you are so strict (Wed Feb 4 21:25:51 2015 -0700) <Vito Librarius>
+* 38a164e -  Another strict PHP error from synology (Wed Feb 4 21:13:46 2015 -0700) <Vito Librarius>
+* 8bf6121 -  More explicit declaration of class names because the mac is case insensitive, but linux is case sensitive, so classes don't load properly if the case is wrong (e.g.: Log_level vs Log_Level) (Wed Feb 4 20:40:57 2015 -0700) <Vito Librarius>
+* 7c326ab -  Added footer version number and site links (Wed Feb 4 20:15:38 2015 -0700) <Vito Librarius>
+* 0df5b02 -  removed posix function since it is not available on Synology (Wed Feb 4 20:05:16 2015 -0700) <Vito Librarius>
+* 706d754 -  php_value does not work on synology, work around is to create a .user.ini field and change the php.ini to load it. (Wed Feb 4 10:56:43 2015 -0700) <Vito Librarius>
+* 8966e06 -  added to ignore list (Tue Feb 3 21:47:42 2015 -0700) <Vito Librarius>
+
 Version 0.1.5:
 * a5b3141 -  (HEAD, master) Migration bug fixes (Tue Feb 3 17:11:56 2015 -0700) <Vito Librarius>
 
