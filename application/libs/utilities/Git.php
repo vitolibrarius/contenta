@@ -10,6 +10,7 @@ class Git
 {
 	const UP_TO_DATE = "Up-to-date";
 	const UNCOMMITTED = "Uncommitted Changes";
+	const LOCAL_AHEAD_BEHIND = "Local site is ";
 
 	protected static $binary = '/usr/bin/git';
 	protected $repository = null;
@@ -115,7 +116,7 @@ class Git
 		$statusLines = explode("\n", str_replace("\r", '', trim($status['stdout'])));
 		if ( $status['status'] == 0 && is_array($statusLines)) {
 			if ( count($statusLines) == 1 && preg_match("/\[(.*?)\]/", $statusLines[0], $aheadBehind) > 0) {
-				return $aheadBehind[1];
+				return Git::LOCAL_AHEAD_BEHIND . ' ' . $aheadBehind[1];
 			}
 			else if ( count($statusLines) > 1) {
 				return Git::UNCOMMITTED;
