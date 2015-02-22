@@ -135,12 +135,12 @@ class AdminPublishers extends Admin
 					$connection = new ComicVineConnector($endpoint);
 					$record = $connection->publisherDetails( $object->xid );
 
-					if ( isset($record['image']['tiny_url']) ) {
-						$object = $object->saveSmallIcon( $record['image']['tiny_url'] );
+					if ( isset($record['image']['thumb_url']) ) {
+						$pub = $pub->saveSmallIcon( $record['image']['thumb_url'] );
 					}
 
-					if ( $object != false && isset($record['image']['icon_url']) ) {
-						$object = $object->saveLargeIcon( $record['image']['icon_url'] );
+					if ( $pub != false && isset($record['image']['small_url']) ) {
+						$pub = $pub->saveLargeIcon( $record['image']['small_url'] );
 					}
 
 					$this->editPublisher($pubId);
