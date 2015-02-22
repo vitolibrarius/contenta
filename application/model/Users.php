@@ -135,7 +135,7 @@ class Users extends Model
 	{
 		if ( is_a($userObj, "model\\UsersDBO" )) {
 			if ($this->update(Users::TABLE, array( Users::api_hash => uuidShort()), array(Users::id => $userObj->id))) {
-				return $this->refresh($userObj);
+				return $this->refreshObject($userObj);
 			}
 		}
 		return false;
@@ -145,7 +145,7 @@ class Users extends Model
 	{
 		if ($this->update(Users::TABLE, array( Users::api_hash => $newHash), array(Users::id => $userObj->id)))
 		{
-			return $this->refresh($userObj);
+			return $this->refreshObject($userObj);
 		}
 		return false;
 	}
@@ -166,7 +166,7 @@ class Users extends Model
 			array( Users::password_hash => $newpassword_hash ),
 			array( Users::id => $userObj->id, Users::password_hash => $userObj->password_hash)) )
 		{
-			return $this->refresh($userObj);
+			return $this->refreshObject($userObj);
 		}
 		return false;
 	}
@@ -259,7 +259,7 @@ class Users extends Model
 			array( Users::failed_logins => $userObj->failed_logins + 1, Users::last_failed_login => time() ),
 			array( Users::id => $userObj->id)) )
 		{
-			return $this->refresh($userObj);
+			return $this->refreshObject($userObj);
 		}
 		return false;
 	}
@@ -270,7 +270,7 @@ class Users extends Model
 			array( Users::last_login_timestamp => time() ),
 			array( Users::id => $userObj->id)))
 		{
-			return $this->refresh($userObj);
+			return $this->refreshObject($userObj);
 		}
 		return false;
 	}

@@ -60,11 +60,11 @@ class Patch extends Model
 		return $obj;
 	}
 
-	public function deleteRecord($obj)
+	public function deleteObject($object = null)
 	{
-		if ( $obj != false )
+		if ( $object != false )
 		{
-			return $this->deleteObj($obj, Patch::TABLE, Patch::id );
+			return parent::deleteObj($object, Patch::TABLE, Patch::id );
 		}
 		return false;
 	}
