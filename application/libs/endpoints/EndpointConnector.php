@@ -3,6 +3,9 @@
 
 namespace endpoints;
 
+use \RecursiveIteratorIterator as RecursiveIteratorIterator;
+use \RecursiveDirectoryIterator as RecursiveDirectoryIterator;
+
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
@@ -48,6 +51,16 @@ abstract class EndpointConnector
 			$root = Config::GetProcessing();
 			$this->debugPath = appendPath($root, $reflect->getShortName(), $this->endpoint->id );
 			makeRequiredDirectory($this->debugPath, 'endpoint debug subdirectory for ' . get_class($this));
+
+			// purge any old files greater then a day
+			$objects = new RecursiveIteratorIterator( new RecursiveDirectoryIterator($this->debugPath), RecursiveIteratorIterator::SELF_FIRST);
+			foreach($objects as $name => $object) {
+				if ( $object->isFile() ) {
+					if ($object->getMTime() < (time() - Cache::TTL_DAY)) {
+						unlink($object->getPathname());
+					}
+				}
+			}
 		}
 		return $this->debugPath;
 	}
