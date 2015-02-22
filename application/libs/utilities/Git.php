@@ -120,7 +120,8 @@ class Git
 			$remote_rev = $commits['sha'];
 			if ( $local_rev != $remote_rev ) {
 				// https://developer.github.com/v3/repos/commits/#compare-two-commits
-				$diffs = $this->jsonRequest('https://api.github.com/repos/vitolibrarius/contenta/compare/'.$local_rev.'...'.$remote_rev);
+				$diffURL = 'https://api.github.com/repos/vitolibrarius/contenta/compare/'.$local_rev.'...'.$remote_rev;
+				$diffs = $this->jsonRequest($diffURL);
 				if ( isset($diffs, $diffs['total_commits']) ) {
 					if ( $diffs['total_commits'] > 0 ) {
 						return "New version available, you are " . $diffs['total_commits'] . " behind.";
@@ -129,6 +130,13 @@ class Git
 						return Git::UP_TO_DATE;
 					}
 				}
+				else {
+					Logger::logWarning( $diffURL, get_class(), "remoteStatus" );
+					return "No Diffs found";
+				}
+			}
+			else {
+				return Git::UP_TO_DATE;
 			}
 		}
 
