@@ -112,7 +112,7 @@ class Git
 	public function remoteStatus()
 	{
 		$status = $this->status();
-		$statusLines = explode("\n", str_replace("\r", '', $status['stdout']));
+		$statusLines = explode("\n", str_replace("\r", '', trim($status['stdout'])));
 		if ( $status['status'] == 0 && is_array($statusLines)) {
 			if ( count($statusLines) == 1 && preg_match("/\[(.*?)\]/", $statusLines[0], $aheadBehind) > 0) {
 				return $aheadBehind;
