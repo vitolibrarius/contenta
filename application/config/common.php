@@ -415,3 +415,4 @@ function currentChangeLog()
 require_once SYSTEM_PATH . 'application/config/common_arrays.php';
 require_once SYSTEM_PATH . 'application/config/common_filesystem.php';
 require_once SYSTEM_PATH . 'application/config/common_http.php';
+require_once SYSTEM_PATH . 'application/config/common_images.php';

@@ -22,6 +22,15 @@ class ValidationException extends Exception
 	}
 }
 
+interface Image_Interface {
+	public function hasIcons();
+	public function smallIconPath($default = null);
+	public function largeIconPath($default = null);
+
+	public function saveSmallIcon( $url );
+	public function saveLargeIcon( $url );
+}
+
 /**
  * This is the "base controller class". All other "real" controllers extend this class.
  * Whenever a controller is created, we also
