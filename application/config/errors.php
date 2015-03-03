@@ -6,7 +6,7 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 	function exceptionHandler($exception)
 	{
 		try {
-			Logger::logExceptiopn($exception);
+			Logger::logException($exception);
 		}
 		catch (Exception $e) {
 			print get_class($e)." thrown within the exception handler. Message: ".$e->getMessage()." on line ".$e->getLine();
@@ -49,12 +49,13 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 	# Registering shutdown function
 	register_shutdown_function('shutdownHandler');
 
-//	function customError($errno, $errstr) {
-//		Logger::logToFile( $errstr, $errno );
-//	}
-//
-//	//set error handler
-//	set_error_handler("customError");
+	function customError($errno, $errstr) {
+		Logger::LogError( $errstr, $errno );
+	}
+
+	//	set error handler
+	set_error_handler("customError", E_ALL);
+
 
 	function jsonErrorString($code)
 	{

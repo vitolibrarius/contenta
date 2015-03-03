@@ -138,4 +138,24 @@ class Migrator
 		}
 		return false;
 	}
+
+	public function sqlite_execute( $table = null, $sql = null, $comment = null )
+	{
+		if ( is_null($sql) || is_null($table) ) {
+			throw new MigrationFailedException("Unable to execute SQL for -null- table or statement");
+		}
+		else {
+			$statement = $this->db->prepare($sql);
+			if ($statement == false || $statement->execute() == false) {
+				$errPoint = ($statement ? $statement : $this->db);
+				$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+				Logger::logSQLError($table, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, null);
+				throw new MigrationFailedException("Error executing change to " . $table . " table");
+			}
+		}
+
+		if ( is_null($comment) == false) {
+			Logger::logInfo( $comment, get_class(), $table);
+		}
+	}
 }
