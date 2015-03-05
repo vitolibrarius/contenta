@@ -20,10 +20,12 @@ class Endpoint_Type extends Model
 	const throttle_time =	'throttle_time';
 	const comments =		'comments';
 
-	public function __construct(Database $db)
-	{
-		parent::__construct($db);
-	}
+	// currently available type codes
+	const Newznab =		"Newznab";
+	const RSS =			"RSS";
+	const ComicVine =	"ComicVine";
+	const SABnzbd =		"SABnzbd";
+
 
 	public function tableName() { return Endpoint_Type::TABLE; }
 	public function tablePK() { return Endpoint_Type::id; }
