@@ -4,6 +4,7 @@ namespace model;
 
 use \DataObject as DataObject;
 use \Model as Model;
+
 use model\Endpoint_Type as Endpoint_Type;
 
 class EndpointDBO extends DataObject
@@ -33,6 +34,13 @@ class EndpointDBO extends DataObject
 		$type_model = Model::Named("Endpoint_Type");
 		$type = $type_model->objectForId($this->type_id);
 		return $type;
+	}
+
+	public function endpointConnector()
+	{
+		$type = $this->type();
+		$className = "endpoints\\" . $type->code;
+		return new $className($this);
 	}
 
 	public function __toString()

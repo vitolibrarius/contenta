@@ -8,6 +8,9 @@ use \Model as Model;
 use \Cache as Cache;
 use \Database as Database;
 
+use endpoints\NetworkErrorException as NetworkErrorException;
+use endpoints\ResponseErrorException as ResponseErrorException;
+
 abstract class JSON_EndpointConnector extends EndpointConnector
 {
 	public function __construct($endpoint)

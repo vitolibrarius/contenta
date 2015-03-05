@@ -40,11 +40,16 @@ class Publisher extends Model
 		return $this->findExternalOrCreate( '-= Unknown Publisher =-', '-unknown-', 'UNKNOWN', null );
 	}
 
-	public function objectForExternal($xid = 'none', $xsrc = 'none')
+	public function objectForExternal($xid, $xsrc)
 	{
-		if ( isset($xid, $xsrc) )
+		if ( isset($xid) )
 		{
-			return $this->fetch(Publisher::TABLE, $this->allColumns(), array(Publisher::xid => $xid, Publisher::xsource => $xsrc ));
+			$qual = array(Publisher::xid => $xid);
+			if ( isset($xsrc) ) {
+				$qual[Publisher::xsource] = $xsrc;
+			}
+
+			return $this->fetch(Publisher::TABLE, $this->allColumns(), $qual);
 		}
 		return false;
 	}

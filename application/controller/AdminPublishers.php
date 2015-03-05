@@ -9,6 +9,7 @@ use \Auth as Auth;
 use \Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
+use \Config as Config;
 
 use endpoints\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;

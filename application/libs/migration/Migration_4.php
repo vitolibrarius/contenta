@@ -50,7 +50,7 @@ class Migration_4 extends Migrator
 		$ept_model = Model::Named("Endpoint_Type");
 		$types = array(
 			array(
-				Endpoint_Type::code => "Newznab",
+				Endpoint_Type::code => Endpoint_Type::Newznab,
 				Endpoint_Type::site_url => "http://www.newznab.com",
 				Endpoint_Type::name => "Newsnab (Usenet Indexing Service)",
 				Endpoint_Type::favicon_url => "http://www.newznab.com/favicon.ico",
@@ -58,7 +58,7 @@ class Migration_4 extends Migrator
 				Endpoint_Type::comments => "Newznab is a usenet indexing application that many sites employ.  Often you will need to register with the individual sites to obtain an API key allowing you access.  Please check the Newznab home site for more information"
 			),
 			array(
-				Endpoint_Type::code => "RSS",
+				Endpoint_Type::code => Endpoint_Type::RSS,
 				Endpoint_Type::site_url => "http://en.wikipedia.org/wiki/RSS",
 				Endpoint_Type::favicon_url => "http://en.wikipedia.org/favicon.ico",
 				Endpoint_Type::name => "RSS (NZB posting feed)",
@@ -66,7 +66,7 @@ class Migration_4 extends Migrator
 				Endpoint_Type::comments => "Many sites provide RSS feeds of indexed NZB content.  Please see the included Wikipedia link for more informaiton about RSS."
 			),
 			array(
-				Endpoint_Type::code => "ComicVine",
+				Endpoint_Type::code => Endpoint_Type::ComicVine,
 				Endpoint_Type::site_url => "http://www.comicvine.com",
 				Endpoint_Type::api_url => "http://www.comicvine.com/api",
 				Endpoint_Type::favicon_url => "http://static.comicvine.com/bundles/phoenixsite/images/core/loose/favicon-cv.ico",
@@ -77,7 +77,7 @@ class Migration_4 extends Migrator
 				Endpoint_Type::comments => "ComicVine provides a detailed information source about comics and graphic novels that allow Contenta to automatically load and categorize uploaded media content.  Please see the ComicVine home page for information on obtaining an API key."
 			),
 			array(
-				Endpoint_Type::code => "SABnzbd",
+				Endpoint_Type::code => Endpoint_Type::SABnzbd,
 				Endpoint_Type::site_url => "http://sabnzbd.org",
 				Endpoint_Type::favicon_url => "http://sabnzbd.org/favicon.ico",
 				Endpoint_Type::name => "SABnzbd (Open Source Binary Newsreader)",
