@@ -22,7 +22,7 @@ function downloadImage($url = null, $dir = null, $key_name_hint = null )
 			{
 				$dest = appendPath($dir, $filename);
 				if (file_put_contents( $dest, $data )) {
-					return $key_name_hint . "." . $extension;
+					return $filename;
 				}
 			}
 			else {

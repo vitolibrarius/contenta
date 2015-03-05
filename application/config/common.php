@@ -17,6 +17,11 @@ function callerClassAndMethod($currentFunction = '')
 	return $caller;
 }
 
+function get_short_class($obj)
+{
+	return (new \ReflectionClass($obj))->getShortName();
+}
+
 function isset_default($variable, $default = null)
 {
 	return (isset($variable) ? $variable : $default);
