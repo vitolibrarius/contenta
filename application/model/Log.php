@@ -19,10 +19,6 @@ class Log extends Model
 	const created =	'created';
 	const message =	'message';
 
-	public function __construct(Database $db)
-	{
-		parent::__construct($db);
-	}
 
 	public function tableName() { return Log::TABLE; }
 	public function tablePK() { return Log::id; }
