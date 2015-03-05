@@ -25,6 +25,9 @@ class ComicVineConnector extends JSON_EndpointConnector
 	const TYPEID_LOCATION = '4015';
 	const TYPEID_VOLUME = '4050';
 
+	const PUBLISHER_FIELDS = "id,name,api_detail_url,image,deck,description,story_arcs";
+	const CHARACTER_FIELDS = "id,image,name,real_name,aliases,api_detail_url,gender,publisher,deck,description,story_arc_credits,date_last_updated";
+
 	public function __construct($point)
 	{
 		parent::__construct($point);
@@ -60,13 +63,35 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 	public function characterDetails( $id )
 	{
-		$query = array("field_list" => "id,image,name,real_name,aliases,api_detail_url,gender,publisher,date_added,date_last_updated");
-		return $this->details('character', TYPEID_CHARACTER, $id, $query);
+		$query = array("field_list" => ComicVineConnector::CHARACTER_FIELDS);
+		$details = false;
+		try {
+			$details = $this->details('character', ComicVineConnector::TYPEID_CHARACTER, $id, $query);
+		}
+		catch ( \Exception $e ) {
+			Logger::logException( $e );
+			try {
+				$details = $this->details('character', ComicVineConnector::TYPEID_CHARACTER, $id, $query);
+			}
+			catch ( \Exception $e2 ) {
+				Logger::logException( $e2 );
+			}
+		}
+
+		if ( $details != false ) {
+			$list =array("icon_url", "medium_url", "screen_url", "small_url", "super_url", "thumb_url", "tiny_url");
+			foreach($list as $n) {
+				if ( isset($details['image'][$n]) ) {
+					downloadImage($details['image'][$n], $this->debugPath(), "character_" . $id . "_" . $n );
+				}
+			}
+		}
+		return $details;
 	}
 
 	public function publisherDetails( $id )
 	{
-		$query = array("field_list" => "id,name,api_detail_url,image,deck,description,story_arcs");
+		$query = array("field_list" => ComicVineConnector::PUBLISHER_FIELDS);
 		$details = false;
 		try {
 			$details = $this->details('publisher', ComicVineConnector::TYPEID_PUBLISHER, $id, $query);
@@ -85,11 +110,9 @@ class ComicVineConnector extends JSON_EndpointConnector
 			$list =array("icon_url", "medium_url", "screen_url", "small_url", "super_url", "thumb_url", "tiny_url");
 			foreach($list as $n) {
 				if ( isset($details['image'][$n]) ) {
-					downloadImage($details['image'][$n], $this->debugPath(), $n );
+					downloadImage($details['image'][$n], $this->debugPath(), "publisher_" . $id . "_" . $n );
 				}
 			}
-
-
 		}
 		return $details;
 	}
@@ -150,20 +173,6 @@ class ComicVineConnector extends JSON_EndpointConnector
 		);
 	}
 
-	public function queryForPublisherNameOld($name, $strict = false)
-	{
-		$query_string = $name;
-		if ( $strict ) {
-			$query_string = implode( ' AND ', explode(' ', strtolower($seriesName)));
-		}
-		return $this->search( "publisher", $query_string, array(
-			"field_list" => "id,name,api_detail_url,image,description,story_arcs",
-			"sort" => "name",
-			"resource_type" => "publisher"
-			)
-		);
-	}
-
 	public function queryForPublisherName($name, $strict = false)
 	{
 		$query_string = $name;
@@ -173,7 +182,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 		$params = $this->defaultParameters();
 		$params = array_merge($params, array(
-			"field_list" => "id,name,api_detail_url,image,deck,description,story_arcs",
+			"field_list" => ComicVineConnector::PUBLISHER_FIELDS,
 			"sort" => "name"
 			)
 		);
@@ -185,6 +194,30 @@ class ComicVineConnector extends JSON_EndpointConnector
 			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
 		}
 		$search_url = $this->endpointBaseURL() . "/publishers/?" . http_build_query($params);
+		return $this->performRequest( $search_url );
+	}
+
+	public function queryForCharacterName($name, $strict = false)
+	{
+		$query_string = $name;
+		if ( $strict ) {
+			$query_string = implode( ' AND ', explode(' ', strtolower($seriesName)));
+		}
+
+		$params = $this->defaultParameters();
+		$params = array_merge($params, array(
+			"field_list" => ComicVineConnector::CHARACTER_FIELDS,
+			"sort" => "name"
+			)
+		);
+
+		if ( is_string($query_string)) {
+			$params['filter'] = 'name:' . $query_string;
+		}
+		else {
+			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
+		}
+		$search_url = $this->endpointBaseURL() . "/characters/?" . http_build_query($params);
 		return $this->performRequest( $search_url );
 	}
 
