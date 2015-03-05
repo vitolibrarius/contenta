@@ -32,7 +32,8 @@
         "UpgradeButton": "Upgrade",
         "LoginButton": "Login",
         "SearchButton": "Search",
-        "RefreshFromEndpoint": "Refresh From Endpoint"
+        "RefreshFromEndpoint": "Refresh From Endpoint",
+        "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints."
     },
     "Admin": {
         "title": "Admin",
@@ -188,6 +189,14 @@
             "large_icon_name": {
                 "label": "Thumbnail"
             }
+        },
+        "character": {
+            "SearchLegend": {
+                "label": "Query ComicVine Characters "
+            },
+            "name": {
+                "label": "Name"
+            }
         }
     },
     "Logs": {
@@ -244,5 +253,28 @@
             "DeleteDescription": "This will permanently delete the user.",
             "DeleteConfirmation": "Are you sure you want to continue?"
         }
+    },
+    "AdminCharacters": {
+        "title": "Characters",
+        "index": {
+            "DeleteDescription": "This will permanently delete the character",
+            "DeleteConfirmation": "Are you sure you want to continue?"
+        }
+    },
+    "Auth": {
+        "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator"
+    },
+    "Upload": {
+        "title": "Upload media file",
+        "Upload Error": "Upload Error (unknown)",
+        "UPLOAD_ERR_INI_SIZE": "The uploaded file exceeds the upload_max_filesize directive in php.ini",
+        "UPLOAD_ERR_FORM_SIZE": "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form",
+        "UPLOAD_ERR_PARTIAL": "The uploaded file was only partially uploaded",
+        "UPLOAD_ERR_NO_FILE": "No file was uploaded",
+        "UPLOAD_ERR_NO_TMP_DIR": "Missing a temporary folder",
+        "UPLOAD_ERR_CANT_WRITE": "Failed to write file to disk",
+        "UPLOAD_ERR_EXTENSION": "File upload stopped by extension",
+        "No media available": "No media available",
+        "No file selected": "No file selected"
     }
 }

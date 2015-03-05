@@ -19,7 +19,7 @@
 				<img src="<?php echo Config::Web('/public/img/admin-publications.png'); ?>">
 			</div>
 			<div class="admin_card_item">
-				<a href="#"><?php echo $this->label( "UploadLink", "name" ); ?></a>
+				<a href="<?php echo Config::Web('/Upload/index'); ?>"><?php echo $this->label( "UploadLink", "name" ); ?></a>
 				<p><?php echo $this->label( "UploadLink", "desc" ); ?></p>
 			</div>
 			<div class="admin_card_item">

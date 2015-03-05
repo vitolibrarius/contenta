@@ -83,7 +83,10 @@ class PublisherDBO extends DataObject implements \Image_Interface
 		return $path;
 	}
 
-	public function fullpath() {
+	public function fullpath($afile = null) {
+		if ( isset($afile) && is_null($afile) == false) {
+			return appendPath(Config::GetMedia(), $this->path, $afile);
+		}
 		return appendPath(Config::GetMedia(), $this->path);
 	}
 
