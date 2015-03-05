@@ -9,9 +9,15 @@ use \Auth as Auth;
 use \Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
+
 use endpoints\ComicVineConnector as ComicVineConnector;
+use processor\ComicVineImporter as ComicVineImporter;
+
 use controller\Admin as Admin;
+
 use model\Users as Users;
+use model\Endpoint as Endpoint;
+use model\Endpoint_Type as Endpoint_Type;
 use model\Publisher as Publisher;
 
 /**
@@ -131,18 +137,14 @@ class AdminPublishers extends Admin
 			if ( $pubId > 0 ) {
 				$object = $model->objectForId($pubId);
 				$endpoint = $object->externalEndpoint();
-				if ( $endpoint != false ) {
-					$connection = new ComicVineConnector($endpoint);
-					$record = $connection->publisherDetails( $object->xid );
-
-					if ( isset($record['image']['thumb_url']) ) {
-						$pub = $pub->saveSmallIcon( $record['image']['thumb_url'] );
+				if ( $endpoint != false && isset($object->xid) ) {
+					$importer = new ComicVineImporter( $model->tableName() . "_" .$object->xid );
+					if ( $importer->endpoint() == false ) {
+						$importer->setEndpoint($endpoint);
 					}
 
-					if ( $pub != false && isset($record['image']['small_url']) ) {
-						$pub = $pub->saveLargeIcon( $record['image']['small_url'] );
-					}
-
+					$importer->importPublisherValues( null, $object->xid, null);
+					$importer->processData();
 					$this->editPublisher($pubId);
 				}
 				else {
@@ -161,7 +163,7 @@ class AdminPublishers extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$ep_model = Model::Named('Endpoint');
-			$points = $ep_model->allForTypeCode("ComicVine");
+			$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 			if ( $points == false || count($points) == 0) {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) );
 				header('location: ' . Config::Web('/netconfig/index'));
@@ -187,7 +189,7 @@ class AdminPublishers extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$ep_model = Model::Named('Endpoint');
-			$points = $ep_model->allForTypeCode("ComicVine");
+			$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 			if ( $points == false || count($points) == 0) {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) );
 			}
@@ -198,6 +200,8 @@ class AdminPublishers extends Admin
 					$pubName = $values[Publisher::TABLE][Publisher::name];
 					$epoint = $points[0];
 					$connection = new ComicVineConnector($epoint);
+
+					$this->view->model = $model;
 					$this->view->results = $connection->queryForPublisherName( $pubName );
 					$this->view->importAction = "/AdminPublishers/comicVineImportAction";
 				}
@@ -210,34 +214,27 @@ class AdminPublishers extends Admin
 		}
 	}
 
-	function comicVineImportAction($xpubId = null)
+	function comicVineImportAction($xid = null)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			if ( isset($xpubId) && is_null($xpubId) == false) {
-				$ep_model = Model::Named('Endpoint');
-				$points = $ep_model->allForTypeCode("ComicVine");
-				if ( $points == false || count($points) == 0) {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) );
-				}
-				else {
-					$epoint = $points[0];
-					$connection = new ComicVineConnector($epoint);
-					$record = $connection->publisherDetails( $xpubId );
-					$model = Model::Named('Publisher');
-					$pub = $model->findExternalOrCreate( $record['name'], $record['id'], $epoint->type()->code, $record['api_detail_url']);
-
-					if ( $pub != false && $pub->hasIcons() == false ) {
-						if ( isset($record['image']['thumb_url']) ) {
-							$pub = $pub->saveSmallIcon( $record['image']['thumb_url'] );
-						}
-
-						if ( $pub != false && isset($record['image']['small_url']) ) {
-							$pub = $pub->saveLargeIcon( $record['image']['small_url'] );
-						}
+			if ( isset($xid) && is_null($xid) == false) {
+				$importer = new ComicVineImporter( Publisher::TABLE . "_" .$xid );
+				if ( $importer->endpoint() == false ) {
+					$ep_model = Model::Named('Endpoint');
+					$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+					if ( $points == false || count($points) == 0) {
+						Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) );
 					}
-
-					$this->publisherlist();
+					else {
+						$importer->setEndpoint($points[0]);
+					}
 				}
+
+				if ( $importer->endpoint() != false ) {
+					$importer->importPublisherValues( null, $xid, null);
+					$importer->processData();
+				}
+				$this->publisherlist();
 			}
 		}
 	}
