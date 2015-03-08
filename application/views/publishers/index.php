@@ -26,7 +26,6 @@
 		<tr>
 			<th></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "name" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "path" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "xsource" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "xurl" ); ?></th>
 			<th colspan=2></th>
@@ -39,7 +38,6 @@
 						<?php endif; ?>
 					</td>
 					<td><?php echo htmlentities($value->name); ?></td>
-					<td><?php echo $value->path; ?></td>
 					<td><?php echo $value->xsource; ?></td>
 					<td><?php echo $value->xurl; ?></td>
 					<td><?php if (isset($this->editAction)) : ?>
