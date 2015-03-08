@@ -23,10 +23,12 @@ class ComicVineConnector extends JSON_EndpointConnector
 	const TYPEID_PUBLISHER = '4010';
 	const TYPEID_CONCEPT = '4015';
 	const TYPEID_LOCATION = '4015';
+	const TYPEID_STORY_ARC = '4045';
 	const TYPEID_VOLUME = '4050';
 
 	const PUBLISHER_FIELDS = "id,name,api_detail_url,image,deck,description,story_arcs";
 	const CHARACTER_FIELDS = "id,image,name,real_name,aliases,api_detail_url,gender,publisher,deck,description,story_arc_credits,date_last_updated";
+	const STORY_ARC_FIELDS = "";
 
 	public function __construct($point)
 	{
@@ -58,7 +60,28 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 		$detail_url = $this->endpointBaseURL() . "/" . $resource . "/"
 			. ($type == null ? '' : $type . "-") . $id . "/?" . http_build_query($params);
-		return $this->performRequest( $detail_url );
+		return $this->performRequest( $detail_url, true );
+	}
+
+	public function storyArcDetails( $id )
+	{
+// 		$query = array("field_list" => ComicVineConnector::STORY_ARC_FIELDS);
+		$query = array();
+		$details = false;
+		try {
+			$details = $this->details('story_arc', ComicVineConnector::TYPEID_STORY_ARC, $id, $query);
+		}
+		catch ( \Exception $e ) {
+			Logger::logException( $e );
+			try {
+				$details = $this->details('story_arc', ComicVineConnector::TYPEID_STORY_ARC, $id, $query);
+			}
+			catch ( \Exception $e2 ) {
+				Logger::logException( $e2 );
+			}
+		}
+
+		return $details;
 	}
 
 	public function characterDetails( $id )
@@ -78,14 +101,6 @@ class ComicVineConnector extends JSON_EndpointConnector
 			}
 		}
 
-		if ( $details != false ) {
-			$list =array("icon_url", "medium_url", "screen_url", "small_url", "super_url", "thumb_url", "tiny_url");
-			foreach($list as $n) {
-				if ( isset($details['image'][$n]) ) {
-					downloadImage($details['image'][$n], $this->debugPath(), "character_" . $id . "_" . $n );
-				}
-			}
-		}
 		return $details;
 	}
 
@@ -106,14 +121,6 @@ class ComicVineConnector extends JSON_EndpointConnector
 			}
 		}
 
-		if ( $details != false ) {
-			$list =array("icon_url", "medium_url", "screen_url", "small_url", "super_url", "thumb_url", "tiny_url");
-			foreach($list as $n) {
-				if ( isset($details['image'][$n]) ) {
-					downloadImage($details['image'][$n], $this->debugPath(), "publisher_" . $id . "_" . $n );
-				}
-			}
-		}
 		return $details;
 	}
 
@@ -221,9 +228,9 @@ class ComicVineConnector extends JSON_EndpointConnector
 		return $this->performRequest( $search_url );
 	}
 
-	public function performRequest($url)
+	public function performRequest($url, $force = false)
 	{
-		$json = parent::performRequest($url);
+		$json = parent::performRequest($url, $force);
 		if ( $json != false )
 		{
 			if ( $json['status_code'] == 1)

@@ -55,7 +55,18 @@ class Config
 
 	public static function GetMedia()
 	{
-		return self::instance()->mediaDirectory();
+		$keys = func_get_args();
+		$teeth = array();
+		foreach( $keys as $akey ) {
+			$teeth = array_merge_recursive($teeth, (array)$akey );
+		}
+		$fullkey = join(DIRECTORY_SEPARATOR, $teeth);
+
+		$media = self::instance()->mediaDirectory();
+		if ( is_string($fullkey) && strlen($fullkey) > 0 ) {
+			return appendPath($media, $fullkey);
+		}
+		return $media;
 	}
 
 	public static function GetCache()

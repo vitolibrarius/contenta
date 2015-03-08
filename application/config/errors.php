@@ -49,8 +49,9 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 	# Registering shutdown function
 	register_shutdown_function('shutdownHandler');
 
-	function customError($errno, $errstr) {
-		Logger::LogError( $errstr, $errno );
+	function customError($errno, $errstr, $errfile, $errline) {
+		Logger::LogError( "(".$errno.") " . $errstr, $errfile, $errline );
+		return true;
 	}
 
 	//	set error handler

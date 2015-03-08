@@ -17,6 +17,11 @@ function callerClassAndMethod($currentFunction = '')
 	return $caller;
 }
 
+function split_lines($str)
+{
+	return preg_split('/\n|\r/', $str, -1, PREG_SPLIT_NO_EMPTY);
+}
+
 function get_short_class($obj)
 {
 	return (new \ReflectionClass($obj))->getShortName();

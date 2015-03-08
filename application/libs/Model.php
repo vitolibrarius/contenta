@@ -26,9 +26,6 @@ interface Image_Interface {
 	public function hasIcons();
 	public function smallIconPath($default = null);
 	public function largeIconPath($default = null);
-
-	public function saveSmallIcon( $url );
-	public function saveLargeIcon( $url );
 }
 
 /**
@@ -170,7 +167,9 @@ abstract class Model
 	public function deleteObject($object = null) {
 		if (isset($object) && is_a($object, "\\DataObject" )) {
 			$model = $object->model();
-			return $this->deleteObj( $object, $model->tableName(), $model->tablePK() );
+			Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $model->tableName(), $object->id);
+			return (file_exists($object->mediaPath()) == false || destroy_dir($object->mediaPath()))
+				&& $this->deleteObj( $object, $model->tableName(), $model->tablePK() );
 		}
 		return false;
 	}
