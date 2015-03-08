@@ -4,7 +4,7 @@
 	{
 		if ( isset($keypath, $array) && strlen($keypath) > 0) {
 			$result = $array;
-			$path = explode($separator, $keypath);
+			$path = array_filter( explode($separator, $keypath), 'strlen');
 			foreach ($path as $idx => $item) {
 				if (isset($result) && is_array($result) ) {
 					if ( isset($result[$item])) {
@@ -26,7 +26,7 @@
 	function setValueForKeypath($keypath, $value, $array, $separator = '/' )
 	{
 		if ( isset($keypath) && strlen($keypath) > 0) {
-			$path = explode($separator, $keypath);
+			$path = array_filter( explode($separator, $keypath), 'strlen');
 			$lastKey = array_pop($path);
 			if (isset($array) == false || $array == false ) {
 				$array = array();

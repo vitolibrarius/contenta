@@ -23,10 +23,10 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 		return true;
 	}
 
-	public function performRequest($url)
+	public function performRequest($url, $force = false)
 	{
 		if (empty($url) == false) {
-			$data = parent::performRequest($url);
+			$data = parent::performRequest($url, $force);
 			if ( $data != false )
 			{
 				$json = json_decode($data, true);

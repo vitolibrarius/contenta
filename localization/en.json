@@ -33,7 +33,8 @@
         "LoginButton": "Login",
         "SearchButton": "Search",
         "RefreshFromEndpoint": "Refresh From Endpoint",
-        "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints."
+        "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints.",
+        "Delete Failure": "Delete Failure"
     },
     "Admin": {
         "title": "Admin",
@@ -103,7 +104,7 @@
                 "label": "Created"
             },
             "AdditionalLegend": {
-                "label": "Additional"
+                "label": "Additional Features"
             },
             "api_hash": {
                 "label": "API Key",
@@ -196,6 +197,33 @@
             },
             "name": {
                 "label": "Name"
+            },
+            "realname": {
+                "label": "Real Name"
+            },
+            "desc": {
+                "label": "Description"
+            },
+            "gender": {
+                "label": "Gender"
+            },
+            "FormLegend": {
+                "label": "Character Details"
+            },
+            "publisher_id": {
+                "label": "Publisher"
+            },
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "xupdated": {
+                "label": "Updated from endpoint"
+            },
+            "small_icon_name": {
+                "label": "Icon"
+            },
+            "large_icon_name": {
+                "label": "Thumbnail"
             }
         }
     },

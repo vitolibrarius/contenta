@@ -99,11 +99,6 @@ class Publisher extends Model
 
 	public function createObject($values)
 	{
-		if ( isset($values) && (isset($values[Publisher::path]) == false || is_null($values[Publisher::path])) ) {
-			$path = makeUniqueDirectory( Config::GetMedia(), $values[Publisher::name] );
-			$values[Publisher::path] = $path;
-		}
-
 		return parent::createObject($values);
 	}
 
@@ -112,7 +107,7 @@ class Publisher extends Model
 		if ( $object != false )
 		{
 			// delete any relationships
-			return $this->deleteObj($object, Publisher::TABLE, Publisher::id );
+			return parent::deleteObject($object);
 		}
 
 		return false;

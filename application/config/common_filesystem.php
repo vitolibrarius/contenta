@@ -44,6 +44,7 @@ function appendPath()
     foreach ($args as $arg) {
         $paths = array_merge($paths, (array)$arg);
     }
+    $paths = array_filter( $paths, 'strlen' );
 
     $path_count = count($paths);
     for ( $idx = 0; $idx < $path_count; $idx++) {

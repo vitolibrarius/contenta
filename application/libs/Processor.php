@@ -5,15 +5,38 @@ use \Database as Database;
 use \Localized as Localized;
 use \Logger as Logger;
 use \Exception as Exception;
+use \Session as Session;
 
 use utilities\Metadata as Metadata;
-
 
 /**
  * Class Processor
  */
 abstract class Processor
 {
+	public static function Daemonize($userHash = null, $processor = null, $guid = null)
+	{
+		if ( is_null($userHash) || is_null($processor) || is_null($guid)) {
+			throw new \Exception("Unable to Daemonize (" . $userHash .", " . $processor .", " . $guid . ")");
+		}
+
+		$user_model = Model::Named('Users');
+		$user = $user_model->userByApiHash($userHash);
+		if ( $user == false || $user->isAdmin() == false) {
+			throw new \Exception("Unable to Daemonize User (" . $userHash .", " . $processor .", " . $guid. ")");
+		}
+
+		$shell = ((PHP_OS === 'Darwin') ? '' : 'nohup ') . 'php ';
+		$daemon = appendPath(SYSTEM_PATH, 'Daemon.php');
+		$daemonCMD = $daemon
+			. ' -g ' . $guid
+			. ' -u ' . $userHash
+			. ' -p ' . $processor
+			. ' >> /tmp/' . $processor . '_' . $guid . '_' . $userHash . '.log 2>&1';
+
+		return shell_exec( $shell . $daemonCMD . " & echo $!");
+	}
+
 	/**
 	 * loads the Processor with the given name.
 	 * @param $name string name of the Processor
@@ -101,6 +124,15 @@ abstract class Processor
 		return $this->metadata()->getMeta($key);
 	}
 
+	public function daemonizeProcess()
+	{
+		if ( Session::isUserLoggedIn() ) {
+			$user = Model::Named('Users')->objectForId(Session::Get('user_id'));
+			return Processor::Daemonize($user->api_hash, get_short_class($this), $this->guid);
+		}
+
+		return false;
+	}
 
 	public abstract function processData();
 }

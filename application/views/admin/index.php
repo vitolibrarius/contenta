@@ -31,6 +31,10 @@
 				<p>All Publishers</p>
 			</div>
 			<div class="admin_card_item">
+				<a href="<?php echo Config::Web('/AdminCharacters/characterlist'); ?>">Characters</a>
+				<p>All Characters</p>
+			</div>
+			<div class="admin_card_item">
 				<a href="#">Series</a>
 				<p>Flagged series</p>
 			</div>

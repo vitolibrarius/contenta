@@ -129,13 +129,15 @@ abstract class EndpointConnector
 
 	/* perform the URL request and return the data
 	*/
-	public function performRequest($url)
+	public function performRequest($url, $force = false)
 	{
 		if (empty($url) == false) {
 			// check the cashe for the data, there is no point in calling the same API call multiple times in one day
-			$data = Cache::Fetch( $url, false, Cache::TTL_DAY );
-			if ( $data != false ) {
-				return $data;
+			if ( $force == false ) {
+				$data = Cache::Fetch( $url, false, Cache::TTL_DAY );
+				if ( $data != false ) {
+					return $data;
+				}
 			}
 
 			if ( function_exists('curl_version') == true) {
@@ -153,7 +155,7 @@ abstract class EndpointConnector
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
 				curl_setopt($ch, CURLOPT_AUTOREFERER, true );
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false );	# required for https urls
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10 );		# seconds to wait for connection
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30 );		# seconds to wait for connection
 				curl_setopt($ch, CURLOPT_TIMEOUT, 180 );			# seconds to wait for completion
 				curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
 				curl_setopt($ch, CURLOPT_HEADER, 0);
