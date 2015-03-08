@@ -189,6 +189,9 @@
             },
             "large_icon_name": {
                 "label": "Thumbnail"
+            },
+            "SUCCESS_CREATE": {
+                "label": "Created new Publisher"
             }
         },
         "character": {
@@ -224,6 +227,9 @@
             },
             "large_icon_name": {
                 "label": "Thumbnail"
+            },
+            "SUCCESS_CREATE": {
+                "label": "Created new Character"
             }
         }
     },

@@ -145,7 +145,7 @@ class AdminPublishers extends Admin
 					}
 
 					$importer->importPublisherValues( null, $object->xid, null);
-					$importer->processData();
+					$importer->daemonizeProcess();
 					$this->editPublisher($pubId);
 				}
 				else {
@@ -215,10 +215,18 @@ class AdminPublishers extends Admin
 		}
 	}
 
-	function comicVineImportAction($xid = null)
+	function comicVineImportAction($xid = null, $name = null)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			if ( isset($xid) && is_null($xid) == false) {
+				if ( isset($name) == false || strlen($name) == 0) {
+					$name = 'Unknown ' . $xid;
+				}
+				$existing = Model::Named('Publisher')->findExternalOrCreate( $name, $xid, Endpoint_Type::ComicVine);
+				if ( $existing != false ) {
+					Session::addPositiveFeedback( Localized::ModelLabel( 'publisher', "SUCCESS_CREATE" ) );
+				}
+
 				$importer = new ComicVineImporter( Publisher::TABLE . "_" .$xid );
 				if ( $importer->endpoint() == false ) {
 					$ep_model = Model::Named('Endpoint');
@@ -233,7 +241,7 @@ class AdminPublishers extends Admin
 
 				if ( $importer->endpoint() != false ) {
 					$importer->importPublisherValues( null, $xid, null);
-					$importer->processData();
+					$importer->daemonizeProcess();
 				}
 				$this->publisherlist();
 			}

@@ -68,10 +68,25 @@ class Publisher extends Model
 	{
 		if ( isset($name, $xid, $xsrc) && strlen($name) && strlen($xid) && strlen($xsrc)) {
 			$obj = $this->objectForExternal($xid, $xsrc);
-			if ( $obj == false )
-			{
+			if ( $obj == false ) {
 				$obj = $this->create($name, $xid, $xsrc, $xurl);
 			}
+			else {
+				$updates = array();
+
+				if (isset($name) && $name != $obj->name ) {
+					$updates[Publisher::name] = $name;
+				}
+
+				if ((isset($xurl) && strlen($xurl) > 0) && (isset($obj->xurl) == false || strlen($obj->xurl) == 0)) {
+					$updates[Publisher::xurl] = $xurl;
+				}
+
+				if ( count($updates) > 0 ) {
+					$this->updateObject($obj, $updates );
+				}
+			}
+
 			return $obj;
 		}
 		return false;
