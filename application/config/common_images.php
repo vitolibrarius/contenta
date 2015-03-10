@@ -1,5 +1,15 @@
 <?php
 
+/** common image file extensions
+ */
+function imageExtensions()
+{
+	return array( 'png', 'jpg', 'jpeg', 'gif' );
+}
+
+/** downloads an image for the given URL and stores it in the specified directory.
+ *	assumes the image extension will be set by the downloaded content
+ */
 function downloadImage($url = null, $dir = null, $key_name_hint = null )
 {
 	if (is_null($url) || is_null($dir) ) {

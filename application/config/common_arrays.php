@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * this will walk a keypath down a nested associative array and return the leaf value.
+ */
 	function valueForKeypath( $keypath, $array, $separator = '/' )
 	{
 		if ( isset($keypath, $array) && strlen($keypath) > 0) {
@@ -23,6 +26,9 @@
 		return null;
 	}
 
+/**
+ * this will walk a keypath down a nested associative array and set leaf value for the keypath
+ */
 	function setValueForKeypath($keypath, $value, $array, $separator = '/' )
 	{
 		if ( isset($keypath) && strlen($keypath) > 0) {

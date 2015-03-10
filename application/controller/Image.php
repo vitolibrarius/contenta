@@ -29,41 +29,50 @@ class Image extends Controller
 		}
 	}
 
+	private function imageResponse( $graphicFileName = null, $type = 'png' )
+	{
+		$fileModTime = filemtime($graphicFileName);
+
+		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+			$modDate = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+		}
+
+		if (isset($modDate) && (strtotime($modDate) == $fileModTime)) {
+			// browser cache content IS current, so we just respond '304 Not Modified'
+			header('Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT', true, 304);
+			Logger::logWarning('304: Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT' );
+		}
+		else {
+			// Image not cached or cache outdated, we respond '200 OK' and output the image.
+			header('Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT', true, 200);
+			header('Content-Type: image/' . $type);
+			header('Content-transfer-encoding: binary');
+			header('Content-length: ' . filesize($graphicFileName));
+			readfile($graphicFileName);
+		}
+	}
+
 	function icon($table = null, $id = null)
 	{
 		if (isset($table, $id)) {
-			$model = Model::Named($table);
-			$obj = $model->objectForId($id);
-			$file = 'public/img/default_icon_' . $table . '.png';
-			if ( $obj != false )
-			{
-				$file = $obj->smallIconPath( $file );
+			$image = hashedImagePath( $table, $id, Model::IconName );
+			if ( is_null($image) ) {
+				$image = 'public/img/default_icon_' . $table . '.png';
 			}
 
-			header('Content-Type: image/' . file_ext($file));
-			header('Cache-Control: must-revalidate');
-			header('Pragma: public');
-			header('Content-Length: ' . filesize($file));
-			readfile($file);
+			$this->imageResponse( $image, file_ext($image));
 		}
 	}
 
 	function thumbnail($table = null, $id = null)
 	{
 		if (isset($table, $id)) {
-			$model = Model::Named($table);
-			$obj = $model->objectForId($id);
-			$file = 'public/img/default_thumbnail_' . $table . '.png';
-			if ( $obj != false )
-			{
-				$file = $obj->largeIconPath( $file );
+			$image = hashedImagePath( $table, $id, Model::ThumbnailName );
+			if ( is_null($image) ) {
+				$image = 'public/img/default_thumbnail_' . $table . '.png';
 			}
 
-			header('Content-Type: image/' . file_ext($file));
-			header('Cache-Control: must-revalidate');
-			header('Pragma: public');
-			header('Content-Length: ' . filesize($file));
-			readfile($file);
+			$this->imageResponse( $image, file_ext($image));
 		}
 	}
 }

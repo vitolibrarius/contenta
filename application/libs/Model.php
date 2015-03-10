@@ -40,6 +40,9 @@ abstract class Model
 {
 	const HTML_ATTR_SEPARATOR = '-';
 
+	const IconName = 'Icon';
+	const ThumbnailName = 'Thumbnail';
+
 	const TERTIARY_UNSET = -1;
 	const TERTIARY_TRUE = 1;
 	const TERTIARY_FALSE = 0;
