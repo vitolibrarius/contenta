@@ -15,52 +15,28 @@
 		});
 	});
 </script>
-	<!--
-			Publisher::id, Publisher::name, Publisher::created, Publisher::updated,
-			Publisher::path, Publisher::small_icon_name, Publisher::large_icon_name,
-			Publisher::xurl, Publisher::xsource, Publisher::xid, Publisher::xupdated
-	-->
-<div class="mediaData">
-	<table>
-	<?php if (is_array($this->list) && count($this->list) > 0 ): ?>
-		<tr>
-			<th></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "name" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "xsource" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "xurl" ); ?></th>
-			<th colspan=2></th>
-		</tr>
-		<?php foreach($this->list as $key => $value): ?>
-			   <tr>
-					<td>
-						<?php if ( $value->hasIcons() ): ?>
-							<img src="<?php echo Config::Web( "Image", "icon", $this->model->tableName(), $value->id); ?>" />
-						<?php endif; ?>
-					</td>
-					<td><?php echo htmlentities($value->name); ?></td>
-					<td><?php echo $value->xsource; ?></td>
-					<td><?php echo $value->xurl; ?></td>
-					<td><?php if (isset($this->editAction)) : ?>
-						<a href="<?php echo Config::Web( $this->editAction . '/' . $value->id); ?>"><span class="icon edit" /></a>
-						<?php endif; ?></td>
-					<td><?php if (isset($this->deleteAction)) : ?>
-						<a class="confirm" href="#" action="<?php echo Config::Web( $this->deleteAction . '/' . $value->id); ?>"><span class="icon recycle" /></a>
-						<?php endif; ?></td>
-					</td>
-				</tr>
-		<?php endforeach; ?>
-	<?php else: ?>
-		<tr>
-			<th colspan="7"><?php echo 'No publishers yet. Create some !'; ?></th>
-		</tr>
-	<?php endif ?>
 
-	<tfoot>
-		<tr>
-			<td colspan="7">
-				<a class="btn" href="<?php echo Config::Web( '/AdminPublishers/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a>
-			</td>
-		</tr>
-	</tfoot>
-	</table>
+<div class="paging">
+	<ul>
+	<li>
+		<a href="<?php echo Config::Web( '/AdminPublishers/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a>
+	</li>
+	</ul>
 </div>
+
+<?php if (is_array($this->list) && count($this->list) > 0 ): ?>
+	<?php
+		$card = new html\Card();
+		$card->setDetailKeys( array(
+			model\Publisher::xsource => model\Publisher::xsource
+			)
+		);
+		foreach($this->list as $key => $value) {
+			$card->setEditPath( $this->editAction . '/' . $value->id );
+			$card->setDeletePath( $this->deleteAction . '/' . $value->id );
+			echo $card->render($value);
+		}
+	?>
+<?php else: ?>
+	<?php echo 'No publishers yet. Create some !'; ?>
+<?php endif ?>

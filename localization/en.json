@@ -184,14 +184,17 @@
             "xupdated": {
                 "label": "Last Update from Endpoint"
             },
-            "small_icon_name": {
-                "label": "Icon"
-            },
-            "large_icon_name": {
-                "label": "Thumbnail"
-            },
             "SUCCESS_CREATE": {
                 "label": "Created new Publisher"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
+            },
+            "mediaPath": {
+                "label": "Media Path"
             }
         },
         "character": {
@@ -222,14 +225,11 @@
             "xupdated": {
                 "label": "Updated from endpoint"
             },
-            "small_icon_name": {
-                "label": "Icon"
-            },
-            "large_icon_name": {
-                "label": "Thumbnail"
-            },
             "SUCCESS_CREATE": {
                 "label": "Created new Character"
+            },
+            "mediaPath": {
+                "label": "Media Path"
             }
         }
     },
@@ -296,7 +296,8 @@
         }
     },
     "Auth": {
-        "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator"
+        "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator",
+        "PASSWORD_WRONG": "Username / password mismatch.  Please check and retry."
     },
     "Upload": {
         "title": "Upload media file",
