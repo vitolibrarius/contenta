@@ -38,3 +38,30 @@ function splitPOSTValues($array) {
 	return $ret;
 }
 
+function hashedPath($table = 'none', $id = 0, $filename = null)
+{
+	if ( $id > 0 ) {
+		$mediaDir = Config::GetMedia( $table, substr("00".dechex($id % 255),-2), $id );
+		makeRequiredDirectory($mediaDir, 'Media directory for ' . appendPath($table, substr("00".dechex($id % 255),-2), $id) );
+
+		if ( is_null( $filename )) {
+			return $mediaDir;
+		}
+
+		return appendPath( $mediaDir, $filename );
+	}
+	return null;
+}
+
+function hashedImagePath($table = 'none', $id = 0, $imagename = null)
+{
+	if ( $id > 0 ) {
+		$base = hashedPath($table, $id, $imagename);
+		foreach( imageExtensions() as $ext) {
+			if ( file_exists( $base . '.' . $ext) ) {
+				return $base . '.' . $ext;
+			}
+		}
+	}
+	return null;
+}
