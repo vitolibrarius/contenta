@@ -55,10 +55,15 @@
 						value="<?php echo $this->object->formattedDate('xupdated'); ?>"
 					/>
 
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "small_icon_name"); ?></label>
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), "mediaPath"); ?></label>
+					<input class="mediaPath" type="text" name="mediaPath" disabled
+						value="<?php echo $this->object->mediaPath(); ?>"
+					/>
+
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::IconName); ?></label>
 					<img src="<?php echo Config::Web( "Image", "icon", $this->model->tableName(), $this->object->id); ?>" />
 
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "large_icon_name"); ?></label>
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::ThumbnailName); ?></label>
 					<img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $this->object->id); ?>" />
 
 				<div>
