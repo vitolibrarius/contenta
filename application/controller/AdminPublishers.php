@@ -144,7 +144,7 @@ class AdminPublishers extends Admin
 						$importer->setEndpoint($endpoint);
 					}
 
-					$importer->importPublisherValues( null, $object->xid, null);
+					$importer->importPublisherValues( null, $object->xid, null, true);
 					$importer->daemonizeProcess();
 					$this->editPublisher($pubId);
 				}

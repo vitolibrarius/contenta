@@ -22,6 +22,13 @@ use \Config as Config;
 			return $this->modelName() . ' (' . $this->id . ')';
 		}
 
+		public function displayDescription() {
+			if ( isset($this->desc)) {
+				return $this->desc;
+			}
+			return '';
+		}
+
 		public function modelName() {
 			$reflect = new ReflectionClass($this);
 			return substr($reflect->getShortName(), 0, strpos($reflect->getShortName(), 'DBO'));
@@ -54,16 +61,14 @@ use \Config as Config;
 			return '';
 		}
 
+		public function imagePath($filename = null)
+		{
+			return hashedImagePath($this->tableName(), $this->id, $filename);
+		}
+
 		public function mediaPath($filename = null)
 		{
-			$mediaDir = Config::GetMedia( $this->tableName(), substr("00".dechex($this->id % 255),-2), $this->id );
-			makeRequiredDirectory($mediaDir, 'Media directory for ' . $this->displayName() );
-
-			if ( is_null( $filename )) {
-				return $mediaDir;
-			}
-
-			return appendPath( $mediaDir, $filename );
+			return hashedPath($this->tableName(), $this->id, $filename);
 		}
 	}
 ?>

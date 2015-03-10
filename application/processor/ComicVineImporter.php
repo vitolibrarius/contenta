@@ -43,22 +43,18 @@ class ComicVineImporter extends EndpointImporter
 		parent::setEndpoint($point);
 	}
 
-	public function importImage( $mediaObject, $imagename = "small_icon_name", $sourceurl )
+	public function importImage( $mediaObject, $imagename = Model::IconName, $sourceurl )
 	{
 		if ( isset($sourceurl) ) {
 			$filename = downloadImage($sourceurl, $this->workingDirectory(), $imagename );
 			if ( empty($filename) == false ) {
-				$oldfile = $mediaObject->mediaPath($mediaObject->{$imagename});
-				if ( is_file($oldfile) ) {
-					unlink($oldfile) || die("failed to remove old file? " . $oldfile);
+				$imageFile = $mediaObject->imagePath($imagename);
+				if ( is_file($imageFile) ) {
+					unlink($imageFile) || die("failed to remove old file? " . $imageFile);
 				}
 
 				$newfile = $mediaObject->mediaPath($filename);
 				rename(appendPath($this->workingDirectory(), $filename), $newfile) || die("failed install new file? " . $newfile);
-
-				if ( $mediaObject->model()->updateObject( $mediaObject, array( $imagename => $filename )) ) {
-					return $mediaObject->model()->refreshObject($mediaObject);
-				}
 			}
 		}
 		return false;
@@ -343,12 +339,12 @@ class ComicVineImporter extends EndpointImporter
 				if ( $forceImageUpdate == true || $object->hasIcons() == false ) {
 					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
 					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Publisher::small_icon_name, $imageURL );
+						$this->importImage( $object, Model::IconName, $imageURL );
 					}
 
 					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
 					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Publisher::large_icon_name, $imageURL );
+						$this->importImage( $object, Model::ThumbnailName, $imageURL );
 					}
 				}
 			}
@@ -393,12 +389,12 @@ class ComicVineImporter extends EndpointImporter
 				if ( $forceImageUpdate == true || $object->hasIcons() == false ) {
 					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
 					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Character::small_icon_name, $imageURL );
+						$this->importImage( $object, Model::IconName, $imageURL );
 					}
 
 					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
 					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Character::large_icon_name, $imageURL );
+						$this->importImage( $object, Model::ThumbnailName, $imageURL );
 					}
 				}
 			}
