@@ -29,10 +29,4 @@ class Controller
 		$className = "controller\\" . $name;
 		return new $className();
 	}
-
-	public function name()
-	{
-		$reflect = new ReflectionClass($this);
-		return new View($reflect->getShortName());
-	}
 }

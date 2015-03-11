@@ -83,7 +83,15 @@
 	</header>
 
 	<div id="content">
-		<h1><?php echo $this->viewTitle(); ?></h1>
+		<h1>
+		<?php if (isset($this->controllerName)): ?>
+			<a href="<?php echo Config::Web($this->controllerName); ?>">
+		<?php endif; ?>
+			<?php echo $this->viewTitle(); ?>
+		<?php if (isset($this->controllerName)): ?>
+			</a>
+		<?php endif; ?>
+		</h1>
 
 		<!-- echo out the system feedback (error and success messages) -->
 		<?php $this->renderFeedbackMessages(); ?>
