@@ -136,9 +136,13 @@ abstract class Model
 		return false;
 	}
 
-	public function allObjects($sortColumns = null)
+	public function allObjects($sortColumns = null, $limit = null)
 	{
-		return $this->fetchAll($this->tableName(), $this->allColumns(), null, ($sortColumns == null ? $this->sortOrder() : $sortColumns));
+		return $this->fetchAll($this->tableName(), $this->allColumns(), null, ($sortColumns == null ? $this->sortOrder() : $sortColumns), $limit);
+	}
+
+	public function allObjectsLike(array $search = array(), $limit = null) {
+		return $this->fetchAllLike($this->tableName(), $this->allColumns(), $search, null, $this->sortOrder(), $limit);
 	}
 
 	public function validateForSave($object = null, array $values)
@@ -197,6 +201,13 @@ abstract class Model
 				}
 				return $this->update( $this->tableName(), $values, $qual );
 			}
+
+			// create failed, log validation errors
+			$logMsg = "Validation errors creating " . $this->tableName();
+			foreach ($objectOrErrors as $attr => $errMsg ) {
+				$logMsg .= "\n\t" . $errMsg;
+			}
+			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
 			return $validation;
 		}
 
@@ -222,6 +233,13 @@ abstract class Model
 				}
 				return $this->createObj( $this->tableName(), $values, $this->tablePK() );
 			}
+
+			// create failed, log validation errors
+			$logMsg = "Validation errors creating " . $this->tableName();
+			foreach ($objectOrErrors as $attr => $errMsg ) {
+				$logMsg .= "\n\t" . $errMsg;
+			}
+			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
 			return $validation;
 		}
 

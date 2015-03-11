@@ -78,8 +78,12 @@ class Publisher extends Model
 					$updates[Publisher::name] = $name;
 				}
 
-				if ((isset($xurl) && strlen($xurl) > 0) && (isset($obj->xurl) == false || strlen($obj->xurl) == 0)) {
-					$updates[Publisher::xurl] = $xurl;
+				if ( isset($xid) ) {
+					$updates[Publisher::xupdated] = time();
+
+					if ((isset($xurl) && strlen($xurl) > 0) && (isset($obj->xurl) == false || strlen($obj->xurl) == 0)) {
+						$updates[Publisher::xurl] = $xurl;
+					}
 				}
 
 				if ( count($updates) > 0 ) {
@@ -158,7 +162,7 @@ class Publisher extends Model
 		{
 			return Localized::ModelValidation($this->tableName(), Publisher::name, "FIELD_EMPTY");
 		}
-		elseif (strlen($value) > 255 OR strlen($value) < 5)
+		elseif (strlen($value) > 255)
 		{
 			return Localized::ModelValidation($this->tableName(), Publisher::name, "FIELD_TOO_LONG" );
 		}

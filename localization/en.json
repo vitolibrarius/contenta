@@ -161,7 +161,7 @@
             "name": {
                 "label": "Name",
                 "FIELD_EMPTY": "Name field was empty",
-                "FIELD_TOO_LONG": "Name field was either less than 5 characters or more than 255"
+                "FIELD_TOO_LONG": "Name field was more than 255 characters"
             },
             "path": {
                 "label": "Path"
@@ -202,7 +202,9 @@
                 "label": "Query ComicVine Characters "
             },
             "name": {
-                "label": "Name"
+                "label": "Name",
+                "search": "Search name",
+                "FIELD_TOO_LONG": "Name field was more than 255 characters"
             },
             "realname": {
                 "label": "Real Name"
@@ -230,6 +232,18 @@
             },
             "mediaPath": {
                 "label": "Media Path"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
+            },
+            "AliasesLegend": {
+                "label": "Aliases"
+            },
+            "aliases": {
+                "label": "Aliases"
             }
         }
     },
@@ -297,7 +311,7 @@
     },
     "Auth": {
         "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator",
-        "PASSWORD_WRONG": "Username / password mismatch.  Please check and retry."
+        "PASSWORD_WRONG": "Username or password mismatch.  Please check and retry."
     },
     "Upload": {
         "title": "Upload media file",

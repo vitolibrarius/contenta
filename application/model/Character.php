@@ -6,6 +6,7 @@ use \Session as Session;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
+use \Logger as Logger;
 
 class Character extends Model
 {
@@ -85,6 +86,51 @@ class Character extends Model
 			{
 				$obj = $this->create($publishObj, $name, $realname, $gender, $desc, $aliases, $xid, $xsrc, $xurl);
 			}
+			else {
+				$updates = array();
+
+				if ( isset($publishObj) && is_a( $publishObj, '\model\PublisherDBO' ) && $publishObj->id != $obj->publisher_id) {
+					$updates[Character::publisher_id] = $publishObj->id;
+				}
+				else {
+					Logger::logError( "Not a publisher " . var_export($publishObj, true));
+				}
+
+				if (isset($name) && $name != $obj->name ) {
+					$updates[Character::name] = $name;
+				}
+
+				if (isset($realname) && $realname != $obj->realname ) {
+					$updates[Character::realname] = $realname;
+				}
+
+				if (isset($gender) && $gender != $obj->gender ) {
+					$updates[Character::gender] = $gender;
+				}
+
+				if (isset($desc) && $desc != $obj->desc ) {
+					$updates[Character::desc] = $desc;
+				}
+
+				if ( isset($xid) ) {
+					$updates[Character::xupdated] = time();
+
+					if ((isset($xurl) && strlen($xurl) > 0) && (isset($obj->xurl) == false || strlen($obj->xurl) == 0)) {
+						$updates[Character::xurl] = $xurl;
+					}
+				}
+
+				if ( count($updates) > 0 ) {
+					$this->updateObject($obj, $updates );
+				}
+
+				if ( $obj != false && is_array($aliases) ) {
+					$char_model = Model::Named("Character_Alias");
+					foreach ($aliases as $key => $value) {
+						$char_model->create($obj, $value);
+					}
+				}
+			}
 			return $obj;
 		}
 		return false;
@@ -95,33 +141,36 @@ class Character extends Model
 		$obj = $this->objectForExternal($xid, $xsrc);
 		if ( $obj == false )
 		{
-			if ( isset($name) ) {
-				if ( isset($realname) == false ) {
-					$realname = $name;
-				}
+			if ( isset($realname) == false ) {
+				$realname = $name;
+			}
 
-				$params = array(
-					Character::created => time(),
-					Character::name => $name,
-					Character::realname => $realname,
-					Character::desc => $desc,
-					Character::gender => $gender,
-					Character::popularity => 0,
-					Character::path => sanitize($name),
-					Character::small_icon_name => null,
-					Character::large_icon_name => null,
-					Character::xurl => $xurl,
-					Character::xsource => $xsrc,
-					Character::xid => $xid,
-					Character::xupdated => null
-				);
+			$params = array(
+				Character::created => time(),
+				Character::name => $name,
+				Character::realname => $realname,
+				Character::desc => $desc,
+				Character::gender => $gender,
+				Character::popularity => 0,
+				Character::path => sanitize($name),
+				Character::small_icon_name => null,
+				Character::large_icon_name => null,
+				Character::xurl => $xurl,
+				Character::xsource => $xsrc,
+				Character::xid => $xid,
+				Character::xupdated => (is_null($xid) ? null : time())
+			);
 
-				if ( isset($publishObj)  && is_a($publishObj, '\model\PublisherDBO')) {
-					$params[Character::publisher_id] = $publishObj->id;
-				}
+			if ( isset($publishObj)  && is_a($publishObj, '\model\PublisherDBO')) {
+				$params[Character::publisher_id] = $publishObj->id;
+			}
 
-				$newObjId = $this->createObject($params);
-				$obj = ($newObjId != false ? $this->objectForId($newObjId) : false);
+			$objectOrErrors = $this->createObject($params);
+			if ( is_array($objectOrErrors) ) {
+				return $objectOrErrors;
+			}
+			else if ($objectOrErrors != false) {
+				$obj = $this->objectForId( (string)$objectOrErrors);
 			}
 		}
 
@@ -180,7 +229,7 @@ class Character extends Model
 		{
 			return Localized::ModelValidation($this->tableName(), Character::name, "FIELD_EMPTY");
 		}
-		elseif (strlen($value) > 255 OR strlen($value) < 5)
+		else if (strlen($value) > 255 )
 		{
 			return Localized::ModelValidation($this->tableName(), Character::name, "FIELD_TOO_LONG" );
 		}
