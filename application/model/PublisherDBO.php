@@ -26,6 +26,10 @@ class PublisherDBO extends DataObject implements \Image_Interface
 		return $this->name;
 	}
 
+	public function publisher() {
+		return $this;
+	}
+
 	public function hasIcons()
 	{
 		return ($this->smallIconPath() != null) && ($this->largeIconPath() != null);

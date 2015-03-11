@@ -332,7 +332,7 @@ class ComicVineImporter extends EndpointImporter
 			$publisherUrl = valueForKeypath(Publisher::xurl, $cvDetails);
 
 			$object = $publish_model->findExternalOrCreate( $publisherName, $publisherId, $publisherSrc, $publisherUrl);
-			if ( $object != false ) {
+			if ( $object != false && is_array($object) == false) {
 				$this->addImportsProcessed($object);
 
 				$forceImageUpdate = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
@@ -382,7 +382,7 @@ class ComicVineImporter extends EndpointImporter
 
 			$gender = $this->genderMap(valueForKeypath(Character::gender, $cvDetails));
 			$object = $character_model->findExternalOrCreate( $publisher, $name, $realname, $gender, $desc, $aliases, $xid, $xsrc, $xurl);
-			if ( $object != false ) {
+			if ( $object != false && is_array($object) == false) {
 				$this->addImportsProcessed($object);
 
 				$forceImageUpdate = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);

@@ -36,10 +36,22 @@ class AdminCharacters extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Character');
 			$this->view->model = $model;
-			$this->view->list = $model->allObjects();
+			$this->view->render( '/characters/index');
+		}
+	}
+
+	function searchCharacters()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Character');
+			$this->view->model = $model;
+			$this->view->listArray = $model->allObjectsLike( array(
+					Character::name => $_GET['name']
+				)
+			);
 			$this->view->editAction = "/AdminCharacters/editCharacter";
 			$this->view->deleteAction = "/AdminCharacters/deleteCharacter";
-			$this->view->render( '/characters/index');
+			$this->view->render( '/characters/characterCards', true);
 		}
 	}
 
@@ -143,17 +155,13 @@ class AdminCharacters extends Admin
 				$object = $model->objectForId($oid);
 				$endpoint = $object->externalEndpoint();
 				if ( $endpoint != false ) {
-					$connection = new ComicVineConnector($endpoint);
-					$record = $connection->characterDetails( $object->xid );
-
-					if ( isset($record['image']['thumb_url']) ) {
-						$pub = $pub->saveSmallIcon( $record['image']['thumb_url'] );
+					$importer = new ComicVineImporter( $model->tableName() . "_" .$object->xid );
+					if ( $importer->endpoint() == false ) {
+						$importer->setEndpoint($endpoint);
 					}
 
-					if ( $pub != false && isset($record['image']['small_url']) ) {
-						$pub = $pub->saveLargeIcon( $record['image']['small_url'] );
-					}
-
+					$importer->importCharacterValues( null, $object->xid, null, true);
+					$importer->daemonizeProcess();
 					$this->editCharacter($oid);
 				}
 				else {
@@ -225,10 +233,18 @@ class AdminCharacters extends Admin
 		}
 	}
 
-	function comicVineImportAction($xid = null)
+	function comicVineImportAction($xid = null, $name = null)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			if ( isset($xid) && is_null($xid) == false) {
+				if ( isset($name) == false || strlen($name) == 0) {
+					$name = 'Unknown ' . $xid;
+				}
+				$existing = Model::Named('Character')->findExternalOrCreate(null, $name, null, null, null, null, $xid, Endpoint_Type::ComicVine, null );
+				if ( $existing != false ) {
+					Session::addPositiveFeedback( Localized::ModelLabel( 'character', "SUCCESS_CREATE" ) );
+				}
+
 				$importer = new ComicVineImporter( Character::TABLE . "_" .$xid );
 				if ( $importer->endpoint() == false ) {
 					$ep_model = Model::Named('Endpoint');

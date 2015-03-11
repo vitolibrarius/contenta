@@ -726,6 +726,8 @@ span.icon.favorite:before		{ content:"\2665"; color: red; font-size: 32px; }
 
 .card .feature .details span {
 	display: block;
+	word-wrap:break-word;
+	font-size: 0.8em;
 }
 
 .card .feature .details span.year {
@@ -738,8 +740,15 @@ span.icon.favorite:before		{ content:"\2665"; color: red; font-size: 32px; }
 	border-top: 2px groove #888;
 }
 
+.card .caption p {
+	margin-top: 0px;
+	font-size: 0.9em;
+	font-style: italic;
+}
+
 .card .caption em {
 	font-weight: bold;
+	font-size: 1em;
 	color:red;
 }
 

@@ -23,7 +23,7 @@ class characterDBO extends DataObject
 	public $xupdated;
 
 	public function displayName() {
-		return $this->publisherName() . ' - ' . $this->name;
+		return $this->name;
 	}
 
 	public function hasIcons()

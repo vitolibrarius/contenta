@@ -155,11 +155,10 @@ abstract class EndpointConnector
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
 				curl_setopt($ch, CURLOPT_AUTOREFERER, true );
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false );	# required for https urls
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30 );		# seconds to wait for connection
-				curl_setopt($ch, CURLOPT_TIMEOUT, 180 );			# seconds to wait for completion
 				curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
 				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30 );		# seconds to wait for connection
+				curl_setopt($ch, CURLOPT_TIMEOUT, 180 );			# seconds to wait for completion
 				curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
 
 				$data = curl_exec($ch);

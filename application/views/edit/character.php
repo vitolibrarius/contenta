@@ -41,6 +41,24 @@
 			</form>
 		</div>
 
+		<div style="padding:15px; display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
+			<form method="post" style="min-width: 380px;"
+				action="<?php echo Config::Web($this->additionalAction); ?>/<?php echo (isset($this->object)) ? $this->object->id : null; ?>"
+				name="editForm">
+				<fieldset>
+				<legend><?php echo Localized::ModelLabel($this->model->tableName(),"AliasesLegend"); ?></legend>
+
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), "aliases"); ?></label>
+					<?php foreach ($this->object->aliases() as $alias ) : ?>
+					<input class="xupdated" type="text" name="xupdated" disabled
+						value="<?php echo $alias->name; ?>"
+					/>
+					<?php endforeach; ?>
+
+				</fieldset>
+			</form>
+		</div>
+
 		<?php if (isset($this->object, $this->additionalAction) && null != $this->object->externalEndpoint()) : ?>
 		<div style="padding:15px; display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
 			<form method="post" style="min-width: 380px;"
@@ -55,10 +73,15 @@
 						value="<?php echo $this->object->formattedDate('xupdated'); ?>"
 					/>
 
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "small_icon_name"); ?></label>
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), "mediaPath"); ?></label>
+					<input class="mediaPath" type="text" name="mediaPath" disabled
+						value="<?php echo $this->object->mediaPath(); ?>"
+					/>
+
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::IconName); ?></label>
 					<img src="<?php echo Config::Web( "Image", "icon", $this->model->tableName(), $this->object->id); ?>" />
 
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "large_icon_name"); ?></label>
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::ThumbnailName); ?></label>
 					<img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $this->object->id); ?>" />
 
 				<div>

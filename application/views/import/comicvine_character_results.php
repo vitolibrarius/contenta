@@ -3,6 +3,7 @@
 	<div class="span_container_row header">
 		<span class="nobreak">Publisher</span>
 		<span class="break">Name</span>
+		<span class="break">Aliases</span>
 		<span class="break">Description</span>
 		<span class="break"></span>
 	</div>
@@ -38,7 +39,9 @@
 					echo strip_tags($record['deck']);
 				} ?></span>
 			<span class="nobreak">
-				<a class="btn" href="<?php echo Config::Web( $this->importAction, $record['id'] ); ?>">Import</a>
+				<?php if ($this->model->objectForExternal($record['id'], model\Endpoint_Type::ComicVine) == false) : ?>
+				<a class="btn" href="<?php echo Config::Web( $this->importAction, $record['id'], $record['name']  ); ?>">Import</a>
+				<?php endif; ?>
 			</span>
 		</div>
 	<?php endforeach; ?>

@@ -92,9 +92,11 @@ class Card
 	public function publisherIconPath($record = null)
 	{
 		if (isset($record) && is_null($record) == false) {
-			$table = $record->tableName();
-			$pk = $record->pkValue();
-			return Config::Web( "Image", "icon", $table, $pk);
+			$publisher = $record->publisher();
+			if ( $publisher != false ) {
+				$pk = $publisher->pkValue();
+				return Config::Web( "Image", "icon", 'publisher', $pk);
+			}
 		}
 		return Config::Web('/public/img/Logo_favicon.png');
 	}
@@ -170,9 +172,9 @@ class Card
 
 		$card .= '<figcaption class="caption"><a href="' . $this->selectPath() . '"><em>';
 		$card .= ((isset($record) && is_null($record) == false) ? $record->displayName() : "Unknwown");
-		$card .= '</em></a><br />';
+		$card .= '</em></a><p>';
 		$card .= ((isset($record) && is_null($record) == false) ? $record->displayDescription() : "Short Description");
-		$card .= '</figcaption>';
+		$card .= '</p></figcaption>';
 		$card .= '</figure>';
 
 		return $card;

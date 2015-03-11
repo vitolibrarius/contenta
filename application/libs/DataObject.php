@@ -29,6 +29,10 @@ use \Config as Config;
 			return '';
 		}
 
+		public function publisher() {
+			return false;
+		}
+
 		public function modelName() {
 			$reflect = new ReflectionClass($this);
 			return substr($reflect->getShortName(), 0, strpos($reflect->getShortName(), 'DBO'));
