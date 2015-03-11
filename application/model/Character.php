@@ -19,9 +19,6 @@ class Character extends Model
 	const popularity =	'popularity';
 	const gender =		'gender';
 	const created =	'created';
-	const path =		'path';
-	const small_icon_name =	'small_icon_name';
-	const large_icon_name =	'large_icon_name';
 	const xurl =		'xurl';
 	const xsource =		'xsource';
 	const xid =			'xid';
@@ -39,7 +36,6 @@ class Character extends Model
 		return array(
 			Character::id, Character::publisher_id, Character::name, Character::realname, Character::desc,
 			Character::gender, Character::created, Character::popularity,
-			Character::path, Character::small_icon_name, Character::large_icon_name,
 			Character::xurl, Character::xsource, Character::xid, Character::xupdated
 		);
 	}
@@ -152,9 +148,6 @@ class Character extends Model
 				Character::desc => $desc,
 				Character::gender => $gender,
 				Character::popularity => 0,
-				Character::path => sanitize($name),
-				Character::small_icon_name => null,
-				Character::large_icon_name => null,
 				Character::xurl => $xurl,
 				Character::xsource => $xsrc,
 				Character::xid => $xid,

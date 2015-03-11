@@ -65,6 +65,13 @@ use \Config as Config;
 			return '';
 		}
 
+		public function hasIcons()
+		{
+			$smIcon = $this->imagePath(Model::IconName);
+			$lgIcon = $this->imagePath(Model::ThumbnailName);
+			return (is_file($smIcon) && is_file($lgIcon));
+		}
+
 		public function imagePath($filename = null)
 		{
 			return hashedImagePath($this->tableName(), $this->id, $filename);
