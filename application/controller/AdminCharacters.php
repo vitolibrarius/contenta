@@ -31,6 +31,11 @@ use model\Character_Alias as Character_Alias;
  */
 class AdminCharacters extends Admin
 {
+	function index()
+	{
+		$this->characterlist();
+	}
+
 	function characterlist()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {

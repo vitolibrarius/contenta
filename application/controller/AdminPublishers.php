@@ -27,6 +27,11 @@ use model\Publisher as Publisher;
  */
 class AdminPublishers extends Admin
 {
+	function index()
+	{
+		$this->publisherlist();
+	}
+
 	function publisherlist()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
