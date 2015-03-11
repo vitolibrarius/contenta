@@ -13,9 +13,6 @@ class Publisher extends Model
 	const name =	'name';
 	const created = 'created';
 	const updated = 'updated';
-	const path =			'path';
-	const small_icon_name =	'small_icon_name';
-	const large_icon_name =	'large_icon_name';
 	const xurl =	'xurl';
 	const xsource =	'xsource';
 	const xid =		'xid';
@@ -31,7 +28,6 @@ class Publisher extends Model
 	{
 		return array(
 			Publisher::id, Publisher::name, Publisher::created, Publisher::updated,
-			Publisher::path, Publisher::small_icon_name, Publisher::large_icon_name,
 			Publisher::xurl, Publisher::xsource, Publisher::xid, Publisher::xupdated
 		);
 	}
@@ -102,9 +98,6 @@ class Publisher extends Model
 			$newObjId = $this->createObject( array(
 				Publisher::created => time(),
 				Publisher::name => $name,
-				Publisher::path => null,
-				Publisher::small_icon_name => null,
-				Publisher::large_icon_name => null,
 				Publisher::xurl => $xurl,
 				Publisher::xsource => $xsrc,
 				Publisher::xid => $xid,

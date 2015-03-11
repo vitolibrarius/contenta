@@ -9,14 +9,11 @@ use \Config as Config;
 use model\Endpoint as Endpoint;
 use model\Publisher as Publisher;
 
-class PublisherDBO extends DataObject implements \Image_Interface
+class PublisherDBO extends DataObject
 {
 	public $name;
 	public $created;
 	public $updated;
-	public $path;
-	public $small_icon_name;
-	public $large_icon_name;
 	public $xurl;
 	public $xsource;
 	public $xid;
@@ -28,35 +25,6 @@ class PublisherDBO extends DataObject implements \Image_Interface
 
 	public function publisher() {
 		return $this;
-	}
-
-	public function hasIcons()
-	{
-		return ($this->smallIconPath() != null) && ($this->largeIconPath() != null);
-	}
-
-	public function smallIconPath($path = null)
-	{
-		if (isset($this->{Publisher::small_icon_name}) && strlen($this->{Publisher::small_icon_name}) > 0) {
-			$working = $this->mediaPath( $this->{Publisher::small_icon_name} );
-			if ( file_exists($working) == true && is_file($working) == true)
-			{
-				return $working;
-			}
-		}
-		return $path;
-	}
-
-	public function largeIconPath($path = null)
-	{
-		if (isset($this->{Publisher::large_icon_name}) && strlen($this->{Publisher::large_icon_name}) > 0) {
-			$working = $this->mediaPath( $this->{Publisher::large_icon_name} );
-			if ( file_exists($working) == true && is_file($working) == true)
-			{
-				return $working;
-			}
-		}
-		return $path;
 	}
 
 	public function externalEndpoint()

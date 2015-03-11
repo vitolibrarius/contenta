@@ -14,9 +14,6 @@ class characterDBO extends DataObject
 	public $gender;
 	public $popularity;
 	public $created;
-	public $path;
-	public $small_icon_name;
-	public $large_icon_name;
 	public $xurl;
 	public $xsource;
 	public $xid;
@@ -24,35 +21,6 @@ class characterDBO extends DataObject
 
 	public function displayName() {
 		return $this->name;
-	}
-
-	public function hasIcons()
-	{
-		return ($this->smallIconPath() != null) && ($this->largeIconPath() != null);
-	}
-
-	public function smallIconPath($path = null)
-	{
-		if (isset($this->{Character::small_icon_name}) && strlen($this->{Character::small_icon_name}) > 0) {
-			$working = $this->mediaPath( $this->{Publisher::small_icon_name} );
-			if ( file_exists($working) == true && is_file($working) == true)
-			{
-				return $working;
-			}
-		}
-		return $path;
-	}
-
-	public function largeIconPath($path = null)
-	{
-		if (isset($this->{Character::large_icon_name}) && strlen($this->{Character::large_icon_name}) > 0) {
-			$working = $this->mediaPath( $this->{Publisher::large_icon_name} );
-			if ( file_exists($working) == true && is_file($working) == true)
-			{
-				return $working;
-			}
-		}
-		return $path;
 	}
 
 	public function publisherName() {
