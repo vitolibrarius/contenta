@@ -348,9 +348,6 @@ class ComicVineImporter extends EndpointImporter
 						if ( $pubObj == false ) {
 							$pubroot = $this->importPublisherValues( null, $publisher_xid);
 						}
-						else {
-							Logger::logWarning( "Publisher found for " . $publisher_xid . " => " . $pubObj );
-						}
 					}
 					else {
 						Logger::logWarning( "No publisher xid found" );
@@ -407,9 +404,6 @@ class ComicVineImporter extends EndpointImporter
 						$pubObj = Model::Named("Publisher")->objectForExternal( $publisher_xid, Endpoint_Type::ComicVine );
 						if ( $pubObj == false ) {
 							$pubroot = $this->importPublisherValues( null, $publisher_xid);
-						}
-						else {
-							Logger::logWarning( "Publisher found for " . $publisher_xid . " => " . $pubObj );
 						}
 					}
 					else {
@@ -595,8 +589,7 @@ class ComicVineImporter extends EndpointImporter
 		$preorder = array(
 			Series::TABLE,
 			Character::TABLE,
-			Publisher::TABLE,
-			"story_arc"
+			Publisher::TABLE
 		);
 
 		$success = true;
