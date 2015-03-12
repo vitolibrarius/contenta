@@ -155,7 +155,7 @@ class Publisher extends Model
 		{
 			return Localized::ModelValidation($this->tableName(), Publisher::name, "FIELD_EMPTY");
 		}
-		elseif (strlen($value) > 255)
+		elseif (strlen($value) > 256)
 		{
 			return Localized::ModelValidation($this->tableName(), Publisher::name, "FIELD_TOO_LONG" );
 		}

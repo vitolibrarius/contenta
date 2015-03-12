@@ -41,8 +41,8 @@ function splitPOSTValues($array) {
 function hashedPath($table = 'none', $id = 0, $filename = null)
 {
 	if ( $id > 0 ) {
-		$mediaDir = Config::GetMedia( $table, substr("00".dechex($id % 255),-2), $id );
-		makeRequiredDirectory($mediaDir, 'Media directory for ' . appendPath($table, substr("00".dechex($id % 255),-2), $id) );
+		$mediaDir = Config::GetMedia( $table, substr("00".dechex($id % 256),-2), $id );
+		makeRequiredDirectory($mediaDir, 'Media directory for ' . appendPath($table, substr("00".dechex($id % 256),-2), $id) );
 
 		if ( is_null( $filename )) {
 			return $mediaDir;

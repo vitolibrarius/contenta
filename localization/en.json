@@ -162,7 +162,7 @@
             "name": {
                 "label": "Name",
                 "FIELD_EMPTY": "Name field was empty",
-                "FIELD_TOO_LONG": "Name field was more than 255 characters"
+                "FIELD_TOO_LONG": "Name field was more than 256 characters"
             },
             "path": {
                 "label": "Path"
@@ -205,7 +205,7 @@
             "name": {
                 "label": "Name",
                 "search": "Search name",
-                "FIELD_TOO_LONG": "Name field was more than 255 characters"
+                "FIELD_TOO_LONG": "Name field was more than 256 characters"
             },
             "realname": {
                 "label": "Real Name"
