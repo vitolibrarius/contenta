@@ -219,7 +219,7 @@ class Character extends Model
 		{
 			return Localized::ModelValidation($this->tableName(), Character::name, "FIELD_EMPTY");
 		}
-		else if (strlen($value) > 255 )
+		else if (strlen($value) > 256 )
 		{
 			return Localized::ModelValidation($this->tableName(), Character::name, "FIELD_TOO_LONG" );
 		}

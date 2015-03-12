@@ -60,13 +60,13 @@ $tables = array( 'character', 'publisher', 'series', 'publication', 'issue' );
 for ($x = 1; $x <= 10000; $x++) {
 	$table = array_rand($tables);
 
-//  	echo $x . "\t" . Config::GetMedia( $tables[$table], substr("00".dechex($x % 255),-2), $x ) . PHP_EOL;
+//  	echo $x . "\t" . Config::GetMedia( $tables[$table], substr("00".dechex($x % 256),-2), $x ) . PHP_EOL;
 
-	if ( substr("00".dechex($x % 255),-2) === 'ca' ) {
+	if ( substr("00".dechex($x % 256),-2) === 'ca' ) {
 
-		echo '|' . $x . "|" . dechex($x) . "|" . $x%255 . "|". substr("00".dechex($x % 255),-2) . "|`"
-			. '/' . substr("00".dechex($x % 255),-2) . '/' . $x . '/` |`'
-			. 'publication'. '/' . substr("00".dechex($x % 255),-2) . '/' . $x . '/` |' . PHP_EOL;
+		echo '|' . $x . "|" . dechex($x) . "|" . $x%256 . "|". substr("00".dechex($x % 256),-2) . "|`"
+			. '/' . substr("00".dechex($x % 256),-2) . '/' . $x . '/` |`'
+			. 'publication'. '/' . substr("00".dechex($x % 256),-2) . '/' . $x . '/` |' . PHP_EOL;
 	}
 }
 
