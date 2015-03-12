@@ -29,6 +29,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 	const PUBLISHER_FIELDS = "id,name,api_detail_url,image,deck,description,story_arcs";
 	const CHARACTER_FIELDS = "id,image,name,real_name,aliases,api_detail_url,gender,publisher,deck,description,story_arc_credits,date_last_updated";
 	const STORY_ARC_FIELDS = "";
+	const VOLUME_FIELDS = "";
 
 	public function __construct($point)
 	{
@@ -124,9 +125,25 @@ class ComicVineConnector extends JSON_EndpointConnector
 		return $details;
 	}
 
-	public function volumeDetails( $id )
+	public function seriesDetails( $id )
 	{
-		return $this->details('volume', TYPEID_VOLUME, $id, null);
+// 		$query = array("field_list" => ComicVineConnector::VOLUME_FIELDS);
+		$query = array();
+		$details = false;
+		try {
+			$details = $this->details('volume', ComicVineConnector::TYPEID_VOLUME, $id, $query);
+		}
+		catch ( \Exception $e ) {
+			Logger::logException( $e );
+			try {
+				$details = $this->details('volume', ComicVineConnector::TYPEID_VOLUME, $id, $query);
+			}
+			catch ( \Exception $e2 ) {
+				Logger::logException( $e2 );
+			}
+		}
+
+		return $details;
 	}
 
 	public function issueDetails( $id )
@@ -156,7 +173,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 		}
 
 		if ( is_string($query_string)) {
-			$params['query'] = $query_string;
+			$params['query'] = urlencode($query_string);
 		}
 		else {
 			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
@@ -167,24 +184,37 @@ class ComicVineConnector extends JSON_EndpointConnector
 	}
 
 
-	public function queryForVolumeName($name, $strict = false)
+	public function queryForVolumeName($name, $year = 0, $strict = false)
 	{
-		$query_string = $name;
-		if ( $strict ) {
-			$query_string = implode( ' AND ', explode(' ', strtolower($seriesName)));
-		}
-		return $this->search( "volume", $query_string, array(
-			"field_list" => "name,id,start_year,publisher,image,description,count_of_issues",
-			"sort" => "name,start_year"
-			)
-		);
+		return $this->search( "volume", $name, null);
+
+// 		$query_string = $name;
+// 		if ( $strict ) {
+// 			$query_string = implode( ' AND ', explode(' ', strtolower($name)));
+// 		}
+//
+// 		$params = $this->defaultParameters();
+// 		$params = array_merge($params, array(
+// // 			"field_list" => ComicVineConnector::VOLUME_FIELDS,
+// 			"sort" => "name"
+// 			)
+// 		);
+//
+// 		if ( is_string($query_string)) {
+// 			$params['filter'] = 'name:' . $query_string;
+// 		}
+// 		else {
+// 			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
+// 		}
+// 		$search_url = $this->endpointBaseURL() . "/volumes/?" . http_build_query($params);
+// 		return $this->performRequest( $search_url );
 	}
 
 	public function queryForPublisherName($name, $strict = false)
 	{
 		$query_string = $name;
 		if ( $strict ) {
-			$query_string = implode( ' AND ', explode(' ', strtolower($seriesName)));
+			$query_string = implode( ' AND ', explode(' ', strtolower($name)));
 		}
 
 		$params = $this->defaultParameters();

@@ -34,7 +34,8 @@
         "SearchButton": "Search",
         "RefreshFromEndpoint": "Refresh From Endpoint",
         "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints.",
-        "Delete Failure": "Delete Failure"
+        "Delete Failure": "Delete Failure",
+        "Failed to find request record": "Failed to find request record"
     },
     "Admin": {
         "title": "Admin",
@@ -245,6 +246,53 @@
             "aliases": {
                 "label": "Aliases"
             }
+        },
+        "series": {
+            "name": {
+                "search": "Search",
+                "label": "Name"
+            },
+            "SearchLegend": {
+                "label": "Query ComicVine Series"
+            },
+            "start_year": {
+                "label": "Start Year"
+            },
+            "FormLegend": {
+                "label": "Series Details"
+            },
+            "AliasesLegend": {
+                "label": "Aliases"
+            },
+            "aliases": {
+                "label": "Aliases"
+            },
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "xupdated": {
+                "label": "Last Updated"
+            },
+            "mediaPath": {
+                "label": "Media Path"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
+            },
+            "desc": {
+                "label": "Description"
+            },
+            "publisher_id": {
+                "label": "Publisher"
+            }
+        },
+        "Series": {
+            "SUCCESS_CREATE": {
+                "label": "Created new Series"
+            }
         }
     },
     "Logs": {
@@ -289,7 +337,7 @@
         "title": "Login"
     },
     "AdminPublishers": {
-        "title": "Publishers",
+        "title": "Publisher Administration",
         "index": {
             "DeleteDescription": "This will permanently delete the publisher.",
             "DeleteConfirmation": "Are you sure you want to continue?"
@@ -303,7 +351,7 @@
         }
     },
     "AdminCharacters": {
-        "title": "Characters",
+        "title": "Character Administration",
         "index": {
             "DeleteDescription": "This will permanently delete the character",
             "DeleteConfirmation": "Are you sure you want to continue?"
@@ -325,5 +373,12 @@
         "UPLOAD_ERR_EXTENSION": "File upload stopped by extension",
         "No media available": "No media available",
         "No file selected": "No file selected"
+    },
+    "AdminSeries": {
+        "title": "Series Administration",
+        "index": {
+            "DeleteDescription": "This will permanently delete this Series.",
+            "DeleteConfirmation": "Are you sure you want to continue?"
+        }
     }
 }

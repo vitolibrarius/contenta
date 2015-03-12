@@ -22,46 +22,50 @@ use model\Endpoint_Type as Endpoint_Type;
 use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
+use model\Series as Series;
+use model\Series_Alias as Series_Alias;
+use model\Series_Character as Series_Character;
+use model\User_Series as User_Series;
 
 /**
  * Class Admin
  * The index controller
  */
-class AdminCharacters extends Admin
+class AdminSeries extends Admin
 {
 	function index()
 	{
-		$this->characterlist();
+		$this->serieslist();
 	}
 
-	function characterlist()
+	function serieslist()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$model = Model::Named('Character');
+			$model = Model::Named('Series');
 			$this->view->model = $model;
-			$this->view->render( '/characters/index');
+			$this->view->render( '/series/index');
 		}
 	}
 
-	function searchCharacters()
+	function searchSeries()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$model = Model::Named('Character');
+			$model = Model::Named('Series');
 			$this->view->model = $model;
 			$this->view->listArray = $model->allObjectsLike( array(
-					Character::name => $_GET['name']
+					Series::name => $_GET['name']
 				)
 			);
-			$this->view->editAction = "/AdminCharacters/editCharacter";
-			$this->view->deleteAction = "/AdminCharacters/deleteCharacter";
-			$this->view->render( '/characters/characterCards', true);
+			$this->view->editAction = "/AdminSeries/editSeries";
+			$this->view->deleteAction = "/AdminSeries/deleteSeries";
+			$this->view->render( '/series/seriesCards', true);
 		}
 	}
 
-	function deleteCharacter($oid = null)
+	function deleteSeries($oid = null)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$model = Model::Named('Character');
+			$model = Model::Named('Series');
 			if ( $oid > 0 ) {
 				$object = $model->objectForId($oid);
 				if ( $object != false ) {
@@ -80,34 +84,34 @@ class AdminCharacters extends Admin
 			else {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
 			}
-			$this->characterlist();
+			$this->serieslist();
 		}
 	}
 
-	function editCharacter($oid = 0)
+	function editSeries($oid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->addStylesheet("select2.css");
 			$this->view->addScript("select2.min.js");
 
-			$model = Model::Named('Character');
+			$model = Model::Named('Series');
 			$this->view->model = $model;
 			if ( $oid > 0 ) {
 				$this->view->object = $model->objectForId($oid);
 			}
-			$this->view->saveAction = "/AdminCharacters/saveCharacter";
-			$this->view->additionalAction = "/AdminCharacters/updatedAdditional";
+			$this->view->saveAction = "/AdminSeries/saveSeries";
+			$this->view->additionalAction = "/AdminSeries/updatedAdditional";
 
-			$this->view->render( '/edit/character');
+			$this->view->render( '/edit/series');
 
-			Logger::loginfo("Editing Character " . $oid, Session::get('user_name'), Session::get('user_id'));
+			Logger::loginfo("Editing Series " . $oid, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 
-	function saveCharacter($oid = 0)
+	function saveSeries($oid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$model = Model::Named('Character');
+			$model = Model::Named('Series');
 			$values = splitPOSTValues($_POST);
 
 			if ( $oid > 0 ) {
@@ -119,11 +123,11 @@ class AdminCharacters extends Admin
 						foreach ($errors as $attr => $errMsg ) {
 							Session::addValidationFeedback($errMsg);
 						}
-						$this->editCharacter($oid);
+						$this->editSeries($oid);
 					}
 					else {
 						Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-						$this->characterlist();
+						$this->serieslist();
 					}
 				}
 				else {
@@ -138,11 +142,11 @@ class AdminCharacters extends Admin
 					foreach ($errors as $attr => $errMsg ) {
 						Session::addValidationFeedback( $errMsg );
 					}
-					$this->editCharacter();
+					$this->editSeries();
 				}
 				else {
 					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-					$this->characterlist();
+					$this->serieslist();
 				}
 			}
 		}
@@ -151,7 +155,7 @@ class AdminCharacters extends Admin
 	function updatedAdditional($oid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$model = Model::Named('Character');
+			$model = Model::Named('Series');
 			$values = splitPOSTValues($_POST);
 
 			if ( $oid > 0 ) {
@@ -163,9 +167,9 @@ class AdminCharacters extends Admin
 						$importer->setEndpoint($endpoint);
 					}
 
-					$importer->importCharacterValues( null, $object->xid, null, true);
+					$importer->importSeriesValues( null, $object->xid, null, true);
 					$importer->daemonizeProcess();
-					$this->editCharacter($oid);
+					$this->editSeries($oid);
 				}
 				else {
 					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) );
@@ -189,18 +193,18 @@ class AdminCharacters extends Admin
 				header('location: ' . Config::Web('/netconfig/index'));
 			}
 			else {
-				$model = Model::Named('Character');
+				$model = Model::Named('Series');
 				if ( $oid > 0 ) {
 					$object = $model->objectForId($oid);
 					if ( $object != false ) {
 						$this->view->object = $object;
 					}
 				}
-				$this->view->searchAction = "/AdminCharacters/comicVineSearchAction";
+				$this->view->searchAction = "/AdminSeries/comicVineSearchAction";
 				$this->view->endpoints = $points;
 				$this->view->ep_model = $ep_model;
 				$this->view->model = $model;
-				$this->view->render('/import/comicvine_character');
+				$this->view->render('/import/comicvine_series');
 			}
 		}
 	}
@@ -214,25 +218,29 @@ class AdminCharacters extends Admin
 				Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) );
 			}
 			else {
-				$model = Model::Named('Character');
+				$model = Model::Named('Series');
 				$values = splitPOSTValues($_POST);
-				if ( isset($values, $values[Character::TABLE], $values[Character::TABLE][Character::name]) ) {
-					$pubName = $values[Character::TABLE][Character::name];
+				if ( isset($values, $values[Series::TABLE], $values[Series::TABLE][Series::name]) ) {
+					$name = $values[Series::TABLE][Series::name];
+					$year = 0;
+					if ( isset($values[Series::TABLE][Series::start_year]) ) {
+						$year = $values[Series::TABLE][Series::start_year];
+					}
 					$epoint = $points[0];
 					$connection = new ComicVineConnector($epoint);
 
 					$this->view->endpoint = $epoint;
 					$this->view->pub_model = Model::Named("Publisher");
 					$this->view->model = $model;
-					$this->view->results = $connection->queryForCharacterName( $pubName );
-					$this->view->importAction = "/AdminCharacters/comicVineImportAction";
+					$this->view->results = $connection->queryForVolumeName( $name, $year );
+					$this->view->importAction = "/AdminSeries/comicVineImportAction";
 				}
 				else {
-					Session::addNegativeFeedback( Localized::ModelSearch( Character::TABLE, Character::name, "SEARCH_EMPTY" ));
+					Session::addNegativeFeedback( Localized::ModelSearch( Series::TABLE, Series::name, "SEARCH_EMPTY" ));
 				}
 			}
 
-			$this->view->render('/import/comicvine_character_results', true);
+			$this->view->render('/import/comicvine_series_results', true);
 		}
 	}
 
@@ -243,12 +251,12 @@ class AdminCharacters extends Admin
 				if ( isset($name) == false || strlen($name) == 0) {
 					$name = 'Unknown ' . $xid;
 				}
-				$existing = Model::Named('Character')->findExternalOrCreate(null, $name, null, null, null, null, $xid, Endpoint_Type::ComicVine, null );
+				$existing = Model::Named('Series')->findExternalOrCreate(null, $name, null, null, $xid, Endpoint_Type::ComicVine, null, null );
 				if ( $existing != false ) {
-					Session::addPositiveFeedback( Localized::ModelLabel( 'character', "SUCCESS_CREATE" ) );
+					Session::addPositiveFeedback( Localized::ModelLabel( 'Series', "SUCCESS_CREATE" ) );
 				}
 
-				$importer = new ComicVineImporter( Character::TABLE . "_" .$xid );
+				$importer = new ComicVineImporter( Series::TABLE . "_" .$xid );
 				if ( $importer->endpoint() == false ) {
 					$ep_model = Model::Named('Endpoint');
 					$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
@@ -261,11 +269,11 @@ class AdminCharacters extends Admin
 				}
 
 				if ( $importer->endpoint() != false ) {
-					$importer->importCharacterValues( null, $xid, null, true);
+					$importer->importSeriesValues( null, $xid, null, true);
 					$importer->daemonizeProcess();
 				}
 
-				$this->characterlist();
+				$this->serieslist();
 			}
 		}
 	}

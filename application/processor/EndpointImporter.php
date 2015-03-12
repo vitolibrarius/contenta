@@ -68,4 +68,29 @@ abstract class EndpointImporter extends Processor
 				. ", requires a configuration of type 'endpointDBO'");
 		}
 	}
+
+	public function importsProcessed()
+	{
+		if ( isset($this->imported) == false ) {
+			$this->imported = array();
+		}
+		return $this->imported;
+	}
+
+	public function addImportsProcessed($object)
+	{
+		if ( isset($this->imported) == false ) {
+			$this->imported = array();
+		}
+
+		if (isset($object) && is_a($object, "\\DataObject" )) {
+			$model = $object->model();
+			$array = array();
+			if ( isset($this->imported[$model->tableName()]) ) {
+				$array = $this->imported[$model->tableName()];
+			}
+			$array[] = $object;
+			$this->imported[$model->tableName()] = $array;
+		}
+	}
 }
