@@ -85,14 +85,11 @@ class Character extends Model
 			else {
 				$updates = array();
 
-				if ( isset($publishObj) && is_a( $publishObj, '\model\PublisherDBO' ) && $publishObj->id != $obj->publisher_id) {
+				if ( isset($publishObj, $publishObj->id) && (isset($obj->publisher_id) == false || $publishObj->id != $obj->publisher_id) ) {
 					$updates[Character::publisher_id] = $publishObj->id;
 				}
-				else {
-					Logger::logError( "Not a publisher " . var_export($publishObj, true));
-				}
 
-				if (isset($name) && $name != $obj->name ) {
+				if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
 					$updates[Character::name] = $name;
 				}
 
@@ -105,7 +102,7 @@ class Character extends Model
 				}
 
 				if (isset($desc) && $desc != $obj->desc ) {
-					$updates[Character::desc] = $desc;
+					$updates[Character::desc] = strip_tags($desc);
 				}
 
 				if ( isset($xid) ) {
@@ -145,7 +142,7 @@ class Character extends Model
 				Character::created => time(),
 				Character::name => $name,
 				Character::realname => $realname,
-				Character::desc => $desc,
+				Character::desc => strip_tags($desc),
 				Character::gender => $gender,
 				Character::popularity => 0,
 				Character::xurl => $xurl,

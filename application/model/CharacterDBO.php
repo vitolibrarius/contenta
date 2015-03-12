@@ -55,16 +55,4 @@ class characterDBO extends DataObject
 	public function updatePopularity() {
 		return Model::Named('Character')->updatePopularity($this);
 	}
-
-	public function externalEndpoint()
-	{
-		if ( isset( $this->xsource) ) {
-			$ep_model = Model::Named('Endpoint');
-			$points = $ep_model->allForTypeCode($this->xsource);
-			if ( is_array($points) && count($points) > 0) {
-				return $points[0];
-			}
-		}
-		return null;
-	}
 }

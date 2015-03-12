@@ -27,15 +27,15 @@
 				<p><?php echo $this->label( "RepairLink", "desc" ); ?></p>
 			</div>
 			<div class="admin_card_item">
-				<a href="<?php echo Config::Web('/AdminPublishers/publisherlist'); ?>">Publishers</a>
+				<a href="<?php echo Config::Web('/AdminPublishers/index'); ?>">Publishers</a>
 				<p>All Publishers</p>
 			</div>
 			<div class="admin_card_item">
-				<a href="<?php echo Config::Web('/AdminCharacters/characterlist'); ?>">Characters</a>
+				<a href="<?php echo Config::Web('/AdminCharacters/index'); ?>">Characters</a>
 				<p>All Characters</p>
 			</div>
 			<div class="admin_card_item">
-				<a href="#">Series</a>
+				<a href="<?php echo Config::Web('/AdminSeries/index'); ?>">Series</a>
 				<p>Flagged series</p>
 			</div>
 			<div class="admin_card_item">

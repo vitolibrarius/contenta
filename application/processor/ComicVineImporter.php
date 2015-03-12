@@ -15,6 +15,7 @@ use endpoints\ComicVineConnector as ComicVineConnector;
 use model\Users as Users;
 use model\Publisher as Publisher;
 use model\Character as Character;
+use model\Series as Series;
 use model\Endpoint as Endpoint;
 use model\Endpoint_Type as Endpoint_Type;
 use model\EndpointDBO as EndpointDBO;
@@ -110,6 +111,22 @@ class ComicVineImporter extends EndpointImporter
 		);
 	}
 
+	public function importSeriesMap()
+	{
+		// comicvine => model attribute
+		return array( //,
+			"aliases" => "aliases",
+			"id" => Series::xid,
+			"api_detail_url" => Series::xurl,
+			"deck" => Series::desc,
+			"name" => Series::name,
+			"start_year" => Series::start_year,
+			"image/tiny_url" => ComicVineImporter::META_IMPORT_SMALL_ICON,
+			"image/thumb_url" => ComicVineImporter::META_IMPORT_LARGE_ICON,
+			"publisher/id" => Publisher::TABLE . '_' . Publisher::xid
+		);
+	}
+
 
 
 
@@ -169,6 +186,54 @@ class ComicVineImporter extends EndpointImporter
 			$this->setMeta( appendPath( $root, Character::xurl), $xurl);
 			$this->setMeta( appendPath( $root, ComicVineImporter::META_IMPORT_FORCE_ICON), $forceImages );
 		}
+		return $root;
+	}
+
+	public function importSeriesValues($name = null, $xid = null, $xurl = null, $forceImages = false)
+	{
+		if ( isset($xid) == false || strlen($xid) == 0) {
+			throw new Exception("External ID is required");
+		}
+
+		$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, Series::TABLE, $xid);
+		$cvDetails = $this->getMeta( $root );
+		if ( isset($cvDetails, $cvDetails[Series::name]) == false) {
+			$this->setMeta( appendPath( $root, Series::name), $name);
+			$this->setMeta( appendPath( $root, Series::xid), $xid);
+			$this->setMeta( appendPath( $root, Series::xsource), Endpoint_Type::ComicVine);
+			$this->setMeta( appendPath( $root, Series::xurl), $xurl);
+			$this->setMeta( appendPath( $root, ComicVineImporter::META_IMPORT_FORCE_ICON), $forceImages );
+		}
+		return $root;
+	}
+
+	public function importPublicationValues($name = null, $num = null, $xid = null, $xurl = null, $forceImages = false)
+	{
+		if ( isset($xid) == false || strlen($xid) == 0) {
+			throw new Exception("External ID is required");
+		}
+
+		$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, "publication", $xid);
+		$cvDetails = $this->getMeta( $root );
+		if ( isset($cvDetails, $cvDetails["name"]) == false) {
+			$this->setMeta( appendPath( $root, "name"), $name);
+			$this->setMeta( appendPath( $root, "issue_number"), $num);
+			$this->setMeta( appendPath( $root, "xid"), $xid);
+			$this->setMeta( appendPath( $root, "xsource"), Endpoint_Type::ComicVine);
+			$this->setMeta( appendPath( $root, "xurl"), $xurl);
+			$this->setMeta( appendPath( $root, ComicVineImporter::META_IMPORT_FORCE_ICON), $forceImages );
+		}
+
+// 		$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, Publication::TABLE, $xid);
+// 		$cvDetails = $this->getMeta( $root );
+// 		if ( isset($cvDetails, $cvDetails[Publication::name]) == false) {
+// 			$this->setMeta( appendPath( $root, Publication::name), $name);
+// 			$this->setMeta( appendPath( $root, Publication::issue_number), $num);
+// 			$this->setMeta( appendPath( $root, Publication::xid), $xid);
+// 			$this->setMeta( appendPath( $root, Publication::xsource), Endpoint_Type::ComicVine);
+// 			$this->setMeta( appendPath( $root, Publication::xurl), $xurl);
+// 			$this->setMeta( appendPath( $root, ComicVineImporter::META_IMPORT_FORCE_ICON), $forceImages );
+// 		}
 		return $root;
 	}
 
@@ -302,8 +367,80 @@ class ComicVineImporter extends EndpointImporter
 					}
 				}
 			}
-			else {
-				Logger::logError( "Name is set details for " . $path . var_export($cvDetails, true), get_class($this), $this->guid );
+		}
+		else {
+			Logger::logError( "No details for " . $path, get_class($this), $this->guid );
+		}
+		return true;
+	}
+
+	private function preprocess_series($path, array $cvDetails = array())
+	{
+		// this should never happen since the xid is required as part of the path
+		if ( isset($cvDetails[Series::xid]) ) {
+			// with no name means we probably need to fetch from ComicVine
+			if ( isset($cvDetails[Series::name]) == false) {
+				$xId = $cvDetails[Series::xid];
+				// load the details from ComicVine
+				$comicVine = $this->endpoint();
+				if ( $comicVine == false ) {
+					throw new Exception("Endpoint was not found");
+				}
+				else {
+					$connection = new ComicVineConnector($comicVine);
+					$record = $connection->seriesDetails( $xId );
+					if ( $record == false ) {
+						return $record;
+					}
+
+					$this->setMeta( "cv/series/" . $xId, $record );
+					$map = $this->importSeriesMap();
+					$this->setMeta( appendPath( $path, Series::xsource), Endpoint_Type::ComicVine);
+					foreach( $map as $cvKey => $modelKey ) {
+						$value = valueForKeypath($cvKey, $record);
+						$this->setMeta( appendPath( $path, $modelKey), $value );
+					}
+
+					// check for Publisher
+					$publisher_xid = valueForKeypath( "publisher/id", $record );
+					if ( is_null($publisher_xid) == false ) {
+						$pubObj = Model::Named("Publisher")->objectForExternal( $publisher_xid, Endpoint_Type::ComicVine );
+						if ( $pubObj == false ) {
+							$pubroot = $this->importPublisherValues( null, $publisher_xid);
+						}
+						else {
+							Logger::logWarning( "Publisher found for " . $publisher_xid . " => " . $pubObj );
+						}
+					}
+					else {
+						Logger::logWarning( "No publisher xid found" );
+					}
+
+					$characters = valueForKeypath( "characters", $record );
+					if ( is_array($characters) && count($characters) > 0) {
+						foreach( $characters as $character ) {
+							if ( isset($character['id']) ) {
+								// story arcs do not automatically get all details
+								$characterName = (isset($character['name']) ? $character['name'] : "Unknown");
+								$characterURL = (isset($character['api_detail_url']) ? $character['api_detail_url'] : null);
+								$this->importCharacterValues($characterName, $character['id'], $characterURL);
+							}
+						}
+					}
+
+					$issues = valueForKeypath( "issues", $record );
+					if ( is_array($issues) && count($issues) > 0) {
+						foreach( $issues as $issue ) {
+							if ( isset($issue['id']) ) {
+								// story arcs do not automatically get all details
+								$issueName = (isset($issue['name']) ? $issue['name'] : "Unknown");
+								$issueNumber = (isset($issue['issue_number']) ? $issue['issue_number'] : "0");
+								$issueURL = (isset($issue['api_detail_url']) ? $issue['api_detail_url'] : null);
+								$this->importPublicationValues($issueName, $issueNumber, $issue['id'], $issueURL);
+							}
+						}
+					}
+				}
 			}
 		}
 		else {
@@ -403,16 +540,66 @@ class ComicVineImporter extends EndpointImporter
 		return $object;
 	}
 
+	private function process_series($path, array $cvDetails = array())
+	{
+		$object = null;
+		if ( isset($cvDetails[Series::xid], $cvDetails[Series::name]) ) {
+			$series_model = Model::Named('Series');
+
+			$name = valueForKeypath(Series::name, $cvDetails);
+			$start_year = valueForKeypath(Series::start_year, $cvDetails);
+			$desc = valueForKeypath(Series::desc, $cvDetails);
+			$xid = valueForKeypath(Series::xid, $cvDetails);
+			$xsrc = valueForKeypath(Series::xsource, $cvDetails);
+			$xurl = valueForKeypath(Series::xurl, $cvDetails);
+
+			$publisher = null;
+			$publisherId = valueForKeypath( Publisher::TABLE . '_' . Publisher::xid, $cvDetails);
+			if ( is_null( $publisherId ) == false ) {
+				$publisher = Model::Named("Publisher")->objectForExternal( $publisherId, Endpoint_Type::ComicVine );
+			}
+
+			$aliases = valueForKeypath("aliases", $cvDetails);
+			if ( isset($aliases) && strlen($aliases) > 0 ) {
+				$aliases = split_lines($aliases);
+			}
+
+			$object = $series_model->findExternalOrCreate( $publisher, $name, $start_year, null, $xid, $xsrc, $xurl, $desc, $aliases);
+			if ( $object != false && is_array($object) == false) {
+				$this->addImportsProcessed($object);
+
+				$forceImageUpdate = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
+				if ( $forceImageUpdate == true || $object->hasIcons() == false ) {
+					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
+					if ( is_null($imageURL) == false ) {
+						$this->importImage( $object, Model::IconName, $imageURL );
+					}
+
+					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
+					if ( is_null($imageURL) == false ) {
+						$this->importImage( $object, Model::ThumbnailName, $imageURL );
+					}
+				}
+			}
+			else {
+				Logger::logError( "series findExternalOrCreate " . var_export($object, true), get_class($this), $this->guid );
+			}
+		}
+
+		return $object;
+	}
+
+
 	public function processData()
 	{
 		$preorder = array(
+			Series::TABLE,
 			Character::TABLE,
 			Publisher::TABLE,
 			"story_arc"
 		);
 
 		$success = true;
-		$preorder_success = true;
 		foreach( $preorder as $prekey ) {
 			$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, $prekey);
 			$preprocessMethod = 'preprocess_' . $prekey;
@@ -424,17 +611,18 @@ class ComicVineImporter extends EndpointImporter
 						$itemPath = appendPath( $root, $cvKey );
 						if ( $this->$preprocessMethod($itemPath, $cvDetails) == false ) {
 							// we allow the preprocessing to continue since it won't harm anything
-							$preorder_success = false;
+							$success = false;
 						}
 					}
 				}
 			}
 			else {
 				Logger::logError( "failed to find pre-processing function " . $preprocessMethod, get_class($this), $this->guid );
+				$success = false;
 			}
 		}
 
-		if ( $preorder_success == true ) {
+		if ( $success == true ) {
 			$reverse = array_reverse($preorder);
 			foreach( $reverse as $prekey ) {
 				$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, $prekey);
@@ -446,17 +634,21 @@ class ComicVineImporter extends EndpointImporter
 						foreach( $cvImports as $cvKey => $cvDetails ) {
 							$itemPath = appendPath( $root, $cvKey );
 							if ( $this->$processMethod($itemPath, $cvDetails) == false ) {
-								// we allow the preprocessing to continue since it won't harm anything
+								Logger::logError( "Failed to process $processMethod($itemPath)", get_class($this), $this->guid );
 								$success = false;
+								break;
 							}
 						}
 					}
 				}
 				else {
 					Logger::logError( "failed to find processing function " . $processMethod, get_class($this), $this->guid );
+					$success = false;
 				}
 			}
 		}
+
+		$this->setPurgeOnExit( $success );
 		return $success;
 	}
 

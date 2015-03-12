@@ -21,7 +21,7 @@
 			e.preventDefault();
 			$.ajax({
 				type: "GET",
-				url: "<?php echo Config::Web('/AdminCharacters/searchCharacters'); ?>",
+				url: "<?php echo Config::Web('/AdminSeries/searchSeries'); ?>",
 				data: {name: $('input#searchField').val()},
 				dataType: "text",
 				success: function(msg){
@@ -34,7 +34,7 @@
 			delay( function(){
 				$.ajax({
 					type: "GET",
-					url: "<?php echo Config::Web('/AdminCharacters/searchCharacters'); ?>",
+					url: "<?php echo Config::Web('/AdminSeries/searchSeries'); ?>",
 					data: {name: $('input#searchField').val()},
 					dataType: "text",
 					success: function(msg){
@@ -50,7 +50,7 @@
 <div class="paging">
 	<ul>
 	<li>
-		<a href="<?php echo Config::Web( '/AdminCharacters/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a>
+		<a href="<?php echo Config::Web( '/AdminSeries/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a>
 	</li>
 	</ul>
 </div>

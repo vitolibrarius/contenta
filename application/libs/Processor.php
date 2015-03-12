@@ -57,7 +57,7 @@ abstract class Processor
 	{
 		isset($guid) || die('Processor unique id missing.');
 
-
+		$this->purgeOnExit = false;
 		$this->guid = $guid;
 		$reflect = new ReflectionClass($this);
 		$this->type = $reflect->getShortName();
@@ -69,11 +69,26 @@ abstract class Processor
 		$this->workingDir = appendPath($processingRoot, $guid);
 	}
 
+	function __destruct()
+	{
+		if ( isset($this->purgeOnExit) && $this->purgeOnExit == true ) {
+			$this->deleteWorkingDirectory();
+		}
+	}
+
+	public function setPurgeOnExit($trueFalse = false)
+	{
+		$this->purgeOnExit = $trueFalse;
+	}
+
 	public function deleteWorkingDirectory()
 	{
-		if (workingDirectoryExists() == true && destroy_dir(workingDirectory()) == false) {
-			Logger::logInfo("Error destroying working directory " . $this->type . '/' . $this->guid);
-			return false;
+		if ($this->workingDirectoryExists() == true ) {
+			$purged = destroy_dir($this->workingDirectory());
+			if ( $purged != true ) {
+				Logger::LogError("Error destroying working directory ", $this->type, $this->guid);
+				return false;
+			}
 		}
 		return true;
 	}
