@@ -50,14 +50,14 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 	register_shutdown_function('shutdownHandler');
 
 	function customError($errno, $errstr, $errfile, $errline) {
-	    $trace = array_reverse(debug_backtrace());
-	    array_pop($trace);
+	    $trace = debug_backtrace();
+	    array_shift($trace);
 
 		$backtrace = "(".$errno.") " . $errstr;
         foreach($trace as $item) {
             $backtrace .= "\n\t" . (isset($item['file']) ? shortendPath($item['file'], 3) : '<unknown file>')
             	. ' ' . (isset($item['line']) ? $item['line'] : '<unknown line>')
-            	. ' calling ' . $item['function'] . '()';
+            	. ' calling ' . (isset($item['function']) ? $item['function'] : '<unknown function>') . '()';
         }
 
 		Logger::LogError( $backtrace, $errfile, $errline );
