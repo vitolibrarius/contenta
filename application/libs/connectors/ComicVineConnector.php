@@ -1,6 +1,6 @@
 <?php
 
-namespace endpoints;
+namespace connectors;
 
 use \Config as Config;
 use \Logger as Logger;
@@ -23,13 +23,15 @@ class ComicVineConnector extends JSON_EndpointConnector
 	const TYPEID_PUBLISHER = '4010';
 	const TYPEID_CONCEPT = '4015';
 	const TYPEID_LOCATION = '4015';
+	const TYPEID_PERSON = '4040';
 	const TYPEID_STORY_ARC = '4045';
 	const TYPEID_VOLUME = '4050';
 
-	const PUBLISHER_FIELDS = "id,name,api_detail_url,image,deck,description,story_arcs";
-	const CHARACTER_FIELDS = "id,image,name,real_name,aliases,api_detail_url,gender,publisher,deck,description,story_arc_credits,date_last_updated";
-	const STORY_ARC_FIELDS = "";
-	const VOLUME_FIELDS = "";
+	const PUBLISHER_FIELDS =	"id,name,image,deck,description,story_arcs,site_detail_url";
+	const CHARACTER_FIELDS =	"id,image,name,real_name,aliases,gender,publisher,deck,description,story_arc_credits,site_detail_url";
+	const STORY_ARC_FIELDS =	"id,aliases,deck,description,first_appeared_in_issue,image,issues,name,publisher,site_detail_url";
+	const VOLUME_FIELDS =		"id,aliases,characters,deck,description,first_issue,image,issues,name,publisher,site_detail_url,start_year";
+	const ISSUE_FIELDS =		"id,aliases,character_credits,cover_date,deck,description,image,issue_number,name,person_credits,site_detail_url,story_arc_credits,volume";
 
 	public function __construct($point)
 	{
@@ -54,101 +56,62 @@ class ComicVineConnector extends JSON_EndpointConnector
 	 */
 	public function details($resource, $type = null, $id, $additionalParams = null) {
 		$params = $this->defaultParameters();
-
 		if ( is_array($additionalParams) ) {
 			$params = array_merge($params, $additionalParams);
 		}
 
 		$detail_url = $this->endpointBaseURL() . "/" . $resource . "/"
 			. ($type == null ? '' : $type . "-") . $id . "/?" . http_build_query($params);
-		return $this->performRequest( $detail_url, true );
-	}
 
-	public function storyArcDetails( $id )
-	{
-// 		$query = array("field_list" => ComicVineConnector::STORY_ARC_FIELDS);
-		$query = array();
-		$details = false;
 		try {
-			$details = $this->details('story_arc', ComicVineConnector::TYPEID_STORY_ARC, $id, $query);
+			$details = $this->performRequest( $detail_url, true );
 		}
 		catch ( \Exception $e ) {
 			Logger::logException( $e );
 			try {
-				$details = $this->details('story_arc', ComicVineConnector::TYPEID_STORY_ARC, $id, $query);
+				$details = $this->performRequest( $detail_url, true );
 			}
 			catch ( \Exception $e2 ) {
 				Logger::logException( $e2 );
 			}
 		}
+		return (is_array($details) ? $details : false);
+	}
 
-		return $details;
+	public function storyArcDetails( $id )
+	{
+		$query = array("field_list" => ComicVineConnector::STORY_ARC_FIELDS);
+		return $this->details('story_arc', ComicVineConnector::TYPEID_STORY_ARC, $id, $query);;
 	}
 
 	public function characterDetails( $id )
 	{
 		$query = array("field_list" => ComicVineConnector::CHARACTER_FIELDS);
-		$details = false;
-		try {
-			$details = $this->details('character', ComicVineConnector::TYPEID_CHARACTER, $id, $query);
-		}
-		catch ( \Exception $e ) {
-			Logger::logException( $e );
-			try {
-				$details = $this->details('character', ComicVineConnector::TYPEID_CHARACTER, $id, $query);
-			}
-			catch ( \Exception $e2 ) {
-				Logger::logException( $e2 );
-			}
-		}
-
-		return $details;
+		return $this->details('character', ComicVineConnector::TYPEID_CHARACTER, $id, $query);
 	}
 
 	public function publisherDetails( $id )
 	{
 		$query = array("field_list" => ComicVineConnector::PUBLISHER_FIELDS);
-		$details = false;
-		try {
-			$details = $this->details('publisher', ComicVineConnector::TYPEID_PUBLISHER, $id, $query);
-		}
-		catch ( \Exception $e ) {
-			Logger::logException( $e );
-			try {
-				$details = $this->details('publisher', ComicVineConnector::TYPEID_PUBLISHER, $id, $query);
-			}
-			catch ( \Exception $e2 ) {
-				Logger::logException( $e2 );
-			}
-		}
-
-		return $details;
+		return $this->details('publisher', ComicVineConnector::TYPEID_PUBLISHER, $id, $query);
 	}
 
 	public function seriesDetails( $id )
 	{
-// 		$query = array("field_list" => ComicVineConnector::VOLUME_FIELDS);
-		$query = array();
-		$details = false;
-		try {
-			$details = $this->details('volume', ComicVineConnector::TYPEID_VOLUME, $id, $query);
-		}
-		catch ( \Exception $e ) {
-			Logger::logException( $e );
-			try {
-				$details = $this->details('volume', ComicVineConnector::TYPEID_VOLUME, $id, $query);
-			}
-			catch ( \Exception $e2 ) {
-				Logger::logException( $e2 );
-			}
-		}
-
-		return $details;
+		$query = array("field_list" => ComicVineConnector::VOLUME_FIELDS);
+		return $this->details('volume', ComicVineConnector::TYPEID_VOLUME, $id, $query);
 	}
 
 	public function issueDetails( $id )
 	{
-		return $this->details('issue', TYPEID_ISSUE, $id, null);
+		$query = array("field_list" => ComicVineConnector::ISSUE_FIELDS);
+		return $this->details('issue', ComicVineConnector::TYPEID_ISSUE, $id, $query);
+	}
+
+	public function personDetails( $id )
+	{
+		$query = null; //array("field_list" => ComicVineConnector::PERSON_FIELDS);
+		return $this->details('person', ComicVineConnector::TYPEID_PERSON, $id, $query);
 	}
 
 
@@ -269,7 +232,8 @@ class ComicVineConnector extends JSON_EndpointConnector
 			}
 			else
 			{
-				Logger::logError( $json['status_code'] . ': ' . $json['error'], get_class($this), basename($this->sourceDir));
+				Logger::logError( 'Error ' . $json['status_code'] . ': ' . $json['error']
+					. 'with URL: ' . $this->cleanURLForLog($url), get_short_class($this), $this->endpoint());
 				return $json['status_code'] . ': ' . $json['error'];
 			}
 		}

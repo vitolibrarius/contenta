@@ -3,7 +3,6 @@
 use \Session as Session;
 use \View as View;
 use \Config as Config;
-use \ReflectionClass as ReflectionClass;
 
 /**
  * This is the "base controller class". All other "real" controllers extend this class.
@@ -20,8 +19,7 @@ class Controller
 		Session::init();
 
 		// create a view object (that does nothing, but provides the view render() method)
-		$reflect = new ReflectionClass($this);
-		$this->view = new View($reflect->getShortName());
+		$this->view = new View(get_short_class($this));
 	}
 
 	public static function Named($name)

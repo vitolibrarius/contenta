@@ -144,24 +144,12 @@ class Config
 			}
 
 			$this->configuration = parse_ini_file ( $this->filename, true );
-			if ( $this->validateConfiguration() == false ) {
-				throw new ConfigFileNotValidException( "Errors validating configuration '" . $this->filename . "'");
-			}
 		}
 	}
 
-	private function validateConfiguration()
+	public function dumpConfig()
 	{
-		if ( is_array($this->configuration) == false || count($this->configuration) == 0 ) {
-			throw new ConfigFileEmptyException("Configuration appears to be empty");
-		}
-
-		$repo_base_path = $this->repositoryDirectory();
-		$media_path = $this->mediaDirectory();
-		$cache_path = $this->cacheDirectory();
-		$processing_path = $this->processingDirectory();
-
-		return true;
+		printf( var_export( $this->configuration, true ));
 	}
 
 	/**

@@ -1,5 +1,24 @@
 #/bin/sh
 
+if [ ! -d config ]; then
+	if [ -d application ]; then
+		cd application
+	else
+		echo "Unable to identify applicaiton/config directory"
+		exit 1
+	fi
+fi
+
+
+(
+echo "<?php"
+echo ""
+echo "/**"
+echo " * this is a generated file listing all major classes.  It's primary use is for testing."
+echo " *  " $0
+echo " */"
+echo ""
+
 find libs -name \*.php |
 	awk 'BEGIN {FS="/"} \
 		{ LEN=length($NF) - 4;\
@@ -31,3 +50,5 @@ find model -name \*.php |
 			else \
 				printf "use %s\\%s as %s;\n", $2, NAME, NAME; \
 		}' | sort
+
+) > config/FullImport.php

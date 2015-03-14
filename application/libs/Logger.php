@@ -45,7 +45,7 @@ abstract class Logger implements LoggerInterface {
 			catch (Exception $e) {
 				Logger::$catastrophicFail = true;
 				Logger::$instance = new loggers\PrintLogger();
-				Logger::$instance->error( get_class($e) . " thrown within the Log Constructor. Message: " . $e->getMessage() . " on line " . $e->getLine() );
+				Logger::$instance->logException( $e );
 				Logger::$instance->error( "Failed to construct logger for '" . Config::Get("Logging/type") . "'" );
 			}
 		}
