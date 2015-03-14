@@ -1,3 +1,36 @@
+Version 0.1.7:
+* e89c913 -  (HEAD, master) Added model for Story Arcs and added a bunch of join tables. (Fri Mar 13 22:50:03 2015 -0600) <Vito Librarius>
+* 43e4259 -  Moved the endpoints/*Connectors to connectors/*Connectors (Fri Mar 13 22:48:23 2015 -0600) <Vito Librarius>
+* 793ff4a -  (origin/master, origin/HEAD) Changed the directory hash from 255 (? wtf) to 256 - so 'fe' to 'ff' (Thu Mar 12 08:19:12 2015 -0600) <Vito Librarius>
+* f2ccc01 -  Temporary disabled story_arc until I model it (Wed Mar 11 21:52:00 2015 -0600) <Vito Librarius>
+* 230e15f -  Added classes and support for Series (or Volumes as ComicVine calls them) (Wed Mar 11 21:44:54 2015 -0600) <Vito Librarius>
+* ce9fcf1 -  Changed the order for the backtrace to show the most recent method at the top (Wed Mar 11 20:59:36 2015 -0600) <Vito Librarius>
+* 3076da8 -  removed icon names and path variables from data model (Tue Mar 10 20:53:36 2015 -0600) <Vito Librarius>
+* 86f0690 -  added link in the page header to the index page of the current controller (Tue Mar 10 18:21:35 2015 -0600) <Vito Librarius>
+* 52aeccc -  Missed a file (Tue Mar 10 18:13:57 2015 -0600) <Vito Librarius>
+* 20e6e47 -  Updated character pages to use new Card display. (Tue Mar 10 18:03:34 2015 -0600) <Vito Librarius>
+* 7c83828 -  Added backtrace to custom error handler (Tue Mar 10 16:00:25 2015 -0600) <Vito Librarius>
+* da1eb8c -  html\Card UI component. (Mon Mar 9 20:05:27 2015 -0600) <Vito Librarius>
+* e634b92 -  trying to simplify the media content directory usage.  In this case simplifying the Icon and Thumbnail image storage.  Surprise issue is lack of png support in the default PHP install on Yosemite. (Mon Mar 9 20:01:38 2015 -0600) <Vito Librarius>
+* 52e5cbc -  generalized content resource path methods (Mon Mar 9 19:49:25 2015 -0600) <Vito Librarius>
+* 8028d6f -  import publisher in background and create stub record as needed for UI (Sun Mar 8 12:50:40 2015 -0600) <Vito Librarius>
+* e84b9cc -  Directory hash experiments (Sun Mar 8 12:48:40 2015 -0600) <Vito Librarius>
+* 4ffdd52 -  Added character table and working on comic vine import and daemon (background) processing (Sat Mar 7 23:49:43 2015 -0700) <Vito Librarius>
+* 1c8f244 -  Minor fixes for CV connector (Wed Mar 4 21:22:53 2015 -0700) <Vito Librarius>
+* 9708368 -  Added Upload form for new media.  Successful uploads are handed off to the UploadImporter which currently simply creates the working directory and initial metadata.  Eventually it can be handed off to a background process for full processing. (Wed Mar 4 21:21:26 2015 -0700) <Vito Librarius>
+* 5f16c15 -  created importer pattern as Processor.  the idea being Processors save their state in a working directory and can resume processing later. (Wed Mar 4 21:08:07 2015 -0700) <Vito Librarius>
+* 5f39c94 -  small changes (Wed Mar 4 21:04:46 2015 -0700) <Vito Librarius>
+* f5d2d79 -  Added filename parser and file wrapper classes (Mon Mar 2 17:44:29 2015 -0700) <Vito Librarius>
+* 9a039c1 -  I'm such-a liar (Sun Feb 22 10:07:12 2015 -1000) <Vito Librarius>
+* 3ca28bd -  final fix for this remote status display (Sun Feb 22 10:05:28 2015 -1000) <Vito Librarius>
+* a9db9a8 -  always a pain to debug something that is using git.  Change, commit test, repeat (Sun Feb 22 10:03:08 2015 -1000) <Vito Librarius>
+* 0481837 -  trim the output (Sun Feb 22 10:00:59 2015 -1000) <Vito Librarius>
+* a136f8f -  Check for local status before checking remote (Sun Feb 22 10:00:06 2015 -1000) <Vito Librarius>
+* 2a63344 -  purge endpoint debugging files after 24 hours (Sun Feb 22 09:59:36 2015 -1000) <Vito Librarius>
+* dc20e45 -  initial import of publisher and refresh were using different images (Sun Feb 22 09:25:24 2015 -1000) <Vito Librarius>
+* 66c49cc -  Additional remote git status logic. (Sun Feb 22 09:19:51 2015 -1000) <Vito Librarius>
+* 67f7f8c -  small defect in dev where patches are applied, we still need to bump the version (Sun Feb 22 09:10:45 2015 -1000) <Vito Librarius>
+
 Version 0.1.6:
 * e302b9a -  (HEAD, origin/master, origin/HEAD, master) Import publisher from comic vine, including some tiny icons (Sat Feb 21 17:19:49 2015 -1000) <Vito Librarius>
 * 5e35c8b -  ComicVine Connector support (Sat Feb 21 17:18:29 2015 -1000) <Vito Librarius>
