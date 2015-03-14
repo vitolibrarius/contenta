@@ -47,13 +47,6 @@ class SeriesDBO extends DataObject
 		return $yearStr;
 	}
 
-	public function shortDescription($maxLength = 100) {
-		if ( isset($this->desc) && strlen($this->desc) > $maxLength ) {
-			return substr($this->desc, 0 , $maxLength);
-		}
-		return $this->desc;
-	}
-
 	public function allPublications() {
 		$model = Model::Named('Publication');
 		return $model->allForSeries($this);
@@ -104,6 +97,28 @@ class SeriesDBO extends DataObject
 		return $model->create($this, $character);
 	}
 
+	public function story_arcs($limit = null) {
+		$story_arcs_model = Model::Named("Story_Arc");
+		$model = Model::Named("Story_Arc_Series");
+		$joins = $model->allForSeries($this);
+
+		if ( $joins != false ) {
+			return $this->model()->fetchAllJoin(
+				Story_Arc::TABLE,
+				$story_arcs_model->allColumns(),
+				Story_Arc::id, Story_Arc_Series::story_arc_id, $joins, null,
+					array(Story_Arc::name),
+				$limit
+			);
+		}
+		return array();
+	}
+
+	public function joinToStory_Arc($object) {
+		$model = Model::Named('Story_Arc_Series');
+		return $model->create($object, $this);
+	}
+
 	public function userFavorite($userId = null) {
 		$join = $this->userjoin($userId);
 		if ( $join != false ) {
@@ -115,7 +130,7 @@ class SeriesDBO extends DataObject
 	public function userJoin($userId = null) {
 		if (isset($userId)) {
 			$usermodel = Model::Named('Users');
-			$model = Model::Named('UserSeriesJoin');
+			$model = Model::Named('User_Series');
 			$user = $usermodel->objectForId($userId);
 			return $model->joinForUserAndSeries($user, $this);
 		}

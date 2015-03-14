@@ -18,8 +18,6 @@ class User_Network extends Model
 	public function tablePK() { return User_Network::id; }
 	public function sortOrder() { return array(User_Network::user_id, User_Network::network_id); }
 
-	public function dboClassName() { return 'model\\User_NetworkDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(User_Network::id, User_Network::user_id, User_Network::network_id);

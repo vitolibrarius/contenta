@@ -34,8 +34,6 @@ class Users extends Model
 	public function tablePK() { return Users::id; }
 	public function sortOrder() { return array(Users::name); }
 
-	public function dboClassName() { return 'model\\UsersDBO'; }
-
 	public function userTypes() {
 		return array( Users::StandardRole => "Standard", Users::AdministratorRole => "Administrator");
 
@@ -211,7 +209,7 @@ class Users extends Model
 		return parent::updateObject($object, $updates);
 	}
 
-	public function createObject($values) {
+	public function createObject(array $values = array()) {
 		if ( isset($values) && isset($values[Users::creation_timestamp]) == false) {
 			$values[Users::creation_timestamp] = time();
 		}

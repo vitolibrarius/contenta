@@ -18,8 +18,6 @@ class Network extends Model
 	public function tablePK() { return Network::id; }
 	public function sortOrder() { return array("desc" => array(Network::id)); }
 
-	public function dboClassName() { return 'model\\NetworkDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(Network::id, Network::ipAddress, Network::ipHash, Network::created, Network::disable);

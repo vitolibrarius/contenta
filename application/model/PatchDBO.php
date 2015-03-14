@@ -10,5 +10,9 @@ class PatchDBO extends DataObject
 	public $name;
 	public $created;
 	public $version_id;
+
+	public function displayName() {
+		return $this->name;
+	}
 }
 

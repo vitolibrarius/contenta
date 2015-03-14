@@ -42,33 +42,20 @@ class UsersDBO extends DataObject
 		return $array;
 	}
 
-	public function tags() {
-		$tag_model = Model::Named('Tag');
-		$model = Model::Named('TagJoin');
-		$joins = $model->allForObject($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				TagModel::TABLE,
-				$tag_model->allColumns(),
-				TagModel::id, TagJoinModel::tag_id, $joins, null, array(TagModel::name));
-		}
-		return false;
-	}
-
-	public function addTag($name = null) {
-		if ( isset($name) ) {
-			$model = Model::Named('TagJoin');
-			return $model->createTag($this, $name);
-		}
-		return false;
-	}
-
 	public function seriesBeingRead() {
-		$join_model = Model::Named('UserSeriesJoin');
+		$join_model = Model::Named('User_Series');
 		$joins = $join_model->allSeriesForUser($this);
 		return $joins;
 	}
+
+	public function addSeries($series = null) {
+		if ( isset($series) ) {
+			$model = Model::Named('User_Series');
+			return $model->create($this, $series);
+		}
+		return false;
+	}
+
 
 	public function mediaJoins() {
 		$join_model = Model::Named('UserMediaJoin');
@@ -87,7 +74,7 @@ class UsersDBO extends DataObject
 	public function flagMediaAsRead($media = null) {
 		if ( isset($media) ) {
 			$join_m_model = Model::Named('UserMediaJoin');
-			$join_s_model = Model::Named('UserSeriesJoin');
+			$join_s_model = Model::Named('User_Series');
 
 			$join_m_model->create($this, $media, Model::TERTIARY_TRUE, null);
 			$join_s_model->create($this, $media->publication()->series(), Model::TERTIARY_TRUE, null);
@@ -98,7 +85,7 @@ class UsersDBO extends DataObject
 	public function flagMediaAsMislabled($media = null) {
 		if ( isset($media) ) {
 			$join_m_model = Model::Named('UserMediaJoin');
-			$join_s_model = Model::Named('UserSeriesJoin');
+			$join_s_model = Model::Named('User_Series');
 
 			$join_m_model->create($this, $media, null, Model::TERTIARY_TRUE);
 			$join_s_model->create($this, $media->publication()->series(), null, Model::TERTIARY_TRUE);

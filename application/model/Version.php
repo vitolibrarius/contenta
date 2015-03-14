@@ -21,8 +21,6 @@ class Version extends Model
 	public function tablePK() { return Version::id; }
 	public function sortOrder() { return array( 'desc' => array(Version::code)); }
 
-	public function dboClassName() { return 'model\\VersionDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(

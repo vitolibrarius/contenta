@@ -19,8 +19,6 @@ class Character_Alias extends Model
 	public function tablePK() { return Character_Alias::id; }
 	public function sortOrder() { return array(Character_Alias::name); }
 
-	public function dboClassName() { return 'model\\Character_AliasDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(Character_Alias::id, Character_Alias::character_id, Character_Alias::name );

@@ -28,8 +28,6 @@ class Series extends Model
 	public function tablePK() { return Series::id; }
 	public function sortOrder() { return array(Series::name, Series::start_year); }
 
-	public function dboClassName() { return 'model\\SeriesDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(

@@ -29,8 +29,6 @@ class Character extends Model
 	public function tablePK() { return Character::id; }
 	public function sortOrder() { return array(Character::name); }
 
-	public function dboClassName() { return 'model\\CharacterDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(
