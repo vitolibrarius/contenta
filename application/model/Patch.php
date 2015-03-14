@@ -17,8 +17,6 @@ class Patch extends Model
 	public function tablePK() { return Patch::id; }
 	public function sortOrder() { return array(Patch::name); }
 
-	public function dboClassName() { return 'model\\PatchDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(
@@ -33,7 +31,7 @@ class Patch extends Model
 
 	function patchesForVersion($version)
 	{
-		return $this->fetch(Patch::TABLE, $this->allColumnNames(), array(Patch::version_id => $version->id));
+		return $this->fetchAll(Patch::TABLE, $this->allColumnNames(), array(Patch::version_id => $version->id));
 	}
 
 	function patchWithName($name)

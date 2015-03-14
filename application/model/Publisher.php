@@ -22,8 +22,6 @@ class Publisher extends Model
 	public function tablePK() { return Publisher::id; }
 	public function sortOrder() { return array(Publisher::name); }
 
-	public function dboClassName() { return "\model\PublisherDBO"; }
-
 	public function allColumnNames()
 	{
 		return array(
@@ -109,7 +107,7 @@ class Publisher extends Model
 		return ((isset($newObjId) && $newObjId != false) ? $this->objectForId($newObjId) : false);
 	}
 
-	public function createObject($values)
+	public function createObject(array $values = array())
 	{
 		return parent::createObject($values);
 	}

@@ -19,8 +19,6 @@ class Series_Alias extends Model
 	public function tablePK() { return Series_Alias::id; }
 	public function sortOrder() { return array(Series_Alias::name); }
 
-	public function dboClassName() { return 'model\\Series_AliasDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(Series_Alias::id, Series_Alias::series_id, Series_Alias::name);

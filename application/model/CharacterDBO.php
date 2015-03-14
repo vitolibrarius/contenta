@@ -5,7 +5,7 @@ namespace model;
 use \DataObject as DataObject;
 use \Model as Model;
 
-class characterDBO extends DataObject
+class CharacterDBO extends DataObject
 {
 	public $publisher_id;
 	public $name;
@@ -50,6 +50,50 @@ class characterDBO extends DataObject
 			return $alias_model->create($this, $name);
 		}
 		return false;
+	}
+
+	public function series($limit = null) {
+		$series_model = Model::Named("Series");
+		$model = Model::Named("Series_Character");
+		$joins = $model->allForCharacter($this);
+
+		if ( $joins != false ) {
+			return $this->model()->fetchAllJoin(
+				Series::TABLE,
+				$series_model->allColumns(),
+				Series::id, Series_Character::series_id, $joins, null,
+					array(Series::name),
+				$limit
+			);
+		}
+		return array();
+	}
+
+	public function joinToSeries($object) {
+		$model = Model::Named('Series_Character');
+		return $model->create($object, $this);
+	}
+
+	public function story_arcs($limit = null) {
+		$story_arcs_model = Model::Named("Story_Arc");
+		$model = Model::Named("Story_Arc_Character");
+		$joins = $model->allForCharacter($this);
+
+		if ( $joins != false ) {
+			return $this->model()->fetchAllJoin(
+				Story_Arc::TABLE,
+				$story_arcs_model->allColumns(),
+				Story_Arc::id, Story_Arc_Character::story_arc_id, $joins, null,
+					array(Story_Arc::name),
+				$limit
+			);
+		}
+		return array();
+	}
+
+	public function joinToStory_Arc($object) {
+		$model = Model::Named('Story_Arc_Character');
+		return $model->create($object, $this);
 	}
 
 	public function updatePopularity() {

@@ -10,7 +10,7 @@ use \Exception as Exception;
 use \Model as Model;
 
 use processor\EndpointImporter as EndpointImporter;
-use endpoints\ComicVineConnector as ComicVineConnector;
+use connectors\ComicVineConnector as ComicVineConnector;
 
 use model\Users as Users;
 use model\Publisher as Publisher;
@@ -84,7 +84,7 @@ class ComicVineImporter extends EndpointImporter
 		// comicvine => model attribute
 		return array( //,
 			"id" => Publisher::xid,
-			"api_detail_url" => Publisher::xurl,
+			"site_detail_url" => Publisher::xurl,
 			"deck" => "desc",
 			"name" => Publisher::name,
 			"story_arcs" => "story_arcs",
@@ -99,7 +99,7 @@ class ComicVineImporter extends EndpointImporter
 		return array( //,
 			"aliases" => "aliases",
 			"id" => Character::xid,
-			"api_detail_url" => Character::xurl,
+			"site_detail_url" => Character::xurl,
 			"deck" => Character::desc,
 			"gender" => Character::gender,
 			"name" => Character::name,
@@ -117,7 +117,7 @@ class ComicVineImporter extends EndpointImporter
 		return array( //,
 			"aliases" => "aliases",
 			"id" => Series::xid,
-			"api_detail_url" => Series::xurl,
+			"site_detail_url" => Series::xurl,
 			"deck" => Series::desc,
 			"name" => Series::name,
 			"start_year" => Series::start_year,
@@ -304,7 +304,7 @@ class ComicVineImporter extends EndpointImporter
 						foreach( $storyArcs as $arc ) {
 							if ( isset($arc['id']) ) {
 								// story arcs do not automatically get all details
-								$this->importStoryArcValues($arc['name'], $arc['id'], $arc['api_detail_url']);
+								$this->importStoryArcValues($arc['name'], $arc['id'], $arc['site_detail_url']);
 							}
 						}
 					}
@@ -358,7 +358,7 @@ class ComicVineImporter extends EndpointImporter
 						foreach( $storyArcs as $arc ) {
 							if ( isset($arc['id']) ) {
 								// story arcs do not automatically get all details
-								$this->importStoryArcValues($arc['name'], $arc['id'], $arc['api_detail_url']);
+								$this->importStoryArcValues($arc['name'], $arc['id'], $arc['site_detail_url']);
 							}
 						}
 					}
@@ -416,7 +416,7 @@ class ComicVineImporter extends EndpointImporter
 							if ( isset($character['id']) ) {
 								// story arcs do not automatically get all details
 								$characterName = (isset($character['name']) ? $character['name'] : "Unknown");
-								$characterURL = (isset($character['api_detail_url']) ? $character['api_detail_url'] : null);
+								$characterURL = (isset($character['site_detail_url']) ? $character['site_detail_url'] : null);
 								$this->importCharacterValues($characterName, $character['id'], $characterURL);
 							}
 						}
@@ -429,7 +429,7 @@ class ComicVineImporter extends EndpointImporter
 								// story arcs do not automatically get all details
 								$issueName = (isset($issue['name']) ? $issue['name'] : "Unknown");
 								$issueNumber = (isset($issue['issue_number']) ? $issue['issue_number'] : "0");
-								$issueURL = (isset($issue['api_detail_url']) ? $issue['api_detail_url'] : null);
+								$issueURL = (isset($issue['site_detail_url']) ? $issue['site_detail_url'] : null);
 								$this->importPublicationValues($issueName, $issueNumber, $issue['id'], $issueURL);
 							}
 						}

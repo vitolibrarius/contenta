@@ -39,7 +39,7 @@ class EndpointDBO extends DataObject
 	public function endpointConnector()
 	{
 		$type = $this->type();
-		$className = "endpoints\\" . $type->code;
+		$className = "connectors\\" . $type->code;
 		return new $className($this);
 	}
 

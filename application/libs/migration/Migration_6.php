@@ -68,7 +68,7 @@ class Migration_6 extends Migrator
 				. Series_Alias::id . " INTEGER PRIMARY KEY, "
 				. Series_Alias::series_id . " INTEGER, "
 				. Series_Alias::name . " TEXT COLLATE NOCASE, "
-				. "FOREIGN KEY (". Series_Alias::id . ") REFERENCES ". Series::TABLE . "(". Series::id . ")"
+				. "FOREIGN KEY (". Series_Alias::series_id . ") REFERENCES ". Series::TABLE . "(". Series::id . ")"
 				. ")";
 		$this->sqlite_execute( Series_Alias::TABLE, $sql, "Create table " . Series_Alias::TABLE );
 
@@ -117,6 +117,7 @@ class Migration_6 extends Migrator
 			. "FOREIGN KEY (". Series_Character::series_id .") REFERENCES " . Series::TABLE . "(id), "
 			. "FOREIGN KEY (". Series_Character::character_id .") REFERENCES " . Character::TABLE . "(id) "
 			. ")";
+		$this->sqlite_execute( Series_Character::TABLE, $sql, "Create table " . Series_Character::TABLE );
 
 		/** USET_SERIES */
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . User_Series::TABLE . " ( "

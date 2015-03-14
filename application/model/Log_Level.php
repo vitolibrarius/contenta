@@ -16,8 +16,6 @@ class Log_Level extends Model
 	public function tablePK() { return Log_Level::id; }
 	public function sortOrder() { return array("desc" => array(Log_Level::code)); }
 
-	public function dboClassName() { return 'model\\Log_LevelDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(Log_Level::id, Log_Level::code, Log_Level::name);

@@ -24,8 +24,6 @@ class Log extends Model
 	public function tablePK() { return Log::id; }
 	public function sortOrder() { return array("desc" => array(Log::id)); }
 
-	public function dboClassName() { return 'model\\LogDBO'; }
-
 	public function allColumnNames()
 	{
 		return array(
