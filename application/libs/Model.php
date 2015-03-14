@@ -3,6 +3,7 @@
 use \Database as Database;
 use \Localized as Localized;
 use \Logger as Logger;
+use \DataObject as DataObject;
 
 class ValidationException extends Exception
 {
@@ -71,15 +72,13 @@ abstract class Model
 	abstract public function sortOrder();
 	abstract public function allColumnNames();
 
-	abstract public function dboClassName();
-
 	public function allColumns() {
 		return implode(",", $this->allColumnNames() );
 	}
 
 	public function refreshObject($object)
 	{
-		$dboClassName = 'model\\' . ucwords($object->tableName()) . 'DBO';
+		$dboClassName = DataObject::NameForModel($this);
 		if ( $object != false && is_a($object, $dboClassName) ) {
 			return $this->objectForId($object->{$this->tablePK()});
 		}
@@ -111,7 +110,7 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = $this->dboClassName();
+				$dboClassName = DataObject::NameForModel($this);
 				try {
 					if (class_exists($dboClassName)) {
 						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
@@ -208,9 +207,9 @@ abstract class Model
 		return false;
 	}
 
-	public function createObject($values) {
+	public function createObject(array $values = array()) {
 		$tableName = $this->tableName();
-		if ( isset($values) ) {
+		if ( count($values) > 0 ) {
 			$allColumns = $this->allColumnNames();
 			if ( is_array($allColumns) && in_array('created', $allColumns)) {
 				$values['created'] = time();
@@ -235,6 +234,9 @@ abstract class Model
 			}
 			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
 			return $validation;
+		}
+		else {
+			Logger::logError( "Failed to create record for empty values", __METHOD__, $this->tableName() );
 		}
 
 		return false;
@@ -387,7 +389,7 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = $this->dboClassName();
+				$dboClassName = DataObject::NameForModel($this);
 				try {
 					if (class_exists($dboClassName)) {
 						return $statement->fetchObject($dboClassName);
@@ -424,7 +426,7 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute()) {
-				$dboClassName = $this->dboClassName();
+				$dboClassName = DataObject::NameForModel($this);
 				try {
 					if (class_exists($dboClassName)) {
 						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
@@ -470,7 +472,7 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = $this->dboClassName();
+				$dboClassName = DataObject::NameForModel($this);
 				try {
 					if (class_exists($dboClassName)) {
 						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
@@ -522,7 +524,7 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = $this->dboClassName();
+				$dboClassName = DataObject::NameForModel($this);
 				try {
 					if (class_exists($dboClassName)) {
 						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
@@ -572,7 +574,7 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = $this->dboClassName();
+				$dboClassName = DataObject::NameForTable($table);
 				try {
 					if (class_exists($dboClassName)) {
 						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
@@ -743,7 +745,7 @@ abstract class Model
 
 			$statement = $this->db->prepare($sql);
 			if ($statement && $statement->execute($params)) {
-				$dboClassName = $this->dboClassName();
+				$dboClassName = DataObject::NameForModel($this);
 				try {
 					if (class_exists($dboClassName)) {
 						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);

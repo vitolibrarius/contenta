@@ -11,7 +11,7 @@ use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
 
-use endpoints\ComicVineConnector as ComicVineConnector;
+use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
 
 use controller\Admin as Admin;

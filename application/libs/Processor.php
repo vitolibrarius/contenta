@@ -59,8 +59,7 @@ abstract class Processor
 
 		$this->purgeOnExit = false;
 		$this->guid = $guid;
-		$reflect = new ReflectionClass($this);
-		$this->type = $reflect->getShortName();
+		$this->type = get_short_class($this);
 
 		$root = Config::GetProcessing();
 		$processingRoot = appendPath($root, $this->type );

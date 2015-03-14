@@ -1,7 +1,7 @@
 <?php
 
 
-namespace endpoints;
+namespace connectors;
 
 use \RecursiveIteratorIterator as RecursiveIteratorIterator;
 use \RecursiveDirectoryIterator as RecursiveDirectoryIterator;
@@ -47,9 +47,8 @@ abstract class EndpointConnector
 
 	public function debugPath() {
 		if ( isset($this->debugPath) == false ) {
-			$reflect = new \ReflectionClass($this);
 			$root = Config::GetProcessing();
-			$this->debugPath = appendPath($root, $reflect->getShortName(), $this->endpoint->id );
+			$this->debugPath = appendPath($root, get_short_class($this), $this->endpoint->id );
 			makeRequiredDirectory($this->debugPath, 'endpoint debug subdirectory for ' . get_class($this));
 
 			// purge any old files greater then a day
@@ -163,7 +162,8 @@ abstract class EndpointConnector
 
 				$data = curl_exec($ch);
 				if ( $data == false ) {
-					\Logger::logError( 'Error (' . curl_error($ch) . ') with Endpoint: ' . $this->cleanURLForLog($url), get_class($this), $url);
+					\Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
+						get_class($this), $this->endpoint->displayName());
 				}
 				curl_close($ch);
 				Cache::Store( $cacheKey, $cookie );
@@ -173,7 +173,8 @@ abstract class EndpointConnector
 				var_dump($http_response_header);
 			}
 			else {
-				\Logger::logError( 'Unable to process compressed url: ' . $this->cleanURLForLog($url), get_class($this), $this->endpoint->displayName());
+				\Logger::logError( 'Unable to process compressed url: ' . $this->cleanURLForLog($url),
+					get_class($this), $this->endpoint->displayName());
 			}
 
 			if ( $data != false ) {
