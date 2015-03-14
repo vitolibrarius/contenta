@@ -46,6 +46,7 @@ class Upgrade extends Controller
 		else if (Session::get('user_logged_in') == false) {
 			// not logged in, so show login panel
 			$this->view->loginActionPath = "/Upgrade/login";
+			$this->view->model = Model::Named("Users");
 			$this->view->render('/login/index');
 		}
 		else if ( Session::get('user_account_type') != Users::AdministratorRole ) {
@@ -74,6 +75,7 @@ class Upgrade extends Controller
 		else if (Session::get('user_logged_in') == false) {
 			// not logged in, so show login panel
 			$this->view->loginActionPath = "/Upgrade/login";
+			$this->view->model = Model::Named("Users");
 			$this->view->render('/login/index');
 		}
 		else if ( Session::get('user_account_type') != Users::AdministratorRole ) {
@@ -100,6 +102,7 @@ class Upgrade extends Controller
 		else if (Session::get('user_logged_in') == false) {
 			// not logged in, so show login panel
 			$this->view->loginActionPath = "/Upgrade/login";
+			$this->view->model = Model::Named("Users");
 			$this->view->render('/login/index');
 		}
 		else if ( Session::get('user_account_type') != Users::AdministratorRole ) {
@@ -122,6 +125,7 @@ class Upgrade extends Controller
 		else if (Session::get('user_logged_in') == false) {
 			// not logged in, so show login panel
 			$this->view->loginActionPath = "/Upgrade/login";
+			$this->view->model = Model::Named("Users");
 			$this->view->render('/login/index');
 		}
 		else if ( Session::get('user_account_type') != Users::AdministratorRole ) {
