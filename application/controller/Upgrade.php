@@ -7,8 +7,11 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Session as Session;
 use \Logger as Logger;
+use \Auth as Auth;
+
 use \utilities\ShellCommand as ShellCommand;
 use \utilities\Git as Git;
+
 use model\Users as Users;
 use processor\Migration as Migration;
 
