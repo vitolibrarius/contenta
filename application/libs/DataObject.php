@@ -50,7 +50,7 @@ class DataObject
 	public function shortDescription($maxLength = 100) {
 		$full = $this->displayDescription();
 		if ( is_string($full) && strlen($full) > $maxLength ) {
-			return substr($full, 0 , $maxLength);
+			return substr($full, 0 , $maxLength) . '...';
 		}
 		return $full;
 	}

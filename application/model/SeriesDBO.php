@@ -23,7 +23,7 @@ class SeriesDBO extends DataObject
 	}
 
 	public function displayDescription() {
-		return $this->shortDescription();
+		return $this->desc;
 	}
 
 	public function publisher() {

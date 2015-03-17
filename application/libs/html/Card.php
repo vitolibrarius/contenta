@@ -171,9 +171,9 @@ class Card
 		$card .= '</div><div class="clear"></div>';
 
 		$card .= '<figcaption class="caption"><a href="' . $this->selectPath() . '"><em>';
-		$card .= ((isset($record) && is_null($record) == false) ? $record->displayName() : "Unknwown");
+		$card .= ((isset($record) && is_null($record) == false) ? $record->displayName() : "Unknown");
 		$card .= '</em></a><p>';
-		$card .= ((isset($record) && is_null($record) == false) ? $record->displayDescription() : "Short Description");
+		$card .= ((isset($record) && is_null($record) == false) ? $record->shortDescription() : "Short Description");
 		$card .= '</p></figcaption>';
 		$card .= '</figure>';
 
