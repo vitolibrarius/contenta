@@ -99,6 +99,22 @@ class Series_Character extends Model
 		}
 		return $success;
 	}
+
+	public function deleteAllForCharacter($obj)
+	{
+		$success = true;
+		if ( $obj != false )
+		{
+			$array = $this->allForCharacter($obj);
+			foreach ($array as $key => $value) {
+				if ($this->deleteObject($value) == false) {
+					$success = false;
+					break;
+				}
+			}
+		}
+		return $success;
+	}
 }
 
 ?>

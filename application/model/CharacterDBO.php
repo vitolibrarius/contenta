@@ -96,6 +96,28 @@ class CharacterDBO extends DataObject
 		return $model->create($object, $this);
 	}
 
+	public function publications($limit = null) {
+		$publications_model = Model::Named("Publication");
+		$model = Model::Named("Publication_Character");
+		$joins = $model->allForCharacter($this);
+
+		if ( $joins != false ) {
+			return $this->model()->fetchAllJoin(
+				Publication::TABLE,
+				$publications_model->allColumns(),
+				Publication::id, Publication_Character::publication_id, $joins, null,
+					array(Publication::name),
+				$limit
+			);
+		}
+		return array();
+	}
+
+	public function joinToPublication($object) {
+		$model = Model::Named('Publication_Character');
+		return $model->create($object, $this);
+	}
+
 	public function updatePopularity() {
 		return Model::Named('Character')->updatePopularity($this);
 	}

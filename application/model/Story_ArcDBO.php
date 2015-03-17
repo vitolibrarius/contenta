@@ -80,5 +80,27 @@ class Story_ArcDBO extends DataObject
 		$model = Model::Named('Story_Arc_Series');
 		return $model->create($this, $series);
 	}
+
+	public function publications($limit = null) {
+		$publication_model = Model::Named("Publication");
+		$model = Model::Named("Story_Arc_Publication");
+		$joins = $model->allForStory_Arc($this);
+
+		if ( $joins != false ) {
+			return $this->model()->fetchAllJoin(
+				Publication::TABLE,
+				$publication_model->allColumns(),
+				Publication::id, Story_Arc_Publication::publication_id, $joins, null,
+					array(Publication::name),
+				$limit
+			);
+		}
+		return array();
+	}
+
+	public function joinToPublication($publication) {
+		$model = Model::Named('Story_Arc_Publication');
+		return $model->create($this, $publication);
+	}
 }
 

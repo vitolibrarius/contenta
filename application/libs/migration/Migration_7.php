@@ -66,6 +66,10 @@ class Migration_7 extends Migrator
 			. ")";
 		$this->sqlite_execute( Story_Arc_Character::TABLE, $sql, "Create table " . Story_Arc_Character::TABLE );
 
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS ' . Story_Arc_Character::TABLE . '_index on ' . Story_Arc_Character::TABLE
+			. '(' . Story_Arc_Character::story_arc_id . ', ' . Story_Arc_Character::character_id . ')';
+		$this->sqlite_execute( Story_Arc_Character::TABLE, $sql, "Create unique index(story_arc_id, character_id) on " . Story_Arc_Character::TABLE );
+
 		/** STORY_ARC_SERIES */
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . Story_Arc_Series::TABLE . " ( "
 			. Story_Arc_Series::id . " INTEGER PRIMARY KEY, "
@@ -76,6 +80,9 @@ class Migration_7 extends Migrator
 			. ")";
 		$this->sqlite_execute( Story_Arc_Series::TABLE, $sql, "Create table " . Story_Arc_Series::TABLE );
 
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS ' . Story_Arc_Series::TABLE . '_index on ' . Story_Arc_Series::TABLE
+			. '(' . Story_Arc_Series::story_arc_id . ', ' . Story_Arc_Series::series_id . ')';
+		$this->sqlite_execute( Story_Arc_Series::TABLE, $sql, "Create unique index(story_arc_id, series_id) on " . Story_Arc_Series::TABLE );
 	}
 
 	public function sqlite_postUpgrade()

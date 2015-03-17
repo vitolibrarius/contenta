@@ -182,6 +182,11 @@ abstract class Model
 			if ( is_array($allColumns) && in_array('updated', $allColumns)) {
 				$values['updated'] = time();
 			}
+
+			if ( isset($values['desc']) ) {
+				$values['desc'] = strip_tags($values['desc']);
+			}
+
 			$qual = array( $model->tablePK() => $object->pkValue() );
 			$validation = $this->validateForSave($object, $values);
 			if ( count($validation) == 0 ) {
@@ -213,6 +218,10 @@ abstract class Model
 			$allColumns = $this->allColumnNames();
 			if ( is_array($allColumns) && in_array('created', $allColumns)) {
 				$values['created'] = time();
+			}
+
+			if ( isset($values['desc']) ) {
+				$values['desc'] = strip_tags($values['desc']);
 			}
 
 			$validation = $this->validateForSave(null, $values);
@@ -312,11 +321,12 @@ abstract class Model
 		return $sql;
 	}
 
-	public function parameters($params = array(), $arguments = null, $prefix = '', $valuePrefix = '', $valueSuffix = '')
+	public function parameters(array $params = array(), array $arguments = null, $prefix = '', $valuePrefix = '', $valueSuffix = '')
 	{
 		if ( isset($arguments) && is_array($arguments)) {
 			foreach ($arguments as $key => $value) {
-				$params[':' . $prefix . sanitize($key, true, true)] = $valuePrefix . $value . $valueSuffix;
+				$idx = ':' . $prefix . sanitize($key, true, true);
+ 				$params[ $idx ] = $valuePrefix . $value . $valueSuffix;
 			}
 		}
 		return $params;
@@ -383,7 +393,7 @@ abstract class Model
 
 			$sql = "SELECT " . $columns . " FROM " . $table;
 			if ( isset($qualifiers) ) {
-				$params = $this->parameters($params, $qualifiers);
+				$params = $this->parameters($params, $qualifiers, null, null, null);
 				$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers);
 			}
 

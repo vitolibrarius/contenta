@@ -16,7 +16,27 @@
 	require SYSTEM_PATH .'application/libs/Config.php';
 	require SYSTEM_PATH .'application/libs/Cache.php';
 
-	require SYSTEM_PATH .'application/config/FullImport.php';
+use model\Character as Character;
+use model\Character_Alias as Character_Alias;
+use model\Endpoint as Endpoint;
+use model\Endpoint_Type as Endpoint_Type;
+use model\Log as Log;
+use model\Log_Level as Log_Level;
+use model\Network as Network;
+use model\Patch as Patch;
+use model\Publication as Publication;
+use model\Publication_Character as Publication_Character;
+use model\Publisher as Publisher;
+use model\Series as Series;
+use model\Series_Alias as Series_Alias;
+use model\Series_Character as Series_Character;
+use model\Story_Arc as Story_Arc;
+use model\Story_Arc_Character as Story_Arc_Character;
+use model\Story_Arc_Series as Story_Arc_Series;
+use model\User_Network as User_Network;
+use model\User_Series as User_Series;
+use model\Users as Users;
+use model\Version as Version;
 
 	function my_echo($string ="") {
 		echo $string . PHP_EOL;
@@ -150,7 +170,11 @@ my_echo( "---------- Publisher ");
 $publisher_model = Model::Named("Publisher");
 $publisher_data = array(
 	array(
-		model\Publisher::name => "DC Comics"
+		model\Publisher::name => "DC Comics",
+		'xurl' => "http:\/\/www.comicvine.com\/",
+		'xsource' => Endpoint_Type::ComicVine,
+		'xid' => 433786,
+		'xupdated' => time()
 	),
 	array(
 		model\Publisher::name => "Archie Comics"
@@ -169,7 +193,11 @@ $Character_data = array(
 		model\Character::realname => "Batman",
 		model\Character::desc => "The dark knight",
 		model\Character::gender => "Male",
-		model\Character::publisher_id => $publishers[0]->id
+		model\Character::publisher_id => $publishers[0]->id,
+		'xurl' => "http:\/\/www.comicvine.com\/",
+		'xsource' => Endpoint_Type::ComicVine,
+		'xid' => 433786,
+		'xupdated' => time()
 	),
 	array(
 		model\Character::name => "Robin",
@@ -202,7 +230,11 @@ $Series_data = array(
 		model\Series::name => "Batman",
 		model\Series::start_year => 2012,
 		model\Series::desc => "The dark knight comic series",
-		model\Series::publisher_id => $publishers[0]->id
+		model\Series::publisher_id => $publishers[0]->id,
+		'xurl' => "http:\/\/www.comicvine.com\/",
+		'xsource' => Endpoint_Type::ComicVine,
+		'xid' => 433786,
+		'xupdated' => time()
 	),
 	array(
 		model\Series::name => "Spiderman",
@@ -244,7 +276,11 @@ $Story_Arc_data = array(
 	array(
 		model\Story_Arc::name => "Crisis",
 		model\Story_Arc::desc => "It's a Crisis Story_Arc",
-		model\Story_Arc::publisher_id => $publishers[0]->id
+		model\Story_Arc::publisher_id => $publishers[0]->id,
+		'xurl' => "http:\/\/www.comicvine.com\/",
+		'xsource' => Endpoint_Type::ComicVine,
+		'xid' => 433786,
+		'xupdated' => time()
 	),
 	array(
 		model\Story_Arc::name => "Of Gods and Men",
@@ -276,6 +312,68 @@ reportData($crisis->characters(),  array("name", "realname", "desc", "gender", "
 
 my_echo( "Story Arcs attached to " . $nightwing );
 reportData($nightwing->story_arcs(),  array("name", "desc", "publisher", "characters") );
+
+
+my_echo( "---------- Publications ");
+$Publication_model = Model::Named("Publication");
+/*
+	const id =			'id';
+	const series_id =	'series_id';
+	const name =		'name';
+	const desc =		'desc';
+	const pub_date =	'pub_date';
+	const created =		'created';
+	const issue_num =	'issue_num';
+	const xurl =		'xurl';
+	const xsource =		'xsource';
+	const xid =			;
+	const xupdated =	'xupdated';
+*/
+$Publication_data = array(
+	array(
+		model\Publication::name => "The Big Burn: Sparks",
+		model\Publication::desc => "<p style=\"\"><em>As Two-Face continues his rampage through Gotham City, more light is shed on his past. Who is Carrie Kelley and how can her mysterious connection to Harvey Dent help Batman?<\/em><\/p>",
+		model\Publication::issue_num => 25,
+		model\Publication::pub_date => strtotime('2014-01-01'),
+		model\Publication::series_id => $tdk->id,
+		'xurl' => "http:\/\/www.comicvine.com\/",
+		'xsource' => Endpoint_Type::ComicVine,
+		'xid' => 433786,
+		'xupdated' => time()
+	),
+	array(
+		model\Publication::name => "Bad Blood",
+		model\Publication::desc => "Long description",
+		model\Publication::issue_num => 2,
+		model\Publication::pub_date => strtotime('2014-01-01'),
+		model\Publication::series_id => $nightwing->id
+	),
+	array(
+		model\Publication::name => "Knightmoves",
+		model\Publication::desc => "<p style=\"\"><em>As Knightmoves-Knightmoves Dent help Batman?<\/em><\/p>",
+		model\Publication::issue_num => 22,
+		model\Publication::pub_date => strtotime('2014-01-01'),
+		model\Publication::series_id => $tdk->id
+	)
+);
+$Publications = loadData( $Publication_model, $Publication_data, array("name", "desc", "issue_num", "series") );
+
+$burn = $Publications[0];
+$burn->joinToCharacter($batman);
+$burn->joinToCharacter($robin);
+
+$kmoves = $Publications[2];
+$kmoves->joinToCharacter($batman);
+$robin->joinToPublication($kmoves);
+
+my_echo( "Characters attached to " . $burn );
+reportData($burn->characters(),  array("name", "realname", "desc", "gender", "Publications") );
+
+$crisis->joinToPublication($burn);
+$kmoves->joinToStory_Arc($crisis);
+
+my_echo( "Story Arcs attached to " . $kmoves );
+reportData($kmoves->story_arcs(),  array("name", "desc", "publisher", "publications") );
 
 my_echo( );
 my_echo( );
