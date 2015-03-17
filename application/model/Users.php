@@ -285,7 +285,7 @@ class Users extends Model
 		return false;
 	}
 
-	public function validateForSave($object = null, array $values)
+	public function validateForSave($object = null, array &$values = array())
 	{
 		$validationErrors = parent::validateForSave($object, $values);
 

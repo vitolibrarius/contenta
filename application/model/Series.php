@@ -37,11 +37,6 @@ class Series extends Model
 		);
 	}
 
-	public function series($id = 0)
-	{
-		return $this->fetch(Series::TABLE, $this->allColumns(), array(Series::id => $id));
-	}
-
 	public function objectForExternal($xid, $xsrc)
 	{
 		if ( isset($xid, $xsrc) )
@@ -184,7 +179,7 @@ class Series extends Model
 	{
 		if ( $seriesObj != false && $seriesObj->parent_id != null)
 		{
-			return $this->series($seriesObj->parent_id);
+			return $this->objectForId($seriesObj->parent_id);
 		}
 
 		return false;

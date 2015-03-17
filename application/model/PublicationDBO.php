@@ -58,6 +58,11 @@ class PublicationDBO extends DataObject
 		return false;
 	}
 
+	public function media() {
+		$model = Model::Named('Media');
+		return $model->allForPublication($this);
+	}
+
 	public function characters($limit = null) {
 		$character_model = Model::Named("Character");
 		$model = Model::Named("Publication_Character");

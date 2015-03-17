@@ -205,6 +205,7 @@
             "name": {
                 "label": "Name",
                 "search": "Search name",
+                "FIELD_EMPTY": "Name field was empty",
                 "FIELD_TOO_LONG": "Name field was more than 256 characters"
             },
             "realname": {
@@ -292,6 +293,12 @@
         "Series": {
             "SUCCESS_CREATE": {
                 "label": "Created new Series"
+            }
+        },
+        "media": {
+            "filename": {
+                "FIELD_EMPTY": "Filename field was empty",
+                "FIELD_TOO_LONG": "Filename field was more than 256 characters"
             }
         }
     },

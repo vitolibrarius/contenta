@@ -138,7 +138,7 @@ abstract class Model
 		return $this->fetchAllLike($this->tableName(), $this->allColumns(), $search, null, $this->sortOrder(), $limit);
 	}
 
-	public function validateForSave($object = null, array $values)
+	public function validateForSave($object = null, array &$values = array())
 	{
 		$validationErrors = array();
 

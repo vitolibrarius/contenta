@@ -109,6 +109,11 @@ class Publication extends Model
 		return $obj;
 	}
 
+	public function allForSeries(model\SeriesDBO $obj = null)
+	{
+		return $this->fetchAll(Publication::TABLE, $this->allColumns(), array(Publication::series_id => $obj->id), $this->sortOrder());
+	}
+
 	/* EditableModelInterface */
 	function validate_name($object = null, $value)
 	{

@@ -10,15 +10,6 @@ if [ ! -d config ]; then
 fi
 
 
-(
-echo "<?php"
-echo ""
-echo "/**"
-echo " * this is a generated file listing all major classes.  It's primary use is for testing."
-echo " *  " $0
-echo " */"
-echo ""
-
 find libs -name \*.php |
 	awk 'BEGIN {FS="/"} \
 		{ LEN=length($NF) - 4;\
@@ -51,4 +42,3 @@ find model -name \*.php |
 				printf "use %s\\%s as %s;\n", $2, NAME, NAME; \
 		}' | sort
 
-) > config/FullImport.php

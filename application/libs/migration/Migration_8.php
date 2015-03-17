@@ -24,6 +24,8 @@ use model\Story_Arc_Publication as Story_Arc_Publication;
 
 use model\Publication as Publication;
 use model\Publication_Character as Publication_Character;
+use model\Media_Type as Media_Type;
+use model\Media as Media;
 
 class Migration_8 extends Migrator
 {
@@ -44,6 +46,7 @@ class Migration_8 extends Migrator
 		$publisher_model = Model::Named("Publisher");
 		$storyArc_model = Model::Named("Story_Arc");
 		$publication_model = Model::Named("Publication");
+		$media_type_model = Model::Named("Media_Type");
 
 		/** PUBLICATION
 		Publication::id, Publication::name, Publication::desc, Publication::series_id, Publication::created,
@@ -94,9 +97,48 @@ class Migration_8 extends Migrator
 			. '(' . Story_Arc_Publication::story_arc_id . ', ' . Story_Arc_Publication::publication_id . ')';
 		$this->sqlite_execute( Story_Arc_Publication::TABLE, $sql, "Create unique index(story_arc_id, publication_id) on " . Story_Arc_Publication::TABLE );
 
+		/** MEDIA_TYPE */
+		$sql = 'CREATE TABLE IF NOT EXISTS ' . Media_Type::TABLE . " ( "
+			. Media_Type::id . " INTEGER PRIMARY KEY, "
+			. Media_Type::code . " TEXT, "
+			. Media_Type::name . " TEXT "
+			. ")";
+		$this->sqlite_execute( Media_Type::TABLE, $sql, "Create table " . Media_Type::TABLE );
+
+		/** MEDIA */
+		$sql = 'CREATE TABLE IF NOT EXISTS ' . Media::TABLE . " ( "
+			. Media::id . " INTEGER PRIMARY KEY, "
+			. Media::publication_id . " INTEGER, "
+			. Media::type_id . " INTEGER, "
+			. Media::created . " INTEGER, "
+			. Media::filename . " TEXT, "
+			. Media::original_filename . " TEXT, "
+			. Media::checksum . " TEXT, "
+			. Media::size . " INTEGER, "
+			. "FOREIGN KEY (". Media::publication_id .") REFERENCES " . Publication::TABLE . "(" . Publication::id . "),"
+			. "FOREIGN KEY (". Media::type_id .") REFERENCES " . Media_Type::TABLE . "(" . Media_Type::id . ")"
+			. ")";
+		$this->sqlite_execute( Media::TABLE, $sql, "Create table " . Media::TABLE );
 	}
 
 	public function sqlite_postUpgrade()
 	{
+		$media_type_model = Model::Named("Media_Type");
+		$types = array(
+			'cbz' => 'Comic Book',
+			'cbr' => 'Comic Book',
+			'epub' => 'Electronic Book',
+			'pdf' => 'Portable Document Format'
+		);
+		foreach ($types as $code => $name) {
+			if ($media_type_model->mediaTypeForCode($code) == false)
+			{
+				$newObjId = $media_type_model->createObj(Media_Type::TABLE, array(
+					Media_Type::code => $code,
+					Media_Type::name => $name
+					)
+				);
+			}
+		}
 	}
 }

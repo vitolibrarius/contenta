@@ -216,12 +216,12 @@ $Character_data = array(
 );
 $Characters = loadData( $Character_model, $Character_data, array("name", "realname", "desc", "gender", "publisher", "series") );
 
-$batman = $Characters[0];
-$robin = $Characters[1];
-$batman->addAlias("Bruce Wayne");
-$batman->addAlias("Bruce");
-$batman->addAlias("Bat-Man");
-reportData($batman->aliases(),  array( "name", "character" ));
+$batman_character = $Characters[0];
+$robin_character = $Characters[1];
+$batman_character->addAlias("Bruce Wayne");
+$batman_character->addAlias("Bruce");
+$batman_character->addAlias("Bat-Man");
+reportData($batman_character->aliases(),  array( "name", "character" ));
 
 my_echo( "---------- Series ");
 $Series_model = Model::Named("Series");
@@ -251,23 +251,23 @@ $Series_data = array(
 );
 $Series = loadData( $Series_model, $Series_data, array("name", "start_year", "desc", "publisher") );
 
-$tdk = $Series[0];
-$tdk->addAlias("The Dark Knight");
-$tdk->addAlias("TDK");
-$tdk->addAlias("Batman and Robin");
-reportData($tdk->aliases(),  array( "name", "series" ));
+$tdk_series = $Series[0];
+$tdk_series->addAlias("The Dark Knight");
+$tdk_series->addAlias("TDK");
+$tdk_series->addAlias("Batman and Robin");
+reportData($tdk_series->aliases(),  array( "name", "series" ));
 
-$tdk->joinToCharacter($batman);
-$tdk->joinToCharacter($robin);
+$tdk_series->joinToCharacter($batman_character);
+$tdk_series->joinToCharacter($robin_character);
 
-$nightwing = $Series[2];
-$nightwing->joinToCharacter($batman);
-$nightwing->joinToCharacter($robin);
+$nightwing_series = $Series[2];
+$nightwing_series->joinToCharacter($batman_character);
+$nightwing_series->joinToCharacter($robin_character);
 
-reportData($tdk->characters(),  array("name", "realname", "desc", "gender", "publisher", "series") );
+reportData($tdk_series->characters(),  array("name", "realname", "desc", "gender", "publisher", "series") );
 
-$user->addSeries($tdk);
-$user->addSeries($nightwing);
+$user->addSeries($tdk_series);
+$user->addSeries($nightwing_series);
 reportData(array($user),  array("name", "seriesBeingRead") );
 
 my_echo( "---------- Story Arcs ");
@@ -295,23 +295,23 @@ $Story_Arc_data = array(
 );
 $Story_Arcs = loadData( $Story_Arc_model, $Story_Arc_data, array("name", "desc", "publisher") );
 
-$crisis = $Story_Arcs[0];
-$crisis->joinToCharacter($batman);
-$crisis->joinToCharacter($robin);
-$tdk->joinToStory_Arc($crisis);
-$nightwing->joinToStory_Arc($crisis);
+$crisis_story_arc = $Story_Arcs[0];
+$crisis_story_arc->joinToCharacter($batman_character);
+$crisis_story_arc->joinToCharacter($robin_character);
+$tdk_series->joinToStory_Arc($crisis_story_arc);
+$nightwing_series->joinToStory_Arc($crisis_story_arc);
 
-$storm = $Story_Arcs[2];
-$storm->joinToCharacter($batman);
-$storm->joinToCharacter($robin);
-$tdk->joinToStory_Arc($storm);
-$nightwing->joinToStory_Arc($storm);
+$storm_story_arc = $Story_Arcs[2];
+$storm_story_arc->joinToCharacter($batman_character);
+$storm_story_arc->joinToCharacter($robin_character);
+$tdk_series->joinToStory_Arc($storm_story_arc);
+$nightwing_series->joinToStory_Arc($storm_story_arc);
 
-my_echo( "Characters attached to " . $crisis );
-reportData($crisis->characters(),  array("name", "realname", "desc", "gender", "story_arcs") );
+my_echo( "Characters attached to " . $crisis_story_arc );
+reportData($crisis_story_arc->characters(),  array("name", "realname", "desc", "gender", "story_arcs") );
 
-my_echo( "Story Arcs attached to " . $nightwing );
-reportData($nightwing->story_arcs(),  array("name", "desc", "publisher", "characters") );
+my_echo( "Story Arcs attached to " . $nightwing_series );
+reportData($nightwing_series->story_arcs(),  array("name", "desc", "publisher", "characters") );
 
 
 my_echo( "---------- Publications ");
@@ -335,7 +335,7 @@ $Publication_data = array(
 		model\Publication::desc => "<p style=\"\"><em>As Two-Face continues his rampage through Gotham City, more light is shed on his past. Who is Carrie Kelley and how can her mysterious connection to Harvey Dent help Batman?<\/em><\/p>",
 		model\Publication::issue_num => 25,
 		model\Publication::pub_date => strtotime('2014-01-01'),
-		model\Publication::series_id => $tdk->id,
+		model\Publication::series_id => $tdk_series->id,
 		'xurl' => "http:\/\/www.comicvine.com\/",
 		'xsource' => Endpoint_Type::ComicVine,
 		'xid' => 433786,
@@ -346,34 +346,74 @@ $Publication_data = array(
 		model\Publication::desc => "Long description",
 		model\Publication::issue_num => 2,
 		model\Publication::pub_date => strtotime('2014-01-01'),
-		model\Publication::series_id => $nightwing->id
+		model\Publication::series_id => $nightwing_series->id
 	),
 	array(
 		model\Publication::name => "Knightmoves",
 		model\Publication::desc => "<p style=\"\"><em>As Knightmoves-Knightmoves Dent help Batman?<\/em><\/p>",
 		model\Publication::issue_num => 22,
 		model\Publication::pub_date => strtotime('2014-01-01'),
-		model\Publication::series_id => $tdk->id
+		model\Publication::series_id => $tdk_series->id
 	)
 );
 $Publications = loadData( $Publication_model, $Publication_data, array("name", "desc", "issue_num", "series") );
 
-$burn = $Publications[0];
-$burn->joinToCharacter($batman);
-$burn->joinToCharacter($robin);
+$burn_publication = $Publications[0];
+$burn_publication->joinToCharacter($batman_character);
+$burn_publication->joinToCharacter($robin_character);
 
-$kmoves = $Publications[2];
-$kmoves->joinToCharacter($batman);
-$robin->joinToPublication($kmoves);
+$kmoves_publication = $Publications[2];
+$kmoves_publication->joinToCharacter($batman_character);
+$robin_character->joinToPublication($kmoves_publication);
 
-my_echo( "Characters attached to " . $burn );
-reportData($burn->characters(),  array("name", "realname", "desc", "gender", "Publications") );
+my_echo( "Characters attached to " . $burn_publication );
+reportData($burn_publication->characters(),  array("name", "realname", "desc", "gender", "Publications") );
 
-$crisis->joinToPublication($burn);
-$kmoves->joinToStory_Arc($crisis);
+$crisis_story_arc->joinToPublication($burn_publication);
+$kmoves_publication->joinToStory_Arc($crisis_story_arc);
 
-my_echo( "Story Arcs attached to " . $kmoves );
-reportData($kmoves->story_arcs(),  array("name", "desc", "publisher", "publications") );
+my_echo( "Story Arcs attached to " . $kmoves_publication );
+reportData($kmoves_publication->story_arcs(),  array("name", "desc", "publisher", "publications") );
+
+my_echo( "---------- Media ");
+/**
+				Media::created => time(),
+				Media::publication_id => $publication->id,
+				Media::type_id => $type->id,
+				Media::filename => $filename,
+				Media::original_filename => $original_file,
+				Media::checksum => $checksum,
+				Media::size =>$size
+*/
+$cbz_type = Model::Named('Media_Type')->mediaTypeForCode(model\Media_Type::CBZ);
+($cbz_type != false && $cbz_type->code == 'cbz') || dir("Could not find Media_Type::CBZ");
+
+$Media_model = Model::Named("Media");
+$Media_data = array(
+	array(
+		model\Media::type_id => $cbz_type->id,
+		model\Media::publication_id => $kmoves_publication->id,
+		model\Media::original_filename => 'vito',
+		model\Media::checksum => uuid(),
+		model\Media::size => 112233
+	),
+	array(
+		model\Media::type_id => $cbz_type->id,
+		model\Media::publication_id => $kmoves_publication->id,
+		model\Media::original_filename => 'Batman Beyond 001 (2012) v12.cbz',
+		model\Media::checksum => uuid(),
+		model\Media::size => 54321
+	),
+	array(
+		model\Media::type_id => $cbz_type->id,
+		model\Media::publication_id => $burn_publication->id,
+		model\Media::original_filename => 'Blackhawks 006 (2012) [Digital] (ZOOM-Empire).cbz',
+		model\Media::checksum => uuid(),
+		model\Media::size => 91919
+	)
+);
+$media = loadData( $Media_model, $Media_data );
+reportData($kmoves_publication->media(),  array("filename", "publication", "mediaType") );
 
 my_echo( );
 my_echo( );
