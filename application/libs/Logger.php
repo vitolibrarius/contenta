@@ -94,7 +94,12 @@ abstract class Logger implements LoggerInterface {
 			foreach ($trace as $key => $stackPoint) {
 				// I'm converting arguments to their type
 				// (prevents passwords from ever getting logged as anything other than 'string')
-				$trace[$key]['args'] = array_map('gettype', $trace[$key]['args']);
+				if ( isset($trace[$key]['args']) ) {
+					$trace[$key]['args'] = array_map('gettype', $trace[$key]['args']);
+				}
+				else {
+					$trace[$key]['args'] = array();
+				}
 			}
 
 			// build your tracelines
