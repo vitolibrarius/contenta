@@ -36,11 +36,9 @@ class Migrator
 			try {
 				$migrationClass = 'migration\\Migration_' . $number;
 				if ( in_array($migrationClass, $patches) == false ) {
-					Logger::logInfo( "Trying " . $migrationClass ,	"Migrator", "Upgrade" );
+// 					Logger::logInfo( "Trying " . $migrationClass ,	"Migrator", "Upgrade" );
 
 					$worker = new $migrationClass(Database::instance(), $scratchDirectory);
-					Logger::logInfo( "$migrationClass", "Migration", $migrationClass);
-
 					$continue = $worker->performMigration();
 					if ( $continue == true ) {
 						$version = $version_model->create($versionNum, $versionHash);
@@ -53,9 +51,6 @@ class Migrator
 							throw new MigrationFailedException("Failed to create migration record " . $migrationClass);
 						}
 					}
-				}
-				else {
-					Logger::logInfo( "Already completed " . $migrationClass ,	"Migrator", "Upgrade" );
 				}
 				$number++;
 			}
