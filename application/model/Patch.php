@@ -66,7 +66,6 @@ class Patch extends Model
 		}
 		return false;
 	}
-
 }
 
 ?>

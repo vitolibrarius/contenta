@@ -37,6 +37,9 @@ use model\User_Network as User_Network;
 use model\User_Series as User_Series;
 use model\Users as Users;
 use model\Version as Version;
+use model\Job_Type as Job_Type;
+use model\Job_Running as Job_Running;
+use model\Job as Job;
 
 	function my_echo($string ="") {
 		echo $string . PHP_EOL;
@@ -126,8 +129,9 @@ use model\Version as Version;
 				. 'Validation errors ' . var_export( $newObjId, true ). PHP_EOL);
 
 			$obj = $model->objectForId($newObjId);
-			( is_a("DataObject", $obj) == false ) ||
-				die('Wrong class from insert ' . var_export( $record, true ) . PHP_EOL . var_export( $obj, true ) . PHP_EOL);
+			( is_a($obj, DataObject::NameForModel($model)) ) ||
+				die('Insert should be "' . DataObject::NameForModel($model) . '", wrong class from insert ' . var_export( $record, true ) . PHP_EOL
+					. var_export( $obj, true ) . PHP_EOL);
 			$loaded[] = $obj;
 		}
 		reportData($loaded,  (is_null($columns) ? array_keys($data[0]) : $columns) );
@@ -141,7 +145,7 @@ Migrator::Upgrade("/tmp/TestDatabase/logs");
 
 // load the default user
 $user = Model::Named("Users")->userByName('vito');
-($user != false && $user->name == 'vito') || dir("Could not find 'vito' user");
+($user != false && $user->name == 'vito') || die("Could not find 'vito' user");
 
 my_echo( "---------- Version ");
 $versions = Model::Named('Version')->allObjects();
@@ -149,22 +153,109 @@ reportData($versions,  array( "code", "hash_code" ));
 reportData($versions[0]->patches(),  array( "displayName"));
 
 my_echo( "---------- Endpoint ");
-$endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
-($endpoint_type != false && $endpoint_type->code == 'ComicVine') || dir("Could not find Endpoint_Type::ComicVine");
+$cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
+($cv_endpoint_type != false && $cv_endpoint_type->code == 'ComicVine') || die("Could not find Endpoint_Type::ComicVine");
+
+$rss_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::RSS);
+($rss_endpoint_type != false && $rss_endpoint_type->code == 'RSS') || die("Could not find Endpoint_Type::RSS");
 
 $endpoint_model = Model::Named("Endpoint");
 $endpoint_data = array(
 	array(
 		model\Endpoint::name => "My ComicVine",
-		model\Endpoint::type_id => $endpoint_type->id,
-		model\Endpoint::base_url => $endpoint_type->api_url,
+		model\Endpoint::type_id => $cv_endpoint_type->id,
+		model\Endpoint::base_url => $cv_endpoint_type->api_url,
 		model\Endpoint::api_key => uuid(),
 		model\Endpoint::username => 'vito',
 		model\Endpoint::enabled => Model::TERTIARY_TRUE,
 		model\Endpoint::compressed => Model::TERTIARY_FALSE
+	),
+	array(
+		model\Endpoint::name => "Comicbook RSS",
+		model\Endpoint::type_id => $rss_endpoint_type->id,
+		model\Endpoint::base_url => "http://comicbook.source.com/rss?api=12345",
+		model\Endpoint::username => 'vito',
+		model\Endpoint::enabled => Model::TERTIARY_TRUE,
+		model\Endpoint::compressed => Model::TERTIARY_TRUE
 	)
+
 );
 $endpoints = loadData( $endpoint_model, $endpoint_data );
+$comicvine_endpoint = $endpoints[0];
+$rss_endpoint = $endpoints[1];
+
+my_echo( "---------- Jobs ");
+$job_types = Model::Named('Job_Type')->allObjects();
+reportData($job_types,  Model::Named('Job_Type')->allColumnNames());
+
+$cbz_job_type = Model::Named('Job_Type')->jobTypeForCode('cbz');
+($cbz_job_type != false && $cbz_job_type->code == 'cbz') || die("Could not find 'cbz' job_type");
+
+$rss_job_type = Model::Named('Job_Type')->jobTypeForCode('rss');
+($rss_job_type != false && $rss_job_type->code == 'rss') || die("Could not find 'rss' job_type");
+
+$job_model = Model::Named("Job");
+$job_data = array(
+	array(
+		model\Job::type_id => $cbz_job_type->id,
+		model\Job::minute => null,
+		model\Job::hour => null,
+		model\Job::dayOfWeek => null,
+		model\Job::parameter => '27add4363e9b138cd375b258db481b8f',
+		model\Job::next => null,
+		model\Job::one_shot => Model::TERTIARY_TRUE,
+		model\Job::enabled => Model::TERTIARY_TRUE
+	),
+	array(
+		model\Job::type_id => $rss_job_type->id,
+		model\Job::minute => "10",
+		model\Job::hour => "2,4,6,8",
+		model\Job::dayOfWeek => "*",
+		model\Job::parameter => '',
+		model\Job::endpoint_id => $rss_endpoint->id,
+		model\Job::next => null,
+		model\Job::one_shot => Model::TERTIARY_FALSE,
+		model\Job::enabled => Model::TERTIARY_TRUE
+	),
+	array(
+		model\Job::type_id => $rss_job_type->id,
+		model\Job::minute => "10",
+		model\Job::hour => "2,4,6,8",
+		model\Job::dayOfWeek => "*",
+		model\Job::parameter => '',
+		model\Job::endpoint_id => $rss_endpoint->id,
+		model\Job::next => null,
+		model\Job::one_shot => Model::TERTIARY_FALSE,
+		model\Job::enabled => Model::TERTIARY_FALSE
+	)
+);
+$jobs = loadData( $job_model, $job_data, array("jobType", "endpoint", "minute", "hour", "dayOfWeek", "parameter", "next", "one_shot", "enabled") );
+$cbz_job = $jobs[0];
+$rss_job = $jobs[2];
+
+$job_run_model = Model::Named("Job_Running");
+$job_run_data = array(
+	array(
+		model\Job_Running::job_id => $cbz_job->id,
+		model\Job_Running::job_type_id => $cbz_job_type->id,
+		model\Job_Running::trace => 'trace',
+		model\Job_Running::trace_id => rand(),
+		model\Job_Running::context => 'context',
+		model\Job_Running::context_id => rand(),
+		model\Job_Running::pid => 3456
+	),
+	array(
+		model\Job_Running::job_id => $rss_job->id,
+		model\Job_Running::job_type_id => $rss_job_type->id,
+		model\Job_Running::trace => 'trace',
+		model\Job_Running::trace_id => rand(),
+		model\Job_Running::context => 'context',
+		model\Job_Running::context_id => rand(),
+		model\Job_Running::pid => 98765
+	)
+);
+$jobs_running = loadData( $job_run_model, $job_run_data, array("job", "jobType", "trace", "trace_id", "context", "context_id", "pid") );
+die();
 
 my_echo( "---------- Publisher ");
 $publisher_model = Model::Named("Publisher");
@@ -386,7 +477,7 @@ my_echo( "---------- Media ");
 				Media::size =>$size
 */
 $cbz_type = Model::Named('Media_Type')->mediaTypeForCode(model\Media_Type::CBZ);
-($cbz_type != false && $cbz_type->code == 'cbz') || dir("Could not find Media_Type::CBZ");
+($cbz_type != false && $cbz_type->code == 'cbz') || die("Could not find Media_Type::CBZ");
 
 $Media_model = Model::Named("Media");
 $Media_data = array(
