@@ -88,9 +88,8 @@ abstract class FileWrapper
 			return false;
 		}
 
-		$cache = new Cache();
 		$key = Cache::MakeKey( $this->cacheKeyRoot(), $name );
-		return $cache->fetch( $key );
+		return Cache::Fetch( $key );
 	}
 
 	public function wrappedThumbnailNameForName($name, $width = null, $height = null) {
@@ -102,6 +101,26 @@ abstract class FileWrapper
 
 	public function wrappedThumbnailForName($name, $width = null, $height = null) {
 		return false;
+	}
+
+	public function firstImageThumbnailName() {
+		$content = $this->wrapperContents();
+		if ( is_array($content) ) {
+			foreach( $content as $item ) {
+				$originalExt = file_ext($item);
+				if ( in_array($originalExt, array('jpg','jpeg','gif','png')) == true ) {
+					return $item;
+				}
+			}
+		}
+		else if ( is_string($content) ) {
+			$originalExt = file_ext($content);
+			if ( in_array($originalExt, array('jpg','jpeg','gif','png')) == true ) {
+				return $content;
+			}
+		}
+
+		return null;
 	}
 }
 
@@ -142,9 +161,8 @@ class zipFileWrapper extends FileWrapper
 
 	public function wrapperContents()
 	{
-		$cache = new Cache();
 		$key = Cache::MakeKey( $this->cacheKeyRoot(), FileWrapper::FILELIST );
-		$filelist = $cache->fetch( $key );
+		$filelist = Cache::Fetch( $key );
 		if ( $filelist == false ) {
 			$filelist = array();
 			$zip = zip_open($this->sourcepath);
@@ -162,7 +180,7 @@ class zipFileWrapper extends FileWrapper
 					if (sort($filelist) == false) {
 						Logger::logError( 'Sort Failed ' . zipFileErrMsg($zip), $this->sourcepath );
 					}
-					$cache->store($key, $filelist);
+					Cache::Store($key, $filelist);
 				}
 			}
 			else {
@@ -194,9 +212,8 @@ class zipFileWrapper extends FileWrapper
 						if (zip_entry_open($zip, $zip_entry, "r")) {
 							$data = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
 							if ( $data != false ) {
-								$cache = new Cache();
 								$key = Cache::MakeKey( $this->cacheKeyRoot(), $name );
-								$cache->store($key, $data);
+								Cache::Store($key, $data);
 							}
 
 							zip_entry_close($zip_entry);
@@ -233,10 +250,9 @@ class zipFileWrapper extends FileWrapper
 			$height = 300;
 		}
 
-		$cache = new Cache();
 		$thmbName = $this->wrappedThumbnailNameForName($name, $width, $height);
 		$cacheThumbKey = Cache::MakeKey( $this->cacheKeyRoot(), $thmbName );
-		$thumbnail = $cache->fetch( $cacheThumbKey );
+		$thumbnail = Cache::Fetch( $cacheThumbKey );
 
 		if ( $thumbnail == false ) {
 			$data = $this->wrappedDataForName($name);
@@ -249,7 +265,7 @@ class zipFileWrapper extends FileWrapper
 					imagepng($resized, $thmbPath );
 					$thumbnail = file_get_contents($thmbPath);
 
-					$cache->store($cacheThumbKey, $thumbnail);
+					Cache::Store($cacheThumbKey, $thumbnail);
 
 					unlink($tempPath);
 					unlink($thmbPath);

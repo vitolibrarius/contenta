@@ -18,9 +18,9 @@
 
 <div class="paging">
 	<ul>
-	<li>
-		<a href="<?php echo Config::Web( '/AdminPublishers/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a>
-	</li>
+		<li><a href="<?php echo Config::Web('/AdminCharacters/index'); ?>">Characters</a></li>
+		<li><a href="<?php echo Config::Web('/AdminSeries/index'); ?>">Series</a></li>
+		<li><a href="<?php echo Config::Web( '/AdminPublishers/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a></li>
 	</ul>
 </div>
 

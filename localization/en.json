@@ -379,13 +379,23 @@
         "UPLOAD_ERR_CANT_WRITE": "Failed to write file to disk",
         "UPLOAD_ERR_EXTENSION": "File upload stopped by extension",
         "No media available": "No media available",
-        "No file selected": "No file selected"
+        "No file selected": "No file selected",
+        "Hash Exists": "Already uploaded",
+        "RepairLink": {
+            "name": "Repair Processing"
+        }
     },
     "AdminSeries": {
         "title": "Series Administration",
         "index": {
             "DeleteDescription": "This will permanently delete this Series.",
             "DeleteConfirmation": "Are you sure you want to continue?"
+        }
+    },
+    "AdminUploadRepair": {
+        "title": "Unprocessed Uploads",
+        "UploadLink": {
+            "name": "Upload"
         }
     }
 }

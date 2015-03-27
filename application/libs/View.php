@@ -241,4 +241,48 @@ class View
 	public function cancelButton() { return Localized::GlobalLabel("cancelButton"); }
 	public function deleteButton() { return Localized::GlobalLabel("deleteButton"); }
 	public function resetButton() { return Localized::GlobalLabel("resetButton"); }
+
+
+	function renderImage($defaultImagePath, $imageData, $imageDataMimeType = 'image/png')
+	{
+		ob_clean();
+		if ( isset($imageData) AND ($imageData != false)) {
+			$etag = '"'. hash(HASH_DEFAULT_ALGO, $imageData) .'"';
+
+			if ( !empty($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag) {
+				header('HTTP/1.1 304 Not Modified');
+				header('Content-Length: 0');
+				exit;
+			}
+
+			$expiry = 604800; // (60*60*24*7)
+			header('ETag: ' . $etag);
+			header('Last-Modified: '. gmdate('D, d M Y H:i:s', time()) .' GMT');
+			header('Expires:'. gmdate('D, d M Y H:i:s', time() + $expiry) .' GMT');
+			header('Content-Type: ' . $imageDataMimeType );
+			header('Cache-Control: max-age=86400');
+			header("Content-Transfer-Encoding: binary");
+			header('Pragma: public');
+			echo $imageData;
+		}
+		else if (is_file($defaultImagePath)) {
+			$etag = '"'. hash_file(HASH_DEFAULT_ALGO, $defaultImagePath) .'"';
+			if ( !empty($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag) {
+				header('HTTP/1.1 304 Not Modified');
+				header('Content-Length: 0');
+				exit;
+			}
+
+			$expiry = 604800; // (60*60*24*7)
+			header('ETag: ' . $etag);
+			header('Last-Modified: '. gmdate('D, d M Y H:i:s', time()) .' GMT');
+			header('Expires:'. gmdate('D, d M Y H:i:s', time() + $expiry) .' GMT');
+			header('Content-Type: image/' . file_ext($defaultImagePath) );
+			header("Content-Transfer-Encoding: binary");
+			header('Cache-Control: max-age=86400');
+			header('Pragma: public');
+			header('Content-Length: ' . filesize($defaultImagePath));
+			readfile($defaultImagePath);
+		}
+	}
 }

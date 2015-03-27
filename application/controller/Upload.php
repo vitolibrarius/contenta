@@ -113,12 +113,18 @@ class Upload extends Controller
 			$extension = file_ext($_FILES['mediaFile']['name']);
 			$contentHash = hash_file(HASH_DEFAULT_ALGO, $_FILES['mediaFile']['tmp_name']);
 			$importer = Processor::Named('UploadImport', $contentHash);
-			if ( $importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name'])) == true ) {
-				$_SESSION["feedback_positive"][] = 'Upload success';
-				$uploadSuccess = true;
+			if ( $importer->workingDirectoryExists() == true ) {
+				Session::addNegativeFeedback( Localized::Get("Upload", 'Hash Exists'));
 			}
 			else {
-				Session::addNegativeFeedback('Identified as ' . ' (' . $pubObj->name . ')  issue ' . $pubObj->issue);
+				if ( $importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name'])) == true ) {
+					$_SESSION["feedback_positive"][] = 'Upload success';
+					$importer->daemonizeProcess();
+					$uploadSuccess = true;
+				}
+				else {
+					Session::addNegativeFeedback('Identified as ' . ' (' . $pubObj->name . ')  issue ' . $pubObj->issue);
+				}
 			}
 		}
 		return $uploadSuccess;

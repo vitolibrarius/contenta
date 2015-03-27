@@ -13,18 +13,23 @@
 			</div>
 		</div>
 
-
 		<div class="admin_card">
 			<div class="admin_card_top">
-				<img src="<?php echo Config::Web('/public/img/admin-publications.png'); ?>">
+				<img src="<?php echo Config::Web('/public/img/admin-uploads.png'); ?>">
 			</div>
 			<div class="admin_card_item">
 				<a href="<?php echo Config::Web('/Upload/index'); ?>"><?php echo $this->label( "UploadLink", "name" ); ?></a>
 				<p><?php echo $this->label( "UploadLink", "desc" ); ?></p>
 			</div>
 			<div class="admin_card_item">
-				<a href="#"><?php echo $this->label( "RepairLink", "name" ); ?></a>
+				<a href="<?php echo Config::Web('/AdminUploadRepair/index'); ?>"><?php echo $this->label( "RepairLink", "name" ); ?></a>
 				<p><?php echo $this->label( "RepairLink", "desc" ); ?></p>
+			</div>
+		</div>
+
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="<?php echo Config::Web('/public/img/admin-publications.png'); ?>">
 			</div>
 			<div class="admin_card_item">
 				<a href="<?php echo Config::Web('/AdminPublishers/index'); ?>">Publishers</a>
