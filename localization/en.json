@@ -335,7 +335,8 @@
         "eligibility": {
             "UpgradeDescription": "This will pull the latest changes from the master repository and update your local application.",
             "UpgradeConfirmation": "Are you sure you are ready to upgrade?"
-        }
+        },
+        "PHP Version": "PHP Version"
     },
     "Error": {
         "title": "Error"

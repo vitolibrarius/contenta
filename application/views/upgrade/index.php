@@ -59,6 +59,25 @@
 			</span></td>
 		</tr>
 		<tr>
+			<th><?php echo $this->label("PHP Version"); ?></th>
+			<td>
+				<?php
+					$status = "";
+					if (PHP_VERSION_ID < 50000) {
+						$status = "problem";
+					}
+					echo "<span class='" . $status . "'>" . phpversion() . '</span><br />';
+				?>
+			</td>
+			<td><span>
+					<p>PHP versions below 5.0 may not operate correctly.  Please report broken features to
+					<a target="ContentIssues"
+						href="https://github.com/vitolibrarius/contenta/issues/new?title=PHP%20Version">
+						<?php echo Localized::GlobalLabel("AddIssueLink"); ?>
+					</a></p>
+			</span></td>
+		</tr>
+		<tr>
 			<th><?php echo $this->label("PHP error log"); ?></th>
 			<td>
 				<?php
