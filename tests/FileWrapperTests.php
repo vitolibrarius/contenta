@@ -45,7 +45,7 @@ function getImage($wrapper, $name) {
 	}
 }
 
-$options = getopt( "f:e::");
+$options = getopt( "f:c:e::");
 echo "Options " . var_export($options, true) . PHP_EOL. PHP_EOL;
 
 if (is_file($options['f']) ) {
@@ -54,12 +54,50 @@ if (is_file($options['f']) ) {
 	if ($wrapper != false) {
 		echo 'file list ' . var_export($wrapper->wrapperContents(), true) . PHP_EOL;
 
-		if ( isset($options['e']) ) {
-			getImage($wrapper, $options['e']);
-		}
-		else {
-			$list = $wrapper->wrapperContents();
-			getImage($wrapper, $list[0]);
+
+		if ( isset($options['c']) ) {
+			$cmd = $options['c'];
+			$temp = appendPath( '/tmp', $wrapper->cacheKeyRoot(), $cmd );
+			echo "Temp dir $temp" . PHP_EOL;
+			if ( is_dir($temp) ) {
+				destroy_dir($temp) || die( "unable to delete $temp" );
+			}
+			mkdir( $temp ) || die( "Unable to create $temp" );
+
+			if ( $cmd == 'unwrap' ) {
+				$success = $wrapper->unwrapToDirectory( $temp );
+				echo "Unwrap " . ($success == true ? "success" :  "fail") . PHP_EOL;
+			}
+
+			if ( $cmd == 'wrap' ) {
+				$success = $wrapper->unwrapToDirectory( $temp );
+				echo "Unwrap " . ($success == true ? "success" :  "fail") . PHP_EOL;
+				$ext = "zip";
+				if ( isset($options['e']) ) {
+					$ext = $options['e'];
+				}
+				$newfile = $wrapper->cacheKeyRoot() . "." . $ext;
+				$dest = appendPath( '/tmp', $wrapper->cacheKeyRoot(), $newfile );
+				(file_exists($dest) == false) || unlink($dest) || die( "Unable to delete old $dest");
+				$newWrapper = utilities\FileWrapper::createWrapperForSource($temp, $dest, $ext);
+				if ( $newWrapper == false ) {
+					echo "Wrap failed " . PHP_EOL;
+				}
+				else {
+					echo "new Wrap $dest " . PHP_EOL;
+				}
+
+			}
+
+			if ( $cmd == 'image' ) {
+				if ( isset($options['e']) ) {
+					getImage($wrapper, $options['e']);
+				}
+				else {
+					$list = $wrapper->wrapperContents();
+					getImage($wrapper, $list[0]);
+				}
+			}
 		}
 	}
 	else {

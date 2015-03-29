@@ -38,6 +38,19 @@ abstract class FileWrapper
 		return false;
 	}
 
+	public static function createWrapperForSource($sourcePath = null, $destinationPath = null, $extension = "zip")
+	{
+		try {
+			$fileClass = 'utilities\\' . $extension . 'FileWrapper';
+			return $fileClass::createWrapper($sourcePath, $destinationPath);
+		}
+		catch ( ClassNotFoundException $exception ) {
+			Logger::logException( $exception );
+		}
+
+		return false;
+	}
+
 	public function __construct($path)
 	{
 		$this->sourcepath = $path;
@@ -68,11 +81,13 @@ abstract class FileWrapper
 		return false;
 	}
 
-	public function wrapperContents() {
+	public function wrapperContents()
+	{
 		return basename($this->sourcepath);
 	}
 
-	public function wrapperContentCount() {
+	public function wrapperContentCount()
+	{
 		$content = $this->wrapperContents();
 		if ( is_array($content) ) {
 			return count($content);
@@ -83,7 +98,8 @@ abstract class FileWrapper
 		return 0;
 	}
 
-	public function wrappedDataForName($name) {
+	public function wrappedDataForName($name)
+	{
 		if ( isset($name) == false || strlen($name) == 0) {
 			return false;
 		}
@@ -92,18 +108,21 @@ abstract class FileWrapper
 		return Cache::Fetch( $key );
 	}
 
-	public function wrappedThumbnailNameForName($name, $width = null, $height = null) {
+	public function wrappedThumbnailNameForName($name, $width = null, $height = null)
+	{
 		if ( isset($name) == false || strlen($name) == 0) {
 			return false;
 		}
 		return file_ext_strip($name) . '-(' . $width . 'x'. $height . ')thumbnail.png';
 	}
 
-	public function wrappedThumbnailForName($name, $width = null, $height = null) {
+	public function wrappedThumbnailForName($name, $width = null, $height = null)
+	{
 		return false;
 	}
 
-	public function firstImageThumbnailName() {
+	public function firstImageThumbnailName()
+	{
 		$content = $this->wrapperContents();
 		if ( is_array($content) ) {
 			foreach( $content as $item ) {
@@ -122,6 +141,11 @@ abstract class FileWrapper
 
 		return null;
 	}
+
+	public function unwrapToDirectory($dest = null)
+	{
+		return false;
+	}
 }
 
 class zipFileWrapper extends FileWrapper
@@ -129,6 +153,27 @@ class zipFileWrapper extends FileWrapper
 	public function __construct($path)
 	{
 		parent::__construct($path);
+	}
+
+	public static function createWrapper($sourcePath = null, $destinationPath = null)
+	{
+		if ( is_null($sourcePath) || is_null($destinationPath) ) {
+			throw new Exception('Source and/or destination path is null.');
+		}
+
+		if ( file_exists($sourcePath) == false ) {
+			throw new Exception("Source does not exist $sourcePath");
+		}
+
+		if ( file_exists($destinationPath) == true ) {
+			unlink($destinationPath) || die("Source does not exist $destinationPath");
+		}
+
+		$success = Zip($sourcePath, $destinationPath);
+		if ( $success == true ) {
+			return FileWrapper::instance($destinationPath);
+		}
+		return false;
 	}
 
 	public function testWrapper()
@@ -277,6 +322,11 @@ class zipFileWrapper extends FileWrapper
 		}
 		return $thumbnail;
 	}
+
+	public function unwrapToDirectory($dest = null)
+	{
+		return false;
+	}
 }
 
 class cbzFileWrapper extends zipFileWrapper
@@ -326,6 +376,37 @@ class cbrFileWrapper extends FileWrapper
 		}
 
 		return true;
+	}
+
+	public function unwrapToDirectory($dest = null)
+	{
+		if ( $this->testWrapper() == false ) {
+			throw new Exception( "RAR file error" );
+		}
+
+		if ( is_null($dest) ) {
+			throw new Exception( "Destination path is required" );
+		}
+
+		$unrarTool = findPathForTool('unrar');
+		if ($unrarTool == false) {
+			throw new Exception('Could not find unrar tool.');
+		}
+
+		if ( file_exists( $dest ))
+		{
+			destroy_dir($dest);
+		}
+		mkdir($dest);
+
+		$cmd = $unrarTool . ' x -r "' . $this->sourcepath . '" "' . $dest . '"';
+		exec($cmd, $output, $success);
+		if ( $success != 0 ) {
+			Logger::logWarning( $cmd, 'Unrar', 'command' );
+			Logger::logWarning( 'output ' . var_export($output, true), 'Unrar', $success );
+			Logger::logError( 'RAR File corrupt', get_class($this), basename($this->sourceDir));
+		}
+		return ($success == 0);
 	}
 }
 
