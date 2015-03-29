@@ -335,6 +335,11 @@ class cbzFileWrapper extends zipFileWrapper
 	{
 		parent::__construct($path);
 	}
+
+	public static function createWrapper($sourcePath = null, $destinationPath = null)
+	{
+		return parent::createWrapper($sourcePath, $destinationPath);
+	}
 }
 
 class cbrFileWrapper extends FileWrapper
@@ -388,18 +393,13 @@ class cbrFileWrapper extends FileWrapper
 			throw new Exception( "Destination path is required" );
 		}
 
-		$unrarTool = findPathForTool('unrar');
-		if ($unrarTool == false) {
-			throw new Exception('Could not find unrar tool.');
-		}
-
 		if ( file_exists( $dest ))
 		{
 			destroy_dir($dest);
 		}
 		mkdir($dest);
 
-		$cmd = $unrarTool . ' x -r "' . $this->sourcepath . '" "' . $dest . '"';
+		$cmd = $this->UNRAR_PATH . ' x -r "' . $this->sourcepath . '" "' . $dest . '"';
 		exec($cmd, $output, $success);
 		if ( $success != 0 ) {
 			Logger::logWarning( $cmd, 'Unrar', 'command' );

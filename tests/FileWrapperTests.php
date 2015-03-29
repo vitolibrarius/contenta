@@ -45,7 +45,7 @@ function getImage($wrapper, $name) {
 	}
 }
 
-$options = getopt( "f:c:e::");
+$options = getopt( "f:c:e:");
 echo "Options " . var_export($options, true) . PHP_EOL. PHP_EOL;
 
 if (is_file($options['f']) ) {
