@@ -14,6 +14,7 @@ use \Processor as Processor;
 
 use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
+use processor\UploadImport as UploadImport;
 
 use controller\Admin as Admin;
 
@@ -35,11 +36,15 @@ class AdminUploadRepair extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$processor = Processor::Named("ImportManager", 0);
 
+			$model = Model::Named("Job_Running");
+			$model->clearFinishedProcesses();
+
 			$idx = $processor->correctChunkIndex($chunkNum);
+			$this->view->job_model = $model;
 			$this->view->active = $processor->chunk($idx);;
 			$this->view->pageCurrent = $idx;
 			$this->view->pageCount = $processor->totalChunks();
-			$this->view->render( '/upload/processing');
+			$this->view->render( '/upload/processing' );
 		}
 	}
 
@@ -62,6 +67,19 @@ class AdminUploadRepair extends Admin
 			$this->view->renderImage('public/img/default_thumbnail_publication.png', $image, $mimeType);
 		}
 	}
+
+	function reprocess($processKey = null)
+	{
+		if (Auth::handleLogin() && Auth::requireRole('admin')) {
+			if ( is_null($processKey) == false ) {
+				$importer = Processor::Named('UploadImport', $processKey);
+				$_SESSION["feedback_positive"][] = 'Reprocessing ' . $importer->getMeta(UploadImport::META_MEDIA_NAME);
+				$importer->daemonizeProcess();
+				echo "<b>working ..</b>";
+			}
+		}
+	}
+
 }
 
 

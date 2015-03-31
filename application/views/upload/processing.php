@@ -1,3 +1,25 @@
+<script language="javascript" type="text/javascript">
+	// Wait until the DOM has loaded before querying the document
+	$(document).ready(function(){
+		$('a.rpc').click(function(e){
+			e.preventDefault();
+			$(".rpc_tools." + $(this).attr('data_key')).hide();
+			$(".rpc_spinner." + $(this).attr('data_key')).show();
+			var ajaxDiv = $("#ajaxDiv_" + $(this).attr('data_key'));
+
+			$.ajax({
+				type: "GET",
+				url: $(this).attr('data_action'),
+				dataType: "text",
+				success: function(msg){
+					ajaxDiv.html(msg);
+				}
+			});
+
+		});
+	});
+</script>
+
 <div class="paging">
 	<ul>
 		<li><a href="<?php echo Config::Web('/Upload/index'); ?>"><?php echo $this->label( "UploadLink", "name" ); ?></a></li>
@@ -49,38 +71,30 @@
 			<td>
 				<h3 class="path"><?php echo (isset($value, $value['name']) ? $value['name'] : 'No Source'); ?></h3>
 				<a href="#" limit="5" name="<?php echo $key; ?>" class="ajaxLogs">Logs</a>
-				<div id="ajaxDiv_<?php echo $key; ?>"/></td>
+				<div id="ajaxDiv_<?php echo $key; ?>" ></div>
 			</td>
 			<td><?php echo (isset($value, $value['size']) ? formatSizeUnits($value['size']) : 'Unknown'); ?></td>
 			<td>
-				<div class="retry">
-					<a class="retry_icon" href="<?php echo Config::Web('/AdminUploadRepair/reprocess', $key); ?>" alt="Retry"></a>
-				</div>
-				<div class="edit">
-					<a class="edit_icon" href="<?php echo Config::Web('/AdminUploadRepair/editInProcess', $key); ?>" alt="Edit"></a>
-				</div>
-				<div class="trash"><a class="trash_icon" href="#openDeleteConfirm" alt="Delete"></a></div>
+				<?php
+					$spinDisplay = "none";
+					$toolsDisplay = "inline";
+					$running = $this->job_model->allForContext('UploadImport', $key );
+					if ( is_array($running) && count($running) > 0 ) {
+						$spinDisplay = "inline";
+						$toolsDisplay = "none";
+					}
+				?>
 
-				<!-- div id="openDeleteConfirm" class="modalDialog">
-					<div>
-						<a href="#close" title="Close" class="close">X</a>
-						<h2>Confirm Delete</h2>
-						<div>
-							<div style="float:left ; width:20%;"><img src="<?php echo WEB_DIR; ?>/AdminUploadRepair/firstThumbnail/<?php echo $key; ?>" class="icon"></div>
-							<div style="float:right; width:75%;">
-								This will permanently delete
-									<b><?php echo (isset($value, $value['name']) ? $value['name'] : 'No Source'); ?></b>
-								<br>
-								<a class="btn" href="<?php echo WEB_DIR; ?>/AdminUploadRepair/deleteInProcess/<?php echo $key; ?>">Delete</a>
-							</div>
-						</div>
-						<div style="clear:both;"></div>
-					</div>
-				</div -->
+				<div class="rpc_tools <?php echo $key; ?>" style="display:<?php echo $toolsDisplay; ?>;">
+					<a href="#" class="rpc" data_action="<?php echo Config::Web('/AdminUploadRepair/reprocess', $key); ?>" data_key="<?php echo $key; ?>" alt="Retry">
+						<span class="icon retry" />
+					</a>
+				</div>
+				<img class="rpc_spinner <?php echo $key; ?>" style="display:<?php echo $spinDisplay; ?>;"
+					src="<?php echo Config::Web('/public/select2-spinner.gif'); ?>" />
 			</td>
 		</tr>
 	<?php endforeach; ?>
 	<?php endif; ?>
 	</table>
 </div>
-
