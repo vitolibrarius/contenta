@@ -8,9 +8,10 @@ use \ClassNotFoundException as ClassNotFoundException;
 
 class MediaFilename
 {
-	public function __construct($filename)
+	public function __construct($filename, $skipExtension = false)
 	{
 		$this->sourcename = $filename;
+		$this->skipExtension = $skipExtension;
 	}
 
 	public function parseYearFromFilename( $filename )
@@ -105,12 +106,15 @@ class MediaFilename
 	{
 		$metadata = array();
 
-		$ext = file_ext($this->sourcename);
-		if ( isset($ext) && strlen($ext) > 0) {
-			$metadata['extension'] = strtolower($ext);
+		$clean = $this->sourcename;
+		if ( is_bool($this->skipExtension) && $this->skipExtension == false) {
+			$ext = file_ext($this->sourcename);
+			if ( isset($ext) && strlen($ext) > 0) {
+				$metadata['extension'] = strtolower($ext);
+			}
+			$clean = file_ext_strip($this->sourcename);
 		}
 
-		$clean = file_ext_strip($this->sourcename);
 		if (substr_count($clean, "_28") > 1 && substr_count($filename, "_29") > 1)
 		{
 			$clean = str_replace("_28", "(", $clean);
