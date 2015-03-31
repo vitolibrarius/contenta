@@ -85,6 +85,7 @@ abstract class FileWrapper
 
 	public function testWrapper( &$errorCode = 0 )
 	{
+		$errorCode = 0;
 		return null;
 	}
 
@@ -206,6 +207,7 @@ class zipFileWrapper extends FileWrapper
 
 	public function testWrapper( &$errorCode = 0 )
 	{
+		$errorCode = 0;
 		$zip = new ZipArchive();
 		$res = $zip->open($this->sourcepath, ZipArchive::CHECKCONS);
 		if ( is_bool($res) == false && $res > 0 ) {
@@ -392,6 +394,7 @@ class cbrFileWrapper extends FileWrapper
 
 	public function testWrapper( &$errorCode = 0 )
 	{
+		$errorCode = 0;
 		$cmd = $this->UNRAR_PATH . ' t "' . $this->sourcepath . '"';
 		exec($cmd, $output, $success);
 		if ( $success != 0 ) {
