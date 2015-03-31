@@ -2,6 +2,8 @@
 
 namespace utilities;
 
+use \ZipArchive as ZipArchive;
+
 use \Logger as Logger;
 use \Cache as Cache;
 use \ClassNotFoundException as ClassNotFoundException;
@@ -76,9 +78,14 @@ abstract class FileWrapper
 		);
 	}
 
-	public function testWrapper()
+	public function errorMessage( $errorCode = 0 )
 	{
-		return false;
+		return null;
+	}
+
+	public function testWrapper( &$errorCode = 0 )
+	{
+		return null;
 	}
 
 	public function wrapperContents()
@@ -176,32 +183,39 @@ class zipFileWrapper extends FileWrapper
 		return false;
 	}
 
-	public function testWrapper()
+	public function errorMessage( $errorCode = 0 )
+	{
+		if ( $errorCode > 0 ) {
+			switch($errorCode) {
+				case ZipArchive::ER_OPEN:
+					return 'Unable to read file ' . $this->sourcepath;
+				case ZipArchive::ER_NOENT:
+					return 'No such file ' . $this->sourcepath;
+				case ZipArchive::ER_NOZIP:
+					return  'Not a zip file ' . $this->sourcepath;
+				case ZipArchive::ER_INCONS:
+					return 'Inconsistent file ' . $this->sourcepath;
+				case ZipArchive::ER_CRC :
+					return 'Failed checksum ' . $this->sourcepath;
+				default:
+					return 'ZIP Error Code ' . $errorCode;
+			}
+		}
+		return null;
+	}
+
+	public function testWrapper( &$errorCode = 0 )
 	{
 		$zip = new ZipArchive();
 		$res = $zip->open($this->sourcepath, ZipArchive::CHECKCONS);
-		$zip->close();
-
-		if ( $res != true ) {
-			switch($res) {
-				case ZipArchive::ER_OPEN:
-					Logger::logError( 'Unable to read file ' . $this->sourcepath, get_class($this), basename($this->sourcepath) );
-					return false;
-				case ZipArchive::ER_NOENT:
-					Logger::logError( 'No such file ' . $this->sourcepath, get_class($this), basename($this->sourcepath)  );
-					return false;
-				case ZipArchive::ER_NOZIP:
-					Logger::logError( 'Not a zip file ' . $this->sourcepath, get_class($this), basename($this->sourcepath)  );
-					return false;
-				case ZipArchive::ER_INCONS:
-					Logger::logError( 'Inconsistent file ' . $this->sourcepath, get_class($this), basename($this->sourcepath)  );
-					return false;
-				case ZipArchive::ER_CRC :
-					Logger::logError( 'Failed checksum ' . $this->sourcepath, get_class($this), basename($this->sourcepath)  );
-					return false;
-			}
+		if ( is_bool($res) == false && $res > 0 ) {
+			$errorCode = $res;
+			Logger::logError( $this->errorMessage($errorCode), get_class($this), basename($this->sourcepath) );
 		}
-		return true;
+		else {
+			$zip->close();
+		}
+		return $this->errorMessage($errorCode);
 	}
 
 	public function wrapperContents()
@@ -353,39 +367,47 @@ class cbrFileWrapper extends FileWrapper
 		}
 	}
 
-	public function testWrapper()
+	public function errorMessage( $errorCode = 0 )
+	{
+		if ( $errorCode > 0 ) {
+			switch ($errorCode) {
+				case 1: return 'RARX_WARNING'; break;
+				case 2: return 'RARX_FATAL'; break;
+				case 3: return 'RARX_CRC'; break;
+				case 4: return 'RARX_LOCK'; break;
+				case 5: return 'RARX_WRITE'; break;
+				case 6: return 'RARX_OPEN'; break;
+				case 7: return 'RARX_USERERROR'; break;
+				case 8: return 'RARX_MEMORY'; break;
+				case 9: return 'RARX_CREATE'; break;
+				case 10: return 'RARX_NOFILES'; break;
+				case 11: return 'RARX_BADPWD'; break;
+				default:
+					return 'RAR Error Code ' . $errorCode;
+			}
+		}
+
+		return null;
+	}
+
+	public function testWrapper( &$errorCode = 0 )
 	{
 		$cmd = $this->UNRAR_PATH . ' t "' . $this->sourcepath . '"';
 		exec($cmd, $output, $success);
 		if ( $success != 0 ) {
+			$errorCode = $success;
+
 			Logger::logWarning( $cmd, 'Unrar', 'command' );
 			Logger::logWarning( 'output ' . var_export($output, true), 'Unrar', $success );
-			$errorType = 'Code ' . $success;
-			switch ($success) {
-				case 1: $errorType = 'RARX_WARNING'; break;
-				case 2: $errorType = 'RARX_FATAL'; break;
-				case 3: $errorType = 'RARX_CRC'; break;
-				case 4: $errorType = 'RARX_LOCK'; break;
-				case 5: $errorType = 'RARX_WRITE'; break;
-				case 6: $errorType = 'RARX_OPEN'; break;
-				case 7: $errorType = 'RARX_USERERROR'; break;
-				case 8: $errorType = 'RARX_MEMORY'; break;
-				case 9: $errorType = 'RARX_CREATE'; break;
-				case 10: $errorType = 'RARX_NOFILES'; break;
-				case 11: $errorType = 'RARX_BADPWD'; break;
-				default:
-				break;
-			}
-			Logger::logError( 'RAR File ' . $errorType, get_class($this), basename($this->sourcepath));
-			return false;
+			Logger::logError( $this->errorMessage($errorCode), get_class($this), basename($this->sourcepath) );
 		}
 
-		return true;
+		return $this->errorMessage($errorCode);
 	}
 
 	public function unwrapToDirectory($dest = null)
 	{
-		if ( $this->testWrapper() == false ) {
+		if ( $this->testWrapper() != null ) {
 			throw new Exception( "RAR file error" );
 		}
 

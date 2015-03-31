@@ -52,8 +52,6 @@ if (is_file($options['f']) ) {
 	$wrapper = utilities\FileWrapper::instance($options['f']);
 	echo 'wrapper ' . var_export($wrapper, true) . PHP_EOL;
 	if ($wrapper != false) {
-		echo 'file list ' . var_export($wrapper->wrapperContents(), true) . PHP_EOL;
-
 
 		if ( isset($options['c']) ) {
 			$cmd = $options['c'];
@@ -62,11 +60,22 @@ if (is_file($options['f']) ) {
 			if ( is_dir($temp) ) {
 				destroy_dir($temp) || die( "unable to delete $temp" );
 			}
-			mkdir( $temp ) || die( "Unable to create $temp" );
+			mkdir( $temp, 0777, true ) || die( "Unable to create $temp" );
 
 			if ( $cmd == 'unwrap' ) {
 				$success = $wrapper->unwrapToDirectory( $temp );
 				echo "Unwrap " . ($success == true ? "success" :  "fail") . PHP_EOL;
+			}
+
+			if ( $cmd == 'test' ) {
+				$error = 0;
+				$success = $wrapper->testWrapper( $error );
+				if ( is_null($success) ) {
+					echo "Test passes " . $error . PHP_EOL;
+				}
+				else {
+					echo "Test failed " . $success . ' error ' . $error . PHP_EOL;
+				}
 			}
 
 			if ( $cmd == 'wrap' ) {
@@ -86,7 +95,6 @@ if (is_file($options['f']) ) {
 				else {
 					echo "new Wrap $dest " . PHP_EOL;
 				}
-
 			}
 
 			if ( $cmd == 'image' ) {
