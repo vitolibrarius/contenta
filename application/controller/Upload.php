@@ -4,6 +4,7 @@ namespace controller;
 
 use \Controller as Controller;
 use \DataObject as DataObject;
+use \Config as Config;
 use \Model as Model;
 use \Auth as Auth;
 use \Session as Session;
@@ -112,11 +113,14 @@ class Upload extends Controller
 		{
 			$extension = file_ext($_FILES['mediaFile']['name']);
 			$contentHash = hash_file(HASH_DEFAULT_ALGO, $_FILES['mediaFile']['tmp_name']);
-			$importer = Processor::Named('UploadImport', $contentHash);
-			if ( $importer->workingDirectoryExists() == true ) {
+			$root = Config::GetProcessing();
+			$workingDir = appendPath($root, "UploadImport", $contentHash );
+
+			if ( is_dir($workingDir) == true ) {
 				Session::addNegativeFeedback( Localized::Get("Upload", 'Hash Exists'));
 			}
 			else {
+				$importer = Processor::Named('UploadImport', $contentHash);
 				if ( $importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name'])) == true ) {
 					$_SESSION["feedback_positive"][] = 'Upload success';
 					$importer->daemonizeProcess();
