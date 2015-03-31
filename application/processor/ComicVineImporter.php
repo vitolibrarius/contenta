@@ -46,7 +46,7 @@ class ComicVineImporter extends EndpointImporter
 
 	public function importImage( $mediaObject, $imagename = Model::IconName, $sourceurl )
 	{
-		if ( isset($sourceurl) ) {
+		if ( isset($sourceurl) && $mediaObject->hasAdditionalMedia() ) {
 			$filename = downloadImage($sourceurl, $this->workingDirectory(), $imagename );
 			if ( empty($filename) == false ) {
 				$imageFile = $mediaObject->imagePath($imagename);
