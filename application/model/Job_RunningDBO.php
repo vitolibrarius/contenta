@@ -31,4 +31,11 @@ class Job_RunningDBO extends DataObject
 		$type_model = Model::Named("Job_Type");
 		return $type_model->objectForId($this->job_type_id);
 	}
+
+	private function isRunning() {
+		$shell = "ps " . ((PHP_OS === 'Darwin') ? ' ax ' : '') . "| awk '{print $1}'";
+		$output = shell_exec(  $shell );
+		$pids = explode(PHP_EOL, $output);
+		return in_array($this->pid, $pids);
+	}
 }

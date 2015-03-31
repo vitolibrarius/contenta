@@ -37,6 +37,18 @@ class Job_Running extends Model
 		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running::job_id => $job->id));
 	}
 
+	public function allForContext($context = null, $context_id = null)
+	{
+		$qualifiers = array();
+		if ( is_null($context) == false ) {
+			$qualifiers[Job_Running::context] = $context;
+		}
+		if ( is_null($context_id) == false ) {
+			$qualifiers[Job_Running::context_id] = $context_id;
+		}
+		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), $qualifiers);
+	}
+
 	public function allForJobTypeCode($code = null)
 	{
 		$type_model = Model::Named("Job_Type");
@@ -49,10 +61,24 @@ class Job_Running extends Model
 		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running::job_type_id => $obj->id));
 	}
 
-	public function createForCode($jobObj, $jobtype_code, $trace, $trace_id, $context, $context_id, $pid)
+	public function createForCode($jobObj, $jobtype_code = null, $trace, $trace_id, $context, $context_id, $pid)
 	{
-		$type_model = loadModel("JobType");
-		$type = $type_model->jobTypeForCode($jobtype_code);
+		$type = false;
+		if ( is_null($jobtype_code) == false) {
+			$type_model = Model::Named("Job_Type");
+			$type = $type_model->jobTypeForCode($jobtype_code);
+			if ( $type == false ) {
+				$param = array(
+					Job_Type::name => $jobtype_code,
+					Job_Type::code => $jobtype_code,
+					Job_Type::desc => "Unknown",
+					Job_Type::scheduled => 0
+				);
+				$newObjId = $type_model->createObject($param);
+				$type = $type_model->objectForId($newObjId);
+			}
+		}
+
 		return $this->create($jobObj, $type, $trace, $trace_id, $context, $context_id, $pid);
 	}
 
@@ -60,8 +86,6 @@ class Job_Running extends Model
 	{
 		if ( isset($jobtypeObj, $pid) ) {
 			$params = array(
-				Job_Running::job_type_id => (is_a($jobtypeObj, 'model\Job_Type') ? $jobtypeObj->id : null),
-				Job_Running::job_id => (is_a($jobObj, 'model\Job') ? $jobObj->id : null),
 				Job_Running::trace => $trace,
 				Job_Running::trace_id => $trace_id,
 				Job_Running::context => $context,
@@ -69,6 +93,14 @@ class Job_Running extends Model
 				Job_Running::created => time(),
 				Job_Running::pid => $pid
 			);
+
+			if ( isset($jobObj)  && is_a($jobObj, 'model\JobDBO')) {
+				$params[Job_Running::job_id] = $jobObj->id;
+			}
+
+			if ( isset($jobtypeObj)  && is_a($jobtypeObj, 'model\Job_TypeDBO')) {
+				$params[Job_Running::job_type_id] = $jobtypeObj->id;
+			}
 
 			$objectOrErrors = $this->createObject($params);
 			if ( is_array($objectOrErrors) ) {
@@ -78,8 +110,29 @@ class Job_Running extends Model
 				return $this->objectForId( (string)$objectOrErrors);
 			}
 		}
+		else {
+			Logger::LogError( var_export($jobtypeObj, true));
+		}
 
 		return false;
+	}
+
+	public function clearFinishedProcesses()
+	{
+		$allRunning = $this->allObjects();
+		if ( is_array($allRunning) ) {
+			$shell = "ps " . ((PHP_OS === 'Darwin') ? ' ax ' : '') . "| awk '{print $1}'";
+			$output = shell_exec(  $shell );
+			$pids = explode(PHP_EOL, $output);
+
+			foreach ( $allRunning as $jobrunning ) {
+				if ( in_array($jobrunning->pid, $pids) == false ) {
+					// process is done
+					$this->deleteObject($jobrunning);
+				}
+			}
+		}
+		return true;
 	}
 }
 
