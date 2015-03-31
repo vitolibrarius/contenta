@@ -166,10 +166,14 @@ abstract class Model
 
 	public function deleteObject($object = null) {
 		if (isset($object) && is_a($object, "\\DataObject" )) {
+			$mediaPurged = true;
+			if ( $object->hasAdditionalMedia() == true ) {
+				Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $model->tableName(), $object->id);
+				$mediaPurged = (file_exists($object->mediaPath()) == false || destroy_dir($object->mediaPath()) );
+			}
+
 			$model = $object->model();
-			Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $model->tableName(), $object->id);
-			return (file_exists($object->mediaPath()) == false || destroy_dir($object->mediaPath()))
-				&& $this->deleteObj( $object, $model->tableName(), $model->tablePK() );
+			return ($mediaPurged) && $this->deleteObj( $object, $model->tableName(), $model->tablePK() );
 		}
 		return false;
 	}

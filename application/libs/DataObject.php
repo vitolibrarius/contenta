@@ -90,21 +90,36 @@ class DataObject
 		return '';
 	}
 
+	public function hasAdditionalMedia()
+	{
+		$tbl = $this->tableName();
+		return in_array($tbl, array('series', 'publication', 'story_arc', 'character', 'publisher'));
+	}
+
 	public function hasIcons()
 	{
-		$smIcon = $this->imagePath(Model::IconName);
-		$lgIcon = $this->imagePath(Model::ThumbnailName);
-		return (is_file($smIcon) && is_file($lgIcon));
+		if ( $this->hasAdditionalMedia() == true ) {
+			$smIcon = $this->imagePath(Model::IconName);
+			$lgIcon = $this->imagePath(Model::ThumbnailName);
+			return (is_file($smIcon) && is_file($lgIcon));
+		}
+		return false;
 	}
 
 	public function imagePath($filename = null)
 	{
-		return hashedImagePath($this->tableName(), $this->id, $filename);
+		if ( $this->hasAdditionalMedia() == true ) {
+			return hashedImagePath($this->tableName(), $this->id, $filename);
+		}
+		return null;
 	}
 
 	public function mediaPath($filename = null)
 	{
-		return hashedPath($this->tableName(), $this->id, $filename);
+		if ( $this->hasAdditionalMedia() == true ) {
+			return hashedPath($this->tableName(), $this->id, $filename);
+		}
+		return null;
 	}
 
 	public function externalEndpoint()
