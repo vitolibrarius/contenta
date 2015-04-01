@@ -7,3 +7,5 @@
 * copy.*
 .user.ini
 /php_user.ini
+
+/tests/ComicVine.json
