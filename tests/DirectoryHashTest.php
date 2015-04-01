@@ -17,6 +17,11 @@ require SYSTEM_PATH .'application/libs/Config.php';
 require SYSTEM_PATH .'application/libs/Cache.php';
 require SYSTEM_PATH .'application/libs/Logger.php';
 
+require SYSTEM_PATH .'tests/_ResetConfig.php';
+require SYSTEM_PATH .'tests/_Data.php';
+
+$root = "/tmp/test/" . basename(__FILE__, ".php");
+SetConfigRoot( $root );
 
 echo "Random " . randomPath() . PHP_EOL;
 
@@ -50,12 +55,6 @@ echo "Random " . randomPath() . PHP_EOL;
 
 echo PHP_EOL;
 
-$model = Model::Named('Publisher');
-$all = $model->allObjects();
-
-foreach( $all as $obj ) {
-	echo $obj->displayName() . "\t" . $obj->mediaPath() . PHP_EOL;
-}
 $tables = array( 'character', 'publisher', 'series', 'publication', 'issue' );
 for ($x = 1; $x <= 10000; $x++) {
 	$table = array_rand($tables);

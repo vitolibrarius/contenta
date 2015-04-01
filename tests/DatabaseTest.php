@@ -16,6 +16,9 @@
 	require SYSTEM_PATH .'application/libs/Config.php';
 	require SYSTEM_PATH .'application/libs/Cache.php';
 
+	require SYSTEM_PATH .'tests/_ResetConfig.php';
+	require SYSTEM_PATH .'tests/_Data.php';
+
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
 use model\Endpoint as Endpoint;
@@ -41,107 +44,12 @@ use model\Job_Type as Job_Type;
 use model\Job_Running as Job_Running;
 use model\Job as Job;
 
-	function my_echo($string ="") {
-		echo $string . PHP_EOL;
-	}
-
-	destroy_dir( "/tmp/TestDatabase" ) || die( "Failed to remove last test run /tmp/TestDatabase");
-	try {
-		$config = Config::instance();
-
-		// override the logger type
-		$config->setValue("Repository/path", "/tmp/TestDatabase" );
-
-		$config->setValue("Database/type", "sqlite" );
-		$config->setValue("Database/path", "db" );
-
-		$config->setValue("Logging/type", "Print") || die("Failed to change the configured Logging");
-		$config->setValue("Logging/path", "logs") || die("Failed to change the configured Logging");
-
-		$config->setValue("Repository/cache", "cache" );
-		$config->setValue("Repository/processing", "processing" );
-
-		my_echo( "** Configuration" );
-		my_echo( "Repository " . $config->repositoryDirectory() );
-		my_echo( "media " . $config->mediaDirectory() );
-		my_echo( "cache " . $config->cacheDirectory() );
-		my_echo( "processing " . $config->processingDirectory() );
-		my_echo( "logs " . $config->loggingDirectory() );
-	}
-	catch (Exception $e) {
-		my_echo( "Error :" . $e );
-	}
-	function reportData($array, $columns) {
-		if ( is_array($array) ) {
-			if ( is_array($columns) ) {
-				echo "Clazz\t";
-				foreach ($columns as $key => $value) {
-					echo $value . "\t";
-				}
-				echo PHP_EOL;
-				foreach ($array as $key => $value) {
-					echo $value->modelName(). "[" .$value->id."]" . "\t";
-					foreach ($columns as $c => $cname) {
-						$out = null;
-						if ( property_exists($value, $cname)) {
-							$out = $value->{$cname};
-						}
-						else if (method_exists($value, $cname)) {
-							$out = $value->{$cname}();
-						}
-						if ( is_string($out) ) {
-							echo $out . "\t";
-						}
-						else if ( is_a($out, '\DataObject')) {
-							echo $out->__toString() . "\t";
-						}
-						else if ( is_array($out) ) {
-							array_walk($out, function(&$val){ echo $val->__toString(); });
-//
-// 							$small = array_map('__toString', $out);
-// 							echo var_export($out, false) . "\t";
-						}
-						else {
-							echo var_export($out, false) . "\t";
-						}
-					}
-					echo PHP_EOL;
-				}
-			}
-			else {
-				my_echo( "reportData() Columns are not array" . var_export($columns, true) );
-			}
-		}
-		else {
-			my_echo( "reportData() data array is not array " .var_export($array, true) );
-		}
-		echo PHP_EOL;
-	}
-
-	function loadData( Model $model = null, array $data = array(), array $columns = null )
-	{
-		$loaded = array();
-		foreach($data as $record) {
-			$newObjId = $model->createObject($record);
-
-			( $newObjId != false ) || die('Failed to insert ' . $record );
-			( is_array($newObjId) == false ) || die('Failed to insert ' . var_export( $record, true ) . PHP_EOL
-				. 'Validation errors ' . var_export( $newObjId, true ). PHP_EOL);
-
-			$obj = $model->objectForId($newObjId);
-			( is_a($obj, DataObject::NameForModel($model)) ) ||
-				die('Insert should be "' . DataObject::NameForModel($model) . '", wrong class from insert ' . var_export( $record, true ) . PHP_EOL
-					. var_export( $obj, true ) . PHP_EOL);
-			$loaded[] = $obj;
-		}
-		reportData($loaded,  (is_null($columns) ? array_keys($data[0]) : $columns) );
-		return $loaded;
-	}
-
+$root = "/tmp/test/" . basename(__FILE__, ".php");
+SetConfigRoot( $root );
 
 my_echo( );
 my_echo( "Creating Database" );
-Migrator::Upgrade("/tmp/TestDatabase/logs");
+Migrator::Upgrade( Config::GetLog() );
 
 // load the default user
 $user = Model::Named("Users")->userByName('vito');
@@ -255,7 +163,6 @@ $job_run_data = array(
 	)
 );
 $jobs_running = loadData( $job_run_model, $job_run_data, array("job", "jobType", "trace", "trace_id", "context", "context_id", "pid") );
-die();
 
 my_echo( "---------- Publisher ");
 $publisher_model = Model::Named("Publisher");

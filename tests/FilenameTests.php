@@ -17,9 +17,11 @@ require SYSTEM_PATH .'application/libs/Config.php';
 require SYSTEM_PATH .'application/libs/Cache.php';
 require SYSTEM_PATH .'application/libs/Logger.php';
 
-$config = Config::instance();
-$config->setValue("Logging/type", "Print") || die("Failed to change the configured logger");
-Logger::resetInstance();
+require SYSTEM_PATH .'tests/_ResetConfig.php';
+require SYSTEM_PATH .'tests/_Data.php';
+
+$root = "/tmp/test/" . basename(__FILE__, ".php");
+SetConfigRoot( $root );
 
 $testdata = array(
 	"'68 Hallowed Ground 2013 digital Son of Ultron-Empire.cbz" => array(

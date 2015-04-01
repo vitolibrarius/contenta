@@ -13,15 +13,8 @@
 	require SYSTEM_PATH .'application/config/errors.php';
 	require SYSTEM_PATH .'application/libs/Config.php';
 
-	try {
-		$config = Config::instance();
+	require SYSTEM_PATH .'tests/_ResetConfig.php';
+	require SYSTEM_PATH .'tests/_Data.php';
 
-		// override the logger type
-		$config->setValue("Logger/type", "Print") || die("Failed to change the configured logger");
-
-		Logger::logWarning( "Test log", basename(__FILE__), "cool" );
-
-	}
-	catch (Exception $e) {
-		echo "Error :" . $e . PHP_EOL;
-	}
+$root = "/tmp/test/" . basename(__FILE__, ".php");
+SetConfigRoot( $root );

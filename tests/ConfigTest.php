@@ -14,6 +14,9 @@
 	require SYSTEM_PATH .'application/config/errors.php';
 	require SYSTEM_PATH .'application/libs/Config.php';
 
+	require SYSTEM_PATH .'tests/_ResetConfig.php';
+	require SYSTEM_PATH .'tests/_Data.php';
+
 	try {
 
 		$config = Config::instance();

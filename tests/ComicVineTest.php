@@ -16,29 +16,45 @@
 	require SYSTEM_PATH .'application/libs/Config.php';
 	require SYSTEM_PATH .'application/libs/Cache.php';
 
+	require SYSTEM_PATH .'tests/_ResetConfig.php';
+	require SYSTEM_PATH .'tests/_Data.php';
+
 	use connectors\ComicVineConnector as ComicVineConnector;
 
 	use model\Endpoint as Endpoint;
 	use model\Endpoint_Type as Endpoint_Type;
 
-	try {
-		$config = Config::instance();
+$root = "/tmp/test/" . basename(__FILE__, ".php");
+SetConfigRoot( $root );
 
-		// override the logger type
-		$config->setValue("Logging/type", "Print") || die("Failed to change the configured Logging");
-		$config->setValue("Logging/path", "/tmp/Tests/logs") || die("Failed to change the configured Logging");
+my_echo( );
+my_echo( "Creating Database" );
+Migrator::Upgrade( Config::GetLog() );
 
-		$config->setValue("Repository/cache", "/tmp/Tests/cache" );
-		$config->setValue("Repository/processing", "/tmp/Tests/processing" );
-
-		Logger::logWarning( "Test log", basename(__FILE__), "cool" );
-
-	}
-	catch (Exception $e) {
-		echo "Error :" . $e . PHP_EOL;
-	}
+my_echo( "---------- Endpoint ");
+$cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
+($cv_endpoint_type != false && $cv_endpoint_type->code == 'ComicVine') || die("Could not find Endpoint_Type::ComicVine");
 
 	$ep_model = Model::Named('Endpoint');
+	$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+	if ( is_array($points) == false || count($points) == 0) {
+		$metadata = metadataFor(Endpoint_Type::ComicVine . ".json");
+		if ( $metadata->isMeta( model\Endpoint::api_key ) == false )
+		{
+			$metadata->setMeta( model\Endpoint::name, "My ComicVine" );
+			$metadata->setMeta( model\Endpoint::type_id, $cv_endpoint_type->id );
+			$metadata->setMeta( model\Endpoint::base_url, $cv_endpoint_type->api_url );
+			$metadata->setMeta( model\Endpoint::api_key, "YOUR API KEY HERE" );
+			$metadata->setMeta( model\Endpoint::username, 'vito' );
+			$metadata->setMeta( model\Endpoint::enabled, Model::TERTIARY_TRUE );
+			$metadata->setMeta( model\Endpoint::compressed, Model::TERTIARY_FALSE );
+
+			die( "Please configure the comicvine.json config file with your API key" );
+		}
+
+		loadData( $ep_model, array($metadata->readMetadata()) );
+	}
+
 	$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 	($points != false && count($points) > 0) || die('No endpoint defined');
 

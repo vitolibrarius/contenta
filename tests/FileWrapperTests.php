@@ -17,12 +17,11 @@ require SYSTEM_PATH .'application/libs/Config.php';
 require SYSTEM_PATH .'application/libs/Cache.php';
 require SYSTEM_PATH .'application/libs/Logger.php';
 
-$config = Config::instance();
-$config->setValue('Repository/cache', appendPath( sys_get_temp_dir(), 'TestCache') ) || die('Failed to change cache directory');
-$config->setValue("Logging/type", "Print") || die("Failed to change the configured logger");
-Logger::resetInstance();
+require SYSTEM_PATH .'tests/_ResetConfig.php';
+require SYSTEM_PATH .'tests/_Data.php';
 
-echo "Cache path " . $config->cacheDirectory() . PHP_EOL;
+$root = "/tmp/test/" . basename(__FILE__, ".php");
+SetConfigRoot( $root );
 
 function getImage($wrapper, $name) {
 	$original = $wrapper->wrappedDataForName($name);
