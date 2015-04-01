@@ -1,0 +1,30 @@
+{
+    "publisher": [
+        {
+            "xid": 101,
+            "name": "Archie Comics"
+        },
+        {
+            "xid": 464,
+            "name": "Disney"
+        },
+        {
+            "xid": 513,
+            "name": "Image"
+        }
+    ],
+    "series": [
+        {
+            "xid": 42599,
+            "name": "Swamp Thing"
+        },
+        {
+            "xid": 68136,
+            "name": "Afterlife With Archie"
+        },
+        {
+            "xid": 26151,
+            "name": "All-New Savage She-Hulk"
+        }
+    ]
+}
