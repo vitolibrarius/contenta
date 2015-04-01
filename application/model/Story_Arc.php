@@ -33,6 +33,15 @@ class Story_Arc extends Model
 		);
 	}
 
+	public function objectForExternal($xid, $xsrc)
+	{
+		if ( isset($xid, $xsrc) )
+		{
+			return $this->fetch(Story_Arc::TABLE, $this->allColumns(), array(Story_Arc::xid => $xid, Story_Arc::xsource => $xsrc ));
+		}
+		return false;
+	}
+
 	public function findExternalOrCreate( $publisher = null, $name, $desc, $xid, $xsrc, $xurl = null )
 	{
 		if ( isset($name, $xid, $xsrc) && strlen($name) && strlen($xid) && strlen($xsrc)) {

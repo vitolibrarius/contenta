@@ -36,6 +36,15 @@ class Publication extends Model
 		);
 	}
 
+	public function objectForExternal($xid, $xsrc)
+	{
+		if ( isset($xid, $xsrc) )
+		{
+			return $this->fetch(Publication::TABLE, $this->allColumns(), array(Publication::xid => $xid, Publication::xsource => $xsrc ));
+		}
+		return false;
+	}
+
 	public function findExternalOrCreate( $series = null, $name, $desc, $xid, $xsrc, $xurl = null )
 	{
 		if ( isset($name, $xid, $xsrc) && strlen($name) && strlen($xid) && strlen($xsrc)) {
@@ -75,6 +84,9 @@ class Publication extends Model
 			}
 
 			return $obj;
+		}
+		else {
+			Logger::LogError( "Missing parameter $name, $xid, $xsrc" );
 		}
 		return false;
 	}
