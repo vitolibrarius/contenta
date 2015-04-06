@@ -82,8 +82,9 @@ $points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 
 $epoint = $points[0];
 
-$metadata = metadataFor( "ComicVineImporter.json");
+$metadata = metadataFor( "ComicVineImporter.json", true);
 
+/***********************************************************************************************/
 my_echo( );
 my_echo( "---------- Publisher ");
 $importer = new ComicVineImporter( Publisher::TABLE );
@@ -114,6 +115,7 @@ foreach( $publishers as $pub ) {
 }
 my_echo( );
 
+/***********************************************************************************************/
 my_echo( );
 my_echo( "---------- Series ");
 $importer = new ComicVineImporter( Series::TABLE );
@@ -142,3 +144,76 @@ foreach( $series as $sample ) {
 		my_echo( "Error with " . $sample["xid"] . " - " . $sample["name"] . " found " . var_export( $object, true ));
 	}
 }
+
+my_echo( );
+
+/***********************************************************************************************/
+my_echo( );
+my_echo( "---------- Publication ");
+$importer = new ComicVineImporter( Publication::TABLE );
+$importer->setEndpoint($points[0]);
+
+$pubs = $metadata->getMeta( Publication::TABLE );
+if ( is_array($pubs) == false || count($pubs) == 0 ) {
+	$sample = array(
+		array(   "xid" => 319038, "name" => "Swamp Thing", "issue" => 7,
+			"series_id" => 42599, "series_name" => "Swamp Thing" ),
+		array(   "xid" => 447038, "name" => "Escape From Riverdale Chapter Four: Archibald Rex", "issue" => 4,
+			"series_id" => 68136, "series_name" => "Afterlife With Archie" ),
+		array(   "xid" => 293263, "name" => "...And Most Of The Costumes Stay On...", "issue" => 1,
+			"series_id" => 42722, "series_name" => "Catwoman" ),
+		array(   "xid" => 155152, "name" => "W.M.D. Woman of Mass Destruction", "issue" => 1,
+			"series_id" => 26151, "series_name" => "All-New Savage She-Hulk" )
+	);
+	$metadata->setMeta( Publication::TABLE, $sample );
+	$pubs = $metadata->getMeta( Publication::TABLE );
+}
+
+foreach( $pubs as $sample ) {
+	$importer->importPublicationValues( $sample["series_id"], null, $sample["issue"], $sample["xid"], null);
+}
+$importer->processData();
+
+$pubs_model = Model::Named("Publication");
+foreach( $pubs as $sample ) {
+	$object = $pubs_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
+	if ( isset($object) == false || is_a($object, '\model\PublicationDBO') == false) {
+		my_echo( "Error with " . $sample["xid"] . " - record not found .. not imported");
+	}
+	else {
+		if ( $object->name != $sample["name"] ) {
+			my_echo( "Error with " . $sample["xid"] . " - " . $object->name . " is not " . $sample["name"]);
+		}
+
+		if ( $object->issue_num != $sample["issue"] ) {
+			my_echo( "Error with " . $sample["xid"] . " - " . $object->issue_num . " is not " . $sample["issue"]);
+		}
+
+		if ( $object->series() == false ) {
+			my_echo( "Error with " . $sample["xid"] . " - no series");
+		}
+		else {
+			if ( $object->series()->name != $sample["series_name"] ) {
+				my_echo( "Error with " . $sample["xid"] . " - series name " . $object->series()->name
+					. " is not " . $sample["series_name"]);
+			}
+
+			$seriesObj = $series_model->objectForExternal( $sample["series_id"], Endpoint_Type::ComicVine);
+			if ( $seriesObj == false || ($seriesObj instanceof model\SeriesDBO) == false ) {
+				my_echo( "Error with " . $sample["xid"] . " - expected series not found " .  $sample["series_id"]
+					. " got " . var_export($seriesObj, true));
+			}
+			else {
+				if ( $seriesObj->id != $object->series()->id) {
+					my_echo( "Error with " . $sample["xid"] . " - wrong series id " . $seriesObj->id . " found " . var_export( $object, true ));
+				}
+
+				if ( $seriesObj->xid != $object->series()->xid) {
+					my_echo( "Error with " . $sample["xid"] . " - wrong series xid " . $seriesObj->xid . " found " . var_export( $object, true ));
+				}
+			}
+		}
+	}
+}
+
+/***********************************************************************************************/

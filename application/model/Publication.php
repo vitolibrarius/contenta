@@ -45,12 +45,12 @@ class Publication extends Model
 		return false;
 	}
 
-	public function findExternalOrCreate( $series = null, $name, $desc, $xid, $xsrc, $xurl = null )
+	public function findExternalOrCreate( $series = null, $name, $desc, $issue_num = null, $xid, $xsrc, $xurl = null )
 	{
 		if ( isset($name, $xid, $xsrc) && strlen($name) && strlen($xid) && strlen($xsrc)) {
 			$obj = $this->objectForExternal($xid, $xsrc);
 			if ( $obj == false ) {
-				$obj = $this->create($series, $name, $desc, $xid, $xsrc, $xurl);
+				$obj = $this->create($series, $name, $desc, $issue_num, $xid, $xsrc, $xurl);
 			}
 			else {
 				$updates = array();
@@ -61,6 +61,10 @@ class Publication extends Model
 
 				if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
 					$updates[Publication::name] = $name;
+				}
+
+				if (isset($issue_num) && (isset($obj->issue_num) == false || $issue_num != $obj->issue_num)) {
+					$updates[Publication::issue_num] = $issue_num;
 				}
 
 				if (isset($desc) && strlen($desc) > 0) {
@@ -91,7 +95,7 @@ class Publication extends Model
 		return false;
 	}
 
-	public function create( $series = null, $name, $desc, $xid, $xsrc, $xurl = null )
+	public function create( $series = null, $name, $desc, $issue_num = 0, $xid, $xsrc, $xurl = null )
 	{
 		$obj = $this->objectForExternal($xid, $xsrc);
 		if ( $obj == false )
@@ -100,6 +104,7 @@ class Publication extends Model
 				Publication::created => time(),
 				Publication::name => $name,
 				Publication::desc => $desc,
+				Publication::issue_num => $issue_num,
 				Publication::xurl => $xurl,
 				Publication::xsource => $xsrc,
 				Publication::xid => $xid

@@ -74,11 +74,16 @@ function loadData( Model $model = null, array $data = array(), array $columns = 
 	return $loaded;
 }
 
-function metadataFor($name = null)
+function metadataFor($name = null, $purge = false)
 {
 	if ( is_null($name) ) {
 		$name = "test.json";
 	}
 	$path = appendPath( SYSTEM_PATH, "tests", $name );
+
+	if ($purge == true && is_file($path) ) {
+		unlink( $path );
+	}
+
 	return new Metadata( $path );
 }
