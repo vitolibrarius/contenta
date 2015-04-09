@@ -21,7 +21,7 @@ define('COOKIE_RUNTIME', 1209600);
 define('COOKIE_DOMAIN', '.localhost');
 
 define("HASH_COST_FACTOR", "10");
-define("HASH_DEFAULT_ALGO", "md5");
+define("HASH_DEFAULT_ALGO", "sha256"); // md5?
 
 $_utf8_specials = array (
 	"UTF8_PENCIL" => '\u270E',
