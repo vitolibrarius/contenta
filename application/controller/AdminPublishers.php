@@ -149,7 +149,7 @@ class AdminPublishers extends Admin
 						$importer->setEndpoint($endpoint);
 					}
 
-					$importer->importPublisherValues( null, $object->xid, null, true);
+					$importer->enqueue_publisher( array( "xid" => $object->xid ), true, true );
 					$importer->daemonizeProcess();
 					$this->editPublisher($pubId);
 				}
@@ -245,7 +245,7 @@ class AdminPublishers extends Admin
 				}
 
 				if ( $importer->endpoint() != false ) {
-					$importer->importPublisherValues( null, $xid, null);
+					$importer->enqueue_publisher( array( "xid" => $xid, "name" => $name ), true, true );
 					$importer->daemonizeProcess();
 				}
 				$this->publisherlist();

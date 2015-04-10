@@ -15,6 +15,12 @@
 		});
 	});
 </script>
+<div class="paging">
+	<ul>
+		<li><a href="<?php echo Config::Web('/netconfig/edit'); ?>"><span class="">Add New Endpoint</span></a></li>
+	</ul>
+</div>
+
 <div class="mediaData">
 	<table>
 		<tr>

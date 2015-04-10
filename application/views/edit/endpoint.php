@@ -1,3 +1,9 @@
+<div class="paging">
+	<ul>
+		<li><a href="<?php echo Config::Web('/netconfig/index'); ?>"><span class="">Endpoints</span></a></li>
+	</ul>
+</div>
+
 <div><!-- container -->
 	<div><!-- top -->
 		<div style="padding:15px; display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
