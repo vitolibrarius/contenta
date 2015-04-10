@@ -27,11 +27,11 @@ class ComicVineConnector extends JSON_EndpointConnector
 	const TYPEID_STORY_ARC = '4045';
 	const TYPEID_VOLUME = '4050';
 
-	const PUBLISHER_FIELDS =	"id,name,image,deck,description,story_arcs,site_detail_url";
-	const CHARACTER_FIELDS =	"id,image,name,real_name,aliases,gender,publisher,deck,description,story_arc_credits,site_detail_url";
-	const STORY_ARC_FIELDS =	"id,aliases,deck,description,first_appeared_in_issue,image,issues,name,publisher,site_detail_url";
-	const VOLUME_FIELDS =		"id,aliases,characters,deck,description,first_issue,image,issues,name,publisher,site_detail_url,start_year";
-	const ISSUE_FIELDS =		"id,aliases,character_credits,cover_date,deck,description,image,issue_number,name,person_credits,site_detail_url,story_arc_credits,volume";
+	const PUBLISHER_FIELDS =	"id,name,image,deck,story_arcs,site_detail_url";
+	const CHARACTER_FIELDS =	"id,image,name,real_name,aliases,gender,publisher,deck,story_arc_credits,site_detail_url";
+	const STORY_ARC_FIELDS =	"id,aliases,deck,first_appeared_in_issue,image,issues,name,publisher,site_detail_url";
+	const VOLUME_FIELDS =		"id,aliases,characters,deck,first_issue,image,issues,name,publisher,site_detail_url,start_year";
+	const ISSUE_FIELDS =		"id,aliases,character_credits,cover_date,deck,image,issue_number,name,person_credits,site_detail_url,story_arc_credits,volume";
 
 	public function __construct($point)
 	{
@@ -64,7 +64,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 			. ($type == null ? '' : $type . "-") . $id . "/?" . http_build_query($params);
 
 		try {
-			$details = $this->performRequest( $detail_url, true );
+			$details = $this->performRequest( $detail_url, false );
 		}
 		catch ( \Exception $e ) {
 			Logger::logException( $e );
@@ -78,7 +78,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 		return (is_array($details) ? $details : false);
 	}
 
-	public function storyArcDetails( $id )
+	public function story_arcDetails( $id )
 	{
 		$query = array("field_list" => ComicVineConnector::STORY_ARC_FIELDS);
 		return $this->details('story_arc', ComicVineConnector::TYPEID_STORY_ARC, $id, $query);;
