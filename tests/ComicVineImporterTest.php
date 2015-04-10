@@ -102,7 +102,7 @@ if ( is_array($publishers) == false || count($publishers) == 0 ) {
 }
 
 foreach( $publishers as $pub ) {
-	$importer->importPublisherValues( null, $pub["xid"], null);
+	$importer->enqueue_publisher( $pub, true, true);
 }
 $importer->processData();
 
@@ -132,8 +132,10 @@ if ( is_array($series) == false || count($series) == 0 ) {
 	$series = $metadata->getMeta( Series::TABLE );
 }
 
+$importer->enqueue_publisher( array( "xid" => 10, "name" => "DC Comics" ), true, true);
+$importer->enqueue_character( array( "xid" => 1686, "name" => "Superboy" ), true, true);
 foreach( $series as $sample ) {
-	$importer->importSeriesValues( null, $sample["xid"], null);
+	$importer->enqueue_series( $sample, true, true );
 }
 $importer->processData();
 
@@ -157,20 +159,20 @@ $pubs = $metadata->getMeta( Publication::TABLE );
 if ( is_array($pubs) == false || count($pubs) == 0 ) {
 	$sample = array(
 		array(   "xid" => 319038, "name" => "Swamp Thing", "issue" => 7,
-			"series_id" => 42599, "series_name" => "Swamp Thing" ),
+			"series_xid" => 42599, "series_name" => "Swamp Thing" ),
 		array(   "xid" => 447038, "name" => "Escape From Riverdale Chapter Four: Archibald Rex", "issue" => 4,
-			"series_id" => 68136, "series_name" => "Afterlife With Archie" ),
+			"series_xid" => 68136, "series_name" => "Afterlife With Archie" ),
 		array(   "xid" => 293263, "name" => "...And Most Of The Costumes Stay On...", "issue" => 1,
-			"series_id" => 42722, "series_name" => "Catwoman" ),
+			"series_xid" => 42722, "series_name" => "Catwoman" ),
 		array(   "xid" => 155152, "name" => "W.M.D. Woman of Mass Destruction", "issue" => 1,
-			"series_id" => 26151, "series_name" => "All-New Savage She-Hulk" )
+			"series_xid" => 26151, "series_name" => "All-New Savage She-Hulk" )
 	);
 	$metadata->setMeta( Publication::TABLE, $sample );
 	$pubs = $metadata->getMeta( Publication::TABLE );
 }
 
 foreach( $pubs as $sample ) {
-	$importer->importPublicationValues( $sample["series_id"], null, $sample["issue"], $sample["xid"], null);
+	$importer->enqueue_publication( $sample, true, true );
 }
 $importer->processData();
 
@@ -198,9 +200,9 @@ foreach( $pubs as $sample ) {
 					. " is not " . $sample["series_name"]);
 			}
 
-			$seriesObj = $series_model->objectForExternal( $sample["series_id"], Endpoint_Type::ComicVine);
+			$seriesObj = $series_model->objectForExternal( $sample["series_xid"], Endpoint_Type::ComicVine);
 			if ( $seriesObj == false || ($seriesObj instanceof model\SeriesDBO) == false ) {
-				my_echo( "Error with " . $sample["xid"] . " - expected series not found " .  $sample["series_id"]
+				my_echo( "Error with " . $sample["xid"] . " - expected series not found " .  $sample["series_xid"]
 					. " got " . var_export($seriesObj, true));
 			}
 			else {

@@ -26,12 +26,6 @@ use model\Story_Arc_Series as Story_Arc_Series;
 
 class ComicVineImporter extends EndpointImporter
 {
-	const META_IMPORT_ROOT = 	'import/';
-
-	const META_IMPORT_FORCE_ICON =	'image/force';
-	const META_IMPORT_SMALL_ICON =	'image/small';
-	const META_IMPORT_LARGE_ICON =	'image/large';
-
 	function __construct($guid)
 	{
 		parent::__construct($guid);
@@ -47,28 +41,45 @@ class ComicVineImporter extends EndpointImporter
 		parent::setEndpoint($point);
 	}
 
-	public function importImage( $mediaObject, $imagename = Model::IconName, $sourceurl )
+	public function connection()
 	{
-		if ( isset($sourceurl) && $mediaObject->hasAdditionalMedia() ) {
-			$filename = downloadImage($sourceurl, $this->workingDirectory(), $imagename );
-			if ( empty($filename) == false ) {
-				$imageFile = $mediaObject->imagePath($imagename);
-				if ( is_file($imageFile) ) {
-					unlink($imageFile) || die("failed to remove old file? " . $imageFile);
+		$comicVine = $this->endpoint();
+		if ( $comicVine == false ) {
+			throw new Exception("Endpoint was not found");
+		}
+
+		return new ComicVineConnector($comicVine);
+	}
+
+	public function importImages( $mediaObject, array $cvDetails = array() )
+	{
+		if ( $mediaObject->hasAdditionalMedia() ) {
+			$forceImages = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
+			if ( $forceImages == true || $mediaObject->hasIcons() == false ) {
+				$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
+				if ( is_null($imageURL) == false ) {
+					$this->importImage( $mediaObject, Model::IconName, $imageURL );
 				}
 
-				$newfile = $mediaObject->mediaPath($filename);
-				rename(appendPath($this->workingDirectory(), $filename), $newfile) || die("failed install new file? " . $newfile);
+				$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
+				if ( is_null($imageURL) == false ) {
+					$this->importImage( $mediaObject, Model::ThumbnailName, $imageURL );
+				}
 			}
-		}
-		else {
-			echo "$mediaObject does not support images" . PHP_EOL;
 		}
 		return false;
 	}
 
+	public function setMetaBoolean( $path, $newValue = false )
+	{
+		$oldValue = $this->getMeta( $path );
+		if ( $oldValue == null || $oldValue == false ) {
+			$this->setMeta( $path, $newValue );
+		}
+	}
+
 	/** Import maps between ComicVine keypaths and model attributes */
-	public function genderMap($code = "3")
+	public function convert_gender($code = "3")
 	{
 		$cv_gender = array(
 			1 => "Male",
@@ -85,618 +96,175 @@ class ComicVineImporter extends EndpointImporter
 		return $code;
 	}
 
-	public function importPublisherMap()
+	public function convert_desc($desc = null)
+	{
+		if (isset($desc) && strlen($desc) > 0) {
+			return strip_tags ( $desc );
+		}
+
+		return $desc;
+	}
+
+	public function convert_pub_date($coverDate = null)
+	{
+		return (is_string($coverDate) ? strtotime($coverDate) : $coverDate);
+	}
+
+	public function convert_issue_num($issueNum = null)
+	{
+		if (isset($issueNum) && strlen($issueNum) > 0) {
+			return intval($issueNum);
+		}
+
+		return $issueNum;
+	}
+
+	public function convert_start_year($start_year = null)
+	{
+		if (isset($start_year) && strlen($start_year) == 4) {
+			return intval($start_year);
+		}
+
+		return $start_year;
+	}
+
+	public function importMap_publisher()
 	{
 		// comicvine => model attribute
 		return array( //,
-			"id" => Publisher::xid,
-			"site_detail_url" => Publisher::xurl,
-			"deck" => "desc",
-			"name" => Publisher::name,
-			"story_arcs" => "story_arcs",
-			"image/tiny_url" => ComicVineImporter::META_IMPORT_SMALL_ICON,
-			"image/icon_url" => ComicVineImporter::META_IMPORT_LARGE_ICON
+			"id" 				=> Publisher::xid,
+			"site_detail_url" 	=> Publisher::xurl,
+			"name" 				=> Publisher::name,
+			"deck" 				=> "desc", // not currently used
+			"image/tiny_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
+			"image/icon_url" 	=> ComicVineImporter::META_IMPORT_LARGE_ICON
 		);
 	}
 
-	public function importCharacterMap()
+	public function importMap_character()
 	{
 		// comicvine => model attribute
 		return array( //,
-			"aliases" => "aliases",
-			"id" => Character::xid,
-			"site_detail_url" => Character::xurl,
-			"deck" => Character::desc,
-			"gender" => Character::gender,
-			"name" => Character::name,
-			"real_name" => Character::realname,
-			"story_arc_credits" => "story_arc_credits",
-			"image/tiny_url" => ComicVineImporter::META_IMPORT_SMALL_ICON,
-			"image/icon_url" => ComicVineImporter::META_IMPORT_LARGE_ICON,
-			"publisher/id" => Publisher::TABLE . '/' . Publisher::xid,
-			"publisher/name" => Publisher::TABLE . '/' . Publisher::name
+			"aliases"			=> "aliases",
+			"id" 				=> Character::xid,
+			"site_detail_url" 	=> Character::xurl,
+			"deck" 				=> Character::desc,
+			"gender" 			=> Character::gender,
+			"name" 				=> Character::name,
+			"real_name" 		=> Character::realname,
+			"image/tiny_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
+			"image/icon_url" 	=> ComicVineImporter::META_IMPORT_LARGE_ICON
 		);
 	}
 
-	public function importSeriesMap()
+	public function importMap_series()
 	{
 		// comicvine => model attribute
 		return array( //,
-			"aliases" => "aliases",
-			"id" => Series::xid,
-			"site_detail_url" => Series::xurl,
-			"deck" => Series::desc,
-			"name" => Series::name,
-			"start_year" => Series::start_year,
-			"image/tiny_url" => ComicVineImporter::META_IMPORT_SMALL_ICON,
-			"image/thumb_url" => ComicVineImporter::META_IMPORT_LARGE_ICON,
-			"publisher/id" => Publisher::TABLE . '/' . Publisher::xid,
-			"publisher/name" => Publisher::TABLE . '/' . Publisher::name
+			"aliases"			=> "aliases",
+			"id" 				=> Series::xid,
+			"site_detail_url" 	=> Series::xurl,
+			"deck" 				=> Series::desc,
+			"name" 				=> Series::name,
+			"start_year" 		=> Series::start_year,
+			"image/tiny_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
+			"image/thumb_url" 	=> ComicVineImporter::META_IMPORT_LARGE_ICON
 		);
 	}
 
-	public function importPublicationMap()
+	public function importMap_publication()
 	{
 		// comicvine => model attribute
 		return array( //,
-			"id" => Publication::xid,
-			"name" => Publication::name,
-			"deck" => Publication::desc,
-			"volume/id" => Series::TABLE . '/' . Series::xid,
-			"volume/name" => Series::TABLE . '/' . Series::name,
-			"cover_date" => Publication::pub_date,
-			"issue_number" => Publication::issue_num,
-			"site_detail_url" => Publication::xurl,
-			"image/icon_url" => ComicVineImporter::META_IMPORT_SMALL_ICON,
-			"image/thumb_url" => ComicVineImporter::META_IMPORT_LARGE_ICON
+			"id" 				=> Publication::xid,
+			"name" 				=> Publication::name,
+			"deck" 				=> Publication::desc,
+			"cover_date" 		=> Publication::pub_date,
+			"issue_number" 		=> Publication::issue_num,
+			"site_detail_url" 	=> Publication::xurl,
+			"image/icon_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
+			"image/thumb_url"	=> ComicVineImporter::META_IMPORT_LARGE_ICON
 		);
 	}
 
-	public function importStoryArcMap()
+	public function importMap_story_arc()
 	{
 		// comicvine => model attribute
 		return array( //,
-			"id" => Story_Arc::xid,
-			"name" => Story_Arc::name,
-			"deck" => Story_Arc::desc,
-			"volume/id" => Series::TABLE . '/' . Series::xid,
-			"volume/name" => Series::TABLE . '/' . Series::name,
-			"site_detail_url" => Story_Arc::xurl,
-			"publisher/id" => Publisher::TABLE . '/' . Publisher::xid,
-			"publisher/name" => Publisher::TABLE . '/' . Publisher::name,
-			"image/tiny_url" => ComicVineImporter::META_IMPORT_SMALL_ICON,
-			"image/icon_url" => ComicVineImporter::META_IMPORT_LARGE_ICON
+			"id" 				=> Story_Arc::xid,
+			"name"				=> Story_Arc::name,
+			"deck" 				=> Story_Arc::desc,
+			"site_detail_url"	=> Story_Arc::xurl,
+			"image/tiny_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
+			"image/icon_url" 	=> ComicVineImporter::META_IMPORT_LARGE_ICON
 		);
 	}
 
-
-
-	/**
-	 * Set meta data for async processing
+	/** PRE-PROCESSING
+	 * imports a minimal record that can later bew fleshed out
 	 */
-	public function importStoryArcValues($publisher_xid = null, $name = null, $xid, $xurl = null, $forceImages = false)
+	public function preprocessRelationship( $model = null, $path = "error", array $cvData = array(), array $map = array() )
 	{
-		if ( isset($xid) == false || strlen($xid) == 0) {
-			throw new Exception("External ID is required");
+		if ( is_null($model) || ($model instanceof \Model) == false) {
+			throw new Exception("Destination Model is required " . var_export($model, true));
 		}
 
-		$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, "story_arc", $xid);
-		$cvDetails = $this->getMeta( $root );
-		if ( isset($cvDetails, $cvDetails[Publisher::name]) == false) {
-			$this->setMeta( appendPath( $root, Publisher::TABLE . '/' . Publisher::xid), $publisher_xid);
-			$this->setMeta( appendPath( $root, Story_Arc::name), $name);
-			$this->setMeta( appendPath( $root, Story_Arc::xid), $xid);
-			$this->setMeta( appendPath( $root, Story_Arc::xsource), Endpoint_Type::ComicVine);
-			$this->setMeta( appendPath( $root, Story_Arc::xurl), $xurl);
-			$this->setMeta( appendPath( $root, ComicVineImporter::META_IMPORT_FORCE_ICON), $forceImages );
+		// this is a little different because the xid from CV is the id
+		if ( isset($cvData['id']) == false || strlen($cvData['id']) == 0) {
+			throw new Exception("External ID 'id' is required " . var_export($cvData, true));
 		}
 
-		return $root;
-	}
+		$dir = $model->tableName() . '_' . $cvData['id'];
+		$this->setMeta( appendPath( $path, EndpointImporter::META_IMPORT_RELATIONSHIP, $dir, EndpointImporter::META_IMPORT_TYPE), $model->tableName());
 
-	public function importPublisherValues($name = null, $xid, $xurl = null, $forceImages = false)
-	{
-		if ( isset($xid) == false || strlen($xid) == 0) {
-			throw new Exception("External ID is required");
-		}
-
-		$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, Publisher::TABLE, $xid);
-		$cvDetails = $this->getMeta( $root );
-		if ( isset($cvDetails, $cvDetails[Publisher::name]) == false) {
-			$this->setMeta( appendPath( $root, Publisher::name), $name);
-			$this->setMeta( appendPath( $root, Publisher::xid), $xid);
-			$this->setMeta( appendPath( $root, Publisher::xsource), Endpoint_Type::ComicVine);
-			$this->setMeta( appendPath( $root, Publisher::xurl), $xurl);
-			$this->setMeta( appendPath( $root, ComicVineImporter::META_IMPORT_FORCE_ICON), $forceImages );
-		}
-
-		return $root;
-	}
-
-	public function importCharacterValues($name = null, $xid = null, $xurl = null, $forceImages = false)
-	{
-		if ( isset($xid) == false || strlen($xid) == 0) {
-			throw new Exception("External ID is required");
-		}
-
-		$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, Character::TABLE, $xid);
-		$cvDetails = $this->getMeta( $root );
-		if ( isset($cvDetails, $cvDetails[Character::name]) == false) {
-			$this->setMeta( appendPath( $root, Character::name), $name);
-			$this->setMeta( appendPath( $root, Character::xid), $xid);
-			$this->setMeta( appendPath( $root, Character::xsource), Endpoint_Type::ComicVine);
-			$this->setMeta( appendPath( $root, Character::xurl), $xurl);
-			$this->setMeta( appendPath( $root, ComicVineImporter::META_IMPORT_FORCE_ICON), $forceImages );
-		}
-		return $root;
-	}
-
-	public function importSeriesValues($name = null, $xid = null, $xurl = null, $forceImages = false)
-	{
-		if ( isset($xid) == false || strlen($xid) == 0) {
-			throw new Exception("External ID is required");
-		}
-
-		$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, Series::TABLE, $xid);
-		$cvDetails = $this->getMeta( $root );
-		if ( isset($cvDetails, $cvDetails[Series::name]) == false) {
-			$this->setMeta( appendPath( $root, Series::name), $name);
-			$this->setMeta( appendPath( $root, Series::xid), $xid);
-			$this->setMeta( appendPath( $root, Series::xsource), Endpoint_Type::ComicVine);
-			$this->setMeta( appendPath( $root, Series::xurl), $xurl);
-			$this->setMeta( appendPath( $root, ComicVineImporter::META_IMPORT_FORCE_ICON), $forceImages );
-		}
-		return $root;
-	}
-
-	public function importPublicationValues($series_xid = null, $name = null, $num = null, $xid = null, $xurl = null, $forceImages = false)
-	{
-		if ( isset($xid) == false || strlen($xid) == 0) {
-			throw new Exception("External ID is required");
-		}
-
-		$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, "publication", $xid);
-		$cvDetails = $this->getMeta( $root );
-		if ( isset($cvDetails, $cvDetails[Publication::name]) == false) {
-			$this->setMeta( appendPath( $root, Series::TABLE . '/' . Series::xid), $series_xid);
-			$this->setMeta( appendPath( $root, Publication::name), $name);
-			$this->setMeta( appendPath( $root, Publication::issue_num), $num);
-			$this->setMeta( appendPath( $root, Publication::xid), $xid);
-			$this->setMeta( appendPath( $root, Publication::xsource), Endpoint_Type::ComicVine);
-			$this->setMeta( appendPath( $root, Publication::xurl), $xurl);
-			$this->setMeta( appendPath( $root, ComicVineImporter::META_IMPORT_FORCE_ICON), $forceImages );
-		}
-		return $root;
-	}
-
-	/**
-	 * Perform ComicVine processing actions.  Can be called sync or async
-	 */
-	private function preprocess_story_arc($path, array $cvDetails = array())
-	{
-		// this should never happen since the xid is required as part of the path
-		if ( isset($cvDetails["xid"]) ) {
-			// with no name means we probably need to fetch from ComicVine
-			if ( isset($cvDetails["name"]) == false) {
-				$story_arcId = $cvDetails["xid"];
-				// load the details from ComicVine
-				$comicVine = $this->endpoint();
-				if ( $comicVine == false ) {
-					throw new Exception("Endpoint was not found");
-				}
-				else {
-					$connection = new ComicVineConnector($comicVine);
-					$record = $connection->storyArcDetails( $story_arcId );
-					if ( $record == false ) {
-						return $record;
-					}
-
-					$this->setMeta( "cv/story_arc/" . $story_arcId, $record );
-					$map = $this->importStoryArcMap();
-					$this->setMeta( appendPath( $path, Publisher::xsource), Endpoint_Type::ComicVine);
-					foreach( $map as $cvKey => $modelKey ) {
-						$value = valueForKeypath($cvKey, $record);
-						$this->setMeta( appendPath( $path, $modelKey), $value );
-					}
-
-					$publisher_xid = valueForKeypath( "publisher/id", $record );
-					$publisher_name = valueForKeypath( "publisher/name", $record );
-					$publisher_url = valueForKeypath("publisher/site_detail_url", $record);
-					if ( is_null($publisher_xid) == false ) {
-						$pubObj = Model::Named("Publisher")->objectForExternal( $publisher_xid, Endpoint_Type::ComicVine );
-						if ( $pubObj == false ) {
-							$this->importPublisherValues($publisher_name, $publisher_xid, $publisher_url, false);
-						}
-					}
-
-					$issues = valueForKeypath( "issues", $record );
-					if ( is_array($issues) && count($issues) > 0) {
-						$issue_array = array();
-						foreach( $issues as $issue ) {
-							if ( isset($issue['id']) ) {
-								$issue_array[] = $issue['id'];
-							}
-						}
-						$this->setMeta( appendPath( $path, Publication::TABLE), $issue_array );
-					}
-				}
-			}
-		}
-		return true;
-	}
-
-	private function preprocess_publisher($path, array $cvDetails = array())
-	{
-		// this should never happen since the xid is required as part of the path
-		if ( isset($cvDetails[Publisher::xid]) ) {
-			// with no name means we probably need to fetch from ComicVine
-			if ( isset($cvDetails[Publisher::name]) == false) {
-				$publisherId = $cvDetails[Publisher::xid];
-				// load the details from ComicVine
-				$comicVine = $this->endpoint();
-				if ( $comicVine == false ) {
-					throw new Exception("Endpoint was not found");
-				}
-				else {
-					$connection = new ComicVineConnector($comicVine);
-					$record = $connection->publisherDetails( $publisherId );
-					if ( $record == false ) {
-						return $record;
-					}
-
-					$this->setMeta( "cv/publisher/" . $publisherId, $record );
-					$map = $this->importPublisherMap();
-					$this->setMeta( appendPath( $path, Publisher::xsource), Endpoint_Type::ComicVine);
-					foreach( $map as $cvKey => $modelKey ) {
-						$value = valueForKeypath($cvKey, $record);
-						$this->setMeta( appendPath( $path, $modelKey), $value );
-					}
-
-					$storyArcs = valueForKeypath( "story_arcs", $record );
-					if ( is_array($storyArcs) && count($storyArcs) > 0) {
-						foreach( $storyArcs as $arc ) {
-							if ( isset($arc['id']) ) {
-								// story arcs do not automatically get all details
-								$this->importStoryArcValues($publisherId, $arc['name'], $arc['id'], $arc['site_detail_url']);
-							}
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
-
-	private function preprocess_character($path, array $cvDetails = array())
-	{
-		// this should never happen since the xid is required as part of the path
-		if ( isset($cvDetails[Character::xid]) ) {
-			// with no name means we probably need to fetch from ComicVine
-			if ( isset($cvDetails[Character::name]) == false) {
-				$characterId = $cvDetails[Character::xid];
-				// load the details from ComicVine
-				$comicVine = $this->endpoint();
-				if ( $comicVine == false ) {
-					throw new Exception("Endpoint was not found");
-				}
-				else {
-					$connection = new ComicVineConnector($comicVine);
-					$record = $connection->characterDetails( $characterId );
-					if ( $record == false ) {
-						return $record;
-					}
-
-					$this->setMeta( "cv/character/" . $characterId, $record );
-					$map = $this->importCharacterMap();
-					$this->setMeta( appendPath( $path, Character::xsource), Endpoint_Type::ComicVine);
-					foreach( $map as $cvKey => $modelKey ) {
-						$value = valueForKeypath($cvKey, $record);
-						$this->setMeta( appendPath( $path, $modelKey), $value );
-					}
-
-					// check for Publisher
-					$publisher_xid = valueForKeypath( "publisher/id", $record );
-					$publisher_name = valueForKeypath( "publisher/name", $record );
-					if ( is_null($publisher_xid) == false ) {
-						$pubObj = Model::Named("Publisher")->objectForExternal( $publisher_xid, Endpoint_Type::ComicVine );
-						if ( $pubObj == false ) {
-							$pubroot = $this->importPublisherValues( $publisher_name, $publisher_xid);
-						}
-					}
-					else {
-						Logger::logWarning( "No publisher xid found" );
-					}
-
-					$storyArcs = valueForKeypath( "story_arc_credits", $record );
-					if ( is_array($storyArcs) && count($storyArcs) > 0) {
-						foreach( $storyArcs as $arc ) {
-							if ( isset($arc['id']) ) {
-								// story arcs do not automatically get all details
-								$this->importStoryArcValues($publisher_xid, $arc['name'], $arc['id'], $arc['site_detail_url']);
-							}
-						}
-					}
-				}
-			}
-		}
-		else {
-			Logger::logError( "No details for " . $path, get_class($this), $this->guid );
-		}
-		return true;
-	}
-
-	private function preprocess_series($path, array $cvDetails = array())
-	{
-		// this should never happen since the xid is required as part of the path
-		if ( isset($cvDetails[Series::xid]) ) {
-			// with no name means we probably need to fetch from ComicVine
-			if ( isset($cvDetails[Series::name]) == false) {
-				$xId = $cvDetails[Series::xid];
-				// load the details from ComicVine
-				$comicVine = $this->endpoint();
-				if ( $comicVine == false ) {
-					throw new Exception("Endpoint was not found");
-				}
-				else {
-					$connection = new ComicVineConnector($comicVine);
-					$record = $connection->seriesDetails( $xId );
-					if ( $record == false ) {
-						return $record;
-					}
-
-					$this->setMeta( "cv/series/" . $xId, $record );
-					$map = $this->importSeriesMap();
-					$this->setMeta( appendPath( $path, Series::xsource), Endpoint_Type::ComicVine);
-					foreach( $map as $cvKey => $modelKey ) {
-						$value = valueForKeypath($cvKey, $record);
-						$this->setMeta( appendPath( $path, $modelKey), $value );
-					}
-
-					// check for Publisher
-					$publisher_xid = valueForKeypath( "publisher/id", $record );
-					$publisher_name = valueForKeypath( "publisher/name", $record );
-					$publisher_url = valueForKeypath("publisher/site_detail_url", $record);
-					if ( is_null($publisher_xid) == false ) {
-						$pubObj = Model::Named("Publisher")->objectForExternal( $publisher_xid, Endpoint_Type::ComicVine );
-						if ( $pubObj == false ) {
-							$this->importPublisherValues($publisher_name, $publisher_xid, $publisher_url, false);
-						}
-					}
-
-					$characters = valueForKeypath( "characters", $record );
-					if ( is_array($characters) && count($characters) > 0) {
-						$char_array = array();
-						foreach( $characters as $character ) {
-							if ( isset($character['id']) ) {
-								$char_array[] = $character['id'];
-								$characterName = (isset($character['name']) ? $character['name'] : "Unknown");
-								$characterURL = (isset($character['site_detail_url']) ? $character['site_detail_url'] : null);
-								$this->importCharacterValues($characterName, $character['id'], $characterURL);
-							}
-						}
-						$this->setMeta( appendPath( $path, Character::TABLE), $char_array );
-					}
-
-					$issues = valueForKeypath( "issues", $record );
-					if ( is_array($issues) && count($issues) > 0) {
-						$issue_array = array();
-						foreach( $issues as $issue ) {
-							if ( isset($issue['id']) ) {
-								$issue_array[] = $issue['id'];
-							}
-						}
-						$this->setMeta( appendPath( $path, Publication::TABLE), $issue_array );
-					}
-				}
-			}
-		}
-		else {
-			Logger::logError( "No details for " . $path, get_class($this), $this->guid );
-		}
-		return true;
-	}
-
-	private function preprocess_publication($path, array $cvDetails = array())
-	{
-		// this should never happen since the xid is required as part of the path
-		if ( isset($cvDetails["xid"]) ) {
-			// with no name means we probably need to fetch from ComicVine
-			if ( isset($cvDetails["name"]) == false) {
-				$publicationId = $cvDetails["xid"];
-				// load the details from ComicVine
-				$comicVine = $this->endpoint();
-				if ( $comicVine == false ) {
-					throw new Exception("Endpoint was not found");
-				}
-				else {
-					$connection = new ComicVineConnector($comicVine);
-					$record = $connection->issueDetails( $publicationId );
-					if ( $record == false ) {
-						return $record;
-					}
-
-					$this->setMeta( "cv/publication/" . $publicationId, $record );
-					$map = $this->importPublicationMap();
-					$this->setMeta( appendPath( $path, Publication::xsource), Endpoint_Type::ComicVine);
-					foreach( $map as $cvKey => $modelKey ) {
-						$value = valueForKeypath($cvKey, $record);
-						$this->setMeta( appendPath( $path, $modelKey), $value );
-					}
-
-					// check for Series
-					$series_xid = valueForKeypath( "volume/id", $record );
-					$series_name = valueForKeypath( "volume/name", $record );
-					if ( is_null($series_xid) == false ) {
-						$seriesObj = Model::Named("Series")->objectForExternal( $series_xid, Endpoint_Type::ComicVine );
-						if ( $seriesObj == false ) {
-							$seriesroot = $this->importSeriesValues($series_name, $series_xid, null, false);
-						}
-					}
-					else {
-						Logger::logWarning( "No series xid found");
-					}
-
-					$characters = valueForKeypath( "characters", $record );
-					if ( is_array($characters) && count($characters) > 0) {
-						foreach( $characters as $character ) {
-							if ( isset($character['id']) ) {
-								$characterName = (isset($character['name']) ? $character['name'] : "Unknown");
-								$characterURL = (isset($character['site_detail_url']) ? $character['site_detail_url'] : null);
-								$this->importCharacterValues($characterName, $character['id'], $characterURL);
-							}
-						}
-					}
-
-					$storyArcs = valueForKeypath( "story_arc_credits", $record );
-					if ( is_array($storyArcs) && count($storyArcs) > 0) {
-						$story_arc_array = array();
-						foreach( $storyArcs as $arc ) {
-							if ( isset($arc['id']) ) {
-								$story_arc_array[] = $arc['id'];
-// 								$this->importStoryArcValues(null, $arc['name'], $arc['id'], $arc['site_detail_url']);
-								$this->importStoryArcValues(null, null, $arc['id'], $arc['site_detail_url']);
-							}
-						}
-						$this->setMeta( appendPath( $path, Story_Arc::TABLE), $story_arc_array );
-					}
-				}
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Perform actual processing actions loading the comicVine data into the database.
-	 * should return the created/updated object, false on error, or null if no action takes place
-	 */
-	private function process_story_arc($path, array $cvDetails = array())
-	{
-		$object = null;
-		if ( isset($cvDetails[Story_Arc::xid], $cvDetails[Story_Arc::name]) ) {
-			$sarc_model = Model::Named('Story_Arc');
-			$name = valueForKeypath(Story_Arc::name, $cvDetails);
-			$desc = valueForKeypath(Story_Arc::desc, $cvDetails);
-			$xId = valueForKeypath(Story_Arc::xid, $cvDetails);
-			$xSrc = valueForKeypath(Story_Arc::xsource, $cvDetails);
-			$xUrl = valueForKeypath(Story_Arc::xurl, $cvDetails);
-
-			$publisher = null;
-			$publisherId = valueForKeypath( Publisher::TABLE . '/' . Publisher::xid, $cvDetails);
-			if ( is_null( $publisherId ) == false ) {
-				$publisher = Model::Named("Publisher")->objectForExternal( $publisherId, Endpoint_Type::ComicVine );
+		$importValues = array();
+		foreach( $map as $cvKey => $modelKey ) {
+			$value = valueForKeypath($cvKey, $cvData);
+			$convert_method = 'convert_' . $modelKey;
+			if (method_exists($this, $convert_method)) {
+				$value = $this->$convert_method( $value );
 			}
 
-			$object = $sarc_model->findExternalOrCreate( $publisher, $name, $desc, $xId, $xSrc, $xUrl );
-			if ( $object != false && is_array($object) == false) {
-				$this->addImportsProcessed($object);
-
-				$pubs_array = valueForKeypath(Publication::TABLE, $cvDetails);
-				if ( is_array($pubs_array) ) {
-					$pubs_model = Model::Named("Publication");
-					foreach( $pubs_array as $pub_xid ) {
-						$pub = $pubs_model->objectForExternal( $pub_xid, Endpoint_Type::ComicVine );
-						if ( $pub != false ) {
-							$object->joinToPublication($pub);
-						}
-					}
-				}
-
-				$forceImageUpdate = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
-				if ( $forceImageUpdate == true || $object->hasIcons() == false ) {
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::IconName, $imageURL );
-					}
-
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::ThumbnailName, $imageURL );
-					}
-				}
+			// set the reference value for the import record
+			$this->setMeta( appendPath( $path, EndpointImporter::META_IMPORT_RELATIONSHIP, $dir, $modelKey), $value );
+			// set the enqueued values for pre-processing
+			if ( is_null( $value ) == false ) {
+				$importValues[$modelKey] = $value;
 			}
 		}
-		else {
-			Logger::logError( "Unable to import story_arc.  incomplete details " . var_export( $cvDetails, true), get_class($this), $this->guid );
-		}
 
-		return $object;
+		return $this->enqueue( $model, $importValues, false, false );
+
 	}
 
-	private function process_publisher($path, array $cvDetails = array())
+	public function preprocess_publisher(array $metaRecord = array())
 	{
-		$object = null;
-		if ( isset($cvDetails[Publisher::xid], $cvDetails[Publisher::name]) ) {
-			$publish_model = Model::Named('Publisher');
-			$publisherName = valueForKeypath(Publisher::name, $cvDetails);
-			$publisherId = valueForKeypath(Publisher::xid, $cvDetails);
-			$publisherSrc = valueForKeypath(Publisher::xsource, $cvDetails);
-			$publisherUrl = valueForKeypath(Publisher::xurl, $cvDetails);
+		$object = parent::preprocess(Model::Named("Publisher"), $metaRecord);
 
-			$object = $publish_model->findExternalOrCreate( $publisherName, $publisherId, $publisherSrc, $publisherUrl);
-			if ( $object != false && is_array($object) == false) {
-				$this->addImportsProcessed($object);
+		if ( $object != null ) {
+			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 
-				$forceImageUpdate = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
-				if ( $forceImageUpdate == true || $object->hasIcons() == false ) {
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::IconName, $imageURL );
-					}
-
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::ThumbnailName, $imageURL );
-					}
+			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Publisher::TABLE . '_' . $xid );
+			if ( $forceMeta === true ) {
+				$connection = $this->connection();
+				$record = $connection->publisherDetails( $xid );
+				if ( $record == false ) {
+					throw new Exception("Connection failed to find publisher for " . $xid);
 				}
-			}
-		}
-		else {
-			Logger::logError( "Unable to import publisher.  incomplete details " . var_export( $cvDetails, true), get_class($this), $this->guid );
-		}
 
-		return $object;
-	}
+				// $this->setMeta( "cv/publisher/" . $xid, $record );
 
-	private function process_character($path, array $cvDetails = array())
-	{
-		$object = null;
-		if ( isset($cvDetails[Character::xid], $cvDetails[Character::name]) ) {
-			$character_model = Model::Named('Character');
-
-			$name = valueForKeypath(Character::name, $cvDetails);
-			$realname = valueForKeypath(Character::realname, $cvDetails);
-			$desc = valueForKeypath(Character::desc, $cvDetails);
-			$xid = valueForKeypath(Character::xid, $cvDetails);
-			$xsrc = valueForKeypath(Character::xsource, $cvDetails);
-			$xurl = valueForKeypath(Character::xurl, $cvDetails);
-
-			$publisher = null;
-			$publisherId = valueForKeypath( Publisher::TABLE . '/' . Publisher::xid, $cvDetails);
-			if ( is_null( $publisherId ) == false ) {
-				$publisher = Model::Named("Publisher")->objectForExternal( $publisherId, Endpoint_Type::ComicVine );
-			}
-
-			$aliases = valueForKeypath("aliases", $cvDetails);
-			if ( isset($aliases) && strlen($aliases) > 0 ) {
-				$aliases = split_lines($aliases);
-			}
-
-			$gender = $this->genderMap(valueForKeypath(Character::gender, $cvDetails));
-			$object = $character_model->findExternalOrCreate( $publisher, $name, $realname, $gender, $desc, $aliases, $xid, $xsrc, $xurl);
-			if ( $object != false && is_array($object) == false) {
-				$this->addImportsProcessed($object);
-
-				$forceImageUpdate = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
-				if ( $forceImageUpdate == true || $object->hasIcons() == false ) {
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::IconName, $imageURL );
+				$map = $this->importMap_publisher();
+				foreach( $map as $cvKey => $modelKey ) {
+					$value = valueForKeypath($cvKey, $record);
+					$convert_method = 'convert_' . $modelKey;
+					if (method_exists($this, $convert_method)) {
+						$value = $this->$convert_method( $value );
 					}
 
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::ThumbnailName, $imageURL );
-					}
+					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
 			}
 		}
@@ -704,171 +272,366 @@ class ComicVineImporter extends EndpointImporter
 		return $object;
 	}
 
-	private function process_series($path, array $cvDetails = array())
+	public function preprocess_character(array $metaRecord = array())
 	{
-		$object = null;
-		if ( isset($cvDetails[Series::xid], $cvDetails[Series::name]) ) {
-			$series_model = Model::Named('Series');
+		$object = parent::preprocess(Model::Named("Character"), $metaRecord);
 
-			$name = valueForKeypath(Series::name, $cvDetails);
-			$start_year = valueForKeypath(Series::start_year, $cvDetails);
-			$desc = valueForKeypath(Series::desc, $cvDetails);
-			$xid = valueForKeypath(Series::xid, $cvDetails);
-			$xsrc = valueForKeypath(Series::xsource, $cvDetails);
-			$xurl = valueForKeypath(Series::xurl, $cvDetails);
+		if ( $object != null ) {
+			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 
-			$publisher = null;
-			$publisherId = valueForKeypath( Publisher::TABLE . '/' . Publisher::xid, $cvDetails);
-			if ( is_null( $publisherId ) == false ) {
-				$publisher = Model::Named("Publisher")->objectForExternal( $publisherId, Endpoint_Type::ComicVine );
-			}
-
-			$aliases = valueForKeypath("aliases", $cvDetails);
-			if ( isset($aliases) && strlen($aliases) > 0 ) {
-				$aliases = split_lines($aliases);
-			}
-
-			$object = $series_model->findExternalOrCreate( $publisher, $name, $start_year, null, $xid, $xsrc, $xurl, $desc, $aliases);
-			if ( $object != false && is_array($object) == false) {
-				$this->addImportsProcessed($object);
-
-				$forceImageUpdate = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
-				if ( $forceImageUpdate == true || $object->hasIcons() == false ) {
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::IconName, $imageURL );
-					}
-
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::ThumbnailName, $imageURL );
-					}
+			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Character::TABLE . '_' . $xid );
+			if ( $forceMeta === true ) {
+				$connection = $this->connection();
+				$record = $connection->characterDetails( $xid );
+				if ( $record == false ) {
+					throw new Exception("Connection failed to find character for " . $xid);
 				}
-			}
-			else {
-				Logger::logError( "series findExternalOrCreate " . var_export($object, true), get_class($this), $this->guid );
-			}
-		}
 
-		return $object;
-	}
+				// $this->setMeta( "cv/character/" . $xid, $record );
 
-	private function process_publication($path, array $cvDetails = array())
-	{
-		$object = null;
-		if ( isset($cvDetails[Publication::xid], $cvDetails[Publication::name]) ) {
-			$pub_model = Model::Named('Publication');
+				$map = $this->importMap_character();
+				foreach( $map as $cvKey => $modelKey ) {
+					$value = valueForKeypath($cvKey, $record);
+					$convert_method = 'convert_' . $modelKey;
+					if (method_exists($this, $convert_method)) {
+						$value = $this->$convert_method( $value );
+					}
+					$this->setMeta( appendPath( $path, $modelKey), $value );
+				}
 
-			$name = valueForKeypath(Publication::name, $cvDetails);
-			$pub_date = valueForKeypath(Publication::pub_date, $cvDetails);
-			$issue_num = valueForKeypath(Publication::issue_num, $cvDetails);
-			$desc = valueForKeypath(Publication::desc, $cvDetails);
-			$xid = valueForKeypath(Publication::xid, $cvDetails);
-			$xsrc = valueForKeypath(Publication::xsource, $cvDetails);
-			$xurl = valueForKeypath(Publication::xurl, $cvDetails);
+				$pubReference = valueForKeypath("publisher", $record);
+				if ( is_array($pubReference) ) {
+					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
+				}
 
-			$series = null;
-			$seriesId = valueForKeypath( Series::TABLE . '/' . Series::xid, $cvDetails);
-			if ( is_null( $seriesId ) == false ) {
-				$series = Model::Named("Series")->objectForExternal( $seriesId, Endpoint_Type::ComicVine );
-			}
-
-			$object = $pub_model->findExternalOrCreate( $series, $name, $desc, $issue_num, $xid, $xsrc, $xurl );
-			if ( $object != false && is_array($object) == false) {
-				$this->addImportsProcessed($object);
-
-				$story_arc_array = valueForKeypath(Story_Arc::TABLE, $cvDetails);
+				$story_arc_array = valueForKeypath("story_arc_credits", $record);
 				if ( is_array($story_arc_array) ) {
-					$story_arc_model = Model::Named("Story_Arc");
-					foreach( $story_arc_array as $arc_xid ) {
-						$arc = $story_arc_model->objectForExternal( $arc_xid, Endpoint_Type::ComicVine );
-						if ( $arc != false ) {
-							$object->joinToStory_Arc($arc);
-						}
+					foreach ( $story_arc_array as $story_arc ) {
+						$enqueued = $this->preprocessRelationship( Model::Named('Story_Arc'), $path, $story_arc, $this->importMap_story_arc() );
 					}
 				}
-
-				$forceImageUpdate = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
-				if ( $forceImageUpdate == true || $object->hasIcons() == false ) {
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::IconName, $imageURL );
-					}
-
-					$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
-					if ( is_null($imageURL) == false ) {
-						$this->importImage( $object, Model::ThumbnailName, $imageURL );
-					}
-				}
-			}
-			else {
-				Logger::logError( "publication findExternalOrCreate " . var_export($object, true), get_class($this), $this->guid );
 			}
 		}
 
 		return $object;
 	}
-	public function processData()
+
+	public function preprocess_series(array $metaRecord = array())
 	{
-		$preorder = array(
-			Publication::TABLE,
-			Series::TABLE,
-			Character::TABLE,
-			Story_Arc::TABLE,
-			Publisher::TABLE
-		);
+		$object = parent::preprocess(Model::Named("Series"), $metaRecord);
 
-		$success = true;
-		foreach( $preorder as $prekey ) {
-			$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, $prekey);
-			$preprocessMethod = 'preprocess_' . $prekey;
-			if (method_exists($this, $preprocessMethod)) {
-				$cvImports = $this->getMeta($root);
-				// each key in the imports is an externalId to be imported
-				if ( is_null($cvImports) == false ) {
-					foreach( $cvImports as $cvKey => $cvDetails ) {
-						$itemPath = appendPath( $root, $cvKey );
-						if ( $this->$preprocessMethod($itemPath, $cvDetails) == false ) {
-							// we allow the preprocessing to continue since it won't harm anything
-							$success = false;
-						}
+		if ( $object != null ) {
+			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+
+			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Series::TABLE . '_' . $xid );
+			if ( $forceMeta === true ) {
+				$connection = $this->connection();
+				$record = $connection->seriesDetails( $xid );
+				if ( $record == false ) {
+					throw new Exception("Connection failed to find series for " . $xid);
+				}
+
+				// $this->setMeta( "cv/series/" . $xid, $record );
+
+				$map = $this->importMap_series();
+				foreach( $map as $cvKey => $modelKey ) {
+					$value = valueForKeypath($cvKey, $record);
+					$convert_method = 'convert_' . $modelKey;
+					if (method_exists($this, $convert_method)) {
+						$value = $this->$convert_method( $value );
+					}
+
+					$this->setMeta( appendPath( $path, $modelKey), $value );
+				}
+
+				$pubReference = valueForKeypath("publisher", $record);
+				if ( is_array($pubReference) ) {
+					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
+				}
+
+				$character_array = valueForKeypath("characters", $record);
+				if ( is_array($character_array) ) {
+					foreach ( $character_array as $character ) {
+						$enqueued = $this->preprocessRelationship( Model::Named('Character'), $path, $character, $this->importMap_character() );
 					}
 				}
-			}
-			else {
-				Logger::logError( "failed to find pre-processing function " . $preprocessMethod, get_class($this), $this->guid );
-				$success = false;
-			}
-		}
 
-		if ( $success == true ) {
-			$reverse = array_reverse($preorder);
-			foreach( $reverse as $prekey ) {
-				$root = appendPath( ComicVineImporter::META_IMPORT_ROOT, $prekey);
-				$processMethod = 'process_' . $prekey;
-				if (method_exists($this, $processMethod)) {
-					$cvImports = $this->getMeta($root);
-					// each key in the imports is an externalId to be imported
-					if ( is_null($cvImports) == false ) {
-						foreach( $cvImports as $cvKey => $cvDetails ) {
-							$itemPath = appendPath( $root, $cvKey );
-							if ( $this->$processMethod($itemPath, $cvDetails) == false ) {
-								Logger::logError( "Failed to process $processMethod($itemPath)", get_class($this), $this->guid );
-								$success = false;
-								break;
-							}
-						}
+				$issues_array = valueForKeypath("issues", $record);
+				if ( is_array($issues_array) ) {
+					foreach ( $issues_array as $issue ) {
+						$enqueued = $this->preprocessRelationship( Model::Named('Publication'), $path, $issue, $this->importMap_publication() );
 					}
-				}
-				else {
-					Logger::logError( "failed to find processing function " . $processMethod, get_class($this), $this->guid );
-					$success = false;
 				}
 			}
 		}
 
-// 		$this->setPurgeOnExit( $success );
-		return $success;
+		return $object;
 	}
 
+	public function preprocess_story_arc(array $metaRecord = array())
+	{
+		$object = parent::preprocess(Model::Named("Story_Arc"), $metaRecord);
+
+		if ( $object != null ) {
+			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+
+			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Story_Arc::TABLE . '_' . $xid );
+			if ( $forceMeta === true ) {
+				$connection = $this->connection();
+				$record = $connection->story_arcDetails( $xid );
+				if ( $record == false ) {
+					throw new Exception("Connection failed to find story_arc for " . $xid);
+				}
+
+ 				// $this->setMeta( "cv/story_arc/" . $xid, $record );
+
+				$map = $this->importMap_story_arc();
+				foreach( $map as $cvKey => $modelKey ) {
+					$value = valueForKeypath($cvKey, $record);
+					$convert_method = 'convert_' . $modelKey;
+					if (method_exists($this, $convert_method)) {
+						$value = $this->$convert_method( $value );
+					}
+
+					$this->setMeta( appendPath( $path, $modelKey), $value );
+				}
+
+				$pubReference = valueForKeypath("publisher", $record);
+				if ( is_array($pubReference) ) {
+					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
+				}
+			}
+		}
+
+		return $object;
+	}
+
+	public function preprocess_publication(array $metaRecord = array())
+	{
+		$object = parent::preprocess(Model::Named("Publication"), $metaRecord);
+
+		if ( $object != null ) {
+			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+
+			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Publication::TABLE . '_' . $xid );
+			if ( $forceMeta === true ) {
+				$connection = $this->connection();
+				$record = $connection->issueDetails( $xid );
+				if ( $record == false ) {
+					throw new Exception("Connection failed to find publication for " . $xid);
+				}
+
+				// $this->setMeta( "cv/publication/" . $xid, $record );
+
+				$map = $this->importMap_publication();
+				foreach( $map as $cvKey => $modelKey ) {
+					$value = valueForKeypath($cvKey, $record);
+					$convert_method = 'convert_' . $modelKey;
+					if (method_exists($this, $convert_method)) {
+						$value = $this->$convert_method( $value );
+					}
+
+					$this->setMeta( appendPath( $path, $modelKey), $value );
+				}
+
+				$pubReference = valueForKeypath("publisher", $record);
+				if ( is_array($pubReference) ) {
+					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
+				}
+
+				$seriesReference = valueForKeypath("volume", $record);
+				if ( is_array($seriesReference) ) {
+					$seriesEnqueued = $this->preprocessRelationship( Model::Named('Series'), $path, $seriesReference, $this->importMap_series() );
+				}
+
+				$story_arc_array = valueForKeypath("story_arc_credits", $record);
+				if ( is_array($story_arc_array) ) {
+					foreach ( $story_arc_array as $story_arc ) {
+						$enqueued = $this->preprocessRelationship( Model::Named('Story_Arc'), $path, $story_arc, $this->importMap_story_arc() );
+					}
+				}
+
+				$character_array = valueForKeypath("character_credits", $record);
+				if ( is_array($character_array) ) {
+					foreach ( $character_array as $character ) {
+						$enqueued = $this->preprocessRelationship( Model::Named('Character'), $path, $character, $this->importMap_character() );
+					}
+				}
+			}
+		}
+
+		return $object;
+	}
+
+
+	/** FINALIZE
+	 * complete the import for each object
+	 */
+	public function finalize_publisher(array $metaRecord = array())
+	{
+		$object = parent::finalize(Model::Named("Publisher"), $metaRecord);
+
+		return $object;
+	}
+
+	public function finalize_character(array $metaRecord = array())
+	{
+		$object = parent::finalize(Model::Named("Character"), $metaRecord);
+		if ( $object instanceof model\CharacterDBO ) {
+			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			if ( is_array($relationships) ) {
+				foreach( $relationships as $rel_key => $relation ) {
+					$table = valueForKeypath(EndpointImporter::META_IMPORT_TYPE, $relation);
+					$related_model = Model::Named( $table );
+					$relatedId = valueForKeypath(EndpointImporter::META_IMPORT_XID, $relation);
+					if ( $related_model == null ) {
+						throw new Exception( "failed to find model for " . var_export( $relation, true ));
+					}
+					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+					if ( $relatedObj == false ) {
+						throw new Exception( "failed to find object for " . var_export( $relation, true ));
+					}
+
+					switch( $table ) {
+						case "publisher":
+							$object->setPublisher( $relatedObj );
+							break;
+						case "story_arc":
+							$object->joinToStory_Arc( $relatedObj );
+							break;
+						default:
+							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
+							break;
+					}
+				}
+			}
+		}
+
+		return $object;
+	}
+
+	public function finalize_series(array $metaRecord = array())
+	{
+		$object = parent::finalize(Model::Named("Series"), $metaRecord);
+		if ( $object instanceof model\SeriesDBO ) {
+			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			if ( is_array($relationships) ) {
+				foreach( $relationships as $rel_key => $relation ) {
+					$table = valueForKeypath(EndpointImporter::META_IMPORT_TYPE, $relation);
+					$related_model = Model::Named( $table );
+					$relatedId = valueForKeypath(EndpointImporter::META_IMPORT_XID, $relation);
+					if ( $related_model == null ) {
+						throw new Exception( "failed to find model for " . var_export( $relation, true ));
+					}
+					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+					if ( $relatedObj == false ) {
+						throw new Exception( "failed to find object for " . var_export( $relation, true ));
+					}
+
+					switch( $table ) {
+						case "publisher":
+							$object->setPublisher( $relatedObj );
+							break;
+						case "publication":
+							$relatedObj->setSeries( $object );
+							break;
+						case "character":
+							$object->joinToCharacter( $relatedObj );
+							break;
+						case "story_arc":
+							$object->joinToStory_Arc( $relatedObj );
+							break;
+						default:
+							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
+							break;
+					}
+				}
+			}
+		}
+
+		return $object;
+	}
+
+	public function finalize_story_arc(array $metaRecord = array())
+	{
+		$object = parent::finalize(Model::Named("Story_Arc"), $metaRecord);
+		if ( $object instanceof model\Story_ArcDBO ) {
+			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			if ( is_array($relationships) ) {
+				foreach( $relationships as $rel_key => $relation ) {
+					$table = valueForKeypath(EndpointImporter::META_IMPORT_TYPE, $relation);
+					$related_model = Model::Named( $table );
+					$relatedId = valueForKeypath(EndpointImporter::META_IMPORT_XID, $relation);
+					if ( $related_model == null ) {
+						throw new Exception( "failed to find model for " . var_export( $relation, true ));
+					}
+					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+					if ( $relatedObj == false ) {
+						throw new Exception( "failed to find object for " . var_export( $relation, true ));
+					}
+
+					switch( $table ) {
+						case "publisher":
+							$object->setPublisher( $relatedObj );
+							break;
+						default:
+							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
+							break;
+					}
+				}
+			}
+		}
+
+		return $object;
+	}
+
+	public function finalize_publication(array $metaRecord = array())
+	{
+		$object = parent::finalize(Model::Named("Publication"), $metaRecord);
+		if ( $object instanceof model\PublicationDBO ) {
+			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			if ( is_array($relationships) ) {
+				foreach( $relationships as $rel_key => $relation ) {
+					$table = valueForKeypath(EndpointImporter::META_IMPORT_TYPE, $relation);
+					$related_model = Model::Named( $table );
+					$relatedId = valueForKeypath(EndpointImporter::META_IMPORT_XID, $relation);
+					if ( $related_model == null ) {
+						throw new Exception( "failed to find model for " . var_export( $relation, true ));
+					}
+					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+					if ( $relatedObj == false ) {
+						throw new Exception( "failed to find object for " . var_export( $relation, true ));
+					}
+
+					switch( $table ) {
+						case "publisher":
+							$object->setPublisher( $relatedObj );
+							break;
+						case "series":
+							$object->setSeries( $relatedObj );
+							break;
+						case "character":
+							$object->joinToCharacter( $relatedObj );
+							break;
+						case "story_arc":
+							$object->joinToStory_Arc( $relatedObj );
+							break;
+						default:
+							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
+							break;
+					}
+				}
+			}
+		}
+
+		return $object;
+	}
 }

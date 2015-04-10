@@ -163,7 +163,7 @@ class AdminCharacters extends Admin
 						$importer->setEndpoint($endpoint);
 					}
 
-					$importer->importCharacterValues( null, $object->xid, null, true);
+					$importer->enqueue_character( array( "xid" => $object->xid), true, true );
 					$importer->daemonizeProcess();
 					$this->editCharacter($oid);
 				}
@@ -261,7 +261,7 @@ class AdminCharacters extends Admin
 				}
 
 				if ( $importer->endpoint() != false ) {
-					$importer->importCharacterValues( null, $xid, null, true);
+					$importer->enqueue_character( array( "xid" => $xid, "name" => $name), true, true );
 					$importer->daemonizeProcess();
 				}
 

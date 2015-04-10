@@ -167,7 +167,7 @@ class AdminSeries extends Admin
 						$importer->setEndpoint($endpoint);
 					}
 
-					$importer->importSeriesValues( null, $object->xid, null, true);
+					$importer->enqueue_series( array( "xid" => $object->xid), true, true );
 					$importer->daemonizeProcess();
 					$this->editSeries($oid);
 				}
@@ -269,7 +269,7 @@ class AdminSeries extends Admin
 				}
 
 				if ( $importer->endpoint() != false ) {
-					$importer->importSeriesValues( null, $xid, null, true);
+					$importer->enqueue_series( array( "xid" => $xid, "name" => $name ), true, true );
 					$importer->daemonizeProcess();
 				}
 
