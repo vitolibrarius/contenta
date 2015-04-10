@@ -90,6 +90,20 @@ abstract class Model
 		return $this->fetch($this->tableName(), $this->allColumns(), array($this->tablePK() => $id));
 	}
 
+	public function objectForExternal($xid, $xsrc)
+	{
+		$allColumns = $this->allColumnNames();
+		if ( in_array("xid", $allColumns) == false || in_array("xsource", $allColumns) == false )  {
+			throw new Exception("External ID is not supported by " . var_export($this, true));
+		}
+
+		if ( isset($xid, $xsrc) )
+		{
+			return $this->fetch($this->tableName(), $this->allColumns(), array("xid" => $xid, "xsource" => $xsrc ));
+		}
+		return false;
+	}
+
 	public function allObjectsForId(array $idArray, $sortColumns = null, $limit = null)
 	{
 		if ( isset($idArray) ) {

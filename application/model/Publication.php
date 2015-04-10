@@ -36,15 +36,6 @@ class Publication extends Model
 		);
 	}
 
-	public function objectForExternal($xid, $xsrc)
-	{
-		if ( isset($xid, $xsrc) )
-		{
-			return $this->fetch(Publication::TABLE, $this->allColumns(), array(Publication::xid => $xid, Publication::xsource => $xsrc ));
-		}
-		return false;
-	}
-
 	public function findExternalOrCreate( $series = null, $name, $desc, $issue_num = null, $xid, $xsrc, $xurl = null )
 	{
 		if ( isset($name, $xid, $xsrc) && strlen($name) && strlen($xid) && strlen($xsrc)) {

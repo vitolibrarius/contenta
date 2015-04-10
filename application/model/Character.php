@@ -63,15 +63,6 @@ class Character extends Model
 			array(Character::character_id => $obj->id, Character::name => $name));
 	}
 
-	public function objectForExternal($xid, $xsrc)
-	{
-		if ( isset($xid, $xsrc) )
-		{
-			return $this->fetch(Character::TABLE, $this->allColumns(), array(Character::xid => $xid, Character::xsource => $xsrc ));
-		}
-		return false;
-	}
-
 	public function findExternalOrCreate($publishObj, $name, $realname, $gender, $desc, $aliases, $xid, $xsrc, $xurl = null )
 	{
 		if ( isset($name, $xid, $xsrc) && strlen($name) && strlen($xid) && strlen($xsrc)) {

@@ -37,15 +37,6 @@ class Series extends Model
 		);
 	}
 
-	public function objectForExternal($xid, $xsrc)
-	{
-		if ( isset($xid, $xsrc) )
-		{
-			return $this->fetch(Series::TABLE, $this->allColumns(), array(Series::xid => $xid, Series::xsource => $xsrc ));
-		}
-		return false;
-	}
-
 	public function randomObjects($limit = 1)
 	{
 		return $this->fetchRandom(Series::TABLE, $this->allColumns(), $limit);
