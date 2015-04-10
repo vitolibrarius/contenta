@@ -1,8 +1,7 @@
 .DS_Store
 ._*
 .Spotlight-V100
-/contenta.ini
-/contenta.ini.bak
+/contenta*.ini
 
 * copy.*
 .user.ini
