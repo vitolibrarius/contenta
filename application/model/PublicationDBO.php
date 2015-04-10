@@ -58,6 +58,14 @@ class PublicationDBO extends DataObject
 		return false;
 	}
 
+	public function setSeries( model\SeriesDBO $series ) {
+		if ( isset($series, $series->id) && (isset($this->series_id) == false || $series->id != $this->series_id) ) {
+			$updates = array();
+			$updates[Publication::series_id] = $series->id;
+			$this->model()->updateObject($this, $updates );
+		}
+	}
+
 	public function media() {
 		$model = Model::Named('Media');
 		return $model->allForPublication($this);

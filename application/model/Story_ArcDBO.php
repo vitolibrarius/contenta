@@ -37,6 +37,15 @@ class Story_ArcDBO extends DataObject
 		return false;
 	}
 
+	public function setPublisher( model\PublisherDBO $pubObj )
+	{
+		if ( isset($pubObj, $pubObj->id) && (isset($this->publisher_id) == false || $pubObj->id != $this->publisher_id) ) {
+			$updates = array();
+			$updates[Character::publisher_id] = $pubObj->id;
+			$this->model()->updateObject($this, $updates );
+		}
+	}
+
 	public function characters($limit = null) {
 		$character_model = Model::Named("Character");
 		$model = Model::Named("Story_Arc_Character");
@@ -54,7 +63,7 @@ class Story_ArcDBO extends DataObject
 		return array();
 	}
 
-	public function joinToCharacter($character) {
+	public function joinToCharacter(model\CharacterDBO $character) {
 		$model = Model::Named('Story_Arc_Character');
 		return $model->create($this, $character);
 	}
@@ -76,7 +85,7 @@ class Story_ArcDBO extends DataObject
 		return array();
 	}
 
-	public function joinToSeries($series) {
+	public function joinToSeries(model\SeriesDBO $series) {
 		$model = Model::Named('Story_Arc_Series');
 		return $model->create($this, $series);
 	}
@@ -98,7 +107,7 @@ class Story_ArcDBO extends DataObject
 		return array();
 	}
 
-	public function joinToPublication($publication) {
+	public function joinToPublication(model\PublicationDBO $publication) {
 		$model = Model::Named('Story_Arc_Publication');
 		return $model->create($this, $publication);
 	}
