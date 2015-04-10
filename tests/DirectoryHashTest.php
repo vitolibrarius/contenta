@@ -43,7 +43,7 @@ $array = array(
 foreach( $array as $series => $years ) {
 	foreach( $years as $year => $issues ) {
 		foreach( $issues as $issue => $name ) {
-			echo appendPath( $series, $year, $issue, $name) . " " . md5(sanitizedPath($series, $year, $issue, $name)) . PHP_EOL;
+			echo appendPath( $series, $year, $issue, $name) . " " . hash(HASH_DEFAULT_ALGO, sanitizedPath($series, $year, $issue, $name)) . PHP_EOL;
 		}
 	}
 }
