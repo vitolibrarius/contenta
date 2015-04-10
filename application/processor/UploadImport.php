@@ -89,7 +89,7 @@ class UploadImport extends Processor
 				if ( $rar_wrapper->testWrapper() == null ) {
 					// it is a valid RAR file, so rename it and reprocess
 					Logger::logWarning($this->getMeta(UploadImport::META_MEDIA_FILENAME) . " identified as RAR", $this->type, $this->guid );
-					$newFilename = file_ext_strip($workingFile) . '.cbz';
+					$newFilename = file_ext_strip($workingFile) . '.cbr';
 					$this->renameMedia( $newFilename );
 				}
 				else {
