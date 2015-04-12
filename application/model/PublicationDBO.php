@@ -28,10 +28,6 @@ class PublicationDBO extends DataObject
 		return $this->name;
 	}
 
-	public function displayDescription() {
-		return $this->shortDescription();
-	}
-
 	public function publishedYear() {
 		if (isset($this->pub_date) && ($this->pub_date > 0)) {
 			$coverDate = getdate($this->pub_date);
