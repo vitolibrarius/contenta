@@ -60,3 +60,16 @@
 		}
 		return false;
 	}
+
+	function array_kmap(Closure $callback, Array $input)
+	{
+		$map = array();
+		foreach ($input as $key => $value) {
+			$ret = $callback($key, $value);
+			if ($ret === false) {
+				break;
+			}
+			array_push($map, $ret);
+		}
+		return $map;
+	}
