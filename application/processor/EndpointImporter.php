@@ -257,11 +257,24 @@ abstract class EndpointImporter extends Processor
 		$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 		$object = $model->objectForExternal($xid, $this->endpointTypeCode());
 		if ( $object == false ) {
-			throw new Exception("All objects should eb in finalize state " . var_export($metaRecord, true) );
+			throw new Exception("All objects should be in finalize state " . var_export($metaRecord, true) );
 		}
 
 		// import images
 		$this->importImages( $object, $metaRecord );
+
+		$aliases = valueForKeypath("aliases", $metaRecord);
+		if ( isset($aliases) && strlen($aliases) > 0 ) {
+			$aliases = split_lines($aliases);
+			if ( is_array($aliases) && method_exists($object, "addAlias") ) {
+				foreach( $aliases as $alias ) {
+					$object->addAlias( $alias );
+				}
+			}
+			else {
+				Logger::LogWarning( "$object does not support aliases '" . valueForKeypath("aliases", $metaRecord) . "'", $this->type, $this->guid );
+			}
+		}
 
 		$updates = array();
 		foreach( $importKeys as $key ) {
