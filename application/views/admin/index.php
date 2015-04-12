@@ -44,7 +44,7 @@
 				<p>Flagged series</p>
 			</div>
 			<div class="admin_card_item">
-				<a href="#">Publications</a>
+				<a href="<?php echo Config::Web('/AdminPublication/index'); ?>">Publications</a>
 				<p>Flagged issues</p>
 			</div>
 		</div>
