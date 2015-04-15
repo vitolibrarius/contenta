@@ -201,7 +201,7 @@ class ComicVineImporter extends EndpointImporter
 	}
 
 	/** PRE-PROCESSING
-	 * imports a minimal record that can later bew fleshed out
+	 * imports a minimal record that can later be fleshed out
 	 */
 	public function preprocessRelationship( $model = null, $path = "error", array $cvData = array(), array $map = array() )
 	{
@@ -214,9 +214,16 @@ class ComicVineImporter extends EndpointImporter
 			throw new Exception("External ID 'id' is required " . var_export($cvData, true));
 		}
 
-		$dir = $model->tableName() . '_' . $cvData['id'];
-		$this->setMeta( appendPath( $path, EndpointImporter::META_IMPORT_RELATIONSHIP, $dir, EndpointImporter::META_IMPORT_TYPE), $model->tableName());
+		// relationship reference
+		$relation_path = appendPath( $path, EndpointImporter::META_IMPORT_RELATIONSHIP, $model->tableName() );
+		$relationships = $this->getMeta( $relation_path );
+		if ( is_array( $relationships ) == false ) {
+			$relationships = array();
+		}
+		$relationships[] = $cvData['id'];
+		$this->setMeta( $relation_path, $relationships );
 
+		// ensure the related record is enqueued for import
 		$importValues = array();
 		foreach( $map as $cvKey => $modelKey ) {
 			$value = valueForKeypath($cvKey, $cvData);
@@ -225,8 +232,6 @@ class ComicVineImporter extends EndpointImporter
 				$value = $this->$convert_method( $value );
 			}
 
-			// set the reference value for the import record
-			$this->setMeta( appendPath( $path, EndpointImporter::META_IMPORT_RELATIONSHIP, $dir, $modelKey), $value );
 			// set the enqueued values for pre-processing
 			if ( is_null( $value ) == false ) {
 				$importValues[$modelKey] = $value;
@@ -488,28 +493,29 @@ class ComicVineImporter extends EndpointImporter
 		if ( $object instanceof model\CharacterDBO ) {
 			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
-				foreach( $relationships as $rel_key => $relation ) {
-					$table = valueForKeypath(EndpointImporter::META_IMPORT_TYPE, $relation);
+				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
-					$relatedId = valueForKeypath(EndpointImporter::META_IMPORT_XID, $relation);
 					if ( $related_model == null ) {
 						throw new Exception( "failed to find model for " . var_export( $relation, true ));
 					}
-					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
-					if ( $relatedObj == false ) {
-						throw new Exception( "failed to find object for " . var_export( $relation, true ));
-					}
 
-					switch( $table ) {
-						case "publisher":
-							$object->setPublisher( $relatedObj );
-							break;
-						case "story_arc":
-							$object->joinToStory_Arc( $relatedObj );
-							break;
-						default:
-							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
-							break;
+					foreach ( $relations as $relatedId ) {
+						$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+						if ( $relatedObj == false ) {
+							throw new Exception( "failed to find object for " . var_export( $relation, true ));
+						}
+
+						switch( $table ) {
+							case "publisher":
+								$object->setPublisher( $relatedObj );
+								break;
+							case "story_arc":
+								$object->joinToStory_Arc( $relatedObj );
+								break;
+							default:
+								Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
+								break;
+						}
 					}
 				}
 			}
@@ -524,34 +530,35 @@ class ComicVineImporter extends EndpointImporter
 		if ( $object instanceof model\SeriesDBO ) {
 			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
-				foreach( $relationships as $rel_key => $relation ) {
-					$table = valueForKeypath(EndpointImporter::META_IMPORT_TYPE, $relation);
+				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
-					$relatedId = valueForKeypath(EndpointImporter::META_IMPORT_XID, $relation);
 					if ( $related_model == null ) {
 						throw new Exception( "failed to find model for " . var_export( $relation, true ));
 					}
-					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
-					if ( $relatedObj == false ) {
-						throw new Exception( "failed to find object for " . var_export( $relation, true ));
-					}
 
-					switch( $table ) {
-						case "publisher":
-							$object->setPublisher( $relatedObj );
-							break;
-						case "publication":
-							$relatedObj->setSeries( $object );
-							break;
-						case "character":
-							$object->joinToCharacter( $relatedObj );
-							break;
-						case "story_arc":
-							$object->joinToStory_Arc( $relatedObj );
-							break;
-						default:
-							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
-							break;
+					foreach ( $relations as $relatedId ) {
+						$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+						if ( $relatedObj == false ) {
+							throw new Exception( "failed to find object for " . var_export( $relation, true ));
+						}
+
+						switch( $table ) {
+							case "publisher":
+								$object->setPublisher( $relatedObj );
+								break;
+							case "publication":
+								$relatedObj->setSeries( $object );
+								break;
+							case "character":
+								$object->joinToCharacter( $relatedObj );
+								break;
+							case "story_arc":
+								$object->joinToStory_Arc( $relatedObj );
+								break;
+							default:
+								Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
+								break;
+						}
 					}
 				}
 			}
@@ -566,25 +573,26 @@ class ComicVineImporter extends EndpointImporter
 		if ( $object instanceof model\Story_ArcDBO ) {
 			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
-				foreach( $relationships as $rel_key => $relation ) {
-					$table = valueForKeypath(EndpointImporter::META_IMPORT_TYPE, $relation);
+				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
-					$relatedId = valueForKeypath(EndpointImporter::META_IMPORT_XID, $relation);
 					if ( $related_model == null ) {
 						throw new Exception( "failed to find model for " . var_export( $relation, true ));
 					}
-					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
-					if ( $relatedObj == false ) {
-						throw new Exception( "failed to find object for " . var_export( $relation, true ));
-					}
 
-					switch( $table ) {
-						case "publisher":
-							$object->setPublisher( $relatedObj );
-							break;
-						default:
-							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
-							break;
+					foreach ( $relations as $relatedId ) {
+						$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+						if ( $relatedObj == false ) {
+							throw new Exception( "failed to find object for " . var_export( $relation, true ));
+						}
+
+						switch( $table ) {
+							case "publisher":
+								$object->setPublisher( $relatedObj );
+								break;
+							default:
+								Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
+								break;
+						}
 					}
 				}
 			}
@@ -599,34 +607,35 @@ class ComicVineImporter extends EndpointImporter
 		if ( $object instanceof model\PublicationDBO ) {
 			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
-				foreach( $relationships as $rel_key => $relation ) {
-					$table = valueForKeypath(EndpointImporter::META_IMPORT_TYPE, $relation);
+				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
-					$relatedId = valueForKeypath(EndpointImporter::META_IMPORT_XID, $relation);
 					if ( $related_model == null ) {
 						throw new Exception( "failed to find model for " . var_export( $relation, true ));
 					}
-					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
-					if ( $relatedObj == false ) {
-						throw new Exception( "failed to find object for " . var_export( $relation, true ));
-					}
 
-					switch( $table ) {
-						case "publisher":
-							$object->setPublisher( $relatedObj );
-							break;
-						case "series":
-							$object->setSeries( $relatedObj );
-							break;
-						case "character":
-							$object->joinToCharacter( $relatedObj );
-							break;
-						case "story_arc":
-							$object->joinToStory_Arc( $relatedObj );
-							break;
-						default:
-							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
-							break;
+					foreach ( $relations as $relatedId ) {
+						$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+						if ( $relatedObj == false ) {
+							throw new Exception( "failed to find object for " . var_export( $relation, true ));
+						}
+
+						switch( $table ) {
+							case "publisher":
+								$object->setPublisher( $relatedObj );
+								break;
+							case "series":
+								$object->setSeries( $relatedObj );
+								break;
+							case "character":
+								$object->joinToCharacter( $relatedObj );
+								break;
+							case "story_arc":
+								$object->joinToStory_Arc( $relatedObj );
+								break;
+							default:
+								Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
+								break;
+						}
 					}
 				}
 			}
