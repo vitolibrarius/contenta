@@ -118,7 +118,7 @@ abstract class Model
 			$sql .= $this->tablePK() . ' IN (' . implode(", ", $placeholders) . ')';
 
 			$sql .= $this->orderbyClause($sortColumns);
-			if ( isset($limit) ) {
+			if ( isset($limit) && intval($limit) > 0 ) {
 				$sql .= " LIMIT " . $limit;
 			}
 
@@ -143,12 +143,12 @@ abstract class Model
 		return false;
 	}
 
-	public function allObjects($sortColumns = null, $limit = null)
+	public function allObjects($sortColumns = null, $limit = 50)
 	{
 		return $this->fetchAll($this->tableName(), $this->allColumns(), null, ($sortColumns == null ? $this->sortOrder() : $sortColumns), $limit);
 	}
 
-	public function allObjectsLike(array $search = array(), $limit = null) {
+	public function allObjectsLike(array $search = array(), $limit = 50) {
 		return $this->fetchAllLike($this->tableName(), $this->allColumns(), $search, null, $this->sortOrder(), $limit);
 	}
 
@@ -446,7 +446,7 @@ abstract class Model
 
 			$sql = "SELECT " . $columns . " FROM " . $table . " ORDER BY RANDOM()";
 
-			if ( isset($limit) ) {
+			if ( isset($limit) && intval($limit) > 0 ) {
 				$sql .= " LIMIT " . $limit;
 			}
 
@@ -492,7 +492,7 @@ abstract class Model
 
 			$sql .= $this->orderbyClause($order);
 
-			if ( isset($limit) ) {
+			if ( isset($limit) && intval($limit) > 0 ) {
 				$sql .= " LIMIT " . $limit;
 			}
 
@@ -546,7 +546,7 @@ abstract class Model
 
 			$sql .= $this->orderbyClause($order);
 
-			if ( isset($limit) ) {
+			if ( isset($limit) && intval($limit) > 0 ) {
 				$sql .= " LIMIT " . $limit;
 			}
 
@@ -594,7 +594,7 @@ abstract class Model
 			}
 
 			$sql .= $this->orderbyClause($order);
-			if ( isset($limit) ) {
+			if ( isset($limit) && intval($limit) > 0 ) {
 				$sql .= " LIMIT " . $limit;
 			}
 
@@ -765,7 +765,7 @@ abstract class Model
 
 			$sql .= $this->orderbyClause(array( 'desc' => array($date_column)));
 
-			if ( isset($limit) ) {
+			if ( isset($limit) && intval($limit) > 0 ) {
 				$sql .= " LIMIT " . $limit;
 			}
 			echo $sql . PHP_EOL;

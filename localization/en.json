@@ -300,6 +300,11 @@
                 "FIELD_EMPTY": "Filename field was empty",
                 "FIELD_TOO_LONG": "Filename field was more than 256 characters"
             }
+        },
+        "publication": {
+            "name": {
+                "search": "Issue Name"
+            }
         }
     },
     "Logs": {
@@ -397,6 +402,13 @@
         "title": "Unprocessed Uploads",
         "UploadLink": {
             "name": "Upload"
+        }
+    },
+    "AdminPublication": {
+        "title": "Publication Administration",
+        "index": {
+            "DeleteDescription": "This will permanently delete this Publication.",
+            "DeleteConfirmation": "Are you sure you want to continue?"
         }
     }
 }

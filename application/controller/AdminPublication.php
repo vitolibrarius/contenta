@@ -49,7 +49,6 @@ class AdminPublication extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Publication');
 			$this->view->model = $model;
-		Logger::LogError( "searchPublication - query"  );
 			$this->view->listArray = $model->allObjectsLike( array(
 					Publication::name => $_GET['name']
 				)
