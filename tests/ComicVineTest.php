@@ -49,7 +49,7 @@ $cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\End
 			$metadata->setMeta( model\Endpoint::enabled, Model::TERTIARY_TRUE );
 			$metadata->setMeta( model\Endpoint::compressed, Model::TERTIARY_FALSE );
 
-			die( "Please configure the comicvine.json config file with your API key" );
+			die( "Please configure the ComicVine.json config file with your API key" );
 		}
 
 		loadData( $ep_model, array($metadata->readMetadata()) );
@@ -63,10 +63,10 @@ $cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\End
 	$connection = new ComicVineConnector($epoint);
 
 // 	$results = $connection->queryForCharacterName( "Batman" );
-	$results = $connection->storyArcDetails( "40764" );
+// 	$results = $connection->storyArcDetails( "40764" );
 // 	$results = $connection->seriesDetails( "38859" );
 // 	$results = $connection->issueDetails( "260758" );
-// 	$results = $connection->personDetails( "7082" );
+	$results = $connection->personDetails( "7082" );
 
 	echo  json_encode($results, JSON_PRETTY_PRINT) . PHP_EOL;
 	echo  PHP_EOL;

@@ -32,6 +32,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 	const STORY_ARC_FIELDS =	"id,aliases,deck,first_appeared_in_issue,image,issues,name,publisher,site_detail_url";
 	const VOLUME_FIELDS =		"id,aliases,characters,deck,first_issue,image,issues,name,publisher,site_detail_url,start_year";
 	const ISSUE_FIELDS =		"id,aliases,character_credits,cover_date,deck,image,issue_number,name,person_credits,site_detail_url,story_arc_credits,volume";
+	const PERSON_FIELDS =		"id,aliases,birth,country,created_characters,deck,gender,hometown,image,issues,name,site_detail_url,story_arc_credits,volume_credits";
 
 	public function __construct($point)
 	{

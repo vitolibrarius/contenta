@@ -71,7 +71,7 @@ if ( is_array($points) == false || count($points) == 0) {
 		$metadata->setMeta( model\Endpoint::enabled, Model::TERTIARY_TRUE );
 		$metadata->setMeta( model\Endpoint::compressed, Model::TERTIARY_FALSE );
 
-		die( "Please configure the comicvine.json config file with your API key" );
+		die( "Please configure the ComicVine.json config file with your API key" );
 	}
 
 	loadData( $ep_model, array($metadata->readMetadata()), array( "name", "type", "base_url", "api_key") );
