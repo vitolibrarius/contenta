@@ -7,6 +7,7 @@ use \ClassNotFoundException as ClassNotFoundException;
 use \DataObject as DataObject;
 use \Config as Config;
 
+use html\Generator as H;
 
 class Card
 {
@@ -114,69 +115,85 @@ class Card
 		return $this->detailKeys = $keys;
 	}
 
-	public function render(DataObject $record = NULL)
+	public function render( DataObject $record = null )
 	{
-		$card = '<figure class="card"><div class="feature">';
+		$this->record = $record;
+		H::figure( array( "class" => "card"), function() {
+			H::div( array( "class" => "feature" ), function() {
+				H::div( array( "class" => "feature_top" ), function() {
+					H::div( array( "class" => "feature_top_left" ), function() {
+						H::a( array("href" => $this->selectPath()), function() {
+							H::img( array( "src" => $this->thumbnailPath($this->record), "class" => "thumbnail recordType" ));
+						});
+					});
+					H::div( array( "class" => "feature_top_right" ), function() {
+						H::div( array( "class" => "feature_top_right_top" ), function() {
+							H::img( array( "src" => $this->publisherIconPath($this->record), "class" => "icon publisher" ));
+						});
 
-		$card .= '<div class="feature_top">';
+						H::div( array( "class" => "feature_top_right_middle" ), function() {
+							H::span( array( "class" => "details" ), function() {
+								foreach( $this->detailKeys() as $key => $methodName ) {
+									$value = '';
+									if ( method_exists($this->record, $methodName) ) {
+										$value = $this->record->$methodName();
+									}
+									else if ( isset( $this->record->{$methodName} )) {
+										$value = $this->record->{$methodName};
+									}
+									H::span( array( "class" => $key ), $value );
+								}
+							});
+						});
 
-			$card .= '<div class="feature_top_left">';
-			$card .= '<a href="' . $this->selectPath() . '" ><img src="' . $this->thumbnailPath($record) . '" class="thumbnail recordType" /></a>';
-			$card .= '</div>';
+						H::div( array( "class" => "feature_top_right_bottom" ), function() {
+							H::div( array( "class" => "actions" ), function() {
 
-			$card .= '<div class="feature_top_right">';
-				$card .= '<div class="feature_top_right_top"><img src="' . $this->publisherIconPath($record) . '" class="icon publisher" /></div>';
+								$editPath = $this->editPath();
+								if (isset($editPath) && is_null($editPath) == false) {
+									H::a( array("href" => $editPath ), function() {
+										H::span( array( "class" => "icon edit"));
+									});
+								}
 
-				$card .= '<div class="feature_top_right_middle">';
-				$card .= '<span class="details">';
-				foreach( $this->detailKeys() as $key => $methodName ) {
-					$value = '';
-					if ( method_exists($record, $methodName) ) {
-						$value = $record->$methodName();
-					}
-					else if ( isset( $record->{$methodName} )) {
-						$value = $record->{$methodName};
-					}
-					$card .= '<span class="' . $key . '">' . $value . '</span>';
-				}
-				$card .= '</span>';
-				$card .= '</div>';
+								$flagPath = $this->flagPath();
+								if (isset($flagPath) && is_null($flagPath) == false) {
+									H::a( array("href" => $flagPath ), function() {
+										H::span( array( "class" => "icon flag"));
+									});
+								}
 
-				$card .= '<div class="feature_top_right_bottom">';
-				$card .= '<div class="actions">';
-					$editPath = $this->editPath();
-					if (isset($editPath) && is_null($editPath) == false) {
-						$card .= ' <a href="' . $editPath . '"><span class="icon edit" /></a>';
-					}
+								$favoritePath = $this->favoritePath();
+								if (isset($favoritePath) && is_null($favoritePath) == false) {
+									H::a( array("href" => $favoritePath ), function() {
+										H::span( array( "class" => "icon favorite"));
+									});
+								}
 
-					$flagPath = $this->flagPath();
-					if (isset($flagPath) && is_null($flagPath) == false) {
-						$card .= ' <a href="' . $flagPath . '"><span class="icon flag" /></a>';
-					}
+								$deletePath = $this->deletePath();
+								if (isset($deletePath) && is_null($deletePath) == false) {
+									H::a( array("href" => "#", "class" => "confirm", "action" => $deletePath), function() {
+										H::span( array( "class" => "icon recycle"));
+									});
+								}
+							});
+						});
+					});
+				});
+			});
 
-					$favoritePath = $this->favoritePath();
-					if (isset($favoritePath) && is_null($favoritePath) == false) {
-						$card .= ' <a href="' . $favoritePath . '"><span class="icon favorite" /></a>';
-					}
+			H::div( array("class" => "clear") );
 
-					$deletePath = $this->deletePath();
-					if (isset($deletePath) && is_null($deletePath) == false) {
-						$card .= ' <a class="confirm" href="#" action="' . $deletePath . '"><span class="icon recycle" /></a>';
-					}
-				$card .= '</div>';
-				$card .= '</div>';
+			H::figcaption( array("class" => "caption"), function() {
+				H::a( array("href" => $this->selectPath()), function() {
+					$displayName = ($this->record) ? $this->record->displayName() : "Unknown";
+					H::em( $displayName );
+				});
 
-			$card .= '</div>';
-		$card .= '</div>';
-		$card .= '</div><div class="clear"></div>';
-
-		$card .= '<figcaption class="caption"><a href="' . $this->selectPath() . '"><em>';
-		$card .= ((isset($record) && is_null($record) == false) ? $record->displayName() : "Unknown");
-		$card .= '</em></a><p>';
-		$card .= ((isset($record) && is_null($record) == false) ? $record->shortDescription() : "Short Description");
-		$card .= '</p></figcaption>';
-		$card .= '</figure>';
-
-		return $card;
+				$displayDesc = ($this->record) ? $this->record->shortDescription() : "Short Description";
+				H::p( $displayDesc );
+			});
+		});
+		unset($this->record);
 	}
 }
