@@ -61,7 +61,7 @@
 		return false;
 	}
 
-	function array_kmap(Closure $callback, Array $input)
+	function array_kmap(Closure $callback, Array $input = array())
 	{
 		$map = array();
 		foreach ($input as $key => $value) {
@@ -72,4 +72,27 @@
 			array_push($map, $ret);
 		}
 		return $map;
+	}
+
+	function array_filterForKeyValue(Array $input = array(), Array $filters = array())
+	{
+		if ( count($filters) > 0 ) {
+			$results = array();
+			foreach( $input as $record ) {
+				$pass = true;
+				foreach( $filters as $key => $expectedValue ) {
+					$testValue = valueForKeypath( $key, $record );
+					if ( $testValue != $expectedValue ) {
+						$pass = false;
+						break;
+					}
+				}
+
+				if ( $pass == true ) {
+					$results[] = $record;
+				}
+			}
+			return $results;
+		}
+		return $input;
 	}

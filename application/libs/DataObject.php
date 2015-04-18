@@ -93,7 +93,7 @@ class DataObject
 	public function hasAdditionalMedia()
 	{
 		$tbl = $this->tableName();
-		return in_array($tbl, array('series', 'publication', 'story_arc', 'character', 'publisher'));
+		return in_array($tbl, array('series', 'publication', 'media', 'story_arc', 'character', 'publisher'));
 	}
 
 	public function hasIcons()

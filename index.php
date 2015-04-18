@@ -3,10 +3,10 @@
 	$system_path = dirname(__FILE__);
 	if (realpath($system_path) !== FALSE)
 	{
-		$system_path = realpath($system_path).'/';
+		$system_path = realpath($system_path).DIRECTORY_SEPARATOR;
 	}
 
-	define('SYSTEM_PATH', str_replace("\\", "/", $system_path));
+	define('SYSTEM_PATH', str_replace("\\", DIRECTORY_SEPARATOR, $system_path));
 	define('APPLICATION_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR);
 
 	require APPLICATION_PATH .'config/bootstrap.php';

@@ -41,4 +41,10 @@ class MediaDBO extends DataObject
 	{
 		return $this->displayName() . ' (' . $this->pkValue() . ') ';
 	}
+
+	public function contentaPath()
+	{
+		return parent::mediaPath( $this->filename );
+	}
+
 }

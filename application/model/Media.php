@@ -8,7 +8,9 @@ use \Model as Model;
 use \Localized as Localized;
 
 use model\Publication as Publication;
+use model\PublicationDBO as PublicationDBO;
 use model\Media_Type as Media_Type;
+use model\Media_TypeDBO as Media_TypeDBO;
 
 class Media extends Model
 {
@@ -83,7 +85,7 @@ class Media extends Model
 
 		$existing = $this->mediaForChecksum($checksum);
 		if ( $existing == false ) {
-			$filename = createFilenameForPublication( $publication, $type);
+			$filename = $this->createFilenameForPublication( $publication, $type);
 
 			$params = array(
 				Media::created => time(),

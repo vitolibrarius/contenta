@@ -274,7 +274,7 @@ function Zip($source, $destination)
 		return false;
 	}
 
-	$source = str_replace('\\', '/', realpath($source));
+	$source = str_replace('\\', DIRECTORY_SEPARATOR, realpath($source));
 
 	if (is_dir($source) === true)
 	{
@@ -282,17 +282,17 @@ function Zip($source, $destination)
 
 		foreach ($files as $file)
 		{
-			$file = str_replace('\\', '/', $file);
+			$file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
 
 			// Ignore "." and ".." folders
-			if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+			if( in_array(substr($file, strrpos($file, DIRECTORY_SEPARATOR)+1), array('.', '..')) )
 				continue;
 
 			$file = realpath($file);
 
 			if (is_dir($file) === true)
 			{
-				$zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+				$zip->addEmptyDir(str_replace($source . DIRECTORY_SEPARATOR, '', $file . DIRECTORY_SEPARATOR));
 			}
 			else if (is_file($file) === true)
 			{

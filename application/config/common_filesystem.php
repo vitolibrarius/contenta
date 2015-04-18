@@ -85,7 +85,7 @@ function makeRequiredDirectory($path, $purpose = 'unknown')
 
 	if (realpath($path) !== FALSE)
 	{
-		$path = realpath($path) . '/';
+		$path = realpath($path) . DIRECTORY_SEPARATOR;
 	}
 
 	is_dir($path) || mkdir($path, DIR_PERMS, true) ||

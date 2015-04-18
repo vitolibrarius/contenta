@@ -31,6 +31,8 @@ class Endpoint_Type extends Model
 	public function tablePK() { return Endpoint_Type::id; }
 	public function sortOrder() { return array(Endpoint_Type::name); }
 
+	public function ComicVine() { return $this->endpointTypeForCode( Endpoint_Type::ComicVine ); }
+
 	public function allColumnNames()
 	{
 		return array(
@@ -49,6 +51,7 @@ class Endpoint_Type extends Model
 	{
 		return $this->fetch(Endpoint_Type::TABLE, $this->allColumnNames(), array(Endpoint_Type::code => $name));
 	}
+
 }
 
 ?>

@@ -55,7 +55,7 @@ class View
 
 	public function addStylesheet($path = null) {
 		if ( isset($path) && strlen($path) > 0) {
-			$filename = appendPath( '/public/css', implode('_', explode('/', trim($path, '/'))));
+			$filename = appendPath( '/public/css', implode('_', explode(DIRECTORY_SEPARATOR, trim($path, DIRECTORY_SEPARATOR))));
 			$sheet = appendPath(SYSTEM_PATH, $filename);
 			if ( file_exists($sheet) ) {
 				if ( isset($this->additionalStyles) == false) {
@@ -69,7 +69,7 @@ class View
 
 	public function addScript($path = null) {
 		if ( isset($path) && strlen($path) > 0) {
-			$filename = appendPath( '/public/js', implode('_', explode('/', trim($path, '/'))));
+			$filename = appendPath( '/public/js', implode('_', explode(DIRECTORY_SEPARATOR, trim($path, DIRECTORY_SEPARATOR))));
 			$sheet = appendPath(SYSTEM_PATH, $filename);
 			if ( file_exists($sheet) ) {
 				if ( isset($this->additionalScripts) == false) {

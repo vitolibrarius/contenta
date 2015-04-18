@@ -19,8 +19,10 @@ class Media_Type extends Model
 	const EPUB =	"epub";
 	const PDF =		"pdf";
 
+	public function cbz() 		{ return $this->mediaTypeForCode( Media_Type::CBZ ); }
+
 	public function tableName() { return Media_Type::TABLE; }
-	public function tablePK() { return Media_Type::id; }
+	public function tablePK() 	{ return Media_Type::id; }
 	public function sortOrder() { return array(Media_Type::name); }
 
 	public function allColumnNames()

@@ -3,10 +3,10 @@
 	$system_path = dirname(dirname(__FILE__));
 	if (realpath($system_path) !== FALSE)
 	{
-		$system_path = realpath($system_path).'/';
+		$system_path = realpath($system_path). DIRECTORY_SEPARATOR;
 	}
 
-	define('SYSTEM_PATH', str_replace("\\", "/", $system_path));
+	define('SYSTEM_PATH', str_replace("\\", DIRECTORY_SEPARATOR, $system_path));
 	define('APPLICATION_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR);
 
 	require SYSTEM_PATH .'application/config/bootstrap.php';
@@ -219,3 +219,44 @@ foreach( $pubs as $sample ) {
 }
 
 /***********************************************************************************************/
+my_echo( );
+my_echo( "---------- Media ");
+
+$cbzType = Model::Named( "Media_Type" )->cbz();
+$media_model = Model::Named("Media");
+
+$samples = array();
+foreach (glob(SYSTEM_PATH . "/tests/samples/*.cbz") as $file) {
+	$samples[] = $file;
+}
+
+foreach( $pubs as $idx => $sample ) {
+	$publication = $pubs_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
+	if ( $publication instanceof model\PublicationDBO ) {
+		$filename = "NoSampleFound";
+		$hash = uuid();
+		$size = rand();
+		$fullpath = null;
+		if ( count( $samples ) >= $idx ) {
+			$fullpath = $samples[$idx];
+			$filename = basename($fullpath);
+			$hash = hash_file(HASH_DEFAULT_ALGO, $fullpath);
+			$size = filesize($fullpath);
+		}
+
+		my_echo( "$idx => $filename for $publication" );
+		$media = $media_model->create( $publication, $cbzType, $filename, $hash, $size );
+		if ( $media instanceof model\MediaDBO ) {
+			$newfile = $media->contentaPath();
+			if ( is_null($fullpath) ) {
+				touch($newfile);
+			}
+			else {
+				copy($fullpath, $newfile);
+			}
+		}
+	}
+}
+
+$allMedia = $media_model->allObjects();
+reportData($allMedia,  array("filename", "original_filename", "publication", "checksum") );
