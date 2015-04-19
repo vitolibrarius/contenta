@@ -79,6 +79,18 @@ class ComicVineImporter extends EndpointImporter
 	}
 
 	/** Import maps between ComicVine keypaths and model attributes */
+	public function descriptionForRecord( Array $cvRecord = array() )
+	{
+		$desc = $this->convert_desc(valueForKeypath("deck", $cvRecord));
+		$fullDesc = valueForKeypath("description", $cvRecord);
+
+		if ( is_null($desc) || strlen($desc) == 0) {
+			$desc = $this->convert_desc( $fullDesc );
+		}
+
+		return $desc;
+	}
+
 	public function convert_gender($code = "3")
 	{
 		$cv_gender = array(
@@ -149,6 +161,7 @@ class ComicVineImporter extends EndpointImporter
 			"id" 				=> Character::xid,
 			"site_detail_url" 	=> Character::xurl,
 			"deck" 				=> Character::desc,
+			"description" 		=> "description",
 			"gender" 			=> Character::gender,
 			"name" 				=> Character::name,
 			"real_name" 		=> Character::realname,
@@ -165,6 +178,7 @@ class ComicVineImporter extends EndpointImporter
 			"id" 				=> Series::xid,
 			"site_detail_url" 	=> Series::xurl,
 			"deck" 				=> Series::desc,
+			"description" 		=> "description",
 			"name" 				=> Series::name,
 			"start_year" 		=> Series::start_year,
 			"image/tiny_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
@@ -179,6 +193,7 @@ class ComicVineImporter extends EndpointImporter
 			"id" 				=> Publication::xid,
 			"name" 				=> Publication::name,
 			"deck" 				=> Publication::desc,
+			"description" 		=> "description",
 			"cover_date" 		=> Publication::pub_date,
 			"issue_number" 		=> Publication::issue_num,
 			"site_detail_url" 	=> Publication::xurl,
@@ -194,6 +209,7 @@ class ComicVineImporter extends EndpointImporter
 			"id" 				=> Story_Arc::xid,
 			"name"				=> Story_Arc::name,
 			"deck" 				=> Story_Arc::desc,
+			"description" 		=> "description",
 			"site_detail_url"	=> Story_Arc::xurl,
 			"image/tiny_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
 			"image/icon_url" 	=> ComicVineImporter::META_IMPORT_LARGE_ICON
@@ -271,6 +287,9 @@ class ComicVineImporter extends EndpointImporter
 
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
+
+				$descPath = appendPath( $path, "desc");
+				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
 			}
 		}
 
@@ -305,6 +324,9 @@ class ComicVineImporter extends EndpointImporter
 					}
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
+
+				$descPath = appendPath( $path, "desc");
+				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
 
 				$pubReference = valueForKeypath("publisher", $record);
 				if ( is_array($pubReference) ) {
@@ -352,6 +374,9 @@ class ComicVineImporter extends EndpointImporter
 
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
+
+				$descPath = appendPath( $path, "desc");
+				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
 
 				$pubReference = valueForKeypath("publisher", $record);
 				if ( is_array($pubReference) ) {
@@ -407,6 +432,9 @@ class ComicVineImporter extends EndpointImporter
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
 
+				$descPath = appendPath( $path, "desc");
+				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
+
 				$pubReference = valueForKeypath("publisher", $record);
 				if ( is_array($pubReference) ) {
 					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
@@ -446,6 +474,9 @@ class ComicVineImporter extends EndpointImporter
 
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
+
+				$descPath = appendPath( $path, "desc");
+				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
 
 				$pubReference = valueForKeypath("publisher", $record);
 				if ( is_array($pubReference) ) {
