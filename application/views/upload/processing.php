@@ -63,7 +63,7 @@
 	<?php foreach ($this->active as $key => $value): ?>
 		<tr>
 			<td>
-				<a href="<?php echo Config::Web('/AdminUploadRepair/editInProcess', $key); ?>">
+				<a href="<?php echo Config::Web('/AdminUploadRepair/editUnprocessed', $key); ?>">
 				<img src="<?php echo Config::Web('/AdminUploadRepair/firstThumbnail', $key) ?>" class="thumbnail">
 				</a>
 			</td>

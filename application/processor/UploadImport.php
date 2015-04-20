@@ -6,9 +6,15 @@ use \Processor as Processor;
 use \Migrator as Migrator;
 use \Config as Config;
 use \Logger as Logger;
+use \Model as Model;
 
 use utilities\FileWrapper as FileWrapper;
 use utilities\MediaFilename as MediaFilename;
+use utilities\Metadata as Metadata;
+use connectors\ComicVineConnector as ComicVineConnector;
+
+use model\Endpoint_Type as Endpoint_Type;
+use model\PublicationDBO as PublicationDBO;
 
 class UploadImport extends Processor
 {
@@ -20,6 +26,16 @@ class UploadImport extends Processor
 	const META_MEDIA_SIZE = 'source/size';
 
 	const META_QUERY = 'search';
+	const META_QUERY_CLEAN = 'search/clean';
+	const META_QUERY_YEAR = 'search/year';
+	const META_QUERY_ISSUE = 'search/issue';
+	const META_QUERY_NAME = 'search/name';
+
+	const META_STATUS = 'status';
+
+	const META_RESULTS = 'results';
+	const META_RESULTS_ISSUES = 'results/issues';
+	const META_RESULTS_VOLUME = 'results/volume';
 
 	function __construct($guid)
 	{
@@ -44,7 +60,35 @@ class UploadImport extends Processor
 		return $this->workingDirectory($filename);
 	}
 
-	public function importFileWrapper()
+	public function sourceMetaData()
+	{
+		return $this->getMeta(UploadImport::META_MEDIA);
+	}
+
+	public function searchMetaData()
+	{
+		return $this->getMeta(UploadImport::META_QUERY);
+	}
+
+	public function statusMetaData()
+	{
+		return $this->getMeta(UploadImport::META_STATUS);
+	}
+
+	public function sourceFileExtension()
+	{
+		$ext = $this->getMeta(UploadImport::META_MEDIA_EXT);
+		if ( is_null($ext) ) {
+			$filename = $this->getMeta(UploadImport::META_MEDIA_FILENAME);
+			if ( is_null($filename) ) {
+				return '';
+			}
+			$ext = file_ext($filename);
+		}
+		return $ext;
+	}
+
+	public function sourceFileWrapper()
 	{
 		$importFile = $this->importFilePath();
 		if ( file_exists($importFile) ) {
@@ -56,12 +100,12 @@ class UploadImport extends Processor
 	public function setMediaForImport( $path = null, $filename = null )
 	{
 		if ( is_null($path) || is_null($filename) ) {
-			Logger::logError("Unable to import -null- for media file", __CLASS__, __METHOD__);
+			Logger::logError("Unable to import -null- for media file", $this->type, $this->guid);
 			return false;
 		}
 
 		if ( file_exists($path) == false ) {
-			Logger::logError("No media file at " . $path, __CLASS__, __METHOD__);
+			Logger::logError("No media file at " . $path, $this->type, $this->guid);
 			return false;
 		}
 
@@ -106,20 +150,144 @@ class UploadImport extends Processor
 		return true;
 	}
 
+	public function resetSearchCriteria()
+	{
+		$this->setMeta(UploadImport::META_QUERY, null);
+		$this->setMeta(UploadImport::META_RESULTS, null);
+
+		$mediaFilename = new MediaFilename($this->getMeta(UploadImport::META_MEDIA_NAME), true);
+		$this->setMeta( UploadImport::META_QUERY, $mediaFilename->updateFileMetaData());
+		return true;
+	}
+
+	function setSearchCriteria($seriesname = null, $issue = null, $year = null)
+	{
+		$this->setMeta(UploadImport::META_RESULTS, null);
+
+		if (isset($seriesname)) {
+			$this->setMeta(UploadImport::META_QUERY_NAME, $seriesname);
+		}
+
+		if (isset($issue)) {
+			$this->setMeta(UploadImport::META_QUERY_ISSUE, $issue);
+		}
+
+		if (isset($year)) {
+			$this->setMeta(UploadImport::META_QUERY_YEAR, $year);
+		}
+
+		return true;
+	}
+
 	public function processData()
 	{
 		Logger::logInfo( "processingData start", $this->type, $this->guid );
 
 		$wrapper = FileWrapper::instance($this->importFilePath());
 		$testStatus = $wrapper->testWrapper($errorCode);
-		if ($errorCode == 0 && $this->getMeta(UploadImport::META_MEDIA_EXT) == 'cbz' ) {
-			if ( $this->isMeta(UploadImport::META_QUERY) == false ) {
-				$mediaFilename = new MediaFilename($this->getMeta(UploadImport::META_MEDIA_NAME), true);
-				$this->setMeta( UploadImport::META_QUERY, $mediaFilename->updateFileMetaData());
+		if ($errorCode != 0 || $this->getMeta(UploadImport::META_MEDIA_EXT) != 'cbz' ) {
+			$this->setMeta( UploadImport::META_STATUS, "MEDIA_CORRUPT" );
+			Logger::logInfo( "Media corrupt " . $testStatus, $this->type, $this->guid);
+			return;
+		}
+
+		// update the query values, but only if they are not already set
+		if ( $this->isMeta(UploadImport::META_QUERY) == false ) {
+			$mediaFilename = new MediaFilename($this->getMeta(UploadImport::META_MEDIA_NAME), true);
+			$this->setMeta( UploadImport::META_QUERY, $mediaFilename->updateFileMetaData());
+		}
+
+		$ep_model = Model::Named('Endpoint');
+		$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+		if ($points == false || count($points) == 0) {
+			$this->setMeta( UploadImport::META_STATUS, "NO_ENDPOINTS" );
+			Logger::logInfo( "No ComicVine Endpoints defined ", $this->type, $this->guid);
+			return;
+		}
+
+		$this->setMeta( UploadImport::META_RESULTS_ISSUES, null );
+		$this->setMeta( UploadImport::META_RESULTS_VOLUME, null );
+
+		$connection = new ComicVineConnector($points[0]);
+		$issue = $connection->searchForIssue(
+			$this->getMeta(UploadImport::META_QUERY_NAME),
+			$this->getMeta(UploadImport::META_QUERY_ISSUE),
+			$this->getMeta(UploadImport::META_QUERY_YEAR)
+		);
+		if ( $issue == false )
+		{
+			$this->setMeta( UploadImport::META_STATUS, "NO_MATCHES" );
+			Logger::logInfo( "No ComicVine matches, unable to import", $this->type, $this->guid);
+			return;
+		}
+
+		$this->setMeta( UploadImport::META_RESULTS_ISSUES, $issue );
+		if (count($issue) > 1) {
+			$this->setMeta( UploadImport::META_STATUS, "MULTIPLE_MATCHES" );
+			Logger::logInfo( "Multiple ComicVine matches, unable to import", $this->type, $this->guid);
+			return;
+		}
+
+		$matchingIssue = $issue[0];
+		$series = $connection->seriesDetails( valueForKeypath( "volume/id", $matchingIssue), true );
+		if ( $series == false ) {
+			$this->setMeta( UploadImport::META_STATUS, "FAILED_TO_FIND_VOLUME" );
+			Logger::logInfo( "Failed to find ComicVine series, unable to import", $this->type, $this->guid);
+			return;
+		}
+
+		$this->setMeta( UploadImport::META_RESULTS_VOLUME, $series );
+		$this->setMeta( UploadImport::META_STATUS, "COMICVINE_SUCCESS" );
+
+		$importer = Processor::Named('ComicVineImporter', $this->guid );
+		$importer->setEndpoint($points[0]);
+
+		$importer->enqueue_publisher( array(
+			"xid" => valueForKeypath( "publisher/id", $series),
+			"name" => valueForKeypath( "publisher/name", $series),
+			), true, true
+		);
+
+		$importer->enqueue_series( array(
+			"xid" => valueForKeypath( "id", $series),
+			"name" => valueForKeypath( "name", $series),
+			), true, true
+		);
+
+		$importer->enqueue_publication( array(
+			"xid" => valueForKeypath( "id", $matchingIssue),
+			"name" => valueForKeypath( "name", $matchingIssue),
+			"issue" => valueForKeypath( "issue_number", $matchingIssue),
+			), true, true
+		);
+
+		try {
+			$importer->processData();
+
+			$cbzType = Model::Named( "Media_Type" )->cbz();
+			$pub_xid = valueForKeypath( "id", $matchingIssue);
+			$publication = Model::Named("Publication")->objectForExternal($pub_xid, $importer->endpointTypeCode());
+			$filename = $this->getMeta(UploadImport::META_MEDIA_FILENAME);
+			$hash = $this->getMeta(UploadImport::META_MEDIA_HASH);
+			$size = $this->getMeta(UploadImport::META_MEDIA_SIZE);
+
+			$media = Model::Named( "Media" )->create( $publication, $cbzType, $filename, $hash, $size );
+			if ( $media instanceof model\MediaDBO ) {
+				if ( rename( $this->importFilePath(), $media->contentaPath()) ) {
+					@copy( $this->workingDirectory(Metadata::DefaultFilename), $media->contentaMetadataPath());
+					$this->setPurgeOnExit(true);
+				}
+				else {
+					$errors= error_get_last();
+					Logger::logError(  "MOVE ERROR: " . $errors['type'] . ' - ' . $errors['message'], $this->type, $this->guid);
+					return false;
+				}
 			}
 		}
-		else {
-			Logger::logInfo( "Media corrupt " . $testStatus, $this->type, $this->guid);
+		catch ( \Exception $e ) {
+			Logger::logException( $e );
+			$this->setMeta( UploadImport::META_STATUS, "IMPORTER_ERROR" );
+			return;
 		}
 
 		Logger::logInfo( "processingData end", $this->type, $this->guid);
@@ -140,7 +308,7 @@ class UploadImport extends Processor
 			// RARX_NOFILES, check for zip
 			$zipFileList = zipFileList($this->importFilePath());
 			if (is_array($zipFileList)) {
-				Logger::logWarning( $filename . " identified as ZIP format" );
+				Logger::logWarning( $filename . " identified as ZIP format", $this->type, $this->guid );
 				$newFilename = file_ext_strip($filename) . '.cbz';
 				$this->renameMedia( $newFilename );
 				return true;
@@ -163,5 +331,23 @@ class UploadImport extends Processor
 			}
 		}
 		return false;
+	}
+
+	/** comic vine metadata */
+	public function hasResultsMetadata()
+	{
+		$issues = $this->getMeta(UploadImport::META_RESULTS_ISSUES);
+		$volumes = $this->getMeta(UploadImport::META_RESULTS_VOLUME);
+		return ((is_array($issues) && count($issues) > 0) || (is_array($volumes) && count($volumes) > 0));
+	}
+
+	public function issueMetadata()
+	{
+		return $this->getMeta(UploadImport::META_RESULTS_ISSUES);
+	}
+
+	public function volumeMetadata()
+	{
+		return $this->getMeta(UploadImport::META_RESULTS_VOLUME);
 	}
 }

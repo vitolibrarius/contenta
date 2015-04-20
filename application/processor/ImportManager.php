@@ -6,6 +6,7 @@ use \Processor as Processor;
 use \Migrator as Migrator;
 use \Config as Config;
 use \Logger as Logger;
+use \Model as Model;
 
 use utilities\Metadata as Metadata;
 use utilities\FileWrapper as FileWrapper;
@@ -14,6 +15,35 @@ class ImportManager extends Processor
 {
 	const GUID = '60EB7A5B-DCBE-4A42-827F-180087F31620';
 	const IMPORTS = 'imports';
+
+	public static function ImportHashPath( $hash = null )
+	{
+		if ( is_string($hash) && strlen($hash) > 0) {
+			$root = Config::GetProcessing();
+			$path = appendPath($root, "UploadImport", $hash );
+			if ( is_dir($path) ) {
+				return $path;
+			}
+		}
+		return null;
+	}
+
+	public static function IsEditable( $hash = null )
+	{
+		$path = ImportManager::ImportHashPath( $hash );
+		if ( is_string($path) && strlen($path) > 0) {
+			// ensure no processors are already running
+			$job_model = Model::Named('Job_Running');
+			$running = $job_model->allForContext( null, $hash);
+			if ( $running == false ) {
+				return true;
+			}
+		}
+		else {
+				$_SESSION["feedback_negative"][] = 'Not editable';
+		}
+		return false;
+	}
 
 	function __construct($guid)
 	{
