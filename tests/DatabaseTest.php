@@ -146,19 +146,15 @@ $job_run_data = array(
 	array(
 		model\Job_Running::job_id => $cbz_job->id,
 		model\Job_Running::job_type_id => $cbz_job_type->id,
-		model\Job_Running::trace => 'trace',
-		model\Job_Running::trace_id => rand(),
-		model\Job_Running::context => 'context',
-		model\Job_Running::context_id => rand(),
+		model\Job_Running::processor => 'UploadImport',
+		model\Job_Running::guid => rand(),
 		model\Job_Running::pid => 3456
 	),
 	array(
 		model\Job_Running::job_id => $rss_job->id,
 		model\Job_Running::job_type_id => $rss_job_type->id,
-		model\Job_Running::trace => 'trace',
-		model\Job_Running::trace_id => rand(),
-		model\Job_Running::context => 'context',
-		model\Job_Running::context_id => rand(),
+		model\Job_Running::processor => 'UploadImport',
+		model\Job_Running::guid => rand(),
 		model\Job_Running::pid => 98765
 	)
 );

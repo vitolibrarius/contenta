@@ -78,14 +78,15 @@ class Migration_9 extends Migrator
 		$this->sqlite_execute( Job::TABLE, $sql, "Create table " . Job::TABLE );
 
 		/** JOB_RUNNING */
+		$sql = 'DROP TABLE IF EXISTS ' . Job_Running::TABLE;
+		$this->sqlite_execute( Job_Running::TABLE, $sql, "Drop table for recreate " . Job_Running::TABLE );
+
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . Job_Running::TABLE . " ( "
 				. Job_Running::id . " INTEGER PRIMARY KEY, "
 				. Job_Running::job_id . " INTEGER, "
 				. Job_Running::job_type_id . " INTEGER, "
-				. Job_Running::trace . " TEXT, "
-				. Job_Running::trace_id . " TEXT, "
-				. Job_Running::context . " TEXT, "
-				. Job_Running::context_id . " TEXT, "
+				. Job_Running::processor . " TEXT, "
+				. Job_Running::guid . " TEXT, "
 				. Job_Running::created . " INTEGER, "
 				. Job_Running::pid . " INTEGER, "
 				. "FOREIGN KEY (". Job_Running::job_id .") REFERENCES " . Job::TABLE . "(" . Job::id . "),"

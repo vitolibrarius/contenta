@@ -9,10 +9,8 @@ class Job_RunningDBO extends DataObject
 {
 	public $job_type_id;
 	public $job_id;
-	public $trace;
-	public $trace_id;
-	public $context;
-	public $context_id;
+	public $processor;
+	public $guid;
 	public $created;
 	public $pid;
 

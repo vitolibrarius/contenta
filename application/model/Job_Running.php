@@ -11,10 +11,8 @@ class Job_Running extends Model
 	const id =				'id';
 	const job_id =			'job_id';
 	const job_type_id =		'job_type_id';
-	const trace =			'trace';
-	const trace_id =		'trace_id';
-	const context =			'context';
-	const context_id =		'context_id';
+	const processor =		'processor';
+	const guid =			'guid';
 	const created =			'created';
 	const pid =				'pid';
 
@@ -26,8 +24,7 @@ class Job_Running extends Model
 	{
 		return array(
 			Job_Running::id, Job_Running::job_id, Job_Running::job_type_id,
-			Job_Running::trace, Job_Running::trace_id,
-			Job_Running::context, Job_Running::context_id,
+			Job_Running::processor, Job_Running::guid,
 			Job_Running::created, Job_Running::pid
 		);
 	}
@@ -37,14 +34,14 @@ class Job_Running extends Model
 		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running::job_id => $job->id));
 	}
 
-	public function allForContext($context = null, $context_id = null)
+	public function allForProcessorGUID($processorName = null, $guid = null)
 	{
 		$qualifiers = array();
-		if ( is_null($context) == false ) {
-			$qualifiers[Job_Running::context] = $context;
+		if ( is_null($processorName) == false ) {
+			$qualifiers[Job_Running::processor] = $processorName;
 		}
-		if ( is_null($context_id) == false ) {
-			$qualifiers[Job_Running::context_id] = $context_id;
+		if ( is_null($guid) == false ) {
+			$qualifiers[Job_Running::guid] = $guid;
 		}
 		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), $qualifiers);
 	}
@@ -61,7 +58,19 @@ class Job_Running extends Model
 		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running::job_type_id => $obj->id));
 	}
 
-	public function createForCode($jobObj, $jobtype_code = null, $trace, $trace_id, $context, $context_id, $pid)
+// 	public function runningJobs( $jobid = null, $jobtype = null, $processorName = null, $guid = null )
+// 	{
+// 		$allForGUID = $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running:: => $obj->id));
+//
+// 	}
+//
+// 			$options['j'],
+// 			$options['t'],
+// 			$options['p'],
+// 			$options['g']
+// 		);
+//
+	public function createForCode($jobObj, $jobtype_code = null, $processorName, $guid, $pid)
 	{
 		$type = false;
 		if ( is_null($jobtype_code) == false) {
@@ -79,17 +88,15 @@ class Job_Running extends Model
 			}
 		}
 
-		return $this->create($jobObj, $type, $trace, $trace_id, $context, $context_id, $pid);
+		return $this->create($jobObj, $type, $processorName, $guid, $pid);
 	}
 
-	public function create($jobObj, $jobtypeObj, $trace, $trace_id, $context, $context_id, $pid)
+	public function create($jobObj, $jobtypeObj, $processorName, $guid, $pid)
 	{
 		if ( isset($jobtypeObj, $pid) ) {
 			$params = array(
-				Job_Running::trace => $trace,
-				Job_Running::trace_id => $trace_id,
-				Job_Running::context => $context,
-				Job_Running::context_id => $context_id,
+				Job_Running::processor => $processorName,
+				Job_Running::guid => $guid,
 				Job_Running::created => time(),
 				Job_Running::pid => $pid
 			);

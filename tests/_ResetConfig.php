@@ -3,14 +3,11 @@
 // guard to ensure basic configuration is loaded
 defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
-function SetConfigRoot($path = null)
+function SetConfigRoot($path = null, $purgeFirst = true)
 {
 	if ( is_null($path) ) {
 		$path = "/tmp/test/unknown";
 	}
-
-	destroy_dir( $path ) || die( "Failed to remove last test run $path");
-	makeRequiredDirectory($path, "Test directory $path");
 
 	$config = Config::instance();
 
@@ -32,4 +29,9 @@ function SetConfigRoot($path = null)
 	my_echo( "cache " . $config->cacheDirectory() );
 	my_echo( "processing " . $config->processingDirectory() );
 	my_echo( "logs " . $config->loggingDirectory() );
+
+	if ( $purgeFirst == true ) {
+		destroy_dir( $path ) || die( "Failed to remove last test run $path");
+	}
+	makeRequiredDirectory($path, "Test directory $path");
 }
