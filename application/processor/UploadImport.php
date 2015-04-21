@@ -179,6 +179,46 @@ class UploadImport extends Processor
 		return true;
 	}
 
+	public function processSearch()
+	{
+		// update the query values, but only if they are not already set
+		if ( $this->isMeta(UploadImport::META_QUERY) == false ) {
+			$mediaFilename = new MediaFilename($this->getMeta(UploadImport::META_MEDIA_NAME), true);
+			$this->setMeta( UploadImport::META_QUERY, $mediaFilename->updateFileMetaData());
+		}
+
+		$ep_model = Model::Named('Endpoint');
+		$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+		if ($points == false || count($points) == 0) {
+			$this->setMeta( UploadImport::META_STATUS, "NO_ENDPOINTS" );
+			Logger::logInfo( "No ComicVine Endpoints defined ", $this->type, $this->guid);
+			return false;
+		}
+
+		$connection = new ComicVineConnector($points[0]);
+		$issue = $connection->searchForIssue(
+			$this->getMeta(UploadImport::META_QUERY_NAME),
+			$this->getMeta(UploadImport::META_QUERY_ISSUE),
+			$this->getMeta(UploadImport::META_QUERY_YEAR)
+		);
+		if ( $issue == false )
+		{
+			$this->setMeta( UploadImport::META_STATUS, "NO_MATCHES" );
+			Logger::logInfo( "No ComicVine matches, unable to import", $this->type, $this->guid);
+			return false;
+		}
+
+		$this->setMeta( UploadImport::META_RESULTS_ISSUES, $issue );
+		if (count($issue) > 1) {
+			$this->setMeta( UploadImport::META_STATUS, "MULTIPLE_MATCHES" );
+			Logger::logInfo( "Multiple ComicVine matches, unable to import", $this->type, $this->guid);
+			return false;
+		}
+
+		$this->setMeta( UploadImport::META_STATUS, "COMICVINE_SUCCESS" );
+		return true;
+	}
+
 	public function processData()
 	{
 		Logger::logInfo( "processingData start", $this->type, $this->guid );
@@ -191,66 +231,31 @@ class UploadImport extends Processor
 			return;
 		}
 
-		// update the query values, but only if they are not already set
-		if ( $this->isMeta(UploadImport::META_QUERY) == false ) {
-			$mediaFilename = new MediaFilename($this->getMeta(UploadImport::META_MEDIA_NAME), true);
-			$this->setMeta( UploadImport::META_QUERY, $mediaFilename->updateFileMetaData());
+		if ($this->hasResultsMetadata() == false && $this->processSearch() == false ) {
+			return;
 		}
+
+		$issue = $this->getMeta( UploadImport::META_RESULTS_ISSUES );
+		if (count($issue) > 1) {
+			return;
+		}
+
+		$matchingIssue = $issue[0];
 
 		$ep_model = Model::Named('Endpoint');
 		$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 		if ($points == false || count($points) == 0) {
 			$this->setMeta( UploadImport::META_STATUS, "NO_ENDPOINTS" );
 			Logger::logInfo( "No ComicVine Endpoints defined ", $this->type, $this->guid);
-			return;
+			return false;
 		}
-
-		$this->setMeta( UploadImport::META_RESULTS_ISSUES, null );
-		$this->setMeta( UploadImport::META_RESULTS_VOLUME, null );
-
-		$connection = new ComicVineConnector($points[0]);
-		$issue = $connection->searchForIssue(
-			$this->getMeta(UploadImport::META_QUERY_NAME),
-			$this->getMeta(UploadImport::META_QUERY_ISSUE),
-			$this->getMeta(UploadImport::META_QUERY_YEAR)
-		);
-		if ( $issue == false )
-		{
-			$this->setMeta( UploadImport::META_STATUS, "NO_MATCHES" );
-			Logger::logInfo( "No ComicVine matches, unable to import", $this->type, $this->guid);
-			return;
-		}
-
-		$this->setMeta( UploadImport::META_RESULTS_ISSUES, $issue );
-		if (count($issue) > 1) {
-			$this->setMeta( UploadImport::META_STATUS, "MULTIPLE_MATCHES" );
-			Logger::logInfo( "Multiple ComicVine matches, unable to import", $this->type, $this->guid);
-			return;
-		}
-
-		$matchingIssue = $issue[0];
-		$series = $connection->seriesDetails( valueForKeypath( "volume/id", $matchingIssue), true );
-		if ( $series == false ) {
-			$this->setMeta( UploadImport::META_STATUS, "FAILED_TO_FIND_VOLUME" );
-			Logger::logInfo( "Failed to find ComicVine series, unable to import", $this->type, $this->guid);
-			return;
-		}
-
-		$this->setMeta( UploadImport::META_RESULTS_VOLUME, $series );
-		$this->setMeta( UploadImport::META_STATUS, "COMICVINE_SUCCESS" );
 
 		$importer = Processor::Named('ComicVineImporter', $this->guid );
 		$importer->setEndpoint($points[0]);
 
-		$importer->enqueue_publisher( array(
-			"xid" => valueForKeypath( "publisher/id", $series),
-			"name" => valueForKeypath( "publisher/name", $series),
-			), true, true
-		);
-
 		$importer->enqueue_series( array(
-			"xid" => valueForKeypath( "id", $series),
-			"name" => valueForKeypath( "name", $series),
+			"xid" => valueForKeypath( "volume/id", $matchingIssue),
+			"name" => valueForKeypath( "volume/name", $matchingIssue),
 			), true, true
 		);
 
@@ -337,8 +342,8 @@ class UploadImport extends Processor
 	public function hasResultsMetadata()
 	{
 		$issues = $this->getMeta(UploadImport::META_RESULTS_ISSUES);
-		$volumes = $this->getMeta(UploadImport::META_RESULTS_VOLUME);
-		return ((is_array($issues) && count($issues) > 0) || (is_array($volumes) && count($volumes) > 0));
+// 		$volumes = $this->getMeta(UploadImport::META_RESULTS_VOLUME);
+		return (is_array($issues) && count($issues) > 0);
 	}
 
 	public function issueMetadata()
