@@ -70,10 +70,22 @@ class Job_Running extends Model
 // 			$options['g']
 // 		);
 //
-	public function createForCode($jobObj, $jobtype_code = null, $processorName, $guid, $pid)
+	public function createForJob($job_id = null, $jobtype_code = null, $processorName, $guid, $pid)
+	{
+		$jobObj = null;
+		if ( is_integer($job_id) ) {
+			$jobObj = Model::Named("Job")->objectForId( $job_id );
+			if ( $jobObj instanceof model\JobBDO ) {
+				return $this->create($jobObj, $jobObj->jobType(), $processorName, $guid, $pid);
+			}
+		}
+		return $this->createForCode($jobtype_code, $processorName, $guid, $pid);
+	}
+
+	public function createForCode($jobtype_code = null, $processorName, $guid, $pid)
 	{
 		$type = false;
-		if ( is_null($jobtype_code) == false) {
+		if ( is_string($jobtype_code) ) {
 			$type_model = Model::Named("Job_Type");
 			$type = $type_model->jobTypeForCode($jobtype_code);
 			if ( $type == false ) {
@@ -86,9 +98,11 @@ class Job_Running extends Model
 				$newObjId = $type_model->createObject($param);
 				$type = $type_model->objectForId($newObjId);
 			}
+
+			return $this->create(null, $type, $processorName, $guid, $pid);
 		}
 
-		return $this->create($jobObj, $type, $processorName, $guid, $pid);
+		return false;
 	}
 
 	public function create($jobObj, $jobtypeObj, $processorName, $guid, $pid)

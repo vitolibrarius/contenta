@@ -14,22 +14,23 @@ use utilities\Metadata as Metadata;
  */
 abstract class Processor
 {
-	public static function Daemonize($userHash = null, $processor = null, $guid = null)
+	public static function Daemonize($userHash = null, $jobtype = null, $processor = null, $guid = null)
 	{
-		if ( is_null($userHash) || is_null($processor) || is_null($guid)) {
-			throw new \Exception("Unable to Daemonize (" . $userHash .", " . $processor .", " . $guid . ")");
+		if ( is_null($userHash) || is_null($jobtype) || is_null($processor) || is_null($guid)) {
+			throw new \Exception("Unable to Daemonize (" . var_export(func_get_args(), true) . ")");
 		}
 
 		$user_model = Model::Named('Users');
 		$user = $user_model->userByApiHash($userHash);
 		if ( $user == false || $user->isAdmin() == false) {
-			throw new \Exception("Unable to Daemonize User (" . $userHash .", " . $processor .", " . $guid. ")");
+			throw new \Exception("Unable to Daemonize User (" . $userHash .", " . $jobtype .", " . $processor .", " . $guid. ")");
 		}
 
 		$shell = ((PHP_OS === 'Darwin') ? '' : 'nohup ') . 'php ';
 		$daemon = appendPath(SYSTEM_PATH, 'Daemon.php');
 		$daemonCMD = $daemon
 			. ' -g ' . $guid
+			. ' -t ' . $jobtype
 			. ' -u ' . $userHash
 			. ' -p ' . $processor
 			. ' >> /tmp/' . $processor . '_' . $guid . '_' . $userHash . '.log 2>&1';
@@ -142,7 +143,7 @@ abstract class Processor
 	{
 		if ( Session::isUserLoggedIn() ) {
 			$user = Model::Named('Users')->objectForId(Session::Get('user_id'));
-			return Processor::Daemonize($user->api_hash, get_short_class($this), $this->guid);
+			return Processor::Daemonize($user->api_hash, get_short_class($this), get_short_class($this), $this->guid);
 		}
 
 		return false;

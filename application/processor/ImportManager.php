@@ -34,7 +34,7 @@ class ImportManager extends Processor
 		if ( is_string($path) && strlen($path) > 0) {
 			// ensure no processors are already running
 			$job_model = Model::Named('Job_Running');
-			$running = $job_model->allForContext( null, $hash);
+			$running = $job_model->allForProcessorGUID( null, $hash);
 			if ( $running == false ) {
 				return true;
 			}

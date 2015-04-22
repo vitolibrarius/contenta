@@ -61,11 +61,16 @@
 		</tr>
 	<?php if ($this->active): ?>
 	<?php foreach ($this->active as $key => $value): ?>
+		<?php $running = $this->job_model->allForProcessorGUID('UploadImport', $key ); ?>
 		<tr>
 			<td>
-				<a href="<?php echo Config::Web('/AdminUploadRepair/editUnprocessed', $key); ?>">
+				<?php if ( is_array($running) == false || count($running) == 0 ) : ?>
+					<a href="<?php echo Config::Web('/AdminUploadRepair/editUnprocessed', $key); ?>">
+				<?php endif; ?>
 				<img src="<?php echo Config::Web('/AdminUploadRepair/firstThumbnail', $key) ?>" class="thumbnail">
-				</a>
+				<?php if ( is_array($running) == false || count($running) == 0 ) : ?>
+					</a>
+				<?php endif; ?>
 			</td>
 			<td><?php echo (isset($value, $value['filename']) ? file_ext($value['filename']) : 'Unknown'); ?></td>
 			<td>
@@ -78,7 +83,6 @@
 				<?php
 					$spinDisplay = "none";
 					$toolsDisplay = "inline";
-					$running = $this->job_model->allForContext('UploadImport', $key );
 					if ( is_array($running) && count($running) > 0 ) {
 						$spinDisplay = "inline";
 						$toolsDisplay = "none";

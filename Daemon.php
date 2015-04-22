@@ -3,10 +3,10 @@
 	$system_path = dirname(__FILE__);
 	if (realpath($system_path) !== FALSE)
 	{
-		$system_path = realpath($system_path).'/';
+		$system_path = realpath($system_path).DIRECTORY_SEPARATOR;
 	}
 
-	define('SYSTEM_PATH', str_replace("\\", "/", $system_path));
+	define('SYSTEM_PATH', str_replace("\\", DIRECTORY_SEPARATOR, $system_path));
 	define('APPLICATION_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR);
 
 	require APPLICATION_PATH .'config/bootstrap.php';
@@ -39,35 +39,38 @@
 		pcntl_signal(SIGINT, "signal_handler");
 	}
 
-    $options = getopt("g:u:p:");
+	/**
+		-g <guid>
+		-u <user api hash>
+		-p <processor name>
+		-j <jobid>
+		-t <jobtype>
+	 */
+    $options = getopt("g:u:p:t:j::");
+    $guid = (isset($options['g']) ? $options['g'] : null);
+    $user_api = (isset($options['u']) ? $options['u'] : null);
+    $processorName = (isset($options['p']) ? $options['p'] : null);
+    $job_id = (isset($options['j']) ? $options['j'] : null);
+    $jobtype_code = (isset($options['t']) ? $options['t'] : null);
 
-	printf('starting daemon ' . $options['p'] . ' for id ' . $options['g'] . PHP_EOL);
-	$trace = uuid();
-	$traceid = $options['p'] . '-' . basename($options['g']);
-	Logger::instance()->setTrace( $trace, $traceid );
+	printf('starting daemon ' . var_export($options, true) . PHP_EOL);
+	Logger::instance()->setTrace($processorName, $guid );
 
 	try {
-		$processor = Processor::Named( $options['p'], $options['g'] );
-		$lockfile = appendPath( sys_get_temp_dir(), $traceid . ".lock");
+		$lockfile = appendPath( sys_get_temp_dir(), $processorName . '-' . $guid . ".lock");
 		printf('    Lock ' . $lockfile . PHP_EOL);
 		$lock = new Lock($lockfile);
-
 		if (($pid = $lock->lock()) !== false) {
+			$job_run_model = Model::Named('Job_Running');
+			$jobList = $job_run_model->allForProcessorGUID($processorName, $guid );
+			if ( is_array($jobList) == false || count($jobList) == 0) {
+				$jobRunning = $job_run_model->createForJob($job_id, $jobtype_code, $processorName, $guid, $pid);
+			}
+
 			try
 			{
+				$processor = Processor::Named( $processorName, $guid );
 				$processor->processData();
-
-// 				$log_model = loadModel('Log');
-// 				$array = $log_model->fetchAll(LogModel::TABLE, $log_model->allColumns(),
-// 					array(LogModel::trace => $trace, LogModel::trace_id => $traceid),
-// 					array(LogModel::created)
-// 				);
-
-// 				if ( is_array($array) ) {
-// 					foreach ($array as $key => $log) {
-// 						printf( $log->description() . PHP_EOL);
-// 					}
-// 				}
 			}
 			catch (Exception $e)
 			{

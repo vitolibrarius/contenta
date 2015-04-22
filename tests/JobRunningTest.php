@@ -49,7 +49,6 @@ $job_run_data = array(
 // $jobs_running = loadData( $job_run_model, $job_run_data, array("job", "jobType", "trace", "trace_id", "context", "context_id", "pid") );
 foreach ( $job_run_data as $sample ) {
 	$jobRunning = $job_run_model->createForCode(
-			null,
 			$sample['job_type_code'],
 			$sample['processor'],
 			$sample['guid'],
