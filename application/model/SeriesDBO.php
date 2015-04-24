@@ -66,9 +66,9 @@ class SeriesDBO extends DataObject
 		return $model->activePublicationsForSeries($this);
 	}
 
-	public function publicationsForIssue($issue) {
+	public function publicationForExternal($issue_xid, $xsource) {
 		$model = Model::Named('Publication');
-		return $model->activePublicationsForSeries($this, $issue);
+		return $model->publicationForSeriesExternal($this, $issue_xid, $xsource);
 	}
 
 	public function aliases() {

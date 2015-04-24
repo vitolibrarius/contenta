@@ -219,6 +219,19 @@ class UploadImport extends Processor
 		return true;
 	}
 
+	public function selectMatchingIssue( $issueId = null )
+	{
+		if ( is_string($issueId) && strlen($issueId) > 0 ) {
+			$issues = $this->getMeta( UploadImport::META_RESULTS_ISSUES );
+			if ( is_array($issues) ) {
+				$result = array_filterForKeyValue( $issues, array( "id"=>$issueId));
+				$this->setMeta( UploadImport::META_RESULTS_ISSUES, $result );
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function processData()
 	{
 		Logger::logInfo( "processingData start", $this->type, $this->guid );

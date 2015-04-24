@@ -65,16 +65,19 @@
 			$jobList = $job_run_model->allForProcessorGUID($processorName, $guid );
 			if ( is_array($jobList) == false || count($jobList) == 0) {
 				$jobRunning = $job_run_model->createForJob($job_id, $jobtype_code, $processorName, $guid, $pid);
+				try
+				{
+					$processor = Processor::Named( $processorName, $guid );
+					$processor->processData();
+				}
+				catch (Exception $e)
+				{
+					printf('Exception ' . $e->getMessage() . ' ' . $e->getTraceAsString() . PHP_EOL);
+				}
+				$job_run_model->deleteObject($jobRunning);
 			}
-
-			try
-			{
-				$processor = Processor::Named( $processorName, $guid );
-				$processor->processData();
-			}
-			catch (Exception $e)
-			{
-				printf('Exception ' . $e->getMessage() . ' ' . $e->getTraceAsString() . PHP_EOL);
+			else {
+				printf('Jobs running for ' . $guid . ' are ' . var_export($jobList, true) . PHP_EOL);
 			}
 
 			$lock->unlock();

@@ -36,6 +36,17 @@ class Publication extends Model
 		);
 	}
 
+	public function publicationForSeriesExternal(model\SeriesDBO $series = null, $issue_xid = null, $xsource = null)
+	{
+		if ( isset($series, $issue_xid, $xsource) && strlen($issue_xid) && strlen($xsource)) {
+			$obj = $this->objectForExternal($issue_xid, $xsource);
+			if ( $obj instanceof model\PublicationDBO && $obj->series_id === $series->id ) {
+				return $obj;
+			}
+		}
+		return false;
+	}
+
 	public function findExternalOrCreate( $series = null, $name, $desc, $issue_num = null, $xid, $xsrc, $xurl = null )
 	{
 		if ( isset($name, $xid, $xsrc) && strlen($name) && strlen($xid) && strlen($xsrc)) {

@@ -23,6 +23,10 @@ class MediaDBO extends DataObject
 		return (empty($type) ? 'Unknown' : $type->name) . " " . $this->filename;
 	}
 
+	public function formattedSize() {
+		return (isset($this->size) ? formatSizeUnits($this->size) : '');
+	}
+
 	public function mediaType() {
 		if ( isset($this->type_id) ) {
 			return Model::Named("Media_Type")->objectForId($this->type_id);
