@@ -135,8 +135,8 @@ class AdminUploadRepair extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {
 			if ( is_null($processKey) == false ) {
+				Session::addPositiveFeedback(Localized::Get("Imports", 'Reprocessing') . ' ' . $importer->getMeta(UploadImport::META_MEDIA_NAME));
 				$importer = Processor::Named('UploadImport', $processKey);
-				$_SESSION["feedback_positive"][] = 'Reprocessing ' . $importer->getMeta(UploadImport::META_MEDIA_NAME);
 				$importer->daemonizeProcess();
 				echo "<b>working ..</b>";
 			}
@@ -161,7 +161,7 @@ class AdminUploadRepair extends Admin
 				$this->view->render( '/upload/process_' . $ext);
 			}
 			else {
-				$_SESSION["feedback_negative"][] = 'Not editable';
+				Session::addNegativeFeedback(Localized::Get("Imports", 'NotEditable'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}
@@ -176,16 +176,16 @@ class AdminUploadRepair extends Admin
 				if ( $processor != false ) {
 					if (isset($_POST['reset'])) {
 						if ($processor->resetSearchCriteria() == false) {
-							$_SESSION["feedback_negative"][] = 'Failed to reset metadata';
+							Session::addNegativeFeedback(Localized::Get("Imports", 'Failed to reset metadata'));
 						}
 					}
 					else if (isset($_POST['search'])) {
 						if ($processor->setSearchCriteria($_POST['series'], $_POST['issue'], $_POST['year']) == false) {
-							$_SESSION["feedback_negative"][] = 'Failed to update metadata';
+							Session::addNegativeFeedback(Localized::Get("Imports", 'Failed to update metadata'));
 						}
 					}
 					else {
-						$_SESSION["feedback_negative"][] = 'Unknown form submit ' . var_export($_POST, false);
+						Session::addNegativeFeedback(Localized::Get("Imports", 'Unknown form submit') . ' ' . var_export($_POST, false));
 					}
 
 					$this->view->source = $processor->sourceMetaData();
@@ -201,7 +201,7 @@ class AdminUploadRepair extends Admin
 				}
 			}
 			else {
-				$_SESSION["feedback_negative"][] = 'Not a active process';
+				Session::addNegativeFeedback(Localized::Get("Imports", 'Not Active'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}
@@ -226,7 +226,7 @@ class AdminUploadRepair extends Admin
 			}
 			else
 			{
-				$_SESSION["feedback_negative"][] = 'Not a active process';
+				Session::addNegativeFeedback(Localized::Get("Imports", 'Not Active'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}
@@ -248,7 +248,7 @@ class AdminUploadRepair extends Admin
 			}
 			else
 			{
-				$_SESSION["feedback_negative"][] = 'Not a active process';
+				Session::addNegativeFeedback(Localized::Get("Imports", 'Not Active'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}
@@ -269,19 +269,19 @@ class AdminUploadRepair extends Admin
 						$this->view->render( '/processing/comicViewResults', true);
 					}
 					else {
-						$_SESSION["feedback_positive"][] = 'Processing "' . $message . '"';
+						Session::addPositiveFeedback(Localized::Get("Imports", 'Processing') . ' "' . $message . '"' );
 						$processor->daemonizeProcess();
 						sleep(4);
 						header('location: ' . Config::Web( get_short_class($this), 'index'));
 					}
 				}
 				else {
-					$_SESSION["feedback_positive"][] = 'Failed to load processor CBZ';
+					Session::addNegativeFeedback(Localized::Get("Imports", 'Failed to load processor'));
 					header('location: ' . Config::Web( get_short_class($this), 'index'));
 				}
 			}
 			else {
-				$_SESSION["feedback_negative"][] = 'Not a active process';
+				Session::addNegativeFeedback(Localized::Get("Imports", 'Not Active'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}

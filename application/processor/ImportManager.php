@@ -40,7 +40,7 @@ class ImportManager extends Processor
 			}
 		}
 		else {
-				$_SESSION["feedback_negative"][] = 'Not editable';
+			Session::addNegativeFeedback(Localized::Get("Imports", 'NotEditable'));
 		}
 		return false;
 	}
