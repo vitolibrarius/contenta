@@ -89,6 +89,11 @@ abstract class FileWrapper
 		return null;
 	}
 
+	public function wrapperHash()
+	{
+		return hash_file(HASH_DEFAULT_ALGO, $this->sourcepath));
+	}
+
 	public function wrapperContents()
 	{
 		return basename($this->sourcepath);

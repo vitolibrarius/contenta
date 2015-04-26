@@ -344,6 +344,7 @@ class UploadImport extends Processor
 				{
 					$this->setMeta(UploadImport::META_MEDIA_FILENAME, $newFilename);
 					$this->setMeta(UploadImport::META_MEDIA_EXT, 'cbz');
+					$this->setMeta(UploadImport::META_MEDIA_HASH, $newWrapper->wrapperHash());
 					return true;
 				}
 			}
