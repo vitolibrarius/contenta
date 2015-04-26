@@ -91,7 +91,7 @@ abstract class FileWrapper
 
 	public function wrapperHash()
 	{
-		return hash_file(HASH_DEFAULT_ALGO, $this->sourcepath));
+		return hash_file(HASH_DEFAULT_ALGO, $this->sourcepath);
 	}
 
 	public function wrapperContents()

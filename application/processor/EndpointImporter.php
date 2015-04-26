@@ -332,6 +332,7 @@ abstract class EndpointImporter extends Processor
 			}
 		}
 
+		$this->setPurgeOnExit(true);
 		return true;
 	}
 }
