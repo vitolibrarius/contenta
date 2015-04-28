@@ -389,7 +389,8 @@
         "Hash Exists": "Already uploaded",
         "RepairLink": {
             "name": "Repair Processing"
-        }
+        },
+        "Upload success": "Upload success"
     },
     "AdminSeries": {
         "title": "Series Administration",

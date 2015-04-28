@@ -127,7 +127,7 @@ class Upload extends Controller
 			else {
 				$importer = Processor::Named('UploadImport', $contentHash);
 				if ( $importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name'])) == true ) {
-					Session::addPositiveFeedback(Localized::Get("Imports", 'Upload success'));
+					Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success'));
 					$importer->daemonizeProcess();
 					$uploadSuccess = true;
 				}
