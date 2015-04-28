@@ -256,7 +256,7 @@ abstract class Model
 
 			// create failed, log validation errors
 			$logMsg = "Validation errors creating " . $this->tableName();
-			foreach ($objectOrErrors as $attr => $errMsg ) {
+			foreach ($validation as $attr => $errMsg ) {
 				$logMsg .= "\n\t" . $errMsg;
 			}
 			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
