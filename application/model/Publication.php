@@ -128,6 +128,23 @@ class Publication extends Model
 		return $obj;
 	}
 
+	public function createObject(array $values = array())
+	{
+		if ( isset($values) ) {
+			// no id (so not an update just in case) and no name set
+			if ( isset($values[Publication::id]) == false && isset($values[Publication::name]) == false ) {
+				if ( isset( $values[Publication::issue_num])) {
+					$values[Publication::name] = "Issue " . $values[Publication::issue_num];
+				}
+				else {
+					$values[Publication::name] = "Issue";
+				}
+			}
+		}
+
+		return parent::createObject($values);
+	}
+
 	public function allForSeries(model\SeriesDBO $obj = null)
 	{
 		return $this->fetchAll(Publication::TABLE, $this->allColumns(), array(Publication::series_id => $obj->id), $this->sortOrder());
