@@ -135,9 +135,10 @@ class AdminUploadRepair extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {
 			if ( is_null($processKey) == false ) {
-				Session::addPositiveFeedback(Localized::Get("Imports", 'Reprocessing') . ' ' . $importer->getMeta(UploadImport::META_MEDIA_NAME));
 				$importer = Processor::Named('UploadImport', $processKey);
 				$importer->daemonizeProcess();
+				Session::addPositiveFeedback(Localized::Get("Upload", 'Reprocessing')
+					. ' ' . $importer->getMeta(UploadImport::META_MEDIA_NAME));
 				echo "<b>working ..</b>";
 			}
 		}
@@ -161,7 +162,7 @@ class AdminUploadRepair extends Admin
 				$this->view->render( '/upload/process_' . $ext);
 			}
 			else {
-				Session::addNegativeFeedback(Localized::Get("Imports", 'NotEditable'));
+				Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}
@@ -176,16 +177,16 @@ class AdminUploadRepair extends Admin
 				if ( $processor != false ) {
 					if (isset($_POST['reset'])) {
 						if ($processor->resetSearchCriteria() == false) {
-							Session::addNegativeFeedback(Localized::Get("Imports", 'Failed to reset metadata'));
+							Session::addNegativeFeedback(Localized::Get("Upload", 'Failed to reset metadata'));
 						}
 					}
 					else if (isset($_POST['search'])) {
 						if ($processor->setSearchCriteria($_POST['series'], $_POST['issue'], $_POST['year']) == false) {
-							Session::addNegativeFeedback(Localized::Get("Imports", 'Failed to update metadata'));
+							Session::addNegativeFeedback(Localized::Get("Upload", 'Failed to update metadata'));
 						}
 					}
 					else {
-						Session::addNegativeFeedback(Localized::Get("Imports", 'Unknown form submit') . ' ' . var_export($_POST, false));
+						Session::addNegativeFeedback(Localized::Get("Upload", 'Unknown form submit') . ' ' . var_export($_POST, false));
 					}
 
 					$this->view->source = $processor->sourceMetaData();
@@ -201,7 +202,7 @@ class AdminUploadRepair extends Admin
 				}
 			}
 			else {
-				Session::addNegativeFeedback(Localized::Get("Imports", 'Not Active'));
+				Session::addNegativeFeedback(Localized::Get("Upload", 'Not Active'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}
@@ -226,7 +227,7 @@ class AdminUploadRepair extends Admin
 			}
 			else
 			{
-				Session::addNegativeFeedback(Localized::Get("Imports", 'Not Active'));
+				Session::addNegativeFeedback(Localized::Get("Upload", 'Not Active'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}
@@ -248,7 +249,7 @@ class AdminUploadRepair extends Admin
 			}
 			else
 			{
-				Session::addNegativeFeedback(Localized::Get("Imports", 'Not Active'));
+				Session::addNegativeFeedback(Localized::Get("Upload", 'Not Active'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}
@@ -269,19 +270,19 @@ class AdminUploadRepair extends Admin
 						$this->view->render( '/processing/comicViewResults', true);
 					}
 					else {
-						Session::addPositiveFeedback(Localized::Get("Imports", 'Processing') . ' "' . $message . '"' );
+						Session::addPositiveFeedback(Localized::Get("Upload", 'Processing') . ' "' . $message . '"' );
 						$processor->daemonizeProcess();
 						sleep(4);
 						header('location: ' . Config::Web( get_short_class($this), 'index'));
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::Get("Imports", 'Failed to load processor'));
+					Session::addNegativeFeedback(Localized::Get("Upload", 'Failed to load processor'));
 					header('location: ' . Config::Web( get_short_class($this), 'index'));
 				}
 			}
 			else {
-				Session::addNegativeFeedback(Localized::Get("Imports", 'Not Active'));
+				Session::addNegativeFeedback(Localized::Get("Upload", 'Not Active'));
 				header('location: ' . Config::Web( get_short_class($this), 'index'));
 			}
 		}

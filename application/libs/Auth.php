@@ -31,6 +31,35 @@ class Auth
 		return true;
 	}
 
+	public static function handleLoginWithAPI($userHash = '')
+	{
+		$login_successful = false;
+		if ( is_string($userHash) ) {
+			$user = Model::Named('Users')->userByApiHash($userHash);
+			if ( $user instanceof model\UsersDBO ) {
+				Session::init();
+				Session::set('user_logged_in', true);
+				Session::set('user_id', $user->id);
+				Session::set('user_name', $user->name);
+				Session::set('user_email', $user->email);
+				Session::set('user_account_type', $user->account_type);
+
+				Model::Named('Users')->stampLoginTimestamp($user);
+				Logger::logInfo("User logged In (API)", Session::get('user_name'), Session::get('user_id'));
+
+				$login_successful = true;
+			}
+		}
+
+		if ( $login_successful === false ) {
+			Logger::logError("Error attempting API access '" . $userHash . "'");
+			Session::destroy();
+			http_response_code(401); // Unauthorized
+		}
+
+		return $login_successful;
+	}
+
 	public static function requireRole($role = null) {
 		if (isset($role) == false  || $role == null) {
 			return true;
