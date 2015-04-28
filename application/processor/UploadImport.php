@@ -356,7 +356,6 @@ class UploadImport extends Processor
 	public function hasResultsMetadata()
 	{
 		$issues = $this->getMeta(UploadImport::META_RESULTS_ISSUES);
-// 		$volumes = $this->getMeta(UploadImport::META_RESULTS_VOLUME);
 		return (is_array($issues) && count($issues) > 0);
 	}
 

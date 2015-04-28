@@ -570,7 +570,7 @@ class ComicVineImporter extends EndpointImporter
 					foreach ( $relations as $relatedId ) {
 						$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
 						if ( $relatedObj == false ) {
-							throw new Exception( "failed to find object for " . var_export( $relation, true ));
+							throw new Exception( "failed to find related object for $table->xid = " . var_export( $relatedId, true ));
 						}
 
 						switch( $table ) {

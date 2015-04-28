@@ -93,11 +93,6 @@ class Publisher extends Model
 		return ((isset($newObjId) && $newObjId != false) ? $this->objectForId($newObjId) : false);
 	}
 
-	public function createObject(array $values = array())
-	{
-		return parent::createObject($values);
-	}
-
 	public function deleteObject($object = null)
 	{
 		if ( $object != false )
