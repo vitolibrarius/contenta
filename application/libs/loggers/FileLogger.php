@@ -4,48 +4,36 @@ namespace loggers;
 
 class FileLogger extends \Logger
 {
-	private $logfilehandle = null;
-
 	public function __construct()
 	{
-		if ($this->logfilehandle == null) {
-			$base_path = \Config::GetPath("Logging/path", null);
-			if ( strlen($base_path) == 0 ) {
-				throw new \LogFileOpenErrorException('No path set in configuration for logging');
-			}
-			makeRequiredDirectory($base_path, 'Logging directory');
-
-			$logfile = appendPath( $base_path, 'log_'.date('Y-m-d').'.txt');
-			$this->openLogFile($logfile);
+		$base_path = \Config::GetPath("Logging/path", null);
+		if ( strlen($base_path) == 0 ) {
+			throw new \LogFileOpenErrorException('No path set in configuration for logging');
 		}
+		makeRequiredDirectory($base_path, 'Logging directory');
+		$this->logfile = appendPath( $base_path, 'log_'.date('Y-m-d').'.txt');
 	}
 
 	public function __destruct()
 	{
-		$this->closeLogFile();
-	}
-
-	public function openLogFile($logfile)
-	{
-		//close old logfile if opened;
-		$this->closeLogFile();
-		$this->logfilehandle = @fopen($logfile,"a");
-		if ( ! $this->logfilehandle )
-			throw new \LogFileOpenErrorException('Could not open Logfile in append-mode (' . $logfile . ')');
 	}
 
 	private function writeToLogFile($message)
 	{
-		flock($this->logfilehandle,LOCK_EX);
-		fwrite($this->logfilehandle,$message."\n");
-		flock($this->logfilehandle,LOCK_UN);
-	}
+		$logfilehandle = fopen($this->logfile,"a");
+		if ( ! $logfilehandle )
+			throw new \LogFileOpenErrorException('Could not open Logfile in append-mode (' . $this->logfile . ')');
 
-	public function closeLogFile() {
-		if ($this->logfilehandle != null) {
-			fclose($this->logfilehandle);
-			$this->logfilehandle = null;
+		if (flock($logfilehandle,LOCK_EX)) {
+			fwrite($logfilehandle, $message."\n");
+			fflush($logfilehandle);
+			flock($logfilehandle,LOCK_UN);
 		}
+		else {
+			throw new \LogFileOpenErrorException('Could not open Logfile in exclusive (' . $this->logfile . ')');
+		}
+
+		fclose($logfilehandle);
 	}
 
 	private function getTime()
@@ -55,9 +43,6 @@ class FileLogger extends \Logger
 
 	public function _doLog($level = \Logger::INFO, $message, $trace = null, $traceId = null, $context = null, $context_id = null)
 	{
-		if ($this->logfilehandle == null)
-			throw new \LogFileNotOpenException('Logfile is not opened.');
-
 		if ( is_string($message) == false)
 			throw new \NotAStringException('$message is not a string');
 
