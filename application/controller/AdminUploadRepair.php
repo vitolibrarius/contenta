@@ -212,17 +212,11 @@ class AdminUploadRepair extends Admin
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {
 			if ( ImportManager::IsEditable($processKey) == true ) {
 				$processor = Processor::Named("UploadImport", $processKey);
-
-				if ($processor->hasResultsMetadata() ) {
+				if ( $processor != false ) {
 					$this->view->key = $processKey;
 					$this->view->issue = $processor->issueMetadata();
 					$this->view->series_model = Model::Named('Series');
 					$this->view->render( '/upload/ComicVineResults', true);
-				}
-				else {
-					// missing fileparts, run reset
-// 					http_response_code(203); // Partial Information
-					http_response_code(204); // Partial Information
 				}
 			}
 			else

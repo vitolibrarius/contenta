@@ -7,6 +7,7 @@ use \Migrator as Migrator;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
+use \Session as Session;
 
 use utilities\Metadata as Metadata;
 use utilities\FileWrapper as FileWrapper;
