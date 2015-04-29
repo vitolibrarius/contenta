@@ -188,6 +188,7 @@ class AdminUploadRepair extends Admin
 					else {
 						Session::addNegativeFeedback(Localized::Get("Upload", 'Unknown form submit') . ' ' . var_export($_POST, false));
 					}
+					$processor->processSearch();
 
 					$this->view->source = $processor->sourceMetaData();
 					$this->view->search = $processor->searchMetaData();
