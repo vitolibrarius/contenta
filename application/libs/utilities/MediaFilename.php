@@ -131,8 +131,8 @@ class MediaFilename
 		$clean = preg_replace("/\\((.*?)\\)/us", " $1 ", $clean);
 		$clean = preg_replace("/\\[(.*?)\\]/u", " $1 ", $clean);
 
-		// remove '-' and '_'
-		$clean = preg_replace("/([-_])/u", " ", $clean);
+		// remove '_'
+		$clean = preg_replace("/([_])/u", " ", $clean);
 
 		// remove any "of NN" phrase
 		$clean = preg_replace("/(of [\\d]+)/ui", " ", $clean);
@@ -140,7 +140,8 @@ class MediaFilename
 		// remove multiple spaces with single spaces
 		$clean = preg_replace("/(  +)/u", " ", $clean);
 
-		$metadata['clean'] = $clean;
+		// remove any extra whitespace
+		$metadata['clean'] = trim($clean);
 		$year = $this->parseYearFromFilename($metadata['clean']);
 		if ( $year != false )
 		{
