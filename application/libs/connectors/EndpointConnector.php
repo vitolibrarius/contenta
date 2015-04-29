@@ -170,7 +170,10 @@ abstract class EndpointConnector
 			}
 			else if ( $this->endpointCompressed() == false) {
 				$data = file_get_contents($url);
-				var_dump($http_response_header);
+				if ( $data == false ) {
+					\Logger::logError( 'Error (?) with url: ' . $this->cleanURLForLog($url),
+						get_class($this), $this->endpoint->displayName());
+				}
 			}
 			else {
 				\Logger::logError( 'Unable to process compressed url: ' . $this->cleanURLForLog($url),
