@@ -23,7 +23,7 @@
 images = [<?php foreach ($this->fileWrapper->wrapperContents() as $index => $item) {
 	echo "'" . Config::Web('/AdminUploadRepair/thumbnail', $this->key, $index) . "', ";
 }?>];
-fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized/', $this->key); ?>/";
+fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key); ?>/";
 //-->
 </script>
 

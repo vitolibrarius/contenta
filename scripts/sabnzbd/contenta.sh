@@ -1,6 +1,5 @@
 #! /bin/bash
 
-
 # debugging trace
 #set -x
 

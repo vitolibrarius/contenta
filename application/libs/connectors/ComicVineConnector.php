@@ -229,7 +229,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 	public function queryForSeriesNameAndYear($seriesName = null, $year = null)
 	{
-		if ( is_string($seriesName) && strlen($seriesName) > 4 ) {
+		if ( is_string($seriesName) && strlen($seriesName) > 1 ) {
 			$json = $this->queryForSeriesName( $seriesName, true );
 			if ( $json != false ) {
 				return $this->filterSeriesResultForYear($json, $year);
