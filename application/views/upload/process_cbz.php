@@ -31,7 +31,7 @@ fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized/', $this->key
 	<div><!-- top -->
 		<div style="padding:15px; display:inline-block;"><!-- left -->
 			<div id="slideshow">
-				<img src="<?php echo Config::Web('/AdminUploadRepair/thumbnail/', $this->key); ?>" id="page">
+				<img src="<?php echo Config::Web('/AdminUploadRepair/thumbnail', $this->key, 0); ?>" id="page">
 				<span class="button" id="leftArrow"></span>
 				<span class="button" id="rightArrow"></span>
 			</div>
