@@ -254,6 +254,7 @@ class AdminUploadRepair extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {
 			if ( ImportManager::IsEditable($processKey) == true ) {
+				$importMgr = Processor::Named("ImportManager", 0);
 				$processor = Processor::Named("UploadImport", $processKey);
 				if ( $processor != false ) {
 					$message = $processor->getMeta(UploadImport::META_MEDIA_NAME);
@@ -267,18 +268,18 @@ class AdminUploadRepair extends Admin
 					else {
 						Session::addPositiveFeedback(Localized::Get("Upload", 'Processing') . ' "' . $message . '"' );
 						$processor->daemonizeProcess();
-						sleep(4);
-						header('location: ' . Config::Web( get_short_class($this), 'index'));
+						sleep(2);
+						header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
 					}
 				}
 				else {
 					Session::addNegativeFeedback(Localized::Get("Upload", 'Failed to load processor'));
-					header('location: ' . Config::Web( get_short_class($this), 'index'));
+					header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
 				}
 			}
 			else {
 				Session::addNegativeFeedback(Localized::Get("Upload", 'Not Active'));
-				header('location: ' . Config::Web( get_short_class($this), 'index'));
+				header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
 			}
 		}
 	}

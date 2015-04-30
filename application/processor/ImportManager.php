@@ -115,6 +115,18 @@ class ImportManager extends Processor
 		return $chunked[$idx];
 	}
 
+	function chunkNumberFor($processKey = null) {
+		if ( is_null( $processKey ) == false ) {
+			$chunks = $this->chunkedArray();
+			foreach( $chunks as $idx => $subchunk ) {
+				if ( isset($subchunk[$processKey]) ) {
+					return $idx;
+				}
+			}
+		}
+		return 0;
+	}
+
 	function fileWrapper($processKey = null)
 	{
 		if ( is_null( $processKey ) == false ) {
