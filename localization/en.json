@@ -390,7 +390,9 @@
         "RepairLink": {
             "name": "Repair Processing"
         },
-        "Upload success": "Upload success"
+        "Upload success": "Upload success",
+        "Reprocessing": "Reprocessing",
+        "Processing": "Processing"
     },
     "AdminSeries": {
         "title": "Series Administration",
