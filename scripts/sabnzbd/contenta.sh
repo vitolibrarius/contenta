@@ -1,5 +1,6 @@
 #! /bin/bash
 
+
 # debugging trace
 #set -x
 
@@ -39,12 +40,27 @@ SCRIPT_PATH="`( cd \"$SCRIPT_PATH\" && pwd -P )`"  # absolutized and normalized
 HTTP_SCHEME=https
 HTTP_HOST=localhost
 
-# contenta options
-API_HASH=""
+# contenta options, for testing you can place your API key as a shell environment variable
+[ -z "$API_HASH" ] && API_HASH=""
+
+[ -z "$API_HASH" ] && echo "No API hash key set" && exit 1
 
 # command options
 CURL=/usr/bin/curl
-FIND=/usr/bin/find
+FIND=/opt/bin/find
+if [ ! -x ${FIND} ]; then
+	FIND=/usr/bin/find
+fi
+
+UNRAR=/usr/syno/bin/unrar
+if [ ! -x ${UNRAR} ]; then
+	UNRAR=/usr/local/bin/unrar
+fi
+
+ZIP=/usr/syno/bin/zip
+if [ ! -x ${ZIP} ]; then
+	ZIP=/usr/bin/zip
+fi
 
 # deletable junk.  After a successful POST of the media content, the extra junk
 # can be removed, and if the directory is empty, then delete it also
@@ -66,22 +82,63 @@ EOF
 
 purgeDirectory()
 {
-	echo
-    echo "-= - - - - - - - - - - - - - - - - - - - - =-"
-	echo "purging directory"
-	for word in "${PURGE_LIST[@]}"; do
-		echo " ... " $word
-		${FIND} "$DIR" -iname "$word" -prune -print
-# 		-exec rm -R {} \;
-	done
+	if $PURGE_ENABLED; then
+		echo "purging directory" $DIR
+		for word in "${PURGE_LIST[@]}"; do
+			${FIND} "$DIR" -iname "$word" -prune -print -exec rm -R {} \;
+		done
 
-	${FIND} "$DIR" -type d -empty -prune -print
-	#-exec rmdir {} \;
+		${FIND} "$DIR" -type d -empty -prune -print -exec rmdir {} \;
+	fi
+}
+
+convertCBR() {
+    echo "converting $1"
+    if [ -f "$2" ]; then
+    	rm "$2"
+		if [ $? -ne 0 ]; then
+			echo "Failed to remove previous zip $2"
+			exit 1
+		fi
+	fi
+
+	${UNRAR} t "$1" >/dev/null
+	if [ $? -ne 0 ]; then
+		echo "Bad RAR file"
+		echo $?
+		exit 1
+	fi
+
+	RAR_WORKING=${2%.*}
+	if [ -d "$RAR_WORKING" ]; then
+		rm -Rf "$RAR_WORKING"
+		if [ $? -ne 0 ]; then
+			echo "Failed to remove previous unrar $RAR_WORKING"
+			exit 1
+		fi
+	fi
+
+	mkdir "$RAR_WORKING"
+	${UNRAR} x -r "$1" "$RAR_WORKING" >/dev/null
+	if [ $? -ne 0 ]; then
+		echo "Error unpacking RAR file"
+		echo $?
+		exit 1
+	fi
+
+	${ZIP} -r "$2" "$RAR_WORKING" >/dev/null
+	if [ $? -ne 0 ]; then
+		echo "Error zipping new file  $2"
+		echo $?
+		rm "$2"
+		exit 1
+	fi
+
+	# clean up
+	rm -Rf "$1" "$RAR_WORKING"
 }
 
 postComic() {
-	echo
-    echo "-= - - - - - - - - - - - - - - - - - - - - =-"
     echo "posting comic $1"
 	OUT=/tmp/out-$$.txt
 	http_code=$(${CURL} --insecure -s -w '%{http_code}' -o ${OUT} \
@@ -94,19 +151,40 @@ postComic() {
 		rm $OUT
 	fi
 
-# 	if [ $http_code == "200" ]; then
-# 		# success, remove media
-# # 		rm "$1"
-# 	fi
+ 	if [ $http_code == "200" ]; then
+		if $PURGE_ENABLED; then
+ 			# success, remove media
+ 			rm "$1"
+ 		fi
+ 	fi
 }
 
+echo
+echo "-= - - - - - - - - - - - - - - - - - - - - =-"
 echo "looking for media content in '$DIR'"
+PURGE_ENABLED=true
+if [[ "$NZB_FILE" = "test" ]]; then
+	echo "File Purge Disabled"
+	PURGE_ENABLED=false
+fi
+
 ${FIND} "$DIR" -type f -print |
 while read file; do
 	extension=$(echo "${file##*.}" | awk '{print tolower($0)}')
 
 	case $extension in
-		cbr|cbz )
+		cbr )
+			echo
+			echo "----======"
+			destination=${file%.*}".cbz"
+			convertCBR "$file" "$destination"
+			if [ -f "$destination" ]; then
+				postComic "$destination"
+			fi
+			;;
+		cbz )
+			echo
+			echo "----======"
 			postComic "$file"
 			;;
 		pdf )
@@ -122,4 +200,8 @@ while read file; do
 
 done
 
-purgeDirectory
+if $PURGE_ENABLED; then
+	echo
+	echo "----======"
+	purgeDirectory
+fi
