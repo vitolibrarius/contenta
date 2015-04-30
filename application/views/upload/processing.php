@@ -61,14 +61,17 @@
 		</tr>
 	<?php if ($this->active): ?>
 	<?php foreach ($this->active as $key => $value): ?>
-		<?php $running = $this->job_model->allForProcessorGUID('UploadImport', $key ); ?>
-		<tr>
+		<?php
+			$runningJobs = $this->job_model->allForProcessorGUID('UploadImport', $key );
+			$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
+		?>
+		<tr <?php if ( $running == true ) { echo 'class="blocked"'; } ?> >
 			<td>
-				<?php if ( is_array($running) == false || count($running) == 0 ) : ?>
+				<?php if ( $running == false ) : ?>
 					<a href="<?php echo Config::Web('/AdminUploadRepair/editUnprocessed', $key); ?>">
 				<?php endif; ?>
 				<img src="<?php echo Config::Web('/AdminUploadRepair/firstThumbnail', $key) ?>" class="thumbnail">
-				<?php if ( is_array($running) == false || count($running) == 0 ) : ?>
+				<?php if ( $running == false ) : ?>
 					</a>
 				<?php endif; ?>
 			</td>
@@ -83,7 +86,7 @@
 				<?php
 					$spinDisplay = "none";
 					$toolsDisplay = "inline";
-					if ( is_array($running) && count($running) > 0 ) {
+					if ( $running == true ) {
 						$spinDisplay = "inline";
 						$toolsDisplay = "none";
 					}

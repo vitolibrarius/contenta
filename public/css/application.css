@@ -517,16 +517,27 @@ form .omega { margin-right:0;}
 	background-color: #dedede;
 }
 
+.mediaData table tr {
+	background: #b8d1f3;
+}
+
+.mediaData table tr:nth-child(odd) {
+	background: #b8d1f3;
+}
+
+.mediaData table tr:nth-child(even){
+	background: #dae5f4;
+}
+
+.mediaData table tr.blocked {
+	background-color: pink;
+}
+
 .mediaData table td {
 	border-width: 1px;
 	padding: 8px;
 	border-style: solid;
 	border-color: #666666;
-	background-color: #ffffff;
-}
-
-.mediaData tr.no-media td {
-	background-color: pink;
 }
 
 .mediaData td.issue {
