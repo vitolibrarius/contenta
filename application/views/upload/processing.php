@@ -17,6 +17,19 @@
 			});
 
 		});
+
+		var list = $('a.confirm');
+		$('a.confirm').click(function(e){
+			modal.open({
+				heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
+				img: '<?php echo Config::Web("/AdminUploadRepair/firstThumbnail/") ?>' + $(this).attr('data_key'),
+				description: '<?php echo $this->label( "index", "DeleteDescription"); ?> <br /><em>' + $(this).attr('data_filename') + '</em>',
+				confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
+				actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
+				action: $(this).attr('data_action')
+			});
+			e.preventDefault();
+		});
 	});
 </script>
 
@@ -77,7 +90,7 @@
 			</td>
 			<td><?php echo (isset($value, $value['filename']) ? file_ext($value['filename']) : 'Unknown'); ?></td>
 			<td>
-				<h3 class="path"><?php echo (isset($value, $value['name']) ? $value['name'] : 'No Source'); ?></h3>
+				<h3 class="path"><?php echo (isset($value, $value['name']) ? $value['name'] : $value['filename']); ?></h3>
 				<a href="#" limit="5" name="<?php echo $key; ?>" class="ajaxLogs">Logs</a>
 				<div id="ajaxDiv_<?php echo $key; ?>" ></div>
 			</td>
@@ -95,6 +108,14 @@
 				<div class="rpc_tools <?php echo $key; ?>" style="display:<?php echo $toolsDisplay; ?>;">
 					<a href="#" class="rpc" data_action="<?php echo Config::Web('/AdminUploadRepair/reprocess', $key); ?>" data_key="<?php echo $key; ?>" alt="Retry">
 						<span class="icon retry" />
+					</a>
+
+					<a href="#" class="confirm"
+						data_action="<?php echo Config::Web('/AdminUploadRepair/deleteUnprocessed', $key); ?>"
+						data_key="<?php echo $key; ?>"
+						data_filename="<?php echo (isset($value, $value['name']) ? $value['name'] : $value['filename']); ?>"
+						alt="Delete">
+						<span class="icon trash" />
 					</a>
 				</div>
 				<img class="rpc_spinner <?php echo $key; ?>" style="display:<?php echo $spinDisplay; ?>;"

@@ -144,6 +144,32 @@ class AdminUploadRepair extends Admin
 		}
 	}
 
+	function deleteUnprocessed($processKey = null)
+	{
+		if (Auth::handleLogin() && Auth::requireRole('admin')) {
+			if ( ImportManager::IsEditable($processKey) == true ) {
+				$importMgr = Processor::Named("ImportManager", 0);
+				$page = $importMgr->chunkNumberFor($processKey);
+				$metadata = $importMgr->metadataFor( $processKey );
+				$filename = valueForKeypath( "filename", $metadata);
+
+				if ( $importMgr->purgeUnprocessed($processKey) ) {
+					Session::addPositiveFeedback('Deleted in process files for ' . $filename);
+				}
+				else {
+					Logger::logInfo("Error destroying working directory ", "Filename",  $filename);
+					Session::addNegativeFeedback( 'Failed to deleted in process files for ' . $filename);
+				}
+
+				header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
+			}
+			else {
+				Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
+				header('location: ' . Config::Web( get_short_class($this), 'index'));
+			}
+		}
+	}
+
 	function editUnprocessed($processKey = null)
 	{
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {

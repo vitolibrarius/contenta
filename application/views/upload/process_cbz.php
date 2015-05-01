@@ -18,6 +18,19 @@
 
 </style>
 
+<div class="paging">
+	<ul>
+		<li><a href="#" class="confirm"
+				data_action="<?php echo Config::Web('/AdminUploadRepair/deleteUnprocessed', $this->key); ?>"
+				data_key="<?php echo $this->key; ?>"
+				data_filename="<?php echo $this->source['name']; ; ?>"
+				alt="Delete">
+				<span class="icon trash" />
+			</a> Delete
+		</li>
+	</ul>
+</div>
+
 <script type="text/javascript">
 <!--
 images = [<?php foreach ($this->fileWrapper->wrapperContents() as $index => $item) {
@@ -130,6 +143,19 @@ $(document).ready(function() {
 		error: function (jqXHR, textStatus, errorThrown) {
 			alert('Unexpected error.');
 		}
+	});
+
+	var list = $('a.confirm');
+	$('a.confirm').click(function(e){
+		modal.open({
+			heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
+			img: '<?php echo Config::Web("/AdminUploadRepair/firstThumbnail/") ?>' + $(this).attr('data_key'),
+			description: '<?php echo $this->label( "index", "DeleteDescription"); ?> <br /><em>' + $(this).attr('data_filename') + '</em>',
+			confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
+			actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
+			action: $(this).attr('data_action')
+		});
+		e.preventDefault();
 	});
 });
 

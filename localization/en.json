@@ -405,6 +405,10 @@
         "title": "Unprocessed Uploads",
         "UploadLink": {
             "name": "Upload"
+        },
+        "index": {
+            "DeleteDescription": "This will permanently delete this media ",
+            "DeleteConfirmation": "Are you sure you want to continue?"
         }
     },
     "AdminPublication": {

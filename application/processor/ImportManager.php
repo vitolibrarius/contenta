@@ -96,6 +96,16 @@ class ImportManager extends Processor
 		return $this->currentItems;
 	}
 
+	function metadataFor($processKey = null) {
+		if ( is_string($processKey) ) {
+			$allData = $this->processData();
+			if ( is_array($allData) && isset($allData[$processKey]) ) {
+				return $allData[$processKey];
+			}
+		}
+		return array();
+	}
+
 	function chunkedArray() {
 		$array = $this->processData();
 		return array_chunk ( $array, 10, true);
@@ -140,5 +150,18 @@ class ImportManager extends Processor
 		}
 
 		return null;
+	}
+
+	function purgeUnprocessed($processKey = null)
+	{
+		if ( is_null( $processKey ) == false ) {
+			$importQueue = $this->uploadDir();
+			$processDir = appendPath($importQueue, $processKey);
+			if ( is_dir($processDir) ) {
+				return destroy_dir($processDir);
+			}
+		}
+
+		return false;
 	}
 }

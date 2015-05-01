@@ -348,11 +348,19 @@ a.btn:hover {
 	padding: 4px 4px;
 }
 
-.modalDialog > div > div.modal_desc {
+.modalDialog > div > .modal_desc {
 }
 
-.modalDialog > div > div.modal_confirm {
+.modalDialog > div > .modal_confirm {
 }
+
+.modal_desc em {
+	border-bottom: 1px solid orange;
+	color: #787878;
+	text-align: center;
+	font-weight: bold;
+}
+
 
 .modalDialog .close {
 	background: #606061;
