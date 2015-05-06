@@ -15,38 +15,27 @@
 
 <?php if (Session::get('user_logged_in') == true):?>
 
-<div class="span_container">
-	<div class="span_container_row header">
-		<span class="">Feature</span>
-		<span class="">Expected Version</span>
-		<span class="">System Version</span>
-	</div>
-	<div class="span_container_row">
-		<span class="">PHP</span>
-		<span class=""></span>
-		<span class="">
-			<?php
-			if (PHP_VERSION_ID < 57207) {
-				echo '<b style="color:red;">';
-			}
-			echo phpversion();
-			if (PHP_VERSION_ID < 57207) {
-				echo '</b>';
-			}
-			?>
-		</span>
-	</div>
+	<?php
+		$card = new html\Card();
+		$card->setThumbnailTable( "publication" );
+		$card->setThumbnailPrimaryKeypath( "publication_id" );
+		$card->setDetailKeys( array(
+			)
+		);
+		if ( is_null($this->recentMedia) || count($this->recentMedia) == 0) {
+			echo "No records";
+		}
 
-	<?php foreach (get_loaded_extensions() as $key => $extension): ?>
-		<div class="span_container_row">
-			<span class=""><?php echo $extension; ?></span>
-			<span class=""></span>
-			<span class="">
-				<?php echo phpversion($extension) ; ?>
-			</span>
-		</div>
-	<?php endforeach; ?>
+		foreach($this->recentMedia as $key => $media) {
+// 			if ( isset($this->editAction) ) {
+// 				$card->setEditPath( $this->editAction . '/' . $value->id );
+// 			}
+// 			if ( isset($this->deleteAction) ) {
+// 	 			$card->setDeletePath( $this->deleteAction . '/' . $value->id );
+// 			}
+			echo $card->render($media);
+		}
+	?>
 
-</div>
 <?php endif; ?>
 

@@ -18,6 +18,14 @@ class MediaDBO extends DataObject
 	public $checksum;
 	public $size;
 
+	public function publisher() {
+		$publication = $this->publication();
+		if ( $publication != false) {
+			return $publication->publisher();
+		}
+		return false;
+	}
+
 	public function displayName() {
 		$type = $this->mediaType();
 		return (empty($type) ? 'Unknown' : $type->name) . " " . $this->filename;

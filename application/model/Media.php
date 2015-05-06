@@ -36,6 +36,11 @@ class Media extends Model
 		);
 	}
 
+	public function mostRecent( $limit = 50 )
+	{
+		return $this->fetchAll(Media::TABLE, $this->allColumns(), null, array(desc => array(Media::created)) );
+	}
+
 	public function allForPublication(model\PublicationDBO $obj = null)
 	{
 		return $this->fetchAll(Media::TABLE, $this->allColumns(), array(Media::publication_id => $obj->id), $this->sortOrder());

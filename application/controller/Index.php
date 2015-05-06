@@ -22,7 +22,21 @@ class Index extends Controller
 	function index()
 	{
 		if (Auth::handleLogin()) {
+			$media_model = Model::Named("Media");
+
+			$this->view->model = Model::Named("Media");
+			$this->view->recentMedia = $media_model->mostRecent();
 			$this->view->render( '/index/index' );
+		}
+	}
+
+	function ajax_recentMedia()
+	{
+		if (Auth::handleLogin()) {
+			$media_model = Model::Named("Media");
+
+			$this->view->recentMedia = $media_model->mostRecent();
+			$this->view->render( '/index/rec' );
 		}
 	}
 }

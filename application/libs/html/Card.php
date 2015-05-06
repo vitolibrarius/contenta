@@ -80,11 +80,38 @@ class Card
 		return null;
 	}
 
+	public function thumbnailTable()
+	{
+		if (isset($this->thumbnailTable)) {
+			return $this->thumbnailTable;
+		}
+		return $record->tableName();
+	}
+
+	public function setThumbnailTable( $path = null )
+	{
+		$this->thumbnailTable = $path;
+	}
+
+	public function thumbnailPrimaryKeypath()
+	{
+		if (isset($this->thumbnailPrimaryKeypath)) {
+			return $this->thumbnailPrimaryKeypath;
+		}
+		return "id";
+	}
+
+	public function setThumbnailPrimaryKeypath( $path = null )
+	{
+		$this->thumbnailPrimaryKeypath = $path;
+	}
+
 	public function thumbnailPath(DataObject $record = null)
 	{
 		if (isset($record) && is_null($record) == false) {
-			$table = $record->tableName();
-			$pk = $record->pkValue();
+			$table = $this->thumbnailTable();
+			$pkAttribute = $this->thumbnailPrimaryKeypath();
+			$pk = $record->{$pkAttribute};
 			return Config::Web( "Image", "thumbnail", $table, $pk);
 		}
 		return Config::Web('/public/img/Logo_sm.png');
