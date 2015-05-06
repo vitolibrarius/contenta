@@ -415,13 +415,18 @@ reportData($media,  array(
 	)
 );
 
-// dbo_setValueForKeypath( "publication/series/publisher/name", "DC Stinkers", $media[0] );
+// using the dbo_function to set a value
+dbo_setValueForKeypath( "publication/series/publisher/name", "DC Stinkers", $media[0] );
+// using the __call overload method to set a value
 $media[0]->{"publication/series/name"}("BatVito");
+// using the __set overload method to set a value
+$media[0]->{"publication/issue_num"} = 2001;
 
 foreach( $media as $m ) {
 	my_echo( $m->id
-		. "\t" . $m->{"publication/issue_num"}()
-		. "\t" . $m->{"publication/series/name"}()
+		. "\t" . $m->{"publication/issue_num"}
+		. "\t" . $m->{"publication/series/name"}
+		. "\t" . $m->{"publication/series/publisher/name"}
 	);
 }
 
