@@ -42,7 +42,7 @@ class Metadata
 	public function setMeta($key, $value)
 	{
 		if ( isset($key) && strlen($key) > 0) {
-			$newConfiguration = setValueForKeypath($key, $value, $this->jsonData);
+			$newConfiguration = array_setValueForKeypath($key, $value, $this->jsonData);
 			if ( is_array($newConfiguration) ) {
 				$this->jsonData = $newConfiguration;
 				$this->writeMetadata();
@@ -61,7 +61,7 @@ class Metadata
 	{
 		if ( isset($key) && strlen($key) > 0) {
 			$data = $this->readMetadata();
-			$value = valueForKeypath($key, $data);
+			$value = array_valueForKeypath($key, $data);
 			return (is_null($value) ? $default : $value);
 		}
 		return $default;

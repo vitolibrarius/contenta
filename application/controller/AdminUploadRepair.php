@@ -151,7 +151,7 @@ class AdminUploadRepair extends Admin
 				$importMgr = Processor::Named("ImportManager", 0);
 				$page = $importMgr->chunkNumberFor($processKey);
 				$metadata = $importMgr->metadataFor( $processKey );
-				$filename = valueForKeypath( "filename", $metadata);
+				$filename = array_valueForKeypath( "filename", $metadata);
 
 				if ( $importMgr->purgeUnprocessed($processKey) ) {
 					Session::addPositiveFeedback('Deleted in process files for ' . $filename);

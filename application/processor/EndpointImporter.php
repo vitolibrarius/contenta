@@ -156,7 +156,7 @@ abstract class EndpointImporter extends Processor
 		}
 
 		foreach( $importKeys as $key ) {
-			$value = valueForKeypath($key, $importValues);
+			$value = array_valueForKeypath($key, $importValues);
 			if ( $value != null ) {
 				$this->setMeta( appendPath( $root, $key), $value);
 			}
@@ -212,12 +212,12 @@ abstract class EndpointImporter extends Processor
 		}
 
 		// check for existing
-		$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+		$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 		$object = $model->objectForExternal($xid, $this->endpointTypeCode());
 		if ( $object == false ) {
 			$createDict = array();
 			foreach( $importKeys as $key ) {
-				$value = valueForKeypath($key, $metaRecord);
+				$value = array_valueForKeypath($key, $metaRecord);
 				if ( $value != null ) {
 					$createDict[$key] = $value;
 				}
@@ -254,7 +254,7 @@ abstract class EndpointImporter extends Processor
 		}
 
 		// check for existing
-		$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+		$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 		$object = $model->objectForExternal($xid, $this->endpointTypeCode());
 		if ( $object == false ) {
 			throw new Exception("All objects should be in finalize state " . var_export($metaRecord, true) );
@@ -263,7 +263,7 @@ abstract class EndpointImporter extends Processor
 		// import images
 		$this->importImages( $object, $metaRecord );
 
-		$aliases = valueForKeypath("aliases", $metaRecord);
+		$aliases = array_valueForKeypath("aliases", $metaRecord);
 		if ( isset($aliases) && strlen($aliases) > 0 ) {
 			$aliases = split_lines($aliases);
 			if ( is_array($aliases) && method_exists($object, "addAlias") ) {
@@ -272,13 +272,13 @@ abstract class EndpointImporter extends Processor
 				}
 			}
 			else {
-				Logger::LogWarning( "$object does not support aliases '" . valueForKeypath("aliases", $metaRecord) . "'", $this->type, $this->guid );
+				Logger::LogWarning( "$object does not support aliases '" . array_valueForKeypath("aliases", $metaRecord) . "'", $this->type, $this->guid );
 			}
 		}
 
 		$updates = array();
 		foreach( $importKeys as $key ) {
-			$value = valueForKeypath($key, $metaRecord);
+			$value = array_valueForKeypath($key, $metaRecord);
 			if ( $value != null && (isset($object->{$key}) == false || $value != $object->{$key})) {
 				$updates[$key] = $value;
 			}

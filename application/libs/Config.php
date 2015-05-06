@@ -159,13 +159,13 @@ class Config
 	 */
 	public function getValue($key, $default = '')
 	{
-		$value = valueForKeypath($key, $this->configuration);
+		$value = array_valueForKeypath($key, $this->configuration);
 		return (is_null($value) ? $default : $value);
 	}
 
 	public function setValue($key, $value)
 	{
-		$newConfiguration = setValueForKeypath($key, $value, $this->configuration);
+		$newConfiguration = array_setValueForKeypath($key, $value, $this->configuration);
 		if ( is_array($newConfiguration) ) {
 			$this->configuration = $newConfiguration;
 			return true;

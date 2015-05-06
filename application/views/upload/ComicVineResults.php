@@ -5,7 +5,7 @@
 	$unknownGroups = array();
 	$map = array();
 	foreach ($this->issue as $idx => $item) {
-		$series_xid = valueForKeypath( "volume/id", $item );
+		$series_xid = array_valueForKeypath( "volume/id", $item );
 		$seriesObj = $this->series_model->objectForExternal( $series_xid, model\Endpoint_Type::ComicVine);
 
 		if ( $seriesObj instanceof model\SeriesDBO ) {
@@ -45,7 +45,7 @@
 		<tr>
 			<td class="name">
 				<?php
-					$issue_xid = valueForKeypath( "id", $item );
+					$issue_xid = array_valueForKeypath( "id", $item );
 					$issue = $seriesObj->publicationForExternal( $issue_xid, model\Endpoint_Type::ComicVine);
 					if ( $issue instanceof model\PublicationDBO ) {
 						echo '<h4 class="publication name">' . $issue->name . '</h4>';

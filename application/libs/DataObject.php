@@ -32,6 +32,14 @@ class DataObject
 	{
 	}
 
+	private function __call($method, $args)
+	{
+		if ( is_array($args) && count($args) == 1) {
+			return dbo_setValueForKeypath( $method, $args[0], $this );
+		}
+		return dbo_valueForKeypath( $method, $this );
+	}
+
 	public function pkValue() {
 		return $this->id;
 	}

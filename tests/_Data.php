@@ -20,13 +20,8 @@ function reportData($array, $columns) {
 			foreach ($array as $key => $value) {
 				echo $value->modelName(). "[" .$value->id."]" . "\t";
 				foreach ($columns as $c => $cname) {
-					$out = null;
-					if ( property_exists($value, $cname)) {
-						$out = $value->{$cname};
-					}
-					else if (method_exists($value, $cname)) {
-						$out = $value->{$cname}();
-					}
+					$out = dbo_valueForKeypath( $cname, $value );
+
 					if ( is_string($out) ) {
 						echo $out . "\t";
 					}

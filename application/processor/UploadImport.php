@@ -267,15 +267,15 @@ class UploadImport extends Processor
 		$importer->setEndpoint($points[0]);
 
 		$importer->enqueue_series( array(
-			"xid" => valueForKeypath( "volume/id", $matchingIssue),
-			"name" => valueForKeypath( "volume/name", $matchingIssue),
+			"xid" => array_valueForKeypath( "volume/id", $matchingIssue),
+			"name" => array_valueForKeypath( "volume/name", $matchingIssue),
 			), true, true
 		);
 
 		$importer->enqueue_publication( array(
-			"xid" => valueForKeypath( "id", $matchingIssue),
-			"name" => valueForKeypath( "name", $matchingIssue),
-			"issue" => valueForKeypath( "issue_number", $matchingIssue),
+			"xid" => array_valueForKeypath( "id", $matchingIssue),
+			"name" => array_valueForKeypath( "name", $matchingIssue),
+			"issue" => array_valueForKeypath( "issue_number", $matchingIssue),
 			), true, true
 		);
 
@@ -283,7 +283,7 @@ class UploadImport extends Processor
 			$importer->processData();
 
 			$cbzType = Model::Named( "Media_Type" )->cbz();
-			$pub_xid = valueForKeypath( "id", $matchingIssue);
+			$pub_xid = array_valueForKeypath( "id", $matchingIssue);
 			$publication = Model::Named("Publication")->objectForExternal($pub_xid, $importer->endpointTypeCode());
 			$filename = $this->getMeta(UploadImport::META_MEDIA_FILENAME);
 			$hash = $this->getMeta(UploadImport::META_MEDIA_HASH);

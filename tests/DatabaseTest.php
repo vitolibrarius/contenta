@@ -407,7 +407,31 @@ $Media_data = array(
 	)
 );
 $media = loadData( $Media_model, $Media_data );
-reportData($kmoves_publication->media(),  array("filename", "publication", "mediaType") );
+reportData($media,  array(
+	"publication/issue_num",
+	"publication/name",
+	"publication/series/name",
+	"publication/series/publisher/name"
+	)
+);
+
+// dbo_setValueForKeypath( "publication/series/publisher/name", "DC Stinkers", $media[0] );
+$media[0]->{"publication/series/name"}("BatVito");
+
+foreach( $media as $m ) {
+	my_echo( $m->id
+		. "\t" . $m->{"publication/issue_num"}()
+		. "\t" . $m->{"publication/series/name"}()
+	);
+}
+
+reportData($media,  array(
+	"publication/issue_num",
+	"publication/name",
+	"publication/series/name",
+	"publication/series/publisher/name"
+	)
+);
 
 my_echo( );
 my_echo( );

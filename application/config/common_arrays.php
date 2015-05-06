@@ -3,7 +3,7 @@
 /**
  * this will walk a keypath down a nested associative array and return the leaf value.
  */
-	function valueForKeypath( $keypath, $array, $separator = '/' )
+	function array_valueForKeypath( $keypath, $array, $separator = '/' )
 	{
 		if ( isset($keypath, $array) && strlen($keypath) > 0) {
 			$result = $array;
@@ -29,7 +29,7 @@
 /**
  * this will walk a keypath down a nested associative array and set leaf value for the keypath
  */
-	function setValueForKeypath($keypath, $value, $array, $separator = '/' )
+	function array_setValueForKeypath($keypath, $value, $array, $separator = '/' )
 	{
 		if ( isset($keypath) && strlen($keypath) > 0) {
 			$path = array_filter( explode($separator, $keypath), 'strlen');
@@ -81,7 +81,7 @@
 			foreach( $input as $record ) {
 				$pass = true;
 				foreach( $filters as $key => $expectedValue ) {
-					$testValue = valueForKeypath( $key, $record );
+					$testValue = array_valueForKeypath( $key, $record );
 					if ( $testValue != $expectedValue ) {
 						$pass = false;
 						break;

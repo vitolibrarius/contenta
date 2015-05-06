@@ -54,14 +54,14 @@ class ComicVineImporter extends EndpointImporter
 	public function importImages( $mediaObject, array $cvDetails = array() )
 	{
 		if ( $mediaObject->hasAdditionalMedia() ) {
-			$forceImages = valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
+			$forceImages = array_valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
 			if ( $forceImages == true || $mediaObject->hasIcons() == false ) {
-				$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
+				$imageURL = array_valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
 				if ( is_null($imageURL) == false ) {
 					$this->importImage( $mediaObject, Model::IconName, $imageURL );
 				}
 
-				$imageURL = valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
+				$imageURL = array_valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
 				if ( is_null($imageURL) == false ) {
 					$this->importImage( $mediaObject, Model::ThumbnailName, $imageURL );
 				}
@@ -81,8 +81,8 @@ class ComicVineImporter extends EndpointImporter
 	/** Import maps between ComicVine keypaths and model attributes */
 	public function descriptionForRecord( Array $cvRecord = array() )
 	{
-		$desc = $this->convert_desc(valueForKeypath("deck", $cvRecord));
-		$fullDesc = valueForKeypath("description", $cvRecord);
+		$desc = $this->convert_desc(array_valueForKeypath("deck", $cvRecord));
+		$fullDesc = array_valueForKeypath("description", $cvRecord);
 
 		if ( is_null($desc) || strlen($desc) == 0) {
 			$desc = $this->convert_desc( $fullDesc );
@@ -242,7 +242,7 @@ class ComicVineImporter extends EndpointImporter
 		// ensure the related record is enqueued for import
 		$importValues = array();
 		foreach( $map as $cvKey => $modelKey ) {
-			$value = valueForKeypath($cvKey, $cvData);
+			$value = array_valueForKeypath($cvKey, $cvData);
 			$convert_method = 'convert_' . $modelKey;
 			if (method_exists($this, $convert_method)) {
 				$value = $this->$convert_method( $value );
@@ -263,9 +263,9 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Publisher"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 
 			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Publisher::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
@@ -279,7 +279,7 @@ class ComicVineImporter extends EndpointImporter
 
 				$map = $this->importMap_publisher();
 				foreach( $map as $cvKey => $modelKey ) {
-					$value = valueForKeypath($cvKey, $record);
+					$value = array_valueForKeypath($cvKey, $record);
 					$convert_method = 'convert_' . $modelKey;
 					if (method_exists($this, $convert_method)) {
 						$value = $this->$convert_method( $value );
@@ -301,9 +301,9 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Character"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 
 			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Character::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
@@ -317,7 +317,7 @@ class ComicVineImporter extends EndpointImporter
 
 				$map = $this->importMap_character();
 				foreach( $map as $cvKey => $modelKey ) {
-					$value = valueForKeypath($cvKey, $record);
+					$value = array_valueForKeypath($cvKey, $record);
 					$convert_method = 'convert_' . $modelKey;
 					if (method_exists($this, $convert_method)) {
 						$value = $this->$convert_method( $value );
@@ -328,12 +328,12 @@ class ComicVineImporter extends EndpointImporter
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
 
-				$pubReference = valueForKeypath("publisher", $record);
+				$pubReference = array_valueForKeypath("publisher", $record);
 				if ( is_array($pubReference) ) {
 					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
 				}
 
-				$story_arc_array = valueForKeypath("story_arc_credits", $record);
+				$story_arc_array = array_valueForKeypath("story_arc_credits", $record);
 				if ( is_array($story_arc_array) ) {
 					foreach ( $story_arc_array as $story_arc ) {
 						$enqueued = $this->preprocessRelationship( Model::Named('Story_Arc'), $path, $story_arc, $this->importMap_story_arc() );
@@ -350,9 +350,9 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Series"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 
 			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Series::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
@@ -366,7 +366,7 @@ class ComicVineImporter extends EndpointImporter
 
 				$map = $this->importMap_series();
 				foreach( $map as $cvKey => $modelKey ) {
-					$value = valueForKeypath($cvKey, $record);
+					$value = array_valueForKeypath($cvKey, $record);
 					$convert_method = 'convert_' . $modelKey;
 					if (method_exists($this, $convert_method)) {
 						$value = $this->$convert_method( $value );
@@ -378,19 +378,19 @@ class ComicVineImporter extends EndpointImporter
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
 
-				$pubReference = valueForKeypath("publisher", $record);
+				$pubReference = array_valueForKeypath("publisher", $record);
 				if ( is_array($pubReference) ) {
 					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
 				}
 
-				$character_array = valueForKeypath("characters", $record);
+				$character_array = array_valueForKeypath("characters", $record);
 				if ( is_array($character_array) ) {
 					foreach ( $character_array as $character ) {
 						$enqueued = $this->preprocessRelationship( Model::Named('Character'), $path, $character, $this->importMap_character() );
 					}
 				}
 
-				$issues_array = valueForKeypath("issues", $record);
+				$issues_array = array_valueForKeypath("issues", $record);
 				if ( is_array($issues_array) ) {
 					foreach ( $issues_array as $issue ) {
 						$enqueued = $this->preprocessRelationship( Model::Named('Publication'), $path, $issue, $this->importMap_publication() );
@@ -407,9 +407,9 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Story_Arc"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 
 			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Story_Arc::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
@@ -423,7 +423,7 @@ class ComicVineImporter extends EndpointImporter
 
 				$map = $this->importMap_story_arc();
 				foreach( $map as $cvKey => $modelKey ) {
-					$value = valueForKeypath($cvKey, $record);
+					$value = array_valueForKeypath($cvKey, $record);
 					$convert_method = 'convert_' . $modelKey;
 					if (method_exists($this, $convert_method)) {
 						$value = $this->$convert_method( $value );
@@ -435,7 +435,7 @@ class ComicVineImporter extends EndpointImporter
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
 
-				$pubReference = valueForKeypath("publisher", $record);
+				$pubReference = array_valueForKeypath("publisher", $record);
 				if ( is_array($pubReference) ) {
 					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
 				}
@@ -450,9 +450,9 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Publication"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
 
 			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Publication::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
@@ -466,7 +466,7 @@ class ComicVineImporter extends EndpointImporter
 
 				$map = $this->importMap_publication();
 				foreach( $map as $cvKey => $modelKey ) {
-					$value = valueForKeypath($cvKey, $record);
+					$value = array_valueForKeypath($cvKey, $record);
 					$convert_method = 'convert_' . $modelKey;
 					if (method_exists($this, $convert_method)) {
 						$value = $this->$convert_method( $value );
@@ -478,24 +478,24 @@ class ComicVineImporter extends EndpointImporter
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
 
-				$pubReference = valueForKeypath("publisher", $record);
+				$pubReference = array_valueForKeypath("publisher", $record);
 				if ( is_array($pubReference) ) {
 					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
 				}
 
-				$seriesReference = valueForKeypath("volume", $record);
+				$seriesReference = array_valueForKeypath("volume", $record);
 				if ( is_array($seriesReference) ) {
 					$seriesEnqueued = $this->preprocessRelationship( Model::Named('Series'), $path, $seriesReference, $this->importMap_series() );
 				}
 
-				$story_arc_array = valueForKeypath("story_arc_credits", $record);
+				$story_arc_array = array_valueForKeypath("story_arc_credits", $record);
 				if ( is_array($story_arc_array) ) {
 					foreach ( $story_arc_array as $story_arc ) {
 						$enqueued = $this->preprocessRelationship( Model::Named('Story_Arc'), $path, $story_arc, $this->importMap_story_arc() );
 					}
 				}
 
-				$character_array = valueForKeypath("character_credits", $record);
+				$character_array = array_valueForKeypath("character_credits", $record);
 				if ( is_array($character_array) ) {
 					foreach ( $character_array as $character ) {
 						$enqueued = $this->preprocessRelationship( Model::Named('Character'), $path, $character, $this->importMap_character() );
@@ -522,7 +522,7 @@ class ComicVineImporter extends EndpointImporter
 	{
 		$object = parent::finalize(Model::Named("Character"), $metaRecord);
 		if ( $object instanceof model\CharacterDBO ) {
-			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			$relationships = array_valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
 				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
@@ -559,7 +559,7 @@ class ComicVineImporter extends EndpointImporter
 	{
 		$object = parent::finalize(Model::Named("Series"), $metaRecord);
 		if ( $object instanceof model\SeriesDBO ) {
-			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			$relationships = array_valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
 				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
@@ -602,7 +602,7 @@ class ComicVineImporter extends EndpointImporter
 	{
 		$object = parent::finalize(Model::Named("Story_Arc"), $metaRecord);
 		if ( $object instanceof model\Story_ArcDBO ) {
-			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			$relationships = array_valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
 				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
@@ -636,7 +636,7 @@ class ComicVineImporter extends EndpointImporter
 	{
 		$object = parent::finalize(Model::Named("Publication"), $metaRecord);
 		if ( $object instanceof model\PublicationDBO ) {
-			$relationships = valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			$relationships = array_valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
 				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
