@@ -14,6 +14,7 @@
 	require APPLICATION_PATH .'config/common.php';
 	require APPLICATION_PATH .'config/errors.php';
 
+	session_cache_limiter('none');
 	try {
  		$config = Config::instance();
  		if ( $config->absolutePathValue( "Logging/path", null) != null ) {
