@@ -11,7 +11,7 @@ use model\Media_Type as Media_Type;
 class MediaDBO extends DataObject
 {
 	public $publication_id;
-	public $type;
+	public $type_id;
 	public $filename;
 	public $original_file;
 	public $created;

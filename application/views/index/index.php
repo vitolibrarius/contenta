@@ -20,8 +20,12 @@
 		$card->setThumbnailTable( "publication" );
 		$card->setThumbnailPrimaryKeypath( "publication_id" );
 		$card->setDetailKeys( array(
+				"publication/issue_num",
+				"publication/publishedMonthYear"
 			)
 		);
+		$card->setDisplayNameKey( "publication/series/name" );
+		$card->setDisplayDescriptionKey( "publication/shortDescription" );
 		if ( is_null($this->recentMedia) || count($this->recentMedia) == 0) {
 			echo "No records";
 		}

@@ -28,6 +28,10 @@ class PublicationDBO extends DataObject
 		return $this->name;
 	}
 
+	public function publishedMonthYear() {
+		return $this->formattedDate( Publication::pub_date, "M Y" );
+	}
+
 	public function publishedYear() {
 		if (isset($this->pub_date) && ($this->pub_date > 0)) {
 			$coverDate = getdate($this->pub_date);

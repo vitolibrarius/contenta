@@ -80,12 +80,12 @@ class Card
 		return null;
 	}
 
-	public function thumbnailTable()
+	public function thumbnailTable(DataObject $record = null)
 	{
 		if (isset($this->thumbnailTable)) {
 			return $this->thumbnailTable;
 		}
-		return $record->tableName();
+		return (is_null($record) ? null : $record->tableName());
 	}
 
 	public function setThumbnailTable( $path = null )
@@ -109,7 +109,7 @@ class Card
 	public function thumbnailPath(DataObject $record = null)
 	{
 		if (isset($record) && is_null($record) == false) {
-			$table = $this->thumbnailTable();
+			$table = $this->thumbnailTable($record);
 			$pkAttribute = $this->thumbnailPrimaryKeypath();
 			$pk = $record->{$pkAttribute};
 			return Config::Web( "Image", "thumbnail", $table, $pk);
@@ -142,6 +142,32 @@ class Card
 		return $this->detailKeys = $keys;
 	}
 
+	public function displayNameKey()
+	{
+		if (isset($this->displayNameKey)) {
+			return $this->displayNameKey;
+		}
+		return "displayName";
+	}
+
+	public function setDisplayNameKey( $key = null )
+	{
+		$this->displayNameKey = $key;
+	}
+
+	public function displayDescriptionKey()
+	{
+		if (isset($this->displayDescriptionKey)) {
+			return $this->displayDescriptionKey;
+		}
+		return "displayDescription";
+	}
+
+	public function setDisplayDescriptionKey( $key = null )
+	{
+		$this->displayDescriptionKey = $key;
+	}
+
 	public function render( DataObject $record = null )
 	{
 		$this->record = $record;
@@ -160,15 +186,8 @@ class Card
 
 						H::div( array( "class" => "feature_top_right_middle" ), function() {
 							H::span( array( "class" => "details" ), function() {
-								foreach( $this->detailKeys() as $key => $methodName ) {
-									$value = '';
-									if ( method_exists($this->record, $methodName) ) {
-										$value = $this->record->$methodName();
-									}
-									else if ( isset( $this->record->{$methodName} )) {
-										$value = $this->record->{$methodName};
-									}
-									H::span( array( "class" => $key ), $value );
+								foreach( $this->detailKeys() as $key => $keypath ) {
+									H::span( array( "class" => $key ), $this->record->{$keypath} );
 								}
 							});
 						});
@@ -213,12 +232,12 @@ class Card
 
 			H::figcaption( array("class" => "caption"), function() {
 				H::a( array("href" => $this->selectPath()), function() {
-					$displayName = ($this->record) ? $this->record->displayName() : "Unknown";
-					H::em( $displayName );
+					$keypath = $this->displayNameKey();
+					H::em( $this->record->{$keypath} );
 				});
 
-				$displayDesc = ($this->record) ? $this->record->shortDescription() : "Short Description";
-				H::p( $displayDesc );
+				$keypath = $this->displayDescriptionKey();
+				H::p( $this->record->{$keypath} );
 			});
 		});
 		unset($this->record);
