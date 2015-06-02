@@ -9,6 +9,19 @@ function my_echo($string ="") {
 	echo $string . PHP_EOL;
 }
 
+function clearAllData( Model $model = null) {
+	if ( is_null($model) == false ) {
+		// returns objects in batch of 50
+		$allObjects = $model->allObjects();
+		while ( is_array($allObjects) && count($allObjects) > 0) {
+			foreach( $allObjects as $row ) {
+				$model->deleteObject($row) || die( "Error deleting " . var_export($row, true));
+			}
+			$allObjects = $model->allObjects();
+		}
+	}
+}
+
 function reportData($array, $columns) {
 	if ( is_array($array) ) {
 		if ( is_array($columns) ) {
