@@ -115,6 +115,11 @@ class Endpoint extends Model
 		{
 			return Localized::ModelValidation($this->tableName(), Endpoint::base_url, "FIELD_EMPTY");
 		}
+		elseif (!filter_var($value, FILTER_VALIDATE_URL))
+		{
+			return Localized::ModelValidation($this->tableName(), Endpoint::base_url, "FILTER_VALIDATE_URL" );
+		}
+
 		return null;
 	}
 
