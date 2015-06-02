@@ -5,24 +5,6 @@ use \Localized as Localized;
 use \Logger as Logger;
 use \DataObject as DataObject;
 
-class ValidationException extends Exception
-{
-	private $reasons = null;
-	public function __construct($message, $code = 0, $reasons) {
-		$this->reasons = $reasons;
-		parent::__construct($message, $code);
-	}
-
-	// custom string representation of object
-	public function __toString() {
-		return __CLASS__ . ": [{$this->code}]: {$this->message}\n" . var_export($this->reasons);
-	}
-
-	public function reasons() {
-		return $this->reasons;
-	}
-}
-
 /**
  * This is the "base controller class". All other "real" controllers extend this class.
  * Whenever a controller is created, we also
