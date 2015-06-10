@@ -105,7 +105,7 @@ function makeUniqueDirectory( $root, $elements )
 			$working = $path . sprintf( ' - 0x%02x', $index);
 			$full = appendPath($root, $working);
 		}
-		return (mkdir($full , DIR_PERMS , true) ? $working : null);
+		return (mkdir($full , DIR_PERMS , true) ? $full : null);
 	}
 
 	Logger::logError("Unable to find root path '" . (string)$root . "'", "Common", "makeUniqueDirectory");
@@ -189,6 +189,26 @@ function recursive_copy($src, $dst, $purgeDestination = false)
 	}
 	else if (file_exists($src)) {
 		if ( @copy($src, $dst) == false ) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function is_sub_dir($path = '', $parent_folder = SYSTEM_PATH)
+{
+	$path = realpath($path);
+	$parent_folder = realpath($parent_folder);
+
+	if ( strlen($path) == 0 || strlen($path) < strlen($parent_folder) ) {
+		// if path is a subfolder, then it must be longer
+		return false;
+	}
+
+	$parent = explode( DIRECTORY_SEPARATOR, $parent_folder );
+	$subs = explode( DIRECTORY_SEPARATOR, $path );
+	for( $i=0; $i < count($parent); $i++) {
+		if ( $parent[$i] != $subs[$i]) {
 			return false;
 		}
 	}
