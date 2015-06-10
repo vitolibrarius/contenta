@@ -172,7 +172,7 @@ abstract class Logger implements LoggerInterface {
 
 	public function info($message, $context = null, $context_id = null) {
 		try {
-			$success = $this->_doLog(Logger::INFO, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$this->_doLog(Logger::INFO, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 		}
 		catch (Exception $e) {
 			Logger::$catastrophicFail = true;
@@ -181,12 +181,11 @@ abstract class Logger implements LoggerInterface {
 			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
 		}
-		return $success;
 	}
 
 	public function warn($message, $context = null, $context_id = null) {
 		try {
-			$success = $this->_doLog(Logger::WARNING, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$this->_doLog(Logger::WARNING, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 		}
 		catch (Exception $e) {
 			Logger::$catastrophicFail = true;
@@ -195,12 +194,11 @@ abstract class Logger implements LoggerInterface {
 			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
 		}
-		return $success;
 	}
 
 	public function error($message, $context = null, $context_id = null) {
 		try {
-			$success = $this->_doLog(Logger::ERROR, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$this->_doLog(Logger::ERROR, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 		}
 		catch (Exception $e) {
 			Logger::$catastrophicFail = true;
@@ -209,12 +207,11 @@ abstract class Logger implements LoggerInterface {
 			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
 		}
-		return $success;
 	}
 
 	public function fatal($message, $context = null, $context_id = null) {
 		try {
-			$success = $this->_doLog(Logger::FATAL, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$this->_doLog(Logger::FATAL, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 		}
 		catch (Exception $e) {
 			Logger::$catastrophicFail = true;
@@ -223,6 +220,5 @@ abstract class Logger implements LoggerInterface {
 			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
 		}
-		return $success;
 	}
 }
