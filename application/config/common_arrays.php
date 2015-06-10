@@ -29,7 +29,7 @@
 /**
  * this will walk a keypath down a nested associative array and set leaf value for the keypath
  */
-	function array_setValueForKeypath($keypath, $value, $array, $separator = '/' )
+	function array_setValueForKeypath($keypath, $value, &$array, $separator = '/' )
 	{
 		if ( isset($keypath) && strlen($keypath) > 0) {
 			$path = array_filter( explode($separator, $keypath), 'strlen');
