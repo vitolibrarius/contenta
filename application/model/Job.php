@@ -5,6 +5,9 @@ namespace model;
 use \DataObject as DataObject;
 use \Model as Model;
 
+use utilities\CronEvaluator as CronEvaluator;
+
+
 class Job extends Model
 {
 	const TABLE =		'job';
@@ -17,6 +20,7 @@ class Job extends Model
 	const one_shot =	'one_shot';
 	const created =		'created';
 	const next =		'next';
+	const last_run =	'last_run';
 	const parameter =	'parameter';
 	const enabled =		'enabled';
 
@@ -30,7 +34,7 @@ class Job extends Model
 		return array(
 			Job::id, Job::type_id, Job::endpoint_id,
 			Job::minute, Job::hour, Job::dayOfWeek, Job::parameter,
-			Job::created, Job::next, Job::one_shot, Job::enabled
+			Job::created, Job::next, Job::last_run, Job::one_shot, Job::enabled
 		);
 	}
 
@@ -78,5 +82,70 @@ class Job extends Model
 
 		return false;
 	}
+
+	public function updateObject($object = null, array $values = array()) {
+		if ( $object instanceof model\JobDBO ) {
+			$cronEval = new CronEvaluator( $object->minute, $object->hour, $object->dayOfWeek );
+			$nextRunDate = $cronEval->nextDate();
+			$values[Job::next] = $nextRunDate->getTimestamp();
+		}
+
+		return parent::updateObject($object, $values);
+	}
+
+	public function createObject(array $values = array()) {
+		if ( isset($values[Job::minute], $values[Job::hour], $values[Job::dayOfWeek]) ) {
+			$cronEval = new CronEvaluator( $values[Job::minute], $values[Job::hour], $values[Job::dayOfWeek] );
+			$nextRunDate = $cronEval->nextDate();
+			$values[Job::next] = $nextRunDate->getTimestamp();
+		}
+
+		return parent::createObject($values);
+	}
+
+	public function jobsToRun()
+	{
+		return $this->fetchAllForDateOlderThan(Job::TABLE, $this->allColumns(), Job::next, time(), true, null);
+	}
+
+	/* EditableModelInterface */
+	public function validateForSave($object = null, array &$values = array())
+	{
+		$validationErrors = parent::validateForSave($object, $values);
+		return $validationErrors;
+	}
+
+	function validate_minute($object = null, $value)
+	{
+		try {
+			CronEvaluator::validateExpressionPart( CronEvaluator::MINUTE, $value );
+		}
+		catch ( exceptions\ValidationException $ve ) {
+			return Localized::ModelValidation($this->tableName(), Job::minute, $ve->getMessage() );
+		}
+		return null;
+	}
+
+	function validate_hour($object = null, $value)
+	{
+		try {
+			CronEvaluator::validateExpressionPart( CronEvaluator::HOUR, $value );
+		}
+		catch ( exceptions\ValidationException $ve ) {
+			return Localized::ModelValidation($this->tableName(), Job::hour, $ve->getMessage() );
+		}
+		return null;
+	}
+
+	function validate_dayOfWeek($object = null, $value)
+	{
+		try {
+			CronEvaluator::validateExpressionPart( CronEvaluator::DAYOFWEEK, $value );
+		}
+		catch ( exceptions\ValidationException $ve ) {
+			return Localized::ModelValidation($this->tableName(), Job::dayOfWeek, $ve->getMessage() );
+		}
+		return null;
+	}
 }
-?>
+

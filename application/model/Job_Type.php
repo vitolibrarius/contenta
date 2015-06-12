@@ -13,6 +13,7 @@ class Job_Type extends Model
 	const code =		'code';
 	const desc = 		'desc';
 	const scheduled = 	'scheduled';
+	const processor = 	'processor';
 
 	public function tableName() { return Job_Type::TABLE; }
 	public function tablePK() { return Job_Type::id; }
@@ -22,7 +23,7 @@ class Job_Type extends Model
 	public function allColumnNames()
 	{
 		return array(
-			Job_Type::id, Job_Type::name, Job_Type::code, Job_Type::desc, Job_Type::scheduled
+			Job_Type::id, Job_Type::name, Job_Type::code, Job_Type::desc, Job_Type::scheduled, Job_Type::processor
 		 );
 	}
 
@@ -39,6 +40,14 @@ class Job_Type extends Model
     function allScheduled()
     {
 		return $this->fetch(Job_Type::TABLE, $this->allColumnNames(), array(Job_Type::scheduled => 1));
+    }
+
+    function allForProcessor($processorName)
+    {
+		return $this->fetch(Job_Type::TABLE, $this->allColumnNames(), array(
+			Job_Type::processor => $processorName
+			)
+		);
     }
 }
 

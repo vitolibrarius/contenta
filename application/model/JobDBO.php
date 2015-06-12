@@ -16,8 +16,19 @@ class JobDBO extends DataObject
 	public $one_shot;
 	public $created;
 	public $next;
+	public $last_run;
 	public $parameter;
 	public $enabled;
+
+	public $uuid;
+
+	public function nextDate() {
+		return $this->formattedDate( Job::next, "M d, Y H:i" );
+	}
+
+	public function lastDate() {
+		return $this->formattedDate( Job::last_run, "M d, Y H:i" );
+	}
 
 	public function isEnabled() {
 		return ( (empty($this->enabled) == false) && ($this->enabled == Model::TERTIARY_TRUE) );
@@ -31,6 +42,26 @@ class JobDBO extends DataObject
 	public function jobType() {
 		$type_model = Model::Named("Job_Type");
 		return $type_model->objectForId($this->type_id);
+	}
+
+	public function jsonParameters() {
+		if ( isset($this->parameter) ) {
+			$jsonData = json_decode($this->parameter, true);
+			if ( json_last_error() != 0 ) {
+				throw new \Exception( jsonErrorString(json_last_error()) );
+			}
+		}
+		return (isset($jsonData) ? $jsonData : array());
+	}
+
+	public function uuidParameter() {
+		if ( isset($this->uuid) ) {
+			return $this->uuid;
+		}
+
+		$jsonData = $this->jsonParameters();
+		$this->uuid = (isset($jsonData["uuid"]) ? $jsonData["uuid"] : uuid());
+		return $this->uuid;
 	}
 
 	public function endpoint() {

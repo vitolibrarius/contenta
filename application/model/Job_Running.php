@@ -29,7 +29,7 @@ class Job_Running extends Model
 		);
 	}
 
-	public function allForJob($job = null)
+	public function allForJob(model\JobDBO $job = null)
 	{
 		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running::job_id => $job->id));
 	}
@@ -58,19 +58,7 @@ class Job_Running extends Model
 		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running::job_type_id => $obj->id));
 	}
 
-// 	public function runningJobs( $jobid = null, $jobtype = null, $processorName = null, $guid = null )
-// 	{
-// 		$allForGUID = $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running:: => $obj->id));
-//
-// 	}
-//
-// 			$options['j'],
-// 			$options['t'],
-// 			$options['p'],
-// 			$options['g']
-// 		);
-//
-	public function createForJob($job_id = null, $jobtype_code = null, $processorName, $guid, $pid)
+	public function createForJob($job_id = null, $processorName, $guid, $pid)
 	{
 		$jobObj = null;
 		if ( is_integer($job_id) ) {
@@ -80,6 +68,17 @@ class Job_Running extends Model
 			}
 		}
 		return $this->createForCode($jobtype_code, $processorName, $guid, $pid);
+	}
+
+	public function createForProcessor($processorName, $guid, $pid)
+	{
+		if ( isset($processorName, $guid, $pid) ) {
+			return $this->create(null, null, $processorName, $guid, $pid);
+		}
+		else {
+			Logger::LogError( "No values for $processorName, $guid, $pid" );
+		}
+		return false;
 	}
 
 	public function createForCode($jobtype_code = null, $processorName, $guid, $pid)
@@ -107,7 +106,7 @@ class Job_Running extends Model
 
 	public function create($jobObj, $jobtypeObj, $processorName, $guid, $pid)
 	{
-		if ( isset($jobtypeObj, $pid) ) {
+		if ( isset($pid) ) {
 			$params = array(
 				Job_Running::processor => $processorName,
 				Job_Running::guid => $guid,
@@ -132,7 +131,7 @@ class Job_Running extends Model
 			}
 		}
 		else {
-			Logger::LogError( var_export($jobtypeObj, true));
+			Logger::LogError( "No Process ID" );
 		}
 
 		return false;

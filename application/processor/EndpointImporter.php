@@ -27,7 +27,6 @@ abstract class EndpointImporter extends Processor
 	const META_ENDPOINT_ID 		= "endpoint_id";
 	const META_ENDPOINT_TYPE 	= "endpoint_type_code";
 
-
 	const META_ENQUEUE_ROOT = 	'enqueued/';
 	const META_IMPORT_ROOT = 	'import/';
 
@@ -291,6 +290,38 @@ abstract class EndpointImporter extends Processor
 		}
 
 		return $object;
+	}
+
+	public function setEndpointId( $endpoint_id = 0)
+	{
+		$endp = Model::Named( "Endpoint" )->objectForId( $endpoint_id );
+		$this->setEndpoint( $endp );
+	}
+
+	public function enqueueBatch( $objectType = '', $size = 0 )
+	{
+		if ( is_numeric($size) ) {
+			$size = max(abs($size), 50);
+			$methodName = 'enqueue_' . $objectType;
+			if (method_exists($this, $methodName)) {
+				$objectModel = Model::Named( $objectType );
+				if (( $objectModel instanceof \Model) == false) {
+					throw new \Exception( "Failed to load model named '" . $objectModel . "'");
+				}
+				$objects = $objectModel->fetchAllExternal( $objectType, $objectModel->allColumnNames(), $size);
+
+				foreach( $objects as $idx => $object ) {
+					Logger::logInfo( "Enqueuing $idx: " . $object, $this->type, $this->guid );
+					call_user_func_array(array($this, $methodName), array( array( "xid" => $object->xid), true, true) );
+				}
+			}
+			else {
+				throw new \Exception( "No method named '" . $methodName . "( array, bool, bool )'");
+			}
+		}
+		else {
+			throw new \Exception( "Batch parameter is not a number '" . $size . "'");
+		}
 	}
 
 	public function processData()

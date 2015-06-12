@@ -14,30 +14,6 @@ use utilities\Metadata as Metadata;
  */
 abstract class Processor
 {
-	public static function Daemonize($userHash = null, $jobtype = null, $processor = null, $guid = null)
-	{
-		if ( is_null($userHash) || is_null($jobtype) || is_null($processor) || is_null($guid)) {
-			throw new \Exception("Unable to Daemonize (" . var_export(func_get_args(), true) . ")");
-		}
-
-		$user_model = Model::Named('Users');
-		$user = $user_model->userByApiHash($userHash);
-		if ( $user == false || $user->isAdmin() == false) {
-			throw new \Exception("Unable to Daemonize User (" . $userHash .", " . $jobtype .", " . $processor .", " . $guid. ")");
-		}
-
-		$shell = ((PHP_OS === 'Darwin') ? '' : 'nohup ') . 'php ';
-		$daemon = appendPath(SYSTEM_PATH, 'Daemon.php');
-		$daemonCMD = $daemon
-			. ' -g ' . $guid
-			. ' -t ' . $jobtype
-			. ' -u ' . $userHash
-			. ' -p ' . $processor
-			. ' >> /tmp/' . $processor . '_' . $guid . '_' . $userHash . '.log 2>&1';
-
-		return shell_exec( $shell . $daemonCMD . " & echo $!");
-	}
-
 	/**
 	 * loads the Processor with the given name.
 	 * @param $name string name of the Processor
@@ -83,11 +59,13 @@ abstract class Processor
 
 	public function deleteWorkingDirectory()
 	{
-		if ($this->workingDirectoryExists() == true ) {
-			$purged = destroy_dir($this->workingDirectory());
-			if ( $purged != true ) {
-				Logger::LogError("Error destroying working directory ", $this->type, $this->guid);
-				return false;
+		if ( is_sub_dir($this->workingDirectory(), Config::GetProcessing()) ) {
+			if ($this->workingDirectoryExists() == true ) {
+				$purged = destroy_dir($this->workingDirectory());
+				if ( $purged != true ) {
+					Logger::LogError("Error destroying working directory " . $this->workingDirectory(), $this->type, $this->guid);
+					return false;
+				}
 			}
 		}
 		return true;
@@ -143,10 +121,30 @@ abstract class Processor
 	{
 		if ( Session::isUserLoggedIn() ) {
 			$user = Model::Named('Users')->objectForId(Session::Get('user_id'));
-			return Processor::Daemonize($user->api_hash, get_short_class($this), get_short_class($this), $this->guid);
+			return Daemonize( get_short_class($this), $user->api_hash, $this->guid);
 		}
 
 		return false;
+	}
+
+	public function initializationParams(array $specialParams = array())
+	{
+		foreach( $specialParams as $specialKey => $specialValue ) {
+			if ( property_exists($this, $specialKey)) {
+				$this->{$specialKey} = $specialValue;
+			}
+			else if (method_exists($this, $specialKey)) {
+				if ( is_array($specialValue) ) {
+					call_user_func_array(array($this, $specialKey), $specialValue );
+				}
+				else {
+					$this->{$specialKey}( $specialValue );
+				}
+			}
+			else {
+				throw new \Exception( "bad parameter $specialKey = " . var_export($specialValue, true));
+			}
+		}
 	}
 
 	public abstract function processData();

@@ -11,6 +11,7 @@ class Job_TypeDBO extends DataObject
 	public $code;
 	public $description;
 	public $scheduled;
+	public $processor;
 
 	public function displayName()
 	{

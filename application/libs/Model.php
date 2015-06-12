@@ -501,6 +501,47 @@ abstract class Model
 		return false;
 	}
 
+	public function fetchAllExternal($table, $columns, $limit = null)
+	{
+		if ( isset($table, $columns) ) {
+			$placeholders = array();
+			$params = array();
+
+			if ( is_array($columns) ) {
+				$columns = implode(", ", $columns);
+			}
+
+			$sql = "SELECT " . $columns . " FROM " . $table;
+			$sql .= " WHERE xid is not null and ( xupdated is null or xupdated < " . (time() - (3600 * 24 * 7)) . " )";
+			$sql .= " ORDER BY xupdated desc";
+
+			if ( isset($limit) && intval($limit) > 0 ) {
+				$sql .= " LIMIT " . $limit;
+			}
+
+//			$this->echoSQL( $sql, $params);
+
+			$statement = $this->db->prepare($sql);
+			if ($statement && $statement->execute($params)) {
+				$dboClassName = DataObject::NameForModel($this);
+				try {
+					if (class_exists($dboClassName)) {
+						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+					}
+				}
+				catch ( \ClassNotFoundException $e ) {
+					return $statement->fetchAll();
+				}
+			}
+
+			$caller = callerClassAndMethod('fetchAll');
+			$errPoint = ($statement ? $statement : $this->db);
+			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, null);
+		}
+		return false;
+	}
+
 	public function fetchAllLike($table, $columns, $likes, $qualifiers = null, $order = null, $limit = null, $joinType = 'AND', $likePrefix = '', $likeSuffix = '%')
 	{
 		if ( isset($table, $columns, $likes) ) {
