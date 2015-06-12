@@ -80,25 +80,36 @@ abstract class EndpointConnector
 
 	public function endpoint()
 	{
-		return $this->endpoint;
+		return (isset($this->endpoint) ? $this->endpoint : null);
+	}
+
+	public function endpointDisplayName() {
+		$ep = $this->endpoint();
+		if ( $ep!= null && empty( $ep->api_key ) == false ) {
+			return $this->endpoint->displayName();
+		}
+		return null;
 	}
 
 	public function endpointAPIKey() {
-		if ( empty( $this->endpoint->api_key ) == false ) {
+		$ep = $this->endpoint();
+		if ( $ep!= null && empty( $ep->api_key ) == false ) {
 			return $this->endpoint->api_key;
 		}
 		return null;
 	}
 
 	public function endpointUsername() {
-		if ( empty( $this->endpoint->username ) == false ) {
+		$ep = $this->endpoint();
+		if ( $ep!= null && empty( $ep->username ) == false ) {
 			return $this->endpoint->username;
 		}
 		return null;
 	}
 
 	public function endpointBaseURL() {
-		if ( empty( $this->endpoint->base_url ) == false ) {
+		$ep = $this->endpoint();
+		if ( $ep!= null && empty( $ep->base_url ) == false ) {
 			return $this->endpoint->base_url;
 		}
 		return null;
@@ -170,11 +181,11 @@ abstract class EndpointConnector
 				}
 				else {
 					\Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
-							get_class($this), $this->endpoint->displayName());
+							get_class($this), $this->endpointDisplayName());
 					\Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
-						get_class($this), $this->endpoint->displayName());
+						get_class($this), $this->endpointDisplayName());
 					foreach( $info as $http_key => $http_value ) {
-						\Logger::logError( "$http_key = $http_value", get_class($this), $this->endpoint->displayName());
+						\Logger::logError( "$http_key = " . var_export($http_value, true), get_class($this), $this->endpointDisplayName());
 					}
 					$data = false;
 				}
@@ -184,12 +195,12 @@ abstract class EndpointConnector
 				$data = file_get_contents($url);
 				if ( $data == false ) {
 					\Logger::logError( 'Error (?) with url: ' . $this->cleanURLForLog($url),
-						get_class($this), $this->endpoint->displayName());
+						get_class($this), $this->endpointDisplayName());
 				}
 			}
 			else {
 				\Logger::logError( 'Unable to process compressed url: ' . $this->cleanURLForLog($url),
-					get_class($this), $this->endpoint->displayName());
+					get_class($this), $this->endpointDisplayName());
 			}
 
 			return $data;
