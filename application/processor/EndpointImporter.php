@@ -320,15 +320,17 @@ abstract class EndpointImporter extends Processor
 		}
 
 		$imported = $this->getMeta( ComicVineImporter::META_IMPORT_ROOT );
-		foreach( $imported as $path => $meta ) {
-			$finalize_method = 'finalize_' . $meta[EndpointImporter::META_IMPORT_TYPE];
-			if (method_exists($this, $finalize_method)) {
-				if ( $this->$finalize_method($meta) == null ) {
-					throw new Exception("finalize error " . $finalize_method );
+		if ( is_array($imported) && count($imported) > 0 ) {
+			foreach( $imported as $path => $meta ) {
+				$finalize_method = 'finalize_' . $meta[EndpointImporter::META_IMPORT_TYPE];
+				if (method_exists($this, $finalize_method)) {
+					if ( $this->$finalize_method($meta) == null ) {
+						throw new Exception("finalize error " . $finalize_method );
+					}
 				}
-			}
-			else {
-				throw new Exception("failed to find processing function " . $finalize_method );
+				else {
+					throw new Exception("failed to find processing function " . $finalize_method );
+				}
 			}
 		}
 
