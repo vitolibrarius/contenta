@@ -161,12 +161,24 @@ abstract class EndpointConnector
 				curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
 
 				$data = curl_exec($ch);
-				if ( $data == false ) {
+				$info = curl_getinfo($ch);
+				$http_code = ( empty($info['http_code']) ? -1 : $info['http_code']);
+
+				if ( $http_code >= 200 && $http_code < 300 ) {
+					Cache::Store( $cacheKey, $cookie );
+					Cache::Store( $url, $data );
+				}
+				else {
+					\Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
+							get_class($this), $this->endpoint->displayName());
 					\Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
 						get_class($this), $this->endpoint->displayName());
+					foreach( $info as $http_key => $http_value ) {
+						\Logger::logError( "$http_key = $http_value", get_class($this), $this->endpoint->displayName());
+					}
+					$data = false;
 				}
 				curl_close($ch);
-				Cache::Store( $cacheKey, $cookie );
 			}
 			else if ( $this->endpointCompressed() == false) {
 				$data = file_get_contents($url);
@@ -178,10 +190,6 @@ abstract class EndpointConnector
 			else {
 				\Logger::logError( 'Unable to process compressed url: ' . $this->cleanURLForLog($url),
 					get_class($this), $this->endpoint->displayName());
-			}
-
-			if ( $data != false ) {
-				Cache::Store( $url, $data );
 			}
 
 			return $data;

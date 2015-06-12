@@ -77,7 +77,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 				Logger::logException( $e2 );
 			}
 		}
-		return (is_array($details) ? $details : false);
+		return (isset($details) && is_array($details) ? $details : false);
 	}
 
 	public function story_arcDetails( $id )
