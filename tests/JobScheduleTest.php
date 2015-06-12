@@ -48,7 +48,7 @@ use model\Job_Type as Job_Type;
 use model\Job_Running as Job_Running;
 use model\Job as Job;
 
-$root = "/tmp/test/" . basename(__FILE__, ".php");
+$root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root, false );
 
 my_echo( );

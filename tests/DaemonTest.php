@@ -25,7 +25,7 @@ use \Processor as Processor;
 use utilities\Metadata as Metadata;
 
 
-$root = "/tmp/test/" . basename(__FILE__, ".php");
+$root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root, false);
 
 my_echo( );

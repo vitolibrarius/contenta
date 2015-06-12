@@ -20,7 +20,7 @@ require SYSTEM_PATH .'application/libs/Logger.php';
 require SYSTEM_PATH .'tests/_ResetConfig.php';
 require SYSTEM_PATH .'tests/_Data.php';
 
-$root = "/tmp/test/" . basename(__FILE__, ".php");
+$root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root );
 
 function getImage($wrapper, $name) {

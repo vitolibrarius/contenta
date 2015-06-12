@@ -3,10 +3,12 @@
 // guard to ensure basic configuration is loaded
 defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
+define('TEST_ROOT_PATH', "/tmp/ContentaTest" );
+
 function SetConfigRoot($path = null, $purgeFirst = true)
 {
 	if ( is_null($path) ) {
-		$path = "/tmp/test/unknown";
+		$path = TEST_ROOT_PATH . "/unknown";
 	}
 
 	$config = Config::instance();
@@ -20,7 +22,7 @@ function SetConfigRoot($path = null, $purgeFirst = true)
 	$config->setValue("Logging/type", "Print") || die("Failed to change the configured Logging");
 	$config->setValue("Logging/path", "logs") || die("Failed to change the configured Logging");
 
-	$config->setValue("Repository/cache", "/tmp/test/cache" );
+	$config->setValue("Repository/cache", TEST_ROOT_PATH . "/cache" );
 	$config->setValue("Repository/processing", "processing" );
 
 	my_echo( "** Configuration" );
