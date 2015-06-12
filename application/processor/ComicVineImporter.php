@@ -287,6 +287,7 @@ class ComicVineImporter extends EndpointImporter
 
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
+				$this->setMeta( appendPath($path, Publisher::xupdated), time() );
 
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
@@ -324,6 +325,7 @@ class ComicVineImporter extends EndpointImporter
 					}
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
+				$this->setMeta( appendPath($path, Character::xupdated), time() );
 
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
@@ -374,6 +376,7 @@ class ComicVineImporter extends EndpointImporter
 
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
+				$this->setMeta( appendPath($path, Series::xupdated), time() );
 
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
@@ -431,6 +434,7 @@ class ComicVineImporter extends EndpointImporter
 
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
+				$this->setMeta( appendPath($path, Story_Arc::xupdated), time() );
 
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
@@ -474,6 +478,7 @@ class ComicVineImporter extends EndpointImporter
 
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
+				$this->setMeta( appendPath($path, Publication::xupdated), time() );
 
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
