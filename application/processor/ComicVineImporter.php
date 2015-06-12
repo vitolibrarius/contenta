@@ -376,7 +376,7 @@ class ComicVineImporter extends EndpointImporter
 
 					$this->setMeta( appendPath( $path, $modelKey), $value );
 				}
-				$this->setMeta( appendPath($path, Series::xupdated), time() );
+				//$this->setMeta( appendPath($path, Series::xupdated), time() );
 
 				$descPath = appendPath( $path, "desc");
 				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
