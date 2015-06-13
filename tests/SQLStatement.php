@@ -33,14 +33,32 @@ my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
 $name = db\Qualifier::Equals( 'a', "name", "David" );
-my_echo( "select * from table where " . $name->sqlStatement() . " | " . var_export($name->sqlParameters(), true));
+my_echo( "select * from table where " . $name->sqlStatement() . PHP_EOL . var_export($name->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);
 
 $age = db\Qualifier::Equals( 'a', "age", "47" );
-my_echo( "select * from table where " . $age->sqlStatement() . " | " . var_export($age->sqlParameters(), true));
+my_echo( "select * from table where " . $age->sqlStatement() . PHP_EOL . var_export($age->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);
 
 $notname = db\Qualifier::NotQualifier( $name );
-my_echo( "select * from table where " . $notname->sqlStatement() . " | " . var_export($notname->sqlParameters(), true));
+my_echo( "select * from table where " . $notname->sqlStatement() . PHP_EOL . var_export($notname->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);
 
 $andname = db\Qualifier::AndQualifier( $name, $age, $notname );
-my_echo( "select * from table where " . $andname->sqlStatement() . " | " . var_export($andname->sqlParameters(), true));
+my_echo( "select * from table where " . $andname->sqlStatement() . PHP_EOL . var_export($andname->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);
 
+$select = \SQL::Select( Model::Named("Series") );
+$select->where( $andname );
+my_echo( "SQL: " . $select->sqlStatement() . PHP_EOL . var_export($select->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);
+
+$select = \SQL::Select( Model::Named("Publisher") );
+$select->where( $name );
+$select->orderBy( array(
+		model\Publisher::name,
+		array( "desc" => model\Publisher::created )
+	)
+);
+my_echo( "SQL: " . $select->sqlStatement() . PHP_EOL . var_export($select->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);

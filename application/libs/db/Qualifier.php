@@ -7,8 +7,9 @@ use \Localized as Localized;
 use \Logger as Logger;
 use \Model as Model;
 use \Config as Config;
+use \SQL as SQL;
 
-abstract class Qualifier
+abstract class Qualifier extends SQL
 {
 	const EQ				= '=';
 	const NOT_EQ	 		= '!=';
@@ -84,9 +85,6 @@ abstract class Qualifier
 
 		return new BasicQualifier( $prefix, $key, Qualifier::EQ, $value );
 	}
-
-	abstract public function sqlParameters();
-	abstract public function sqlStatement();
 }
 
 class OrQualifier extends Qualifier
