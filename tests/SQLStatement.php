@@ -75,9 +75,14 @@ my_echo( "- - - - -" . PHP_EOL);
 
 $insert = \SQL::Insert( Model::Named("Job_Type") );
 $insert
-	->insertRecord( array( 'name' => 'test 1', 'code' => 'abc', 'desc' => 'abc test', 'processor' => "Processor" ) )
-	->insertRecord( array( 'name' => 'test 1', 'code' => 'abc', 'desc' => 'abc test', 'scheduled' => "1" ) )
+	->addRecord( array( 'name' => 'test 1', 'code' => 'abc', 'desc' => 'abc test', 'processor' => "Processor" ) )
+	->addRecord( array( 'name' => 'test 1', 'code' => 'abc', 'desc' => 'abc test', 'scheduled' => "1" ) )
 	;
 
 my_echo( "SQL: " . $insert->sqlStatement() . PHP_EOL . var_export($insert->sqlParameters(), true));
 my_echo( "- - - - -" . PHP_EOL);
+
+$update = \SQL::UpdateObject( $user, array( 'name' => 'Sammy' ));
+my_echo( "SQL: " . $update->sqlStatement() . PHP_EOL . var_export($update->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);
+

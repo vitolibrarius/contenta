@@ -20,6 +20,7 @@ abstract class SQL
 	const SQL_FROM		= 'FROM';
 	const SQL_WHERE		= 'WHERE';
 	const SQL_VALUES	= 'VALUES';
+	const SQL_SET		= 'SET';
 
 	const SQL_ORDER		= 'ORDER BY';
 	const SQL_ORDER_ASC		= 'ASC';
@@ -52,7 +53,7 @@ abstract class SQL
 	public static function InsertRecord( Model $model, array $columns = array(), array $record = null )
 	{
 		$sql = new db\InsertSQL($model, $columns);
-		$sql->insertRecord( $record );
+		$sql->addRecord( $record );
 		return $sql;
 	}
 
@@ -68,6 +69,20 @@ abstract class SQL
 		}
 
 		return new db\DeleteSQL($data->model(), db\Qualifier::PK($data));
+	}
+
+	public static function Updated( Model $model, db\Qualifier $qualifier = null, array $changes = null)
+	{
+		return new db\UpdateSQL($model, $qualifier, $changes);
+	}
+
+	public static function UpdateObject( DataObject $data = null, array $changes = null )
+	{
+		if ( is_null($data) ) {
+			throw new \Exception( "You must specify the data to be deleted" );
+		}
+
+		return new db\UpdateSQL($data->model(), db\Qualifier::PK($data), $changes);
 	}
 
 

@@ -8,34 +8,24 @@ use \Logger as Logger;
 use \Model as Model;
 use \SQL as SQL;
 
-class InsertSQL extends SQL
+class UpdateSQL extends SQL
 {
 	public $model;
-	public $columns;
-	public $dataArray;
+	public $data;
 
-    public function __construct(Model $model = null, array $columns = array())
+    public function __construct(Model $model, Qualifier $qualifier = null, array $changes = null)
     {
     	parent::__construct();
     	if ( is_null($model) ) {
     		throw new \Exception( "Must specfify the model to insert into .. " );
     	}
 
-    	if ( count($columns) == 0 ) {
-    		$columns = $model->allColumnNames();
-    		$columns = array_diff($columns, array($model->tablePK()));
-    	}
-
     	$this->model = $model;
-    	$this->columns = $columns;
+    	$this->data = $changes;
+    	$this->where($qualifier);
+
     	return $this;
     }
-
-	public function addRecord( array $record = null )
-	{
-		$this->dataArray[] = $record;
-		return $this;
-	}
 
 	private function rowValues( $idx = 0, array $row)
 	{
@@ -70,8 +60,13 @@ class InsertSQL extends SQL
 	public function sqlParameters()
 	{
 		$params = array();
-		foreach ($this->dataArray as $idx => $row ) {
-			$params = array_merge($params, $this->rowValues($idx, $row));
+		foreach ($this->data as $key => $value) {
+			$pKey = ':' . sanitize($key, true, true);
+			$params[$pKey] = $value;
+		}
+
+		if (isset($this->qualifier) ) {
+			$params = array_merge($params, $this->qualifier->sqlParameters() );
 		}
 
 		return $params;
@@ -79,23 +74,26 @@ class InsertSQL extends SQL
 
 	public function sqlStatement()
 	{
-		if ( is_null($this->dataArray) || count($this->dataArray) == 0 ) {
-    		throw new \Exception( "Must specfify the data to be inserted into " . $this->model );
+		if ( is_null($this->data) || count($this->data) == 0 ) {
+    		throw new \Exception( "Must specfify the data to be updated into " . $this->model );
     	}
 
 		$components = array(
-			SQL::CMD_INSERT,
+			SQL::CMD_UPDATE,
 			$this->model->tableName(),
+			SQL::SQL_SET
 		);
 
-		$components[] = "(" . implode(",", $this->columns ) . ")";
-		$components[] = SQL::SQL_VALUES;
-
-		$rowPlaceholders = array();
-		foreach ($this->dataArray as $idx => $row ) {
-			$rowPlaceholders[] = "(" . implode(",", $this->rowPlaceholders($idx, $row)) . ")";
+		$placeholders = array();
+		foreach ($this->data as $key => $value) {
+			$placeholders[] = $key . ' = :' . sanitize($key, true, true);
 		}
-		$components[] = implode(", ", $rowPlaceholders );
+		$components[] = implode(',', $placeholders);
+
+		if ( isset($this->qualifier) ) {
+			$components[] = SQL::SQL_WHERE;
+			$components[] = $this->qualifier->sqlStatement();
+		}
 
 		return implode(" ", $components );
 	}
