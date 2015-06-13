@@ -10,13 +10,6 @@ use \SQL as SQL;
 
 class SelectSQL extends SQL
 {
-	const SQL_SELECT	= 'SELECT';
-	const SQL_FROM		= 'FROM';
-	const SQL_WHERE		= 'WHERE';
-	const SQL_ORDER		= 'ORDER BY';
-	const SQL_ORDER_ASC		= 'ASC';
-	const SQL_ORDER_DESC	= 'DESC';
-
 	public $model;
 	public $columns;
 	public $order;
@@ -49,19 +42,19 @@ class SelectSQL extends SQL
 	public function sqlStatement()
 	{
 		$components = array(
-			SelectSQL::SQL_SELECT,
+			SQL::CMD_SELECT,
 			implode(",", $this->columns),
-			SelectSQL::SQL_FROM,
+			SQL::SQL_FROM,
 			$this->model->tableName(),
 		);
 
 		if ( isset($this->qualifier) ) {
-			$components[] = SelectSQL::SQL_WHERE;
+			$components[] = SQL::SQL_WHERE;
 			$components[] = $this->qualifier->sqlStatement();
 		}
 
 		if ( isset($this->order) ) {
-			$components[] = SelectSQL::SQL_ORDER;
+			$components[] = SQL::SQL_ORDER;
 			$orderClauses = array();
 			foreach( $this->order as $clause ) {
 				if ( is_array($clause) ) {
@@ -69,11 +62,11 @@ class SelectSQL extends SQL
 						throw new \Exception( "Unable to parse order clause " . var_export($clause, true) );
 					}
 					foreach( $clause as $direction => $col ) {
-						if ( is_int($direction) || strtoupper($direction) === SelectSQL::SQL_ORDER_ASC) {
+						if ( is_int($direction) || strtoupper($direction) === SQL::SQL_ORDER_ASC) {
 							$orderClauses[] = $col;
 						}
-						else if ( strtoupper($direction) === SelectSQL::SQL_ORDER_DESC ) {
-							$orderClauses[] = $col . ' ' . SelectSQL::SQL_ORDER_DESC;
+						else if ( strtoupper($direction) === SQL::SQL_ORDER_DESC ) {
+							$orderClauses[] = $col . ' ' . SQL::SQL_ORDER_DESC;
 						}
 						else {
 							throw new \Exception( "Unable to order '$direction' on column $col" );

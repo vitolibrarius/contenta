@@ -32,11 +32,17 @@ my_echo( );
 my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
-$name = db\Qualifier::Equals( 'a', "name", "David" );
+//// Load test data
+// load the default user
+$user = Model::Named("Users")->userByName('vito');
+($user != false && $user->name == 'vito') || die("Could not find 'vito' user");
+
+////
+$name = db\Qualifier::Equals( "name", "David" );
 my_echo( "select * from table where " . $name->sqlStatement() . PHP_EOL . var_export($name->sqlParameters(), true));
 my_echo( "- - - - -" . PHP_EOL);
 
-$age = db\Qualifier::Equals( 'a', "age", "47" );
+$age = db\Qualifier::Equals( "age", "47" );
 my_echo( "select * from table where " . $age->sqlStatement() . PHP_EOL . var_export($age->sqlParameters(), true));
 my_echo( "- - - - -" . PHP_EOL);
 
@@ -61,4 +67,8 @@ $select->orderBy( array(
 	)
 );
 my_echo( "SQL: " . $select->sqlStatement() . PHP_EOL . var_export($select->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);
+
+$delete = \SQL::DeleteObject( $user );
+my_echo( "SQL: " . $delete->sqlStatement() . PHP_EOL . var_export($delete->sqlParameters(), true));
 my_echo( "- - - - -" . PHP_EOL);

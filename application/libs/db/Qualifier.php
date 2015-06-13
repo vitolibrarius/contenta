@@ -8,6 +8,7 @@ use \Logger as Logger;
 use \Model as Model;
 use \Config as Config;
 use \SQL as SQL;
+use \DataObject as DataObject;
 
 abstract class Qualifier extends SQL
 {
@@ -36,6 +37,15 @@ abstract class Qualifier extends SQL
 	public function prefixedAttribute( $attribute = '' )
 	{
 		return ':' . (strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '_') . sanitize($attribute, true, true);
+	}
+
+	public static function PK( DataObject $data = null, $prefix = '' )
+	{
+		if ( is_null($data) ) {
+			throw new \Exception( "You must specify the data to be qualified" );
+		}
+		$model = $data->model();
+		return new BasicQualifier( $model->tablePK(), Qualifier::EQ, $data->pkValue(), $prefix );
 	}
 
 	public static function AndQualifier()
@@ -77,13 +87,13 @@ abstract class Qualifier extends SQL
 		return new NotQualifier( $qual );
 	}
 
-	public static function Equals($prefix = '', $key = null, $value = null)
+	public static function Equals( $key = null, $value = null, $prefix = '')
 	{
 		if ( is_null($key) || is_null($value) ) {
 			throw new \Exception( "Must specify attribute key/value" );
 		}
 
-		return new BasicQualifier( $prefix, $key, Qualifier::EQ, $value );
+		return new BasicQualifier( $key, Qualifier::EQ, $value, $prefix );
 	}
 }
 
@@ -169,7 +179,7 @@ class BasicQualifier extends Qualifier
 	public $operator;
 	public $value;
 
-	public function __construct($prefix = '', $key = null, $op = Qualifier::EQ, $v = null)
+	public function __construct( $key = null, $op = Qualifier::EQ, $v = null, $prefix = '')
 	{
 		parent::__construct($prefix);
 		if ( is_null($key) || is_null($v) ) {

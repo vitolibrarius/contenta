@@ -12,6 +12,19 @@ use \Model as Model;
  */
 abstract class SQL
 {
+	const CMD_SELECT	= 'SELECT';
+	const CMD_INSERT	= 'INSERT';
+	const CMD_UPDATE	= 'UPDATE';
+	const CMD_DELETE	= 'DELETE';
+
+	const SQL_FROM		= 'FROM';
+
+	const SQL_WHERE		= 'WHERE';
+
+	const SQL_ORDER		= 'ORDER BY';
+	const SQL_ORDER_ASC		= 'ASC';
+	const SQL_ORDER_DESC	= 'DESC';
+
 	public $qualifier;
 
 	public static function TableAlias( $idx = 0 )
@@ -29,6 +42,21 @@ abstract class SQL
 	{
 		return new db\SelectSQL($model, $columns);
 	}
+
+	public static function Delete( Model $model, db\Qualifier $qualifier = null )
+	{
+		return new db\DeleteSQL($model, $qualifier);
+	}
+
+	public static function DeleteObject( DataObject $data = null )
+	{
+		if ( is_null($data) ) {
+			throw new \Exception( "You must specify the data to be deleted" );
+		}
+
+		return new db\DeleteSQL($data->model(), db\Qualifier::PK($data));
+	}
+
 
     public function __construct()
     {
