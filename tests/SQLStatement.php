@@ -72,3 +72,12 @@ my_echo( "- - - - -" . PHP_EOL);
 $delete = \SQL::DeleteObject( $user );
 my_echo( "SQL: " . $delete->sqlStatement() . PHP_EOL . var_export($delete->sqlParameters(), true));
 my_echo( "- - - - -" . PHP_EOL);
+
+$insert = \SQL::Insert( Model::Named("Job_Type") );
+$insert
+	->insertRecord( array( 'name' => 'test 1', 'code' => 'abc', 'desc' => 'abc test', 'processor' => "Processor" ) )
+	->insertRecord( array( 'name' => 'test 1', 'code' => 'abc', 'desc' => 'abc test', 'scheduled' => "1" ) )
+	;
+
+my_echo( "SQL: " . $insert->sqlStatement() . PHP_EOL . var_export($insert->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);

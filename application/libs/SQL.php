@@ -13,13 +13,13 @@ use \Model as Model;
 abstract class SQL
 {
 	const CMD_SELECT	= 'SELECT';
-	const CMD_INSERT	= 'INSERT';
+	const CMD_INSERT	= 'INSERT INTO';
 	const CMD_UPDATE	= 'UPDATE';
 	const CMD_DELETE	= 'DELETE';
 
 	const SQL_FROM		= 'FROM';
-
 	const SQL_WHERE		= 'WHERE';
+	const SQL_VALUES	= 'VALUES';
 
 	const SQL_ORDER		= 'ORDER BY';
 	const SQL_ORDER_ASC		= 'ASC';
@@ -27,8 +27,9 @@ abstract class SQL
 
 	public $qualifier;
 
-	public static function TableAlias( $idx = 0 )
+	public static function PrefixAlias( $idx = 0 )
 	{
+		$idx = (is_int($idx) ? intval($idx) : 0);
 		$characters = 'abcdefghijklmnopqrstuvwxyz';
 		$alias = '';
 		if ( intval(floor($idx / 26)) > 0 ) {
@@ -41,6 +42,18 @@ abstract class SQL
 	public static function Select( Model $model, array $columns = array() )
 	{
 		return new db\SelectSQL($model, $columns);
+	}
+
+	public static function Insert( Model $model, array $columns = array() )
+	{
+		return new db\InsertSQL($model, $columns);
+	}
+
+	public static function InsertRecord( Model $model, array $columns = array(), array $record = null )
+	{
+		$sql = new db\InsertSQL($model, $columns);
+		$sql->insertRecord( $record );
+		return $sql;
 	}
 
 	public static function Delete( Model $model, db\Qualifier $qualifier = null )
