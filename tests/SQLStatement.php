@@ -69,17 +69,28 @@ $select->orderBy( array(
 my_echo( "SQL: " . $select->sqlStatement() . PHP_EOL . var_export($select->sqlParameters(), true));
 my_echo( "- - - - -" . PHP_EOL);
 
+$select = \SQL::Select( Model::Named("Job_Type") );
+$select->where( db\Qualifier::Equals( "scheduled", "1" ) );
+$select->orderBy( array( "name"));
+my_echo( "SQL: " . $select->sqlStatement() . PHP_EOL . var_export($select->sqlParameters(), true));
+$results = $select->fetchAll();
+reportData($results,  array( "id", "name", "code", "desc", "scheduled", "processor" ));
+my_echo( "- - - - -" . PHP_EOL);
+
 $delete = \SQL::DeleteObject( $user );
 my_echo( "SQL: " . $delete->sqlStatement() . PHP_EOL . var_export($delete->sqlParameters(), true));
 my_echo( "- - - - -" . PHP_EOL);
 
-$insert = \SQL::Insert( Model::Named("Job_Type") );
+$insert = \SQL::Insert( Model::Named("Job_Type"),  array( 'joks' ) );
 $insert
-	->addRecord( array( 'name' => 'test 1', 'code' => 'abc', 'desc' => 'abc test', 'processor' => "Processor" ) )
+	->addRecord( array( 'joks' => 'test 1', 'code' => 'abc', 'desc' => 'abc test', 'processor' => "Processor" ) )
 	->addRecord( array( 'name' => 'test 1', 'code' => 'abc', 'desc' => 'abc test', 'scheduled' => "1" ) )
 	;
-
-my_echo( "SQL: " . $insert->sqlStatement() . PHP_EOL . var_export($insert->sqlParameters(), true));
+$success = $insert->commitTransaction();
+my_echo( "SQL: " . $insert->sqlStatement() . PHP_EOL . var_export($insert->sqlParameters(), true) . PHP_EOL . "success = $success");
+$results = \SQL::Select( Model::Named("Job_Type") )->fetchAll();
+reportData($results,  array( "id", "name", "code", "desc", "scheduled", "processor" ));
+my_echo( "- - - - -" . PHP_EOL);
 my_echo( "- - - - -" . PHP_EOL);
 
 $update = \SQL::UpdateObject( $user, array( 'name' => 'Sammy' ));

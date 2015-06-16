@@ -90,6 +90,13 @@ abstract class SQL
     {
     }
 
+	public function reportSQLError( $clazz = 'Model', $method = 'unknown', $pdocode, $pdoError, $sql, $params = null)
+	{
+		$msg = 'PDO Error(' . $pdocode . ') ' . $pdoError . ' for [' . $sql . '] ' . (isset($params) ? var_export($params, true) : 'No Parameters');
+		Logger::logError($msg, $clazz, $method);
+	}
+
+
 	abstract public function sqlParameters();
 	abstract public function sqlStatement();
 

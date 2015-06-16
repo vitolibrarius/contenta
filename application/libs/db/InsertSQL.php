@@ -99,4 +99,39 @@ class InsertSQL extends SQL
 
 		return implode(" ", $components );
 	}
+
+	public function commitTransaction()
+	{
+		$sql = $this->sqlStatement();
+		$params = $this->sqlParameters();
+
+		$db = Database::instance();
+		$statement = $db->prepare($sql);
+		if ($statement ) {
+			$affectedRows = $statement->execute($params);
+			if ( $affectedRows > 0 ) {
+				if ( count( $this->dataArray ) == 1 ) {
+					$rowId = $db->lastInsertId();
+					if ( isset($this->model) ) {
+						$select = new SelectSQL($this->model);
+						$select->where( Qualifier::Equals($this->model->tablePK(), $rowId) );
+						return $select->fetch();
+					}
+					else {
+						return $rowId;
+					}
+				}
+				else {
+					return true;
+				}
+			}
+		}
+
+		$caller = callerClassAndMethod('commitTransaction');
+		$errPoint = ($statement ? $statement : Database::instance());
+		$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+		$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
+
+		return false;
+	}
 }

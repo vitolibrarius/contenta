@@ -2,7 +2,9 @@
 
 namespace db;
 
+use \PDO as PDO;
 use \Database as Database;
+use \DataObject as DataObject;
 use \Localized as Localized;
 use \Logger as Logger;
 use \Model as Model;
@@ -86,4 +88,70 @@ class SelectSQL extends SQL
 		return implode(" ", $components );
 	}
 
+	public function fetch()
+	{
+		$sql = $this->sqlStatement();
+		$params = $this->sqlParameters();
+
+		$statement = Database::instance()->prepare($sql);
+		if ($statement && $statement->execute($params)) {
+			try {
+				if ( isset($this->model) ) {
+					$dboClassName = DataObject::NameForModel($this->model);
+					if (class_exists($dboClassName)) {
+						return $statement->fetchObject($dboClassName);
+					}
+				}
+				else {
+					return $statement->fetch();
+				}
+			}
+			catch ( \ClassNotFoundException $e ) {
+				Logger::logException( $e );
+				return $statement->fetch();
+			}
+		}
+
+		$caller = callerClassAndMethod('fetch');
+		$errPoint = ($statement ? $statement : Database::instance());
+		$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+		$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
+
+		return false;
+	}
+
+	public function fetchAll()
+	{
+		$sql = $this->sqlStatement();
+		$params = $this->sqlParameters();
+
+		$statement = Database::instance()->prepare($sql);
+		if ($statement && $statement->execute($params)) {
+			try {
+				if ( isset($this->model) ) {
+					$dboClassName = DataObject::NameForModel($this->model);
+					if (class_exists($dboClassName)) {
+						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
+					}
+					else {
+						return $statement->fetchAll();
+					}
+				}
+				else {
+					return $statement->fetchAll();
+				}
+			}
+			catch ( \ClassNotFoundException $e ) {
+				Logger::logException( $e );
+				return $statement->fetchAll();
+			}
+		}
+
+		$caller = callerClassAndMethod('fetchAll');
+		$errPoint = ($statement ? $statement : Database::instance());
+		$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+		$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
+
+		return false;
+	}
 }

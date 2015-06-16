@@ -28,15 +28,23 @@ abstract class Qualifier extends SQL
 	const NOT_Q				= 'NOT';
 
 	public $tablePrefix;
+	public $parameterPrefix;
+
+	public static function NextParameterPrefix()
+	{
+		static $qualifierCount = 0;
+		return SQL::PrefixAlias( $qualifierCount++ );
+	}
 
 	public function __construct($prefix = '')
 	{
 		$this->tablePrefix = (string)$prefix;
+		$this->parameterPrefix = Qualifier::NextParameterPrefix();
 	}
 
 	public function prefixedAttribute( $attribute = '' )
 	{
-		return ':' . (strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '_') . sanitize($attribute, true, true);
+		return ':' . (strlen($this->parameterPrefix) == 0 ? '' : $this->parameterPrefix . '_') . sanitize($attribute, true, true);
 	}
 
 	public static function PK( DataObject $data = null, $prefix = '' )
@@ -197,6 +205,8 @@ class BasicQualifier extends Qualifier
 
 	public function sqlStatement()
 	{
-		return $this->attribute . " " . $this->operator . " " . $this->prefixedAttribute( $this->attribute );
+		return
+			(strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.') . $this->attribute . " "
+			. $this->operator . " " . $this->prefixedAttribute( $this->attribute );
 	}
 }
