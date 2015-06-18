@@ -32,7 +32,20 @@ class SelectSQL extends SQL
     	return $this;
     }
 
-	public function orderby(array $order = null) {
+    public function objectBasedSelect()
+    {
+		if ( isset($this->columns) ) {
+			$modelColumns = $this->model->allColumnNames();
+			if ( count($this->columns) == count($modelColumns) ) {
+				$diff = array_diff($this->columns, $modelColumns);
+				return (count($diff) == 0);
+			}
+		}
+		return false;
+    }
+
+	public function orderby(array $order = null)
+	{
 		$this->order = $order;
 	}
 
@@ -96,7 +109,7 @@ class SelectSQL extends SQL
 		$statement = Database::instance()->prepare($sql);
 		if ($statement && $statement->execute($params)) {
 			try {
-				if ( isset($this->model) ) {
+				if ( isset($this->model) && $this->objectBasedSelect() ) {
 					$dboClassName = DataObject::NameForModel($this->model);
 					if (class_exists($dboClassName)) {
 						return $statement->fetchObject($dboClassName);
@@ -128,7 +141,7 @@ class SelectSQL extends SQL
 		$statement = Database::instance()->prepare($sql);
 		if ($statement && $statement->execute($params)) {
 			try {
-				if ( isset($this->model) ) {
+				if ( isset($this->model) && $this->objectBasedSelect() ) {
 					$dboClassName = DataObject::NameForModel($this->model);
 					if (class_exists($dboClassName)) {
 						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
