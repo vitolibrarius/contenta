@@ -7,7 +7,7 @@ use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
-use \Database as Database;
+use \SQL as SQL;
 
 use model\Users as Users;
 use model\Endpoint_Type as Endpoint_Type;
@@ -44,21 +44,15 @@ class Migration_3 extends Migrator
 				. Endpoint_Type::throttle_hits . " INTEGER, "
 				. Endpoint_Type::throttle_time . " INTEGER "
 				. ")";
+		$this->sqlite_execute( Endpoint_Type::TABLE, $sql, "Create table " . Endpoint_Type::TABLE );
 
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError('Endpoint_Type', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-		}
-		else {
-			Logger::logInfo( "Created table " . Endpoint_Type::TABLE, "Migration", Endpoint_Type::TABLE);
-		}
-
-		$table_fields = $model->pragma_TableInfo(Endpoint_Type::TABLE);
+		$table_fields = \SQL::pragma_TableInfo(Endpoint_Type::TABLE);
 		if ( isset($table_fields[ Endpoint_Type::data_type ]) == false ) {
-			$this->db->exec("ALTER TABLE " . Endpoint_Type::TABLE . " ADD COLUMN " . Endpoint_Type::data_type . " TEXT");
-			Logger::logInfo( Endpoint_Type::TABLE . " - " . Endpoint_Type::data_type . " column added" );
+			$this->sqlite_execute(
+				Endpoint_Type::TABLE,
+				"ALTER TABLE " . Endpoint_Type::TABLE . " ADD COLUMN " . Endpoint_Type::data_type . " TEXT",
+				Endpoint_Type::TABLE . " - " . Endpoint_Type::data_type . " column added"
+			);
 		}
 
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . Endpoint::TABLE . " ( "
@@ -72,21 +66,15 @@ class Migration_3 extends Migrator
 				. Endpoint::compressed . " INTEGER, "
 				. "FOREIGN KEY (". Endpoint::type_id .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::id . ")"
 				. ")";
+		$this->sqlite_execute( Endpoint::TABLE, $sql, "Create table " . Endpoint::TABLE );
 
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError('Endpoint', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-		}
-		else {
-			Logger::logInfo( "Created table " . Endpoint::TABLE, "Migration", Endpoint::TABLE);
-		}
-
-		$table_fields = $model->pragma_TableInfo(Endpoint::TABLE);
+		$table_fields = \SQL::pragma_TableInfo(Endpoint::TABLE);
 		if ( isset($table_fields[ Endpoint::compressed ]) == false ) {
-			$this->db->exec("ALTER TABLE " . Endpoint::TABLE . " ADD COLUMN " . Endpoint::compressed . " INTEGER");
-			Logger::logInfo( Endpoint::TABLE . " - " . Endpoint::compressed . " column added" );
+			$this->sqlite_execute(
+				Endpoint::TABLE,
+				"ALTER TABLE " . Endpoint::TABLE . " ADD COLUMN " . Endpoint::compressed . " INTEGER",
+				Endpoint::TABLE . " - " . Endpoint::compressed . " column added"
+			);
 		}
 
 		$sql = "CREATE TABLE IF NOT EXISTS " . Network::TABLE
@@ -97,18 +85,13 @@ class Migration_3 extends Migrator
 				. Network::created . " INTEGER, "
 				. Network::disable . " INTEGER "
 				. ")";
+		$this->sqlite_execute( Network::TABLE, $sql, "Create table " . Network::TABLE );
 
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError('Network', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-		}
-		else {
-			Logger::logInfo( "Created table " . Network::TABLE, "Migration", Network::TABLE);
-		}
-
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Network::TABLE . '_ipaddress on ' . Network::TABLE . '(' . Network::ipAddress . ')');
+		$this->sqlite_execute(
+			Network::TABLE,
+			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Network::TABLE . '_ipaddress on ' . Network::TABLE . '(' . Network::ipAddress . ')',
+			"Unique index on " . Network::TABLE
+		);
 
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . User_Network::TABLE . " ( "
 							. User_Network::id . " INTEGER PRIMARY KEY, "
@@ -117,15 +100,7 @@ class Migration_3 extends Migrator
 							. "FOREIGN KEY (". User_Network::user_id .") REFERENCES " . Users::TABLE . "(id), "
 							. "FOREIGN KEY (". User_Network::network_id .") REFERENCES " . Network::TABLE . "(id) "
 							. ")";
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError('User_Network', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-		}
-		else {
-			Logger::logInfo( "Created table " . User_Network::TABLE, "Migration", User_Network::TABLE);
-		}
+		$this->sqlite_execute( User_Network::TABLE, $sql, "Create table " . User_Network::TABLE );
 	}
 
 	public function sqlite_postUpgrade()

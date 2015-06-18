@@ -7,7 +7,7 @@ use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
-use \Database as Database;
+use \SQL as SQL;
 
 use model\Publisher as Publisher;
 
@@ -40,18 +40,13 @@ class Migration_5 extends Migrator
 				. Publisher::updated . " INTEGER, "
 				. Publisher::xupdated . " INTEGER "
 				. ")";
+		$this->sqlite_execute( Publisher::TABLE, $sql, "Create table " . Publisher::TABLE );
 
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			Logger::logSQLError('Log', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-			throw new MigrationFailedException("Error creating Log_Level table");
-		}
-
-		Logger::logInfo( "Created table " . Publisher::TABLE, "Migration", Publisher::TABLE);
-
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Publisher::TABLE . '_nameindex on ' . Publisher::TABLE . '(' . Publisher::name . ')');
+		$this->sqlite_execute(
+			Publisher::TABLE,
+			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Publisher::TABLE . '_nameindex on ' . Publisher::TABLE . '(' . Publisher::name . ')',
+			"Unique index on " . Publisher::TABLE
+		);
 	}
 
 	public function sqlite_postUpgrade()

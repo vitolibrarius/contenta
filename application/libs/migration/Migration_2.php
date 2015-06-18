@@ -7,7 +7,7 @@ use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
-use \Database as Database;
+use \SQL as SQL;
 
 use model\Users as Users;
 use model\Log_Level as Log_Level;
@@ -36,15 +36,7 @@ class Migration_2 extends Migrator
 				. Log_Level::code . " TEXT PRIMARY KEY, "
 				. Log_Level::name . " TEXT COLLATE NOCASE "
 				. ")";
-
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			Logger::logSQLError('Log_Level', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-			throw new MigrationFailedException("Error creating Log_Level table");
-		}
-		Logger::logInfo( "Created table " . Log_Level::TABLE, "Migration", Log_Level::TABLE);
+		$this->sqlite_execute( Log_Level::TABLE, $sql, "Create table " . Log_Level::TABLE );
 
 		$sql = "CREATE TABLE IF NOT EXISTS " . Log::TABLE
 				. " ( "
@@ -58,19 +50,14 @@ class Migration_2 extends Migrator
 				. Log::created . " INTEGER, "
 				. "FOREIGN KEY (" . Log::level . ") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
 				. ")";
-
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			Logger::logSQLError('Log', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-			throw new MigrationFailedException("Error creating Log_Level table");
+		$this->sqlite_execute( Log::TABLE, $sql, "Create table " . Log::TABLE );
+		$indexStatements = array(
+			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Log_Level::TABLE . '_idindex on ' . Log_Level::TABLE . '(' . Log_Level::id . ')',
+			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Log_Level::TABLE . '_nameindex on ' . Log_Level::TABLE . '(' . Log_Level::name . ')'
+		);
+		foreach( $indexStatements as $stmt ) {
+			$this->sqlite_execute( Log::TABLE, $stmt, "Index on " . Log::TABLE );
 		}
-
-		Logger::logInfo( "Created table " . Log::TABLE, "Migration", Log::TABLE);
-
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Log_Level::TABLE . '_idindex on ' . Log_Level::TABLE . '(' . Log_Level::id . ')');
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Log_Level::TABLE . '_nameindex on ' . Log_Level::TABLE . '(' . Log_Level::name . ')');
 	}
 
 	public function sqlite_postUpgrade()
@@ -85,12 +72,14 @@ class Migration_2 extends Migrator
 		foreach ($log_levels as $code => $name) {
 			if ($log_level_model->logLevelForCode($code) == false)
 			{
-				$newObjId = $log_level_model->createObj(Log_Level::TABLE, array(
+				$insert = SQL::Insert( $log_level_model );
+				$insert->addRecord( array(
 					Log_Level::id => array_search($code, array_keys($log_levels)),
 					Log_Level::code => $code,
 					Log_Level::name => $name
 					)
-				);
+				 );
+				$success = $insert->commitTransaction();
 			}
 		}
 	}

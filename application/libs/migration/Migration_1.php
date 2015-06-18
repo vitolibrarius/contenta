@@ -6,7 +6,7 @@ use \Migrator as Migrator;
 use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
-use \Database as Database;
+use \SQL as SQL;
 
 use model\Users as Users;
 
@@ -45,32 +45,36 @@ class Migration_1 extends Migrator
 			. Users::password_reset_hash . " TEXT, "
 			. Users::password_reset_timestamp . " TEXT "
 			. ")";
+		$this->sqlite_execute( Users::TABLE, $sql, "Create table " . Users::TABLE );
 
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			Logger::logSQLError('Users', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-			throw new MigrationFailedException("Error creating Users table");
+		$indexStatements = array(
+			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_tokenindex on ' . Users::TABLE . '(' . Users::rememberme_token . ')',
+			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_activationindex on ' . Users::TABLE . '(' . Users::activation_hash . ')',
+			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_apiindex on ' . Users::TABLE . '(' . Users::api_hash . ')',
+			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_emailindex on ' . Users::TABLE . '(' . Users::email . ')',
+			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_nameindex on ' . Users::TABLE . '(' . Users::name . ')'
+		);
+		foreach( $indexStatements as $stmt ) {
+			$this->sqlite_execute( Users::TABLE, $stmt, "Index on " . Users::TABLE );
 		}
-
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_tokenindex on '
-			. Users::TABLE . '(' . Users::rememberme_token . ')');
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_activationindex on '
-			. Users::TABLE . '(' . Users::activation_hash . ')');
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_apiindex on '
-			. Users::TABLE . '(' . Users::api_hash . ')');
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_emailindex on '
-			. Users::TABLE . '(' . Users::email . ')');
-		$this->db->exec('CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_nameindex on '
-			. Users::TABLE . '(' . Users::name . ')');
-
-		Logger::logInfo( "Created table " . Users::TABLE, "Migration", Users::TABLE);
 	}
 
 	public function sqlite_postUpgrade()
 	{
-		$users_model = new Users(Database::instance());
-		$vito = $users_model->createUserIfMissing('vito', 'omega1Zulu!', 'vitolibrarius@gmail.com', Users::AdministratorRole);
+		$values = array(
+			"name" => "vito",
+			"password_hash" => "$2y$10$486J2llu2CS.2DnXlTIQgOsk3tzcIVki428mjELHoEr/evhymDLGO",
+			"email" => "vitolibrarius@gmail.com",
+			"active" => 1,
+			"account_type" => Users::AdministratorRole,
+			"creation_timestamp" => time(),
+			"failed_logins" => 0,
+			"api_hash" => "4bd3b2b9075571c95ade00002334e7b2"
+		);
+
+		$users_model = new Users();
+		$insert = SQL::Insert( $users_model );
+		$insert->addRecord( $values );
+		$success = $insert->commitTransaction();
 	}
 }

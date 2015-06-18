@@ -7,7 +7,7 @@ use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
-use \Database as Database;
+use \SQL as SQL;
 
 use model\Series as Series;
 use model\Publisher as Publisher;
@@ -97,44 +97,44 @@ class Migration_9 extends Migrator
 
 	public function sqlite_postUpgrade()
 	{
-		$job_type_model = Model::Named("Job_Type");
-		$types = array(
-			array(
-				Job_Type::name => "Comic Book RAR",
-				Job_Type::code => "cbr",
-				Job_Type::desc => "Convert cbr files into cbz",
-				Job_Type::scheduled => 0
-			),
-			array(
-				Job_Type::name => "Comic Book ZIP",
-				Job_Type::code => "cbz",
-				Job_Type::desc => "Process cbz files into indexed media for database",
-				Job_Type::scheduled => 0
-			),
-			array(
-				Job_Type::name => "Character profiles",
-				Job_Type::code => "character",
-				Job_Type::desc => "Load character profile data from metadata endpoints (like ComicVine)",
-				Job_Type::scheduled => 1
-			),
-			array(
-				Job_Type::name => "Publisher profiles",
-				Job_Type::code => "publisher",
-				Job_Type::desc => "Load publisher profile data from metadata endpoints (like ComicVine)",
-				Job_Type::scheduled => 1
-			),
-			array(
-				Job_Type::name => "RSS Feed (nzb)",
-				Job_Type::code => "rss",
-				Job_Type::desc => "Load data from an RSS feed",
-				Job_Type::scheduled => 1
-			)
-		);
-
-		foreach ($types as $dict) {
-			if ($job_type_model->jobTypeForCode($dict[Job_Type::code]) == false) {
-				$newObjId = $job_type_model->createObject($dict);
-			}
-		}
+// 		$job_type_model = Model::Named("Job_Type");
+// 		$types = array(
+// 			array(
+// 				Job_Type::name => "Comic Book RAR",
+// 				Job_Type::code => "cbr",
+// 				Job_Type::desc => "Convert cbr files into cbz",
+// 				Job_Type::scheduled => 0
+// 			),
+// 			array(
+// 				Job_Type::name => "Comic Book ZIP",
+// 				Job_Type::code => "cbz",
+// 				Job_Type::desc => "Process cbz files into indexed media for database",
+// 				Job_Type::scheduled => 0
+// 			),
+// 			array(
+// 				Job_Type::name => "Character profiles",
+// 				Job_Type::code => "character",
+// 				Job_Type::desc => "Load character profile data from metadata endpoints (like ComicVine)",
+// 				Job_Type::scheduled => 1
+// 			),
+// 			array(
+// 				Job_Type::name => "Publisher profiles",
+// 				Job_Type::code => "publisher",
+// 				Job_Type::desc => "Load publisher profile data from metadata endpoints (like ComicVine)",
+// 				Job_Type::scheduled => 1
+// 			),
+// 			array(
+// 				Job_Type::name => "RSS Feed (nzb)",
+// 				Job_Type::code => "rss",
+// 				Job_Type::desc => "Load data from an RSS feed",
+// 				Job_Type::scheduled => 1
+// 			)
+// 		);
+//
+// 		foreach ($types as $dict) {
+// 			if ($job_type_model->jobTypeForCode($dict[Job_Type::code]) == false) {
+// 				$newObjId = $job_type_model->createObject($dict);
+// 			}
+// 		}
 	}
 }

@@ -2,6 +2,7 @@
 
 class MigrationFailedException extends Exception {}
 
+use \SQL as SQL;
 use model\Version as Version;
 use model\VersionDBO as VersionDBO;
 use model\Patch as Patch;
@@ -13,20 +14,16 @@ class Migrator
 	{
 		$versionNum = currentVersionNumber();
 		$versionHash = currentVersionHash();
-		$version_model = new Version(Database::instance());
-		$patch_model = new Patch(Database::instance());
+		$version_model = Model::Named("Version");
+		$patch_model = Model::Named("Patch");
 
 		Logger::logInfo( "Migrating application to version " . currentVersionNumber(),	"Migrator", "Upgrade" );
 
 		$patches = array();
-		$sql = "SELECT * FROM patch";
-		$statement = Database::instance()->prepare($sql);
-		if ($statement && $statement->execute()) {
-			$fetch = $statement->fetchAll();
-			if ( is_array($fetch) ) {
-				foreach( $fetch as $row ) {
-					$patches[] = $row->name;
-				}
+		$fetch = \SQL::Select( $patch_model, array("name"))->fetchAll();
+		if ( is_array($fetch) ) {
+			foreach( $fetch as $row ) {
+				$patches[] = $row->name;
 			}
 		}
 
@@ -36,9 +33,7 @@ class Migrator
 			try {
 				$migrationClass = 'migration\\Migration_' . $number;
 				if ( in_array($migrationClass, $patches) == false ) {
-// 					Logger::logInfo( "Trying " . $migrationClass ,	"Migrator", "Upgrade" );
-
-					$worker = new $migrationClass(Database::instance(), $scratchDirectory);
+					$worker = new $migrationClass($scratchDirectory);
 					$continue = $worker->performMigration();
 					if ( $continue == true ) {
 						$version = $version_model->create($versionNum, $versionHash);
@@ -71,12 +66,9 @@ class Migrator
 		}
 	}
 
-	public function __construct(Database $db, $scratchDirectory)
+	public function __construct($scratchDirectory)
 	{
-		isset($db) || die("No database object");
 		is_dir($scratchDirectory) || die("Scratch direcotry is not valid '" . $scratchDirectory . "'");
-
-		$this->db = $db;
 		$this->scratch = $scratchDirectory;
 	}
 
@@ -140,9 +132,9 @@ class Migrator
 			throw new MigrationFailedException("Unable to execute SQL for -null- table or statement");
 		}
 		else {
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement == false || $statement->execute() == false) {
-				$errPoint = ($statement ? $statement : $this->db);
+				$errPoint = ($statement ? $statement : Database::instance());
 				$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 				Logger::logSQLError($table, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, null);
 				throw new MigrationFailedException("Error executing change to " . $table . " table");

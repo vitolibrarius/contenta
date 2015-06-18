@@ -1,17 +1,12 @@
 <?php
 
-use \Database as Database;
 use \Localized as Localized;
 use \Logger as Logger;
 use \DataObject as DataObject;
+use \SQL as SQL;
 
 /**
- * This is the "base controller class". All other "real" controllers extend this class.
- * Whenever a controller is created, we also
- * 1. initialize a session
- * 2. check if the user is not logged in anymore (session timeout) but has a cookie
- * 3. create a database connection (that will be passed to all models that need a database connection)
- * 4. create a view object
+ * This is the "base model class". All other "real" models extend this class.
  */
 abstract class Model
 {
@@ -39,13 +34,11 @@ abstract class Model
 		$parts = explode("_", $name);
 		$parts = array_map('ucfirst', $parts);
 		$className = "model\\" . implode("_", $parts);
-		return new $className(Database::instance());
+		return new $className();
 	}
 
-	public function __construct(Database $db)
+	public function __construct()
 	{
-		isset($db) || die("No database object");
-		$this->db = $db;
 	}
 
 	/* Common model methods */
@@ -60,16 +53,12 @@ abstract class Model
 
 	public function refreshObject($object)
 	{
-		$dboClassName = DataObject::NameForModel($this);
-		if ( $object != false && is_a($object, $dboClassName) ) {
-			return $this->objectForId($object->{$this->tablePK()});
-		}
-		return false;
+		return SQL::SelectObject( $this, $object )->fetch();
 	}
 
 	public function objectForId($id = 0)
 	{
-		return $this->fetch($this->tableName(), $this->allColumns(), array($this->tablePK() => $id));
+		return SQL::Select( $this, null, db\Qualifier::Equals( $this->tablePK(), $id) )->fetch();
 	}
 
 	public function objectForExternal($xid, $xsrc)
@@ -79,13 +68,18 @@ abstract class Model
 			throw new Exception("External ID is not supported by " . var_export($this, true));
 		}
 
-		if ( isset($xid, $xsrc) )
-		{
-			return $this->fetch($this->tableName(), $this->allColumns(), array("xid" => $xid, "xsource" => $xsrc ));
+		if ( isset($xid, $xsrc) ) {
+			return SQL::Select( $this, null, db\Qualifier::AndQualifier(
+					db\Qualifier::Equals( "xid", $xid),
+					db\Qualifier::Equals( "xsource", $xsrc)
+				)
+			)->fetch();
 		}
+
 		return false;
 	}
 
+	/** FIXME: */
 	public function allObjectsForId(array $idArray, $sortColumns = null, $limit = null)
 	{
 		if ( isset($idArray) ) {
@@ -104,7 +98,7 @@ abstract class Model
 				$sql .= " LIMIT " . $limit;
 			}
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				$dboClassName = DataObject::NameForModel($this);
 				try {
@@ -118,7 +112,7 @@ abstract class Model
 			}
 
 			$caller = callerClassAndMethod('allObjectsForId');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
 		}
@@ -127,13 +121,18 @@ abstract class Model
 
 	public function allObjects($sortColumns = null, $limit = 50)
 	{
-		return $this->fetchAll($this->tableName(), $this->allColumns(), null, ($sortColumns == null ? $this->sortOrder() : $sortColumns), $limit);
+		$select = SQL::Select( $this );
+		$select->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) );
+		$select->limit($limit);
+		return $select->fetchAll();
 	}
 
+	/** FIXME: rewrite */
 	public function allObjectsLike(array $search = array(), $limit = 50) {
 		return $this->fetchAllLike($this->tableName(), $this->allColumns(), $search, null, $this->sortOrder(), $limit);
 	}
 
+	/** validation */
 	public function validateForSave($object = null, array &$values = array())
 	{
 		$validationErrors = array();
@@ -160,6 +159,7 @@ abstract class Model
 		return $validationErrors;
 	}
 
+	/** FIXME: */
 	public function deleteObject($object = null) {
 		if (isset($object) && is_a($object, "\\DataObject" )) {
 			$mediaPurged = true;
@@ -174,6 +174,7 @@ abstract class Model
 		return false;
 	}
 
+	/** FIXME: */
 	public function updateObject($object = null, array $values) {
 		if (isset($object) && is_a($object, "\\DataObject" )) {
 			$model = $object->model();
@@ -212,6 +213,7 @@ abstract class Model
 		return false;
 	}
 
+	/** FIXME: */
 	public function createObject(array $values = array()) {
 		$tableName = $this->tableName();
 		if ( count($values) > 0 ) {
@@ -251,40 +253,15 @@ abstract class Model
 		return false;
 	}
 
-	public function echoSQL( $sql, $params = null)
-	{
-		echo $sql . PHP_EOL . (isset($params) ? var_export($params, true) : 'No Parameters') . PHP_EOL;
-	}
 
+	/** FIXME: */
 	public function reportSQLError( $clazz = 'Model', $method = 'unknown', $pdocode, $pdoError, $sql, $params = null)
 	{
 		$msg = 'PDO Error(' . $pdocode . ') ' . $pdoError . ' for [' . $sql . '] ' . (isset($params) ? var_export($params, true) : 'No Parameters');
 		Logger::logError($msg, $clazz, $method);
 	}
 
-	public function pragma_TableInfo($table)
-	{
-		$sql = "PRAGMA table_info(" . $table . ")";
-		$statement = $this->db->prepare( $sql );
-		if ($statement && $statement->execute()) {
-			$table_pragma = $statement->fetchAll();
-			if ($table_pragma != false) {
-				$table_fields = array();
-				foreach($table_pragma as $key => $value) {
-					$table_fields[ $value->name ] = $value;
-				}
-				return $table_fields;
-			}
-		}
-		else {
-			$caller = callerClassAndMethod('pragma_TableInfo');
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, null);
-		}
-		return false;
-	}
-
+	/** FIXME: */
 	public function keyValueClause($glue = " AND ", $qualifiers = null, $prefix = '', $valueQual = '=')
 	{
 		$sql = '';
@@ -299,6 +276,7 @@ abstract class Model
 		return $sql;
 	}
 
+	/** FIXME: */
 	public function orderbyClause($order = null) {
 		$sql = '';
 		if (is_null($order) == false) {
@@ -321,6 +299,7 @@ abstract class Model
 		return $sql;
 	}
 
+	/** FIXME: */
 	public function parameters(array $params = array(), array $arguments = null, $prefix = '', $valuePrefix = '', $valueSuffix = '')
 	{
 		if ( isset($arguments) && is_array($arguments)) {
@@ -332,6 +311,7 @@ abstract class Model
 		return $params;
 	}
 
+	/** FIXME: new aggregate SQl needed*/
 	public function updateAgregate($target_table, $agg_table, $agg_target, $agg_function, $target_pk, $agg_fk)
 	{
 		if ( isset($target_table, $agg_table, $agg_target, $agg_function, $target_pk, $agg_fk) ) {
@@ -342,19 +322,20 @@ abstract class Model
 				. " set " . $agg_target . " = (select " . $agg_function . " from "
 					. $agg_table . " where " . $agg_table . "." . $agg_fk . " = " . $target_table . "." . $target_pk . ")";
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute()) {
 				return true;
 			}
 
 			$caller = callerClassAndMethod('updateAgregate');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
 		}
 		return false;
 	}
 
+	/** FIXME: new aggregate SQl needed*/
 	public function countForQualifier($table, $qualifiers = null)
 	{
 		if ( isset($table) ) {
@@ -367,20 +348,21 @@ abstract class Model
 				$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers);
 			}
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				$dict = $statement->fetch();
 				return (($dict != false) ? $dict->COUNT : 0);
 			}
 
 			$caller = callerClassAndMethod('countForQualifier');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
 		}
 		return false;
 	}
 
+	/** FIXME: */
 	public function fetch($table, $columns, $qualifiers = null)
 	{
 		if ( isset($table, $columns) ) {
@@ -397,7 +379,7 @@ abstract class Model
 				$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers);
 			}
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				$dboClassName = DataObject::NameForModel($this);
 				try {
@@ -411,13 +393,14 @@ abstract class Model
 			}
 
 			$caller = callerClassAndMethod('fetch');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
 		}
 		return false;
 	}
 
+	/** FIXME: */
 	public function fetchRandom($table, $columns, $limit = 1)
 	{
 		// SELECT name FROM students ORDER BY RANDOM() LIMIT 1
@@ -432,9 +415,7 @@ abstract class Model
 				$sql .= " LIMIT " . $limit;
 			}
 
-//			$this->echoSQL( $sql, $params);
-
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute()) {
 				$dboClassName = DataObject::NameForModel($this);
 				try {
@@ -448,7 +429,7 @@ abstract class Model
 			}
 
 			$caller = callerClassAndMethod('fetchAll');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
 		}
@@ -456,6 +437,7 @@ abstract class Model
 
 	}
 
+	/** FIXME: */
 	public function fetchAll($table, $columns, $qualifiers = null, $order = null, $limit = null)
 	{
 		if ( isset($table, $columns) ) {
@@ -478,9 +460,8 @@ abstract class Model
 				$sql .= " LIMIT " . $limit;
 			}
 
-//			$this->echoSQL( $sql, $params);
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				$dboClassName = DataObject::NameForModel($this);
 				try {
@@ -494,13 +475,14 @@ abstract class Model
 			}
 
 			$caller = callerClassAndMethod('fetchAll');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
 		}
 		return false;
 	}
 
+	/** FIXME: */
 	public function fetchAllExternal($table, $columns, $limit = null)
 	{
 		if ( isset($table, $columns) ) {
@@ -519,9 +501,8 @@ abstract class Model
 				$sql .= " LIMIT " . $limit;
 			}
 
-//			$this->echoSQL( $sql, $params);
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				$dboClassName = DataObject::NameForModel($this);
 				try {
@@ -535,13 +516,14 @@ abstract class Model
 			}
 
 			$caller = callerClassAndMethod('fetchAll');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, null);
 		}
 		return false;
 	}
 
+	/** FIXME: */
 	public function fetchAllLike($table, $columns, $likes, $qualifiers = null, $order = null, $limit = null, $joinType = 'AND', $likePrefix = '', $likeSuffix = '%')
 	{
 		if ( isset($table, $columns, $likes) ) {
@@ -573,7 +555,7 @@ abstract class Model
 				$sql .= " LIMIT " . $limit;
 			}
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				$dboClassName = DataObject::NameForModel($this);
 				try {
@@ -587,13 +569,14 @@ abstract class Model
 			}
 
 			$caller = callerClassAndMethod('fetchAllLike');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $likes);
 		}
 		return false;
 	}
 
+	/** FIXME: */
 	public function fetchAllJoin($table, $columns, $joinSource, $joinForeign, $foreignObjects, $qualifiers, $order = null, $limit = null)
 	{
 		if ( isset($table, $columns, $joinSource, $joinForeign, $foreignObjects) ) {
@@ -621,9 +604,8 @@ abstract class Model
 				$sql .= " LIMIT " . $limit;
 			}
 
-//			$this->echoSQL( $sql, $params);
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				$dboClassName = DataObject::NameForTable($table);
 				try {
@@ -637,13 +619,14 @@ abstract class Model
 			}
 
 			$caller = callerClassAndMethod('fetchAllJoin');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
 		}
 		return false;
 	}
 
+	/** FIXME: */
 	public function fetchJoin($table, $columns, $joinSource, $joinForeign, $foreignObject, $qualifiers, $order = null)
 	{
 		$results = fetchAllJoin($table, $columns, $joinSource, $joinForeign, array($foreignObject), $qualifiers, $order);
@@ -653,6 +636,7 @@ abstract class Model
 		return false;
 	}
 
+	/** FIXME: */
 	public function update( $table, array $updates, $qualifiers = null )
 	{
 		if ( isset($table, $updates) && count($updates) > 0 ) {
@@ -667,19 +651,20 @@ abstract class Model
 				$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers, 'q1_');
 			}
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				return true;
 			}
 
 			$caller = callerClassAndMethod('update');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
 		}
 		return false;
 	}
 
+	/** FIXME: */
 	public function createObj( $table, $updates, $primaryKey = 'id' )
 	{
 		if ( isset($table, $updates) ) {
@@ -688,13 +673,13 @@ abstract class Model
 			$sql = "INSERT INTO " . $table . " (" . implode(", ", array_keys($updates)) . ") "
 				. "VALUES (" . implode(", ", array_keys($params)) . ")";
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				// convert the last inserted ROWID into the record primary key
-				$rowId = $this->db->lastInsertId();
+				$rowId = Database::instance()->lastInsertId();
 
 				$sql = "SELECT " . $primaryKey . " FROM " . $table . ' WHERE ROWID = :row' ;
-				$statement = $this->db->prepare($sql);
+				$statement = Database::instance()->prepare($sql);
 				if ($statement && $statement->execute(array(':row' => $rowId))) {
 					$record = $statement->fetch();
 					return $record->{$primaryKey};
@@ -702,26 +687,27 @@ abstract class Model
 			}
 
 			$caller = callerClassAndMethod('createObj');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
 		}
 		return false;
 	}
 
+	/** FIXME: */
 	public function deleteObj( $obj, $table, $pkName = "id" )
 	{
 		if ( $obj != false && isset($table, $obj->{$pkName}) )
 		{
 			$sql = "delete from " . $table . " where " . $pkName . " = :id";
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			$params = array( ":id" => $obj->{$pkName} );
 			if ($statement && $statement->execute( $params ) ) {
 				return true;
 			}
 
 			$caller = callerClassAndMethod('deleteObj');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
 		}
@@ -732,6 +718,7 @@ abstract class Model
 	   return false;
 	}
 
+	/** FIXME: */
 	public function deleteAllJoin( $table, $joinSource, $joinForeign, $foreignObject )
 	{
 		if ( $foreignObject != false && isset($table, $joinSource, $joinForeign) ) {
@@ -742,27 +729,30 @@ abstract class Model
 			echo var_dump($foreignObject->{$joinForeign}) . PHP_EOL;
 			echo var_export($params, true) . PHP_EOL;
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			$statement->execute( $params );
 
-			echo 'error code "'. var_export($this->db->errorCode(), true) . '"'. PHP_EOL;
+			echo 'error code "'. var_export(Database::instance()->errorCode(), true) . '"'. PHP_EOL;
 			echo 'PDO error info ' . var_export( PDO::ERR_NONE, true) . PHP_EOL;
-			return is_null($this->db->errorCode()) || $this->db->errorCode() === PDO::ERR_NONE;
+			return is_null(Database::instance()->errorCode()) || Database::instance()->errorCode() === PDO::ERR_NONE;
 		}
 
 	   return false;
 	}
 
+	/** FIXME: */
 	public function fetchAllForDateOlderThan($table, $columns, $date_column, $date, $includeNull = true, $limit)
 	{
 		return $this->fetchAllForDateComparison($table, $columns, $date_column, $date, '<', $includeNull, $limit);
 	}
 
+	/** FIXME: */
 	public function fetchAllForDateNewerThan($table, $columns, $date_column, $date, $includeNull = true, $limit)
 	{
 		return $this->fetchAllForDateComparison($table, $columns, $date_column, $date, '>', $includeNull, $limit);
 	}
 
+	/** FIXME: */
 	public function fetchAllForDateComparison($table, $columns, $date_column, $date, $comparison = '<', $includeNull = true, $limit)
 	{
 		if ( isset($table, $columns) ) {
@@ -794,7 +784,7 @@ abstract class Model
 			echo $sql . PHP_EOL;
 			echo var_export($params, true) . PHP_EOL;
 
-			$statement = $this->db->prepare($sql);
+			$statement = Database::instance()->prepare($sql);
 			if ($statement && $statement->execute($params)) {
 				$dboClassName = DataObject::NameForModel($this);
 				try {
@@ -808,7 +798,7 @@ abstract class Model
 			}
 
 			$caller = callerClassAndMethod('fetchAllLike');
-			$errPoint = ($statement ? $statement : $this->db);
+			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
 		}

@@ -7,7 +7,7 @@ use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
-use \Database as Database;
+use \SQL as SQL;
 
 use model\Series as Series;
 use model\Publisher as Publisher;
@@ -50,7 +50,7 @@ class Migration_10 extends Migrator
 	{
 		/** JOB_TYPE */
 		$job_type_model = Model::Named("Job_Type");
-		$table_fields = $job_type_model->pragma_TableInfo(Job_Type::TABLE);
+		$table_fields = \SQL::pragma_TableInfo(Job_Type::TABLE);
 		if ( isset($table_fields[ Job_Type::processor ]) == false ) {
 			$this->sqlite_execute(
 				Job_Type::TABLE ,
@@ -61,7 +61,7 @@ class Migration_10 extends Migrator
 
 		/** JOB */
 		$job_model = Model::Named("Job");
-		$table_fields = $job_model->pragma_TableInfo(Job::TABLE);
+		$table_fields = \SQL::pragma_TableInfo(Job::TABLE);
 		if ( isset($table_fields[ Job::last_run ]) == false ) {
 			$this->sqlite_execute(
 				Job::TABLE ,

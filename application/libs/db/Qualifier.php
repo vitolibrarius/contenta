@@ -21,6 +21,7 @@ abstract class Qualifier extends SQL
 	const GREATER_THAN_EQ	= '=>';
 	const LIKE_Q			= 'LIKE';
 	const IS_Q				= 'IS';
+	const IS_NULL_Q			= 'IS NULL';
 
 	const IN_Q				= 'IN';
 	const AND_Q				= 'AND';
@@ -103,6 +104,31 @@ abstract class Qualifier extends SQL
 
 		return new BasicQualifier( $key, Qualifier::EQ, $value, $prefix );
 	}
+
+	public static function IsNull( $key = null, $prefix = '')
+	{
+		return new IsNullQualifier( $key, $prefix );
+	}
+
+	public static function GreaterThan( $key = null, $value = null, $prefix = '')
+	{
+		return new BasicQualifier( $key, Qualifier::GREATER_THAN, $value, $prefix );
+	}
+
+	public static function GreaterThanEqual( $key = null, $value = null, $prefix = '')
+	{
+		return new BasicQualifier( $key, Qualifier::GREATER_THAN_EQ, $value, $prefix );
+	}
+
+	public static function LessThan( $key = null, $value = null, $prefix = '')
+	{
+		return new BasicQualifier( $key, Qualifier::LESS_THAN, $value, $prefix );
+	}
+
+	public static function LessThanEqual( $key = null, $value = null, $prefix = '')
+	{
+		return new BasicQualifier( $key, Qualifier::LESS_THAN_EQ, $value, $prefix );
+	}
 }
 
 class OrQualifier extends Qualifier
@@ -181,6 +207,45 @@ class NotQualifier extends Qualifier
 	}
 }
 
+class InQualifier extends Qualifier
+{
+	public $attribute;
+	public $inArray;
+	public function __construct( $key = null, array $values = null, $prefix = '')
+	{
+		parent::__construct(null);
+		if ( is_null($key) ) {
+			throw new \Exception( "Must specify attribute key" );
+		}
+		if ( is_null($values) || count($values) == 0) {
+			throw new \Exception( "Must specify the in values" );
+		}
+		$this->attribute = $key;
+		$this->inArray = $values;
+	}
+
+	public function sqlParameters()
+	{
+		$args = array();
+		foreach( $this->inArray as $idx => $value ) {
+			$param = $this->prefixedAttribute( $this->attribute );
+			$args[$param] = $value;
+		}
+
+		return $args;
+	}
+
+	public function sqlStatement()
+	{
+		$attr = (strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.') . $this->attribute;
+		$args = array();
+		foreach( $this->inArray as $idx => $value ) {
+			$args[] = $this->prefixedAttribute( $this->attribute );
+		}
+		return $attr . " ". Qualifier::IN_Q . " (" . implode(",", $args) . ")";
+	}
+}
+
 class BasicQualifier extends Qualifier
 {
 	public $attribute;
@@ -190,8 +255,8 @@ class BasicQualifier extends Qualifier
 	public function __construct( $key = null, $op = Qualifier::EQ, $v = null, $prefix = '')
 	{
 		parent::__construct($prefix);
-		if ( is_null($key) || is_null($v) ) {
-			throw new \Exception( "Must specify attribute key/value" );
+		if ( is_null($key) ) {
+			throw new \Exception( "Must specify attribute key" );
 		}
 		$this->attribute = $key;
 		$this->operator = $op;
@@ -208,5 +273,24 @@ class BasicQualifier extends Qualifier
 		return
 			(strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.') . $this->attribute . " "
 			. $this->operator . " " . $this->prefixedAttribute( $this->attribute );
+	}
+}
+
+class IsNullQualifier extends BasicQualifier
+{
+	public function __construct( $key = null, $prefix = '')
+	{
+		parent::__construct( $key, Qualifier::IS_NULL_Q, null, $prefix);
+	}
+
+	public function sqlParameters()
+	{
+		return null;
+	}
+
+	public function sqlStatement()
+	{
+		return (strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.')
+			. $this->attribute . " " . $this->operator;
 	}
 }

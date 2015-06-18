@@ -7,7 +7,7 @@ use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
-use \Database as Database;
+use \SQL as SQL;
 
 use model\Users as Users;
 use model\Endpoint_Type as Endpoint_Type;
@@ -33,7 +33,7 @@ class Migration_4 extends Migrator
 	{
 		$model = Model::Named("Endpoint_Type");
 
-		$table_fields = $model->pragma_TableInfo(Endpoint_Type::TABLE);
+		$table_fields = \SQL::pragma_TableInfo(Endpoint_Type::TABLE);
 		if ( isset($table_fields[ Endpoint_Type::comments ]) == false ) {
 			$this->db->exec("ALTER TABLE " . Endpoint_Type::TABLE . " ADD COLUMN " . Endpoint_Type::comments . " TEXT");
 			Logger::logInfo( Endpoint_Type::TABLE . " - " . Endpoint_Type::comments . " column added" );

@@ -15,20 +15,25 @@ class SelectSQL extends SQL
 	public $model;
 	public $columns;
 	public $order;
+	public $limit = 50;
 
-    public function __construct(Model $model, array $columns = array())
+    public function __construct(Model $model, array $columns = null, Qualifier $qualifier = null)
     {
     	parent::__construct();
     	if ( is_null($model) ) {
     		throw new \Exception( "Must specfify the model to selct from .. " );
     	}
 
-    	if ( count($columns) == 0 ) {
+    	if ( is_null($columns) || count($columns) == 0 ) {
     		$columns = $model->allColumnNames();
     	}
 
     	$this->model = $model;
     	$this->columns = $columns;
+
+    	if ( isset($qualifier) && is_null($qualifier) == false) {
+        	$this->where($qualifier);
+        }
     	return $this;
     }
 
@@ -47,6 +52,13 @@ class SelectSQL extends SQL
 	public function orderby(array $order = null)
 	{
 		$this->order = $order;
+		return $this;
+	}
+
+	public function limit( $limit = 50 )
+	{
+		$this->limit = $limit;
+		return $this;
 	}
 
 	public function sqlParameters()
@@ -96,6 +108,10 @@ class SelectSQL extends SQL
 				}
 			}
 			$components[] = implode(",", $orderClauses);
+		}
+
+		if ( isset($this->limit) && intval($this->limit) > 0 ) {
+			$components[] = "LIMIT " . $this->limit;
 		}
 
 		return implode(" ", $components );

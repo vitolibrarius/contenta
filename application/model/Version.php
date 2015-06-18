@@ -32,23 +32,23 @@ class Version extends Model
 
 	function latestVersion()
 	{
-		$onlyOne = $this->fetchAll(Version::TABLE, $this->allColumnNames(), null, $this->sortOrder(), 1 );
+		$onlyOne = \SQL::Select( $this )->orderBy($this->sortOrder())->limit(1)->fetchAll();
 		return (is_array($onlyOne) ? $onlyOne[0] : false );
 	}
 
 	function versions()
 	{
-		return $this->fetchAll(Version::TABLE, $this->allColumnNames(), null, $this->sortOrder() );
+		return \SQL::Select( $this )->fetchAll();
 	}
 
 	function versionForCode($name)
 	{
-		return $this->fetch(Version::TABLE, $this->allColumnNames(), array(Version::code => $name));
+		return \SQL::Select( $this )->whereEqual( Version::code, $name )->fetch();
 	}
 
 	function versionForHash($hash)
 	{
-		return $this->fetch(Version::TABLE, $this->allColumnNames(), array(Version::hash_code => $hash));
+		return \SQL::Select( $this )->whereEqual( Version::hash_code, $hash )->fetch();
 	}
 
 	function create($versionNum, $versionHash)
@@ -56,7 +56,7 @@ class Version extends Model
 		$obj = false;
 		if ( isset($versionNum, $versionHash) ) {
 			$obj = $this->versionForCode($versionNum);
-			if ( is_a( $obj, "model\\VersionDBO" ) ) {
+			if ( $obj instanceof model\VersionDBO ) {
 				$updates = array();
 				if ($obj->hash_code != $versionHash) {
 					$updates[Version::hash_code] = $versionHash;

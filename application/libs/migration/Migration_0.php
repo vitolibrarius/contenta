@@ -6,7 +6,7 @@ use \Migrator as Migrator;
 use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
-use \Database as Database;
+use \SQL as SQL;
 
 use model\Version as Version;
 use model\Patch as Patch;
@@ -28,8 +28,8 @@ class Migration_0 extends Migrator
 
 	public function sqlite_upgrade()
 	{
-		$version_model = new Version(Database::instance());
-		$patch_model = new Patch(Database::instance());
+		$version_model = new Version();
+		$patch_model = new Patch();
 
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . Version::TABLE . " ( "
 				. Version::id . " INTEGER PRIMARY KEY, "
@@ -40,15 +40,7 @@ class Migration_0 extends Migrator
 				. Version::created . " INTEGER, "
 				. Version::hash_code . " TEXT "
 				. ")";
-
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			Logger::logSQLError('Version', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-			throw new MigrationFailedException("Error creating Version table");
-		}
-		Logger::logInfo( "Created table " . Version::TABLE, "Migration", Version::TABLE);
+		$this->sqlite_execute( Version::TABLE, $sql, "Create table " . Version::TABLE );
 
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . Patch::TABLE . " ( "
 				. Patch::id . " INTEGER PRIMARY KEY, "
@@ -57,15 +49,7 @@ class Migration_0 extends Migrator
 				. Patch::created . " INTEGER, "
 				. "FOREIGN KEY (". Patch::version_id .") REFERENCES " . Version::TABLE ." ( ".Version::id." )"
 				. ")";
-
-		$statement = $this->db->prepare($sql);
-		if ($statement == false || $statement->execute() == false) {
-			$errPoint = ($statement ? $statement : $this->db);
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			Logger::logSQLError('Patch', 'createTable', $errPoint->errorCode(), $pdoError, $sql, null);
-			throw new MigrationFailedException("Error creating Migration table");
-		}
-		Logger::logInfo( "Created table " . Patch::TABLE, "Migration", Patch::TABLE);
+		$this->sqlite_execute( Patch::TABLE, $sql, "Create table " . Patch::TABLE );
 
 		return true;
 	}

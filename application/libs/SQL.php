@@ -40,9 +40,17 @@ abstract class SQL
 		return $alias;
 	}
 
-	public static function Select( Model $model, array $columns = array() )
+	public static function Select( Model $model, array $columns = null, db\Qualifier $qualifier = null )
 	{
-		return new db\SelectSQL($model, $columns);
+		return new db\SelectSQL($model, $columns, $qualifier);
+	}
+
+	public static function SelectObject( Model $model, DataObject $obj )
+	{
+		if ( is_null($data) ) {
+			throw new \Exception( "You must specify the data to be selected" );
+		}
+		return new db\SelectSQL($model, null, db\Qualifier::PK($data));
 	}
 
 	public static function Insert( Model $model, array $columns = array() )
@@ -103,5 +111,54 @@ abstract class SQL
 	public function where( db\Qualifier $qualifier )
 	{
 		$this->qualifier = $qualifier;
+		return $this;
+	}
+
+	public function whereEqual( $key = null, $value = null )
+	{
+		$this->qualifier = db\Qualifier::Equals( $key, $value );
+		return $this;
+	}
+
+	/** Misc SQL functions */
+	public static function raw( $sql = null, array $params = null, $comment = null )
+	{
+		if ( is_null($sql) ) {
+			throw new \Exception("Unable to execute SQL for -null- statement");
+		}
+		else {
+			$statement = Database::instance()->prepare($sql);
+			if ($statement == false || $statement->execute($params) == false) {
+				$errPoint = ($statement ? $statement : Database::instance());
+				$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+				Logger::logSQLError($table, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, null);
+				throw new \Exception("Error executing change to " . $table . " table");
+			}
+		}
+
+		if ( is_null($comment) == false) {
+			Logger::logInfo( $comment, get_class(), "SQL::raw");
+		}
+	}
+
+	public static function pragma_TableInfo($table)
+	{
+		$sql = "PRAGMA table_info(" . $table . ")";
+		$statement = Database::instance()->prepare($sql);
+		if ($statement && $statement->execute()) {
+			$table_pragma = $statement->fetchAll();
+			if ($table_pragma != false) {
+				$table_fields = array();
+				foreach($table_pragma as $key => $value) {
+					$table_fields[ $value->name ] = $value;
+				}
+				return $table_fields;
+			}
+		}
+		$caller = callerClassAndMethod('pragma_TableInfo');
+		$errPoint = ($statement ? $statement : Database::instance());
+		$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+		$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, null);
+		return false;
 	}
 }
