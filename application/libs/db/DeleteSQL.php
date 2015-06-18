@@ -11,6 +11,7 @@ use \SQL as SQL;
 class DeleteSQL extends SQL
 {
 	public $model;
+	public $allowFullTableDelete = false;
 
     public function __construct(Model $model, Qualifier $qualifier = null)
     {
@@ -20,7 +21,9 @@ class DeleteSQL extends SQL
     	}
 
     	$this->model = $model;
-    	$this->where($qualifier);
+    	if ( isset($qualifier) && is_null($qualifier) == false) {
+        	$this->where($qualifier);
+        }
     	return $this;
     }
 
@@ -45,4 +48,29 @@ class DeleteSQL extends SQL
 		return implode(" ", $components );
 	}
 
+	public function commitTransaction()
+	{
+		if ( isset($this->qualifier) == false && $this->allowFullTableDelete != true ) {
+			throw new \Exception("No qualifier set on delete statement '" .$this->sqlStatement(). "'");
+		}
+
+		$sql = $this->sqlStatement();
+		$params = $this->sqlParameters();
+
+		$db = Database::instance();
+		$statement = $db->prepare($sql);
+		if ($statement ) {
+			$affectedRows = $statement->execute($params);
+			if ( $affectedRows > 0 ) {
+				return true;
+			}
+		}
+
+		$caller = callerClassAndMethod('commitTransaction');
+		$errPoint = ($statement ? $statement : Database::instance());
+		$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+		$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
+
+		return false;
+	}
 }
