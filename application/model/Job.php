@@ -94,11 +94,19 @@ class Job extends Model
 	}
 
 	public function createObject(array $values = array()) {
-		if ( isset($values[Job::minute], $values[Job::hour], $values[Job::dayOfWeek]) ) {
-			$cronEval = new CronEvaluator( $values[Job::minute], $values[Job::hour], $values[Job::dayOfWeek] );
-			$nextRunDate = $cronEval->nextDate();
-			$values[Job::next] = $nextRunDate->getTimestamp();
+		if ( isset( $values[Job::minute]) == false ) {
+			$values[Job::minute] = "*";
 		}
+		if ( isset( $values[Job::hour]) == false ) {
+			$values[Job::hour] = "*";
+		}
+		if ( isset( $values[Job::dayOfWeek]) == false ) {
+			$values[Job::dayOfWeek] = "*";
+		}
+
+		$cronEval = new CronEvaluator( $values[Job::minute], $values[Job::hour], $values[Job::dayOfWeek] );
+		$nextRunDate = $cronEval->nextDate();
+		$values[Job::next] = $nextRunDate->getTimestamp();
 
 		return parent::createObject($values);
 	}
