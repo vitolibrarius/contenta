@@ -101,10 +101,15 @@ my_echo( "SQL: " . $select->sqlStatement() . PHP_EOL . var_export($select->sqlPa
 $results = $select->fetchAll();
 my_echo( var_export($results, true) . "- - - - -" . PHP_EOL);
 
+$update = \SQL::Update( Model::Named("Job_Type"), db\Qualifier::Equals( "code", "abc" ), array( 'code' => 'def' ));
+$success = $update->commitTransaction();
+my_echo( "SQL: " . $update->sqlStatement() . PHP_EOL . var_export($update->sqlParameters(), true) . PHP_EOL . "success = $success");
+$results = \SQL::Select( Model::Named("Job_Type") )->fetchAll();
+reportData($results,  array( "id", "name", "code", "desc", "scheduled", "processor" ));
+my_echo( "- - - - -" . PHP_EOL);
 
 $name1 = db\Qualifier::Equals( "name", "test 1" );
 $name2 = db\Qualifier::Equals( "name", "test 2" );
-
 $delete = \SQL::Delete( Model::Named("Job_Type") );
 $delete->where(db\Qualifier::OrQualifier( $name1, $name2 ));
 $success = $delete->commitTransaction();

@@ -71,7 +71,7 @@ abstract class SQL
 		return new db\DeleteSQL($data->model(), db\Qualifier::PK($data));
 	}
 
-	public static function Updated( Model $model, db\Qualifier $qualifier = null, array $changes = null)
+	public static function Update( Model $model, db\Qualifier $qualifier = null, array $changes = null)
 	{
 		return new db\UpdateSQL($model, $qualifier, $changes);
 	}

@@ -12,6 +12,7 @@ class UpdateSQL extends SQL
 {
 	public $model;
 	public $data;
+	public $allowFullTableUpdate = false;
 
     public function __construct(Model $model, Qualifier $qualifier = null, array $changes = null)
     {
@@ -19,10 +20,15 @@ class UpdateSQL extends SQL
     	if ( is_null($model) ) {
     		throw new \Exception( "Must specfify the model to insert into .. " );
     	}
+    	if ( is_null($changes) ) {
+    		throw new \Exception( "Must specfify the data changes for update .. " );
+    	}
 
     	$this->model = $model;
     	$this->data = $changes;
-    	$this->where($qualifier);
+    	if ( isset($qualifier) && is_null($qualifier) == false) {
+        	$this->where($qualifier);
+        }
 
     	return $this;
     }
@@ -96,5 +102,31 @@ class UpdateSQL extends SQL
 		}
 
 		return implode(" ", $components );
+	}
+
+	public function commitTransaction()
+	{
+		if ( isset($this->qualifier) == false && $this->allowFullTableUpdate != true ) {
+			throw new \Exception("No qualifier set on delete statement '" .$this->sqlStatement(). "'");
+		}
+
+		$sql = $this->sqlStatement();
+		$params = $this->sqlParameters();
+
+		$db = Database::instance();
+		$statement = $db->prepare($sql);
+		if ($statement ) {
+			$affectedRows = $statement->execute($params);
+			if ( $affectedRows > 0 ) {
+				return true;
+			}
+		}
+
+		$caller = callerClassAndMethod('commitTransaction');
+		$errPoint = ($statement ? $statement : Database::instance());
+		$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+		$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
+
+		return false;
 	}
 }
