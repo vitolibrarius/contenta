@@ -6,7 +6,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 
 use utilities\CronEvaluator as CronEvaluator;
-
+use db\Qualifier as Qualifier;
 
 class Job extends Model
 {
@@ -52,7 +52,7 @@ class Job extends Model
 
 	public function allForType($obj)
 	{
-		return $this->fetchAll(Job::TABLE, $this->allColumns(), array(Job::type_id => $obj->id), array(Job::next));
+		return $this->allObjectsForFK(Job::type_id, $obj, array(Job::next));
 	}
 
 	public function create($typeObj, $endpointObj, $minute, $hour, $dayOfWeek, $one_shot = false, $parameter = null, $enabled = true)
@@ -83,7 +83,7 @@ class Job extends Model
 		return false;
 	}
 
-	public function updateObject($object = null, array $values = array()) {
+	public function updateObject(DataObject $object = null, array $values = array()) {
 		if ( $object instanceof model\JobDBO ) {
 			$cronEval = new CronEvaluator( $object->minute, $object->hour, $object->dayOfWeek );
 			$nextRunDate = $cronEval->nextDate();
@@ -113,7 +113,12 @@ class Job extends Model
 
 	public function jobsToRun()
 	{
-		return $this->fetchAllForDateOlderThan(Job::TABLE, $this->allColumns(), Job::next, time(), true, null);
+		$needsRun = Qualifier::OrQualifier(
+			Qualifier::IsNull( Job::next ),
+			Qualifier::LessThan( Job::next, time() )
+		);
+
+		return $this->allObjectsForQualifier($needsRun);
 	}
 
 	/* EditableModelInterface */

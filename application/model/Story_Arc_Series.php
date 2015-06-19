@@ -39,22 +39,14 @@ class Story_Arc_Series extends Model
 		return false;
 	}
 
-	public function allForStory_Arc($obj)
+	public function allForStory_Arc(model\Story_ArcDBO $obj)
 	{
-		return $this->fetchAll(Story_Arc_Series::TABLE,
-			$this->allColumns(),
-			array(Story_Arc_Series::story_arc_id => $obj->id),
-			array(Story_Arc_Series::series_id)
-		);
+		return $this->allObjectsForFK(Story_Arc_Series::story_arc_id, $obj);
 	}
 
-	public function allForSeries($obj)
+	public function allForSeries(model\SeriesDBO $obj)
 	{
-		return $this->fetchAll(Story_Arc_Series::TABLE,
-			$this->allColumns(),
-			array(Story_Arc_Series::series_id => $obj->id),
-			array(Story_Arc_Series::story_arc_id)
-		);
+		return $this->allObjectsForFK(Story_Arc_Series::series_id, $obj);
 	}
 
 	public function countForSeries( model\SeriesDBO $obj = null)

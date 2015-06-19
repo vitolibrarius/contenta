@@ -39,22 +39,14 @@ class Story_Arc_Character extends Model
 		return false;
 	}
 
-	public function allForStory_Arc($obj)
+	public function allForStory_Arc(model\Story_ArcDBO $obj)
 	{
-		return $this->fetchAll(Story_Arc_Character::TABLE,
-			$this->allColumns(),
-			array(Story_Arc_Character::story_arc_id => $obj->id),
-			array(Story_Arc_Character::character_id)
-		);
+		return $this->allObjectsForFK(Story_Arc_Character::story_arc_id, $obj);
 	}
 
-	public function allForCharacter($obj)
+	public function allForCharacter(model\CharacterDBO $obj)
 	{
-		return $this->fetchAll(Story_Arc_Character::TABLE,
-			$this->allColumns(),
-			array(Story_Arc_Character::character_id => $obj->id),
-			array(Story_Arc_Character::story_arc_id)
-		);
+		return $this->allObjectsForFK(Story_Arc_Character::character_id, $obj);
 	}
 
 	public function countForCharacter( model\CharacterDBO $obj = null)

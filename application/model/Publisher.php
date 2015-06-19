@@ -93,9 +93,9 @@ class Publisher extends Model
 		return ((isset($newObjId) && $newObjId != false) ? $this->objectForId($newObjId) : false);
 	}
 
-	public function deleteObject($object = null)
+	public function deleteObject( \DataObject $object = null)
 	{
-		if ( $object != false )
+		if ( $object != false && $object instanceof model\PublisherDBO)
 		{
 			// delete any relationships
 			return parent::deleteObject($object);

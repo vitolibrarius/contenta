@@ -61,61 +61,35 @@ abstract class Model
 		return SQL::Select( $this, null, db\Qualifier::Equals( $this->tablePK(), $id) )->fetch();
 	}
 
-	public function objectForExternal($xid, $xsrc)
+	public function singleObjectForKeyValue($key, $value = null)
 	{
-		$allColumns = $this->allColumnNames();
-		if ( in_array("xid", $allColumns) == false || in_array("xsource", $allColumns) == false )  {
-			throw new Exception("External ID is not supported by " . var_export($this, true));
+		if ( is_null($value) ) {
+			return $this->singleObject( db\Qualifier::IsNull( $key ));
 		}
 
-		if ( isset($xid, $xsrc) ) {
-			return SQL::Select( $this, null, db\Qualifier::AndQualifier(
-					db\Qualifier::Equals( "xid", $xid),
-					db\Qualifier::Equals( "xsource", $xsrc)
-				)
-			)->fetch();
+		return $this->singleObject( db\Qualifier::Equals( $key, $value ));
+	}
+
+	public function singleObject( db\Qualifier $qualifier = null)
+	{
+		if ( is_null($qualifier) == false) {
+			return SQL::Select( $this )->where( $qualifier )->fetch();
 		}
 
 		return false;
 	}
 
-	/** FIXME: */
-	public function allObjectsForId(array $idArray, $sortColumns = null, $limit = null)
+	public function objectForExternal($xid, $xsrc)
 	{
-		if ( isset($idArray) ) {
-			$placeholders = array();
-			$params = array();
-
-			$sql = "SELECT " . $this->allColumns() . " FROM " . $this->tableName() . " WHERE ";
-			foreach ($idArray as $key => $id) {
-				$placeholders[] = ':id_' . $key;
-				$params[':id_' . $key] = $id;
-			}
-			$sql .= $this->tablePK() . ' IN (' . implode(", ", $placeholders) . ')';
-
-			$sql .= $this->orderbyClause($sortColumns);
-			if ( isset($limit) && intval($limit) > 0 ) {
-				$sql .= " LIMIT " . $limit;
-			}
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				$dboClassName = DataObject::NameForModel($this);
-				try {
-					if (class_exists($dboClassName)) {
-						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
-					}
-				}
-				catch ( \ClassNotFoundException $e ) {
-					return $statement->fetchAll();
-				}
-			}
-
-			$caller = callerClassAndMethod('allObjectsForId');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
+		$allColumns = $this->allColumnNames();
+		if ( in_array("xid", $allColumns) == false || in_array("xsource", $allColumns) == false )  {
+			throw new \Exception("External ID is not supported by " . var_export($this, true));
 		}
+
+		if ( isset($xid, $xsrc) ) {
+			return SQL::Select( $this, null, db\Qualifier::XID($xid, $xsrc))->fetch();
+		}
+
 		return false;
 	}
 
@@ -127,41 +101,68 @@ abstract class Model
 		return $select->fetchAll();
 	}
 
+	public function allObjectsForKeyValue($key, $value = null, $sortColumns = null, $limit = 50)
+	{
+		$select = SQL::Select( $this );
+		if ( is_null($value) ) {
+			$select->where( db\Qualifier::IsNull( $key ));
+		}
+		else {
+			$select->where( db\Qualifier::Equals( $key, $value ));
+		}
+		$select->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) );
+		$select->limit($limit);
+		return $select->fetchAll();
+	}
+
+	public function allObjectsForQualifier(db\Qualifier $qualifier = null, $sortColumns = null, $limit = 50)
+	{
+		$select = SQL::Select( $this );
+		if ( is_null($qualifier) == false ) {
+			$select->where( $qualifier );
+		}
+		$select->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) );
+		$select->limit($limit);
+		return $select->fetchAll();
+	}
+
+	public function allObjectsForFK($relatedAttribute, DataObject $sourceObject, array $sortOrder = null)
+	{
+		return SQL::Select( $this, null, db\Qualifier::FK( $relatedAttribute, $sourceObject ) )
+			->orderBy($sortOrder)
+			->fetchAll();
+	}
+
+	public function allObjectsForFKWithValue($relatedAttribute, DataObject $sourceObject, $key, $value = null, array $sortOrder = null)
+	{
+		if ( is_null($value) ) {
+			return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, db\Qualifier::IsNull( $key ), $sortOrder);
+		}
+
+		return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, db\Qualifier::Equals( $key, $value ), $sortOrder);
+	}
+
+	public function allObjectsForFKAndQualifier($relatedAttribute, DataObject $sourceObject, db\Qualifier $qual = null, array $sortOrder = null)
+	{
+		if ( is_null($qual) ) {
+			throw new \Exception( "Qualifier cannot be null" );
+		}
+		$fkQual = db\Qualifier::FK( $relatedAttribute, $sourceObject );
+
+		$select = SQL::Select( $this );
+		$select->where( db\Qualifier::AndQualifier($qual, $fkQual));
+		$select->orderBy($sortOrder);
+		return $select->fetchAll();
+	}
+
 	/** FIXME: rewrite */
 	public function allObjectsLike(array $search = array(), $limit = 50) {
 		return $this->fetchAllLike($this->tableName(), $this->allColumns(), $search, null, $this->sortOrder(), $limit);
 	}
 
-	/** validation */
-	public function validateForSave($object = null, array &$values = array())
-	{
-		$validationErrors = array();
-
-		$mandatoryKeys = $this->attributesMandatory($object);
-		if ( is_array($mandatoryKeys) == false ) {
-			$mandatoryKeys = array_keys($values);
-		}
-		else {
-			$mandatoryKeys = array_merge_recursive($mandatoryKeys, array_keys($values) );
-		}
-		$mandatoryKeys = array_unique($mandatoryKeys);
-
-		foreach( $mandatoryKeys as $key ) {
-			$function = "validate_" . $key;
-			if (method_exists($this, $function)) {
-				$newvalue = (isset($values[$key]) ? $values[$key] : null);
-				$failure = $this->$function($object, $newvalue);
-				if ( is_null($failure) == false ) {
-					$validationErrors[$key] = $failure;
-				}
-			}
-		}
-		return $validationErrors;
-	}
-
 	/** FIXME: */
-	public function deleteObject($object = null) {
-		if (isset($object) && is_a($object, "\\DataObject" )) {
+	public function deleteObject(DataObject $object = null) {
+		if (isset($object) ) {
 			$mediaPurged = true;
 			if ( $object->hasAdditionalMedia() == true ) {
 				Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $model->tableName(), $object->id);
@@ -175,8 +176,8 @@ abstract class Model
 	}
 
 	/** FIXME: */
-	public function updateObject($object = null, array $values) {
-		if (isset($object) && is_a($object, "\\DataObject" )) {
+	public function updateObject(DataObject $object = null, array $values) {
+		if (isset($object) ) {
 			$model = $object->model();
 
 			$allColumns = $model->allColumnNames();
@@ -276,7 +277,7 @@ abstract class Model
 		return $sql;
 	}
 
-	/** FIXME: */
+// 	/** FIXME: */
 	public function orderbyClause($order = null) {
 		$sql = '';
 		if (is_null($order) == false) {
@@ -363,217 +364,27 @@ abstract class Model
 	}
 
 	/** FIXME: */
-	public function fetch($table, $columns, $qualifiers = null)
+	public function randomObjects( $limit = 1)
 	{
-		if ( isset($table, $columns) ) {
-			$placeholders = array();
-			$params = array();
-
-			if ( is_array($columns) ) {
-				$columns = implode(", ", $columns);
-			}
-
-			$sql = "SELECT " . $columns . " FROM " . $table;
-			if ( isset($qualifiers) ) {
-				$params = $this->parameters($params, $qualifiers, null, null, null);
-				$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers);
-			}
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				$dboClassName = DataObject::NameForModel($this);
-				try {
-					if (class_exists($dboClassName)) {
-						return $statement->fetchObject($dboClassName);
-					}
-				}
-				catch ( \ClassNotFoundException $e ) {
-					return $statement->fetch();
-				}
-			}
-
-			$caller = callerClassAndMethod('fetch');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
-		}
-		return false;
+		$select = SQL::Select( $this );
+		$select->orderBy( "random()" );
+		$select->limit($limit);
+		return $select->fetchAll();
 	}
 
-	/** FIXME: */
-	public function fetchRandom($table, $columns, $limit = 1)
+
+	public function allObjectsNeedingExternalUpdate($limit = -1)
 	{
-		// SELECT name FROM students ORDER BY RANDOM() LIMIT 1
-		if ( isset($table, $columns) ) {
-			if ( is_array($columns) ) {
-				$columns = implode(", ", $columns);
-			}
-
-			$sql = "SELECT " . $columns . " FROM " . $table . " ORDER BY RANDOM()";
-
-			if ( isset($limit) && intval($limit) > 0 ) {
-				$sql .= " LIMIT " . $limit;
-			}
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute()) {
-				$dboClassName = DataObject::NameForModel($this);
-				try {
-					if (class_exists($dboClassName)) {
-						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
-					}
-				}
-				catch ( \ClassNotFoundException $e ) {
-					return $statement->fetchAll();
-				}
-			}
-
-			$caller = callerClassAndMethod('fetchAll');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
-		}
-		return false;
-
-	}
-
-	/** FIXME: */
-	public function fetchAll($table, $columns, $qualifiers = null, $order = null, $limit = null)
-	{
-		if ( isset($table, $columns) ) {
-			$placeholders = array();
-			$params = array();
-
-			if ( is_array($columns) ) {
-				$columns = implode(", ", $columns);
-			}
-
-			$sql = "SELECT " . $columns . " FROM " . $table;
-			if ( isset($qualifiers) ) {
-				$params = $this->parameters($params, $qualifiers);
-				$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers);
-			}
-
-			$sql .= $this->orderbyClause($order);
-
-			if ( isset($limit) && intval($limit) > 0 ) {
-				$sql .= " LIMIT " . $limit;
-			}
-
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				$dboClassName = DataObject::NameForModel($this);
-				try {
-					if (class_exists($dboClassName)) {
-						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
-					}
-				}
-				catch ( \ClassNotFoundException $e ) {
-					return $statement->fetchAll();
-				}
-			}
-
-			$caller = callerClassAndMethod('fetchAll');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
-		}
-		return false;
-	}
-
-	/** FIXME: */
-	public function fetchAllExternal($table, $columns, $limit = null)
-	{
-		if ( isset($table, $columns) ) {
-			$placeholders = array();
-			$params = array();
-
-			if ( is_array($columns) ) {
-				$columns = implode(", ", $columns);
-			}
-
-			$sql = "SELECT " . $columns . " FROM " . $table;
-			$sql .= " WHERE xid is not null and ( xupdated is null or xupdated < " . (time() - (3600 * 24 * 7)) . " )";
-			$sql .= " ORDER BY xupdated desc";
-
-			if ( isset($limit) && intval($limit) > 0 ) {
-				$sql .= " LIMIT " . $limit;
-			}
-
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				$dboClassName = DataObject::NameForModel($this);
-				try {
-					if (class_exists($dboClassName)) {
-						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
-					}
-				}
-				catch ( \ClassNotFoundException $e ) {
-					return $statement->fetchAll();
-				}
-			}
-
-			$caller = callerClassAndMethod('fetchAll');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, null);
-		}
-		return false;
-	}
-
-	/** FIXME: */
-	public function fetchAllLike($table, $columns, $likes, $qualifiers = null, $order = null, $limit = null, $joinType = 'AND', $likePrefix = '', $likeSuffix = '%')
-	{
-		if ( isset($table, $columns, $likes) ) {
-			$placeholders = array();
-			$params = array();
-
-			if ( is_array($columns) ) {
-				$columns = implode(", ", $columns);
-			}
-
-			$sql = "SELECT " . $columns . " FROM " . $table;
-			if ( is_array($likes) && count($likes) > 0) {
-				$params = $this->parameters($params, $likes, 'like', $likePrefix, $likeSuffix);
-				$sql .= " WHERE " . $this->keyValueClause( $joinType, $likes, 'like', 'LIKE');
-
-				if ( isset($qualifiers) ) {
-					$params = $this->parameters($params, $qualifiers);
-					$sql .= " AND " . $this->keyValueClause(" AND ", $qualifiers);
-				}
-			}
-			else if ( isset($qualifiers) ) {
-				$params = $this->parameters($params, $qualifiers);
-				$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers);
-			}
-
-			$sql .= $this->orderbyClause($order);
-
-			if ( isset($limit) && intval($limit) > 0 ) {
-				$sql .= " LIMIT " . $limit;
-			}
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				$dboClassName = DataObject::NameForModel($this);
-				try {
-					if (class_exists($dboClassName)) {
-						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
-					}
-				}
-				catch ( \ClassNotFoundException $e ) {
-					return $statement->fetchAll();
-				}
-			}
-
-			$caller = callerClassAndMethod('fetchAllLike');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $likes);
-		}
-		return false;
+		$select = SQL::Select( $this );
+		$hasXID = db\Qualifier::IsNotNull( "xid" );
+		$needsUpdate = db\Qualifier::OrQualifier(
+			db\Qualifier::IsNull( "xupdated" ),
+			db\Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * 7)) )
+		);
+		$select->where( db\Qualifier::AndQualifier( $hasXID, $needsUpdate ));
+		$select->orderBy( "xupdated" );
+		$select->limit( intval($limit) );
+		return $select->fetchAll();
 	}
 
 	/** FIXME: */
@@ -740,69 +551,31 @@ abstract class Model
 	   return false;
 	}
 
-	/** FIXME: */
-	public function fetchAllForDateOlderThan($table, $columns, $date_column, $date, $includeNull = true, $limit)
+	/** validation */
+	public function validateForSave($object = null, array &$values = array())
 	{
-		return $this->fetchAllForDateComparison($table, $columns, $date_column, $date, '<', $includeNull, $limit);
-	}
+		$validationErrors = array();
 
-	/** FIXME: */
-	public function fetchAllForDateNewerThan($table, $columns, $date_column, $date, $includeNull = true, $limit)
-	{
-		return $this->fetchAllForDateComparison($table, $columns, $date_column, $date, '>', $includeNull, $limit);
-	}
-
-	/** FIXME: */
-	public function fetchAllForDateComparison($table, $columns, $date_column, $date, $comparison = '<', $includeNull = true, $limit)
-	{
-		if ( isset($table, $columns) ) {
-			if ( isset($date) == false ) {
-				$date = time();
-			}
-
-			$placeholders = array();
-			$params = array();
-			$qualifiers = array($date_column => $date);
-
-			if ( is_array($columns) ) {
-				$columns = implode(", ", $columns);
-			}
-
-			$sql = "SELECT " . $columns . " FROM " . $table;
-			$params = $this->parameters($params, $qualifiers);
-			$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers, null, $comparison);
-			if ( $includeNull == true ) {
-				$sql .= " OR " . $date_column . " is null";
-				$sql .= " OR " . $date_column . " = ''";
-			}
-
-			$sql .= $this->orderbyClause(array( 'desc' => array($date_column)));
-
-			if ( isset($limit) && intval($limit) > 0 ) {
-				$sql .= " LIMIT " . $limit;
-			}
-			echo $sql . PHP_EOL;
-			echo var_export($params, true) . PHP_EOL;
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				$dboClassName = DataObject::NameForModel($this);
-				try {
-					if (class_exists($dboClassName)) {
-						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
-					}
-				}
-				catch ( \ClassNotFoundException $e ) {
-					return $statement->fetchAll();
-				}
-			}
-
-			$caller = callerClassAndMethod('fetchAllLike');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
+		$mandatoryKeys = $this->attributesMandatory($object);
+		if ( is_array($mandatoryKeys) == false ) {
+			$mandatoryKeys = array_keys($values);
 		}
-		return false;
+		else {
+			$mandatoryKeys = array_merge_recursive($mandatoryKeys, array_keys($values) );
+		}
+		$mandatoryKeys = array_unique($mandatoryKeys);
+
+		foreach( $mandatoryKeys as $key ) {
+			$function = "validate_" . $key;
+			if (method_exists($this, $function)) {
+				$newvalue = (isset($values[$key]) ? $values[$key] : null);
+				$failure = $this->$function($object, $newvalue);
+				if ( is_null($failure) == false ) {
+					$validationErrors[$key] = $failure;
+				}
+			}
+		}
+		return $validationErrors;
 	}
 
 	public function attributesFor($object = null, $type = null) 				{ return array(); }

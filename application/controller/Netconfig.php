@@ -8,6 +8,7 @@ use \Model as Model;
 use \Session as Session;
 use \Auth as Auth;
 use \Localized as Localized;
+use \Logger as Logger;
 use model\Users as Users;
 use model\Endpoint as Endpoint;
 

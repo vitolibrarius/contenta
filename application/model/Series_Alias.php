@@ -26,22 +26,17 @@ class Series_Alias extends Model
 
 	public function allForSeries($obj)
 	{
-		return $this->fetchAll(Series_Alias::TABLE, $this->allColumns(), array(Series_Alias::series_id => $obj->id), array(Series_Alias::name));
+		return $this->allObjectsForFK(Series_Alias::series_id, $obj);
 	}
 
 	public function allForName($name)
 	{
-		return $this->fetchAll(Series_Alias::TABLE,
-			$this->allColumns(),
-			array(Series_Alias::name => $name),
-			array(Series_Alias::name));
+		return $this->allObjectsForKeyValue(Series_Alias::name, $name);
 	}
 
 	public function forName($obj, $name)
 	{
-		return $this->fetch(Series_Alias::TABLE,
-			$this->allColumns(),
-			array(Series_Alias::series_id => $obj->id, Series_Alias::name => $name));
+		return $this->allObjectsForFKWithValue(Series_Alias::series_id, $obj, Series_Alias::name, $name);
 	}
 
 	public function create($seriesObj, $name)

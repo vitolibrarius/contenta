@@ -45,13 +45,12 @@ class Endpoint extends Model
 
 	public function allForType($obj)
 	{
-		return $this->fetchAll(Endpoint::TABLE, $this->allColumns(), array(Endpoint::type_id => $obj->id), array(Endpoint::name));
+		return $this->allObjectsForFK(Endpoint::type_id, $obj, array(Endpoint::name));
 	}
 
 	public function endpointForTypeAndUrl($obj, $endpointURL)
 	{
-		return $this->fetch(Endpoint::TABLE, $this->allColumns(), array(
-			Endpoint::type_id => $obj->id,	Endpoint::base_url => $endpointURL ));
+		return $this->allObjectsForFKWithValue(Endpoint::type_id, $obj, Endpoint::base_url, $endpointURL );
 	}
 
 	public function create($typeObj, $name, $endpointURL, $apiKey = null, $username = null, $enabled = true,  $compressed = false)
@@ -74,7 +73,7 @@ class Endpoint extends Model
 		return $obj;
 	}
 
-	public function updateObject($object = null, array $values) {
+	public function updateObject(DataObject $object = null, array $values) {
 		if (isset($object) && is_a($object, '\\model\EndpointDBO' )) {
 			$formEnabled = (isset($values[Endpoint::enabled]) ? 1 : 0);
 			$values[Endpoint::enabled] = $formEnabled;
@@ -86,9 +85,9 @@ class Endpoint extends Model
 		return parent::updateObject($object, $values);
 	}
 
-	public function deleteObject($object = null)
+	public function deleteObject(\DataObject $object = null)
 	{
-		if ( $object != false )
+		if ( $object != false && $object instanceof model\EndpointDBO )
 		{
 			return parent::deleteObj($object, Endpoint::TABLE, Endpoint::id );
 		}
@@ -148,7 +147,7 @@ class Endpoint extends Model
 	public function attributeOptions($object = null, $type = null, $attr) {
 		if ( $attr == Endpoint::type_id ) {
 			$type_model = Model::Named('Endpoint_Type');
-			return $type_model->endpointTypes();
+			return $type_model->allObjects();
 		}
 		return null;
 	}

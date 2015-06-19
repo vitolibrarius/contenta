@@ -39,22 +39,14 @@ class Story_Arc_Publication extends Model
 		return false;
 	}
 
-	public function allForStory_Arc($obj)
+	public function allForStory_Arc(model\Story_ArcDBO $obj)
 	{
-		return $this->fetchAll(Story_Arc_Publication::TABLE,
-			$this->allColumns(),
-			array(Story_Arc_Publication::story_arc_id => $obj->id),
-			array(Story_Arc_Publication::publication_id)
-		);
+		return $this->allObjectsForFK(Story_Arc_Publication::story_arc_id, $obj);
 	}
 
-	public function allForPublication($obj)
+	public function allForPublication(model\PublicationDBO $obj)
 	{
-		return $this->fetchAll(Story_Arc_Publication::TABLE,
-			$this->allColumns(),
-			array(Story_Arc_Publication::publication_id => $obj->id),
-			array(Story_Arc_Publication::story_arc_id)
-		);
+		return $this->allObjectsForFK(Story_Arc_Publication::publication_id, $obj);
 	}
 
 	public function countForPublication( model\PublicationDBO $obj = null)

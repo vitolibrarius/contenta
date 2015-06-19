@@ -42,16 +42,10 @@ class Endpoint_Type extends Model
 		 );
 	}
 
-	function endpointTypes()
-	{
-		return $this->fetchAll(Endpoint_Type::TABLE, $this->allColumnNames(), null, array(Endpoint_Type::name));
-	}
-
 	function endpointTypeForCode($name)
 	{
-		return $this->fetch(Endpoint_Type::TABLE, $this->allColumnNames(), array(Endpoint_Type::code => $name));
+		return $this->singleObjectForKeyValue( Endpoint_Type::code, $name );
 	}
-
 }
 
 ?>

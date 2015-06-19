@@ -6,6 +6,7 @@ use \Session as Session;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
+use \Logger as Logger;
 
 use model\Publication as Publication;
 use model\PublicationDBO as PublicationDBO;
@@ -38,12 +39,12 @@ class Media extends Model
 
 	public function mostRecent( $limit = 20 )
 	{
-		return $this->fetchAll(Media::TABLE, $this->allColumns(), null, array("desc" => array(Media::created)), $limit );
+		return $this->allObjects(array("desc" => array(Media::created)), $limit);
 	}
 
 	public function allForPublication(model\PublicationDBO $obj = null)
 	{
-		return $this->fetchAll(Media::TABLE, $this->allColumns(), array(Media::publication_id => $obj->id), $this->sortOrder());
+		return $this->allObjectsForFK(Media::publication_id, $obj );
 	}
 
 	public function mediaForChecksum($checksum)

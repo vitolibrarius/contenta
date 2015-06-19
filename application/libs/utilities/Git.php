@@ -30,11 +30,11 @@ class Git
 				$this->repository = $fullpath;
 			}
 			else {
-				throw new Exception( '"' . $fullpath . '" is not a git repository');
+				throw new \Exception( '"' . $fullpath . '" is not a git repository');
 			}
 		}
 		else {
-			throw new Exception('"' . $fullpath . '" is not a directory');
+			throw new \Exception('"' . $fullpath . '" is not a directory');
 		}
 	}
 
@@ -190,7 +190,7 @@ class Git
 
 				$data = curl_exec($ch);
 				if ( $data == false ) {
-					\Logger::logError( 'Error (' . curl_error($ch) . ')', get_class($this), $url);
+					Logger::logError( 'Error (' . curl_error($ch) . ')', get_class($this), $url);
 				}
 				curl_close($ch);
 				Cache::Store( $cacheKey, $cookie );

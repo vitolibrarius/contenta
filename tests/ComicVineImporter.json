@@ -26,35 +26,5 @@
             "xid": 26151,
             "name": "All-New Savage She-Hulk"
         }
-    ],
-    "publication": [
-        {
-            "xid": 319038,
-            "name": "Swamp Thing",
-            "issue": 7,
-            "series_xid": 42599,
-            "series_name": "Swamp Thing"
-        },
-        {
-            "xid": 447038,
-            "name": "Escape From Riverdale Chapter Four: Archibald Rex",
-            "issue": 4,
-            "series_xid": 68136,
-            "series_name": "Afterlife With Archie"
-        },
-        {
-            "xid": 293263,
-            "name": "...And Most Of The Costumes Stay On...",
-            "issue": 1,
-            "series_xid": 42722,
-            "series_name": "Catwoman"
-        },
-        {
-            "xid": 155152,
-            "name": "W.M.D. Woman of Mass Destruction",
-            "issue": 1,
-            "series_xid": 26151,
-            "series_name": "All-New Savage She-Hulk"
-        }
     ]
 }

@@ -22,6 +22,7 @@ abstract class Qualifier extends SQL
 	const LIKE_Q			= 'LIKE';
 	const IS_Q				= 'IS';
 	const IS_NULL_Q			= 'IS NULL';
+	const IS_NOT_NULL_Q		= 'IS NOT NULL';
 
 	const IN_Q				= 'IN';
 	const AND_Q				= 'AND';
@@ -57,33 +58,42 @@ abstract class Qualifier extends SQL
 		return new BasicQualifier( $model->tablePK(), Qualifier::EQ, $data->pkValue(), $prefix );
 	}
 
+	public static function FK( $key = null, DataObject $data = null, $prefix = '' )
+	{
+		if ( is_null($key) ) {
+			throw new \Exception( "You must specify the foreign key to be qualified" );
+		}
+		if ( is_null($data) ) {
+			throw new \Exception( "You must specify the data to be qualified" );
+		}
+		return new BasicQualifier( $key, Qualifier::EQ, $data->pkValue(), $prefix );
+	}
+
+	public static function XID( $xid = null, $xsrc = null, $prefix = '' )
+	{
+		$qualifiers = array();
+		if ( is_null($xid) ) {
+			$qualifiers[] = Qualifier::IsNull( "xid" );
+		}
+		else {
+			$qualifiers[] = Qualifier::Equals( "xid", $xid);
+		}
+
+		if ( is_null($xsrc) == false ) {
+			$qualifiers[] = Qualifier::Equals( "xsource", $xsrc);
+		}
+		return Qualifier::AndQualifier( $qualifiers );
+	}
+
 	public static function AndQualifier()
 	{
-		$args = func_get_args();
-		$qualifiers = array();
-		foreach( $args as $q ) {
-			if ( $q instanceof Qualifier ) {
-				$qualifiers[] = $q;
-			}
-			else {
-				throw new \Exception( "Not a qualifier " . var_export($q, true));
-			}
-		}
+		$qualifiers = array_flatten( func_get_args(), 'db\Qualifier' );
 		return new AndQualifier( $qualifiers );
 	}
 
 	public static function OrQualifier()
 	{
-		$args = func_get_args();
-		$qualifiers = array();
-		foreach( $args as $q ) {
-			if ( $q instanceof Qualifier ) {
-				$qualifiers[] = $q;
-			}
-			else {
-				throw new \Exception( "Not a qualifier " . var_export($q, true));
-			}
-		}
+		$qualifiers = array_flatten( func_get_args(), 'db\Qualifier' );
 		return new OrQualifier( $qualifiers );
 	}
 
@@ -94,6 +104,15 @@ abstract class Qualifier extends SQL
 		}
 
 		return new NotQualifier( $qual );
+	}
+
+	public static function LikeQualifier( $key = null, $value = null, $prefix = '')
+	{
+		if ( is_null($key) || is_null($value) ) {
+			throw new \Exception( "Must specify attribute key/value" );
+		}
+
+		return new BasicQualifier( $key, Qualifier::LIKE_Q, $value, $prefix );
 	}
 
 	public static function Equals( $key = null, $value = null, $prefix = '')
@@ -107,7 +126,12 @@ abstract class Qualifier extends SQL
 
 	public static function IsNull( $key = null, $prefix = '')
 	{
-		return new IsNullQualifier( $key, $prefix );
+		return new IsNullQualifier( $key, true, $prefix );
+	}
+
+	public static function IsNotNull( $key = null, $prefix = '')
+	{
+		return new IsNullQualifier( $key, false, $prefix );
 	}
 
 	public static function GreaterThan( $key = null, $value = null, $prefix = '')
@@ -155,7 +179,7 @@ class OrQualifier extends Qualifier
 		foreach( $this->qualifiers as $idx => $q ) {
 			$statements[] = $q->sqlStatement();
 		}
-		return implode(" " . Qualifier::OR_Q . " ", $statements);
+		return "(" . implode(" " . Qualifier::OR_Q . " ", $statements) . ")";
 	}
 }
 
@@ -183,7 +207,7 @@ class AndQualifier extends Qualifier
 		foreach( $this->qualifiers as $idx => $q ) {
 			$statements[] = $q->sqlStatement();
 		}
-		return implode(" " . Qualifier::AND_Q . " ", $statements);
+		return "(" . implode(" " . Qualifier::AND_Q . " ", $statements) . ")";
 	}
 }
 
@@ -278,9 +302,9 @@ class BasicQualifier extends Qualifier
 
 class IsNullQualifier extends BasicQualifier
 {
-	public function __construct( $key = null, $prefix = '')
+	public function __construct( $key = null, $direction = true, $prefix = '')
 	{
-		parent::__construct( $key, Qualifier::IS_NULL_Q, null, $prefix);
+		parent::__construct( $key, (boolval($direction) ? Qualifier::IS_NULL_Q : Qualifier::IS_NOT_NULL_Q), null, $prefix);
 	}
 
 	public function sqlParameters()

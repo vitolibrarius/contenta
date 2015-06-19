@@ -108,7 +108,7 @@ function makeUniqueDirectory( $root, $elements )
 		return (mkdir($full , DIR_PERMS , true) ? $full : null);
 	}
 
-	Logger::logError("Unable to find root path '" . (string)$root . "'", "Common", "makeUniqueDirectory");
+	\Logger::logError("Unable to find root path '" . (string)$root . "'", "Common", "makeUniqueDirectory");
 	return null;
 }
 

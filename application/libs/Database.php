@@ -27,7 +27,7 @@ class Database extends PDO
 		{
 			$db_path = Config::GetPath("Database/path", null);
 			if ( strlen($db_path) == 0 ) {
-				throw new Exception('No path set in configuration for sqlite database');
+				throw new \Exception('No path set in configuration for sqlite database');
 			}
 			makeRequiredDirectory($db_path, 'Database directory');
 

@@ -11,7 +11,7 @@ class Patch extends Model
 	const id =			'id';
 	const name =		'name';
 	const created =		'created';
-	const version_id =		'version_id';
+	const version_id =	'version_id';
 
 	public function tableName() { return Patch::TABLE; }
 	public function tablePK() { return Patch::id; }
@@ -24,19 +24,14 @@ class Patch extends Model
 		 );
 	}
 
-	function patches()
+	function patchesForVersion(model\VersionDBO $version)
 	{
-		return $this->fetchAll(VersionModel::TABLE, $this->allColumnNames(), null, array(VersionModel::name));
-	}
-
-	function patchesForVersion($version)
-	{
-		return $this->fetchAll(Patch::TABLE, $this->allColumnNames(), array(Patch::version_id => $version->id));
+		return $this->allObjectsForFK(Patch::version_id, $version);
 	}
 
 	function patchWithName($name)
 	{
-		return $this->fetch(Patch::TABLE, $this->allColumnNames(), array(Patch::name => $name));
+		return $this->singleObjectForKeyValue(Patch::name, $name);
 	}
 
 	public function create($version, $name)
@@ -58,9 +53,9 @@ class Patch extends Model
 		return $obj;
 	}
 
-	public function deleteObject($object = null)
+	public function deleteObject(\DataObject $object = null)
 	{
-		if ( $object != false )
+		if ( $object != false && $object instanceof model\PatchDBO )
 		{
 			return parent::deleteObj($object, Patch::TABLE, Patch::id );
 		}

@@ -51,32 +51,26 @@ class Users extends Model
 
 	public function allUsers($role = null)
 	{
-		$qualifier = null;
-		if ( isset($role) ) {
-			$qualifier = array(Users::account_type => $role );
-		}
-
-		return $this->fetchAll(Users::TABLE, $this->allColumns(), $qualifier, array(Users::name));
-	}
-
-	public function user($id)
-	{
-		return $this->fetch(Users::TABLE, $this->allColumns(), array(Users::id => $id));
+		return $this->allObjectsForKeyValue(Users::account_type, $role);
 	}
 
 	public function userByName($name)
 	{
-		return $this->fetch(Users::TABLE, $this->allColumns(), array(Users::name => $name));
+		return $this->singleObjectForKeyValue(Users::name, $name);
 	}
 
 	public function userByToken($id, $token)
 	{
-		return $this->fetch(Users::TABLE, $this->allColumns(), array(Users::id => $id, Users::rememberme_token => $token));
+		$qualifier = db\Qualifier::AndQualifier(
+			db\Qualifier::Equals( Users::id, $id ),
+			db\Qualifier::Equals( Users::rememberme_token, $token )
+		);
+		return $this->singleObject($qualifier);
 	}
 
 	public function userByApiHash($token = '')
 	{
-		return $this->fetch(Users::TABLE, $this->allColumns(), array(Users::api_hash => $token));
+		return $this->singleObjectForKeyValue(Users::api_hash, $token);
 	}
 
 	function createUserIfMissing($name, $pass, $email, $type)
@@ -169,7 +163,7 @@ class Users extends Model
 		return false;
 	}
 
-	public function updateObject($object = null, array $values) {
+	public function updateObject(DataObject $object = null, array $values) {
 		$updates = array();
 		if (isset($object) && is_a($object, "\\model\UsersDBO" )) {
 

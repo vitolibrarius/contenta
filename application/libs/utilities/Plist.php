@@ -21,10 +21,10 @@ class Plist extends XMLReader
 
 		return $this->parseFile($file);
 	}
-	
+
 	public function parseFile($file) {
 		if(basename($file) == $file) {
-			throw new Exception("Non-relative file path expected", 1);
+			throw new \Exception("Non-relative file path expected", 1);
 		}
 		$this->open("file://" . $file);
 		return $this->process();
@@ -38,17 +38,17 @@ class Plist extends XMLReader
 	private function process() {
 		// plist's always start with a doctype, use it as a validity check
 		$this->read();
-		
+
 		if($this->nodeType !== XMLReader::DOC_TYPE || $this->name !== "plist") {
-			throw new Exception(sprintf("Error parsing plist. nodeType: %d -- Name: '%s' %s\n", $this->nodeType, $this->name, var_export($this, true)), 2);
+			throw new \Exception(sprintf("Error parsing plist. nodeType: %d -- Name: '%s' %s\n", $this->nodeType, $this->name, var_export($this, true)), 2);
 		}
-		
+
 		// as one additional check, the first element node is always a plist
 		if(!$this->next("plist") || $this->nodeType !== XMLReader::ELEMENT || $this->name !== "plist") {
-			throw new Exception(sprintf("Error parsing plist. nodeType: %d -- Name: '%s' %s", $this->nodeType, $this->name, var_export($this, true)), 3);
+			throw new \Exception(sprintf("Error parsing plist. nodeType: %d -- Name: '%s' %s", $this->nodeType, $this->name, var_export($this, true)), 3);
 		}
-		
-		$plist = array();	
+
+		$plist = array();
 		while($this->read()) {
 			if($this->nodeType == XMLReader::ELEMENT) {
 				$plist[] = $this->parse_node();
@@ -67,9 +67,9 @@ class Plist extends XMLReader
 	private function parse_node() {
 		// If not an element, nothing for us to do
 		if($this->nodeType !== XMLReader::ELEMENT) return;
-		
+
 		switch($this->name) {
-			case 'data': 
+			case 'data':
 				return base64_decode($this->getNodeText());
 				break;
 			case 'real':
@@ -98,10 +98,10 @@ class Plist extends XMLReader
 				break;
 			default:
 				// per DTD, the above is the only valid types
-				throw new Exception(sprintf("Not a valid plist. %s is not a valid type", $this->name), 4);
-		}			
+				throw new \Exception(sprintf("Not a valid plist. %s is not a valid type", $this->name), 4);
+		}
 	}
-	
+
 	private function parse_dict() {
 		$array = array();
 		$this->nextOfType(XMLReader::ELEMENT);
@@ -121,7 +121,7 @@ class Plist extends XMLReader
 		} while($this->nodeType && !$this->isNodeOfTypeName(XMLReader::END_ELEMENT, "dict"));
 		return $array;
 	}
-	
+
 	private function parse_array() {
 		$array = array();
 		$this->nextOfType(XMLReader::ELEMENT);
@@ -132,14 +132,14 @@ class Plist extends XMLReader
 		} while($this->nodeType && !$this->isNodeOfTypeName(XMLReader::END_ELEMENT, "array"));
 		return $array;
 	}
-	
+
 	private function getNodeText() {
 		$string = $this->readString();
 		// now gobble up everything up to the closing tag
 		$this->nextOfType(XMLReader::END_ELEMENT);
 		return $string;
 	}
-	
+
 	private function nextOfType() {
 		$types = func_get_args();
 		// skip to next
@@ -150,7 +150,7 @@ class Plist extends XMLReader
 			$this->read();
 		}
 	}
-	
+
 	private function isNodeOfTypeName($type, $name) {
 		return $this->nodeType === $type && $this->name === $name;
 	}

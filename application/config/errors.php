@@ -6,7 +6,7 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 	function exceptionHandler($exception)
 	{
 		try {
-			Logger::logException($exception);
+			\Logger::logException($exception);
 		}
 		catch (Exception $e) {
 			print get_class($e)." thrown within the exception handler. Message: ".$e->getMessage()." on line ".$e->getLine();
@@ -18,7 +18,7 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 	function shutdown($msg)
 	{
 		try {
-			Logger::instance()->fatal($msg);
+			\Logger::instance()->fatal($msg);
 		}
 		catch (Exception $e) {
 			print get_class($e)." thrown within the shutdown action. Message: ".$e->getMessage()." on line ".$e->getLine();
@@ -34,7 +34,7 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 			# Checking if last error is a fatal error
 			if (($error['type'] === E_ERROR) || ($error['type'] === E_USER_ERROR) || ($error['type'] === E_USER_NOTICE)) {
 				# Here we handle the error, displaying HTML, logging, ...
-				Logger::instance()->fatal(
+				\Logger::instance()->fatal(
 					$error['type']. " - " . $error['message'],
 					$error['file'],
 					$error['line']
@@ -60,7 +60,8 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
             	. ' calling ' . (isset($item['function']) ? $item['function'] : '<unknown function>') . '()';
         }
 
-		Logger::LogError( $backtrace, $errfile, $errline );
+		echo "$backtrace, $errfile, $errline";
+// 		\Logger::LogError( $backtrace, $errfile, $errline );
 		return true;
 	}
 

@@ -4,6 +4,7 @@ use \Session as Session;
 use \Model as Model;
 use \Localized as Localized;
 use \Config as Config;
+use \Logger as Logger;
 use model\Users as Users;
 
 /**
@@ -71,7 +72,7 @@ class Auth
 
 		Logger::logError("User is not authorized", Session::get('user_name'), Session::get('user_id'));
 		http_response_code(401); // Not Authorized
-		throw new Exception("Not authorized", 1);
+		throw new \Exception("Not authorized", 1);
 	}
 
 	public static function login()

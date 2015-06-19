@@ -3,7 +3,7 @@
 // guard to ensure basic configuration is loaded
 defined('APPLICATION_PATH') || exit("APPLICATION_PATH not found.");
 
-class ClassNotFoundException extends Exception {}
+class ClassNotFoundException extends \Exception {}
 
 /**
  * the auto-loading function, which will be called every time a file "is missing"

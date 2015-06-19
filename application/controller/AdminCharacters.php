@@ -48,10 +48,11 @@ class AdminCharacters extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Character');
 			$this->view->model = $model;
-			$this->view->listArray = $model->allObjectsLike( array(
-					Character::name => $_GET['name']
-				)
-			);
+			$this->view->listArray = \SQL::Select( $model )
+				->where( db\Qualifier::LikeQualifier( Character::name, $_GET['name'] . '*' ))
+				->orderBy( $model->sortOrder() )
+				->fetchAll();
+
 			$this->view->editAction = "/AdminCharacters/editCharacter";
 			$this->view->deleteAction = "/AdminCharacters/deleteCharacter";
 			$this->view->render( '/characters/characterCards', true);
@@ -100,7 +101,7 @@ class AdminCharacters extends Admin
 
 			$this->view->render( '/edit/character');
 
-			Logger::loginfo("Editing Character " . $oid, Session::get('user_name'), Session::get('user_id'));
+			\Logger::loginfo("Editing Character " . $oid, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 

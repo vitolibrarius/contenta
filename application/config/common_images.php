@@ -36,7 +36,7 @@ function downloadImage($url = null, $dir = null, $key_name_hint = null )
 				}
 			}
 			else {
-				Logger::logWarning( "Failed to load image from URL " . $url, $dir, $filename );
+				\Logger::logWarning( "Failed to load image from URL " . $url, $dir, $filename );
 			}
 		}
 	}

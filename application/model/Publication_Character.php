@@ -41,20 +41,12 @@ class Publication_Character extends Model
 
 	public function allForPublication($obj)
 	{
-		return $this->fetchAll(Publication_Character::TABLE,
-			$this->allColumns(),
-			array(Publication_Character::publication_id => $obj->id),
-			array(Publication_Character::character_id)
-		);
+		return $this->allObjectsForFK(Publication_Character::publication_id, $obj);
 	}
 
 	public function allForCharacter($obj)
 	{
-		return $this->fetchAll(Publication_Character::TABLE,
-			$this->allColumns(),
-			array(Publication_Character::character_id => $obj->id),
-			array(Publication_Character::publication_id)
-		);
+		return $this->allObjectsForFK(Publication_Character::character_id, $obj);
 	}
 
 	public function countForCharacter( model\CharacterDBO $obj = null)

@@ -5,8 +5,8 @@ namespace model;
 use \Session as Session;
 use \DataObject as DataObject;
 use \Model as Model;
-use \Localized as Localized;
 use \Logger as Logger;
+use \Localized as Localized;
 
 class Publication extends Model
 {
@@ -38,11 +38,9 @@ class Publication extends Model
 
 	public function publicationForSeriesExternal(model\SeriesDBO $series = null, $issue_xid = null, $xsource = null)
 	{
-		if ( isset($series, $issue_xid, $xsource) && strlen($issue_xid) && strlen($xsource)) {
-			$obj = $this->objectForExternal($issue_xid, $xsource);
-			if ( $obj instanceof model\PublicationDBO && $obj->series_id === $series->id ) {
-				return $obj;
-			}
+		$matches = $this->allObjectsForFKAndQualifier(Publication::series_id, $series, db\Qualifier::XID($issue_xid, $xsource));
+		if ( is_array($matches) && count($matches) > 0 ) {
+			return $matches[0];
 		}
 		return false;
 	}
@@ -147,7 +145,7 @@ class Publication extends Model
 
 	public function allForSeries(model\SeriesDBO $obj = null)
 	{
-		return $this->fetchAll(Publication::TABLE, $this->allColumns(), array(Publication::series_id => $obj->id), $this->sortOrder());
+		return $this->allObjectsForFK(Publication::series_id, $obj);
 	}
 
 	/* EditableModelInterface */

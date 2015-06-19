@@ -32,14 +32,9 @@ class Media_Type extends Model
 		 );
 	}
 
-	function mediaTypes()
-	{
-		return $this->fetchAll(Media_Type::TABLE, $this->allColumnNames(), null, array(Media_Type::name));
-	}
-
 	function mediaTypeForCode($cd)
 	{
-		return $this->fetch(Media_Type::TABLE, $this->allColumnNames(), array(Media_Type::code => $cd));
+		return $this->singleObjectForKeyValue( Media_Type::code, $cd);
 	}
 }
 

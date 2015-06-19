@@ -30,14 +30,11 @@ abstract class SQL
 
 	public static function PrefixAlias( $idx = 0 )
 	{
-		$idx = (is_int($idx) ? intval($idx) : 0);
-		$characters = 'abcdefghijklmnopqrstuvwxyz';
-		$alias = '';
-		if ( intval(floor($idx / 26)) > 0 ) {
-			$alias .= $characters[intval(floor($idx / 26)) - 1];
+		$prefix = '';
+		for ( ; $idx >= 0; $idx = intval($idx / 26) - 1) {
+			$prefix = chr($idx % 26 + 0x61) . $prefix;
 		}
-		$alias .= $characters[intval($idx % 26)];
-		return $alias;
+		return $prefix;
 	}
 
 	public static function Select( Model $model, array $columns = null, db\Qualifier $qualifier = null )
@@ -45,7 +42,7 @@ abstract class SQL
 		return new db\SelectSQL($model, $columns, $qualifier);
 	}
 
-	public static function SelectObject( Model $model, DataObject $obj )
+	public static function SelectObject( Model $model, DataObject $data )
 	{
 		if ( is_null($data) ) {
 			throw new \Exception( "You must specify the data to be selected" );
@@ -110,14 +107,23 @@ abstract class SQL
 
 	public function where( db\Qualifier $qualifier )
 	{
-		$this->qualifier = $qualifier;
+		if ( isset( $this->qualifier, $qualifier) ) {
+			$this->qualifier = db\Qualifier::AndQualifier( $this->qualifier, $qualifier );
+		}
+		else {
+			$this->qualifier = $qualifier;
+		}
 		return $this;
 	}
 
 	public function whereEqual( $key = null, $value = null )
 	{
-		$this->qualifier = db\Qualifier::Equals( $key, $value );
-		return $this;
+		return $this->where( db\Qualifier::Equals( $key, $value ) );
+	}
+
+	public function whereRelation( $key = null, $value = null )
+	{
+		return $this->where( db\Qualifier::FK( $key, $value ));
 	}
 
 	/** Misc SQL functions */

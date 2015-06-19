@@ -45,14 +45,15 @@ class AdminPublication extends Admin
 
 	function searchPublication()
 	{
-		Logger::LogError( "searchPublication" );
+		\Logger::LogError( "searchPublication" );
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Publication');
 			$this->view->model = $model;
-			$this->view->listArray = $model->allObjectsLike( array(
-					Publication::name => $_GET['name']
-				)
-			);
+			$this->view->listArray = \SQL::Select( $model )
+				->where( db\Qualifier::LikeQualifier( Publication::name, $_GET['name'] . '*' ))
+				->orderBy( $model->sortOrder() )
+				->fetchAll();
+
 			$this->view->editAction = "/AdminPublication/editPublication";
 			$this->view->deleteAction = "/AdminPublication/deletePublication";
 			$this->view->render( '/publication/publicationCards', true);
@@ -101,7 +102,7 @@ class AdminPublication extends Admin
 
 			$this->view->render( '/edit/publication');
 
-			Logger::loginfo("Editing Publication " . $oid, Session::get('user_name'), Session::get('user_id'));
+			\Logger::loginfo("Editing Publication " . $oid, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 

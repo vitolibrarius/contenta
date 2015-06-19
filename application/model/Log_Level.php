@@ -21,13 +21,8 @@ class Log_Level extends Model
 		return array(Log_Level::id, Log_Level::code, Log_Level::name);
 	}
 
-	function logLevels()
-	{
-		return \SQL::Select( $this )->orderBy(array(Log_Level::id))->fetchAll();
-	}
-
 	function logLevelForCode($name)
 	{
-		return \SQL::Select( $this )->whereEqual( Log_Level::code, $name )->fetch();
+		return $this->singleObjectForKeyValue( Log_Level::code, $name );
 	}
 }

@@ -27,27 +27,19 @@ class Job_Type extends Model
 		 );
 	}
 
-    function jobTypes()
-    {
-		return $this->fetchAll(Job_Type::TABLE, $this->allColumnNames(), null, array(Job_Type::name));
-    }
-
     function jobTypeForCode($cd)
     {
-		return $this->fetch(Job_Type::TABLE, $this->allColumnNames(), array(Job_Type::code => $cd));
+		return $this->singleObjectForKeyValue( Job_Type::code, $cd );
     }
 
     function allScheduled()
     {
-		return $this->fetch(Job_Type::TABLE, $this->allColumnNames(), array(Job_Type::scheduled => 1));
+		return $this->singleObjectForKeyValue( Job_Type::scheduled, 1 );
     }
 
     function allForProcessor($processorName)
     {
-		return $this->fetch(Job_Type::TABLE, $this->allColumnNames(), array(
-			Job_Type::processor => $processorName
-			)
-		);
+    	return $this->allObjectsForKeyValue( Job_Type::processor, $processorName );
     }
 }
 

@@ -7,14 +7,14 @@ interface LoggerInterface {
 	public function fatal($message, $context = null, $context_id = null);
 }
 
-class LogFileDoesNotExistException extends Exception {}
-class LogFileOpenErrorException extends Exception {}
-class LogFileNotOpenException extends Exception {}
-class LogFileAlreadyExistsException extends Exception {}
-class FileCreationErrorException extends Exception {}
-class NotAStringException extends Exception {}
-class NotAIntegerException extends Exception {}
-class InvalidMessageTypeException extends Exception {}
+class LogFileDoesNotExistException extends \Exception {}
+class LogFileOpenErrorException extends \Exception {}
+class LogFileNotOpenException extends \Exception {}
+class LogFileAlreadyExistsException extends \Exception {}
+class FileCreationErrorException extends \Exception {}
+class NotAStringException extends \Exception {}
+class NotAIntegerException extends \Exception {}
+class InvalidMessageTypeException extends \Exception {}
 
 abstract class Logger implements LoggerInterface {
 	const INFO = 'info';
@@ -29,33 +29,33 @@ abstract class Logger implements LoggerInterface {
 
 	private static $catastrophicFail = false;
 	public static function catastrophicFailure() {
-		Logger::$catastrophicFail = true;
+		\Logger::$catastrophicFail = true;
 	}
 
 	final public static function instance()
 	{
-		if ( Logger::$catastrophicFail ) {
-			Logger::$instance = new loggers\PrintLogger();
+		if ( \Logger::$catastrophicFail ) {
+			\Logger::$instance = new loggers\PrintLogger();
 		}
-		else if ( null == Logger::$instance ) {
+		else if ( null == \Logger::$instance ) {
 			try {
 				$loggerClass = 'loggers\\' . Config::Get("Logging/type", "Print") . 'Logger';
-				Logger::$instance = new $loggerClass();
+				\Logger::$instance = new $loggerClass();
 			}
 			catch (Exception $e) {
-				Logger::$catastrophicFail = true;
-				Logger::$instance = new loggers\PrintLogger();
-				Logger::$instance->logException( $e );
-				Logger::$instance->error( "Failed to construct logger for '" . Config::Get("Logging/type") . "'" );
+				\Logger::$catastrophicFail = true;
+				\Logger::$instance = new loggers\PrintLogger();
+				\Logger::$instance->logException( $e );
+				\Logger::$instance->error( "Failed to construct logger for '" . Config::Get("Logging/type") . "'" );
 			}
 		}
 
-		return Logger::$instance;
+		return \Logger::$instance;
 	}
 
 	final public static function resetInstance()
 	{
-		Logger::$instance = null;
+		\Logger::$instance = null;
 		$catastrophicFail = false;
 	}
 
@@ -66,21 +66,21 @@ abstract class Logger implements LoggerInterface {
 	}
 
 	final public static function logInfo($message, $context = null, $context_id = null) {
-		return Logger::instance()->info( $message, $context, $context_id );
+		return \Logger::instance()->info( $message, $context, $context_id );
 	}
 
 	final public static function logWarning($message, $context = null, $context_id = null) {
-		return Logger::instance()->warn( $message, $context, $context_id );
+		return \Logger::instance()->warn( $message, $context, $context_id );
 	}
 
 	final public static function logError($message, $context = null, $context_id = null) {
-		return Logger::instance()->error( $message, $context, $context_id );
+		return \Logger::instance()->error( $message, $context, $context_id );
 	}
 
 	final public static function logSQLError( $clazz = 'Model', $method = 'unknown', $pdocode, $pdoError, $sql, $params = null)
 	{
 		$msg = 'PDO Error(' . $pdocode . ') ' . $pdoError . ' for [' . $sql . '] ' . (isset($params) ? var_export($params, true) : 'No Parameters');
-		return Logger::instance()->error( $msg, $clazz, $method );
+		return \Logger::instance()->error( $msg, $clazz, $method );
 	}
 
 	final public static function logException($exception) {
@@ -124,10 +124,10 @@ abstract class Logger implements LoggerInterface {
 				$exception->getLine(),
 				implode("\n", $result)
 			);
-			return Logger::instance()->error( $msg,	shortendPath($exception->getFile(), 3), $exception->getLine());
+			return \Logger::instance()->error( $msg,	shortendPath($exception->getFile(), 3), $exception->getLine());
 		}
 		else {
-			return Logger::instance()->error(
+			return \Logger::instance()->error(
 				get_class($exception)." thrown? Message: " . var_export($exception, true),
 				"File",
 				null
@@ -137,7 +137,7 @@ abstract class Logger implements LoggerInterface {
 	}
 
 	final public static function logFatal($message, $context = null, $context_id = null) {
-		return Logger::instance()->fatal( $message, $context, $context_id );
+		return \Logger::instance()->fatal( $message, $context, $context_id );
 	}
 
 	private function __clone()
@@ -168,56 +168,56 @@ abstract class Logger implements LoggerInterface {
 		$this->currentTraceId = null;
 	}
 
-	abstract protected function _doLog($level = Logger::INFO, $message, $trace = null, $traceId = null, $context = null, $context_id = null);
+	abstract protected function _doLog($level = \Logger::INFO, $message, $trace = null, $traceId = null, $context = null, $context_id = null);
 
 	public function info($message, $context = null, $context_id = null) {
 		try {
-			$this->_doLog(Logger::INFO, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$this->_doLog(\Logger::INFO, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 		}
 		catch (Exception $e) {
-			Logger::$catastrophicFail = true;
+			\Logger::$catastrophicFail = true;
 			$plog = new \loggers\PrintLogger();
-			$plog->_doLog(Logger::INFO, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
-			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
+			$plog->_doLog(\Logger::INFO, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$plog->_doLog(\Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
 		}
 	}
 
 	public function warn($message, $context = null, $context_id = null) {
 		try {
-			$this->_doLog(Logger::WARNING, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$this->_doLog(\Logger::WARNING, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 		}
 		catch (Exception $e) {
-			Logger::$catastrophicFail = true;
+			\Logger::$catastrophicFail = true;
 			$plog = new \loggers\PrintLogger();
-			$plog->_doLog(Logger::WARNING, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
-			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
+			$plog->_doLog(\Logger::WARNING, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$plog->_doLog(\Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
 		}
 	}
 
 	public function error($message, $context = null, $context_id = null) {
 		try {
-			$this->_doLog(Logger::ERROR, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$this->_doLog(\Logger::ERROR, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 		}
 		catch (Exception $e) {
-			Logger::$catastrophicFail = true;
+			\Logger::$catastrophicFail = true;
 			$plog = new \loggers\PrintLogger();
-			$plog->_doLog(Logger::ERROR, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
-			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
+			$plog->_doLog(\Logger::ERROR, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$plog->_doLog(\Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
 		}
 	}
 
 	public function fatal($message, $context = null, $context_id = null) {
 		try {
-			$this->_doLog(Logger::FATAL, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$this->_doLog(\Logger::FATAL, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
 		}
 		catch (Exception $e) {
-			Logger::$catastrophicFail = true;
+			\Logger::$catastrophicFail = true;
 			$plog = new \loggers\PrintLogger();
-			$plog->_doLog(Logger::FATAL, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
-			$plog->_doLog(Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
+			$plog->_doLog(\Logger::FATAL, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$plog->_doLog(\Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
 				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
 		}
 	}

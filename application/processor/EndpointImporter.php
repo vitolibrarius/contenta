@@ -308,7 +308,7 @@ abstract class EndpointImporter extends Processor
 				if (( $objectModel instanceof \Model) == false) {
 					throw new \Exception( "Failed to load model named '" . $objectModel . "'");
 				}
-				$objects = $objectModel->fetchAllExternal( $objectType, $objectModel->allColumnNames(), $size);
+				$objects = $objectModel->allObjectsNeedingExternalUpdate($size);
 
 				foreach( $objects as $idx => $object ) {
 					Logger::logInfo( "Enqueuing $idx: " . $object, $this->type, $this->guid );

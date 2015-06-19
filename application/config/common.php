@@ -58,7 +58,7 @@ function zipFileList($path)
 	}
 	else
 	{
-		Logger::logError('Zip error ' . $zip . ' ' . zipFileErrMsg($zip),  'zipFileList', basename($path));
+		\Logger::logError('Zip error ' . $zip . ' ' . zipFileErrMsg($zip),  'zipFileList', basename($path));
 	}
 	return $list;
 }
@@ -270,7 +270,7 @@ function Zip($source, $destination)
 
 	$zip = new ZipArchive();
 	if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
-		Logger::logError( 'Zip error ' . $zip . ' ' . zipFileErrMsg($zip), 'ZIPARCHIVE::CREATE', $path);
+		\Logger::logError( 'Zip error ' . $zip . ' ' . zipFileErrMsg($zip), 'ZIPARCHIVE::CREATE', $path);
 		return false;
 	}
 
@@ -311,7 +311,7 @@ function Zip($source, $destination)
 
 	$status = $zip->close();
 	if ( $status != true ) {
-		Logger::logError( 'Zip error ' . $zip . ' ' . zipFileErrMsg($zip), 'ZIPARCHIVE::CREATE', $path);
+		\Logger::logError( 'Zip error ' . $zip . ' ' . zipFileErrMsg($zip), 'ZIPARCHIVE::CREATE', $path);
 	}
 	return $status;
 }

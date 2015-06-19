@@ -36,14 +36,9 @@ class Version extends Model
 		return (is_array($onlyOne) ? $onlyOne[0] : false );
 	}
 
-	function versions()
-	{
-		return \SQL::Select( $this )->fetchAll();
-	}
-
 	function versionForCode($name)
 	{
-		return \SQL::Select( $this )->whereEqual( Version::code, $name )->fetch();
+		return $this->singleObjectForKeyValue(Version::code, $name);
 	}
 
 	function versionForHash($hash)

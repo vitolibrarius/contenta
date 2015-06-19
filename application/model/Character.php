@@ -38,29 +38,14 @@ class Character extends Model
 		);
 	}
 
-	public function allForPublisher($obj)
+	public function allForPublisher( model\PublisherDBO $obj)
 	{
-		return $this->fetchAll(Series::TABLE, $this->allColumns(), array(Character::publisher_id => $obj->id), array(Character::name));
-	}
-
-	public function allForCharacter($obj)
-	{
-		return $this->fetchAll(Character::TABLE, $this->allColumns(), array(Character::character_id => $obj->id), array(Character::name));
+		return $this->allObjectsForFK(Character::publisher_id, $obj, array(Character::name));
 	}
 
 	public function allForName($name)
 	{
-		return $this->fetchAll(Character::TABLE,
-			$this->allColumns(),
-			array(Character::name => $name),
-			array(Character::character_id));
-	}
-
-	public function forName($obj, $name)
-	{
-		return $this->fetch(Character::TABLE,
-			$this->allColumns(),
-			array(Character::character_id => $obj->id, Character::name => $name));
+		return $this->allObjectsForKeyValue(Character::name, $name);
 	}
 
 	public function findExternalOrCreate($publishObj, $name, $realname, $gender, $desc, $aliases, $xid, $xsrc, $xurl = null )
@@ -163,9 +148,9 @@ class Character extends Model
 		return $obj;
 	}
 
-	public function deleteObject($object = null)
+	public function deleteObject( \DataObject $object = null)
 	{
-		if ( $object != false )
+		if ( $object != false && $object instanceof model\CharacterDBO)
 		{
 			$alias_model = Model::Named("Character_Alias");
 			if ( $alias_model->deleteAllForCharacter($object) == true ) {

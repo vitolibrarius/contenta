@@ -1,5 +1,23 @@
 <?php
 
+	function array_flatten( array $array = array(), $targetClass = null )
+	{
+		$merged = array();
+		foreach ($array as $item) {
+			if ( is_array($item) ) {
+				$subArray = array_flatten( $item, $targetClass );
+				$merged = array_merge($merged, $subArray);
+			}
+			else if (is_null($targetClass) || ( is_string($targetClass) && $item instanceof $targetClass)) {
+				$merged[] = $item;
+			}
+			else {
+				throw new \Exception( "Element is not of type $targetClass " . var_export($item, true));
+			}
+		}
+		return $merged;
+	}
+
 /**
  * this will walk a keypath down a nested associative array and return the leaf value.
  */

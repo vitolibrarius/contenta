@@ -39,22 +39,14 @@ class Series_Character extends Model
 		return false;
 	}
 
-	public function allForSeries($obj)
+	public function allForSeries(model\SeriesDBO $obj)
 	{
-		return $this->fetchAll(Series_Character::TABLE,
-			$this->allColumns(),
-			array(Series_Character::series_id => $obj->id),
-			array(Series_Character::character_id)
-		);
+		return $this->allObjectsForFK(Series_Character::series_id, $obj);
 	}
 
-	public function allForCharacter($obj)
+	public function allForCharacter(model\CharacterDBO $obj)
 	{
-		return $this->fetchAll(Series_Character::TABLE,
-			$this->allColumns(),
-			array(Series_Character::character_id => $obj->id),
-			array(Series_Character::series_id)
-		);
+		return $this->allObjectsForFK(Series_Character::character_id, $obj);
 	}
 
 	public function countForCharacter( model\CharacterDBO $obj = null)

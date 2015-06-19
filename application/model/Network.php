@@ -25,18 +25,18 @@ class Network extends Model
 
 	function networkForAddress($value)
 	{
-		return $this->fetch(Network::TABLE, $this->allColumns(), array(Network::ipAddress => $value));
+		return $this->singleObjectForKeyValue(Network::ipAddress, $value);
 	}
 
 	function networkForAddressHash($value)
 	{
-		return $this->fetchAll(Network::TABLE, $this->allColumns(), array(Network::ipHash => $value));
+		return $this->allObjectsForKeyValue(Network::ipHash, $value);
 	}
 
 	function allNetworkForIPAddressHashed($ipAddress)
 	{
 		$hash = $this->ipToHex($ipAddress);
-		return $this->fetchAll(Network::TABLE, $this->allColumns(), array(Network::ipHash => $hash));
+		return $this->allObjectsForKeyValue(Network::ipHash, $hash);
 	}
 
 	function create( $ip )

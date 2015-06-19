@@ -86,7 +86,7 @@ class AdminPublishers extends Admin
 
 			$this->view->render( '/edit/publisher');
 
-			Logger::loginfo("Editing publisher " . $pubId, Session::get('user_name'), Session::get('user_id'));
+			\Logger::loginfo("Editing publisher " . $pubId, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 

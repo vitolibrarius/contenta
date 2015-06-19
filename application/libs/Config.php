@@ -3,9 +3,9 @@
 // guard to ensure basic configuration is loaded
 defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
-class ConfigFileDoesNotExistException extends Exception {}
-class ConfigFileNotValidException extends Exception {}
-class ConfigFileEmptyException extends Exception {}
+class ConfigFileDoesNotExistException extends \Exception {}
+class ConfigFileNotValidException extends \Exception {}
+class ConfigFileEmptyException extends \Exception {}
 
 /**
  * Configuration class.

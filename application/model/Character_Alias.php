@@ -24,27 +24,22 @@ class Character_Alias extends Model
 		return array(Character_Alias::id, Character_Alias::character_id, Character_Alias::name );
 	}
 
-	public function allForCharacter($obj)
+	public function allForCharacter( model\CharacterDBO $obj )
 	{
-		return $this->fetchAll(Character_Alias::TABLE, $this->allColumns(), array(Character_Alias::character_id => $obj->id), array(Character_Alias::name));
+		return $this->allObjectsForFK(Character_Alias::character_id, $obj, $this->sortOrder());
 	}
 
 	public function allForName($name)
 	{
-		return $this->fetchAll(Character_Alias::TABLE,
-			$this->allColumns(),
-			array(Character_Alias::name => $name),
-			array(Character_Alias::character_id));
+		return $this->allObjectsForKeyValue(Character_Alias::name, $name);
 	}
 
-	public function forName($obj, $name)
+	public function forName( model\CharacterDBO $obj, $name)
 	{
-		return $this->fetch(Character_Alias::TABLE,
-			$this->allColumns(),
-			array(Character_Alias::character_id => $obj->id, Character_Alias::name => $name));
+		return $this->allObjectsForFKWithValue(Character_Alias::character_id, $obj, Character_Alias::name, $name);
 	}
 
-	public function create($characterObj, $name)
+	public function create( model\CharacterDBO $characterObj, $name)
 	{
 		if (isset($characterObj, $characterObj->id, $name)) {
 			$alias = $this->forName($characterObj, $name);
@@ -63,9 +58,9 @@ class Character_Alias extends Model
 		return false;
 	}
 
-	public function deleteObject($obj = null)
+	public function deleteObject( \DataObject $obj = null)
 	{
-		if ( $obj != false )
+		if ( $obj != false && $obj instanceof model\Character_AliasDBO )
 		{
 			return parent::deleteObject($obj);
 		}
@@ -73,17 +68,21 @@ class Character_Alias extends Model
 		return false;
 	}
 
-	public function deleteAllForCharacter($obj)
+	public function deleteAllForCharacter(model\CharacterDBO $obj)
 	{
 		$success = true;
 		if ( $obj != false )
 		{
+			// default batch size is 50
 			$array = $this->allForCharacter($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( count( $array) > 0 ) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						break;
+					}
 				}
+				$array = $this->allForCharacter($obj);
 			}
 		}
 		return $success;

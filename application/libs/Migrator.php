@@ -1,6 +1,6 @@
 <?php
 
-class MigrationFailedException extends Exception {}
+class MigrationFailedException extends \Exception {}
 
 use \SQL as SQL;
 use model\Version as Version;
@@ -120,7 +120,7 @@ class Migrator
 		catch ( MigrationFailedException $mfe ) {
 			Logger::logException( $mfe );
 		}
-		catch ( Exception $exception ) {
+		catch ( \Exception $exception ) {
 			Logger::logException( $exception );
 		}
 		return false;

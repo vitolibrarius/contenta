@@ -43,30 +43,22 @@ class User_Series extends Model
 		return false;
 	}
 
-	public function allForUser($obj)
+	public function allForUser(model\UsersDBO $obj)
 	{
-		return $this->fetchAll(User_Series::TABLE,
-			$this->allColumns(),
-			array(User_Series::user_id => $obj->id),
-			array(User_Series::series_id)
-		);
+		return $this->allObjectsForFK(User_Series::user_id, $obj);
 	}
 
-	public function allFavoritesForUser($obj)
+	public function allFavoritesForUser(model\UsersDBO $obj)
 	{
-		return $this->fetchAll(User_Series::TABLE,
-			$this->allColumns(),
-			array(User_Series::user_id => $obj->id, User_Series::favorite => Model::TERTIARY_TRUE),
-			array(User_Series::series_id)
-		);
+		return $this->allObjectsForFKWithValue(User_Series::user_id, $obj, User_Series::favorite, Model::TERTIARY_TRUE);
 	}
 
-	public function allSeriesForUser($obj)
+	public function allSeriesForUser(model\UsersDBO $obj)
 	{
-		$series_model = Model::Named('Series');
 		$joins = $this->allForUser($obj);
 
 		if ( $joins != false ) {
+			$series_model = Model::Named('Series');
 			return $series_model->fetchAllJoin(
 				Series::TABLE,
 				$series_model->allColumns(),
@@ -76,13 +68,9 @@ class User_Series extends Model
 		return false;
 	}
 
-	public function allForSeries($obj)
+	public function allForSeries(model\SeriesDBO $obj)
 	{
-		return $this->fetchAll(User_Series::TABLE,
-			$this->allColumns(),
-			array(User_Series::series_id => $obj->id),
-			array(User_Series::user_id)
-		);
+		return $this->allObjectsForFK(User_Series::series_id, $obj);
 	}
 
 	public function allMislabled()
@@ -94,30 +82,26 @@ class User_Series extends Model
 	{
 		$qualifiers = array();
 		if ( is_a($user, "usersDataObject") ) {
-			$qualifiers[User_Series::user_id] = $user->id;
+			$qualifiers[] = db\Qualifier::Equals( User_Series::user_id, $user->id );
 		}
 
 		if ( is_a($series, "seriesDataObject") ) {
-			$qualifiers[User_Series::series_id] = $series->id;
+			$qualifiers[] = db\Qualifier::Equals( User_Series::series_id, $series->id);
 		}
 
 		if ( is_null($favorite) != true ) {
-			$qualifiers[User_Series::favorite] = $favorite;
+			$qualifiers[] = db\Qualifier::Equals( User_Series::favorite, $favorite);
 		}
 
 		if ( is_null($read) != true ) {
-			$qualifiers[User_Series::read] = $read;
+			$qualifiers[] = db\Qualifier::Equals( User_Series::read, $read);
 		}
 
 		if ( is_null($label) != true ) {
-			$qualifiers[User_Series::mislabeled] = $label;
+			$qualifiers[] = db\Qualifier::Equals( User_Series::mislabeled, $label);
 		}
 
-		return $this->fetchAll(User_Series::TABLE,
-			$this->allColumns(),
-			$qualifiers,
-			array(User_Series::user_id, User_Series::series_id)
-		);
+		return \SQL::Select( $this)->where( db\Qualifier::AndQualifier( $qualifiers ))->fetchAll();
 	}
 
 	public function create($user, $series, $favorite = null, $read = null, $label = null)
@@ -171,9 +155,9 @@ class User_Series extends Model
 		return $join;
 	}
 
-	public function deleteObject($obj = null)
+	public function deleteObject( \DataObject $obj = null)
 	{
-		if ( $obj != false )
+		if ( $obj instanceof model\User_SeriesDBO )
 		{
 			return $this->deleteObj($obj, User_Series::TABLE, User_Series::id );
 		}

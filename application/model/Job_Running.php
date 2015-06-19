@@ -2,6 +2,7 @@
 
 namespace model;
 
+use \Logger as Logger;
 use \DataObject as DataObject;
 use \Model as Model;
 
@@ -31,19 +32,20 @@ class Job_Running extends Model
 
 	public function allForJob(model\JobDBO $job = null)
 	{
-		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running::job_id => $job->id));
+		return $this->allObjectsForFK(Job_Running::job_id, $job );
 	}
 
 	public function allForProcessorGUID($processorName = null, $guid = null)
 	{
-		$qualifiers = array();
-		if ( is_null($processorName) == false ) {
-			$qualifiers[Job_Running::processor] = $processorName;
+		if ( isset($processorName, $guid) ) {
+			return SQL::Select( $this, null, db\Qualifier::AndQualifier(
+					db\Qualifier::Equals( Job_Running::processor, $processorName),
+					db\Qualifier::Equals( Job_Running::guid, $guid)
+				)
+			)->fetchAll();
 		}
-		if ( is_null($guid) == false ) {
-			$qualifiers[Job_Running::guid] = $guid;
-		}
-		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), $qualifiers);
+
+		return false;
 	}
 
 	public function allForJobTypeCode($code = null)
@@ -55,7 +57,7 @@ class Job_Running extends Model
 
 	public function allForJobType($obj = null)
 	{
-		return $this->fetchAll(Job_Running::TABLE, $this->allColumns(), array(Job_Running::job_type_id => $obj->id));
+		return $this->allObjectsForFK(Job_Running::job_type_id, $obj );
 	}
 
 	public function createForJob($job_id = null, $processorName, $guid, $pid)

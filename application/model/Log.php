@@ -50,31 +50,35 @@ class Log extends Model
 	}
 
 	public function mostRecentLike( $trace = null, $trace_id = null, $context = null, $context_id = null, $level = null, $message = null, $direction="desc", $limit=50) {
+		$select = \SQL::Select( $this )->limit( 50 );
+
 		$likes = array();
 		if ( isset($trace) && strlen($trace) > 0 ) {
-			$likes[Log::trace] = $trace;
+			$likes[] = db\Qualifier::LikeQualifier( Log::trace, $trace . '*' );
 		}
 		if ( isset($trace_id) && strlen($trace_id) > 0 ) {
-			$likes[Log::trace_id] = $trace_id;
+			$likes[] = db\Qualifier::LikeQualifier( Log::trace_id, $trace_id . '*' );
 		}
 		if ( isset($context) && strlen($context) > 0 ) {
-			$likes[Log::context] = $context;
+			$likes[] = db\Qualifier::LikeQualifier( Log::context, $context . '*' );
 		}
 		if ( isset($context_id) && strlen($context_id) > 0 ) {
-			$likes[Log::context_id] = $context_id;
+			$likes[] = db\Qualifier::LikeQualifier( Log::context_id, $context_id . '*' );
 		}
 		if ( isset($level) && strlen($level) > 0 && $level != "any") {
-			$likes[Log::level] = $level;
+			$likes[] = db\Qualifier::LikeQualifier( Log::level, $level . '*' );
 		}
 		if ( isset($message) && strlen($message) > 0 ) {
-			$likes[Log::message] = $message;
+			$likes[] = db\Qualifier::LikeQualifier( Log::message, $message . '*' );
 		}
+		$select->where( db\Qualifier::OrQualifier( $likes ));
 
 		if ( $direction != 'desc' && $direction != 'asc') {
 			$direction = 'desc';
 		}
+		$select->orderBy( array($direction => array(Log::id)) );
 
-		return $this->fetchAllLike(Log::TABLE, $this->allColumns(), $likes, null, array($direction => array(Log::id)), $limit, 'OR');
+		return $select->fetchAll();
 	}
 }
 ?>

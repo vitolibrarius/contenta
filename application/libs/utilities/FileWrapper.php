@@ -171,11 +171,11 @@ class zipFileWrapper extends FileWrapper
 	public static function createWrapper($sourcePath = null, $destinationPath = null)
 	{
 		if ( is_null($sourcePath) || is_null($destinationPath) ) {
-			throw new Exception('Source and/or destination path is null.');
+			throw new \Exception('Source and/or destination path is null.');
 		}
 
 		if ( file_exists($sourcePath) == false ) {
-			throw new Exception("Source does not exist $sourcePath");
+			throw new \Exception("Source does not exist $sourcePath");
 		}
 
 		if ( file_exists($destinationPath) == true ) {
@@ -370,7 +370,7 @@ class cbrFileWrapper extends FileWrapper
 		parent::__construct($path);
 		$this->UNRAR_PATH = findPathForTool('unrar');
 		if ($this->UNRAR_PATH == false) {
-			throw new Exception('Could not find unrar. ');
+			throw new \Exception('Could not find unrar. ');
 		}
 	}
 
@@ -416,11 +416,11 @@ class cbrFileWrapper extends FileWrapper
 	public function unwrapToDirectory($dest = null)
 	{
 		if ( $this->testWrapper() != null ) {
-			throw new Exception( "RAR file error" );
+			throw new \Exception( "RAR file error" );
 		}
 
 		if ( is_null($dest) ) {
-			throw new Exception( "Destination path is required" );
+			throw new \Exception( "Destination path is required" );
 		}
 
 		if ( file_exists( $dest ))

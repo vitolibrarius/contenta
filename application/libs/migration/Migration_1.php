@@ -18,7 +18,7 @@ class Migration_1 extends Migrator
 		// backup sqlite database file
 		$db_path = Config::GetPath("Database/path", null);
 		if ( strlen($db_path) == 0 ) {
-			throw new Exception('No path set in configuration for sqlite database');
+			throw new \Exception('No path set in configuration for sqlite database');
 		}
 		$db_file = appendPath($db_path, "contenta.sqlite" );
 		$backupDatabase = appendPath($this->scratch, "contenta.Migration_1." . date('Y-m-d.H-i-s') . ".backup");

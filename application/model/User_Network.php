@@ -38,13 +38,9 @@ class User_Network extends Model
 		return false;
 	}
 
-	public function allForUser($obj)
+	public function allForUser(model\UsersDBO $obj)
 	{
-		return $this->fetchAll(User_Network::TABLE,
-			$this->allColumns(),
-			array(User_Network::user_id => $obj->id),
-			array(User_Network::network_id)
-		);
+		return $this->allObjectsForFK(User_Network::user_id, $obj);
 	}
 
 	public function allForIP($ipAddress)
@@ -54,11 +50,7 @@ class User_Network extends Model
 		if ( $network == false) {
 			return false;
 		}
-
-		return $this->fetchAll(User_Network::TABLE,
-			$this->allColumns(),
-			array(User_Network::network_id => $network->id),
-			array(User_Network::id));
+		return $this->allObjectsForFK(User_Network::network_id, $network);
 	}
 
 	public function createForIP($user, $ipAddress)
@@ -90,9 +82,9 @@ class User_Network extends Model
 		return false;
 	}
 
-	public function deleteObject($object = null)
+	public function deleteObject(\DataObject $object = null)
 	{
-		if ( $object != false )
+		if ( $object instanceof model\User_NetworkDBO )
 		{
 			return parent::deleteObj($object, User_Network::TABLE, User_Network::id );
 		}

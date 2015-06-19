@@ -37,19 +37,14 @@ class Series extends Model
 		);
 	}
 
-	public function randomObjects($limit = 1)
-	{
-		return $this->fetchRandom(Series::TABLE, $this->allColumns(), $limit);
-	}
-
 	public function allForPublisher($obj)
 	{
-		return $this->fetchAll(Series::TABLE, $this->allColumns(), array(Series::publisher_id => $obj->id), array(Series::name));
+		return $this->allObjectsForFK(Series::publisher_id, $obj);
 	}
 
 	public function allForName($name)
 	{
-		return $this->fetchAll(Series::TABLE, $this->allColumns(), array(Series::name => $name), array(Series::name));
+		return $this->allObjectsForKeyValue(Series::name, $name);
 	}
 
 	public function findExternalOrCreate( $publishObj = null, $name, $year = 0, $count = 0, $xid, $xsrc, $xurl = null, $desc = null, $aliases = null )
@@ -106,12 +101,11 @@ class Series extends Model
 	}
 
 	public function seriesLike($partialName) {
-		$likes = array();
-		if ( isset($partialName) && strlen($partialName) > 0 ) {
-			$likes[Series::name] = $partialName;
-		}
-
-		return $this->fetchAllLike(Series::TABLE, $this->allColumns(), $likes, null, $this->sortOrder(), "50");
+		return \SQL::Select( $this )
+			->where( db\Qualifier::LikeQualifier( Series::name, $partialName . '*' ))
+			->orderBy( $this->sortOrder() )
+			->limit( 50 )
+			->fetchAll();
 	}
 
 	public function create( $publishObj = null, $name, $year = null, $count = 0, $xid = null, $xsrc = null, $xurl = null, $desc = null, $aliases = null )
@@ -153,9 +147,9 @@ class Series extends Model
 		return $obj;
 	}
 
-	public function deleteObject($object = null)
+	public function deleteObject( \DataObject $object = null)
 	{
-		if ( $object != false )
+		if ( $object instanceof model\SeriesDBO )
 		{
 			$series_alias_model = Model::Named('Series_Alias');
 			if ( $series_alias_model->deleteAllForSeries($object) ) {

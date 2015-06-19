@@ -52,10 +52,11 @@ class AdminSeries extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Series');
 			$this->view->model = $model;
-			$this->view->listArray = $model->allObjectsLike( array(
-					Series::name => $_GET['name']
-				)
-			);
+			$this->view->listArray = \SQL::Select( $model )
+				->where( db\Qualifier::LikeQualifier( Series::name, $_GET['name'] . '*' ))
+				->orderBy( $model->sortOrder() )
+				->fetchAll();
+
 			$this->view->editAction = "/AdminSeries/editSeries";
 			$this->view->deleteAction = "/AdminSeries/deleteSeries";
 			$this->view->render( '/series/seriesCards', true);
@@ -104,7 +105,7 @@ class AdminSeries extends Admin
 
 			$this->view->render( '/edit/series');
 
-			Logger::loginfo("Editing Series " . $oid, Session::get('user_name'), Session::get('user_id'));
+			\Logger::loginfo("Editing Series " . $oid, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 
