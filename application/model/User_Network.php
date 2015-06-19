@@ -26,13 +26,11 @@ class User_Network extends Model
 	public function joinForUserAndNetwork($user, $network)
 	{
 		if (isset($user, $user->id, $network, $network->id)) {
-			return $this->fetch(User_Network::TABLE,
-				$this->allColumns(),
-				array(
-					User_Network::user_id => $user->id,
-					User_Network::network_id => $network->id
-				)
+			$join = db\Qualifier::AndQualifier(
+				db\Qualifier::FK( User_Network::user_id, $user ),
+				db\Qualifier::FK( User_Network::network_id, $network )
 			);
+			return $this->singleObject( $join );
 		}
 
 		return false;

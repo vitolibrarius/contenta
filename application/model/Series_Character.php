@@ -27,13 +27,11 @@ class Series_Character extends Model
 	public function joinForSeriesAndCharacter($series, $character)
 	{
 		if (isset($series, $series->id, $character, $character->id)) {
-			return $this->fetch(Series_Character::TABLE,
-				$this->allColumns(),
-				array(
-					Series_Character::series_id => $series->id,
-					Series_Character::character_id => $character->id
-				)
+			$join = db\Qualifier::AndQualifier(
+				db\Qualifier::FK( Series_Character::series_id, $series ),
+				db\Qualifier::FK( Series_Character::character_id, $character )
 			);
+			return $this->singleObject( $join );
 		}
 
 		return false;

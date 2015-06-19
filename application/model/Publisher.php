@@ -106,7 +106,7 @@ class Publisher extends Model
 
 	public function objForName($name = 'none')
 	{
-		return $this->fetch(Publisher::TABLE, $this->allColumns(), array(Publisher::name => $name));
+		return $this->singleObject( db\Qualifier::Equals( Publisher::name, $name));
 	}
 
 	public function updateXReference($obj, $xurl, $xsrc, $xid )

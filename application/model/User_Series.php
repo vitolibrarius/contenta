@@ -31,13 +31,11 @@ class User_Series extends Model
 	public function joinForUserAndSeries($user, $series)
 	{
 		if (isset($user, $user->id, $series, $series->id)) {
-			return $this->fetch(User_Series::TABLE,
-				$this->allColumns(),
-				array(
-					User_Series::user_id => $user->id,
-					User_Series::series_id => $series->id
-				)
+			$join = db\Qualifier::AndQualifier(
+				db\Qualifier::FK( User_Series::user_id, $user ),
+				db\Qualifier::FK( User_Series::series_id, $series )
 			);
+			return $this->singleObject( $join );
 		}
 
 		return false;

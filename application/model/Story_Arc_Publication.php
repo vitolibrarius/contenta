@@ -27,13 +27,11 @@ class Story_Arc_Publication extends Model
 	public function joinForStory_ArcAndPublication($story_arc, $publication)
 	{
 		if (isset($story_arc, $story_arc->id, $publication, $publication->id)) {
-			return $this->fetch(Story_Arc_Publication::TABLE,
-				$this->allColumns(),
-				array(
-					Story_Arc_Publication::story_arc_id => $story_arc->id,
-					Story_Arc_Publication::publication_id => $publication->id
-				)
+			$join = db\Qualifier::AndQualifier(
+				db\Qualifier::FK( Story_Arc_Publication::story_arc_id, $story_arc ),
+				db\Qualifier::FK( Story_Arc_Publication::publication_id, $publication )
 			);
+			return $this->singleObject( $join );
 		}
 
 		return false;

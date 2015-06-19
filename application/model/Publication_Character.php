@@ -27,13 +27,11 @@ class Publication_Character extends Model
 	public function joinForPublicationAndCharacter($publication, $character)
 	{
 		if (isset($publication, $publication->id, $character, $character->id)) {
-			return $this->fetch(Publication_Character::TABLE,
-				$this->allColumns(),
-				array(
-					Publication_Character::publication_id => $publication->id,
-					Publication_Character::character_id => $character->id
-				)
+			$join = db\Qualifier::AndQualifier(
+				db\Qualifier::FK( Publication_Character::publication_id, $series ),
+				db\Qualifier::FK( Publication_Character::character_id, $character )
 			);
+			return $this->singleObject( $join );
 		}
 
 		return false;

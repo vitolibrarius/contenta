@@ -49,7 +49,7 @@ class Media extends Model
 
 	public function mediaForChecksum($checksum)
 	{
-		return $this->fetch(Media::TABLE, $this->allColumns(), array(Media::checksum => $checksum));
+		return $this->singleObject( db\Qualifier::Equals( Media::checksum, $checksum));
 	}
 
 	private function createFilenameForPublication( PublicationDBO $publication = null, Media_TypeDBO $type = null)

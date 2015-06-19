@@ -60,8 +60,8 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
             	. ' calling ' . (isset($item['function']) ? $item['function'] : '<unknown function>') . '()';
         }
 
-		echo "$backtrace, $errfile, $errline";
-// 		\Logger::LogError( $backtrace, $errfile, $errline );
+		//echo "$backtrace, $errfile, $errline";
+ 		\Logger::LogError( $backtrace, $errfile, $errline );
 		return true;
 	}
 

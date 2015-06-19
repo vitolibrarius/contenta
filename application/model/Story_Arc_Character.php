@@ -27,13 +27,11 @@ class Story_Arc_Character extends Model
 	public function joinForStory_ArcAndCharacter($story_arc, $character)
 	{
 		if (isset($story_arc, $story_arc->id, $character, $character->id)) {
-			return $this->fetch(Story_Arc_Character::TABLE,
-				$this->allColumns(),
-				array(
-					Story_Arc_Character::story_arc_id => $story_arc->id,
-					Story_Arc_Character::character_id => $character->id
-				)
+			$join = db\Qualifier::AndQualifier(
+				db\Qualifier::FK( Story_Arc_Character::story_arc_id, $story_arc ),
+				db\Qualifier::FK( Story_Arc_Character::character_id, $character )
 			);
+			return $this->singleObject( $join );
 		}
 
 		return false;

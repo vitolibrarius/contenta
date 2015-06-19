@@ -157,11 +157,13 @@ abstract class Model
 
 	/** FIXME: rewrite */
 	public function allObjectsLike(array $search = array(), $limit = 50) {
+		trigger_error("Deprecated");
 		return $this->fetchAllLike($this->tableName(), $this->allColumns(), $search, null, $this->sortOrder(), $limit);
 	}
 
 	/** FIXME: */
 	public function deleteObject(DataObject $object = null) {
+		trigger_error("Deprecated");
 		if (isset($object) ) {
 			$mediaPurged = true;
 			if ( $object->hasAdditionalMedia() == true ) {
@@ -177,6 +179,7 @@ abstract class Model
 
 	/** FIXME: */
 	public function updateObject(DataObject $object = null, array $values) {
+		trigger_error("Deprecated");
 		if (isset($object) ) {
 			$model = $object->model();
 
@@ -216,6 +219,7 @@ abstract class Model
 
 	/** FIXME: */
 	public function createObject(array $values = array()) {
+		trigger_error("Deprecated");
 		$tableName = $this->tableName();
 		if ( count($values) > 0 ) {
 			$allColumns = $this->allColumnNames();
@@ -258,6 +262,7 @@ abstract class Model
 	/** FIXME: */
 	public function reportSQLError( $clazz = 'Model', $method = 'unknown', $pdocode, $pdoError, $sql, $params = null)
 	{
+		trigger_error("Deprecated");
 		$msg = 'PDO Error(' . $pdocode . ') ' . $pdoError . ' for [' . $sql . '] ' . (isset($params) ? var_export($params, true) : 'No Parameters');
 		Logger::logError($msg, $clazz, $method);
 	}
@@ -265,6 +270,7 @@ abstract class Model
 	/** FIXME: */
 	public function keyValueClause($glue = " AND ", $qualifiers = null, $prefix = '', $valueQual = '=')
 	{
+		trigger_error("Deprecated");
 		$sql = '';
 		if ( is_array($qualifiers) && count($qualifiers) > 0 ) {
 			foreach ($qualifiers as $key => $value) {
@@ -279,6 +285,7 @@ abstract class Model
 
 // 	/** FIXME: */
 	public function orderbyClause($order = null) {
+		trigger_error("Deprecated");
 		$sql = '';
 		if (is_null($order) == false) {
 			$sql .= " ORDER BY ";
@@ -303,6 +310,7 @@ abstract class Model
 	/** FIXME: */
 	public function parameters(array $params = array(), array $arguments = null, $prefix = '', $valuePrefix = '', $valueSuffix = '')
 	{
+		trigger_error("Deprecated");
 		if ( isset($arguments) && is_array($arguments)) {
 			foreach ($arguments as $key => $value) {
 				$idx = ':' . $prefix . sanitize($key, true, true);
@@ -315,6 +323,7 @@ abstract class Model
 	/** FIXME: new aggregate SQl needed*/
 	public function updateAgregate($target_table, $agg_table, $agg_target, $agg_function, $target_pk, $agg_fk)
 	{
+		trigger_error("Deprecated");
 		if ( isset($target_table, $agg_table, $agg_target, $agg_function, $target_pk, $agg_fk) ) {
 			$placeholders = array();
 			$params = array();
@@ -339,6 +348,7 @@ abstract class Model
 	/** FIXME: new aggregate SQl needed*/
 	public function countForQualifier($table, $qualifiers = null)
 	{
+		trigger_error("Deprecated");
 		if ( isset($table) ) {
 			$placeholders = array();
 			$params = array();
@@ -363,7 +373,6 @@ abstract class Model
 		return false;
 	}
 
-	/** FIXME: */
 	public function randomObjects( $limit = 1)
 	{
 		$select = SQL::Select( $this );
@@ -371,7 +380,6 @@ abstract class Model
 		$select->limit($limit);
 		return $select->fetchAll();
 	}
-
 
 	public function allObjectsNeedingExternalUpdate($limit = -1)
 	{
@@ -390,6 +398,7 @@ abstract class Model
 	/** FIXME: */
 	public function fetchAllJoin($table, $columns, $joinSource, $joinForeign, $foreignObjects, $qualifiers, $order = null, $limit = null)
 	{
+		trigger_error("Deprecated");
 		if ( isset($table, $columns, $joinSource, $joinForeign, $foreignObjects) ) {
 			$placeholders = array();
 			$params = array();
@@ -440,6 +449,7 @@ abstract class Model
 	/** FIXME: */
 	public function fetchJoin($table, $columns, $joinSource, $joinForeign, $foreignObject, $qualifiers, $order = null)
 	{
+		trigger_error("Deprecated");
 		$results = fetchAllJoin($table, $columns, $joinSource, $joinForeign, array($foreignObject), $qualifiers, $order);
 		if ( $results != false && count($results) == 1) {
 			return $results[0];
@@ -450,6 +460,7 @@ abstract class Model
 	/** FIXME: */
 	public function update( $table, array $updates, $qualifiers = null )
 	{
+		trigger_error("Deprecated");
 		if ( isset($table, $updates) && count($updates) > 0 ) {
 			$placeholders = array();
 			$params = array();
@@ -478,6 +489,7 @@ abstract class Model
 	/** FIXME: */
 	public function createObj( $table, $updates, $primaryKey = 'id' )
 	{
+		trigger_error("Deprecated");
 		if ( isset($table, $updates) ) {
 			$params = array();
 			$params = $this->parameters($params, $updates);
@@ -508,6 +520,7 @@ abstract class Model
 	/** FIXME: */
 	public function deleteObj( $obj, $table, $pkName = "id" )
 	{
+		trigger_error("Deprecated");
 		if ( $obj != false && isset($table, $obj->{$pkName}) )
 		{
 			$sql = "delete from " . $table . " where " . $pkName . " = :id";
@@ -532,6 +545,7 @@ abstract class Model
 	/** FIXME: */
 	public function deleteAllJoin( $table, $joinSource, $joinForeign, $foreignObject )
 	{
+		trigger_error("Deprecated");
 		if ( $foreignObject != false && isset($table, $joinSource, $joinForeign) ) {
 			$sql = "delete from " . $table . " where " . $joinSource . " = :id";
 			$params = array( ":id" => $foreignObject->{$joinForeign} );
