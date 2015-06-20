@@ -6,6 +6,8 @@ use \Logger as Logger;
 use \DataObject as DataObject;
 use \Model as Model;
 
+use db\Qualifier as Qualifier;
+
 class Job_Running extends Model
 {
 	const TABLE =			'job_running';
@@ -38,9 +40,9 @@ class Job_Running extends Model
 	public function allForProcessorGUID($processorName = null, $guid = null)
 	{
 		if ( isset($processorName, $guid) ) {
-			return SQL::Select( $this, null, db\Qualifier::AndQualifier(
-					db\Qualifier::Equals( Job_Running::processor, $processorName),
-					db\Qualifier::Equals( Job_Running::guid, $guid)
+			return SQL::Select( $this, null, Qualifier::AndQualifier(
+					Qualifier::Equals( Job_Running::processor, $processorName),
+					Qualifier::Equals( Job_Running::guid, $guid)
 				)
 			)->fetchAll();
 		}

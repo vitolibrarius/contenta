@@ -7,6 +7,8 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
 
+use db\Qualifier as Qualifier;
+
 class Story_Arc_Series extends Model
 {
 	const TABLE =		'story_arc_series';
@@ -27,9 +29,9 @@ class Story_Arc_Series extends Model
 	public function joinForStory_ArcAndSeries($story_arc, $series)
 	{
 		if (isset($story_arc, $story_arc->id, $series, $series->id)) {
-			$join = db\Qualifier::AndQualifier(
-				db\Qualifier::FK( Story_Arc_Series::story_arc_id, $story_arc ),
-				db\Qualifier::FK( Story_Arc_Series::series_id, $series )
+			$join = Qualifier::AndQualifier(
+				Qualifier::FK( Story_Arc_Series::story_arc_id, $story_arc ),
+				Qualifier::FK( Story_Arc_Series::series_id, $series )
 			);
 			return $this->singleObject( $join );
 		}
@@ -60,12 +62,11 @@ class Story_Arc_Series extends Model
 		if (isset($story_arc, $story_arc->id, $series, $series->id)) {
 			$join = $this->joinForStory_ArcAndSeries($story_arc, $series);
 			if ($join == false) {
-				$newObjId = $this->createObj(Story_Arc_Series::TABLE, array(
+				$join = $this->createObject(array(
 					Story_Arc_Series::series_id => $series->id,
 					Story_Arc_Series::story_arc_id => $story_arc->id
 					)
 				);
-				$join = ($newObjId != false ? $this->objectForId($newObjId) : false);
 			}
 
 			return $join;

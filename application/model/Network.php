@@ -48,7 +48,7 @@ class Network extends Model
 				$hash = 'Invalid IP address';
 			}
 
-			$object = $this->createObj(Network::TABLE, array(
+			$object = $this->createObject( array(
 				Network::created => time(),
 				Network::ipAddress => $ip,
 				Network::ipHash => $hash,

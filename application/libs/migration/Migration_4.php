@@ -86,12 +86,12 @@ class Migration_4 extends Migrator
 			)
 		);
 		foreach ($types as $dict) {
-			$type = $ept_model->endpointTypeForCode($dict[Endpoint_Type::code]);
+			$type = \SQL::Select( $ept_model, array( "code", "name") )->whereEqual( "code", $dict["code"] )->fetch();
 			if ($type == false) {
-				$newObjId = $ept_model->createObj(Endpoint_Type::TABLE, $dict);
+				$newObjId = \SQL::Insert($ept_model)->addRecord($dict)->commitTransaction();
 			}
 			else {
-				$ept_model->updateObject($type, array(Endpoint_Type::TABLE => $dict));
+				\SQL::Update($ept_model, $dict)->commitTransaction();
 			}
 		}
 		return true;

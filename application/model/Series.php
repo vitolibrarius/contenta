@@ -7,6 +7,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
 
+use db\Qualifier as Qualifier;
 
 class Series extends Model
 {
@@ -102,7 +103,7 @@ class Series extends Model
 
 	public function seriesLike($partialName) {
 		return \SQL::Select( $this )
-			->where( db\Qualifier::LikeQualifier( Series::name, $partialName . '*' ))
+			->where( Qualifier::LikeQualifier( Series::name, $partialName . '*' ))
 			->orderBy( $this->sortOrder() )
 			->limit( 50 )
 			->fetchAll();

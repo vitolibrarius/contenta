@@ -8,6 +8,8 @@ use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
 
+use db\Qualifier as Qualifier;
+
 class Publication extends Model
 {
 	const TABLE =		'publication';
@@ -38,7 +40,7 @@ class Publication extends Model
 
 	public function publicationForSeriesExternal(model\SeriesDBO $series = null, $issue_xid = null, $xsource = null)
 	{
-		$matches = $this->allObjectsForFKAndQualifier(Publication::series_id, $series, db\Qualifier::XID($issue_xid, $xsource));
+		$matches = $this->allObjectsForFKAndQualifier(Publication::series_id, $series, Qualifier::XID($issue_xid, $xsource));
 		if ( is_array($matches) && count($matches) > 0 ) {
 			return $matches[0];
 		}

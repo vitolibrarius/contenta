@@ -7,6 +7,8 @@ use \Model as Model;
 use model\Network as Network;
 use model\Users as Users;
 
+use db\Qualifier as Qualifier;
+
 class User_Network extends Model
 {
 	const TABLE =		'user_network';
@@ -26,9 +28,9 @@ class User_Network extends Model
 	public function joinForUserAndNetwork($user, $network)
 	{
 		if (isset($user, $user->id, $network, $network->id)) {
-			$join = db\Qualifier::AndQualifier(
-				db\Qualifier::FK( User_Network::user_id, $user ),
-				db\Qualifier::FK( User_Network::network_id, $network )
+			$join = Qualifier::AndQualifier(
+				Qualifier::FK( User_Network::user_id, $user ),
+				Qualifier::FK( User_Network::network_id, $network )
 			);
 			return $this->singleObject( $join );
 		}
@@ -66,12 +68,11 @@ class User_Network extends Model
 		if (isset($user, $user->id, $network, $network->id)) {
 			$join = $this->joinForUserAndNetwork($user, $network);
 			if ($join == false) {
-				$newObjId = $this->createObj(User_Network::TABLE, array(
+				$join = $this->createObject(array(
 					User_Network::network_id => $network->id,
 					User_Network::user_id => $user->id
 					)
 				);
-				$join = ($newObjId != false ? $this->objectForId($newObjId) : false);
 			}
 
 			return $join;

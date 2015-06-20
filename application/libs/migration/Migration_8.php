@@ -133,11 +133,11 @@ class Migration_8 extends Migrator
 		foreach ($types as $code => $name) {
 			if ($media_type_model->mediaTypeForCode($code) == false)
 			{
-				$newObjId = $media_type_model->createObj(Media_Type::TABLE, array(
+				$newObjId = \SQL::Insert($media_type_model)->addRecord(array(
 					Media_Type::code => $code,
 					Media_Type::name => $name
 					)
-				);
+				)->commitTransaction();
 			}
 		}
 	}

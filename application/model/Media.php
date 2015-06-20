@@ -13,6 +13,8 @@ use model\PublicationDBO as PublicationDBO;
 use model\Media_Type as Media_Type;
 use model\Media_TypeDBO as Media_TypeDBO;
 
+use db\Qualifier as Qualifier;
+
 class Media extends Model
 {
 	const TABLE =			'media';
@@ -49,7 +51,7 @@ class Media extends Model
 
 	public function mediaForChecksum($checksum)
 	{
-		return $this->singleObject( db\Qualifier::Equals( Media::checksum, $checksum));
+		return $this->singleObject( Qualifier::Equals( Media::checksum, $checksum));
 	}
 
 	private function createFilenameForPublication( PublicationDBO $publication = null, Media_TypeDBO $type = null)

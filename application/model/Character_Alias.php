@@ -44,12 +44,11 @@ class Character_Alias extends Model
 		if (isset($characterObj, $characterObj->id, $name)) {
 			$alias = $this->forName($characterObj, $name);
 			if ($alias == false) {
-				$newObjId = $this->createObj(Character_Alias::TABLE, array(
+				$alias = $this->createObject( array(
 					Character_Alias::character_id => $characterObj->id,
 					Character_Alias::name => $name
 					)
 				);
-				$alias = ($newObjId != false ? $this->objectForId($newObjId) : false);
 			}
 
 			return $alias;

@@ -6,6 +6,8 @@ use \Model as Model;
 use \Localized as Localized;
 use \Config as Config;
 
+use db\Qualifier as Qualifier;
+
 class Publisher extends Model
 {
 	const TABLE =	'publisher';
@@ -106,7 +108,7 @@ class Publisher extends Model
 
 	public function objForName($name = 'none')
 	{
-		return $this->singleObject( db\Qualifier::Equals( Publisher::name, $name));
+		return $this->singleObject( Qualifier::Equals( Publisher::name, $name));
 	}
 
 	public function updateXReference($obj, $xurl, $xsrc, $xid )

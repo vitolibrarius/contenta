@@ -7,6 +7,8 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
 
+use db\Qualifier as Qualifier;
+
 class Users extends Model
 {
 	const AdministratorRole = "admin";
@@ -61,9 +63,9 @@ class Users extends Model
 
 	public function userByToken($id, $token)
 	{
-		$qualifier = db\Qualifier::AndQualifier(
-			db\Qualifier::Equals( Users::id, $id ),
-			db\Qualifier::Equals( Users::rememberme_token, $token )
+		$qualifier = Qualifier::AndQualifier(
+			Qualifier::Equals( Users::id, $id ),
+			Qualifier::Equals( Users::rememberme_token, $token )
 		);
 		return $this->singleObject($qualifier);
 	}
@@ -102,7 +104,7 @@ class Users extends Model
 					$last_login_timestamp, $failed_logins, $last_failed_login, $activation_hash,
 					$password_reset_hash, $password_reset_timestamp)
 	{
-		$userId = $this->createObj(Users::TABLE, array(
+		return $this->createObject(array(
 			Users::name => strip_tags($name),
 			Users::password_hash => $password_hash,
 			Users::email => strip_tags($email),
@@ -119,7 +121,6 @@ class Users extends Model
 			Users::password_reset_timestamp => $password_reset_timestamp
 			)
 		);
-		return ($userId != false ? $this->user($userId) : false);
 	}
 
 

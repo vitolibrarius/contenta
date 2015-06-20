@@ -46,8 +46,7 @@ class Patch extends Model
 					Patch::created => time()
 				);
 
-				$newObjId = $this->createObj(Patch::TABLE, $params);
-				$obj = ($newObjId != false ? $this->objectForId($newObjId) : false);
+				$obj = $this->createObject($params);
 			}
 		}
 		return $obj;

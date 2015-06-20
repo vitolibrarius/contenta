@@ -51,6 +51,10 @@ abstract class Model
 		return implode(",", $this->allColumnNames() );
 	}
 
+	public function hasColumn($columnName) {
+		return in_array($columnName, $this->allColumnNames());
+	}
+
 	public function refreshObject($object)
 	{
 		return SQL::SelectObject( $this, $object )->fetch();
@@ -155,25 +159,43 @@ abstract class Model
 		return $select->fetchAll();
 	}
 
-	/** FIXME: rewrite */
-	public function allObjectsLike(array $search = array(), $limit = 50) {
-		trigger_error("Deprecated");
-		return $this->fetchAllLike($this->tableName(), $this->allColumns(), $search, null, $this->sortOrder(), $limit);
-	}
-
-	/** FIXME: */
-	public function deleteObject(DataObject $object = null) {
-		trigger_error("Deprecated");
-		if (isset($object) ) {
-			$mediaPurged = true;
-			if ( $object->hasAdditionalMedia() == true ) {
-				Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $model->tableName(), $object->id);
-				$mediaPurged = (file_exists($object->mediaPath()) == false || destroy_dir($object->mediaPath()) );
+	/** CRUD - create, read, update, delete */
+	public function createObject(array $values = array()) {
+		if ( count($values) > 0 ) {
+			if ( $this->hasColumn('created') ) {
+				$values['created'] = time();
 			}
 
-			$model = $object->model();
-			return ($mediaPurged) && $this->deleteObj( $object, $model->tableName(), $model->tablePK() );
+			if ( isset($values['desc']) ) {
+				$values['desc'] = strip_tags($values['desc']);
+			}
+
+			$validation = $this->validateForSave(null, $values);
+			if ( count($validation) == 0 ) {
+				// passed validation, remove key/value is not in column list
+				$allkeys = array_keys($values);
+				foreach( $allkeys as $key ) {
+					if ( $this->hasColumn($key) == false ) {
+						unset($values[$key]);
+					}
+				}
+
+				$insert = \SQL::Insert($this)->addRecord($values);
+				return $insert->commitTransaction();
+			}
+
+			// create failed, log validation errors
+			$logMsg = "Validation errors creating " . $this->tableName();
+			foreach ($validation as $attr => $errMsg ) {
+				$logMsg .= "\n\t" . $errMsg;
+			}
+			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
+			return $validation;
 		}
+		else {
+			Logger::logError( "Failed to create record for empty values", __METHOD__, $this->tableName() );
+		}
+
 		return false;
 	}
 
@@ -218,43 +240,18 @@ abstract class Model
 	}
 
 	/** FIXME: */
-	public function createObject(array $values = array()) {
+	public function deleteObject(DataObject $object = null) {
 		trigger_error("Deprecated");
-		$tableName = $this->tableName();
-		if ( count($values) > 0 ) {
-			$allColumns = $this->allColumnNames();
-			if ( is_array($allColumns) && in_array('created', $allColumns)) {
-				$values['created'] = time();
+		if (isset($object) ) {
+			$mediaPurged = true;
+			if ( $object->hasAdditionalMedia() == true ) {
+				Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $model->tableName(), $object->id);
+				$mediaPurged = (file_exists($object->mediaPath()) == false || destroy_dir($object->mediaPath()) );
 			}
 
-			if ( isset($values['desc']) ) {
-				$values['desc'] = strip_tags($values['desc']);
-			}
-
-			$validation = $this->validateForSave(null, $values);
-			if ( count($validation) == 0 ) {
-				// passed validation, remove key/value is not in column list
-				$allkeys = array_keys($values);
-				foreach( $allkeys as $key ) {
-					if ( in_array($key, $allColumns) == false ) {
-						unset($values[$key]);
-					}
-				}
-				return $this->createObj( $this->tableName(), $values, $this->tablePK() );
-			}
-
-			// create failed, log validation errors
-			$logMsg = "Validation errors creating " . $this->tableName();
-			foreach ($validation as $attr => $errMsg ) {
-				$logMsg .= "\n\t" . $errMsg;
-			}
-			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
-			return $validation;
+			$model = $object->model();
+			return ($mediaPurged) && $this->deleteObj( $object, $model->tableName(), $model->tablePK() );
 		}
-		else {
-			Logger::logError( "Failed to create record for empty values", __METHOD__, $this->tableName() );
-		}
-
 		return false;
 	}
 
@@ -487,35 +484,6 @@ abstract class Model
 	}
 
 	/** FIXME: */
-	public function createObj( $table, $updates, $primaryKey = 'id' )
-	{
-		trigger_error("Deprecated");
-		if ( isset($table, $updates) ) {
-			$params = array();
-			$params = $this->parameters($params, $updates);
-			$sql = "INSERT INTO " . $table . " (" . implode(", ", array_keys($updates)) . ") "
-				. "VALUES (" . implode(", ", array_keys($params)) . ")";
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				// convert the last inserted ROWID into the record primary key
-				$rowId = Database::instance()->lastInsertId();
-
-				$sql = "SELECT " . $primaryKey . " FROM " . $table . ' WHERE ROWID = :row' ;
-				$statement = Database::instance()->prepare($sql);
-				if ($statement && $statement->execute(array(':row' => $rowId))) {
-					$record = $statement->fetch();
-					return $record->{$primaryKey};
-				}
-			}
-
-			$caller = callerClassAndMethod('createObj');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
-		}
-		return false;
-	}
 
 	/** FIXME: */
 	public function deleteObj( $obj, $table, $pkName = "id" )

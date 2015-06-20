@@ -7,6 +7,8 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
 
+use db\Qualifier as Qualifier;
+
 class Story_Arc_Character extends Model
 {
 	const TABLE =		'story_arc_character';
@@ -27,9 +29,9 @@ class Story_Arc_Character extends Model
 	public function joinForStory_ArcAndCharacter($story_arc, $character)
 	{
 		if (isset($story_arc, $story_arc->id, $character, $character->id)) {
-			$join = db\Qualifier::AndQualifier(
-				db\Qualifier::FK( Story_Arc_Character::story_arc_id, $story_arc ),
-				db\Qualifier::FK( Story_Arc_Character::character_id, $character )
+			$join = Qualifier::AndQualifier(
+				Qualifier::FK( Story_Arc_Character::story_arc_id, $story_arc ),
+				Qualifier::FK( Story_Arc_Character::character_id, $character )
 			);
 			return $this->singleObject( $join );
 		}
@@ -60,12 +62,11 @@ class Story_Arc_Character extends Model
 		if (isset($story_arc, $story_arc->id, $character, $character->id)) {
 			$join = $this->joinForStory_ArcAndCharacter($story_arc, $character);
 			if ($join == false) {
-				$newObjId = $this->createObj(Story_Arc_Character::TABLE, array(
+				$join = $this->createObject(array(
 					Story_Arc_Character::character_id => $character->id,
 					Story_Arc_Character::story_arc_id => $story_arc->id
 					)
 				);
-				$join = ($newObjId != false ? $this->objectForId($newObjId) : false);
 			}
 
 			return $join;

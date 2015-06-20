@@ -40,16 +40,6 @@ class DataObject
 		return dbo_valueForKeypath( $method, $this );
 	}
 
-	public function __get($method)
-	{
-		return dbo_valueForKeypath( $method, $this );
-	}
-
-	public function __set($method, $value)
-	{
-		return dbo_setValueForKeypath( $method, $value, $this );
-	}
-
 	public function pkValue() {
 		return $this->id;
 	}
@@ -93,7 +83,14 @@ class DataObject
 
 	public function __toString()
 	{
-		return '[' . $this->modelName() . '(' . $this->pkValue() . ')] ' . $this->displayName();
+		$str = null;
+		try {
+			$str = '[' . $this->modelName() . '(' . $this->pkValue() . ')] ' . $this->displayName();
+		}
+		catch ( \Exception $e ) {
+			$str = get_class($this) . '__toString() : ' . $e;
+		}
+		return $str;
 	}
 
 	public function formattedDate( $key, $format = 'M d, Y' ) {

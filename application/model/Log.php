@@ -5,7 +5,9 @@ namespace model;
 use \Database as Database;
 use \DataObject as DataObject;
 use \Model as Model;
+
 use model\Log_Level as Log_Level;
+use db\Qualifier as Qualifier;
 
 class Log extends Model
 {
@@ -36,7 +38,7 @@ class Log extends Model
 		$log_level_model = Model::Named("Log_Level");
 		$levelObj = $log_level_model->logLevelForCode($level);
 
-		$newObjId = $this->createObj(Log::TABLE, array(
+		$this->createObject(array(
 			Log::created => time(),
 			Log::trace => $traceName,
 			Log::trace_id => $traceId,
@@ -54,24 +56,24 @@ class Log extends Model
 
 		$likes = array();
 		if ( isset($trace) && strlen($trace) > 0 ) {
-			$likes[] = db\Qualifier::LikeQualifier( Log::trace, $trace . '*' );
+			$likes[] = Qualifier::LikeQualifier( Log::trace, $trace . '*' );
 		}
 		if ( isset($trace_id) && strlen($trace_id) > 0 ) {
-			$likes[] = db\Qualifier::LikeQualifier( Log::trace_id, $trace_id . '*' );
+			$likes[] = Qualifier::LikeQualifier( Log::trace_id, $trace_id . '*' );
 		}
 		if ( isset($context) && strlen($context) > 0 ) {
-			$likes[] = db\Qualifier::LikeQualifier( Log::context, $context . '*' );
+			$likes[] = Qualifier::LikeQualifier( Log::context, $context . '*' );
 		}
 		if ( isset($context_id) && strlen($context_id) > 0 ) {
-			$likes[] = db\Qualifier::LikeQualifier( Log::context_id, $context_id . '*' );
+			$likes[] = Qualifier::LikeQualifier( Log::context_id, $context_id . '*' );
 		}
 		if ( isset($level) && strlen($level) > 0 && $level != "any") {
-			$likes[] = db\Qualifier::LikeQualifier( Log::level, $level . '*' );
+			$likes[] = Qualifier::LikeQualifier( Log::level, $level . '*' );
 		}
 		if ( isset($message) && strlen($message) > 0 ) {
-			$likes[] = db\Qualifier::LikeQualifier( Log::message, $message . '*' );
+			$likes[] = Qualifier::LikeQualifier( Log::message, $message . '*' );
 		}
-		$select->where( db\Qualifier::OrQualifier( $likes ));
+		$select->where( Qualifier::OrQualifier( $likes ));
 
 		if ( $direction != 'desc' && $direction != 'asc') {
 			$direction = 'desc';

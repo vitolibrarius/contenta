@@ -228,7 +228,7 @@ abstract class EndpointImporter extends Processor
 			}
 
 			if ($objectOrErrors != false) {
-				$object = $model->objectForId( (string)$objectOrErrors);
+				$object = $objectOrErrors;
 				Logger::logWarning( "Importing stub record for " . $object, $this->type, $this->guid );
 			}
 		}

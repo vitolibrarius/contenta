@@ -50,15 +50,18 @@ function dbo_setValueForKeypath($keypath, $value, DataObject $dbo = null, $separ
 				$target_dbo = $target_dbo->{$item}();
 			}
 			else {
-				$target_dbo = null;
+				throw new \Exception( "unable to set value '$keypath' on " . $dbo );
 			}
 		}
 
-		if ( $target_dbo instanceof DataObject ) {
+		if ( $target_dbo instanceof DataObject && $target_dbo->model()->hasColumn($lastKey)) {
 			$updates = array();
 			$updates[$lastKey] = $value;
 			$target_dbo->model()->updateObject($target_dbo, $updates );
 			return true;
+		}
+		else {
+			throw new \Exception( "unable to set value '$lastKey' on " . $target_dbo );
 		}
 	}
 	return false;

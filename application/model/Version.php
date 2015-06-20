@@ -74,8 +74,7 @@ class Version extends Model
 					Version::patch => (isset($vers[2]) ? intval($vers[2]) : 0)
 				);
 
-				$newObjId = $this->createObj(Version::TABLE, $params);
-				$obj = ($newObjId != false ? $this->objectForId($newObjId) : false);
+				$obj = $this->createObject($params);
 			}
 		}
 		return $obj;

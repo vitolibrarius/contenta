@@ -7,6 +7,8 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
 
+use db\Qualifier as Qualifier;
+
 class User_Series extends Model
 {
 	const TABLE =		'user_series';
@@ -31,9 +33,9 @@ class User_Series extends Model
 	public function joinForUserAndSeries($user, $series)
 	{
 		if (isset($user, $user->id, $series, $series->id)) {
-			$join = db\Qualifier::AndQualifier(
-				db\Qualifier::FK( User_Series::user_id, $user ),
-				db\Qualifier::FK( User_Series::series_id, $series )
+			$join = Qualifier::AndQualifier(
+				Qualifier::FK( User_Series::user_id, $user ),
+				Qualifier::FK( User_Series::series_id, $series )
 			);
 			return $this->singleObject( $join );
 		}
@@ -80,26 +82,26 @@ class User_Series extends Model
 	{
 		$qualifiers = array();
 		if ( is_a($user, "usersDataObject") ) {
-			$qualifiers[] = db\Qualifier::Equals( User_Series::user_id, $user->id );
+			$qualifiers[] = Qualifier::Equals( User_Series::user_id, $user->id );
 		}
 
 		if ( is_a($series, "seriesDataObject") ) {
-			$qualifiers[] = db\Qualifier::Equals( User_Series::series_id, $series->id);
+			$qualifiers[] = Qualifier::Equals( User_Series::series_id, $series->id);
 		}
 
 		if ( is_null($favorite) != true ) {
-			$qualifiers[] = db\Qualifier::Equals( User_Series::favorite, $favorite);
+			$qualifiers[] = Qualifier::Equals( User_Series::favorite, $favorite);
 		}
 
 		if ( is_null($read) != true ) {
-			$qualifiers[] = db\Qualifier::Equals( User_Series::read, $read);
+			$qualifiers[] = Qualifier::Equals( User_Series::read, $read);
 		}
 
 		if ( is_null($label) != true ) {
-			$qualifiers[] = db\Qualifier::Equals( User_Series::mislabeled, $label);
+			$qualifiers[] = Qualifier::Equals( User_Series::mislabeled, $label);
 		}
 
-		return \SQL::Select( $this)->where( db\Qualifier::AndQualifier( $qualifiers ))->fetchAll();
+		return \SQL::Select( $this)->where( Qualifier::AndQualifier( $qualifiers ))->fetchAll();
 	}
 
 	public function create($user, $series, $favorite = null, $read = null, $label = null)
@@ -107,7 +109,7 @@ class User_Series extends Model
 		if (isset($user, $user->id, $series, $series->id)) {
 			$join = $this->joinForUserAndSeries($user, $series);
 			if ($join == false) {
-				$newObjId = $this->createObj(User_Series::TABLE, array(
+				$join = $this->createObject(array(
 					User_Series::series_id => $series->id,
 					User_Series::user_id => $user->id,
 					User_Series::favorite => (is_null($favorite) ? Model::TERTIARY_UNSET : $favorite),
@@ -115,7 +117,6 @@ class User_Series extends Model
 					User_Series::mislabeled => (is_null($label) ? Model::TERTIARY_UNSET : $label)
 					)
 				);
-				$join = ($newObjId != false ? $this->objectForId($newObjId) : false);
 			}
 			else {
 				$join = $this->flagJoin($join, $favorite, $read, $label);
