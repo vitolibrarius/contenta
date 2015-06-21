@@ -15,6 +15,7 @@ class SelectSQL extends SQL
 	public $model;
 	public $columns;
 	public $order;
+	public $group;
 	public $limit = 50;
 
     public function __construct(Model $model, array $columns = null, Qualifier $qualifier = null)
@@ -55,6 +56,12 @@ class SelectSQL extends SQL
 		return $this;
 	}
 
+	public function groupby(array $group = null)
+	{
+		$this->group = $group;
+		return $this;
+	}
+
 	public function limit( $limit = 50 )
 	{
 		$this->limit = $limit;
@@ -78,6 +85,11 @@ class SelectSQL extends SQL
 		if ( isset($this->qualifier) ) {
 			$components[] = SQL::SQL_WHERE;
 			$components[] = $this->qualifier->sqlStatement();
+		}
+
+		if ( isset($this->group) ) {
+			$components[] = SQL::SQL_GROUP;
+			$components[] = implode(",", $this->group);
 		}
 
 		if ( isset($this->order) ) {

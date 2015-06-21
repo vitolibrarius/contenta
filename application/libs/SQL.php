@@ -22,6 +22,8 @@ abstract class SQL
 	const SQL_VALUES	= 'VALUES';
 	const SQL_SET		= 'SET';
 
+	const SQL_HAVING	= 'HAVING';
+	const SQL_GROUP		= 'GROUP BY';
 	const SQL_ORDER		= 'ORDER BY';
 	const SQL_ORDER_ASC		= 'ASC';
 	const SQL_ORDER_DESC	= 'DESC';
@@ -35,6 +37,33 @@ abstract class SQL
 			$prefix = chr($idx % 26 + 0x61) . $prefix;
 		}
 		return $prefix;
+	}
+
+	public static function Sum( Model $model, array $columns = null, db\Qualifier $qualifier = null, array $order = null )
+	{
+		return \SQL::Aggregate( "sum", $model, $columns, $qualifier, $order);
+	}
+
+	public static function Count( Model $model, array $columns = null, db\Qualifier $qualifier = null, array $order = null )
+	{
+		return \SQL::Aggregate( "count", $model, $columns, $qualifier, $order);
+	}
+
+	public static function Aggregate( $aggregate, Model $model, array $columns = null, db\Qualifier $qualifier = null, array $order = null )
+	{
+		$groupBy = false;
+		$newColumns = array( $aggregate . "(*) as " . $aggregate );
+		if ( is_array($columns) && count($columns) > 0 ) {
+			$newColumns = array_merge($newColumns, $columns);
+			$groupBy = true;
+		}
+
+		$select = new db\SelectSQL($model, $newColumns, $qualifier);
+		if ( $groupBy == true ) {
+			$select->groupBy( $columns );
+		}
+		$select->orderBy( $order );
+		return $select;
 	}
 
 	public static function Select( Model $model, array $columns = null, db\Qualifier $qualifier = null )

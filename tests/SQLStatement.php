@@ -117,3 +117,6 @@ my_echo( "SQL: " . $delete->sqlStatement() . PHP_EOL . var_export($delete->sqlPa
 $results = \SQL::Select( Model::Named("Job_Type") )->fetchAll();
 reportData($results,  array( "id", "name", "code", "desc", "scheduled", "processor" ));
 my_echo( "- - - - -" . PHP_EOL);
+
+$aggregate = \SQL::Aggregate( "count", Model::Named("Job_Type"), array("code"), db\Qualifier::Equals( "code", "abc" ), array("code") );
+my_echo( "SQL: " . $aggregate->sqlStatement() . PHP_EOL . var_export($aggregate->sqlParameters(), true) );
