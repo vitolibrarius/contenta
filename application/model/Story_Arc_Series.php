@@ -52,7 +52,7 @@ class Story_Arc_Series extends Model
 	public function countForSeries( model\SeriesDBO $obj = null)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForQualifier(Story_Arc_Series::TABLE, array(Story_Arc_Series::series_id => $obj->id) );
+			return $this->countForFK( Story_Arc_Series::series_id, $obj );
 		}
 		return false;
 	}

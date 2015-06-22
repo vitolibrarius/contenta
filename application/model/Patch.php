@@ -56,7 +56,7 @@ class Patch extends Model
 	{
 		if ( $object != false && $object instanceof model\PatchDBO )
 		{
-			return parent::deleteObj($object, Patch::TABLE, Patch::id );
+			return parent::deleteObject($object );
 		}
 		return false;
 	}

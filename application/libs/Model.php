@@ -159,6 +159,48 @@ abstract class Model
 		return $select->fetchAll();
 	}
 
+	/** special functions */
+	public function countForFK($relatedAttribute, DataObject $sourceObject)
+	{
+		$result = SQL::Count( $this, null, db\Qualifier::FK( $relatedAttribute, $sourceObject ) )->fetchAll();
+		return ( isset($result, $result['count']) ? $result['count'] : false );
+	}
+
+	public function countForKeyValue($key, $value = null)
+	{
+		$select = SQL::Count( $this );
+		if ( is_null($value) ) {
+			$select->where( db\Qualifier::IsNull( $key ));
+		}
+		else {
+			$select->where( db\Qualifier::Equals( $key, $value ));
+		}
+		$result = $select->fetchAll();
+		return ( isset($result, $result['count']) ? $result['count'] : false );
+	}
+
+	public function randomObjects( $limit = 1)
+	{
+		$select = SQL::Select( $this );
+		$select->orderBy( "random()" );
+		$select->limit($limit);
+		return $select->fetchAll();
+	}
+
+	public function allObjectsNeedingExternalUpdate($limit = -1)
+	{
+		$select = SQL::Select( $this );
+		$hasXID = db\Qualifier::IsNotNull( "xid" );
+		$needsUpdate = db\Qualifier::OrQualifier(
+			db\Qualifier::IsNull( "xupdated" ),
+			db\Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * 7)) )
+		);
+		$select->where( db\Qualifier::AndQualifier( $hasXID, $needsUpdate ));
+		$select->orderBy( "xupdated" );
+		$select->limit( intval($limit) );
+		return $select->fetchAll();
+	}
+
 	/** CRUD - create, read, update, delete */
 	public function createObject(array $values = array()) {
 		if ( count($values) > 0 ) {
@@ -199,6 +241,21 @@ abstract class Model
 		return false;
 	}
 
+	public function deleteObject(DataObject $object = null)
+	{
+		if (isset($object) ) {
+			$mediaPurged = true;
+			if ( $object->hasAdditionalMedia() == true ) {
+				Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $model->tableName(), $object->id);
+				$mediaPurged = (file_exists($object->mediaPath()) == false || destroy_dir($object->mediaPath()) );
+			}
+
+			$deleteTransaction = \SQL::DeleteObject( $object );
+			return ($mediaPurged) && ($deleteTransaction->commitTransaction());
+		}
+		return false;
+	}
+
 	/** FIXME: */
 	public function updateObject(DataObject $object = null, array $values) {
 		trigger_error("Deprecated");
@@ -236,22 +293,6 @@ abstract class Model
 			return $validation;
 		}
 
-		return false;
-	}
-
-	/** FIXME: */
-	public function deleteObject(DataObject $object = null) {
-		trigger_error("Deprecated");
-		if (isset($object) ) {
-			$mediaPurged = true;
-			if ( $object->hasAdditionalMedia() == true ) {
-				Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $model->tableName(), $object->id);
-				$mediaPurged = (file_exists($object->mediaPath()) == false || destroy_dir($object->mediaPath()) );
-			}
-
-			$model = $object->model();
-			return ($mediaPurged) && $this->deleteObj( $object, $model->tableName(), $model->tablePK() );
-		}
 		return false;
 	}
 
@@ -342,55 +383,6 @@ abstract class Model
 		return false;
 	}
 
-	/** FIXME: new aggregate SQl needed*/
-	public function countForQualifier($table, $qualifiers = null)
-	{
-		trigger_error("Deprecated");
-		if ( isset($table) ) {
-			$placeholders = array();
-			$params = array();
-
-			$sql = "SELECT count(*) AS COUNT FROM " . $table;
-			if ( isset($qualifiers) ) {
-				$params = $this->parameters($params, $qualifiers);
-				$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers);
-			}
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				$dict = $statement->fetch();
-				return (($dict != false) ? $dict->COUNT : 0);
-			}
-
-			$caller = callerClassAndMethod('countForQualifier');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
-		}
-		return false;
-	}
-
-	public function randomObjects( $limit = 1)
-	{
-		$select = SQL::Select( $this );
-		$select->orderBy( "random()" );
-		$select->limit($limit);
-		return $select->fetchAll();
-	}
-
-	public function allObjectsNeedingExternalUpdate($limit = -1)
-	{
-		$select = SQL::Select( $this );
-		$hasXID = db\Qualifier::IsNotNull( "xid" );
-		$needsUpdate = db\Qualifier::OrQualifier(
-			db\Qualifier::IsNull( "xupdated" ),
-			db\Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * 7)) )
-		);
-		$select->where( db\Qualifier::AndQualifier( $hasXID, $needsUpdate ));
-		$select->orderBy( "xupdated" );
-		$select->limit( intval($limit) );
-		return $select->fetchAll();
-	}
 
 	/** FIXME: */
 	public function fetchAllJoin($table, $columns, $joinSource, $joinForeign, $foreignObjects, $qualifiers, $order = null, $limit = null)
@@ -483,32 +475,6 @@ abstract class Model
 		return false;
 	}
 
-	/** FIXME: */
-
-	/** FIXME: */
-	public function deleteObj( $obj, $table, $pkName = "id" )
-	{
-		trigger_error("Deprecated");
-		if ( $obj != false && isset($table, $obj->{$pkName}) )
-		{
-			$sql = "delete from " . $table . " where " . $pkName . " = :id";
-			$statement = Database::instance()->prepare($sql);
-			$params = array( ":id" => $obj->{$pkName} );
-			if ($statement && $statement->execute( $params ) ) {
-				return true;
-			}
-
-			$caller = callerClassAndMethod('deleteObj');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
-		}
-		else {
-			Logger::logError("Unable to delete " . get_class($obj) . '(' . $table . ', ' . $obj->{$pkName} . ')', get_class($this) );
-		}
-
-	   return false;
-	}
 
 	/** FIXME: */
 	public function deleteAllJoin( $table, $joinSource, $joinForeign, $foreignObject )

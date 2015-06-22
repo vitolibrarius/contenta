@@ -52,7 +52,7 @@ class Series_Character extends Model
 	public function countForCharacter( model\CharacterDBO $obj = null)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForQualifier(Series_Character::TABLE, array(Series_Character::character_id => $obj->id) );
+			return $this->countForFK( Series_Character::character_id, $obj );
 		}
 		return false;
 	}

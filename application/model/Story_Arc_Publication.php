@@ -52,7 +52,7 @@ class Story_Arc_Publication extends Model
 	public function countForPublication( model\PublicationDBO $obj = null)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForQualifier(Story_Arc_Publication::TABLE, array(Story_Arc_Publication::publication_id => $obj->id) );
+			return $this->countForFK( Story_Arc_Publication::publication_id, $obj );
 		}
 		return false;
 	}

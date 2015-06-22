@@ -158,7 +158,7 @@ class User_Series extends Model
 	{
 		if ( $obj instanceof model\User_SeriesDBO )
 		{
-			return $this->deleteObj($obj, User_Series::TABLE, User_Series::id );
+			return parent::deleteObject($obj);
 		}
 
 		return false;

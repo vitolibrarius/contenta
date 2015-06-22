@@ -52,7 +52,7 @@ class Publication_Character extends Model
 	public function countForCharacter( model\CharacterDBO $obj = null)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForQualifier(Publication_Character::TABLE, array(Publication_Character::character_id => $obj->id) );
+			return $this->countForFK( Publication_Character::character_id, $obj );
 		}
 		return false;
 	}

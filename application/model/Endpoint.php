@@ -89,7 +89,7 @@ class Endpoint extends Model
 	{
 		if ( $object != false && $object instanceof model\EndpointDBO )
 		{
-			return parent::deleteObj($object, Endpoint::TABLE, Endpoint::id );
+			return parent::deleteObject($object );
 		}
 		return false;
 	}

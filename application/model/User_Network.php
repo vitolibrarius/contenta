@@ -85,7 +85,7 @@ class User_Network extends Model
 	{
 		if ( $object instanceof model\User_NetworkDBO )
 		{
-			return parent::deleteObj($object, User_Network::TABLE, User_Network::id );
+			return parent::deleteObject($object );
 		}
 
 		return false;

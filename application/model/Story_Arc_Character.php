@@ -52,7 +52,7 @@ class Story_Arc_Character extends Model
 	public function countForCharacter( model\CharacterDBO $obj = null)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForQualifier(Story_Arc_Character::TABLE, array(Story_Arc_Character::character_id => $obj->id) );
+			return $this->countForFK( Story_Arc_Character::character_id, $obj );
 		}
 		return false;
 	}
