@@ -115,14 +115,12 @@ class Publisher extends Model
 	{
 		if ( $obj != false )
 		{
-			$this->update(Publisher::TABLE,
-				array(
+			$this->updateObject( $obj, array(
 					Publisher::xurl => $xurl,
 					Publisher::xsource => $xsrc,
 					Publisher::xid => $xid,
 					Publisher::xupdated => time()
-				),
-				array(Publisher::id => $obj->id)
+				)
 			);
 
 			return $this->refreshObject($obj);

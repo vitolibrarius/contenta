@@ -179,7 +179,7 @@ class Character extends Model
 			$characterjoin_model = Model::Named('Series_Character');
 			$pop = $characterjoin_model->countForCharacter($character);
 			if ($character->popularity != $pop ) {
-				$this->update(Character::TABLE, array(Character::popularity => $pop), array(Character::id => $character->id) );
+				$this->updateObject( $character, array(Character::popularity => $pop));
 			}
 			return $pop;
 		}

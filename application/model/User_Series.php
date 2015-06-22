@@ -145,7 +145,7 @@ class User_Series extends Model
 			}
 
 			if ( array_count_values($updates) > 0 ) {
-				if ($this->update(User_Series::TABLE, $updates, array(User_Series::id => $join->id)))
+				if ( $this->updateObject( $join, $updates ) )
 				{
 					return $this->refresh($join);
 				}

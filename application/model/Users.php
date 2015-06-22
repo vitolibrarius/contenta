@@ -126,8 +126,8 @@ class Users extends Model
 
 	public function generateAPIHash($userObj = null)
 	{
-		if ( is_a($userObj, "model\\UsersDBO" )) {
-			if ($this->update(Users::TABLE, array( Users::api_hash => uuidShort()), array(Users::id => $userObj->id))) {
+		if ( is_a($userObj, "model\\UsersDBO" )) {				;
+			if ($this->updateObject( $userObj, array(Users::api_hash => uuidShort())) ) {
 				return $this->refreshObject($userObj);
 			}
 		}
@@ -136,7 +136,7 @@ class Users extends Model
 
 	public function setAPIHash($userObj, $newHash = null)
 	{
-		if ($this->update(Users::TABLE, array( Users::api_hash => $newHash), array(Users::id => $userObj->id)))
+		if ($this->updateObject( $userObj, array(Users::api_hash => $newHash)) )
 		{
 			return $this->refreshObject($userObj);
 		}
@@ -145,21 +145,23 @@ class Users extends Model
 
 	public function setInactive($userObj)
 	{
-		return $this->update(Users::TABLE, array( Users::active => 0), array(Users::id => $userObj->id));
+		return $this->updateObject( $userObj, array(Users::active => 0));
 	}
 
 	public function clearFailedLogin($userObj)
 	{
-		return $this->update(Users::TABLE, array( Users::failed_logins => 0, Users::last_failed_login => null), array(Users::id => $userObj->id));
+		return $this->updateObject( $userObj, array(Users::failed_logins => 0, Users::last_failed_login => null));
 	}
 
 	public function updatePassword($userObj, $newpassword_hash )
 	{
-		if ($this->update(Users::TABLE,
-			array( Users::password_hash => $newpassword_hash ),
-			array( Users::id => $userObj->id, Users::password_hash => $userObj->password_hash)) )
-		{
+		$update = \SQL::UpdateObject( $userObj, array( Users::password_hash => $newpassword_hash ));
+		$update->whereEqual( Users::password_hash, $userObj->password_hash );
+		if ( $update->commitTransaction() ) {
 			return $this->refreshObject($userObj);
+		}
+		else {
+			throw new \Exception( "Failed to update password" );
 		}
 		return false;
 	}
@@ -237,10 +239,8 @@ class Users extends Model
 		}
 
 		if (count($changes) > 0) {
-			$success = $this->update(Users::TABLE, $changes, array( Users::id => $userObj->id ));
-			if ($success != false)
-			{
-				return $this->user($userObj->id);
+			if ($this->updateObject( $userObj, $changes) ) {
+				return $this->objectForId($userObj->id);
 			}
 		}
 		return false;
@@ -248,10 +248,8 @@ class Users extends Model
 
 	function increaseFailedLogin($userObj)
 	{
-		if ( $this->update(Users::TABLE,
-			array( Users::failed_logins => $userObj->failed_logins + 1, Users::last_failed_login => time() ),
-			array( Users::id => $userObj->id)) )
-		{
+		if ($this->updateObject( $userObj, array(
+			Users::failed_logins => $userObj->failed_logins + 1, Users::last_failed_login => time() )) ) {
 			return $this->refreshObject($userObj);
 		}
 		return false;
@@ -259,10 +257,7 @@ class Users extends Model
 
 	function stampLoginTimestamp($userObj)
 	{
-		if ( $this->update(Users::TABLE,
-			array( Users::last_login_timestamp => time() ),
-			array( Users::id => $userObj->id)))
-		{
+		if ($this->updateObject( $userObj, array(Users::last_login_timestamp => time() )) ) {
 			return $this->refreshObject($userObj);
 		}
 		return false;
@@ -271,10 +266,7 @@ class Users extends Model
 	function generateRememberMeToken($userObj)
 	{
 		$random_token_string = hash('sha256', mt_rand());
-		if ( $this->update(Users::TABLE,
-			array( Users::rememberme_token => $random_token_string ),
-			array( Users::id => $userObj->id)) ) {
-
+		if ($this->updateObject( $userObj, array(Users::rememberme_token => $random_token_string)) ) {
 			return $random_token_string;
 		}
 		return false;

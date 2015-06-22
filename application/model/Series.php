@@ -86,7 +86,7 @@ class Series extends Model
 			}
 
 			if ( count($updates) > 0 ) {
-				$this->update(Series::TABLE, $updates, array(Series::id => $obj->id) );
+				$this->updateObject( $obj, $updates );
 			}
 
 			if ( $obj != false && is_array($aliases) ) {

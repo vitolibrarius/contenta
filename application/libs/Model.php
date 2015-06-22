@@ -258,12 +258,8 @@ abstract class Model
 
 	/** FIXME: */
 	public function updateObject(DataObject $object = null, array $values) {
-		trigger_error("Deprecated");
-		if (isset($object) ) {
-			$model = $object->model();
-
-			$allColumns = $model->allColumnNames();
-			if ( is_array($allColumns) && in_array('updated', $allColumns)) {
+		if ( is_null($object) == false && count($values) > 0 ) {
+			if ( $this->hasColumn('updated') ) {
 				$values['updated'] = time();
 			}
 
@@ -271,28 +267,31 @@ abstract class Model
 				$values['desc'] = strip_tags($values['desc']);
 			}
 
-			$qual = array( $model->tablePK() => $object->pkValue() );
 			$validation = $this->validateForSave($object, $values);
 			if ( count($validation) == 0 ) {
 				// passed validation, remove key/value is not in column list
 				$allkeys = array_keys($values);
 				foreach( $allkeys as $key ) {
-					if ( in_array($key, $allColumns) == false ) {
+					if ( $this->hasColumn($key) == false ) {
 						unset($values[$key]);
 					}
 				}
-				return $this->update( $this->tableName(), $values, $qual );
+
+				$update = \SQL::UpdateObject($object, $values);
+				return $update->commitTransaction();
 			}
 
 			// create failed, log validation errors
-			$logMsg = "Validation errors creating " . $this->tableName();
-			foreach ($objectOrErrors as $attr => $errMsg ) {
+			$logMsg = "Validation errors update " . $object;
+			foreach ($validation as $attr => $errMsg ) {
 				$logMsg .= "\n\t" . $errMsg;
 			}
 			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
 			return $validation;
 		}
-
+		else {
+			Logger::logError( "Failed to create record for empty values", __METHOD__, $this->tableName() );
+		}
 		return false;
 	}
 
@@ -445,36 +444,6 @@ abstract class Model
 		}
 		return false;
 	}
-
-	/** FIXME: */
-	public function update( $table, array $updates, $qualifiers = null )
-	{
-		trigger_error("Deprecated");
-		if ( isset($table, $updates) && count($updates) > 0 ) {
-			$placeholders = array();
-			$params = array();
-			$sql = "UPDATE " . $table;
-			$sql .= " SET " . $this->keyValueClause(", ", $updates);
-			$params = $this->parameters($params, $updates);
-
-			if ( isset($qualifiers) ) {
-				$params = $this->parameters($params, $qualifiers, 'q1_');
-				$sql .= " WHERE " . $this->keyValueClause(" AND ", $qualifiers, 'q1_');
-			}
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				return true;
-			}
-
-			$caller = callerClassAndMethod('update');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $params);
-		}
-		return false;
-	}
-
 
 	/** FIXME: */
 	public function deleteAllJoin( $table, $joinSource, $joinForeign, $foreignObject )

@@ -58,7 +58,7 @@ class Version extends Model
 				}
 
 				if ( count($updates) > 0 ) {
-					$this->update(Version::TABLE, $updates, array(Version::id => $obj->id) );
+					$this->updateObject( $obj, $updates);
 					$obj = $this->refreshObject($obj);
 				}
 			}
