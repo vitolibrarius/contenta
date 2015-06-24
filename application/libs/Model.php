@@ -55,6 +55,22 @@ abstract class Model
 		return in_array($columnName, $this->allColumnNames());
 	}
 
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			$fkName = $this->tableName() . "_id";
+			if ( $joinModel->hasColumn( $fkName ) ) {
+				return array($this->tablePK(), $fkName);
+			}
+
+			$localName = $joinModel->tableName() . "_id";
+			if ( $this->hasColumn( $localName ) ) {
+				return array($localName, $joinModel->tablePK());
+			}
+		}
+		return array("unknown", "bad relationship");
+	}
+
 	public function refreshObject($object)
 	{
 		return SQL::SelectObject( $this, $object )->fetch();
@@ -256,7 +272,6 @@ abstract class Model
 		return false;
 	}
 
-	/** FIXME: */
 	public function updateObject(DataObject $object = null, array $values) {
 		if ( is_null($object) == false && count($values) > 0 ) {
 			if ( $this->hasColumn('updated') ) {
@@ -295,68 +310,6 @@ abstract class Model
 		return false;
 	}
 
-
-	/** FIXME: */
-	public function reportSQLError( $clazz = 'Model', $method = 'unknown', $pdocode, $pdoError, $sql, $params = null)
-	{
-		trigger_error("Deprecated");
-		$msg = 'PDO Error(' . $pdocode . ') ' . $pdoError . ' for [' . $sql . '] ' . (isset($params) ? var_export($params, true) : 'No Parameters');
-		Logger::logError($msg, $clazz, $method);
-	}
-
-	/** FIXME: */
-	public function keyValueClause($glue = " AND ", $qualifiers = null, $prefix = '', $valueQual = '=')
-	{
-		trigger_error("Deprecated");
-		$sql = '';
-		if ( is_array($qualifiers) && count($qualifiers) > 0 ) {
-			foreach ($qualifiers as $key => $value) {
-				// key = :prefixKey
-				// key like :prefixKey
-				$placeholders[] = $key . ' ' . $valueQual . ' :' . $prefix . sanitize($key, true, true);
-			}
-			$sql .= implode(' ' . $glue . ' ', $placeholders);
-		}
-		return $sql;
-	}
-
-// 	/** FIXME: */
-	public function orderbyClause($order = null) {
-		trigger_error("Deprecated");
-		$sql = '';
-		if (is_null($order) == false) {
-			$sql .= " ORDER BY ";
-			if ( isset($order['asc']) || isset($order['desc']) ) {
-				$allorder = array();
-				if ( isset($order['asc']) ) {
-					$allorder[] = implode(", ", $order['asc']);
-				}
-				if ( isset($order['desc']) ) {
-					$allorder[] = implode(" DESC, ", $order['desc']) . ' DESC ';
-				}
-
-				$sql .= implode(", ", $allorder);
-			}
-			else {
-				$sql .= implode(", ", $order);
-			}
-		}
-		return $sql;
-	}
-
-	/** FIXME: */
-	public function parameters(array $params = array(), array $arguments = null, $prefix = '', $valuePrefix = '', $valueSuffix = '')
-	{
-		trigger_error("Deprecated");
-		if ( isset($arguments) && is_array($arguments)) {
-			foreach ($arguments as $key => $value) {
-				$idx = ':' . $prefix . sanitize($key, true, true);
- 				$params[ $idx ] = $valuePrefix . $value . $valueSuffix;
-			}
-		}
-		return $params;
-	}
-
 	/** FIXME: new aggregate SQl needed*/
 	public function updateAgregate($target_table, $agg_table, $agg_target, $agg_function, $target_pk, $agg_fk)
 	{
@@ -377,95 +330,12 @@ abstract class Model
 			$caller = callerClassAndMethod('updateAgregate');
 			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
+
+			$msg = 'PDO Error(' . $errPoint->errorCode() . ') ' . $pdoError . ' for [' . $sql . '] '
+				 . (isset($qualifiers) ? var_export($qualifiers, true) : 'No Parameters');
+			Logger::logError($msg, $caller['class'], $caller['function']);
 		}
 		return false;
-	}
-
-
-	/** FIXME: */
-	public function fetchAllJoin($table, $columns, $joinSource, $joinForeign, $foreignObjects, $qualifiers, $order = null, $limit = null)
-	{
-		trigger_error("Deprecated");
-		if ( isset($table, $columns, $joinSource, $joinForeign, $foreignObjects) ) {
-			$placeholders = array();
-			$params = array();
-
-			if ( is_array($columns) ) {
-				$columns = implode(", ", $columns);
-			}
-
-			$sql = "SELECT " . $columns . " FROM " . $table . " WHERE ";
-			foreach ($foreignObjects as $key => $obj) {
-				$placeholders[] = ':join_' . $key;
-				$params[':join_' . $key] = $obj->{$joinForeign};
-			}
-			$sql .= $joinSource . ' IN (' . implode(", ", $placeholders) . ')';
-
-			if ( isset($qualifiers) ) {
-				$params = $this->parameters($params, $qualifiers);
-				$sql .= " AND " . $this->keyValueClause(" AND ", $qualifiers);
-			}
-
-			$sql .= $this->orderbyClause($order);
-			if ( isset($limit) && intval($limit) > 0 ) {
-				$sql .= " LIMIT " . $limit;
-			}
-
-
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute($params)) {
-				$dboClassName = DataObject::NameForTable($table);
-				try {
-					if (class_exists($dboClassName)) {
-						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
-					}
-				}
-				catch ( \ClassNotFoundException $e ) {
-					return $statement->fetchAll();
-				}
-			}
-
-			$caller = callerClassAndMethod('fetchAllJoin');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, $qualifiers);
-		}
-		return false;
-	}
-
-	/** FIXME: */
-	public function fetchJoin($table, $columns, $joinSource, $joinForeign, $foreignObject, $qualifiers, $order = null)
-	{
-		trigger_error("Deprecated");
-		$results = fetchAllJoin($table, $columns, $joinSource, $joinForeign, array($foreignObject), $qualifiers, $order);
-		if ( $results != false && count($results) == 1) {
-			return $results[0];
-		}
-		return false;
-	}
-
-	/** FIXME: */
-	public function deleteAllJoin( $table, $joinSource, $joinForeign, $foreignObject )
-	{
-		trigger_error("Deprecated");
-		if ( $foreignObject != false && isset($table, $joinSource, $joinForeign) ) {
-			$sql = "delete from " . $table . " where " . $joinSource . " = :id";
-			$params = array( ":id" => $foreignObject->{$joinForeign} );
-
-			echo $sql . PHP_EOL;
-			echo var_dump($foreignObject->{$joinForeign}) . PHP_EOL;
-			echo var_export($params, true) . PHP_EOL;
-
-			$statement = Database::instance()->prepare($sql);
-			$statement->execute( $params );
-
-			echo 'error code "'. var_export(Database::instance()->errorCode(), true) . '"'. PHP_EOL;
-			echo 'PDO error info ' . var_export( PDO::ERR_NONE, true) . PHP_EOL;
-			return is_null(Database::instance()->errorCode()) || Database::instance()->errorCode() === PDO::ERR_NONE;
-		}
-
-	   return false;
 	}
 
 	/** validation */

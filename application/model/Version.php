@@ -30,6 +30,20 @@ class Version extends Model
 		 );
 	}
 
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "patch":
+					return array( Version::id, "version_id"  );
+					break;
+				default:
+					break;
+			}
+		}
+		return parent::joinAttributes( $joinModel );
+	}
+
 	function latestVersion()
 	{
 		$onlyOne = \SQL::Select( $this )->orderBy($this->sortOrder())->limit(1)->fetchAll();

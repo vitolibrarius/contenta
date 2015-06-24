@@ -38,6 +38,22 @@ class Publication extends Model
 		);
 	}
 
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "media":
+				case "story_arc_publication":
+				case "publication_character":
+					return array( Publication::id, "publication_id" );
+					break;
+				default:
+					break;
+			}
+		}
+		return parent::joinAttributes( $joinModel );
+	}
+
 	public function publicationForSeriesExternal(model\SeriesDBO $series = null, $issue_xid = null, $xsource = null)
 	{
 		$matches = $this->allObjectsForFKAndQualifier(Publication::series_id, $series, Qualifier::XID($issue_xid, $xsource));

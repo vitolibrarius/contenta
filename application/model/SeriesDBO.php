@@ -5,6 +5,8 @@ namespace model;
 use \DataObject as DataObject;
 use \Model as Model;
 
+use db\Qualifier as Qualifier;
+
 class SeriesDBO extends DataObject
 {
 	public $publisher_id;
@@ -85,20 +87,13 @@ class SeriesDBO extends DataObject
 	}
 
 	public function characters($limit = null) {
-		$character_model = Model::Named("Character");
-		$model = Model::Named("Series_Character");
-		$joins = $model->allForSeries($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Character::TABLE,
-				$character_model->allColumns(),
-				Character::id, Series_Character::character_id, $joins, null,
-					array("desc" => array(Character::popularity)),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Character") );
+		$select->joinOn( Model::Named("Character"), Model::Named("Series_Character"), null,
+			Qualifier::FK( Series_Character::series_id, $this)
+		);
+		$select->limit($limit);
+		$select->orderBy( Model::Named("Character"), Character::popularity, "desc");
+		return $select->fetchAll();
 	}
 
 	public function joinToCharacter(model\CharacterDBO $character) {
@@ -107,20 +102,13 @@ class SeriesDBO extends DataObject
 	}
 
 	public function story_arcs($limit = null) {
-		$story_arcs_model = Model::Named("Story_Arc");
-		$model = Model::Named("Story_Arc_Series");
-		$joins = $model->allForSeries($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Story_Arc::TABLE,
-				$story_arcs_model->allColumns(),
-				Story_Arc::id, Story_Arc_Series::story_arc_id, $joins, null,
-					array(Story_Arc::name),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Story_Arc") );
+		$select->joinOn( Model::Named("Story_Arc"), Model::Named("Story_Arc_Series"), null,
+			Qualifier::FK( Story_Arc_Series::series_id, $this)
+		);
+		$select->limit($limit);
+		$select->orderBy( Model::Named("Story_Arc"), Story_Arc::name);
+		return $select->fetchAll();
 	}
 
 	public function joinToStory_Arc(model\Story_ArcDBO $object) {

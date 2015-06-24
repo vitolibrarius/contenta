@@ -10,6 +10,8 @@ use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Series as Series;
 
+use db\Qualifier as Qualifier;
+
 class PublicationDBO extends DataObject
 {
 	public $name;
@@ -72,20 +74,13 @@ class PublicationDBO extends DataObject
 	}
 
 	public function characters($limit = null) {
-		$character_model = Model::Named("Character");
-		$model = Model::Named("Publication_Character");
-		$joins = $model->allForPublication($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Character::TABLE,
-				$character_model->allColumns(),
-				Character::id, Publication_Character::character_id, $joins, null,
-					array("desc" => array(Character::popularity)),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Character") );
+		$select->joinOn( Model::Named("Character"), Model::Named("Publication_Character"), null,
+			Qualifier::FK( Publication_Character::publication_id, $this)
+		);
+		$select->limit($limit);
+		$select->orderBy( Model::Named("Character"), Character::popularity, "desc" );
+		return $select->fetchAll();
 	}
 
 	public function joinToCharacter($character) {
@@ -94,20 +89,13 @@ class PublicationDBO extends DataObject
 	}
 
 	public function story_arcs($limit = null) {
-		$story_arcs_model = Model::Named("Story_Arc");
-		$model = Model::Named("Story_Arc_Publication");
-		$joins = $model->allForPublication($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Story_Arc::TABLE,
-				$story_arcs_model->allColumns(),
-				Story_Arc::id, Story_Arc_Publication::story_arc_id, $joins, null,
-					array(Story_Arc::name),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Story_Arc") );
+		$select->joinOn( Model::Named("Story_Arc"), Model::Named("Story_Arc_Publication"), null,
+			Qualifier::FK( Story_Arc_Publication::publication_id, $this)
+		);
+		$select->limit($limit);
+		$select->orderBy( Model::Named("Story_Arc"), Story_Arc::name );
+		return $select->fetchAll();
 	}
 
 	public function joinToStory_Arc($object) {

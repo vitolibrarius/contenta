@@ -32,6 +32,22 @@ class Publisher extends Model
 		);
 	}
 
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "series":
+				case "character":
+				case "story_arc":
+					return array( Publisher::id, "publisher_id" );
+					break;
+				default:
+					break;
+			}
+		}
+		return parent::joinAttributes( $joinModel );
+	}
+
 	public function UnknownPublisher() {
 		return $this->findExternalOrCreate( '-= Unknown Publisher =-', '-unknown-', 'UNKNOWN', null );
 	}

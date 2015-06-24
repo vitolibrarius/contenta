@@ -25,6 +25,23 @@ class User_Network extends Model
 		return array(User_Network::id, User_Network::user_id, User_Network::network_id);
 	}
 
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "network":
+					return array( User_Network::network_id, "id"  );
+					break;
+				case "users":
+					return array( User_Network::user_id, "id" );
+					break;
+				default:
+					break;
+			}
+		}
+		return parent::joinAttributes( $joinModel );
+	}
+
 	public function joinForUserAndNetwork($user, $network)
 	{
 		if (isset($user, $user->id, $network, $network->id)) {

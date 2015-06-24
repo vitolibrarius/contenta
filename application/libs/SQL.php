@@ -21,6 +21,7 @@ abstract class SQL
 	const SQL_WHERE		= 'WHERE';
 	const SQL_VALUES	= 'VALUES';
 	const SQL_SET		= 'SET';
+	const SQL_AS		= 'AS';
 	const SQL_ON		= 'ON';
 	const SQL_JOIN		= 'JOIN';
 	const SQL_JOIN_LEFT	= 'LEFT JOIN';
@@ -80,6 +81,11 @@ abstract class SQL
 			throw new \Exception( "You must specify the data to be selected" );
 		}
 		return new db\SelectSQL($model, null, db\Qualifier::PK($data));
+	}
+
+	public static function SelectJoin( Model $model, array $columns = null, db\Qualifier $qualifier = null )
+	{
+		return new db\JoinSQL($model, $columns, $qualifier);
 	}
 
 	public static function Insert( Model $model, array $columns = array() )

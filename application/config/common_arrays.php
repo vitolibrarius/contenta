@@ -21,7 +21,7 @@
 /**
  * this will walk a keypath down a nested associative array and return the leaf value.
  */
-	function array_valueForKeypath( $keypath, $array, $separator = '/' )
+	function array_valueForKeypath( $keypath, array $array = array(), $separator = '/' )
 	{
 		if ( isset($keypath, $array) && strlen($keypath) > 0) {
 			$result = $array;
@@ -47,12 +47,12 @@
 /**
  * this will walk a keypath down a nested associative array and set leaf value for the keypath
  */
-	function array_setValueForKeypath($keypath, $value, &$array, $separator = '/' )
+	function array_setValueForKeypath($keypath, $value, array &$array = null, $separator = '/' )
 	{
 		if ( isset($keypath) && strlen($keypath) > 0) {
 			$path = array_filter( explode($separator, $keypath), 'strlen');
 			$lastKey = array_pop($path);
-			if (isset($array) == false || $array == false ) {
+			if (is_null($array) || $array == false ) {
 				$array = array();
 			}
 			$subArray = &$array;

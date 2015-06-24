@@ -38,6 +38,26 @@ class Character extends Model
 		);
 	}
 
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "publisher":
+					return array( Character::publisher_id, "id" );
+					break;
+				case "series_character":
+					return array( Character::id, "character_id" );
+					break;
+				case "publication_character":
+				case "story_arc_character":
+				default:
+					break;
+			}
+		}
+		return parent::joinAttributes( $joinModel );
+	}
+
+
 	public function allForPublisher( model\PublisherDBO $obj)
 	{
 		return $this->allObjectsForFK(Character::publisher_id, $obj, array(Character::name));

@@ -13,7 +13,7 @@ class Story_Arc_Character extends Model
 {
 	const TABLE =		'story_arc_character';
 	const id =			'id';
-	const story_arc_id =		'story_arc_id';
+	const story_arc_id =	'story_arc_id';
 	const character_id =	'character_id';
 
 

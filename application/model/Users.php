@@ -36,6 +36,21 @@ class Users extends Model
 	public function tablePK() { return Users::id; }
 	public function sortOrder() { return array(Users::name); }
 
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "user_series":
+				case "user_network":
+					return array( Users::id, "user_id"  );
+					break;
+				default:
+					break;
+			}
+		}
+		return parent::joinAttributes( $joinModel );
+	}
+
 	public function userTypes() {
 		return array( Users::StandardRole => "Standard", Users::AdministratorRole => "Administrator");
 

@@ -5,6 +5,8 @@ namespace model;
 use \DataObject as DataObject;
 use \Model as Model;
 
+use db\Qualifier as Qualifier;
+
 class CharacterDBO extends DataObject
 {
 	public $publisher_id;
@@ -62,20 +64,10 @@ class CharacterDBO extends DataObject
 	}
 
 	public function series($limit = null) {
-		$series_model = Model::Named("Series");
-		$model = Model::Named("Series_Character");
-		$joins = $model->allForCharacter($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Series::TABLE,
-				$series_model->allColumns(),
-				Series::id, Series_Character::series_id, $joins, null,
-					array(Series::name),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Series") );
+		$select->joinOn( Model::Named("Series"), Model::Named("Series_Character"), null, Qualifier::FK( Series_Character::character_id, $this));
+		$select->limit = $limit;
+		return $select->fetchAll();
 	}
 
 	public function joinToSeries(model\SeriesDBO $object) {
@@ -84,20 +76,12 @@ class CharacterDBO extends DataObject
 	}
 
 	public function story_arcs($limit = null) {
-		$story_arcs_model = Model::Named("Story_Arc");
-		$model = Model::Named("Story_Arc_Character");
-		$joins = $model->allForCharacter($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Story_Arc::TABLE,
-				$story_arcs_model->allColumns(),
-				Story_Arc::id, Story_Arc_Character::story_arc_id, $joins, null,
-					array(Story_Arc::name),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Story_Arc") );
+		$select->joinOn( Model::Named("Story_Arc"), Model::Named("Story_Arc_Character"), null,
+			Qualifier::FK( Story_Arc_Character::character_id, $this)
+		);
+		$select->limit = $limit;
+		return $select->fetchAll();
 	}
 
 	public function joinToStory_Arc(model\Story_ArcDBO $object) {
@@ -106,20 +90,12 @@ class CharacterDBO extends DataObject
 	}
 
 	public function publications($limit = null) {
-		$publications_model = Model::Named("Publication");
-		$model = Model::Named("Publication_Character");
-		$joins = $model->allForCharacter($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Publication::TABLE,
-				$publications_model->allColumns(),
-				Publication::id, Publication_Character::publication_id, $joins, null,
-					array(Publication::name),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Publication") );
+		$select->joinOn( Model::Named("Publication"), Model::Named("Publication_Character"), null,
+			Qualifier::FK( Publication_Character::character_id, $this)
+		);
+		$select->limit = $limit;
+		return $select->fetchAll();
 	}
 
 	public function joinToPublication(model\PublicationDBO $object) {

@@ -5,6 +5,8 @@ namespace model;
 use \DataObject as DataObject;
 use \Model as Model;
 
+use db\Qualifier as Qualifier;
+
 class UsersDBO extends DataObject
 {
 	public $name;
@@ -42,10 +44,14 @@ class UsersDBO extends DataObject
 		return $array;
 	}
 
-	public function seriesBeingRead() {
-		$join_model = Model::Named('User_Series');
-		$joins = $join_model->allSeriesForUser($this);
-		return $joins;
+	public function seriesBeingRead($limit = 50) {
+		$select = \SQL::SelectJoin( Model::Named("Series") );
+		$select->joinOn( Model::Named("Series"), Model::Named("User_Series"), null,
+			Qualifier::FK( User_Series::user_id, $this)
+		);
+		$select->limit($limit);
+		$select->orderBy( Model::Named("Series"), Series::name);
+		return $select->fetchAll();
 	}
 
 	public function addSeries($series = null) {

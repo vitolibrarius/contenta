@@ -53,21 +53,6 @@ class User_Series extends Model
 		return $this->allObjectsForFKWithValue(User_Series::user_id, $obj, User_Series::favorite, Model::TERTIARY_TRUE);
 	}
 
-	public function allSeriesForUser(model\UsersDBO $obj)
-	{
-		$joins = $this->allForUser($obj);
-
-		if ( $joins != false ) {
-			$series_model = Model::Named('Series');
-			return $series_model->fetchAllJoin(
-				Series::TABLE,
-				$series_model->allColumns(),
-				Series::id, User_Series::series_id, $joins, null, array(Series::name));
-		}
-
-		return false;
-	}
-
 	public function allForSeries(model\SeriesDBO $obj)
 	{
 		return $this->allObjectsForFK(User_Series::series_id, $obj);

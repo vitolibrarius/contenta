@@ -33,6 +33,25 @@ class Story_Arc extends Model
 		);
 	}
 
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "story_arc_character":
+				case "story_arc_publication":
+				case "story_arc_series":
+					return array( Story_Arc::id, "story_arc_id" );
+					break;
+				case "publisher":
+					return array( Story_Arc::publisher_id, "id" );
+					break;
+				default:
+					break;
+			}
+		}
+		return parent::joinAttributes( $joinModel );
+	}
+
 	public function findExternalOrCreate( $publisher = null, $name, $desc, $xid, $xsrc, $xurl = null )
 	{
 		if ( isset($name, $xid, $xsrc) && strlen($name) && strlen($xid) && strlen($xsrc)) {

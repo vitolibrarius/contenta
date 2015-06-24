@@ -10,6 +10,8 @@ use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Series as Series;
 
+use db\Qualifier as Qualifier;
+
 class Story_ArcDBO extends DataObject
 {
 	public $name;
@@ -47,20 +49,13 @@ class Story_ArcDBO extends DataObject
 	}
 
 	public function characters($limit = null) {
-		$character_model = Model::Named("Character");
-		$model = Model::Named("Story_Arc_Character");
-		$joins = $model->allForStory_Arc($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Character::TABLE,
-				$character_model->allColumns(),
-				Character::id, Story_Arc_Character::character_id, $joins, null,
-					array("desc" => array(Character::popularity)),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Character") );
+		$select->joinOn( Model::Named("Character"), Model::Named("Story_Arc_Character"), null,
+			Qualifier::FK( Story_Arc_Character::story_arc_id, $this)
+		);
+		$select->limit($limit);
+		$select->orderBy( Model::Named("Character"), Character::popularity, "desc");
+		return $select->fetchAll();
 	}
 
 	public function joinToCharacter(model\CharacterDBO $character) {
@@ -69,20 +64,13 @@ class Story_ArcDBO extends DataObject
 	}
 
 	public function series($limit = null) {
-		$series_model = Model::Named("Series");
-		$model = Model::Named("Story_Arc_Series");
-		$joins = $model->allForStory_Arc($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Series::TABLE,
-				$series_model->allColumns(),
-				Series::id, Story_Arc_Series::series_id, $joins, null,
-					array("desc" => array(Series::popularity)),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Series") );
+		$select->joinOn( Model::Named("Series"), Model::Named("Story_Arc_Series"), null,
+			Qualifier::FK( Story_Arc_Series::story_arc_id, $this)
+		);
+		$select->limit($limit);
+		$select->orderBy( Model::Named("Series"), Series::popularity, "desc");
+		return $select->fetchAll();
 	}
 
 	public function joinToSeries(model\SeriesDBO $series) {
@@ -91,20 +79,13 @@ class Story_ArcDBO extends DataObject
 	}
 
 	public function publications($limit = null) {
-		$publication_model = Model::Named("Publication");
-		$model = Model::Named("Story_Arc_Publication");
-		$joins = $model->allForStory_Arc($this);
-
-		if ( $joins != false ) {
-			return $this->model()->fetchAllJoin(
-				Publication::TABLE,
-				$publication_model->allColumns(),
-				Publication::id, Story_Arc_Publication::publication_id, $joins, null,
-					array(Publication::name),
-				$limit
-			);
-		}
-		return array();
+		$select = \SQL::SelectJoin( Model::Named("Publication") );
+		$select->joinOn( Model::Named("Publication"), Model::Named("Story_Arc_Publication"), null,
+			Qualifier::FK( Story_Arc_Publication::story_arc_id, $this)
+		);
+		$select->limit($limit);
+		$select->orderBy( Model::Named("Publication"), Publication::name);
+		return $select->fetchAll();
 	}
 
 	public function joinToPublication(model\PublicationDBO $publication) {

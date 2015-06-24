@@ -153,6 +153,15 @@ abstract class Qualifier extends SQL
 	{
 		return new BasicQualifier( $key, Qualifier::LESS_THAN_EQ, $value, $prefix );
 	}
+
+	public static function JoinQualifier($src_prefix, $src_attribute, $dest_prefix, $dest_attribute)
+	{
+		if ( isset($src_prefix, $src_attribute, $dest_prefix, $dest_attribute)) {
+			return new JoinQualifier($src_prefix, $src_attribute, $dest_prefix, $dest_attribute);
+		}
+
+		throw new \Exception("Unable to join on empty list");
+	}
 }
 
 class OrQualifier extends Qualifier
@@ -316,5 +325,37 @@ class IsNullQualifier extends BasicQualifier
 	{
 		return (strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.')
 			. $this->attribute . " " . $this->operator;
+	}
+}
+
+class JoinQualifier extends Qualifier
+{
+	public $att_a_prefix;
+	public $att_b_prefix;
+	public $att_a;
+	public $att_b;
+
+	public function __construct( $src_prefix, $src_attribute, $dest_prefix, $dest_attribute)
+	{
+		parent::__construct();
+		if ( isset($src_prefix, $src_attribute, $dest_prefix, $dest_attribute)) {
+			$this->att_a_prefix = $src_prefix;
+			$this->att_b_prefix = $dest_prefix;
+			$this->att_a = $src_attribute;
+			$this->att_b = $dest_attribute;
+		}
+		else {
+			throw new \Exception( "Incorrect number of joins specified, must be 2" . var_export($joins, true));
+		}
+	}
+
+	public function sqlParameters()
+	{
+		return null;
+	}
+
+	public function sqlStatement()
+	{
+		return $this->att_a_prefix . "." . $this->att_a . " = " . $this->att_b_prefix . "." . $this->att_b;
 	}
 }

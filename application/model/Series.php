@@ -29,6 +29,27 @@ class Series extends Model
 	public function tablePK() { return Series::id; }
 	public function sortOrder() { return array(Series::name, Series::start_year); }
 
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "publisher":
+					return array( Series::publisher_id, "id" );
+					break;
+				case "publication":
+				case "series_character":
+				case "series_alias":
+				case "story_arc":
+				case "user_series":
+					return array( Series::id, "series_id" );
+					break;
+				default:
+					break;
+			}
+		}
+		return parent::joinAttributes( $joinModel );
+	}
+
 	public function allColumnNames()
 	{
 		return array(

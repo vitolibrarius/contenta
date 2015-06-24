@@ -29,6 +29,21 @@ $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root, false);
 
 my_echo( );
+my_echo( );
+
+$join = SQL::SelectJoin( Model::Named("Series"), null, db\Qualifier::Equals( "name", "David" ));
+$join->joinOn( Model::Named("Series"), Model::Named("Publication"), array("name"), db\Qualifier::Equals( "name", "pubname" ));
+my_echo( "SQL: " . $join->sqlStatement() . PHP_EOL . var_export($join->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);
+
+$join = SQL::SelectJoin( Model::Named("Series"), null, db\Qualifier::Equals( "name", "David" ));
+$join->joinOn( Model::Named("Series"), Model::Named("Publication"), array("name"), db\Qualifier::Equals( "name", "pubname" ));
+$join->joinOn( Model::Named("Publication"), Model::Named("Media"), array("checksum"), db\Qualifier::Equals( "type_id", "1" ));
+my_echo( "SQL: " . $join->sqlStatement() . PHP_EOL . var_export($join->sqlParameters(), true));
+my_echo( "- - - - -" . PHP_EOL);
+
+die();
+my_echo( );
 my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
