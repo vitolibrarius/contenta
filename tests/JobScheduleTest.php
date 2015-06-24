@@ -197,3 +197,16 @@ my_echo( "");
 foreach( $jobs_to_run as $aJob ) {
 	echo DaemonizeJob( $aJob, null, array( "debug" => true, "ConfigOverride" => $configOverride )  );
 }
+
+sleep(5);
+
+$running = Model::Named("Job_Running")->allObjects();
+while ( is_array($running) && count( $running ) > 0) {
+	echo "waiting .. " . PHP_EOL;
+	sleep(10);
+	$running = Model::Named("Job_Running")->allObjects();
+}
+
+$export = new db\ExportData( appendPath( Config::GetRepository(), "export.json" ));
+$export->exportAll();
+

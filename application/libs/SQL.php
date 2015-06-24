@@ -21,6 +21,9 @@ abstract class SQL
 	const SQL_WHERE		= 'WHERE';
 	const SQL_VALUES	= 'VALUES';
 	const SQL_SET		= 'SET';
+	const SQL_ON		= 'ON';
+	const SQL_JOIN		= 'JOIN';
+	const SQL_JOIN_LEFT	= 'LEFT JOIN';
 
 	const SQL_HAVING	= 'HAVING';
 	const SQL_GROUP		= 'GROUP BY';
