@@ -187,7 +187,7 @@ class Card
 						H::div( array( "class" => "feature_top_right_middle" ), function() {
 							H::span( array( "class" => "details" ), function() {
 								foreach( $this->detailKeys() as $key => $keypath ) {
-									H::span( array( "class" => $key ), $this->record->{$keypath} );
+									H::span( array( "class" => $key ), $this->record->{$keypath}() );
 								}
 							});
 						});
@@ -233,11 +233,11 @@ class Card
 			H::figcaption( array("class" => "caption"), function() {
 				H::a( array("href" => $this->selectPath()), function() {
 					$keypath = $this->displayNameKey();
-					H::em( $this->record->{$keypath} );
+					H::em( $this->record->{$keypath}() );
 				});
 
 				$keypath = $this->displayDescriptionKey();
-				H::p( $this->record->{$keypath} );
+				H::p( $this->record->{$keypath}() );
 			});
 		});
 		unset($this->record);

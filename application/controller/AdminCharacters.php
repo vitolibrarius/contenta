@@ -23,6 +23,9 @@ use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
 
+use \SQL as SQL;
+use db\Qualifier as Qualifier;
+
 /**
  * Class Admin
  * The index controller
@@ -47,11 +50,13 @@ class AdminCharacters extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Character');
+			$select = SQL::Select( $model )
+				->where( Qualifier::LikeQualifier( Character::name, $_GET['name'] . '%' ))
+				->orderBy( $model->sortOrder() );
+
+			Logger::logInfo( "SQL: " . $select->sqlStatement() . PHP_EOL . var_export($select->sqlParameters(), true) );
 			$this->view->model = $model;
-			$this->view->listArray = \SQL::Select( $model )
-				->where( db\Qualifier::LikeQualifier( Character::name, $_GET['name'] . '*' ))
-				->orderBy( $model->sortOrder() )
-				->fetchAll();
+			$this->view->listArray = $select->fetchAll();
 
 			$this->view->editAction = "/AdminCharacters/editCharacter";
 			$this->view->deleteAction = "/AdminCharacters/deleteCharacter";

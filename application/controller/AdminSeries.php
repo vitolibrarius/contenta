@@ -10,6 +10,8 @@ use \Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
+use \SQL as SQL;
+use db\Qualifier as Qualifier;
 
 use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
@@ -52,8 +54,8 @@ class AdminSeries extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Series');
 			$this->view->model = $model;
-			$this->view->listArray = \SQL::Select( $model )
-				->where( db\Qualifier::LikeQualifier( Series::name, $_GET['name'] . '*' ))
+			$this->view->listArray = SQL::Select( $model )
+				->where( Qualifier::LikeQualifier( Series::name, $_GET['name'] . '%' ))
 				->orderBy( $model->sortOrder() )
 				->fetchAll();
 
