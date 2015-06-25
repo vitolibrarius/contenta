@@ -16,7 +16,7 @@ abstract class Qualifier extends SQL
 	const NOT_EQ	 		= '!=';
 
 	const LESS_THAN			= '<';
-	const LESS_THAN_EQU		= '<=';
+	const LESS_THAN_EQ		= '<=';
 	const GREATER_THAN		= '>';
 	const GREATER_THAN_EQ	= '=>';
 	const LIKE_Q			= 'LIKE';
@@ -158,11 +158,9 @@ abstract class Qualifier extends SQL
 	{
 		return new AndQualifier( array(
 				new BasicQualifier( $key, Qualifier::GREATER_THAN_EQ, $lowValue, $prefix ),
-				new BasicQualifier( $key, Qualifier::LESS_THAN_EQ, $highValue, $prefix );
+				new BasicQualifier( $key, Qualifier::LESS_THAN_EQ, $highValue, $prefix )
 			), $prefix
 		);
-
-		return
 	}
 
 	public static function JoinQualifier($src_prefix, $src_attribute, $dest_prefix, $dest_attribute)
