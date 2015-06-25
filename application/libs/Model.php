@@ -310,30 +310,14 @@ abstract class Model
 		return false;
 	}
 
-	/** FIXME: new aggregate SQl needed*/
 	public function updateAgregate($target_table, $agg_table, $agg_target, $agg_function, $target_pk, $agg_fk)
 	{
-		trigger_error("Deprecated");
 		if ( isset($target_table, $agg_table, $agg_target, $agg_function, $target_pk, $agg_fk) ) {
-			$placeholders = array();
-			$params = array();
-
 			$sql = "update " . $target_table
 				. " set " . $agg_target . " = (select " . $agg_function . " from "
 					. $agg_table . " where " . $agg_table . "." . $agg_fk . " = " . $target_table . "." . $target_pk . ")";
 
-			$statement = Database::instance()->prepare($sql);
-			if ($statement && $statement->execute()) {
-				return true;
-			}
-
-			$caller = callerClassAndMethod('updateAgregate');
-			$errPoint = ($statement ? $statement : Database::instance());
-			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-
-			$msg = 'PDO Error(' . $errPoint->errorCode() . ') ' . $pdoError . ' for [' . $sql . '] '
-				 . (isset($qualifiers) ? var_export($qualifiers, true) : 'No Parameters');
-			Logger::logError($msg, $caller['class'], $caller['function']);
+			return \SQL::raw( $sql, null, "test raw" );
 		}
 		return false;
 	}
