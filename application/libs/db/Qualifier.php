@@ -154,6 +154,17 @@ abstract class Qualifier extends SQL
 		return new BasicQualifier( $key, Qualifier::LESS_THAN_EQ, $value, $prefix );
 	}
 
+	public static function Between( $key = null, $lowValue = null, $highValue, $prefix = '')
+	{
+		return new AndQualifier( array(
+				new BasicQualifier( $key, Qualifier::GREATER_THAN_EQ, $lowValue, $prefix ),
+				new BasicQualifier( $key, Qualifier::LESS_THAN_EQ, $highValue, $prefix );
+			), $prefix
+		);
+
+		return
+	}
+
 	public static function JoinQualifier($src_prefix, $src_attribute, $dest_prefix, $dest_attribute)
 	{
 		if ( isset($src_prefix, $src_attribute, $dest_prefix, $dest_attribute)) {
