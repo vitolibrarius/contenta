@@ -20,9 +20,6 @@
 						if ( isset($_POST, $_POST[$attrName]) ) {
 							$attValue = $_POST[$attrName];
 						}
-						else if ( $form_type == Model::FLAG_TYPE && count($_POST) > 0) {
-							$attValue = 0;
-						}
 						else if (isset($this->{$attr})) {
 							$attValue = $this->{$attr};
 						}

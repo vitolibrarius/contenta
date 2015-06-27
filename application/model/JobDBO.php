@@ -41,14 +41,14 @@ class JobDBO extends DataObject
 
 	public function jobType() {
 		$type_model = Model::Named("Job_Type");
-		return $type_model->objectForId($this->type_id);
+		return (isset($this->type_id) ? $type_model->objectForId($this->type_id) : null);
 	}
 
 	public function jsonParameters() {
 		if ( isset($this->parameter) ) {
 			$jsonData = json_decode($this->parameter, true);
 			if ( json_last_error() != 0 ) {
-				throw new \Exception( jsonErrorString(json_last_error()) );
+				return jsonErrorString(json_last_error()) . "'" . $this->parameter . "'";
 			}
 		}
 		return (isset($jsonData) ? $jsonData : array());

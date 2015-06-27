@@ -118,7 +118,7 @@ abstract class Qualifier extends SQL
 	public static function Equals( $key = null, $value = null, $prefix = '')
 	{
 		if ( is_null($key) || is_null($value) ) {
-			throw new \Exception( "Must specify attribute key/value" );
+			throw new \Exception( "Must specify attribute key = value" );
 		}
 
 		return new BasicQualifier( $key, Qualifier::EQ, $value, $prefix );

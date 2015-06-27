@@ -160,5 +160,80 @@ class Job extends Model
 		}
 		return null;
 	}
+
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Job::dayOfWeek,
+				Job::hour,
+				Job::minute
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
+
+	public function attributesFor($object = null, $type = null ) {
+		return array(
+			Job::endpoint_id => Model::TO_ONE_TYPE,
+			Job::parameter => Model::TEXT_TYPE,
+			Job::dayOfWeek => Model::TEXT_TYPE,
+			Job::minute => Model::TEXT_TYPE,
+			Job::hour => Model::TEXT_TYPE,
+			Job::enabled => Model::FLAG_TYPE,
+			Job::one_shot => Model::FLAG_TYPE
+		);
+	}
+
+	public function attributeOptions($object = null, $type = null, $attr) {
+		if ( $attr == Job::type_id ) {
+			$type_model = Model::Named('Job_Type');
+			return $type_model->allObjects();
+		}
+		else if ( $attr == Job::endpoint_id ) {
+			$type_model = Model::Named('Endpoint');
+			return $type_model->allObjects();
+		}
+		return null;
+	}
+
+	public function attributeIsEditable($object = null, $type = null, $attr) {
+		if ( is_a($object, "model\\EndpointDBO" ) ) {
+			if ( $attr == Job::type_id ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) == false || is_null($object) == true) {
+			if ( isset($type) && is_a($type, "model\\Job_TypeDBO" ) ) {
+				switch ($attr) {
+// 					case Endpoint::base_url:
+// 						return $type->api_url;
+// 					case Endpoint::name:
+// 						return $type->name;
+					case Job::one_shot:
+						return Model::TERTIARY_FALSE;
+					case Job::enabled:
+						return Model::TERTIARY_TRUE;
+				}
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)
+	{
+// 		if ( $attr == Job::type_id ) {
+// 			if ( isset($type, $type->comments) && is_a($type, "model\\Job_TypeDBO" ) ) {
+// 				return $type->comments;
+// 			}
+// 		}
+
+		return null;
+	}
 }
 

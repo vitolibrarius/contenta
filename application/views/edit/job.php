@@ -1,6 +1,6 @@
 <div class="paging">
 	<ul>
-		<li><a href="<?php echo Config::Web('/netconfig/index'); ?>"><span class="">Endpoints</span></a></li>
+		<li><a href="<?php echo Config::Web('/AdminJobs/index'); ?>"><span class="">Jobs</span></a></li>
 	</ul>
 </div>
 
@@ -16,21 +16,14 @@
 
 				<?php
 					$realObj = (isset($this->object)) ? $this->object : null;
-					$realType = ( isset($this->object) ? $this->object->type() :
-						(isset($this->endpoint_type) ? $this->endpoint_type : null));
+					$realType = ( isset($this->object) ? $this->object->jobType() :
+						(isset($this->job_type) ? $this->job_type : null));
 				?>
 					<label>Type</label>
-					<div>
-						<span class="input_restriction" style="width:90%; float:left;"><?php echo $realType->comments; ?></span>
-						<a href="<?php echo $realType->site_url; ?>" target="<?php echo $realType->name; ?>">
-							<img style="display:inline; float:right; max-width: 20px; max-height: 20px;"
-								src="<?php echo $realType->favicon(); ?>">
-						</a>
-					</div>
 					<input class="type" type="text" name="displayType" disabled
-						value="<?php echo $realType->displayName(); ?>"
+						value="<?php echo (is_null($realType) ? '' : $realType->displayName()); ?>"
 					/>
-					<input class="type" type="hidden" name="endpoint-type_id"
+					<input class="type" type="hidden" name="job-type_id"
 						value="<?php echo $realType->id; ?>"
 					/>
 

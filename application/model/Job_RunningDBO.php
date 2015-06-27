@@ -26,8 +26,17 @@ class Job_RunningDBO extends DataObject
 	}
 
 	public function jobType() {
-		$type_model = Model::Named("Job_Type");
-		return $type_model->objectForId($this->job_type_id);
+		if ( isset($this->job_type_id)) {
+			$type_model = Model::Named("Job_Type");
+			return $type_model->objectForId($this->job_type_id);
+		}
+		else if ( isset($this->job_id) ) {
+			$job = $this->job();
+			if ( $job instanceof model\JobDBO ) {
+				return $job->jobType();
+			}
+		}
+		return null;
 	}
 
 	private function isRunning() {

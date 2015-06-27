@@ -29,6 +29,20 @@
 
 		<div class="admin_card">
 			<div class="admin_card_top">
+				<img src="<?php echo Config::Web('/public/img/admin-daemons.png'); ?>">
+			</div>
+			<div class="admin_card_item">
+				<a href="<?php echo Config::Web('/AdminJobs/index'); ?>"><?php echo $this->label( "JobsLink", "name" ); ?></a>
+				<p><?php echo $this->label( "JobsLink", "desc" ); ?></p>
+			</div>
+			<div class="admin_card_item">
+				<a href="<?php echo Config::Web('/AdminJobs/runningIndex'); ?>"><?php echo $this->label( "JobsRunningLink", "name" ); ?></a>
+				<p><?php echo $this->label( "JobsRunningLink", "desc" ); ?></p>
+			</div>
+		</div>
+
+		<div class="admin_card">
+			<div class="admin_card_top">
 				<img src="<?php echo Config::Web('/public/img/admin-publications.png'); ?>">
 			</div>
 			<div class="admin_card_item">

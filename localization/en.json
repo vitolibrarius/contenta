@@ -70,6 +70,14 @@
         "UpgradeLink": {
             "name": "Check Version",
             "desc": "Check for new versions of this software and upgrade if necessary"
+        },
+        "JobsLink": {
+            "name": "Scheduled Jobs",
+            "desc": "Admin JobsLink desc"
+        },
+        "JobsRunningLink": {
+            "name": "Currently Running",
+            "desc": "Admin JobsRunningLink desc"
         }
     },
     "Model": {
@@ -305,6 +313,58 @@
             "name": {
                 "search": "Issue Name"
             }
+        },
+        "job": {
+            "nextDate": {
+                "label": "Next Run Date"
+            },
+            "minute": {
+                "label": "Minute"
+            },
+            "hour": {
+                "label": "Hour"
+            },
+            "dayOfWeek": {
+                "label": "Day of the Week"
+            },
+            "lastDate": {
+                "label": "Last Run Date"
+            },
+            "parameter": {
+                "label": "Parameters"
+            },
+            "one_shot": {
+                "label": "One Shot"
+            },
+            "enabled": {
+                "label": "Enabled"
+            },
+            "type_id": {
+                "label": "Job Type"
+            },
+            "FormLegend": {
+                "label": "Job Schedule Details"
+            },
+            "endpoint_id": {
+                "label": "Remote Endpoint"
+            }
+        },
+        "job_running": {
+            "job_type_id": {
+                "label": "Job Type"
+            },
+            "job_id": {
+                "label": "Scheduled Job"
+            },
+            "processor": {
+                "label": "Processor"
+            },
+            "pid": {
+                "label": "System Process Id"
+            },
+            "guid": {
+                "label": "guid"
+            }
         }
     },
     "Logs": {
@@ -417,5 +477,15 @@
             "DeleteDescription": "This will permanently delete this Publication.",
             "DeleteConfirmation": "Are you sure you want to continue?"
         }
+    },
+    "AdminJobs": {
+        "title": "Scheduled Jobs",
+        "index": {
+            "DeleteDescription": "This will permanently delete this Job.",
+            "DeleteConfirmation": "Are you sure you want to continue?"
+        },
+        "EditRecord": "Edit Job Schedule",
+        "NewRecord": "New Job Schedule",
+        "Running Processes": "Running Processes"
     }
 }
