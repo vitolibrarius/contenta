@@ -33,6 +33,8 @@ class UploadImport extends Processor
 
 	const META_STATUS = 'status';
 
+	const META_THUMBNAIL = 'thumbnail';
+
 	const META_RESULTS = 'results';
 	const META_RESULTS_ISSUES = 'results/issues';
 	const META_RESULTS_VOLUME = 'results/volume';

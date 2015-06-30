@@ -56,14 +56,7 @@ class AdminUploadRepair extends Admin
 			$mimeType = null;
 			if ( is_null($processKey) == false ) {
 				$processor = Processor::Named("ImportManager", 0);
-				$wrapper = $processor->fileWrapper($processKey);
-				if ( $wrapper != null ) {
-					$filename = $wrapper->firstImageThumbnailName();
-					if ( is_null($filename) == false ) {
-						$mimeType = 'image/' . file_ext($filename);
-						$image = $wrapper->wrappedThumbnailForName($filename, 100, 100);
-					}
-				}
+				list( $image, $mimeType ) = $processor->firstThumbnail( $processKey );
 			}
 			$this->view->renderImage('public/img/default_thumbnail_publication.png', $image, $mimeType);
 		}

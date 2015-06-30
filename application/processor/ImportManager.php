@@ -137,6 +137,45 @@ class ImportManager extends Processor
 		return 0;
 	}
 
+	function firstThumbnail($processKey = null)
+	{
+		$image = null;
+		$mimeType = null;
+
+		if ( is_null( $processKey ) == false ) {
+			$importQueue = $this->uploadDir();
+			$processDir = appendPath($importQueue, $processKey);
+			if ( is_dir($processDir) ) {
+				$process_meta = Metadata::forDirectory($processDir);
+				if ( $process_meta->isMeta( UploadImport::META_THUMBNAIL ) ) {
+					$thumbailFile = $process_meta->getMeta(UploadImport::META_THUMBNAIL);
+					if ( file_exists($thumbailFile) ) {
+						$mimeType = 'image/' . file_ext($thumbailFile);
+						$image = file_get_contents(appendPath($processDir, $thumbailFile));
+					}
+				}
+
+				if ( is_null($image)) {
+					$filename = $process_meta->getMeta(UploadImport::META_MEDIA_FILENAME);
+					$wrapper = FileWrapper::instance(appendPath($importQueue, $processKey, $filename));
+					if ( $wrapper != null ) {
+						$imageFile = $wrapper->firstImageThumbnailName();
+						if ( is_null($imageFile) == false ) {
+							$mimeType = 'image/' . file_ext($imageFile);
+							$image = $wrapper->wrappedThumbnailForName($imageFile, 100, 100);
+
+							$thumbailFile = "Thumbnail." . file_ext($imageFile);
+							file_put_contents(appendPath($processDir, $thumbailFile), $image);
+							$process_meta->setMeta(UploadImport::META_THUMBNAIL, $thumbailFile);
+						}
+					}
+				}
+			}
+		}
+
+		return array( $image, $mimeType );
+	}
+
 	function fileWrapper($processKey = null)
 	{
 		if ( is_null( $processKey ) == false ) {
