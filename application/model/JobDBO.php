@@ -39,6 +39,11 @@ class JobDBO extends DataObject
 		return (empty($type) ? 'Unknown' : $type->name);
 	}
 
+	public function displayDescription()
+	{
+		return $this->{"jobType/name"}() . " " . $this->{"endpoint/name"}();
+	}
+
 	public function jobType() {
 		$type_model = Model::Named("Job_Type");
 		return (isset($this->type_id) ? $type_model->objectForId($this->type_id) : null);

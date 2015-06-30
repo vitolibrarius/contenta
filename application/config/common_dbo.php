@@ -11,7 +11,10 @@ function dbo_valueForKeypath( $keypath, DataObject $dbo = null, $separator = '/'
 		$result = $dbo;
 		$path = array_filter( explode($separator, $keypath), 'strlen');
 		foreach ($path as $idx => $item) {
-			if (is_array($result) && isset($result[$item])) {
+			if ( is_null($result) || is_bool($result) ) {
+				return null;
+			}
+			else if (is_array($result) && isset($result[$item])) {
 				$result = $result[$item];
 			}
 			else if ( property_exists($result, $item)) {
@@ -40,7 +43,10 @@ function dbo_setValueForKeypath($keypath, $value, DataObject $dbo = null, $separ
 		$target_dbo = $dbo;
 
 		foreach ($path as $idx => $item) {
-			if (is_array($target_dbo) && isset($target_dbo[$item])) {
+			if ( is_null($result) || is_bool($result) ) {
+				throw new \Exception( "unable to set value '$keypath' on " . $dbo );
+			}
+			else if (is_array($target_dbo) && isset($target_dbo[$item])) {
 				$target_dbo = $target_dbo[$item];
 			}
 			else if ( property_exists($target_dbo, $item)) {
