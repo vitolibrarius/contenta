@@ -275,8 +275,6 @@ class ComicVineImporter extends EndpointImporter
 					throw new Exception("Connection failed to find publisher for " . $xid);
 				}
 
-				// $this->setMeta( "cv/publisher/" . $xid, $record );
-
 				$map = $this->importMap_publisher();
 				foreach( $map as $cvKey => $modelKey ) {
 					$value = array_valueForKeypath($cvKey, $record);
@@ -311,10 +309,12 @@ class ComicVineImporter extends EndpointImporter
 				$connection = $this->connection();
 				$record = $connection->characterDetails( $xid );
 				if ( $record == false ) {
-					throw new Exception("Connection failed to find character for " . $xid);
+					// try minimal fields
+					$record = $connection->characterDetails( $xid, true );
+					if ( $record == false ) {
+						throw new Exception("Connection failed to find character for " . $xid);
+					}
 				}
-
-				// $this->setMeta( "cv/character/" . $xid, $record );
 
 				$map = $this->importMap_character();
 				foreach( $map as $cvKey => $modelKey ) {
@@ -361,10 +361,11 @@ class ComicVineImporter extends EndpointImporter
 				$connection = $this->connection();
 				$record = $connection->seriesDetails( $xid );
 				if ( $record == false ) {
-					throw new Exception("Connection failed to find series for " . $xid);
+					$record = $connection->seriesDetails( $xid, true );
+					if ( $record == false ) {
+						throw new Exception("Connection failed to find series for " . $xid);
+					}
 				}
-
-				// $this->setMeta( "cv/series/" . $xid, $record );
 
 				$map = $this->importMap_series();
 				foreach( $map as $cvKey => $modelKey ) {
@@ -422,8 +423,6 @@ class ComicVineImporter extends EndpointImporter
 					throw new Exception("Connection failed to find story_arc for " . $xid);
 				}
 
- 				// $this->setMeta( "cv/story_arc/" . $xid, $record );
-
 				$map = $this->importMap_story_arc();
 				foreach( $map as $cvKey => $modelKey ) {
 					$value = array_valueForKeypath($cvKey, $record);
@@ -465,8 +464,6 @@ class ComicVineImporter extends EndpointImporter
 				if ( $record == false ) {
 					throw new Exception("Connection failed to find publication for " . $xid);
 				}
-
-				// $this->setMeta( "cv/publication/" . $xid, $record );
 
 				$map = $this->importMap_publication();
 				foreach( $map as $cvKey => $modelKey ) {

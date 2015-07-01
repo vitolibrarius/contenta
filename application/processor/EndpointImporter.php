@@ -38,6 +38,8 @@ abstract class EndpointImporter extends Processor
 	const META_IMPORT_LARGE_ICON =	'image/large';
 	const META_IMPORT_RELATIONSHIP = 'relationships';
 
+	public $strictErrors = true;
+
 	function __construct($guid)
 	{
 		parent::__construct($guid);
@@ -301,7 +303,7 @@ abstract class EndpointImporter extends Processor
 	public function enqueueBatch( $objectType = '', $size = 0 )
 	{
 		if ( is_numeric($size) ) {
-			$size = max(abs($size), 50);
+			$size = min(abs($size), 50);
 			$methodName = 'enqueue_' . $objectType;
 			if (method_exists($this, $methodName)) {
 				$objectModel = Model::Named( $objectType );
@@ -314,6 +316,7 @@ abstract class EndpointImporter extends Processor
 					Logger::logInfo( "Enqueuing $idx: " . $object, $this->type, $this->guid );
 					call_user_func_array(array($this, $methodName), array( array( "xid" => $object->xid), true, true) );
 				}
+				$this->strictErrors = false;
 			}
 			else {
 				throw new \Exception( "No method named '" . $methodName . "( array, bool, bool )'");
@@ -337,8 +340,17 @@ abstract class EndpointImporter extends Processor
 
 				$pre_process_method = 'preprocess_' . $meta[EndpointImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $pre_process_method)) {
-					if ( $this->$pre_process_method($meta) == null ) {
-						throw new Exception("pre-processing error " . $pre_process_method );
+					try {
+						$success_return = $this->$pre_process_method($meta);
+						if ( is_null($success_return)) {
+							throw new Exception("pre-processing error " . $pre_process_method );
+						}
+					}
+					catch ( Exception $e ) {
+						Logger::LogException( $e );
+						if ( $this->strictErrors == true ) {
+							throw $e;
+						}
 					}
 				}
 				else {
@@ -355,8 +367,17 @@ abstract class EndpointImporter extends Processor
 			foreach( $imported as $path => $meta ) {
 				$finalize_method = 'finalize_' . $meta[EndpointImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $finalize_method)) {
-					if ( $this->$finalize_method($meta) == null ) {
-						throw new Exception("finalize error " . $finalize_method );
+					try {
+						$success_return = $this->$finalize_method($meta);
+						if ( is_null($success_return) ) {
+							throw new Exception("finalize error " . $finalize_method );
+						}
+					}
+					catch ( Exception $e ) {
+						Logger::LogException( $e );
+						if ( $this->strictErrors == true ) {
+							throw $e;
+						}
 					}
 				}
 				else {
