@@ -25,7 +25,7 @@ class AdminUsers extends Admin
 // 			$this->view->viewTitle = "Users";
 			$user_model = Model::Named('Users');
 			$this->view->model = $user_model;
-			$this->view->users = $user_model->allUsers();
+			$this->view->users = $user_model->allObjects();
 			$this->view->render( '/admin/userlist');
 		}
 	}

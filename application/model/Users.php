@@ -182,27 +182,10 @@ class Users extends Model
 	}
 
 	public function updateObject(DataObject $object = null, array $values) {
-		$updates = array();
-		if (isset($object) && is_a($object, "\\model\UsersDBO" )) {
-
-			if ( isset($values[Users::name]) && $values[Users::name] != $object->name ) {
-				$updates[Users::name] = $values[Users::name];
-			}
-
-			if ( isset($values[Users::account_type]) && $values[Users::account_type] != $object->account_type ) {
-				$updates[Users::account_type] = $values[Users::account_type];
-			}
-
-			if ( isset($values[Users::email]) && $values[Users::email] != $object->email ) {
-				$updates[Users::email] = $values[Users::email];
-			}
-
-			if ( isset($values[Users::active]) && $values[Users::active] != $object->isActive()) {
-				$updates[Users::active] = ($values[Users::active]) ? 1 : 0;
-			}
-
+		if (isset($object) && $object instanceof model\UsersDBO ) {
 			if ( isset($values['password'], $values['password_check'])
-				&& empty($values['password']) == false && empty($values['password_check']) == false ) {
+				&& empty($values['password']) == false && empty($values['password_check']) == false
+				&& $values['password'] === $values['password_check']) {
 				if ( PHP_VERSION_ID > 50500 )
 				{
 					$hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
@@ -212,13 +195,15 @@ class Users extends Model
 				{
 					$password_hash = hash(HASH_DEFAULT_ALGO, $values['password']);
 				}
-				$updates['password'] = $values['password'];
-				$updates['password_check'] = $values['password_check'];
-				$updates[Users::password_hash] = $password_hash;
+				$values[Users::password_hash] = $password_hash;
+			}
+
+			if ( isset($values[Users::active]) && is_bool($values[Users::active]) && $values[Users::active] != $object->isActive()) {
+				$values[Users::active] = (boolval($values[Users::active]) ? 1 : 0);
 			}
 		}
 
-		return parent::updateObject($object, $updates);
+		return parent::updateObject($object, $values);
 	}
 
 	public function createObject(array $values = array()) {
@@ -272,7 +257,7 @@ class Users extends Model
 
 	function stampLoginTimestamp($userObj)
 	{
-		if ($this->updateObject( $userObj, array(Users::last_login_timestamp => time() )) ) {
+		if ( $this->updateObject( $userObj, array( Users::last_login_timestamp => time() )) ) {
 			return $this->refreshObject($userObj);
 		}
 		return false;

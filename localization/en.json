@@ -136,6 +136,12 @@
             },
             "user_rememberme": {
                 "label": "Remember Me (for 2 weeks)"
+            },
+            "last_login_timestamp": {
+                "label": "Last Login"
+            },
+            "last_failed_login": {
+                "label": "Last Login Failure"
             }
         },
         "endpoint": {
@@ -486,6 +492,9 @@
         },
         "EditRecord": "Edit Job Schedule",
         "NewRecord": "New Job Schedule",
-        "Running Processes": "Running Processes"
+        "Running Processes": "Running Processes",
+        "JobsRunningLink": {
+            "name": "Currently Running"
+        }
     }
 }

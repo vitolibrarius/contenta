@@ -54,7 +54,6 @@ class AdminCharacters extends Admin
 				->where( Qualifier::LikeQualifier( Character::name, $_GET['name'] . '%' ))
 				->orderBy( $model->sortOrder() );
 
-			Logger::logInfo( "SQL: " . $select->sqlStatement() . PHP_EOL . var_export($select->sqlParameters(), true) );
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
 

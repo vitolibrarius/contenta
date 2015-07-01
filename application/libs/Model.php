@@ -198,7 +198,7 @@ abstract class Model
 	public function randomObjects( $limit = 1)
 	{
 		$select = SQL::Select( $this );
-		$select->orderBy( "random()" );
+		$select->orderBy( array( "random()") );
 		$select->limit($limit);
 		return $select->fetchAll();
 	}
@@ -212,7 +212,7 @@ abstract class Model
 			db\Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * 7)) )
 		);
 		$select->where( db\Qualifier::AndQualifier( $hasXID, $needsUpdate ));
-		$select->orderBy( "xupdated" );
+		$select->orderBy( array("xupdated") );
 		$select->limit( intval($limit) );
 		return $select->fetchAll();
 	}
@@ -305,7 +305,7 @@ abstract class Model
 			return $validation;
 		}
 		else {
-			Logger::logError( "Failed to create record for empty values", __METHOD__, $this->tableName() );
+			Logger::logError( "Failed to update $object for values " . var_export($values, true) , __METHOD__, $this->tableName() );
 		}
 		return false;
 	}

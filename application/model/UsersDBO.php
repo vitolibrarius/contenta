@@ -32,6 +32,14 @@ class UsersDBO extends DataObject
 		return (isset($this->active) && $this->active == 1);
 	}
 
+	public function lastLoginDate() {
+		return $this->formattedDate( Users::last_login_timestamp, "M d, Y H:i" );
+	}
+
+	public function lastFailedLoginDate() {
+		return $this->formattedDate( Users::last_failed_login, "M d, Y H:i" );
+	}
+
 	public function recordLoginFrom($ip) {
 		$join_model = Model::Named('User_Network');
 		$join = $join_model->createForIP($this, $ip);
