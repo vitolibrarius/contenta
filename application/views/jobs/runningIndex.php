@@ -5,36 +5,25 @@
 	</ul>
 </div>
 
-<!--
-			Job_Running::id, Job_Running::job_id, Job_Running::job_type_id,
-			Job_Running::processor, Job_Running::guid,
-			Job_Running::created, Job_Running::pid
+<div id='ajaxDiv'></div>
 
--->
-<div class="mediaData">
-	<table>
-		<tr>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "job_type_id" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "job_id" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "processor" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "pid" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "guid" ); ?></th>
-		</tr>
-	<?php if (is_array($this->objects) && count($this->objects) > 0): ?>
-		<?php foreach($this->objects as $key => $value): ?>
-			   <tr>
-					<td><?php echo $value->jobType()->name; ?></td>
-					<td><?php echo $value->job()->displayName(); ?></td>
-					<td><?php echo $value->processor; ?></td>
-					<td><?php echo $value->pid; ?></td>
-					<td><?php echo $value->guid; ?></td>
-				</tr>
-		<?php endforeach; ?>
-	<?php else: ?>
-		<tr>
-			<td colspan=5><?php echo 'No processes running'; ?></td>
-		</tr>
-	<?php endif ?>
-
-	</table>
-</div>
+<script language="javascript" type="text/javascript">
+	$(document).ready(function($) {
+		function refreshJobs() {
+			$.ajax({
+				type: "GET",
+				url: "<?php echo Config::Web('/AdminJobs/ajax_runningTable'); ?>",
+				success: function(msg){
+					var ajaxDisplay = document.getElementById('ajaxDiv');
+					if ( ajaxDisplay.innerHTML != msg ) {
+						ajaxDisplay.innerHTML = msg;
+					}
+				}
+			});
+		};
+		refreshJobs();
+		setInterval (function f() {
+			refreshJobs();
+		}, 5000);
+	});
+</script>

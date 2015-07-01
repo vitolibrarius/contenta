@@ -17,6 +17,9 @@
 </script>
 <div class="paging">
 	<ul>
+		<li><a href="<?php echo Config::Web('/AdminJobs/runningIndex'); ?>">
+			<span class=""><?php echo $this->label( "JobsRunningLink", "name" ); ?></span></a>
+		</li>
 		<li><a href="<?php echo Config::Web('/AdminJobs/edit'); ?>"><span class="">Add New Job</span></a></li>
 	</ul>
 </div>
@@ -59,7 +62,7 @@
 					<td><?php echo $value->dayOfWeek; ?></td>
 					<td><?php echo $value->lastDate(); ?></td>
 					<td><?php echo $value->nextDate(); ?></td>
-					<td><?php echo var_export($value->jsonParameters(), true); ?></td>
+					<td><?php echo var_export($value->parameter, true); ?></td>
 					<td><span class="icon <?php echo ($value->one_shot ? 'true' : 'false') ?>"></span></td>
 					<td><span class="icon <?php echo ($value->enabled ? 'true' : 'false') ?>"></span></td>
 

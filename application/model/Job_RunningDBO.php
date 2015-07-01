@@ -22,7 +22,7 @@ class Job_RunningDBO extends DataObject
 
 	public function job() {
 		$type_model = Model::Named("Job");
-		return $type_model->objectForId($this->job_id);
+		return (isset($this->job_id) ? $type_model->objectForId($this->job_id) : null);
 	}
 
 	public function jobType() {

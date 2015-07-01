@@ -128,11 +128,11 @@ class Job_Running extends Model
 			}
 
 			$objectOrErrors = $this->createObject($params);
-			if ( is_array($objectOrErrors) ) {
+			if ( $objectOrErrors instanceof model\Job_RunningDBO ) {
 				return $objectOrErrors;
 			}
-			else if ($objectOrErrors != false) {
-				return $this->objectForId( (string)$objectOrErrors);
+			else if ( is_array($objectOrErrors) ) {
+				return $objectOrErrors;
 			}
 		}
 		else {

@@ -117,8 +117,9 @@ class Job extends Model
 			Qualifier::IsNull( Job::next ),
 			Qualifier::LessThan( Job::next, time() )
 		);
+		$enabled = Qualifier::Equals( Job::enabled, Model::TERTIARY_TRUE );
 
-		return $this->allObjectsForQualifier($needsRun);
+		return $this->allObjectsForQualifier(Qualifier::AndQualifier( $needsRun, $enabled ));
 	}
 
 	/* EditableModelInterface */

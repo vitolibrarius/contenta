@@ -42,13 +42,19 @@ class AdminJobs extends Admin
 	function runningIndex()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->render( '/jobs/runningIndex' );
+		}
+	}
+
+	function ajax_runningTable()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Job_Running');
 			$model->clearFinishedProcesses();
 
-			$this->view->setLocalizedViewTitle("Running Processes");
 			$this->view->model = $model;
 			$this->view->objects = $model->allObjects();
-			$this->view->render( '/jobs/runningIndex' );
+			$this->view->render( '/jobs/running_table', true );
 		}
 	}
 
