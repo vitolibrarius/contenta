@@ -100,7 +100,7 @@ $debug = ( ($metadata->isMeta("debug")) ? $metadata->getMeta("debug") : null);
 
 Logger::instance()->setTrace("Daemon", $job_id );
 
-Logger::logInfo('starting daemon ');
+Logger::logInfo('starting daemon ', $processorName, $guid);
 try {
 	$job_run_model = Model::Named('Job_Running');
 	$lockfile = appendPath( $workingDir, $processorName . ".lock");
@@ -187,6 +187,6 @@ if ( is_null($debug) && is_sub_dir($workingDir, $config->processingDirectory()) 
 	destroy_dir($workingDir);
 }
 
-Logger::logInfo( 'finished daemon');
+Logger::logInfo( 'finished daemon', $processorName, $guid);
 
 ?>

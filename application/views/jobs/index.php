@@ -50,7 +50,7 @@
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "parameter" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "one_shot" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "enabled" ); ?></th>
-			<th colspan=2></th>
+			<th colspan=3></th>
 		</tr>
 	<?php if (is_array($this->objects)): ?>
 		<?php foreach($this->objects as $key => $value): ?>
@@ -72,6 +72,10 @@
 
 					<td><?php if ( $running == false ): ?>
 						<a href="<?php echo Config::Web('/AdminJobs/edit/'. $value->id); ?>"><span class="icon edit" /></a>
+						<?php endif; ?>
+					</td>
+					<td><?php if ( $running == false ): ?>
+						<a href="<?php echo Config::Web('/AdminJobs/execute/'. $value->id); ?>"><span class="icon run" /></a>
 						<?php endif; ?>
 					</td>
 					<td><?php if ( $running == false ): ?>

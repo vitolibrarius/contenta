@@ -19,6 +19,7 @@ class SeriesDBO extends DataObject
 	public $xurl;
 	public $xsource;
 	public $xid;
+	public $xupdated;
 
 	public function displayName() {
 		return $this->name;

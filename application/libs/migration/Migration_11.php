@@ -60,6 +60,17 @@ class Migration_11 extends Migrator
 				"Adding the parameter column to Job_Type"
 			);
 		}
+
+		/** SERIES */
+		$series_model = Model::Named("Series");
+		$table_fields = \SQL::pragma_TableInfo(Series::TABLE);
+		if ( isset($table_fields[ Series::xupdated ]) == false ) {
+			$this->sqlite_execute(
+				Series::TABLE ,
+				"ALTER TABLE " . Series::TABLE . " ADD COLUMN " . Series::xupdated . " INTEGER",
+				"Adding the parameter column to Series"
+			);
+		}
 	}
 
 	public function sqlite_postUpgrade()

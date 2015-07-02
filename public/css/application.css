@@ -605,9 +605,10 @@ span.icon {
 span.icon.true:before	{ content:"\2713"; }
 span.icon.false:before	{ content:"\2717"; }
 span.icon.edit:before	{ content:"\270E"; }
-span.icon.trash:before	{ content:"\2425"; }
+span.icon.trash:before	{ content:"\232B"; }
 span.icon.recycle:before { content:"\2672"; }
 span.icon.retry:before	{ content:"\21BA"; }
+span.icon.run:before { content:"\1F3C3"; }
 
 span.icon.not_favorite:before	{ content:"\2665"; font-size: 32px; }
 span.icon.favorite:before		{ content:"\2665"; color: red; font-size: 32px; }

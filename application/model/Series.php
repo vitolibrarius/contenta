@@ -23,6 +23,7 @@ class Series extends Model
 	const xurl =			'xurl';
 	const xsource =			'xsource';
 	const xid =				'xid';
+	const xupdated =		'xupdated';
 
 
 	public function tableName() { return Series::TABLE; }
@@ -55,7 +56,7 @@ class Series extends Model
 		return array(
 			Series::id, Series::parent_id, Series::publisher_id, Series::name, Series::desc, Series::created,
 			Series::start_year, Series::issue_count,
-			Series::xurl, Series::xsource, Series::xid
+			Series::xurl, Series::xsource, Series::xid, Series::xupdated
 		);
 	}
 

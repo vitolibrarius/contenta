@@ -35,7 +35,8 @@
         "RefreshFromEndpoint": "Refresh From Endpoint",
         "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints.",
         "Delete Failure": "Delete Failure",
-        "Failed to find request record": "Failed to find request record"
+        "Failed to find request record": "Failed to find request record",
+        "Running process id ": "Running process id "
     },
     "Admin": {
         "title": "Admin",
