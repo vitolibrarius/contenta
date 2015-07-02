@@ -1,3 +1,322 @@
+Version 0.2.0:
+* 908db67 -  (HEAD, master) SQL::raw now returns results if there are any.  Insert allows for just the success value to be returned on commit rather then the inserted record (Thu Jul 2 14:33:39 2015 -0600) <Vito Librarius>
+* 70b5743 -  Added new field to job_type for default parameters (Thu Jul 2 14:32:42 2015 -0600) <Vito Librarius>
+* 86b62e2 -  Basis for a simple cron fired interface that will in turn fire the scheduled jobs.  This allows the Contenta application to only reside in memory when it is active. (Thu Jul 2 11:26:52 2015 -0600) <Vito Librarius>
+* f0e1964 -  Added patch report to the bottom of the eligibility report (Thu Jul 2 11:24:56 2015 -0600) <Vito Librarius>
+* b8901a0 -  added last login and last login failed dates to the user table display (Tue Jun 30 19:59:13 2015 -0600) <Vito Librarius>
+* 9907c9b -  changed the job_running table to an ajax call so it can refresh every 5 seconds (Tue Jun 30 19:58:02 2015 -0600) <Vito Librarius>
+* c1df28c -  slightly changing the error handling so a failure to find a character (for example) may be caused by asking for to much data.  a second call using less fields may succeed (Tue Jun 30 19:56:13 2015 -0600) <Vito Librarius>
+* 2f76649 -  NPE in dbo key value coding (Tue Jun 30 15:37:29 2015 -0600) <Vito Librarius>
+* 72bd614 -  Processing stores the first thumbnail in the working directory (Tue Jun 30 14:41:23 2015 -0600) <Vito Librarius>
+* c760204 -  Basic list / create / edit panels for Jobs and Jobs_Running (Sat Jun 27 12:01:52 2015 -0600) <Vito Librarius>
+* 820783e -  SQL wildcard was set to * instead of % (Thu Jun 25 09:35:57 2015 -0600) <Vito Librarius>
+* 33d6237 -  Update aggregate uses new SQL (Wed Jun 24 20:53:08 2015 -0600) <Vito Librarius>
+* 77b1d52 -  Added between shortcut (Wed Jun 24 20:31:55 2015 -0600) <Vito Librarius>
+* b8274eb -  Added between shortcut (Wed Jun 24 20:28:48 2015 -0600) <Vito Librarius>
+* aed00ca -  only remaining old function is updateAggregate (Tue Jun 23 22:31:27 2015 -0600) <Vito Librarius>
+* b501acc -  more stubs (Tue Jun 23 19:59:27 2015 -0600) <Vito Librarius>
+* 05c0403 -  import stub (Tue Jun 23 19:58:00 2015 -0600) <Vito Librarius>
+* ce1bfe5 -  update the UpdateObject method (Mon Jun 22 12:21:23 2015 -0600) <Vito Librarius>
+* bf34f2d -  Removed more of the old sql style methods (Mon Jun 22 09:41:00 2015 -0600) <Vito Librarius>
+* da7973e -  Added simple aggregate function for 'count' and 'sum' (Sun Jun 21 10:17:20 2015 -0600) <Vito Librarius>
+* f3814a0 -  Removed createObj() from model (Fri Jun 19 21:26:32 2015 -0600) <Vito Librarius>
+* d8c50b6 -  Added deprecated messages (Fri Jun 19 15:29:33 2015 -0600) <Vito Librarius>
+* 7d69c06 -  Massive move to new SQL handlers (Fri Jun 19 15:12:34 2015 -0600) <Vito Librarius>
+* c675071 -  provide defaults for hour/minute/dayOfWeek = '*' (Thu Jun 18 17:03:34 2015 -0600) <Vito Librarius>
+* 33909ba -  Migrated migration to use new SQL objects (Thu Jun 18 16:55:59 2015 -0600) <Vito Librarius>
+* f81cce4 -  Update statement support (Thu Jun 18 12:12:56 2015 -0600) <Vito Librarius>
+* cd8fbdb -  Delete statement support (Thu Jun 18 12:02:37 2015 -0600) <Vito Librarius>
+* 38073c6 -  Test if select matched the model'd DataObject, otherwise fetch raw rows (Thu Jun 18 11:48:00 2015 -0600) <Vito Librarius>
+* dd8c2f0 -  Insert commit logic (Mon Jun 15 20:37:06 2015 -0600) <Vito Librarius>
+* 22a4948 -  (origin/master, origin/HEAD) Simple update clause support (Sat Jun 13 16:08:22 2015 -0600) <Vito Librarius>
+* e6ee3da -  Basic import clause support (Sat Jun 13 16:03:33 2015 -0600) <Vito Librarius>
+* 115dc84 -  basic delete sql clause (Sat Jun 13 14:41:07 2015 -0600) <Vito Librarius>
+* d226301 -  simple single table select generates the correct sql (Sat Jun 13 14:41:06 2015 -0600) <Vito Librarius>
+* b58a49f -  creating an abstract / expressive SQL collection of objects. (Sat Jun 13 14:41:03 2015 -0600) <Vito Librarius>
+* 02e3f27 -  Simple tool to export database into son file (Sat Jun 13 14:41:01 2015 -0600) <Vito Librarius>
+* fa9b196 -  Null checks for endpoints (Sat Jun 13 14:41:00 2015 -0600) <Vito Librarius>
+* c35b386 -  Made the test root a defined value (Sat Jun 13 14:40:57 2015 -0600) <Vito Librarius>
+* 17dbae8 -  Series is missing xupdated attribute (Fri Jun 12 08:17:23 2015 -0600) <Vito Librarius>
+* 22eb0f4 -  Created new Daemon script for launching background processing (Thu Jun 11 21:37:19 2015 -0600) <Vito Librarius>
+* 108a277 -  slightly better error handling using the http response codes (Thu Jun 11 20:58:54 2015 -0600) <Vito Librarius>
+* 0d75d7d -  removed custom 'http_response_code()' function since really 5.4 should be standard. (Thu Jun 11 20:57:55 2015 -0600) <Vito Librarius>
+* 8271973 -  Set the 'updated' field to track when we last updated this record (Thu Jun 11 20:56:08 2015 -0600) <Vito Librarius>
+* 818615f -  Added test for actual imported records (Thu Jun 11 20:55:16 2015 -0600) <Vito Librarius>
+* a72693a -  set values alters the original array and returns the changes (Wed Jun 10 08:51:11 2015 -0600) <Vito Librarius>
+* d59f019 -  Removed Logger return success values (Wed Jun 10 08:50:35 2015 -0600) <Vito Librarius>
+* 4b4af5d -  Added subdirectory detection (Wed Jun 10 08:50:11 2015 -0600) <Vito Librarius>
+* 23850e5 -  added endpoint url validation (Mon Jun 1 23:09:32 2015 -0600) <Vito Librarius>
+* a2e96ea -  moved validation exception to separate file (Mon Jun 1 23:08:57 2015 -0600) <Vito Librarius>
+* 931cee5 -  Function to clear a test table of any data (Mon Jun 1 23:08:13 2015 -0600) <Vito Librarius>
+* 86ae3bf -  Simply cron schedule evaluator for the three cron fields contenta supports (Mon Jun 1 23:07:10 2015 -0600) <Vito Librarius>
+* 9896b90 -  removed default cache header mechanism (Fri May 8 17:44:07 2015 -0600) <Vito Librarius>
+* 6f84342 -  Using some of the new key path methods to display media cards (Thu May 7 20:51:22 2015 -0600) <Vito Librarius>
+* accd220 -  Added overloads for __call, __get and __set for DataObjects (Tue May 5 21:57:47 2015 -0600) <Vito Librarius>
+* 8500bcf -  Migrated valueForKeypath()/setValueForKeypath() to use the array_ prefix.  Also added dbo_ version that will get and set values to data objects using key paths (Tue May 5 21:47:30 2015 -0600) <Vito Librarius>
+* 6789da9 -  Stub controller for API services (Tue May 5 20:33:52 2015 -0600) <Vito Librarius>
+* 672a17c -  Basic user home page. WorkInProgress (Tue May 5 20:33:38 2015 -0600) <Vito Librarius>
+* 4ec25c6 -  Added delete functionality for unprocessed media (Thu Apr 30 21:28:22 2015 -0600) <Vito Librarius>
+* c5318e8 -  Fixed issue where series names less then 4 characters would not search (Thu Apr 30 14:21:26 2015 -0600) <Vito Librarius>
+* 28ae537 -  Fixes #20: slideshow index fixed (Thu Apr 30 09:22:18 2015 -0600) <Vito Librarius>
+* 99c256f -  When accepting a search item, restore the processing list to the correct page (Thu Apr 30 08:33:09 2015 -0600) <Vito Librarius>
+* a2f14a5 -  Localization updates (Wed Apr 29 22:09:50 2015 -0600) <Vito Librarius>
+* 57e16b0 -  Updated results display that groups results by existing series first (Wed Apr 29 22:08:45 2015 -0600) <Vito Librarius>
+* 480c66f -  Slightly updated sabnzbd posting script.  Added feature to have the CBR repackaged as CBZ before posting (Wed Apr 29 22:07:56 2015 -0600) <Vito Librarius>
+* 3c99201 -  Better highlights when rows are processing (Wed Apr 29 21:00:35 2015 -0600) <Vito Librarius>
+* 22fea3a -  Missing call to actually perform the search (Wed Apr 29 13:29:15 2015 -0600) <Vito Librarius>
+* 91ff2d7 -  Problem with no responses (Wed Apr 29 13:23:27 2015 -0600) <Vito Librarius>
+* badda51 -  Changed the initial unprocessed detail view to not automatically re-run the comic vine search (Wed Apr 29 12:46:09 2015 -0600) <Vito Librarius>
+* 3a3e7f6 -  Another tweak for filename parsing (Wed Apr 29 12:01:45 2015 -0600) <Vito Librarius>
+* 39c0e3f -  Modified name parsing to maintain dashes in filenames (Wed Apr 29 11:37:22 2015 -0600) <Vito Librarius>
+* f5d4510 -  Added script for use with sabnzbd to take downloaded content and store it into the Contenta system (Tue Apr 28 07:57:27 2015 -0600) <Vito Librarius>
+* fad7e46 -  Small fixes (Mon Apr 27 22:15:21 2015 -0600) <Vito Librarius>
+* c369795 -  Fixes #19: creates a simple publication name as "Issue ##" if no name is provided. (Mon Apr 27 22:14:18 2015 -0600) <Vito Librarius>
+* f56d63a -  Fixes #18: revamp file locks for appending to the log file. (Mon Apr 27 22:12:09 2015 -0600) <Vito Librarius>
+* 57c1c30 -  Wrong variable reference (Mon Apr 27 21:03:28 2015 -0600) <Vito Librarius>
+* 8eec87d -  Added API login routine and properly setting up the API session (Mon Apr 27 21:02:56 2015 -0600) <Vito Librarius>
+* 644ebc4 -  typos (Sun Apr 26 11:07:22 2015 -0600) <Vito Librarius>
+* 82d30d5 -  When media is re-wrapped (from cbr -> cbz) generate a new hash (Sun Apr 26 10:44:16 2015 -0600) <Vito Librarius>
+* 41ff27d -  Fixed some session message calls (Sun Apr 26 10:43:37 2015 -0600) <Vito Librarius>
+* 17210a4 -  Allows search results to be manually selected and imported (Fri Apr 24 16:32:17 2015 -0600) <Vito Librarius>
+* 2dca024 -  Updated usage for the Job_Running data objects (Tue Apr 21 21:42:39 2015 -0600) <Vito Librarius>
+* 9f80c89 -  Simplified the Job_Running model (Mon Apr 20 22:21:28 2015 -0600) <Vito Librarius>
+* b623848 -  Uploads are automatically indexed and stored if matches can be made (Mon Apr 20 21:14:08 2015 -0600) <Vito Librarius>
+* b7baabc -  Successfully import media after automatic ComicVine search (Mon Apr 20 08:42:49 2015 -0600) <Vito Librarius>
+* 00f08fd -  added large description back into CV fields, but still select short 'deck' preferentially when it is available (Sun Apr 19 15:37:17 2015 -0600) <Vito Librarius>
+* a42881e -  Small fixes including - being more consistent with DIRECTORY_SEPERATOR - adding mediaDBO as objects with media files - adding sample test cbz files (Sat Apr 18 17:19:19 2015 -0600) <Vito Librarius>
+* b8d04ce -  Testing the Person details from ComicVine.  I'm not sure if I want it yet (Tue Apr 14 21:41:52 2015 -0600) <Vito Librarius>
+* c758171 -  Reduced the relationships section of the import metadata to just the external id's. (Tue Apr 14 21:27:57 2015 -0600) <Vito Librarius>
+* 0efd689 -  Initial support for administration of publications (Tue Apr 14 21:12:01 2015 -0600) <Vito Librarius>
+* acbb510 -  New technique for generating HTML content from a class instead of tons of echo's (Tue Apr 14 21:09:52 2015 -0600) <Vito Librarius>
+* 4ca1c33 -  Admin support for publications.  edit is not complete yet (Sun Apr 12 15:59:46 2015 -0600) <Vito Librarius>
+* 97c2c21 -  added support for aliases during import (Sun Apr 12 15:58:55 2015 -0600) <Vito Librarius>
+* b123174 -  ooops, endless loop (Sun Apr 12 15:58:17 2015 -0600) <Vito Librarius>
+* f6db79f -  Added array iterator with callback function (Sun Apr 12 15:57:07 2015 -0600) <Vito Librarius>
+* b441239 -  Wrong extension, file is identified as CRB so extension should match (Fri Apr 10 17:31:07 2015 -0600) <Vito Librarius>
+* 90a88dd -  Small fixes for comic vine importer (Fri Apr 10 17:30:39 2015 -0600) <Vito Librarius>
+* 70d32a9 -  ignore all my test configurations (Fri Apr 10 17:03:00 2015 -0600) <Vito Librarius>
+* 459e09d -  Refactored ComicVineImporter and updated interface usage (Fri Apr 10 11:08:48 2015 -0600) <Vito Librarius>
+* 53baa41 -  Default implementation of objectForExternal() (Fri Apr 10 11:07:27 2015 -0600) <Vito Librarius>
+* 796581a -  Connector allows use of cached data on first call, but on second it forces a re-fetch from source (Fri Apr 10 11:04:38 2015 -0600) <Vito Librarius>
+* 4a2c7b1 -  Added and updated some methods to set data relationships properly (Fri Apr 10 11:01:42 2015 -0600) <Vito Librarius>
+* 5318eac -  Endpoint importer creates stub content objects in the database.  It assumes all meta-stage data is in Contenta format (Fri Apr 10 11:00:54 2015 -0600) <Vito Librarius>
+* ce5f92d -  Small test to examine the various hash algorithms (Fri Apr 10 10:59:44 2015 -0600) <Vito Librarius>
+* 9e40c72 -  Small test to examine the various hash algorithms (Fri Apr 10 10:59:03 2015 -0600) <Vito Librarius>
+* f275d5b -  switched to sha256 (Thu Apr 9 14:22:22 2015 -0600) <Vito Librarius>
+* fb285f0 -  Import test for publications (Mon Apr 6 15:46:26 2015 -0600) <Vito Librarius>
+* 4535d4d -  test/ComicVine.json needs to hold your comic vine API key, but we don't want that in the repo (Tue Mar 31 22:30:02 2015 -0600) <Vito Librarius>
+* 932c0e3 -  Updates for CV Importer and some test data for the importer (Tue Mar 31 21:37:10 2015 -0600) <Vito Librarius>
+* 21611c2 -  Updated test with some common functions (Tue Mar 31 21:36:26 2015 -0600) <Vito Librarius>
+* 8b0dca2 -  missing method, objectForExternal (Tue Mar 31 21:34:48 2015 -0600) <Vito Librarius>
+* 58c4452 -  Upload import now converts from cbr to cbz  when the upload occurs, but for large files this can cause a significant delay. (Tue Mar 31 11:35:10 2015 -0600) <Vito Librarius>
+* c2573c8 -  Check for valid additional media support (Tue Mar 31 11:32:57 2015 -0600) <Vito Librarius>
+* 6a598f2 -  Switched to having the import strip the extension, so having the media name parser trying to strip it again caused issues on the edge cases (Tue Mar 31 11:29:55 2015 -0600) <Vito Librarius>
+* a463890 -  set the value to the expected default (Tue Mar 31 11:28:46 2015 -0600) <Vito Librarius>
+* ad4a013 -  changed the file wrapper -> testWrapper() contract to return the error message (Tue Mar 31 11:06:16 2015 -0600) <Vito Librarius>
+* 8799802 -  Not all data objects have additional media, but the auto creation of directories was noise (Tue Mar 31 10:44:18 2015 -0600) <Vito Librarius>
+* c4fc6d6 -  Check for existing hashes manually (Tue Mar 31 10:43:27 2015 -0600) <Vito Librarius>
+* cdc2f37 -  allow completed jobs to auto-clear (Tue Mar 31 10:41:35 2015 -0600) <Vito Librarius>
+* 573fe46 -  small fixes for cbr unwrapping (Sun Mar 29 12:51:15 2015 -0600) <Vito Librarius>
+* c43473f -  Added feature for Filewrapper to unwrap a rar/cbr file and rewrap as zip/cbz (Sun Mar 29 12:08:54 2015 -0600) <Vito Librarius>
+* ae077fb -  PHP version check to upgrade eligibility page (Sun Mar 29 11:29:52 2015 -0600) <Vito Librarius>
+* 9792b70 -  Basic display of content that has not automatically processed and index (Thu Mar 26 21:35:56 2015 -0600) <Vito Librarius>
+* 4cae2cf -  #14 Added the model tables for job scheduling and running (Thu Mar 19 17:22:44 2015 -0600) <Vito Librarius>
+* fa1410f -  Removed some logging from the Migrator (Wed Mar 18 10:16:34 2015 -0600) <Vito Librarius>
+* 0b21d18 -  Fixed recursion infinite loop in series displayDescription() (Tue Mar 17 16:55:58 2015 -0600) <Vito Librarius>
+* 54e2df2 -  Missing import for \Auth (Tue Mar 17 16:25:02 2015 -0600) <Vito Librarius>
+* 759ac13 -  Fixes #7: added media data model and test code (Tue Mar 17 09:44:02 2015 -0600) <Vito Librarius>
+* b908933 -  Null pointer exception when stack trace point has no arguments (Tue Mar 17 09:40:12 2015 -0600) <Vito Librarius>
+* d4c4a00 -  Fixes #6: Publication data model and simple test (Mon Mar 16 20:59:54 2015 -0600) <Vito Librarius>
+* 78e867d -  Fixes #5 : rendering login panel for upgrade caused exception (Sat Mar 14 10:26:23 2015 -0600) <Vito Librarius>
+* 2185d98 -  Version bump to 0.1.7 (Fri Mar 13 22:50:48 2015 -0600) <Vito Librarius>
+* 8e9fd64 -  Added model for Story Arcs and added a bunch of join tables. (Fri Mar 13 22:50:03 2015 -0600) <Vito Librarius>
+* dd80702 -  Moved the endpoints/*Connectors to connectors/*Connectors (Fri Mar 13 22:48:23 2015 -0600) <Vito Librarius>
+* 707dfc4 -  Changed the directory hash from 255 (? wtf) to 256 - so 'fe' to 'ff' (Thu Mar 12 08:19:12 2015 -0600) <Vito Librarius>
+* 42448f1 -  Temporary disabled story_arc until I model it (Wed Mar 11 21:52:00 2015 -0600) <Vito Librarius>
+* c87591a -  Added classes and support for Series (or Volumes as ComicVine calls them) (Wed Mar 11 21:44:54 2015 -0600) <Vito Librarius>
+* 8d64940 -  Changed the order for the backtrace to show the most recent method at the top (Wed Mar 11 20:59:36 2015 -0600) <Vito Librarius>
+* 00e4172 -  removed icon names and path variables from data model (Tue Mar 10 20:53:36 2015 -0600) <Vito Librarius>
+* d3e195b -  added link in the page header to the index page of the current controller (Tue Mar 10 18:21:35 2015 -0600) <Vito Librarius>
+* abdff6c -  Missed a file (Tue Mar 10 18:13:57 2015 -0600) <Vito Librarius>
+* 5e4bb4c -  Updated character pages to use new Card display. (Tue Mar 10 18:03:34 2015 -0600) <Vito Librarius>
+* 177033a -  Added backtrace to custom error handler (Tue Mar 10 16:00:25 2015 -0600) <Vito Librarius>
+* e617aa3 -  html\Card UI component. (Mon Mar 9 20:05:27 2015 -0600) <Vito Librarius>
+* c1b2652 -  trying to simplify the media content directory usage.  In this case simplifying the Icon and Thumbnail image storage.  Surprise issue is lack of png support in the default PHP install on Yosemite. (Mon Mar 9 20:01:38 2015 -0600) <Vito Librarius>
+* ff5d0d5 -  generalized content resource path methods (Mon Mar 9 19:49:25 2015 -0600) <Vito Librarius>
+* 1c4022a -  import publisher in background and create stub record as needed for UI (Sun Mar 8 12:50:40 2015 -0600) <Vito Librarius>
+* e2e45f9 -  Directory hash experiments (Sun Mar 8 12:48:40 2015 -0600) <Vito Librarius>
+* b779952 -  Added character table and working on comic vine import and daemon (background) processing (Sat Mar 7 23:49:43 2015 -0700) <Vito Librarius>
+* 93825f4 -  Minor fixes for CV connector (Wed Mar 4 21:22:53 2015 -0700) <Vito Librarius>
+* ab207c8 -  Added Upload form for new media.  Successful uploads are handed off to the UploadImporter which currently simply creates the working directory and initial metadata.  Eventually it can be handed off to a background process for full processing. (Wed Mar 4 21:21:26 2015 -0700) <Vito Librarius>
+* 51c4d53 -  created importer pattern as Processor.  the idea being Processors save their state in a working directory and can resume processing later. (Wed Mar 4 21:08:07 2015 -0700) <Vito Librarius>
+* 7faa2e3 -  small changes (Wed Mar 4 21:04:46 2015 -0700) <Vito Librarius>
+* 82dd9cc -  Added filename parser and file wrapper classes (Mon Mar 2 17:44:29 2015 -0700) <Vito Librarius>
+* 084ecbe -  I'm such-a liar (Sun Feb 22 10:07:12 2015 -1000) <Vito Librarius>
+* 0f33151 -  final fix for this remote status display (Sun Feb 22 10:05:28 2015 -1000) <Vito Librarius>
+* 4187df6 -  always a pain to debug something that is using git.  Change, commit test, repeat (Sun Feb 22 10:03:08 2015 -1000) <Vito Librarius>
+* 3f9fc53 -  trim the output (Sun Feb 22 10:00:59 2015 -1000) <Vito Librarius>
+* ca3c839 -  Check for local status before checking remote (Sun Feb 22 10:00:06 2015 -1000) <Vito Librarius>
+* a003ea8 -  purge endpoint debugging files after 24 hours (Sun Feb 22 09:59:36 2015 -1000) <Vito Librarius>
+* c8f901a -  initial import of publisher and refresh were using different images (Sun Feb 22 09:25:24 2015 -1000) <Vito Librarius>
+* 9be0385 -  Additional remote git status logic. (Sun Feb 22 09:19:51 2015 -1000) <Vito Librarius>
+* be1ef47 -  small defect in dev where patches are applied, we still need to bump the version (Sun Feb 22 09:10:45 2015 -1000) <Vito Librarius>
+* f6e47c8 -  Version bump to 0.1.6 (Sat Feb 21 17:29:41 2015 -1000) <Vito Librarius>
+* 5835276 -  Import publisher from comic vine, including some tiny icons (Sat Feb 21 17:19:49 2015 -1000) <Vito Librarius>
+* b9726ac -  ComicVine Connector support (Sat Feb 21 17:18:29 2015 -1000) <Vito Librarius>
+* 1c0e22b -  small interface changes for cache and config (Sat Feb 21 17:17:59 2015 -1000) <Vito Librarius>
+* 23b0765 -  standardizing on deleteObject(), refreshObject(), createObject() ... (Sat Feb 21 17:16:59 2015 -1000) <Vito Librarius>
+* 6003e99 -  minor typos fixed (Wed Feb 18 14:17:17 2015 -1000) <Vito Librarius>
+* 25e87f4 -  POST values support for FLAG datatypes (Wed Feb 18 14:15:18 2015 -1000) <Vito Librarius>
+* e066d7a -  added edit and delete functionality for publishers. (Tue Feb 17 10:01:29 2015 -1000) <Vito Librarius>
+* f997479 -  added admin for users (Mon Feb 16 15:19:17 2015 -0700) <Vito Librarius>
+* 28b68d6 -  added publisher (Mon Feb 16 15:18:53 2015 -0700) <Vito Librarius>
+* cb13e29 -  fixed defect where the curl handle was released before the error message was logged (Fri Feb 13 20:42:57 2015 -0700) <Vito Librarius>
+* 2b2b393 -  Added edit and delete flows to endpoints.  Added validation to endpoints (Fri Feb 13 20:42:18 2015 -0700) <Vito Librarius>
+* 4f62675 -  small defect in checkbox.  was losing the current value every time the form submitted (Fri Feb 13 20:41:03 2015 -0700) <Vito Librarius>
+* 7d0920b -  Added functions to generate new API Key (Fri Feb 13 18:58:53 2015 -0700) <Vito Librarius>
+* e2faab0 -  Synology (at least mine) is PHP version 5.3, so the new VARGS technique does not work. (Fri Feb 13 10:11:51 2015 -0700) <Vito Librarius>
+* ec7de03 -  Fleshed out new editing pattern including automated validation method calls (Thu Feb 12 21:42:23 2015 -0700) <Vito Librarius>
+* cacf9e1 -  Added new modal panel javascript object so the panel can be more dynamic (Thu Feb 12 21:41:44 2015 -0700) <Vito Librarius>
+* 19cfec7 -  reduced the subdirectory buckets from 4 HEX (4096 subdirectories) to just 2 HEX (256 subdirs) (Thu Feb 12 21:39:06 2015 -0700) <Vito Librarius>
+* 358b4c1 -  Migrated to use a consistent interface on the Localized class rather than sprinkling little helper functions in the View and Model classes. (Thu Feb 12 21:37:58 2015 -0700) <Vito Librarius>
+* d895bd2 -  Switched to more consistent Auth functions (Thu Feb 12 21:34:11 2015 -0700) <Vito Librarius>
+* f66aefc -  Useful UTF8 icons that can just be appended to the output.  Still it would probably be better to stick to CSS (Thu Feb 12 21:31:27 2015 -0700) <Vito Librarius>
+* 4597cca -  ignore any copy (Thu Feb 12 21:30:27 2015 -0700) <Vito Librarius>
+* d4ef121 -  Better debug message, have to think about what to do when a v1 is nearing ready, but for now this prints more details given that the ClassNotFound exception can happen anywhere. (Thu Feb 12 21:30:12 2015 -0700) <Vito Librarius>
+* 0452f1d -  Added standard way to create cache keys (Tue Feb 10 17:07:29 2015 -0700) <Vito Librarius>
+* 871df52 -  Added caching of the github status responses (Tue Feb 10 12:51:53 2015 -0700) <Vito Librarius>
+* 4a8ace7 -  Added support for custom TTL for cache fetch.  So individual uses can cache values that live for less than the default 2 weeks (Tue Feb 10 12:51:24 2015 -0700) <Vito Librarius>
+* c406d50 -  Debugging logic fails in prod with "open_basedir restriction in effect" (Tue Feb 10 12:15:12 2015 -0700) <Vito Librarius>
+* d1df619 -  Added basic Cache control object and additions git upgrade tests to evaluate the current remote status. (Tue Feb 10 12:12:51 2015 -0700) <Vito Librarius>
+* 4b98c36 -  Git update using shell commands.  My synology does not have the php posix functions so rather than try to install them, I tried to work around them on the theory others may have similar configurations. (Mon Feb 9 21:55:11 2015 -0700) <Vito Librarius>
+* e54e733 -  Updated ShellCommand to capture stderr and stdout as separate values.  Added Git class for software updating (Fri Feb 6 16:47:51 2015 -0700) <Vito Librarius>
+* e29c38f -  Some small adjustments to localization (Thu Feb 5 20:19:05 2015 -0700) <Vito Librarius>
+* f4f4fe0 -  Small bug fixes.  Admin page should require login before access (Thu Feb 5 12:53:04 2015 -0700) <Vito Librarius>
+* 7b125c2 -  Removed configuration option for dirMask and fileMask.  Converting ini file values back and forth to octal proved more trouble than it was worth. (Thu Feb 5 12:20:48 2015 -0700) <Vito Librarius>
+* 57911ed -  Filename must match class name. (Thu Feb 5 11:12:36 2015 -0700) <Vito Librarius>
+* 3bb93d9 -  Changed login form to use edit components and localization. (Thu Feb 5 10:15:40 2015 -0700) <Vito Librarius>
+* 19bc858 -  Use of undefined constant WEB_DIR (Wed Feb 4 22:12:59 2015 -0700) <Vito Librarius>
+* 3b25f14 -  Synology error 'ClassNotFoundException' with message 'controller\Localized' (Wed Feb 4 22:10:22 2015 -0700) <Vito Librarius>
+* 70c26ac -  Oh synology, you are so strict (Wed Feb 4 21:25:51 2015 -0700) <Vito Librarius>
+* 0c638cc -  Another strict PHP error from synology (Wed Feb 4 21:13:46 2015 -0700) <Vito Librarius>
+* c79ba05 -  More explicit declaration of class names because the mac is case insensitive, but linux is case sensitive, so classes don't load properly if the case is wrong (e.g.: Log_level vs Log_Level) (Wed Feb 4 20:40:57 2015 -0700) <Vito Librarius>
+* 26ceb95 -  Added footer version number and site links (Wed Feb 4 20:15:38 2015 -0700) <Vito Librarius>
+* 4a04795 -  removed posix function since it is not available on Synology (Wed Feb 4 20:05:16 2015 -0700) <Vito Librarius>
+* 7fa3739 -  php_value does not work on synology, work around is to create a .user.ini field and change the php.ini to load it. (Wed Feb 4 10:56:43 2015 -0700) <Vito Librarius>
+* 3d1e122 -  added to ignore list (Tue Feb 3 21:47:42 2015 -0700) <Vito Librarius>
+* f6dc26a -  Version bump to 0.1.5 (Tue Feb 3 17:12:14 2015 -0700) <Vito Librarius>
+* c40e677 -  Migration bug fixes (Tue Feb 3 17:11:56 2015 -0700) <Vito Librarius>
+* ca921da -  Version bump to 0.1.4 (Tue Feb 3 16:09:10 2015 -0700) <Vito Librarius>
+* a13e85d -  Added columns to endpoint_type (Tue Feb 3 16:08:43 2015 -0700) <Vito Librarius>
+* 101b53c -  Added repeatable pattern for model editing. (Tue Feb 3 16:07:30 2015 -0700) <Vito Librarius>
+* 6623a37 -  Nudging mockup css to match production (Mon Feb 2 14:11:30 2015 -0700) <Vito Librarius>
+* 5724428 -  New admin page mockup (Sun Feb 1 20:29:14 2015 -0700) <Vito Librarius>
+* a3cc471 -  rearranging the mockup resources to match the application layout.  Allows for easier diff of changes (Sun Feb 1 12:35:53 2015 -0700) <Vito Librarius>
+* 7e75ad9 -  Working on initial edit patterns.  Added an endpoint report view (Sun Feb 1 12:35:04 2015 -0700) <Vito Librarius>
+* 82c0c8d -  Basic controls for error_log() (Sat Jan 31 13:41:40 2015 -0700) <Vito Librarius>
+* 50084ec -  sort descending (Fri Jan 23 14:46:40 2015 -0700) <Vito Librarius>
+* 654e5d1 -  Version bump to 0.1.3 (Fri Jan 23 14:43:47 2015 -0700) <Vito Librarius>
+* 9fcc81e -  Fixed exception where some of the stack pointers were null (Fri Jan 23 14:43:19 2015 -0700) <Vito Librarius>
+* e0c58f4 -  added tables for Network, EndpointType, Endpoint and User_Network (Fri Jan 23 14:42:50 2015 -0700) <Vito Librarius>
+* 0dd163c -  Defect when upgrading from previous version, the verifyDatabase() function needed to check the return value (Fri Jan 23 09:35:54 2015 -0700) <Vito Librarius>
+* c0d2f7d -  Version bump to 0.1.2 (Fri Jan 23 09:30:57 2015 -0700) <Vito Librarius>
+* 5a0627e -  Merge branch 'master' of github-as-vito:vitolibrarius/contenta (Fri Jan 23 09:29:29 2015 -0700) <Vito Librarius>
+* 0fa56fe -  Update README.md (Thu Jan 22 20:50:13 2015 -0700) <Vito Librarius>
+* 4cdc443 -  (tag: v0.1.7) Version bump to 0.1.7 (Fri Mar 13 22:50:48 2015 -0600) <Vito Librarius>
+* e89c913 -  Added model for Story Arcs and added a bunch of join tables. (Fri Mar 13 22:50:03 2015 -0600) <Vito Librarius>
+* 43e4259 -  Moved the endpoints/*Connectors to connectors/*Connectors (Fri Mar 13 22:48:23 2015 -0600) <Vito Librarius>
+* 793ff4a -  Changed the directory hash from 255 (? wtf) to 256 - so 'fe' to 'ff' (Thu Mar 12 08:19:12 2015 -0600) <Vito Librarius>
+* f2ccc01 -  Temporary disabled story_arc until I model it (Wed Mar 11 21:52:00 2015 -0600) <Vito Librarius>
+* 230e15f -  Added classes and support for Series (or Volumes as ComicVine calls them) (Wed Mar 11 21:44:54 2015 -0600) <Vito Librarius>
+* ce9fcf1 -  Changed the order for the backtrace to show the most recent method at the top (Wed Mar 11 20:59:36 2015 -0600) <Vito Librarius>
+* 3076da8 -  removed icon names and path variables from data model (Tue Mar 10 20:53:36 2015 -0600) <Vito Librarius>
+* 86f0690 -  added link in the page header to the index page of the current controller (Tue Mar 10 18:21:35 2015 -0600) <Vito Librarius>
+* 52aeccc -  Missed a file (Tue Mar 10 18:13:57 2015 -0600) <Vito Librarius>
+* 20e6e47 -  Updated character pages to use new Card display. (Tue Mar 10 18:03:34 2015 -0600) <Vito Librarius>
+* 7c83828 -  Added backtrace to custom error handler (Tue Mar 10 16:00:25 2015 -0600) <Vito Librarius>
+* da1eb8c -  html\Card UI component. (Mon Mar 9 20:05:27 2015 -0600) <Vito Librarius>
+* e634b92 -  trying to simplify the media content directory usage.  In this case simplifying the Icon and Thumbnail image storage.  Surprise issue is lack of png support in the default PHP install on Yosemite. (Mon Mar 9 20:01:38 2015 -0600) <Vito Librarius>
+* 52e5cbc -  generalized content resource path methods (Mon Mar 9 19:49:25 2015 -0600) <Vito Librarius>
+* 8028d6f -  import publisher in background and create stub record as needed for UI (Sun Mar 8 12:50:40 2015 -0600) <Vito Librarius>
+* e84b9cc -  Directory hash experiments (Sun Mar 8 12:48:40 2015 -0600) <Vito Librarius>
+* 4ffdd52 -  Added character table and working on comic vine import and daemon (background) processing (Sat Mar 7 23:49:43 2015 -0700) <Vito Librarius>
+* 1c8f244 -  Minor fixes for CV connector (Wed Mar 4 21:22:53 2015 -0700) <Vito Librarius>
+* 9708368 -  Added Upload form for new media.  Successful uploads are handed off to the UploadImporter which currently simply creates the working directory and initial metadata.  Eventually it can be handed off to a background process for full processing. (Wed Mar 4 21:21:26 2015 -0700) <Vito Librarius>
+* 5f16c15 -  created importer pattern as Processor.  the idea being Processors save their state in a working directory and can resume processing later. (Wed Mar 4 21:08:07 2015 -0700) <Vito Librarius>
+* 5f39c94 -  small changes (Wed Mar 4 21:04:46 2015 -0700) <Vito Librarius>
+* f5d2d79 -  Added filename parser and file wrapper classes (Mon Mar 2 17:44:29 2015 -0700) <Vito Librarius>
+* 9a039c1 -  I'm such-a liar (Sun Feb 22 10:07:12 2015 -1000) <Vito Librarius>
+* 3ca28bd -  final fix for this remote status display (Sun Feb 22 10:05:28 2015 -1000) <Vito Librarius>
+* a9db9a8 -  always a pain to debug something that is using git.  Change, commit test, repeat (Sun Feb 22 10:03:08 2015 -1000) <Vito Librarius>
+* 0481837 -  trim the output (Sun Feb 22 10:00:59 2015 -1000) <Vito Librarius>
+* a136f8f -  Check for local status before checking remote (Sun Feb 22 10:00:06 2015 -1000) <Vito Librarius>
+* 2a63344 -  purge endpoint debugging files after 24 hours (Sun Feb 22 09:59:36 2015 -1000) <Vito Librarius>
+* dc20e45 -  initial import of publisher and refresh were using different images (Sun Feb 22 09:25:24 2015 -1000) <Vito Librarius>
+* 66c49cc -  Additional remote git status logic. (Sun Feb 22 09:19:51 2015 -1000) <Vito Librarius>
+* 67f7f8c -  small defect in dev where patches are applied, we still need to bump the version (Sun Feb 22 09:10:45 2015 -1000) <Vito Librarius>
+* d8c0355 -  (tag: v0.1.6) Version bump to 0.1.6 (Sat Feb 21 17:29:41 2015 -1000) <Vito Librarius>
+* e302b9a -  Import publisher from comic vine, including some tiny icons (Sat Feb 21 17:19:49 2015 -1000) <Vito Librarius>
+* 5e35c8b -  ComicVine Connector support (Sat Feb 21 17:18:29 2015 -1000) <Vito Librarius>
+* 65074e8 -  small interface changes for cache and config (Sat Feb 21 17:17:59 2015 -1000) <Vito Librarius>
+* cd4e99e -  standardizing on deleteObject(), refreshObject(), createObject() ... (Sat Feb 21 17:16:59 2015 -1000) <Vito Librarius>
+* 2934e1a -  minor typos fixed (Wed Feb 18 14:17:17 2015 -1000) <Vito Librarius>
+* 7a1070b -  POST values support for FLAG datatypes (Wed Feb 18 14:15:18 2015 -1000) <Vito Librarius>
+* ec22232 -  added edit and delete functionality for publishers. (Tue Feb 17 10:01:29 2015 -1000) <Vito Librarius>
+* 7577049 -  added admin for users (Mon Feb 16 15:19:17 2015 -0700) <Vito Librarius>
+* 35474dd -  added publisher (Mon Feb 16 15:18:53 2015 -0700) <Vito Librarius>
+* 46412ee -  fixed defect where the curl handle was released before the error message was logged (Fri Feb 13 20:42:57 2015 -0700) <Vito Librarius>
+* 082d3d5 -  Added edit and delete flows to endpoints.  Added validation to endpoints (Fri Feb 13 20:42:18 2015 -0700) <Vito Librarius>
+* 719dcc4 -  small defect in checkbox.  was losing the current value every time the form submitted (Fri Feb 13 20:41:03 2015 -0700) <Vito Librarius>
+* e94b50b -  Added functions to generate new API Key (Fri Feb 13 18:58:53 2015 -0700) <Vito Librarius>
+* 5b77364 -  Synology (at least mine) is PHP version 5.3, so the new VARGS technique does not work. (Fri Feb 13 10:11:51 2015 -0700) <Vito Librarius>
+* ef8a8cb -  Fleshed out new editing pattern including automated validation method calls (Thu Feb 12 21:42:23 2015 -0700) <Vito Librarius>
+* c974eec -  Added new modal panel javascript object so the panel can be more dynamic (Thu Feb 12 21:41:44 2015 -0700) <Vito Librarius>
+* 6e18ca0 -  reduced the subdirectory buckets from 4 HEX (4096 subdirectories) to just 2 HEX (256 subdirs) (Thu Feb 12 21:39:06 2015 -0700) <Vito Librarius>
+* e5b7432 -  Migrated to use a consistent interface on the Localized class rather than sprinkling little helper functions in the View and Model classes. (Thu Feb 12 21:37:58 2015 -0700) <Vito Librarius>
+* 5606cd0 -  Switched to more consistent Auth functions (Thu Feb 12 21:34:11 2015 -0700) <Vito Librarius>
+* dbcb3de -  Useful UTF8 icons that can just be appended to the output.  Still it would probably be better to stick to CSS (Thu Feb 12 21:31:27 2015 -0700) <Vito Librarius>
+* 8bad5f2 -  ignore any copy (Thu Feb 12 21:30:27 2015 -0700) <Vito Librarius>
+* 1305287 -  Better debug message, have to think about what to do when a v1 is nearing ready, but for now this prints more details given that the ClassNotFound exception can happen anywhere. (Thu Feb 12 21:30:12 2015 -0700) <Vito Librarius>
+* 719df51 -  Added standard way to create cache keys (Tue Feb 10 17:07:29 2015 -0700) <Vito Librarius>
+* 3132184 -  Added caching of the github status responses (Tue Feb 10 12:51:53 2015 -0700) <Vito Librarius>
+* bcc9b5f -  Added support for custom TTL for cache fetch.  So individual uses can cache values that live for less than the default 2 weeks (Tue Feb 10 12:51:24 2015 -0700) <Vito Librarius>
+* 972a5a1 -  Debugging logic fails in prod with "open_basedir restriction in effect" (Tue Feb 10 12:15:12 2015 -0700) <Vito Librarius>
+* 32495ab -  Added basic Cache control object and additions git upgrade tests to evaluate the current remote status. (Tue Feb 10 12:12:51 2015 -0700) <Vito Librarius>
+* 0dc32be -  Git update using shell commands.  My synology does not have the php posix functions so rather than try to install them, I tried to work around them on the theory others may have similar configurations. (Mon Feb 9 21:55:11 2015 -0700) <Vito Librarius>
+* a0c4304 -  Updated ShellCommand to capture stderr and stdout as separate values.  Added Git class for software updating (Fri Feb 6 16:47:51 2015 -0700) <Vito Librarius>
+* 02667fc -  Some small adjustments to localization (Thu Feb 5 20:19:05 2015 -0700) <Vito Librarius>
+* 9de3c25 -  Small bug fixes.  Admin page should require login before access (Thu Feb 5 12:53:04 2015 -0700) <Vito Librarius>
+* 7ce58a4 -  Removed configuration option for dirMask and fileMask.  Converting ini file values back and forth to octal proved more trouble than it was worth. (Thu Feb 5 12:20:48 2015 -0700) <Vito Librarius>
+* 9a76424 -  Filename must match class name. (Thu Feb 5 11:12:36 2015 -0700) <Vito Librarius>
+* fd9a7dc -  Changed login form to use edit components and localization. (Thu Feb 5 10:15:40 2015 -0700) <Vito Librarius>
+* bde0010 -  Use of undefined constant WEB_DIR (Wed Feb 4 22:12:59 2015 -0700) <Vito Librarius>
+* ba075dc -  Synology error 'ClassNotFoundException' with message 'controller\Localized' (Wed Feb 4 22:10:22 2015 -0700) <Vito Librarius>
+* d659d36 -  Oh synology, you are so strict (Wed Feb 4 21:25:51 2015 -0700) <Vito Librarius>
+* 38a164e -  Another strict PHP error from synology (Wed Feb 4 21:13:46 2015 -0700) <Vito Librarius>
+* 8bf6121 -  More explicit declaration of class names because the mac is case insensitive, but linux is case sensitive, so classes don't load properly if the case is wrong (e.g.: Log_level vs Log_Level) (Wed Feb 4 20:40:57 2015 -0700) <Vito Librarius>
+* 7c326ab -  Added footer version number and site links (Wed Feb 4 20:15:38 2015 -0700) <Vito Librarius>
+* 0df5b02 -  removed posix function since it is not available on Synology (Wed Feb 4 20:05:16 2015 -0700) <Vito Librarius>
+* 706d754 -  php_value does not work on synology, work around is to create a .user.ini field and change the php.ini to load it. (Wed Feb 4 10:56:43 2015 -0700) <Vito Librarius>
+* 8966e06 -  added to ignore list (Tue Feb 3 21:47:42 2015 -0700) <Vito Librarius>
+* 2b580d8 -  (tag: v0.1.5) Version bump to 0.1.5 (Tue Feb 3 17:12:14 2015 -0700) <Vito Librarius>
+* a5b3141 -  Migration bug fixes (Tue Feb 3 17:11:56 2015 -0700) <Vito Librarius>
+* 70c9b88 -  (tag: v0.1.4) Version bump to 0.1.4 (Tue Feb 3 16:09:10 2015 -0700) <Vito Librarius>
+* d5be86d -  Added columns to endpoint_type (Tue Feb 3 16:08:43 2015 -0700) <Vito Librarius>
+* 4abe4da -  Added repeatable pattern for model editing. (Tue Feb 3 16:07:30 2015 -0700) <Vito Librarius>
+* 45ebeda -  Nudging mockup css to match production (Mon Feb 2 14:11:30 2015 -0700) <Vito Librarius>
+* ef19c63 -  New admin page mockup (Sun Feb 1 20:29:14 2015 -0700) <Vito Librarius>
+* f13b5a6 -  rearranging the mockup resources to match the application layout.  Allows for easier diff of changes (Sun Feb 1 12:35:53 2015 -0700) <Vito Librarius>
+* 2112bd1 -  Working on initial edit patterns.  Added an endpoint report view (Sun Feb 1 12:35:04 2015 -0700) <Vito Librarius>
+* f994df6 -  Basic controls for error_log() (Sat Jan 31 13:41:40 2015 -0700) <Vito Librarius>
+* 5c469fc -  sort descending (Fri Jan 23 14:46:40 2015 -0700) <Vito Librarius>
+* f9b48d5 -  (tag: v0.1.3) Version bump to 0.1.3 (Fri Jan 23 14:43:47 2015 -0700) <Vito Librarius>
+* 75f70db -  Fixed exception where some of the stack pointers were null (Fri Jan 23 14:43:19 2015 -0700) <Vito Librarius>
+* 7f68f36 -  added tables for Network, EndpointType, Endpoint and User_Network (Fri Jan 23 14:42:50 2015 -0700) <Vito Librarius>
+* bfbf87d -  Defect when upgrading from previous version, the verifyDatabase() function needed to check the return value (Fri Jan 23 09:35:54 2015 -0700) <Vito Librarius>
+* bfc7e07 -  (tag: v0.1.2) Version bump to 0.1.2 (Fri Jan 23 09:30:57 2015 -0700) <Vito Librarius>
+* 5cce973 -  Merge branch 'master' of github-as-vito:vitolibrarius/contenta (Fri Jan 23 09:29:29 2015 -0700) <Vito Librarius>
+* d635ff4 -  Update README.md (Thu Jan 22 20:50:13 2015 -0700) <Vito Librarius>
+
 Version 0.1.7:
 * e89c913 -  (HEAD, master) Added model for Story Arcs and added a bunch of join tables. (Fri Mar 13 22:50:03 2015 -0600) <Vito Librarius>
 * 43e4259 -  Moved the endpoints/*Connectors to connectors/*Connectors (Fri Mar 13 22:48:23 2015 -0600) <Vito Librarius>
