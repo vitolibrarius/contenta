@@ -92,7 +92,7 @@ class Migration_11 extends Migrator
 			array(
 				Job_Type::name => "Character Updates",
 				Job_Type::code => "character",
-				Job_Type::desc => "Load character profile data from metadata endpoints (like ComicVine)",
+				Job_Type::desc => "Load character profile data from metadata endpoints (like ComicVine) in batches of 20",
 				Job_Type::processor => "ComicVineImporter",
 				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("character", 20)), JSON_PRETTY_PRINT),
 				Job_Type::scheduled => 1
@@ -100,7 +100,7 @@ class Migration_11 extends Migrator
 			array(
 				Job_Type::name => "Publisher Updates",
 				Job_Type::code => "publisher",
-				Job_Type::desc => "Load publisher profile data from metadata endpoints (like ComicVine)",
+				Job_Type::desc => "Load publisher profile data from metadata endpoints (like ComicVine) in batches of 40",
 				Job_Type::processor => "ComicVineImporter",
 				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("publisher", 40)), JSON_PRETTY_PRINT),
 				Job_Type::scheduled => 1
@@ -108,15 +108,15 @@ class Migration_11 extends Migrator
 			array(
 				Job_Type::name => "Series Updates",
 				Job_Type::code => "series",
-				Job_Type::desc => "Load series data from metadata endpoints (like ComicVine)",
+				Job_Type::desc => "Load series data from metadata endpoints (like ComicVine) in batches of 5",
 				Job_Type::processor => "ComicVineImporter",
-				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("series", 20)), JSON_PRETTY_PRINT),
+				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("series", 5)), JSON_PRETTY_PRINT),
 				Job_Type::scheduled => 1
 			),
 			array(
 				Job_Type::name => "Story Arc Updates",
 				Job_Type::code => "story_arc",
-				Job_Type::desc => "Load Story Arc data from metadata endpoints (like ComicVine)",
+				Job_Type::desc => "Load Story Arc data from metadata endpoints (like ComicVine) in batches of 20",
 				Job_Type::processor => "ComicVineImporter",
 				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("story_arc", 20)), JSON_PRETTY_PRINT),
 				Job_Type::scheduled => 1

@@ -24,7 +24,7 @@ use model\Story_Arc as Story_Arc;
 use model\Story_Arc_Character as Story_Arc_Character;
 use model\Story_Arc_Series as Story_Arc_Series;
 
-class ComicVineImporter extends EndpointImporter
+class ComicVineImporter extends ContentMetadataImporter
 {
 	function __construct($guid)
 	{
@@ -231,7 +231,7 @@ class ComicVineImporter extends EndpointImporter
 		}
 
 		// relationship reference
-		$relation_path = appendPath( $path, EndpointImporter::META_IMPORT_RELATIONSHIP, $model->tableName() );
+		$relation_path = appendPath( $path, ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $model->tableName() );
 		$relationships = $this->getMeta( $relation_path );
 		if ( is_array( $relationships ) == false ) {
 			$relationships = array();
@@ -263,11 +263,11 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Publisher"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Publisher::TABLE . '_' . $xid );
+			$path = appendPath( ContentMetadataImporter::META_IMPORT_ROOT, Publisher::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				$record = $connection->publisherDetails( $xid );
@@ -300,11 +300,11 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Character"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Character::TABLE . '_' . $xid );
+			$path = appendPath( ContentMetadataImporter::META_IMPORT_ROOT, Character::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				$record = $connection->characterDetails( $xid );
@@ -352,11 +352,11 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Series"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Series::TABLE . '_' . $xid );
+			$path = appendPath( ContentMetadataImporter::META_IMPORT_ROOT, Series::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				$record = $connection->seriesDetails( $xid );
@@ -411,11 +411,11 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Story_Arc"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Story_Arc::TABLE . '_' . $xid );
+			$path = appendPath( ContentMetadataImporter::META_IMPORT_ROOT, Story_Arc::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				$record = $connection->story_arcDetails( $xid );
@@ -453,11 +453,11 @@ class ComicVineImporter extends EndpointImporter
 		$object = parent::preprocess(Model::Named("Publication"), $metaRecord);
 
 		if ( $object != null ) {
-			$forceMeta = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE, $metaRecord );
-			$forceImages = array_valueForKeypath( EndpointImporter::META_IMPORT_FORCE_ICON, $metaRecord );
-			$xid = array_valueForKeypath( EndpointImporter::META_IMPORT_XID, $metaRecord );
+			$forceMeta = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( EndpointImporter::META_IMPORT_ROOT, Publication::TABLE . '_' . $xid );
+			$path = appendPath( ContentMetadataImporter::META_IMPORT_ROOT, Publication::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				$record = $connection->issueDetails( $xid );
@@ -524,7 +524,7 @@ class ComicVineImporter extends EndpointImporter
 	{
 		$object = parent::finalize(Model::Named("Character"), $metaRecord);
 		if ( $object instanceof model\CharacterDBO ) {
-			$relationships = array_valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
 				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
@@ -561,7 +561,7 @@ class ComicVineImporter extends EndpointImporter
 	{
 		$object = parent::finalize(Model::Named("Series"), $metaRecord);
 		if ( $object instanceof model\SeriesDBO ) {
-			$relationships = array_valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
 				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
@@ -604,7 +604,7 @@ class ComicVineImporter extends EndpointImporter
 	{
 		$object = parent::finalize(Model::Named("Story_Arc"), $metaRecord);
 		if ( $object instanceof model\Story_ArcDBO ) {
-			$relationships = array_valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
 				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
@@ -638,7 +638,7 @@ class ComicVineImporter extends EndpointImporter
 	{
 		$object = parent::finalize(Model::Named("Publication"), $metaRecord);
 		if ( $object instanceof model\PublicationDBO ) {
-			$relationships = array_valueForKeypath(EndpointImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
 				foreach( $relationships as $table => $relations ) {
 					$related_model = Model::Named( $table );
