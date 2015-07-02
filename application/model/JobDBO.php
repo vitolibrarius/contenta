@@ -50,10 +50,20 @@ class JobDBO extends DataObject
 	}
 
 	public function jsonParameters() {
+		$jsonData = array();
+		$jobType = $this->jobType();
+		if ( $jobType instanceof model\Job_Type ) {
+			$jsonData = $jobType->jsonParameters();
+		}
+
 		if ( isset($this->parameter) ) {
-			$jsonData = json_decode($this->parameter, true);
+			$override = json_decode($this->parameter, true);
 			if ( json_last_error() != 0 ) {
 				return jsonErrorString(json_last_error()) . "'" . $this->parameter . "'";
+			}
+
+			foreach( $override as $key=>$value ) {
+				$jsonData[$key] = $value;
 			}
 		}
 		return (isset($jsonData) ? $jsonData : array());

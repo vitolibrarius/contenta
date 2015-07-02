@@ -111,12 +111,14 @@ class Migration_10 extends Migrator
 		);
 
 		foreach ($types as $dict) {
-			$jobType = $job_type_model->jobTypeForCode($dict[Job_Type::code]);
-			if ($jobType == false) {
-				$newObjId = $job_type_model->createObject($dict);
+			$existing = \SQL::raw( "select id FROM " . Job_Type::TABLE . " where code = :code", array( ":code" => $dict[Job_Type::code]));
+			if ( is_array($existing) && count($existing) > 0) {
+				\SQL::Update($job_type_model, db\Qualifier::Equals( "code", $dict[Job_Type::code]), $dict)->commitTransaction();
 			}
 			else {
-				$job_type_model->updateObject($jobType, $dict);
+				$inserts = \SQL::Insert( $job_type_model, array( "name", "code", "desc", "processor", "scheduled") );
+				$inserts->addRecord( $dict );
+				$inserts->commitTransaction(true);
 			}
 		}
 	}

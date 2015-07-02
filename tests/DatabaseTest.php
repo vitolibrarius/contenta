@@ -58,7 +58,7 @@ $user = Model::Named("Users")->userByName('vito');
 my_echo( "---------- Version ");
 $versions = Model::Named('Version')->allObjects();
 reportData($versions,  array( "code", "hash_code" ));
-reportData($versions[0]->patches(),  array( "displayName"));
+reportData($versions[0]->patches(),  array( "displayName", "version/code" ));
 
 my_echo( "---------- Endpoint ");
 $cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
@@ -96,8 +96,8 @@ my_echo( "---------- Jobs ");
 $job_types = Model::Named('Job_Type')->allObjects();
 reportData($job_types,  Model::Named('Job_Type')->allColumnNames());
 
-$cbz_job_type = Model::Named('Job_Type')->jobTypeForCode('cbz');
-($cbz_job_type != false && $cbz_job_type->code == 'cbz') || die("Could not find 'cbz' job_type");
+$character_job_type = Model::Named('Job_Type')->jobTypeForCode('character');
+($character_job_type != false && $character_job_type->code == 'character') || die("Could not find 'character' job_type");
 
 $rss_job_type = Model::Named('Job_Type')->jobTypeForCode('rss');
 ($rss_job_type != false && $rss_job_type->code == 'rss') || die("Could not find 'rss' job_type");
@@ -105,7 +105,7 @@ $rss_job_type = Model::Named('Job_Type')->jobTypeForCode('rss');
 $job_model = Model::Named("Job");
 $job_data = array(
 	array(
-		model\Job::type_id => $cbz_job_type->id,
+		model\Job::type_id => $character_job_type->id,
 		model\Job::minute => null,
 		model\Job::hour => null,
 		model\Job::dayOfWeek => null,
@@ -138,14 +138,14 @@ $job_data = array(
 	)
 );
 $jobs = loadData( $job_model, $job_data, array("jobType", "endpoint", "minute", "hour", "dayOfWeek", "parameter", "next", "one_shot", "enabled") );
-$cbz_job = $jobs[0];
+$character_job = $jobs[0];
 $rss_job = $jobs[2];
 
 $job_run_model = Model::Named("Job_Running");
 $job_run_data = array(
 	array(
-		model\Job_Running::job_id => $cbz_job->id,
-		model\Job_Running::job_type_id => $cbz_job_type->id,
+		model\Job_Running::job_id => $character_job->id,
+		model\Job_Running::job_type_id => $character_job_type->id,
 		model\Job_Running::processor => 'UploadImport',
 		model\Job_Running::guid => rand(),
 		model\Job_Running::pid => 3456
