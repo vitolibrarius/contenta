@@ -371,6 +371,19 @@
             "guid": {
                 "label": "guid"
             }
+        },
+        "version": {
+            "code": {
+                "label": "Version"
+            }
+        },
+        "patch": {
+            "name": {
+                "label": "Migration"
+            },
+            "created": {
+                "label": "Date Applied"
+            }
         }
     },
     "Logs": {

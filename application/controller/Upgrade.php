@@ -113,6 +113,8 @@ class Upgrade extends Controller
 			$this->view->render('/error/index');
 		}
 		else {
+			$this->view->model = Model::Named("Patch");
+			$this->view->patches = Model::Named("Patch")->allObjects();
 			$this->view->render('/upgrade/eligibility');
 		}
 	}

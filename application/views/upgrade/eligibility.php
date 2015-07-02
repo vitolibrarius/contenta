@@ -121,6 +121,31 @@
 		</div>
 	</div>
 	</li>
+
+	<?php if (isset($this->patches) && is_array($this->patches)): ?>
+	<li class="success"><div class="test_name">Applied Versions</div>
+	<div>
+		<p><em></em></p>
+		<div class="span_container">
+			<div class="span_container_row header">
+				<span class="break"><?php echo Localized::ModelLabel("version", "code" ); ?></span>
+				<span class="break"><?php echo Localized::ModelLabel($this->model->tableName(), "name" ); ?></span>
+				<span class="break"><?php echo Localized::ModelLabel($this->model->tableName(), "created" ); ?></span>
+			</div>
+
+		<?php foreach($this->patches as $key => $value): ?>
+				<div class="span_container_row">
+					<span class="break"><?php echo $value->version()->code; ?></span>
+					<span class="break"><em>
+							<pre><?php echo htmlentities($value->name) ?></pre>
+					</em></span>
+					<span class="break"><?php echo $value->createdDate(); ?></span>
+				</div>
+		<?php endforeach; ?>
+		</div>
+	</div>
+	</li>
+	<?php endif; ?>
 </ul>
 
 	<?php if ( $git_eligible == true ) : ?>
