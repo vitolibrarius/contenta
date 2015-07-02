@@ -1,3 +1,6 @@
+Version 0.2.1:
+
+
 Version 0.2.0:
 * 908db67 -  (HEAD, master) SQL::raw now returns results if there are any.  Insert allows for just the success value to be returned on commit rather then the inserted record (Thu Jul 2 14:33:39 2015 -0600) <Vito Librarius>
 * 70b5743 -  Added new field to job_type for default parameters (Thu Jul 2 14:32:42 2015 -0600) <Vito Librarius>
