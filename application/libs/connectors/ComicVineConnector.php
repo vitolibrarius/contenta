@@ -29,6 +29,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 	const PUBLISHER_FIELDS =	"id,name,image,deck,description,story_arcs,site_detail_url";
 	const CHARACTER_FIELDS =	"id,image,name,real_name,aliases,gender,publisher,deck,description,story_arc_credits,site_detail_url";
+	const CHARACTER_SHORT_FIELDS =	"id,image,name,real_name,aliases,gender,publisher,deck,description,site_detail_url";
 	const STORY_ARC_FIELDS =	"id,aliases,deck,description,first_appeared_in_issue,image,issues,name,publisher,site_detail_url";
 	const VOLUME_FIELDS =		"id,aliases,characters,deck,description,first_issue,image,issues,name,publisher,site_detail_url,start_year";
 	const VOLUME_SHORT_FIELDS =		"id,aliases,deck,description,image,name,publisher,site_detail_url,start_year";
@@ -86,9 +87,16 @@ class ComicVineConnector extends JSON_EndpointConnector
 		return $this->details('story_arc', ComicVineConnector::TYPEID_STORY_ARC, $id, $query);;
 	}
 
-	public function characterDetails( $id )
+	public function characterDetails( $id, $shortDetails = false )
 	{
-		$query = array("field_list" => ComicVineConnector::CHARACTER_FIELDS);
+		$query = array();
+		if ( $shortDetails ) {
+			$query["field_list"] = ComicVineConnector::CHARACTER_SHORT_FIELDS;
+		}
+		else {
+			$query["field_list"] = ComicVineConnector::CHARACTER_FIELDS;
+		}
+
 		return $this->details('character', ComicVineConnector::TYPEID_CHARACTER, $id, $query);
 	}
 

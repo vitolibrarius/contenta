@@ -16,7 +16,7 @@ use model\Publisher as Publisher;
  * Class Admin
  * The index controller
  */
-class Admin extends Controller
+class Api extends Controller
 {
 	/**
 	 * Handles what happens when user moves to URL/index/index, which is the same like URL/index or in this
@@ -26,6 +26,25 @@ class Admin extends Controller
 	{
 		if ( Auth::handleLoginWithAPI($userHash) && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->render( '/admin/index' );
+		}
+	}
+
+	function cron_process( $userHash = null )
+	{
+		if ( Auth::handleLoginWithAPI($userHash) && Auth::requireRole(Users::AdministratorRole)) {
+			$job_model = Model::Named("Job");
+			$jobs_to_run = $job_model->jobsToRun();
+
+			$json = array();
+			foreach( $jobs_to_run as $aJob ) {
+				$pid = DaemonizeJob( $aJob );
+				$json[] = array(
+					"pid" => $pid,
+					"job" => $aJob->displayDescription()
+				);
+			}
+
+			$this->view->renderJson( $json );
 		}
 	}
 }

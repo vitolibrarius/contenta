@@ -98,7 +98,7 @@ $guid = ( ($metadata->isMeta("guid")) ? $metadata->getMeta("guid") : uuid());
 $job_id = ( ($metadata->isMeta("job_id")) ? $metadata->getMeta("job_id") : null);
 $debug = ( ($metadata->isMeta("debug")) ? $metadata->getMeta("debug") : null);
 
-Logger::instance()->setTrace($processorName, $guid );
+Logger::instance()->setTrace("Daemon", $job_id );
 
 Logger::logInfo('starting daemon ');
 try {
@@ -110,6 +110,8 @@ try {
 			$jobList = $job_run_model->allForProcessorGUID($processorName, $guid );
 			if ( is_array($jobList) == false || count($jobList) == 0) {
 				$jobRunning = $job_run_model->createForProcessor($processorName, $guid, $pid);
+				Logger::logError('jobRunning ' .  var_export($jobRunning, true) );
+
 				try {
 					$processor = Processor::Named( $processorName, $guid );
 					$processor->processData();
@@ -117,7 +119,9 @@ try {
 				catch (Exception $e) {
 					Logger::logError('Exception ' . $e->getMessage() . ' ' . $e->getTraceAsString() );
 				}
-				$job_run_model->deleteObject($jobRunning);
+				if ( $jobRunning instanceof model\Job_RunningDBO ) {
+					$job_run_model->deleteObject($jobRunning);
+				}
 			}
 			else {
 				Logger::logError('Jobs running for ' . $guid . ' are ' . var_export($jobList, true));
@@ -133,6 +137,18 @@ try {
 					$jobRunning = $job_run_model->create($jobObj, $jobObj->jobType(), $processorName, $guid, $pid);
 					try {
 						$processor = Processor::Named( $processorName, $guid );
+
+						$endpoint = $jobObj->endpoint();
+						if ( $endpoint instanceof model\EndpointDBO ) {
+							if (method_exists($processor, "setEndpoint")) {
+								$processor->setEndpoint( $endpoint );
+							}
+							else {
+								Logger::logError('Job ' . $jobObj . ' has endpoint but processor '
+									. $processorName . ' does not implement setEndpoint()');
+							}
+						}
+
 						$processor->initializationParams($jobObj->jsonParameters());
 						$processor->processData();
 						// success, calc next job schedule run
@@ -145,7 +161,10 @@ try {
 						// count failures, disable on 5th fail?
 						$jobObj->{"enabled"}(Model::TERTIARY_FALSE);
 					}
-					$job_run_model->deleteObject($jobRunning);
+
+					if ( $jobRunning instanceof model\Job_RunningDBO ) {
+						$job_run_model->deleteObject($jobRunning);
+					}
 				}
 				else {
 					Logger::logError('Jobs running for ' . $jobObj . ' are ' . var_export($jobList, true));

@@ -54,7 +54,11 @@
 		</tr>
 	<?php if (is_array($this->objects)): ?>
 		<?php foreach($this->objects as $key => $value): ?>
-			   <tr>
+				<?php
+					$runningJobs = \Model::Named("Job_Running")->allForJob($value);
+					$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
+				?>
+				<tr <?php if ( $running == true ) { echo 'class="blocked"'; } ?> >
 					<td><?php echo $value->jobType()->name; ?></td>
 					<td><?php echo $value->endpoint()->name; ?></td>
 					<td><?php echo $value->minute; ?></td>
@@ -66,10 +70,14 @@
 					<td><span class="icon <?php echo ($value->one_shot ? 'true' : 'false') ?>"></span></td>
 					<td><span class="icon <?php echo ($value->enabled ? 'true' : 'false') ?>"></span></td>
 
-
-					<td><a href="<?php echo Config::Web('/AdminJobs/edit/'. $value->id); ?>"><span class="icon edit" /></a></td>
-					<td><a class="confirm" action="<?php echo Config::Web('/AdminJobs/delete/') . $value->id; ?>" href="#">
+					<td><?php if ( $running == false ): ?>
+						<a href="<?php echo Config::Web('/AdminJobs/edit/'. $value->id); ?>"><span class="icon edit" /></a>
+						<?php endif; ?>
+					</td>
+					<td><?php if ( $running == false ): ?>
+						<a class="confirm" action="<?php echo Config::Web('/AdminJobs/delete/') . $value->id; ?>" href="#">
 						<span class="icon recycle"></span></a>
+						<?php endif; ?>
 					</td>
 				</tr>
 		<?php endforeach; ?>
