@@ -354,6 +354,9 @@
             },
             "endpoint_id": {
                 "label": "Remote Endpoint"
+            },
+            "elapsed": {
+                "label": "Last Elapsed"
             }
         },
         "job_running": {
@@ -371,6 +374,9 @@
             },
             "guid": {
                 "label": "guid"
+            },
+            "elapsedTime": {
+                "label": "Elapsed Time"
             }
         },
         "version": {

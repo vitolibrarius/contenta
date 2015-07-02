@@ -20,6 +20,7 @@ use model\Job_Type as Job_Type;
 use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
+use model\Series as Series;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
@@ -32,10 +33,41 @@ class AdminJobs extends Admin
 	function index()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+		$table_fields = \SQL::pragma_TableInfo(Job::TABLE);
+		if ( isset($table_fields[ Job::elapsed ]) == false ) {
+			\SQL::raw("ALTER TABLE " . Job::TABLE . " ADD COLUMN " . Job::elapsed . " integer", null,"Adding the elapsed column to Job");
+		}
+
 			$model = Model::Named('Job');
 			$this->view->model = $model;
 			$this->view->objects = $model->allObjects();
 			$this->view->render( '/jobs/index' );
+		}
+	}
+
+	function execute($jobId = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Job');
+			if ( $jobId > 0 ) {
+				$obj = $model->objectForId($jobId);
+				if ( $obj != false ) {
+					$pid = DaemonizeJob( $obj );
+					Session::addPositiveFeedback(Localized::GlobalLabel( "Running process id " ) . $pid);
+					sleep(2);
+					header('location: ' . Config::Web('/AdminJobs/index'));
+				}
+				else {
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ));
+					Logger::logError("Invalid job requested " . $jobId);
+					$this->view->render('/error/index');
+				}
+			}
+			else {
+				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ));
+				Logger::logError("Invalid job requested " . $jobId);
+				$this->view->render('/error/index');
+			}
 		}
 	}
 

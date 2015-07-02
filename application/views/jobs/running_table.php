@@ -5,7 +5,7 @@
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "job_id" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "processor" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "pid" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "guid" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "elapsedTime" ); ?></th>
 		</tr>
 	<?php if (is_array($this->objects) && count($this->objects) > 0): ?>
 		<?php foreach($this->objects as $key => $value): ?>
@@ -14,7 +14,7 @@
 					<td><?php echo (is_null($value->job()) ? "" : $value->job()->displayName()); ?></td>
 					<td><?php echo $value->processor; ?></td>
 					<td><?php echo $value->pid; ?></td>
-					<td><?php echo $value->guid; ?></td>
+					<td><?php echo $value->elapsedFormatted(); ?></td>
 				</tr>
 		<?php endforeach; ?>
 	<?php else: ?>

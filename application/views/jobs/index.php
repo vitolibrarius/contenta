@@ -47,7 +47,7 @@
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "dayOfWeek" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "lastDate" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "nextDate" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "parameter" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "elapsed" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "one_shot" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "enabled" ); ?></th>
 			<th colspan=3></th>
@@ -66,7 +66,7 @@
 					<td><?php echo $value->dayOfWeek; ?></td>
 					<td><?php echo $value->lastDate(); ?></td>
 					<td><?php echo $value->nextDate(); ?></td>
-					<td><?php echo var_export($value->parameter, true); ?></td>
+					<td><?php echo $value->elapsedFormatted(); ?></td>
 					<td><span class="icon <?php echo ($value->one_shot ? 'true' : 'false') ?>"></span></td>
 					<td><span class="icon <?php echo ($value->enabled ? 'true' : 'false') ?>"></span></td>
 
@@ -74,7 +74,7 @@
 						<a href="<?php echo Config::Web('/AdminJobs/edit/'. $value->id); ?>"><span class="icon edit" /></a>
 						<?php endif; ?>
 					</td>
-					<td><?php if ( $running == false ): ?>
+					<td><?php if ( $running == false && $value->enabled ): ?>
 						<a href="<?php echo Config::Web('/AdminJobs/execute/'. $value->id); ?>"><span class="icon run" /></a>
 						<?php endif; ?>
 					</td>

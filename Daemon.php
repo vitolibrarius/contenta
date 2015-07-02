@@ -148,11 +148,16 @@ try {
 									. $processorName . ' does not implement setEndpoint()');
 							}
 						}
+						else {
+							Logger::logInfo('No endpoint defined ' . $job_id);
+						}
 
 						$processor->initializationParams($jobObj->jsonParameters());
 						$processor->processData();
+
 						// success, calc next job schedule run
 						$jobObj->{"last_run"}(time());
+						$jobObj->{"elapsed"}($jobRunning->elapsedSeconds());
 					}
 					catch (Exception $e) {
 						Logger::logException( $e );

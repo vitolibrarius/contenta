@@ -14,6 +14,15 @@ class Job_RunningDBO extends DataObject
 	public $created;
 	public $pid;
 
+	public function elapsedSeconds()
+	{
+		return time() - $this->created;
+	}
+
+	public function elapsedFormatted()
+	{
+		return formattedTimeElapsed($this->elapsedSeconds());
+	}
 
 	public function displayName() {
 		$job = $this->job();

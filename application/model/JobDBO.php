@@ -19,8 +19,14 @@ class JobDBO extends DataObject
 	public $last_run;
 	public $parameter;
 	public $enabled;
+	public $elapsed;
 
 	public $uuid;
+
+	public function elapsedFormatted()
+	{
+		return formattedTimeElapsed($this->elapsed);
+	}
 
 	public function nextDate() {
 		return $this->formattedDate( Job::next, "M d, Y H:i" );

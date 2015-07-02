@@ -23,6 +23,7 @@ class Job extends Model
 	const last_run =	'last_run';
 	const parameter =	'parameter';
 	const enabled =		'enabled';
+	const elapsed =		'elapsed';
 
 
 	public function tableName() { return Job::TABLE; }
@@ -34,7 +35,7 @@ class Job extends Model
 		return array(
 			Job::id, Job::type_id, Job::endpoint_id,
 			Job::minute, Job::hour, Job::dayOfWeek, Job::parameter,
-			Job::created, Job::next, Job::last_run, Job::one_shot, Job::enabled
+			Job::created, Job::next, Job::last_run, Job::one_shot, Job::enabled, Job::elapsed
 		);
 	}
 

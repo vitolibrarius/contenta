@@ -51,7 +51,6 @@ class Migration_11 extends Migrator
 	public function sqlite_upgrade()
 	{
 		/** JOB_TYPE */
-		$job_type_model = Model::Named("Job_Type");
 		$table_fields = \SQL::pragma_TableInfo(Job_Type::TABLE);
 		if ( isset($table_fields[ Job_Type::parameter ]) == false ) {
 			$this->sqlite_execute(
@@ -61,8 +60,17 @@ class Migration_11 extends Migrator
 			);
 		}
 
+		/** JOB */
+		$table_fields = \SQL::pragma_TableInfo(Job::TABLE);
+		if ( isset($table_fields[ Job::elapsed ]) == false ) {
+			$this->sqlite_execute(
+				Job::TABLE ,
+				"ALTER TABLE " . Job::TABLE . " ADD COLUMN " . Job::elapsed . " integer",
+				"Adding the elapsed column to Job"
+			);
+		}
+
 		/** SERIES */
-		$series_model = Model::Named("Series");
 		$table_fields = \SQL::pragma_TableInfo(Series::TABLE);
 		if ( isset($table_fields[ Series::xupdated ]) == false ) {
 			$this->sqlite_execute(
@@ -86,7 +94,7 @@ class Migration_11 extends Migrator
 				Job_Type::code => "character",
 				Job_Type::desc => "Load character profile data from metadata endpoints (like ComicVine)",
 				Job_Type::processor => "ComicVineImporter",
-				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("character", 40)), JSON_PRETTY_PRINT),
+				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("character", 20)), JSON_PRETTY_PRINT),
 				Job_Type::scheduled => 1
 			),
 			array(
@@ -102,7 +110,7 @@ class Migration_11 extends Migrator
 				Job_Type::code => "series",
 				Job_Type::desc => "Load series data from metadata endpoints (like ComicVine)",
 				Job_Type::processor => "ComicVineImporter",
-				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("series", 40)), JSON_PRETTY_PRINT),
+				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("series", 20)), JSON_PRETTY_PRINT),
 				Job_Type::scheduled => 1
 			),
 			array(
@@ -110,7 +118,7 @@ class Migration_11 extends Migrator
 				Job_Type::code => "story_arc",
 				Job_Type::desc => "Load Story Arc data from metadata endpoints (like ComicVine)",
 				Job_Type::processor => "ComicVineImporter",
-				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("story_arc", 40)), JSON_PRETTY_PRINT),
+				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("story_arc", 20)), JSON_PRETTY_PRINT),
 				Job_Type::scheduled => 1
 			),
 			array(
