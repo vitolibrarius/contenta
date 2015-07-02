@@ -100,7 +100,7 @@ class InsertSQL extends SQL
 		return implode(" ", $components );
 	}
 
-	public function commitTransaction()
+	public function commitTransaction($successOnly = false)
 	{
 		$sql = $this->sqlStatement();
 		$params = $this->sqlParameters();
@@ -110,7 +110,7 @@ class InsertSQL extends SQL
 		if ($statement ) {
 			$affectedRows = $statement->execute($params);
 			if ( $affectedRows > 0 ) {
-				if ( count( $this->dataArray ) == 1 ) {
+				if ( $successOnly == false && count( $this->dataArray ) == 1 ) {
 					$rowId = $db->lastInsertId();
 					if ( isset($this->model) ) {
 						$select = new SelectSQL($this->model);

@@ -170,19 +170,20 @@ abstract class SQL
 		if ( is_null($sql) ) {
 			throw new \Exception("Unable to execute SQL for -null- statement");
 		}
-		else {
-			$statement = Database::instance()->prepare($sql);
-			if ($statement == false || $statement->execute($params) == false) {
-				$errPoint = ($statement ? $statement : Database::instance());
-				$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-				Logger::logSQLError($table, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, null);
-				throw new \Exception("Error executing change to " . $table . " table");
-			}
+
+		$statement = Database::instance()->prepare($sql);
+		if ($statement == false || $statement->execute($params) == false) {
+			$errPoint = ($statement ? $statement : Database::instance());
+			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
+			Logger::logSQLError($table, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, null);
+			throw new \Exception("Error executing change to " . $table . " table");
 		}
 
 		if ( is_null($comment) == false) {
 			Logger::logInfo( $comment, get_class(), "SQL::raw");
 		}
+
+		return $statement->fetchAll();
 	}
 
 	public static function pragma_TableInfo($table)

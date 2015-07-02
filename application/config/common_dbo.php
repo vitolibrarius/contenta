@@ -43,7 +43,7 @@ function dbo_setValueForKeypath($keypath, $value, DataObject $dbo = null, $separ
 		$target_dbo = $dbo;
 
 		foreach ($path as $idx => $item) {
-			if ( is_null($result) || is_bool($result) ) {
+			if ( is_null($target_dbo) || is_bool($target_dbo) ) {
 				throw new \Exception( "unable to set value '$keypath' on " . $dbo );
 			}
 			else if (is_array($target_dbo) && isset($target_dbo[$item])) {
