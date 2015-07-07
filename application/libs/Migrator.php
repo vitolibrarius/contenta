@@ -10,6 +10,10 @@ use model\PatchDBO as PatchDBO;
 
 class Migrator
 {
+	const IDX_TABLE = 'index_table';
+	const IDX_COLS = 'index_columns';
+	const IDX_UNIQUE = 'index_unique';
+
 	public static function Upgrade($scratchDirectory)
 	{
 		$versionNum = currentVersionNumber();

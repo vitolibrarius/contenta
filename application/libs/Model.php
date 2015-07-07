@@ -99,6 +99,32 @@ abstract class Model
 		return false;
 	}
 
+	public function singleObjectForKeyValues( array $kvArray = null, $sortColumns = null, $and = true)
+	{
+		if ( count($kvArray > 0 ) ) {
+			$select = SQL::Select( $this );
+			$qArray = array();
+			foreach($kvArray as $key => $value ) {
+				if ( is_null($value) ) {
+					$qArray[] = db\Qualifier::IsNull( $key );
+				}
+				else {
+					$qArray[] = db\Qualifier::Equals( $key, $value );
+				}
+			}
+
+			if ( $and ) {
+				$select->where( db\Qualifier::AndQualifier( $qArray ));
+			}
+			else {
+				$select->where( db\Qualifier::OrQualifier( $qArray ));
+			}
+			$select->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) );
+			return $select->fetch();
+		}
+		return false;
+	}
+
 	public function objectForExternal($xid, $xsrc)
 	{
 		$allColumns = $this->allColumnNames();
@@ -133,6 +159,33 @@ abstract class Model
 		$select->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) );
 		$select->limit($limit);
 		return $select->fetchAll();
+	}
+
+	public function allObjectsForKeyValues( array $kvArray = null, $sortColumns = null, $limit = 50, $and = true)
+	{
+		if ( count($kvArray > 0 ) ) {
+			$select = SQL::Select( $this );
+			$qArray = array();
+			foreach($kvArray as $key => $value ) {
+				if ( is_null($value) ) {
+					$qArray[] = db\Qualifier::IsNull( $key );
+				}
+				else {
+					$qArray[] = db\Qualifier::Equals( $key, $value );
+				}
+			}
+
+			if ( $and ) {
+				$select->where( db\Qualifier::AndQualifier( $qArray ));
+			}
+			else {
+				$select->where( db\Qualifier::OrQualifier( $qArray ));
+			}
+			$select->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) );
+			$select->limit($limit);
+			return $select->fetchAll();
+		}
+		return false;
 	}
 
 	public function allObjectsForQualifier(db\Qualifier $qualifier = null, $sortColumns = null, $limit = 50)

@@ -32,7 +32,7 @@ abstract class EndpointImporter extends Processor
 		}
 
 		$connectorName = 'connectors\\' . $endpoint->type()->code . 'Connector';
-		$connection = new $connectorName($comicVine);
+		$connection = new $connectorName($endpoint);
 		return $connection;
 	}
 
