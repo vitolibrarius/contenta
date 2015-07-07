@@ -326,13 +326,16 @@
                 "label": "Next Run Date"
             },
             "minute": {
-                "label": "Minute"
+                "label": "Minute",
+                "FIELD_EMPTY": "Minute schedule field is required"
             },
             "hour": {
-                "label": "Hour"
+                "label": "Hour",
+                "FIELD_EMPTY": "Hour schedule field is required"
             },
             "dayOfWeek": {
-                "label": "Day of the Week"
+                "label": "Day of the Week",
+                "FIELD_EMPTY": "Day of the Week schedule field is required"
             },
             "lastDate": {
                 "label": "Last Run Date"
@@ -353,10 +356,14 @@
                 "label": "Job Schedule Details"
             },
             "endpoint_id": {
-                "label": "Remote Endpoint"
+                "label": "Remote Endpoint",
+                "FIELD_EMPTY": "You must select an endpoint for this job"
             },
             "elapsed": {
                 "label": "Last Elapsed"
+            },
+            "next": {
+                "FIELD_EMPTY": "Unable to calculate next job execute time.  Please check the schedule for minute\/hour\/day of week"
             }
         },
         "job_running": {

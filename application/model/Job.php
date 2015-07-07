@@ -4,6 +4,8 @@ namespace model;
 
 use \DataObject as DataObject;
 use \Model as Model;
+use \Localized as Localized;
+use \Logger as Logger;
 
 use utilities\CronEvaluator as CronEvaluator;
 use db\Qualifier as Qualifier;
@@ -86,28 +88,38 @@ class Job extends Model
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
 		if ( $object instanceof model\JobDBO ) {
-			$cronEval = new CronEvaluator( $object->minute, $object->hour, $object->dayOfWeek );
-			$nextRunDate = $cronEval->nextDate();
-			$values[Job::next] = $nextRunDate->getTimestamp();
+			$m = (isset($values[Job::minute]) ? $values[Job::minute] : $object->minute);
+			$h = (isset($values[Job::hour]) ? $values[Job::hour] : $object->hour);
+			$d = (isset($values[Job::dayOfWeek]) ? $values[Job::dayOfWeek] : $object->dayOfWeek);
+
+			try {
+				$cronEval = new CronEvaluator( $m, $h, $d );
+				$nextRunDate = $cronEval->nextDate();
+				$values[Job::next] = $nextRunDate->getTimestamp();
+			}
+			catch ( \Exception $ve ) {
+			}
+		}
+
+		if ( isset( $values[Job::endpoint_id]) && intval($values[Job::endpoint_id]) <= 0 ) {
+			unset($values[Job::endpoint_id]);
 		}
 
 		return parent::updateObject($object, $values);
 	}
 
 	public function createObject(array $values = array()) {
-		if ( isset( $values[Job::minute]) == false ) {
-			$values[Job::minute] = "*";
-		}
-		if ( isset( $values[Job::hour]) == false ) {
-			$values[Job::hour] = "*";
-		}
-		if ( isset( $values[Job::dayOfWeek]) == false ) {
-			$values[Job::dayOfWeek] = "*";
+		if ( isset( $values[Job::endpoint_id]) && intval($values[Job::endpoint_id]) <= 0 ) {
+			unset($values[Job::endpoint_id]);
 		}
 
-		$cronEval = new CronEvaluator( $values[Job::minute], $values[Job::hour], $values[Job::dayOfWeek] );
-		$nextRunDate = $cronEval->nextDate();
-		$values[Job::next] = $nextRunDate->getTimestamp();
+		try {
+			$cronEval = new CronEvaluator( $values[Job::minute], $values[Job::hour], $values[Job::dayOfWeek] );
+			$nextRunDate = $cronEval->nextDate();
+			$values[Job::next] = $nextRunDate->getTimestamp();
+		}
+		catch ( \Exception $ve ) {
+		}
 
 		return parent::createObject($values);
 	}
@@ -130,12 +142,23 @@ class Job extends Model
 		return $validationErrors;
 	}
 
+	function validate_endpoint_id($object = null, $value)
+	{
+		if ( $object == null || isset($object->endpoint_id) == false) {
+			if (empty($value) ) {
+				return Localized::ModelValidation($this->tableName(), Job::endpoint_id, "FIELD_EMPTY");
+			}
+		}
+
+		return null;
+	}
+
 	function validate_minute($object = null, $value)
 	{
 		try {
 			CronEvaluator::validateExpressionPart( CronEvaluator::MINUTE, $value );
 		}
-		catch ( exceptions\ValidationException $ve ) {
+		catch ( \Exception $ve ) {
 			return Localized::ModelValidation($this->tableName(), Job::minute, $ve->getMessage() );
 		}
 		return null;
@@ -146,9 +169,18 @@ class Job extends Model
 		try {
 			CronEvaluator::validateExpressionPart( CronEvaluator::HOUR, $value );
 		}
-		catch ( exceptions\ValidationException $ve ) {
+		catch ( \Exception $ve ) {
 			return Localized::ModelValidation($this->tableName(), Job::hour, $ve->getMessage() );
 		}
+		return null;
+	}
+
+	function validate_next($object = null, $value)
+	{
+		if (empty($value) ) {
+			return Localized::ModelValidation($this->tableName(), Job::next, "FIELD_EMPTY");
+		}
+
 		return null;
 	}
 
@@ -157,7 +189,7 @@ class Job extends Model
 		try {
 			CronEvaluator::validateExpressionPart( CronEvaluator::DAYOFWEEK, $value );
 		}
-		catch ( exceptions\ValidationException $ve ) {
+		catch ( \Exception $ve ) {
 			return Localized::ModelValidation($this->tableName(), Job::dayOfWeek, $ve->getMessage() );
 		}
 		return null;
@@ -165,14 +197,13 @@ class Job extends Model
 
 	public function attributesMandatory($object = null)
 	{
-		if ( is_null($object) ) {
-			return array(
-				Job::dayOfWeek,
-				Job::hour,
-				Job::minute
-			);
-		}
-		return parent::attributesMandatory($object);
+		return array(
+			Job::endpoint_id,
+			Job::dayOfWeek,
+			Job::hour,
+			Job::minute,
+			Job::next
+		);
 	}
 
 	public function attributesFor($object = null, $type = null ) {
