@@ -19,7 +19,7 @@
 	require SYSTEM_PATH .'tests/_ResetConfig.php';
 	require SYSTEM_PATH .'tests/_Data.php';
 
-use processor\RSSImporter as RSSImporter;
+use connectors\NewznabConnector as NewznabConnector;
 
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
@@ -54,47 +54,63 @@ my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
 my_echo( "---------- Endpoint ");
-$rss_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::RSS);
-($rss_endpoint_type != false && $rss_endpoint_type->code == Endpoint_Type::RSS) || die("Could not find Endpoint_Type::RSS");
+$Newznab_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::Newznab);
+($Newznab_endpoint_type != false && $Newznab_endpoint_type->code == Endpoint_Type::Newznab) || die("Could not find Endpoint_Type::Newznab");
 
 $ep_model = Model::Named('Endpoint');
-$points = $ep_model->allForTypeCode(Endpoint_Type::RSS);
+$points = $ep_model->allForTypeCode(Endpoint_Type::Newznab);
 if ( is_array($points) == false || count($points) == 0) {
-	$metadata = metadataFor(Endpoint_Type::RSS . ".json");
+	$metadata = metadataFor(Endpoint_Type::Newznab . ".json");
 	if ( $metadata->isMeta( model\Endpoint::api_key ) == false )
 	{
-		$metadata->setMeta( model\Endpoint::name, "RSS Source" );
-		$metadata->setMeta( model\Endpoint::type_id, $rss_endpoint_type->id );
-		$metadata->setMeta( model\Endpoint::base_url, $rss_endpoint_type->api_url );
+		$metadata->setMeta( model\Endpoint::name, "Newznab Source" );
+		$metadata->setMeta( model\Endpoint::type_id, $Newznab_endpoint_type->id );
+		$metadata->setMeta( model\Endpoint::base_url, "YOUR Newznab site base url here" );
 		$metadata->setMeta( model\Endpoint::api_key, "YOUR API KEY HERE" );
 		$metadata->setMeta( model\Endpoint::username, 'vito' );
 		$metadata->setMeta( model\Endpoint::enabled, Model::TERTIARY_TRUE );
 		$metadata->setMeta( model\Endpoint::compressed, Model::TERTIARY_FALSE );
 
-		die( "Please configure the RSS.json config file with correct test data" . PHP_EOL);
+		die( "Please configure the Newznab.json config file with correct test data" . PHP_EOL );
 	}
 
 	loadData( $ep_model, array($metadata->readMetadata()), array( "name", "type", "base_url", "api_key") );
 }
 
-$points = $ep_model->allForTypeCode(Endpoint_Type::RSS);
+$points = $ep_model->allForTypeCode(Endpoint_Type::Newznab);
 ($points != false && count($points) > 0) || die('No endpoint defined');
 
 $epoint = $points[0];
 
-$importer = new RSSImporter( basename(__file__) );
-$importer->setEndpoint($epoint);
-$importer->processData();
+my_echo( "Search capabilities" );
+$connection = new NewznabConnector( $epoint );
+$xml = $connection->capabilities();
+$xml->asXML( appendPath($root, 'capabilities.xml') );
 
-my_echo();
+my_echo( "Search superman" );
+$xml = $connection->search("superman", null, null);
+$xml->asXML( appendPath($root, 'search_1.xml') );
 
-$rss = Model::Named("RSS")->allObjects();
-reportData($rss,  array(
-	"clean_year",
-	"clean_issue",
-	"clean_name",
-	"title",
-	"endpoint/name"
-	)
-);
+my_echo( "Search superman (comics)" );
+$xml = $connection->searchComics("superman");
+$xml->asXML( appendPath($root, 'search_2.xml') );
+
+if ( $xml instanceof SimpleXMLElement) {
+	foreach ($xml->channel->item as $key => $item) {
+		$name = $item->title . ".nzb";
+		$url = $item->link;
+		if (isset($item->enclosure, $item->enclosure['url'])) {
+			$url = $item->enclosure['url'];
+		}
+		$nzb = file_get_contents($url);
+		if ( $nzb != null ) {
+			my_echo( "	" . $name );
+			file_put_contents(appendPath($root, $name), $nzb);
+		}
+	}
+}
+
+my_echo( "Search Stephen King (books)" );
+$xml = $connection->searchBooks("*", "Stephen King");
+$xml->asXML( appendPath($root, 'search_3.xml') );
 

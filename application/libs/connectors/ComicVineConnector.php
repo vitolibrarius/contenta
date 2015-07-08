@@ -45,11 +45,11 @@ class ComicVineConnector extends JSON_EndpointConnector
 	}
 
 	public function defaultParameters() {
-		if ( isset($defaultParam) == false ) {
-			$defaultParam = array(
-				"api_key" => $this->endpointAPIKey(),
-				"format" => "json"
-			);
+		$defaultParam = array();
+		$defaultParam["format"] = "json";
+
+		if ( empty($this->endpointAPIKey()) == false ) {
+			$defaultParam["api_key"] = $this->endpointAPIKey();
 		}
 		return $defaultParam;
 	}
