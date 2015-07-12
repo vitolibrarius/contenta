@@ -70,7 +70,7 @@ class MediaFilename
 		$working = preg_replace("/(\\s-\\s)/uim", ": ", $working, 1);
 
 		// everything up to issue/year like XYZ Comic 001 2014
-		if (preg_match("/(^.+)(?=\\b[-]?(([0-9]*\\.[0-9]+|[0-9]{1,4}))\\s+(\\d\\d\\d\\d)).+/u", $working, $matches, 0))
+		if (preg_match("/(^.+)(?=\\b[-]?(([0-9]{1,3}\\.[0-9]+|[0-9]{1,4}))\\s+(\\d\\d\\d\\d))/uU", $working, $matches, 0))
 		{
 			return $matches[1];
 		}

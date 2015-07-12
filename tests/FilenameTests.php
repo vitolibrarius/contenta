@@ -199,11 +199,11 @@ $testdata = array(
 		"issue" => "002",
 		"name" => "Ben 10",
 	),
-	"The 14 Carat Roadster 2012 digital-Empire.cbz" => array(
+	"The 14 Carat Roadster 22.3 2012 digital-Empire.cbz" => array(
 		"extension" => "cbz",
-		"clean" => "The 14 Carat Roadster 2012 digital-Empire",
+		"clean" => "The 14 Carat Roadster 22.3 2012 digital-Empire",
 		"year" => "2012",
-		"issue" => "14",
+		"issue" => "22.3",
 		"name" => "The 14 Carat Roadster",
 	),
 	"The 14 Carat Roadster 2012 digital-Empire.cbz" => array(
@@ -213,10 +213,10 @@ $testdata = array(
 		"issue" => "14",
 		"name" => "The 14 Carat Roadster",
 	),
-	"All-New X-Men 010 (2013) (Digital) (Zone-Empire).cbz" => array(
-		"clean" => "All-New X-Men 010 2013 Digital Zone-Empire",
+	"All-New X-Men 010.3 (2013) (Digital) (Zone-Empire).cbz" => array(
+		"clean" => "All-New X-Men 010.3 2013 Digital Zone-Empire",
 		"year" => "2013",
-		"issue" => "010",
+		"issue" => "010.3",
 		"extension" => "cbz",
 		"name" => "All-New X-Men",
 	),
