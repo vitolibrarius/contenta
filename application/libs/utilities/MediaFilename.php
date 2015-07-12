@@ -98,7 +98,14 @@ class MediaFilename
 		{
 			return $list[0];
 		}
-
+		else
+		{
+			$issue = $this->parseIssueFromFilename($filename);
+			$idx = array_search($issue, $list);
+			if ( $idx != false ) {
+				return implode(" ", array_slice($list, 0, $idx));
+			}
+		}
 
 		return false;
 	}

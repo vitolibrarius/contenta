@@ -226,6 +226,12 @@ $testdata = array(
 		"issue" => "003",
 		"extension" => "cbz",
 		"name" => "Angela: Asgard's Assassin",
+	),
+	"1872 #1 SWA.cbz" => array(
+		"clean" => "1872 1 SWA",
+		"issue" => "1",
+		"extension" => "cbz",
+		"name" => "1872",
 	)
 );
 
@@ -243,8 +249,8 @@ foreach( $testdata as $filename => $expected ) {
 		foreach ($result as $key => $value) {
 			$hasErrors = true;
 			echo "	Expected value for [" . $value . "] = '"
-				. (isset($expected[$value]) ? $expected[$value] : null) . "' but got '"
-				. (isset($meta[$value]) ? $meta[$value] : null) . "'" . PHP_EOL;
+				. (isset($expected[$value]) ? $expected[$value] : 'null') . "' but got '"
+				. (isset($meta[$value]) ? $meta[$value] : 'null') . "'" . PHP_EOL;
 		}
 		echo PHP_EOL;
 	}
