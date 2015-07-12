@@ -244,6 +244,13 @@ $testdata = array(
 		"name" => "ARROW SEASON 2.5",
 		"issue" => "10",
 	),
+	"ARROW SEASON 2.5 #10 (2015).cbz" => array(
+		"clean" => "ARROW SEASON 2.5 10 2015",
+		"year" => "2015",
+		"extension" => "cbz",
+		"name" => "ARROW SEASON 2.5",
+		"issue" => "10",
+	),
 );
 
 $hasErrors = false;
