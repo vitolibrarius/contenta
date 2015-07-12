@@ -72,24 +72,21 @@ class MediaFilename
 		// everything up to issue/year like XYZ Comic 001 2014
 		if (preg_match("/(^.+)(?=\\b[-]?(([0-9]{1,3}\\.[0-9]+|[0-9]{1,4}))\\s+(\\d\\d\\d\\d))/uU", $working, $matches, 0))
 		{
+// 			echo "everything up to issue/year like $working" .PHP_EOL;
 			return $matches[1];
 		}
 
 		// everything up to issue\syear like XYZ Comic 001 2014
 		if (preg_match("/(^.+)((\\d{3})\\s+(\\d{4})).+/u", $working, $matches, 0))
 		{
+// 			echo "everything up to issue\syear like $working" .PHP_EOL;
 			return $matches[1];
 		}
 
 		// everything up to the year
 		if (preg_match("/(^.+)(?=\\b[-]?(\\d{4})).+/u", $working, $matches, 0))
 		{
-			return $matches[1];
-		}
-
-		// all non-numeric text
-		if (preg_match("/(^\\D+)\\s*/u", $working, $matches, 0))
-		{
+// 			echo "everything up to the year like $working" .PHP_EOL;
 			return $matches[1];
 		}
 
@@ -107,7 +104,7 @@ class MediaFilename
 			}
 		}
 
-		return false;
+		return $working;
 	}
 
 

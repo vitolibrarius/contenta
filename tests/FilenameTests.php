@@ -232,7 +232,18 @@ $testdata = array(
 		"issue" => "1",
 		"extension" => "cbz",
 		"name" => "1872",
-	)
+	),
+	"13 COINS HC.cbz" => array(
+		"clean" => "13 COINS HC",
+		"extension" => "cbz",
+		"name" => "13 COINS HC",
+	),
+	"ARROW SEASON 2.5 #10.cbz" => array(
+		"clean" => "ARROW SEASON 2.5 10",
+		"extension" => "cbz",
+		"name" => "ARROW SEASON 2.5",
+		"issue" => "10",
+	),
 );
 
 $hasErrors = false;
