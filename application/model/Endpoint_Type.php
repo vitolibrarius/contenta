@@ -25,7 +25,7 @@ class Endpoint_Type extends Model
 	const RSS =			"RSS";
 	const ComicVine =	"ComicVine";
 	const SABnzbd =		"SABnzbd";
-
+	const PreviewsWorld = "PreviewsWorld";
 
 	public function tableName() { return Endpoint_Type::TABLE; }
 	public function tablePK() { return Endpoint_Type::id; }
