@@ -41,6 +41,11 @@ function endsWith($haystack, $needle)
 	return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
 }
 
+function contains($haystack, $needle)
+{
+	return ($needle != '' && strpos($haystack, $needle) !== false);
+}
+
 function zipFileList($path)
 {
 	$list = false;
