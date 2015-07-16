@@ -26,14 +26,24 @@ function reportData($array, $columns) {
 	if ( is_array($array) ) {
 		if ( is_array($columns) ) {
 			echo "Clazz\t";
-			foreach ($columns as $key => $value) {
+			foreach ($columns as $value) {
 				echo $value . "\t";
 			}
 			echo PHP_EOL;
-			foreach ($array as $key => $value) {
-				echo $value->modelName(). "[" .$value->id."]" . "\t";
+			foreach ($array as $value) {
+				if ( is_a($value, '\DataObject')) {
+					echo $value->modelName(). "[" .$value->id."]" . "\t";
+				}
+				else {
+					echo gettype($value) . "\t";
+				}
 				foreach ($columns as $c => $cname) {
-					$out = dbo_valueForKeypath( $cname, $value );
+					if ( is_a($value, '\DataObject')) {
+						$out = dbo_valueForKeypath( $cname, $value );
+					}
+					else {
+						$out = array_valueForKeypath( $cname, $value );
+					}
 
 					if ( is_string($out) ) {
 						echo $out . "\t";
