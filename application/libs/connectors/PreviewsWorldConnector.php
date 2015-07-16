@@ -83,6 +83,7 @@ class PreviewsWorldConnector extends EndpointConnector
 			'POSTER',	// poster
 			'COMBO PACK',	// combo
 			' HC ',		// hard cover
+			' TP ',		// trade paperback
 			' DVD ',	// dvd
 			' BD ',		// blue ray
 			'BOX SET',	// box set
