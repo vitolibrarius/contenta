@@ -36,6 +36,16 @@ class ComicVineConnector extends JSON_EndpointConnector
 	const ISSUE_FIELDS =		"id,aliases,character_credits,cover_date,deck,description,image,issue_number,name,person_credits,site_detail_url,story_arc_credits,volume";
 	const PERSON_FIELDS =		"id,aliases,birth,country,created_characters,deck,description,gender,hometown,image,issues,name,site_detail_url,story_arc_credits,volume_credits";
 
+	public static function normalizeQueryString( $query_string = null )
+	{
+		if ( is_null($query_string) == false ) {
+			$query_string = strtolower($query_string);
+			$query_string = preg_replace("/[^[:alnum:][:space:]]/ui", '', $query_string);
+			$query_string = preg_replace('/\s+/', ' ', $query_string);
+		}
+		return $query_string;
+	}
+
 	public function __construct($point)
 	{
 		parent::__construct($point);
@@ -152,7 +162,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 		}
 
 		if ( is_string($query_string)) {
-			$params['query'] = urlencode($query_string);
+			$params['query'] = ComicVineConnector::normalizeQueryString( $query_string );
 		}
 		else {
 			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
@@ -165,15 +175,15 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 	public function queryForSeriesName($name, $strict = false)
 	{
-		$query_string = $name;
+		$query_string = ComicVineConnector::normalizeQueryString( $name );
 		if ( $strict ) {
-			$query_string = implode( ' AND ', explode(' ', strtolower($name)));
+			$query_string = implode( ',', preg_split('/\s+/', $query_string));
 		}
 
 		$params = $this->defaultParameters();
 		$params = array_merge($params, array(
 			"field_list" => ComicVineConnector::VOLUME_FIELDS,
-			"sort" => "name"
+			"sort" => "start_year,name"
 			)
 		);
 
@@ -183,15 +193,16 @@ class ComicVineConnector extends JSON_EndpointConnector
 		else {
 			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
 		}
+
 		$search_url = $this->endpointBaseURL() . "/volumes/?" . http_build_query($params);
 		return $this->performRequest( $search_url );
 	}
 
 	public function queryForPublisherName($name, $strict = false)
 	{
-		$query_string = $name;
+		$query_string = ComicVineConnector::normalizeQueryString( $name );
 		if ( $strict ) {
-			$query_string = implode( ' AND ', explode(' ', strtolower($name)));
+			$query_string = implode( ',', preg_split('/\s+/', $name));
 		}
 
 		$params = $this->defaultParameters();
@@ -213,9 +224,9 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 	public function queryForCharacterName($name, $strict = false)
 	{
-		$query_string = $name;
+		$query_string = ComicVineConnector::normalizeQueryString( $name );
 		if ( $strict ) {
-			$query_string = implode( ' AND ', explode(' ', strtolower($seriesName)));
+			$query_string = implode( ',', preg_split('/\s+/', $seriesName));
 		}
 
 		$params = $this->defaultParameters();
@@ -258,9 +269,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 	function filterSeriesResultForYear(Array $results = array(), $year = 0)
 	{
 		$filtered = array();
-		if ( is_int( $year ) == false ) {
-			$year = intval($year);
-		}
+		$year = intval($year);
 
 		foreach( $results as $key => $item ) {
 			$itemStartYear = isset($item['start_year']) ? intval($item['start_year']) : 0;
@@ -282,7 +291,15 @@ class ComicVineConnector extends JSON_EndpointConnector
 					$matchVolId[] = $item['id'];
 				}
 
-				return $this->searchForIssuesMatchingSeriesAndYear($matchVolId, $issueNum, $year);
+				$possible = $this->searchForIssuesMatchingSeriesAndYear($matchVolId, $issueNum, $year);
+				if ( is_array($possible) && count($possible) > 5 ) {
+					$possible = array_filter($possible, function($v) use($seriesName){
+							$l = levenshtein ( $seriesName , array_valueForKeypath( "volume/name", $v) );
+							return ($l < 10);
+						}
+					);
+				}
+				return $possible;
 			}
 		}
 		else {
@@ -316,54 +333,43 @@ class ComicVineConnector extends JSON_EndpointConnector
 		$search_url = $this->endpointBaseURL() . "/issues/?" . http_build_query($params);
 		$candidate = $this->performRequest( $search_url );
 
-		if ($candidate != false && count($candidate) == 1)
-		{
-			return $candidate;
-		}
-
-		if ( isset( $year ) && intval($year) > 1900 && $candidate != false )
-		{
-			$filterMatch = array();
-			$filterWithinMargin = array();
-			foreach ($candidate as $key => $value )
-			{
-				if ( isset( $value['cover_date'] ) ) {
-					$coverDate = getDate(strtotime($value['cover_date']));
-
-					// convert cover_date year to number
-					if ( $coverDate['year'] == $year) {
-						$filterMatch[] = $value;
-					}
-
-					if (abs($coverDate['year'] - intval($year)) <= 2) {
-						$filterWithinMargin[] = $value;
-					}
-				}
+		if ($candidate != false) {
+			if ( count($candidate) == 1) {
+				return $candidate;
 			}
 
-			switch ( count($filterMatch) )
+			if ( isset( $year ) && intval($year) > 1900)
 			{
-				case 0:
-					if ( count($filterWithinMargin) > 0 ) {
-						return $filterWithinMargin;
+				$filterMatch = array();
+				$filterWithinMargin = array();
+				foreach ($candidate as $key => $value )
+				{
+					if ( isset( $value['cover_date'] ) ) {
+						$coverDate = getDate(strtotime($value['cover_date']));
+						// convert cover_date year to number
+						if ( $coverDate['year'] == $year) {
+							$filterMatch[] = $value;
+						}
+
+						if (abs($coverDate['year'] - intval($year)) <= 2) {
+							$filterWithinMargin[] = $value;
+						}
 					}
-					return false;
-					break;
+				}
 
-				case 1:
+				if ( count($filterMatch) == 0 ) {
+					return (count($filterWithinMargin) > 0 ? $filterWithinMargin : false);
+				}
+				else {
 					return $filterMatch;
-					break;
-
-				default:
-					return $filterMatch;
-					break;
+				}
 			}
 		}
 
 		return $candidate;
 	}
 
-	public function performRequest($url, $force = false)
+	public function performRequest($url, $force = true)
 	{
 		$json = parent::performRequest($url, $force);
 		if ( $json != false )
