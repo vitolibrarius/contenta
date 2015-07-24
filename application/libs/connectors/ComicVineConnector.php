@@ -374,10 +374,10 @@ class ComicVineConnector extends JSON_EndpointConnector
 			);
 			$results = $this->issue_search( null, $matchVolumeId, null, null, null, $issueNumber);
 			if ( is_array($results) ) {
-				usort($results, function($a, $b) {
+				usort($results, function($a, $b) use ($name) {
 					$a_series_name = array_valueForKeypath( "volume/name", $a );
 					$b_series_name = array_valueForKeypath( "volume/name", $b );
-					return levenshtein( $a_series_name, $b_series_name );
+					return (levenshtein( $a_series_name, $name ) < levenshtein( $b_series_name, $name )) ? -1 : 1;
 				});
 			}
 		}
