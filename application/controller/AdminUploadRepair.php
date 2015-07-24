@@ -12,7 +12,6 @@ use \Localized as Localized;
 use \Config as Config;
 use \Processor as Processor;
 
-use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
 use processor\UploadImport as UploadImport;
 use processor\ImportManager as ImportManager;

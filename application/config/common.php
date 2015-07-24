@@ -146,6 +146,16 @@ function normalize($string)
 	return trim($string, ' -');
 }
 
+function normalizeSearchString( $string = null )
+{
+	if ( is_null($string) == false ) {
+		$string = strtolower($string);
+		$string = preg_replace("/[^[:alnum:][:space:]]/ui", ' ', $string);
+		$string = preg_replace('/\s+/', ' ', $string);
+	}
+	return $string;
+}
+
 function words($string)
 {
 	$words = explode(' ', trim($string));

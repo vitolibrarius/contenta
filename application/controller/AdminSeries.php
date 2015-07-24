@@ -235,7 +235,7 @@ class AdminSeries extends Admin
 					$this->view->endpoint = $epoint;
 					$this->view->pub_model = Model::Named("Publisher");
 					$this->view->model = $model;
-					$this->view->results = $connection->queryForVolumeName( $name, $year );
+					$this->view->results = $connection->series_searchFilteredForYear( $name, $year );
 					$this->view->importAction = "/AdminSeries/comicVineImportAction";
 				}
 				else {

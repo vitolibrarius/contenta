@@ -11,9 +11,6 @@ use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
 
-use connectors\ComicVineConnector as ComicVineConnector;
-use processor\ComicVineImporter as ComicVineImporter;
-
 use model\Users as Users;
 use model\Job as Job;
 use model\Job_Type as Job_Type;

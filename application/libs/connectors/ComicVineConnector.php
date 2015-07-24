@@ -18,6 +18,15 @@ class ComicVineParameterException extends \Exception {}
  */
 class ComicVineConnector extends JSON_EndpointConnector
 {
+	const RESOURCE_ISSUE = 'issue';
+	const RESOURCE_CHARACTER = 'character';
+	const RESOURCE_PUBLISHER = 'publisher';
+	const RESOURCE_CONCEPT = 'concept';
+	const RESOURCE_LOCATION = 'location';
+	const RESOURCE_PERSON = 'person';
+	const RESOURCE_STORY_ARC = 'story_arc';
+	const RESOURCE_VOLUME = 'volume';
+
 	const TYPEID_ISSUE = '4000';
 	const TYPEID_CHARACTER = '4005';
 	const TYPEID_PUBLISHER = '4010';
@@ -31,19 +40,18 @@ class ComicVineConnector extends JSON_EndpointConnector
 	const CHARACTER_FIELDS =	"id,image,name,real_name,aliases,gender,publisher,deck,description,story_arc_credits,site_detail_url";
 	const CHARACTER_SHORT_FIELDS =	"id,image,name,real_name,aliases,gender,publisher,deck,description,site_detail_url";
 	const STORY_ARC_FIELDS =	"id,aliases,deck,description,first_appeared_in_issue,image,issues,name,publisher,site_detail_url";
-	const VOLUME_FIELDS =		"id,aliases,characters,deck,description,first_issue,image,issues,name,publisher,site_detail_url,start_year";
-	const VOLUME_SHORT_FIELDS =		"id,aliases,deck,description,image,name,publisher,site_detail_url,start_year";
+	const VOLUME_FIELDS =		"id,aliases,characters,deck,description,first_issue,image,issues,name,publisher,site_detail_url,start_year,count_of_issues";
+	const VOLUME_SHORT_FIELDS =	"id,aliases,deck,description,image,name,publisher,site_detail_url,start_year,count_of_issues";
 	const ISSUE_FIELDS =		"id,aliases,character_credits,cover_date,deck,description,image,issue_number,name,person_credits,site_detail_url,story_arc_credits,volume";
 	const PERSON_FIELDS =		"id,aliases,birth,country,created_characters,deck,description,gender,hometown,image,issues,name,site_detail_url,story_arc_credits,volume_credits";
 
-	public static function normalizeQueryString( $query_string = null )
+	public static function allResourceNames()
 	{
-		if ( is_null($query_string) == false ) {
-			$query_string = strtolower($query_string);
-			$query_string = preg_replace("/[^[:alnum:][:space:]]/ui", '', $query_string);
-			$query_string = preg_replace('/\s+/', ' ', $query_string);
-		}
-		return $query_string;
+		return array(
+			ComicVineConnector::RESOURCE_ISSUE, ComicVineConnector::RESOURCE_CHARACTER, ComicVineConnector::RESOURCE_PUBLISHER,
+			ComicVineConnector::RESOURCE_CONCEPT, ComicVineConnector::RESOURCE_LOCATION, ComicVineConnector::RESOURCE_PERSON,
+			ComicVineConnector::RESOURCE_STORY_ARC, ComicVineConnector::RESOURCE_VOLUME
+		);
 	}
 
 	public function __construct($point)
@@ -94,7 +102,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 	public function story_arcDetails( $id )
 	{
 		$query = array("field_list" => ComicVineConnector::STORY_ARC_FIELDS);
-		return $this->details('story_arc', ComicVineConnector::TYPEID_STORY_ARC, $id, $query);;
+		return $this->details(ComicVineConnector::RESOURCE_STORY_ARC, ComicVineConnector::TYPEID_STORY_ARC, $id, $query);;
 	}
 
 	public function characterDetails( $id, $shortDetails = false )
@@ -107,13 +115,13 @@ class ComicVineConnector extends JSON_EndpointConnector
 			$query["field_list"] = ComicVineConnector::CHARACTER_FIELDS;
 		}
 
-		return $this->details('character', ComicVineConnector::TYPEID_CHARACTER, $id, $query);
+		return $this->details(ComicVineConnector::RESOURCE_CHARACTER, ComicVineConnector::TYPEID_CHARACTER, $id, $query);
 	}
 
 	public function publisherDetails( $id )
 	{
 		$query = array("field_list" => ComicVineConnector::PUBLISHER_FIELDS);
-		return $this->details('publisher', ComicVineConnector::TYPEID_PUBLISHER, $id, $query);
+		return $this->details(ComicVineConnector::RESOURCE_PUBLISHER, ComicVineConnector::TYPEID_PUBLISHER, $id, $query);
 	}
 
 	public function seriesDetails( $id, $shortDetails = false )
@@ -125,19 +133,19 @@ class ComicVineConnector extends JSON_EndpointConnector
 		else {
 			$query["field_list"] = ComicVineConnector::VOLUME_FIELDS;
 		}
-		return $this->details('volume', ComicVineConnector::TYPEID_VOLUME, $id, $query);
+		return $this->details(ComicVineConnector::RESOURCE_VOLUME, ComicVineConnector::TYPEID_VOLUME, $id, $query);
 	}
 
 	public function issueDetails( $id )
 	{
 		$query = array("field_list" => ComicVineConnector::ISSUE_FIELDS);
-		return $this->details('issue', ComicVineConnector::TYPEID_ISSUE, $id, $query);
+		return $this->details(ComicVineConnector::RESOURCE_ISSUE, ComicVineConnector::TYPEID_ISSUE, $id, $query);
 	}
 
 	public function personDetails( $id )
 	{
 		$query = null; //array("field_list" => ComicVineConnector::PERSON_FIELDS);
-		return $this->details('person', ComicVineConnector::TYPEID_PERSON, $id, $query);
+		return $this->details(ComicVineConnector::RESOURCE_PERSON, ComicVineConnector::TYPEID_PERSON, $id, $query);
 	}
 
 
@@ -162,7 +170,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 		}
 
 		if ( is_string($query_string)) {
-			$params['query'] = ComicVineConnector::normalizeQueryString( $query_string );
+			$params['query'] = normalizeSearchString( $query_string );
 		}
 		else {
 			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
@@ -172,201 +180,208 @@ class ComicVineConnector extends JSON_EndpointConnector
 		return $this->performRequest( $search_url );
 	}
 
-
-	public function queryForSeriesName($name, $strict = false)
+	private function addFilter( array &$filters, $key, $value )
 	{
-		$query_string = ComicVineConnector::normalizeQueryString( $name );
-		if ( $strict ) {
-			$query_string = implode( ',', preg_split('/\s+/', $query_string));
+		if (is_array($value) && count($value) > 0) {
+			$filters[$key] = implode( '|', $value);
+		}
+		else if ((is_string($value) && strlen($value) > 0) || (is_integer($value) && $value > 0)) {
+			$filters[$key] = $value;
+		}
+	}
+
+	private function addIntFilter( array &$filters, $key, $value )
+	{
+		if (is_array($value) && count($value) > 0) {
+			$filters[$key] = implode( '|', array_kmap(
+					function($k, $v) {
+						return intval($v);
+					},
+					$value
+				)
+			);
+		}
+		else if ((is_string($value) && strlen($value) > 0) || (is_integer($value) && $value > 0)) {
+			$filters[$key] = intval($value);
+		}
+	}
+
+	private function addStrFilter( array &$filters, $key, $value )
+	{
+		if (is_array($value) && count($value) > 0) {
+			$filters[$key] = implode( '|', array_kmap(
+					function($k, $v) {
+						return normalizeSearchString($v);
+					},
+					$value
+				)
+			);
+		}
+		else if (is_string($value) && strlen($value) > 0) {
+			$filters[$key] = normalizeSearchString($value);
+		}
+	}
+
+	public function resource_filtered( $resource, array $filters, $sort = null, $fields = null)
+	{
+		if ( isset($resource) == false || is_string($resource) == false || in_array($resource, ComicVineConnector::allResourceNames()) == false ) {
+			throw new ComicVineParameterException("Unable to resource_filtered for resource of type " . var_export($resource, true));
+		}
+
+		if ( isset($filters) == false || is_array($filters) == false || count($filters) == false ) {
+			throw new ComicVineParameterException("Unable to resource_filtered for filters of type " . var_export($filters, true));
 		}
 
 		$params = $this->defaultParameters();
-		$params = array_merge($params, array(
-			"field_list" => ComicVineConnector::VOLUME_FIELDS,
-			"sort" => "start_year,name"
-			)
-		);
-
-		if ( is_string($query_string)) {
-			$params['filter'] = 'name:' . $query_string;
+		if (is_array($sort) && count($sort) > 0) {
+			$params['sort'] = implode( ',', $sort);
 		}
-		else {
-			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
+		else if ( is_string($sort)) {
+			$params['sort'] = $sort;
 		}
 
-		$search_url = $this->endpointBaseURL() . "/volumes/?" . http_build_query($params);
+		if (is_array($fields) && count($fields) > 0) {
+			$params['field_list'] = implode(',', $fields);
+		}
+		else if ( is_string($fields)) {
+			$params['field_list'] = $fields;
+		}
+
+		$filter_array = array();
+		foreach( $filters as $attribute => $f ) {
+			$filter_array[] = $attribute . ":" . $f;
+		}
+		$params['filter'] = implode( ',', $filter_array);
+
+		$search_url = $this->endpointBaseURL() ."/". $resource . "s/?" . http_build_query($params);
+// 		echo $this->cleanURLForLog($search_url) . PHP_EOL;
 		return $this->performRequest( $search_url );
 	}
 
-	public function queryForPublisherName($name, $strict = false)
+	public function character_search($xid = null, $name = null, $gender = null)
 	{
-		$query_string = ComicVineConnector::normalizeQueryString( $name );
-		if ( $strict ) {
-			$query_string = implode( ',', preg_split('/\s+/', $name));
+		$filters = array();
+		$this->addIntFilter( $filters, 'id', $xid );
+		$this->addStrFilter( $filters, 'name', $name );
+
+		if ( is_string($gender) && strlen($gender) > 0) {
+			$filters['gender'] = $gender;
 		}
 
-		$params = $this->defaultParameters();
-		$params = array_merge($params, array(
-			"field_list" => ComicVineConnector::PUBLISHER_FIELDS,
-			"sort" => "name"
-			)
+		return $this->resource_filtered(
+			ComicVineConnector::RESOURCE_CHARACTER,
+			$filters,
+			array("name"),
+			ComicVineConnector::CHARACTER_SHORT_FIELDS
 		);
-
-		if ( is_string($query_string)) {
-			$params['filter'] = 'name:' . $query_string;
-		}
-		else {
-			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
-		}
-		$search_url = $this->endpointBaseURL() . "/publishers/?" . http_build_query($params);
-		return $this->performRequest( $search_url );
 	}
 
-	public function queryForCharacterName($name, $strict = false)
+	public function publisher_search($xid = null, $name = null, $aliases = null)
 	{
-		$query_string = ComicVineConnector::normalizeQueryString( $name );
-		if ( $strict ) {
-			$query_string = implode( ',', preg_split('/\s+/', $seriesName));
-		}
-
-		$params = $this->defaultParameters();
-		$params = array_merge($params, array(
-			"field_list" => ComicVineConnector::CHARACTER_FIELDS,
-			"sort" => "name"
-			)
+		$filters = array();
+		$this->addIntFilter( $filters, 'id', $xid );
+		$this->addStrFilter( $filters, 'name', $name );
+		$this->addStrFilter( $filters, 'alias', $aliases );
+		return $this->resource_filtered(
+			ComicVineConnector::RESOURCE_PUBLISHER,
+			$filters,
+			array("name"),
+			ComicVineConnector::PUBLISHER_FIELDS
 		);
-
-		if ( is_string($query_string)) {
-			$params['filter'] = 'name:' . $query_string;
-		}
-		else {
-			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
-		}
-		$search_url = $this->endpointBaseURL() . "/characters/?" . http_build_query($params);
-		return $this->performRequest( $search_url );
 	}
 
-	public function queryForSeriesNameAndYear($seriesName = null, $year = null)
+	public function story_arc_search($xid = null, $name = null, $aliases = null)
 	{
-		if ( is_string($seriesName) && strlen($seriesName) > 1 ) {
-			$json = $this->queryForSeriesName( $seriesName, true );
-			if ( $json != false ) {
-				return $this->filterSeriesResultForYear($json, $year);
-			}
-			else {
-				$json = $this->queryForSeriesName( $seriesName, false );
-				if ( $json != false ) {
-					return $this->filterSeriesResultForYear($json, $year);
-				}
-				else {
-					Logger::logInfo( 'queryForSeries - Search Failed', get_short_class($this), $this->endpoint());
-				}
-			}
-		}
-		return false;
-	}
-
-	function filterSeriesResultForYear(Array $results = array(), $year = 0)
-	{
-		$filtered = array();
-		$year = intval($year);
-
-		foreach( $results as $key => $item ) {
-			$itemStartYear = isset($item['start_year']) ? intval($item['start_year']) : 0;
-			if ($year == 0 || $year >= $itemStartYear) {
-				$filtered[] = $item;
-			}
-		}
-
-		return $filtered;
-	}
-
-	public function searchForIssue($seriesName = null, $issueNum = null, $year = null)
-	{
-		if ( is_string($seriesName) ) {
-			$seriesPossible = $this->queryForSeriesNameAndYear($seriesName, $year);
-			if ( $seriesPossible != false ) {
-				$matchVolumeId = array();
-				foreach ($seriesPossible as $key => $item) {
-					$matchVolId[] = $item['id'];
-				}
-
-				$possible = $this->searchForIssuesMatchingSeriesAndYear($matchVolId, $issueNum, $year);
-				if ( is_array($possible) && count($possible) > 5 ) {
-					$possible = array_filter($possible, function($v) use($seriesName){
-							$l = levenshtein ( $seriesName , array_valueForKeypath( "volume/name", $v) );
-							return ($l < 10);
-						}
-					);
-				}
-				return $possible;
-			}
-		}
-		else {
-			Logger::logInfo( 'searchForIssue - Not enough search data ' . var_export($metadata, true),
-				get_short_class($this), $this->endpoint());
-		}
-		return false;
-	}
-
-	public function searchForIssuesMatchingSeriesAndYear( Array $volumeIdArray = array(), $issueNum = null, $year = null)
-	{
-		$volumeFilter = 'volume:' . implode( '|', $volumeIdArray );
-		$issueFilter = '';
-		if (isset($issueNum) && strlen($issueNum) > 0) {
-			if (intval($issueNum) > 0) {
-				 $issueFilter .= ",issue_number:" . ltrim($issueNum, '0');
-			}
-			else if (ltrim($issueNum, '0') === '') {
-				$issueFilter .= ",issue_number:0";
-			}
-		}
-
-		$params = $this->defaultParameters();
-		$params = array_merge($params, array(
-			"field_list" => ComicVineConnector::ISSUE_FIELDS,
-			"sort" => "name",
-			"filter" => $volumeFilter . $issueFilter
-			)
+		$filters = array();
+		$this->addIntFilter( $filters, 'id', $xid );
+		$this->addStrFilter( $filters, 'name', $name );
+		$this->addStrFilter( $filters, 'alias', $aliases );
+		return $this->resource_filtered(
+			ComicVineConnector::RESOURCE_STORY_ARC,
+			$filters,
+			array("name"),
+			ComicVineConnector::STORY_ARC_FIELDS
 		);
+	}
 
-		$search_url = $this->endpointBaseURL() . "/issues/?" . http_build_query($params);
-		$candidate = $this->performRequest( $search_url );
+	public function series_search($xid = null, $name = null)
+	{
+		$filters = array();
+		$this->addIntFilter( $filters, 'id', $xid );
+		$this->addStrFilter( $filters, 'name', $name );
+		return $this->resource_filtered(
+			ComicVineConnector::RESOURCE_VOLUME,
+			$filters,
+			array("name"),
+			ComicVineConnector::VOLUME_FIELDS
+		);
+	}
 
-		if ($candidate != false) {
-			if ( count($candidate) == 1) {
-				return $candidate;
-			}
+	public function issue_search($xid = null, $vol = null, $name = null, $aliases = null, $cover_date = null, $issue_number = null)
+	{
+		$filters = array();
+		$this->addIntFilter( $filters, 'id', $xid );
+		$this->addIntFilter( $filters, 'volume', $vol );
+		$this->addFilter( $filters, 'cover_date', $cover_date );
+		$this->addIntFilter( $filters, 'issue_number', $issue_number );
+		$this->addStrFilter( $filters, 'name', $name );
+		$this->addStrFilter( $filters, 'alias', $aliases );
+		return $this->resource_filtered(
+			ComicVineConnector::RESOURCE_ISSUE,
+			$filters,
+			array("cover_date","issue_number"),
+			ComicVineConnector::ISSUE_FIELDS
+		);
+	}
 
-			if ( isset( $year ) && intval($year) > 1900)
-			{
-				$filterMatch = array();
-				$filterWithinMargin = array();
-				foreach ($candidate as $key => $value )
-				{
-					if ( isset( $value['cover_date'] ) ) {
-						$coverDate = getDate(strtotime($value['cover_date']));
-						// convert cover_date year to number
-						if ( $coverDate['year'] == $year) {
-							$filterMatch[] = $value;
-						}
-
-						if (abs($coverDate['year'] - intval($year)) <= 2) {
-							$filterWithinMargin[] = $value;
-						}
-					}
-				}
-
-				if ( count($filterMatch) == 0 ) {
-					return (count($filterWithinMargin) > 0 ? $filterWithinMargin : false);
-				}
-				else {
-					return $filterMatch;
-				}
-			}
+	public function series_searchFilteredForYear( $name, $year = 0 )
+	{
+		$results = $this->series_search( null, $name );
+		if ( is_array($results) == false || count($results) == 0 ) {
+			// try a fuzzy search
+			$results = $this->search( ComicVineConnector::RESOURCE_VOLUME, $name);
 		}
 
-		return $candidate;
+		if ( is_array($results) && count($results) > 0 ) {
+			$filtered = array();
+			$year = intval($year);
+
+			foreach( $results as $key => $item ) {
+				$countOfIssues = isset($item['count_of_issues']) ? intval($item['count_of_issues']) : 1;
+				$itemStartYear = isset($item['start_year']) ? intval($item['start_year']) : 0;
+				if ($year == 0 || ($year >= $itemStartYear && $year - $itemStartYear < ceil($countOfIssues/12))) {
+					$filtered[] = $item;
+				}
+// 				else {
+// 					echo "rejecting $itemStartYear - $countOfIssues - " . $item['name'] . ' ' . PHP_EOL;
+// 				}
+			}
+
+			return $filtered;
+		}
+		return $results;
+	}
+
+	public function issue_searchFilteredForSeriesYear( $issueNumber = 0, $name, $year = 0 )
+	{
+		$results = $this->series_searchFilteredForYear( $name, $year );
+		if ( is_array($results) && count($results) > 0 ) {
+			$matchVolumeId = array_kmap(
+				function($k, $v) {
+					return $v['id'];
+				},
+				$results
+			);
+			$results = $this->issue_search( null, $matchVolumeId, null, null, null, $issueNumber);
+			if ( is_array($results) ) {
+				usort($results, function($a, $b) {
+					$a_series_name = array_valueForKeypath( "volume/name", $a );
+					$b_series_name = array_valueForKeypath( "volume/name", $b );
+					return levenshtein( $a_series_name, $b_series_name );
+				});
+			}
+		}
+		return $results;
 	}
 
 	public function performRequest($url, $force = true)

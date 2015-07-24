@@ -19,7 +19,6 @@
 	require SYSTEM_PATH .'tests/_ResetConfig.php';
 	require SYSTEM_PATH .'tests/_Data.php';
 
-	use connectors\ComicVineConnector as ComicVineConnector;
 	use processor\ComicVineImporter as ComicVineImporter;
 	use processor\JobEvaluator as JobEvaluator;
 

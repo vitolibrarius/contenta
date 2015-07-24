@@ -198,9 +198,9 @@ class UploadImport extends Processor
 		}
 
 		$connection = new ComicVineConnector($points[0]);
-		$issue = $connection->searchForIssue(
-			$this->getMeta(UploadImport::META_QUERY_NAME),
+		$issue = $connection->issue_searchFilteredForSeriesYear(
 			$this->getMeta(UploadImport::META_QUERY_ISSUE),
+			$this->getMeta(UploadImport::META_QUERY_NAME),
 			$this->getMeta(UploadImport::META_QUERY_YEAR)
 		);
 		if ( $issue == false )

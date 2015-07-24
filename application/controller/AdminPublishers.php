@@ -208,7 +208,7 @@ class AdminPublishers extends Admin
 					$connection = new ComicVineConnector($epoint);
 
 					$this->view->model = $model;
-					$this->view->results = $connection->queryForPublisherName( $pubName );
+					$this->view->results = $connection->publisher_search( null, $pubName );
 					$this->view->importAction = "/AdminPublishers/comicVineImportAction";
 				}
 				else {

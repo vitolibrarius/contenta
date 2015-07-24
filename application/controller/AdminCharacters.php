@@ -222,14 +222,14 @@ class AdminCharacters extends Admin
 				$model = Model::Named('Character');
 				$values = splitPOSTValues($_POST);
 				if ( isset($values, $values[Character::TABLE], $values[Character::TABLE][Character::name]) ) {
-					$pubName = $values[Character::TABLE][Character::name];
+					$name = $values[Character::TABLE][Character::name];
 					$epoint = $points[0];
 					$connection = new ComicVineConnector($epoint);
 
 					$this->view->endpoint = $epoint;
 					$this->view->pub_model = Model::Named("Publisher");
 					$this->view->model = $model;
-					$this->view->results = $connection->queryForCharacterName( $pubName );
+					$this->view->results = $connection->character_search( null, $name );
 					$this->view->importAction = "/AdminCharacters/comicVineImportAction";
 				}
 				else {

@@ -124,7 +124,7 @@ abstract class EndpointConnector
 	}
 
 	public function cleanURLForLog($url) {
-		$clean = $url;
+		$clean = urldecode($url);
 		if ( empty($url) == false) {
 			if ( empty( $this->endpoint->username ) == false ) {
 				$clean = str_ireplace($this->endpoint->username, '[username]', $clean);
