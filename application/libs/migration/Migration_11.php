@@ -8,6 +8,7 @@ use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
 use \SQL as SQL;
+use db\Qualifier as Qualifier;
 
 use utilities\CronEvaluator as CronEvaluator;
 
@@ -133,7 +134,7 @@ class Migration_11 extends Migrator
 		foreach ($types as $dict) {
 			$existing = \SQL::raw( "select id FROM " . Job_Type::TABLE . " where code = :code", array( ":code" => $dict[Job_Type::code]));
 			if ( is_array($existing) && count($existing) > 0) {
-				$update = \SQL::Update($job_type_model, db\Qualifier::Equals( "code", $dict[Job_Type::code]), $dict);
+				$update = \SQL::Update($job_type_model, Qualifier::Equals( "code", $dict[Job_Type::code]), $dict);
 				$update->commitTransaction();
 			}
 			else {

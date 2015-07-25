@@ -8,6 +8,7 @@ use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
 use \SQL as SQL;
+use db\Qualifier as Qualifier;
 
 use model\Series as Series;
 use model\Publisher as Publisher;
@@ -113,7 +114,7 @@ class Migration_10 extends Migrator
 		foreach ($types as $dict) {
 			$existing = \SQL::raw( "select id FROM " . Job_Type::TABLE . " where code = :code", array( ":code" => $dict[Job_Type::code]));
 			if ( is_array($existing) && count($existing) > 0) {
-				\SQL::Update($job_type_model, db\Qualifier::Equals( "code", $dict[Job_Type::code]), $dict)->commitTransaction();
+				\SQL::Update($job_type_model, Qualifier::Equals( "code", $dict[Job_Type::code]), $dict)->commitTransaction();
 			}
 			else {
 				$inserts = \SQL::Insert( $job_type_model, array( "name", "code", "desc", "processor", "scheduled") );
