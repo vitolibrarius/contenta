@@ -1,3 +1,23 @@
+Version 0.3.0:
+* 3df1d0f -  (HEAD, master) Added some useful summarizing fields for series and story arc to track total publications, pubs available, and average number of days between pub_date (Sat Jul 25 15:02:41 2015 -0600) <Vito Librarius>
+* d7593cf -  small typos fixed (Sat Jul 25 13:55:20 2015 -0600) <Vito Librarius>
+* 5cf27e4 -  Fixed sort based on request name, not the name of the 2 items (Fri Jul 24 10:39:55 2015 -0600) <Vito Librarius>
+* 63f185f -  update and improved the comic vine connector logic for better search (Thu Jul 23 21:16:36 2015 -0600) <Vito Librarius>
+* e2bfc5c -  (origin/master, origin/HEAD) revisiting the ComicVineConnection.  Some search results are wildly off, trying to tighten them up but ComicVine's API is ... not the most flexible (Sun Jul 19 12:34:15 2015 -0600) <Vito Librarius>
+* 660e81f -  exclude trade paperbacks (Thu Jul 16 17:53:24 2015 -0600) <Vito Librarius>
+* b6febeb -  report on non-DBO type objects (Thu Jul 16 17:53:00 2015 -0600) <Vito Librarius>
+* 3f6443d -  Initial support for PreviewsWorld new release file (Sun Jul 12 13:39:02 2015 -0600) <Vito Librarius>
+* 508801a -  new string function for contains() (Sun Jul 12 13:38:28 2015 -0600) <Vito Librarius>
+* efc3cec -  just checking (Sun Jul 12 12:49:25 2015 -0600) <Vito Librarius>
+* 3ea4a86 -  Another tricky filename where the series includes a numbering system like 'Arrow Season 2.5' (Sun Jul 12 12:48:07 2015 -0600) <Vito Librarius>
+* c91e72d -  Added support for another tricky filename (Sun Jul 12 11:59:55 2015 -0600) <Vito Librarius>
+* b6b026b -  Filename patterns missed decimals in the issue number (Sat Jul 11 22:00:55 2015 -0600) <Vito Librarius>
+* b895f25 -  Added simple Newznab api interface for nab searching (Wed Jul 8 08:19:47 2015 -0600) <Vito Librarius>
+* 3b3948b -  Improved Job editing validation for scheduled time (Tue Jul 7 11:08:33 2015 -0600) <Vito Librarius>
+* d117046 -  Added RSS table support and RSSImporting (Mon Jul 6 20:16:11 2015 -0600) <Vito Librarius>
+* 91b49c2 -  Split the EndpointImporter into 2 abstract classes (Thu Jul 2 17:34:11 2015 -0600) <Vito Librarius>
+* a6b5c57 -  Added elapsed time to running jobs and as last run elapsed time (Thu Jul 2 17:08:24 2015 -0600) <Vito Librarius>
+
 Version 0.2.3:
 * ec6076e -  (HEAD, master) Added run now feature to jobs list page (Thu Jul 2 15:18:53 2015 -0600) <Vito Librarius>
 
