@@ -144,8 +144,8 @@ class Job extends Model
 
 	function validate_endpoint_id($object = null, $value)
 	{
-		if ( $object == null || isset($object->endpoint_id) == false) {
-			if (empty($value) ) {
+		if ( $object != null && $object->type() != null && $object->type()->requiresEndpoint() ) {
+			if (isset($object->endpoint_id) == false && empty($value) ) {
 				return Localized::ModelValidation($this->tableName(), Job::endpoint_id, "FIELD_EMPTY");
 			}
 		}
@@ -197,25 +197,32 @@ class Job extends Model
 
 	public function attributesMandatory($object = null)
 	{
-		return array(
-			Job::endpoint_id,
+		$attr = array(
 			Job::dayOfWeek,
 			Job::hour,
 			Job::minute,
 			Job::next
 		);
+		if ( $object != null && $object->type() != null && $object->type()->requiresEndpoint() ) {
+			$attr[] = Job::endpoint_id;
+		}
+		return $attr;
 	}
 
 	public function attributesFor($object = null, $type = null ) {
-		return array(
-			Job::endpoint_id => Model::TO_ONE_TYPE,
-			Job::parameter => Model::TEXT_TYPE,
-			Job::dayOfWeek => Model::TEXT_TYPE,
-			Job::minute => Model::TEXT_TYPE,
-			Job::hour => Model::TEXT_TYPE,
-			Job::enabled => Model::FLAG_TYPE,
-			Job::one_shot => Model::FLAG_TYPE
-		);
+		$attr = array();
+		if ( $type != null && $type->requiresEndpoint() ) {
+			$attr[Job::endpoint_id] = Model::TO_ONE_TYPE;
+		}
+
+		$attr[Job::parameter] = Model::TEXT_TYPE;
+		$attr[Job::dayOfWeek] = Model::TEXT_TYPE;
+		$attr[Job::minute] = Model::TEXT_TYPE;
+		$attr[Job::hour] = Model::TEXT_TYPE;
+		$attr[Job::enabled] = Model::FLAG_TYPE;
+		$attr[Job::one_shot] = Model::FLAG_TYPE;
+
+		return $attr;
 	}
 
 	public function attributeOptions($object = null, $type = null, $attr) {

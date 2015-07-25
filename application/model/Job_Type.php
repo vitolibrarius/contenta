@@ -15,6 +15,7 @@ class Job_Type extends Model
 	const scheduled = 	'scheduled';
 	const processor = 	'processor';
 	const parameter =	'parameter';
+	const requires_endpoint = 'requires_endpoint';
 
 	public function tableName() { return Job_Type::TABLE; }
 	public function tablePK() { return Job_Type::id; }
@@ -24,7 +25,8 @@ class Job_Type extends Model
 	public function allColumnNames()
 	{
 		return array(
-			Job_Type::id, Job_Type::name, Job_Type::code, Job_Type::desc, Job_Type::scheduled, Job_Type::processor, Job_Type::parameter
+			Job_Type::id, Job_Type::name, Job_Type::code, Job_Type::desc, Job_Type::scheduled, Job_Type::processor,
+			Job_Type::parameter, Job_Type::requires_endpoint
 		 );
 	}
 

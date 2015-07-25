@@ -16,6 +16,7 @@ class Series extends Model
 	const publisher_id =	'publisher_id';
 	const parent_id =		'parent_id';
 	const name =			'name';
+	const search_name =		'search_name';
 	const desc =			'desc';
 	const created =			'created';
 	const start_year =		'start_year';
@@ -25,6 +26,11 @@ class Series extends Model
 	const xid =				'xid';
 	const xupdated =		'xupdated';
 
+	const pub_active =		'pub_active';
+	const pub_cycle =		'pub_cycle';
+	const pub_count =		'pub_count';
+	const pub_available = 	'pub_available';
+	const pub_wanted =		'pub_wanted';
 
 	public function tableName() { return Series::TABLE; }
 	public function tablePK() { return Series::id; }
@@ -54,9 +60,10 @@ class Series extends Model
 	public function allColumnNames()
 	{
 		return array(
-			Series::id, Series::parent_id, Series::publisher_id, Series::name, Series::desc, Series::created,
+			Series::id, Series::parent_id, Series::publisher_id, Series::name, Series::search_name, Series::desc, Series::created,
 			Series::start_year, Series::issue_count,
-			Series::xurl, Series::xsource, Series::xid, Series::xupdated
+			Series::xurl, Series::xsource, Series::xid, Series::xupdated,
+			Series::pub_active, Series::pub_cycle, Series::pub_count, Series::pub_available, Series::pub_wanted
 		);
 	}
 
@@ -67,7 +74,7 @@ class Series extends Model
 
 	public function allForName($name)
 	{
-		return $this->allObjectsForKeyValue(Series::name, $name);
+		return $this->allObjectsForKeyValue(Series::search_name, $name);
 	}
 
 	public function findExternalOrCreate( $publishObj = null, $name, $year = 0, $count = 0, $xid, $xsrc, $xurl = null, $desc = null, $aliases = null )
@@ -85,6 +92,10 @@ class Series extends Model
 
 			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
 				$updates[Series::name] = $name;
+				$updates[Series::search_name] = normalizeSearchString($name);
+			}
+			else if ( isset($obj->search_name) == false || strlen($obj->search_name) == 0 ) {
+				$updates[Series::search_name] = normalizeSearchString($obj->name);
 			}
 
 			if (isset($count) && is_numeric($count)) {
@@ -125,7 +136,7 @@ class Series extends Model
 
 	public function seriesLike($partialName) {
 		return \SQL::Select( $this )
-			->where( Qualifier::LikeQualifier( Series::name, $partialName . '%' ))
+			->where( Qualifier::LikeQualifier( Series::search_name, normalizeSearchString($partialName) . '%' ))
 			->orderBy( $this->sortOrder() )
 			->limit( 50 )
 			->fetchAll();
@@ -139,12 +150,18 @@ class Series extends Model
 			$params = array(
 				Series::created => time(),
 				Series::name => $name,
+				Series::search_name => normalizeSearchString($name),
 				Series::desc => $desc,
 				Series::start_year => (isset($year) ? intval($year) : null),
 				Series::issue_count => $count,
 				Series::xurl => $xurl,
 				Series::xsource => $xsrc,
-				Series::xid => $xid
+				Series::xid => $xid,
+				Series::pub_active => Model::TERTIARY_TRUE,
+				Series::pub_cycle => 0,
+				Series::pub_count => 0,
+				Series::pub_available => 0,
+				Series::pub_wanted => Model::TERTIARY_FALSE
 			);
 
 			if ( isset($publishObj)  && is_a($publishObj, '\model\PublisherDBO')) {
@@ -168,6 +185,13 @@ class Series extends Model
 		}
 
 		return $obj;
+	}
+
+	public function createObject(array $values = array()) {
+		if ( isset( $values[Series::search_name]) == false ) {
+			$values[Series::search_name] = normalizeSearchString($values[Series::name]);
+		}
+		return parent::createObject($values);
 	}
 
 	public function deleteObject( \DataObject $object = null)
@@ -222,7 +246,9 @@ class Series extends Model
 			Series::name => Model::TEXT_TYPE,
 			Series::start_year => Model::INT_TYPE,
 			Series::desc => Model::TEXTAREA_TYPE,
-			Series::publisher_id => Model::TO_ONE_TYPE
+			Series::publisher_id => Model::TO_ONE_TYPE,
+			Series::pub_active => Model::FLAG_TYPE,
+			Series::pub_wanted => Model::FLAG_TYPE
 		);
 	}
 
@@ -240,6 +266,19 @@ class Series extends Model
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)
 	{
 		return null;
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) == false || is_null($object) == true) {
+			switch ($attr) {
+				case Series::pub_active:
+					return Model::TERTIARY_TRUE;
+				case Series::pub_wanted:
+					return Model::TERTIARY_FALSE;
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
 	}
 }
 

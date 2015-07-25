@@ -12,6 +12,7 @@ class SeriesDBO extends DataObject
 	public $publisher_id;
 	public $parent_id;
 	public $name;
+	public $search_name;
 	public $desc;
 	public $created;
 	public $start_year;
@@ -20,9 +21,22 @@ class SeriesDBO extends DataObject
 	public $xsource;
 	public $xid;
 	public $xupdated;
+	public $pub_active;
+	public $pub_cycle;
+	public $pub_count;
+	public $pub_available;
+	public $pub_wanted;
 
 	public function displayName() {
 		return $this->name;
+	}
+
+	public function isActive() {
+		return (isset($this->pub_active) && $this->pub_active == Model::TERTIARY_TRUE);
+	}
+
+	public function isWanted() {
+		return (isset($this->pub_wanted) && $this->pub_wanted == Model::TERTIARY_TRUE);
 	}
 
 	public function displayDescription() {

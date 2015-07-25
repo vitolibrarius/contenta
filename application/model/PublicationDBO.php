@@ -25,9 +25,14 @@ class PublicationDBO extends DataObject
 	public $xsource;
 	public $xid;
 	public $xupdated;
+	public $media_count;
 
 	public function displayName() {
 		return $this->name;
+	}
+
+	public function mediaCount() {
+		return (isset($this->media_count) ? $this->media_count : 0);
 	}
 
 	public function publishedMonthYear() {
@@ -102,6 +107,5 @@ class PublicationDBO extends DataObject
 		$model = Model::Named('Story_Arc_Publication');
 		return $model->create($object, $this);
 	}
-
 }
 

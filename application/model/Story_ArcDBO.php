@@ -22,9 +22,22 @@ class Story_ArcDBO extends DataObject
 	public $xid;
 	public $xupdated;
 	public $publisher_id;
+	public $pub_active;
+	public $pub_cycle;
+	public $pub_count;
+	public $pub_available;
+	public $pub_wanted;
 
 	public function displayName() {
 		return $this->name;
+	}
+
+	public function isActive() {
+		return (isset($this->pub_active) && $this->pub_active == Model::TERTIARY_TRUE);
+	}
+
+	public function isWanted() {
+		return (isset($this->pub_wanted) && $this->pub_wanted == Model::TERTIARY_TRUE);
 	}
 
 	public function displayDescription() {

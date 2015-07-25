@@ -21,6 +21,12 @@ class Story_Arc extends Model
 	const xid =			'xid';
 	const xupdated =	'xupdated';
 
+	const pub_active =		'pub_active';
+	const pub_cycle =		'pub_cycle';
+	const pub_count =		'pub_count';
+	const pub_available = 	'pub_available';
+	const pub_wanted =		'pub_wanted';
+
 	public function tableName() { return Story_Arc::TABLE; }
 	public function tablePK() { return Story_Arc::id; }
 	public function sortOrder() { return array(Story_Arc::name); }
@@ -29,7 +35,8 @@ class Story_Arc extends Model
 	{
 		return array(
 			Story_Arc::id, Story_Arc::name, Story_Arc::desc, Story_Arc::publisher_id, Story_Arc::created,
-			Story_Arc::xurl, Story_Arc::xsource, Story_Arc::xid, Story_Arc::xupdated
+			Story_Arc::xurl, Story_Arc::xsource, Story_Arc::xid, Story_Arc::xupdated,
+			Story_Arc::pub_active, Story_Arc::pub_cycle, Story_Arc::pub_count, Story_Arc::pub_available, Story_Arc::pub_wanted
 		);
 	}
 
@@ -106,7 +113,12 @@ class Story_Arc extends Model
 				Story_Arc::desc => strip_tags($desc),
 				Story_Arc::xurl => $xurl,
 				Story_Arc::xsource => $xsrc,
-				Story_Arc::xid => $xid
+				Story_Arc::xid => $xid,
+				Story_Arc::pub_active => Model::TERTIARY_TRUE,
+				Story_Arc::pub_cycle => 0,
+				Story_Arc::pub_count => 0,
+				Story_Arc::pub_available => 0,
+				Story_Arc::pub_wanted => Model::TERTIARY_FALSE
 			);
 
 			if ( isset($publisher)  && is_a($publisher, '\model\PublisherDBO')) {

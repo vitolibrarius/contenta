@@ -24,6 +24,7 @@ class Publication extends Model
 	const xsource =		'xsource';
 	const xid =			'xid';
 	const xupdated =	'xupdated';
+	const media_count =	'media_count';
 
 	public function tableName() { return Publication::TABLE; }
 	public function tablePK() { return Publication::id; }
@@ -34,7 +35,8 @@ class Publication extends Model
 		return array(
 			Publication::id, Publication::name, Publication::desc, Publication::series_id, Publication::created,
 			Publication::pub_date, Publication::issue_num,
-			Publication::xurl, Publication::xsource, Publication::xid, Publication::xupdated
+			Publication::xurl, Publication::xsource, Publication::xid, Publication::xupdated,
+			Publication::media_count
 		);
 	}
 
@@ -125,7 +127,8 @@ class Publication extends Model
 				Publication::issue_num => $issue_num,
 				Publication::xurl => $xurl,
 				Publication::xsource => $xsrc,
-				Publication::xid => $xid
+				Publication::xid => $xid,
+				Publication::media_count => 0
 			);
 
 			if ( isset($series)  && is_a($series, '\model\SeriesDBO')) {
