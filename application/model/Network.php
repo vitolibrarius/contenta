@@ -48,13 +48,17 @@ class Network extends Model
 				$hash = 'Invalid IP address';
 			}
 
-			$object = $this->createObject( array(
+			list( $obj, $errorList ) = $this->createObject(array(
 				Network::created => time(),
 				Network::ipAddress => $ip,
 				Network::ipHash => $hash,
 				Network::disable => false
 				)
 			);
+			if ( is_array($errorList) ) {
+				return $errorList;
+			}
+			return $obj;
 		}
 
 		return $object;

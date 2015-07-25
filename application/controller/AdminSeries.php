@@ -139,7 +139,7 @@ class AdminSeries extends Admin
 				}
 			}
 			else {
-				$errors = $model->createObject($values[$model->tableName()]);
+				list($obj, $error) = $model->createObject($values[$model->tableName()]);
 				if ( is_array($errors) ) {
 					Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
 					foreach ($errors as $attr => $errMsg ) {

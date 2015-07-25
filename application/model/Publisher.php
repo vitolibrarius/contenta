@@ -96,19 +96,24 @@ class Publisher extends Model
 
 	public function create( $name, $xid = null, $xsrc = null, $xurl = null)
 	{
+		$obj = false;
 		if ( isset($name) && strlen($name)) {
-			$newObjId = $this->createObject( array(
+			$params = array(
 				Publisher::created => time(),
 				Publisher::name => $name,
 				Publisher::xurl => $xurl,
 				Publisher::xsource => $xsrc,
 				Publisher::xid => $xid,
 				Publisher::xupdated => (is_null($xid) ? null : time())
-				)
 			);
+
+			list( $obj, $errorList ) = $this->createObject($params);
+			if ( is_array($errorList) ) {
+				return $errorList;
+			}
 		}
 
-		return ((isset($newObjId) && $newObjId != false) ? $this->objectForId($newObjId) : false);
+		return $obj;
 	}
 
 	public function deleteObject( \DataObject $object = null)

@@ -62,11 +62,15 @@ class Series_Character extends Model
 		if (isset($series, $series->id, $character, $character->id)) {
 			$join = $this->joinForSeriesAndCharacter($series, $character);
 			if ($join == false) {
-				$join = $this->createObject(array(
+				$params = array(
 					Series_Character::character_id => $character->id,
 					Series_Character::series_id => $series->id
-					)
 				);
+
+				list( $join, $errorList ) = $this->createObject($params);
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
 			}
 
 			return $join;

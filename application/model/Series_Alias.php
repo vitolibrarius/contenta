@@ -44,11 +44,14 @@ class Series_Alias extends Model
 		if (isset($seriesObj, $seriesObj->id, $name)) {
 			$alias = $this->forName($seriesObj, $name);
 			if ($alias == false) {
-				$alias = $this->createObject( array(
+				$params = array(
 					Series_Alias::series_id => $seriesObj->id,
 					Series_Alias::name => $name
-					)
 				);
+				list( $alias, $errorList ) = $this->createObject($params);
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
 			}
 
 			return $alias;

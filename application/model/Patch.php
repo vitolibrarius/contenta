@@ -46,7 +46,10 @@ class Patch extends Model
 					Patch::created => time()
 				);
 
-				$obj = $this->createObject($params);
+				list( $obj, $errorList ) = $this->createObject($params);
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
 			}
 		}
 		return $obj;

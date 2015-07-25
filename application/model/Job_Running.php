@@ -99,7 +99,7 @@ class Job_Running extends Model
 					Job_Type::desc => "Unknown",
 					Job_Type::scheduled => 0
 				);
-				$newObjId = $type_model->createObject($param);
+				list($type, $error) = $type_model->createObject($param);
 				$type = $type_model->objectForId($newObjId);
 			}
 
@@ -127,13 +127,11 @@ class Job_Running extends Model
 				$params[Job_Running::job_type_id] = $jobtypeObj->id;
 			}
 
-			$objectOrErrors = $this->createObject($params);
-			if ( $objectOrErrors instanceof model\Job_RunningDBO ) {
-				return $objectOrErrors;
+			list( $obj, $errorList ) = $this->createObject($params);
+			if ( is_array($errorList) ) {
+				return $errorList;
 			}
-			else if ( is_array($objectOrErrors) ) {
-				return $objectOrErrors;
-			}
+			return $obj;
 		}
 		else {
 			Logger::LogError( "No Process ID" );

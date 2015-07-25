@@ -66,8 +66,10 @@ class Endpoint extends Model
 				Endpoint::compressed => ($compressed)? Model::TERTIARY_TRUE : Model::TERTIARY_FALSE
 			);
 
-			$newObjId = $this->createObject($params);
-			$obj = ($newObjId != false ? $this->objectForId($newObjId) : false);
+			list( $obj, $errorList ) = $this->createObject($params);
+			if ( is_array($errorList) ) {
+				return $errorList;
+			}
 		}
 
 		return $obj;

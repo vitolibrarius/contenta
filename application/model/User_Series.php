@@ -94,14 +94,18 @@ class User_Series extends Model
 		if (isset($user, $user->id, $series, $series->id)) {
 			$join = $this->joinForUserAndSeries($user, $series);
 			if ($join == false) {
-				$join = $this->createObject(array(
+				$params = array(
 					User_Series::series_id => $series->id,
 					User_Series::user_id => $user->id,
 					User_Series::favorite => (is_null($favorite) ? Model::TERTIARY_UNSET : $favorite),
 					User_Series::read => (is_null($read) ? Model::TERTIARY_UNSET : $read),
 					User_Series::mislabeled => (is_null($label) ? Model::TERTIARY_UNSET : $label)
-					)
 				);
+
+				list( $join, $errorList ) = $this->createObject($params);
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
 			}
 			else {
 				$join = $this->flagJoin($join, $favorite, $read, $label);

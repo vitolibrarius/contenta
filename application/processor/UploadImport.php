@@ -247,11 +247,13 @@ class UploadImport extends Processor
 		}
 
 		if ($this->hasResultsMetadata() == false && $this->processSearch() == false ) {
+			Logger::logError( "No media metadata found for importing", $this->type, $this->guid);
 			return;
 		}
 
 		$issue = $this->getMeta( UploadImport::META_RESULTS_ISSUES );
 		if (count($issue) > 1) {
+			Logger::logError( "Multiple media metadata found for importing", $this->type, $this->guid);
 			return;
 		}
 
@@ -302,6 +304,9 @@ class UploadImport extends Processor
 					Logger::logError(  "MOVE ERROR: " . $errors['type'] . ' - ' . $errors['message'], $this->type, $this->guid);
 					return false;
 				}
+			}
+			else {
+				Logger::logError( "Media error " . var_export($media, true), $this->type, $this->guid);
 			}
 		}
 		catch ( \Exception $e ) {

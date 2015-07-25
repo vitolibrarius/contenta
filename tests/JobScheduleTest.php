@@ -130,8 +130,10 @@ if ( ($test_job_type instanceof model\Job_TypeDBO) == false ) {
 		Job_Type::processor => "TestProcessor",
 		Job_Type::scheduled => 1
 	);
-	$newObjId = Model::Named('Job_Type')->createObject($params);
-	$newObjId != false || die( "failed to create test job_type" );
+	list( $obj, $errorList ) = Model::Named('Job_Type')->createObject($params);
+	if ( is_array($errorList) ) {
+		die( "failed to create test job_type" );
+	}
 
 	$test_job_type = Model::Named('Job_Type')->jobTypeForCode('test');
 	($test_job_type instanceof model\Job_TypeDBO) || die( "failed to fetch new test job_type $newObjId" );

@@ -105,13 +105,11 @@ class Media extends Model
 				Media::size =>$size
 			);
 
-			$objectOrErrors = $this->createObject($params);
-			if ( is_array($objectOrErrors) ) {
-				return $objectOrErrors;
+			list( $obj, $errorList ) = $this->createObject($params);
+			if ( is_array($errorList) ) {
+				return $errorList;
 			}
-			else if ($objectOrErrors != false) {
-				return $this->objectForId( (string)$objectOrErrors);
-			}
+			return $obj;
 		}
 		else {
 			Logger::logError('Media already exists for checksum ' . $checksum);

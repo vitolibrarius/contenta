@@ -77,7 +77,11 @@ class RSS extends Model
 				$params[RSS::endpoint_id] = $endpoint->id;
 			}
 
-			return $this->createObject($params);
+			list( $obj, $errorList ) = $this->createObject($params);
+			if ( is_array($errorList) ) {
+				return $errorList;
+			}
+			return $obj;
 		}
 
 		return false;

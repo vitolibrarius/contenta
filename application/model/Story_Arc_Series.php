@@ -62,11 +62,15 @@ class Story_Arc_Series extends Model
 		if (isset($story_arc, $story_arc->id, $series, $series->id)) {
 			$join = $this->joinForStory_ArcAndSeries($story_arc, $series);
 			if ($join == false) {
-				$join = $this->createObject(array(
+				$params = array(
 					Story_Arc_Series::series_id => $series->id,
 					Story_Arc_Series::story_arc_id => $story_arc->id
-					)
 				);
+
+				list( $join, $errorList ) = $this->createObject($params);
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
 			}
 
 			return $join;

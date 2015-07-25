@@ -88,7 +88,10 @@ class Version extends Model
 					Version::patch => (isset($vers[2]) ? intval($vers[2]) : 0)
 				);
 
-				$obj = $this->createObject($params);
+				list( $obj, $errorList ) = $this->createObject($params);
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
 			}
 		}
 		return $obj;

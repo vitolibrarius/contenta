@@ -159,15 +159,11 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				}
 			}
 
-			$objectOrErrors = $model->createObject($createDict);
-			if ( is_array($objectOrErrors) ) {
-				throw new Exception("Failed to create new object " . var_export($objectOrErrors, true));
+			list( $object, $errorList ) = $model->createObject($createDict);
+			if ( is_array($errorList) ) {
+				throw new Exception("Failed to create new object " . var_export($errorList, true));
 			}
 
-			if ($objectOrErrors != false) {
-				$object = $objectOrErrors;
-				Logger::logWarning( "Importing stub record for " . $object, $this->type, $this->guid );
-			}
 		}
 
 		return ($object == false) ? null : $object;

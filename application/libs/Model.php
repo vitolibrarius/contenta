@@ -292,7 +292,8 @@ abstract class Model
 				}
 
 				$insert = \SQL::Insert($this)->addRecord($values);
-				return $insert->commitTransaction();
+				$obj = $insert->commitTransaction();
+				return array( $obj, null );
 			}
 
 			// create failed, log validation errors
@@ -301,13 +302,13 @@ abstract class Model
 				$logMsg .= "\n\t" . $errMsg;
 			}
 			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
-			return $validation;
+			return array( false, $validation);
 		}
 		else {
 			Logger::logError( "Failed to create record for empty values", __METHOD__, $this->tableName() );
 		}
 
-		return false;
+		return array( false, array());
 	}
 
 	public function deleteObject(DataObject $object = null)

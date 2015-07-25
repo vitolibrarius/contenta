@@ -74,13 +74,11 @@ class Job extends Model
 				Job::enabled => ($enabled)? 1 : 0
 			);
 
-			$objectOrErrors = $this->createObject($params);
-			if ( is_array($objectOrErrors) ) {
-				return $objectOrErrors;
+			list( $obj, $errorList ) = $this->createObject($params);
+			if ( is_array($errorList) ) {
+				return $errorList;
 			}
-			else if ($objectOrErrors != false) {
-				return $this->objectForId( (string)$objectOrErrors);
-			}
+			return $obj;
 		}
 
 		return false;

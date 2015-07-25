@@ -85,11 +85,15 @@ class User_Network extends Model
 		if (isset($user, $user->id, $network, $network->id)) {
 			$join = $this->joinForUserAndNetwork($user, $network);
 			if ($join == false) {
-				$join = $this->createObject(array(
+				$params = array(
 					User_Network::network_id => $network->id,
 					User_Network::user_id => $user->id
-					)
 				);
+
+				list( $join, $errorList ) = $this->createObject($params);
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
 			}
 
 			return $join;

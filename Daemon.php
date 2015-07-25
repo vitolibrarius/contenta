@@ -110,7 +110,7 @@ try {
 			$jobList = $job_run_model->allForProcessorGUID($processorName, $guid );
 			if ( is_array($jobList) == false || count($jobList) == 0) {
 				$jobRunning = $job_run_model->createForProcessor($processorName, $guid, $pid);
-				Logger::logError('jobRunning ' .  var_export($jobRunning, true) );
+				Logger::logInfo('jobRunning ' .  var_export($jobRunning, true) );
 
 				try {
 					$processor = Processor::Named( $processorName, $guid );

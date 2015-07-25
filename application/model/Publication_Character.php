@@ -62,11 +62,14 @@ class Publication_Character extends Model
 		if (isset($publication, $publication->id, $character, $character->id)) {
 			$join = $this->joinForPublicationAndCharacter($publication, $character);
 			if ($join == false) {
-				$join = $this->createObject(array(
+				list( $join, $errorList ) = $this->createObject(array(
 					Publication_Character::character_id => $character->id,
 					Publication_Character::publication_id => $publication->id
 					)
 				);
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
 			}
 
 			return $join;

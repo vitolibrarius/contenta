@@ -168,12 +168,9 @@ class Series extends Model
 				$params[Series::publisher_id] = $publishObj->id;
 			}
 
-			$objectOrErrors = $this->createObject($params);
-			if ( is_array($objectOrErrors) ) {
-				return $objectOrErrors;
-			}
-			else if ($objectOrErrors != false) {
-				$obj = $this->objectForId( (string)$objectOrErrors);
+			list( $obj, $errorList ) = $this->createObject($params);
+			if ( is_array($errorList) ) {
+				return $errorList;
 			}
 		}
 

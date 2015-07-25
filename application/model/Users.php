@@ -119,7 +119,7 @@ class Users extends Model
 					$last_login_timestamp, $failed_logins, $last_failed_login, $activation_hash,
 					$password_reset_hash, $password_reset_timestamp)
 	{
-		return $this->createObject(array(
+		$params = array(
 			Users::name => strip_tags($name),
 			Users::password_hash => $password_hash,
 			Users::email => strip_tags($email),
@@ -134,8 +134,13 @@ class Users extends Model
 			Users::activation_hash => $activation_hash,
 			Users::password_reset_hash => $password_reset_hash,
 			Users::password_reset_timestamp => $password_reset_timestamp
-			)
 		);
+
+		list( $obj, $errorList ) = $this->createObject($params);
+		if ( is_array($errorList) ) {
+			return $errorList;
+		}
+		return $obj;
 	}
 
 

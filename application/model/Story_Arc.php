@@ -125,12 +125,9 @@ class Story_Arc extends Model
 				$params[Story_Arc::publisher_id] = $publisher->id;
 			}
 
-			$objectOrErrors = $this->createObject($params);
-			if ( is_array($objectOrErrors) ) {
-				return $objectOrErrors;
-			}
-			else if ($objectOrErrors != false) {
-				$obj = $this->objectForId( (string)$objectOrErrors);
+			list( $obj, $errorList ) = $this->createObject($params);
+			if ( is_array($errorList) ) {
+				return $errorList;
 			}
 		}
 
