@@ -106,9 +106,9 @@ $job_model = Model::Named("Job");
 $job_data = array(
 	array(
 		model\Job::type_id => $character_job_type->id,
-		model\Job::minute => null,
-		model\Job::hour => null,
-		model\Job::dayOfWeek => null,
+		model\Job::minute => 1,
+		model\Job::hour => 1,
+		model\Job::dayOfWeek => 1,
 		model\Job::parameter => '27add4363e9b138cd375b258db481b8f',
 		model\Job::next => null,
 		model\Job::one_shot => Model::TERTIARY_TRUE,

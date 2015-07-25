@@ -107,7 +107,7 @@ class UpdateSQL extends SQL
 	public function commitTransaction()
 	{
 		if ( isset($this->qualifier) == false && $this->allowFullTableUpdate != true ) {
-			throw new \Exception("No qualifier set on delete statement '" .$this->sqlStatement(). "'");
+			throw new \Exception("No qualifier set on update statement '" .$this->sqlStatement(). "'");
 		}
 
 		$sql = $this->sqlStatement();
