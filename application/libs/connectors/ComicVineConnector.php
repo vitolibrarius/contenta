@@ -341,7 +341,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 			$year = intval($year);
 
 			foreach( $possible as $key => $item ) {
-				$countOfIssues = isset($item['count_of_issues']) ? intval($item['count_of_issues']) : 1;
+				$countOfIssues = max(1, isset($item['count_of_issues']) ? intval($item['count_of_issues']) : 1);
 				$itemStartYear = isset($item['start_year']) ? intval($item['start_year']) : 0;
 				$yearDiffRange = ceil($countOfIssues/12) * 1.5;
 				if ($year == 0 || ($year >= $itemStartYear && $year - $itemStartYear < $yearDiffRange)) {
