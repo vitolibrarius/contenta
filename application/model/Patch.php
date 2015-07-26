@@ -15,7 +15,7 @@ class Patch extends Model
 
 	public function tableName() { return Patch::TABLE; }
 	public function tablePK() { return Patch::id; }
-	public function sortOrder() { return array( "desc" => array(Patch::created)); }
+	public function sortOrder() { return array( array("desc" => Patch::created)); }
 
 	public function allColumnNames()
 	{

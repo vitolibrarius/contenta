@@ -101,14 +101,11 @@ class SelectSQL extends SQL
 						throw new \Exception( "Unable to parse order clause " . var_export($clause, true) );
 					}
 					foreach( $clause as $direction => $col ) {
-						if ( is_int($direction) || strtoupper($direction) === SQL::SQL_ORDER_ASC) {
-							$orderClauses[] = $col;
-						}
-						else if ( strtoupper($direction) === SQL::SQL_ORDER_DESC ) {
+						if ( strtoupper($direction) === SQL::SQL_ORDER_DESC) {
 							$orderClauses[] = $col . ' ' . SQL::SQL_ORDER_DESC;
 						}
 						else {
-							throw new \Exception( "Unable to order '$direction' on column $col" );
+							$orderClauses[] = $col;
 						}
 					}
 				}

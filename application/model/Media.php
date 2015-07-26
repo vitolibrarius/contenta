@@ -41,7 +41,9 @@ class Media extends Model
 
 	public function mostRecent( $limit = 20 )
 	{
-		return $this->allObjects(array("desc" => array(Media::created)), $limit);
+		return $this->allObjects( array(
+			array("desc" => Media::created)
+			), $limit);
 	}
 
 	public function allForPublication(model\PublicationDBO $obj = null)

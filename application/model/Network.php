@@ -16,7 +16,7 @@ class Network extends Model
 
 	public function tableName() { return Network::TABLE; }
 	public function tablePK() { return Network::id; }
-	public function sortOrder() { return array("desc" => array(Network::id)); }
+	public function sortOrder() { return array( array("desc" => Network::id)); }
 
 	public function allColumnNames()
 	{

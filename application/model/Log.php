@@ -24,7 +24,10 @@ class Log extends Model
 
 	public function tableName() { return Log::TABLE; }
 	public function tablePK() { return Log::id; }
-	public function sortOrder() { return array("desc" => array(Log::id)); }
+	public function sortOrder() { return array(
+			array("desc" => Log::id)
+		);
+	}
 
 	public function allColumnNames()
 	{
@@ -78,7 +81,7 @@ class Log extends Model
 		if ( $direction != 'desc' && $direction != 'asc') {
 			$direction = 'desc';
 		}
-		$select->orderBy( array($direction => array(Log::id)) );
+		$select->orderBy( array( array($direction => Log::id) ) );
 
 		return $select->fetchAll();
 	}

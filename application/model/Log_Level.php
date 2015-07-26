@@ -14,7 +14,7 @@ class Log_Level extends Model
 
 	public function tableName() { return Log_Level::TABLE; }
 	public function tablePK() { return Log_Level::id; }
-	public function sortOrder() { return array("desc" => array(Log_Level::code)); }
+	public function sortOrder() { return array( array("desc" => Log_Level::code)); }
 
 	public function allColumnNames()
 	{
