@@ -193,4 +193,6 @@ foreach( $issue_tests as $filename => $expected ) {
 	else {
 		echo "	NO match " . var_export($issues, true) . PHP_EOL;
 	}
+
+// 	die();
 }

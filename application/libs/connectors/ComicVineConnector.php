@@ -343,13 +343,13 @@ class ComicVineConnector extends JSON_EndpointConnector
 			foreach( $possible as $key => $item ) {
 				$countOfIssues = isset($item['count_of_issues']) ? intval($item['count_of_issues']) : 1;
 				$itemStartYear = isset($item['start_year']) ? intval($item['start_year']) : 0;
-				$yearDiffRange = ceil($countOfIssues/12) + 1;
+				$yearDiffRange = ceil($countOfIssues/12) * 1.5;
 				if ($year == 0 || ($year >= $itemStartYear && $year - $itemStartYear < $yearDiffRange)) {
 // 					echo "accepting $itemStartYear - $countOfIssues - " . $item["name"] . PHP_EOL;
 					$filtered[] = $item;
 				}
 // 				else {
-// 					echo "rejecting $itemStartYear - $countOfIssues - " . $item["name"] . PHP_EOL;
+// 					echo "rejecting $itemStartYear - $countOfIssues - " . $item["id"] . " - ". $item["name"] . PHP_EOL;
 // 				}
 			}
 
@@ -386,6 +386,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 		$results = $this->series_filterForIssueYear( $results, $year );
 		if ( is_array($results) == false || count($results) == 0 ) {
 			// try a fuzzy search
+// 			echo " trying fizzy search" . PHP_EOL;
 			$results = $this->search( ComicVineConnector::RESOURCE_VOLUME, $name );
 			$results = $this->series_filterForCloseName( $results, $name, 10 );
 			$results = $this->series_filterForIssueYear( $results, $year );
