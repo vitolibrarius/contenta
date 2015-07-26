@@ -128,6 +128,10 @@ class AdminUploadRepair extends Admin
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {
 			if ( is_null($processKey) == false ) {
 				$importer = Processor::Named('UploadImport', $processKey);
+				if ($importer->resetSearchCriteria() == false) {
+					Session::addNegativeFeedback(Localized::Get("Upload", 'Failed to reset metadata')
+						. ' ' . $importer->getMeta(UploadImport::META_MEDIA_NAME));
+				}
 				$importer->daemonizeProcess();
 				Session::addPositiveFeedback(Localized::Get("Upload", 'Reprocessing')
 					. ' ' . $importer->getMeta(UploadImport::META_MEDIA_NAME));
