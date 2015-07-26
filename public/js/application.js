@@ -88,8 +88,8 @@ var modal = (function(){
 		left = Math.max($(window).width() - $panel.outerWidth(), 0) / 2;
 
 		$panel.css({
-			top:top + $(window).scrollTop(),
-			left:left + $(window).scrollLeft()
+			top:top,
+			left:left
 		});
 	};
 
