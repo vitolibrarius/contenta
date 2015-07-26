@@ -6,6 +6,7 @@ use \Session as Session;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
+use \Logger as Logger;
 
 use db\Qualifier as Qualifier;
 
@@ -196,7 +197,27 @@ class Series extends Model
 		if ( $object instanceof model\SeriesDBO )
 		{
 			$series_alias_model = Model::Named('Series_Alias');
-			if ( $series_alias_model->deleteAllForSeries($object) ) {
+			if ( $series_alias_model->deleteAllForSeries($object) == false ) {
+				return false;
+			}
+
+			$series_char_model = Model::Named('Series_Character');
+			if ( $series_char_model->deleteAllForSeries($object) == false ) {
+				return false;
+			}
+
+			$series_arc_model = Model::Named('Story_Arc_Series');
+			if ( $series_arc_model->deleteAllForSeries($object) == false ) {
+				return false;
+			}
+
+			$user_series_model = Model::Named('User_Series');
+			if ( $user_series_model->deleteAllForSeries($object) == false ) {
+				return false;
+			}
+
+			$pub_model = Model::Named('Publication');
+			if ( $pub_model->deleteAllForSeries($object) ) {
 				return parent::deleteObject($object);
 			}
 		}

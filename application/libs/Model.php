@@ -316,7 +316,7 @@ abstract class Model
 		if (isset($object) ) {
 			$mediaPurged = true;
 			if ( $object->hasAdditionalMedia() == true ) {
-				Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $model->tableName(), $object->id);
+				Logger::logWarning("Purging " . $object->displayName() . " directory " . $object->mediaPath(), $this->tableName(), $object->id);
 				$mediaPurged = (file_exists($object->mediaPath()) == false || destroy_dir($object->mediaPath()) );
 			}
 

@@ -5,6 +5,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
 use \Config as Config;
+use \Logger as Logger;
 
 use db\Qualifier as Qualifier;
 
@@ -121,6 +122,8 @@ class Publisher extends Model
 		if ( $object != false && $object instanceof model\PublisherDBO)
 		{
 			// delete any relationships
+			throw new exceptions\DeleteObjectException("Failed to delete " . $object, $object->id );
+
 			return parent::deleteObject($object);
 		}
 

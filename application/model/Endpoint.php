@@ -6,6 +6,7 @@ use \Session as Session;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
+use \Logger as Logger;
 
 class Endpoint extends Model
 {

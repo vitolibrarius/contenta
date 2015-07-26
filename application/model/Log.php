@@ -5,6 +5,7 @@ namespace model;
 use \Database as Database;
 use \DataObject as DataObject;
 use \Model as Model;
+use \Logger as Logger;
 
 use model\Log_Level as Log_Level;
 use db\Qualifier as Qualifier;

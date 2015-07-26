@@ -6,6 +6,7 @@ use \Session as Session;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
+use \Logger as Logger;
 
 use db\Qualifier as Qualifier;
 
@@ -159,11 +160,33 @@ class User_Series extends Model
 		if ( $obj != false )
 		{
 			$array = $this->allForUser($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( is_array($array) && count( $array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new exceptions\DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
 				}
+				$array = $this->allForUser($obj);
+			}
+		}
+		return $success;
+	}
+
+	public function deleteAllForSeries($obj)
+	{
+		$success = true;
+		if ( $obj != false )
+		{
+			$array = $this->allForSeries($obj);
+			while ( is_array($array) && count( $array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new exceptions\DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
+				}
+				$array = $this->allForSeries($obj);
 			}
 		}
 		return $success;

@@ -173,6 +173,9 @@ class Character extends Model
 			if ( $alias_model->deleteAllForCharacter($object) == true ) {
 				return parent::deleteObject($object);
 			}
+			else {
+				throw new exceptions\DeleteObjectException("Failed to delete " . $object, $object->id );
+			}
 		}
 
 		return false;

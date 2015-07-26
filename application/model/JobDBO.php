@@ -4,6 +4,8 @@ namespace model;
 
 use \DataObject as DataObject;
 use \Model as Model;
+use \Logger as Logger;
+
 use model\Job_Type as Job_Type;
 
 class JobDBO extends DataObject

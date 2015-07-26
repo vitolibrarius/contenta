@@ -166,6 +166,49 @@ class Publication extends Model
 		return $this->allObjectsForFK(Publication::series_id, $obj);
 	}
 
+	public function deleteAllForSeries($obj)
+	{
+		$success = true;
+		if ( $obj != false )
+		{
+			$array = $this->allForSeries($obj);
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new exceptions\DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
+				}
+				$array = $this->allForSeries($obj);
+			}
+		}
+		return $success;
+	}
+
+	public function deleteObject( \DataObject $object = null)
+	{
+		if ( $object instanceof model\PublicationDBO )
+		{
+			$publication_char_model = Model::Named('Publication_Character');
+			if ( $publication_char_model->deleteAllForPublication($object) == false ) {
+				return false;
+			}
+
+			$publication_arc_model = Model::Named('Story_Arc_Publication');
+			if ( $publication_arc_model->deleteAllForPublication($object) == false ) {
+				return false;
+			}
+
+			$media_model = Model::Named('Media');
+			if ( $media_model->deleteAllForPublication($object) ) {
+				return parent::deleteObject($object);
+			}
+		}
+
+		return false;
+	}
+
+
 	/* EditableModelInterface */
 	function validate_name($object = null, $value)
 	{

@@ -3,8 +3,10 @@
 namespace model;
 
 use \DataObject as DataObject;
-use model\VersionDBO as VersionDBO;
 use \Model as Model;
+use \Logger as Logger;
+
+use model\VersionDBO as VersionDBO;
 
 class Version extends Model
 {

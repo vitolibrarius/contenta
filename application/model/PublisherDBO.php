@@ -5,6 +5,7 @@ namespace model;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Config as Config;
+use \Logger as Logger;
 
 use model\Endpoint as Endpoint;
 use model\Publisher as Publisher;

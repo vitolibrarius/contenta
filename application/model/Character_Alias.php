@@ -6,6 +6,7 @@ use \Session as Session;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
+use \Logger as Logger;
 
 class Character_Alias extends Model
 {
@@ -82,7 +83,7 @@ class Character_Alias extends Model
 				foreach ($array as $key => $value) {
 					if ($this->deleteObject($value) == false) {
 						$success = false;
-						break;
+						throw new exceptions\DeleteObjectException("Failed to delete " . $value, $value->id );
 					}
 				}
 				$array = $this->allForCharacter($obj);

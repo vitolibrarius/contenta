@@ -4,6 +4,8 @@ namespace model;
 
 use \DataObject as DataObject;
 use \Model as Model;
+use \Logger as Logger;
+
 use utilities\Metadata as Metadata;
 
 use model\Media_Type as Media_Type;

@@ -4,6 +4,7 @@ namespace model;
 
 use \DataObject as DataObject;
 use \Model as Model;
+use \Logger as Logger;
 
 class PatchDBO extends DataObject
 {

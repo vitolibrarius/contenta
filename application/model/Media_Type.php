@@ -5,6 +5,7 @@ namespace model;
 use \Database as Database;
 use \DataObject as DataObject;
 use \Model as Model;
+use \Logger as Logger;
 
 class Media_Type extends Model
 {

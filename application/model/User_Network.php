@@ -3,6 +3,7 @@ namespace model;
 
 use \DataObject as DataObject;
 use \Model as Model;
+use \Logger as Logger;
 
 use model\Network as Network;
 use model\Users as Users;

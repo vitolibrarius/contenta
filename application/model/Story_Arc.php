@@ -133,5 +133,28 @@ class Story_Arc extends Model
 
 		return $obj;
 	}
+
+	public function deleteObject( \DataObject $object = null)
+	{
+		if ( $object instanceof model\Story_ArcDBO )
+		{
+			$series_char_model = Model::Named('Story_Arc_Character');
+			if ( $series_char_model->deleteAllForStory_Arc($object) == false ) {
+				return false;
+			}
+
+			$series_arc_model = Model::Named('Story_Arc_Series');
+			if ( $series_arc_model->deleteAllForStory_Arc($object) == false ) {
+				return false;
+			}
+
+			$pub_model = Model::Named('Story_Arc_Publication');
+			if ( $pub_model->deleteAllForStory_Arc($object) ) {
+				return parent::deleteObject($object);
+			}
+		}
+
+		return false;
+	}
 }
 ?>
