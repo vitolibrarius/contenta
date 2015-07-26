@@ -78,177 +78,15 @@ $epoint = $points[0];
 echo "Connecting using " . $epoint . PHP_EOL;
 $connection = new ComicVineConnector($epoint);
 
-$series_tests = array(
-	array(
-		"query" => array(
-			"name" => "Injustice: Gods Among Us - Year Two",
-			"year" => "2014"
-		),
-		"expected" => array(
-			"name" => "Abby Holland",
-			"id" => 21292
-		)
-	)
-);
-
-foreach ( $series_tests as $test ) {
-	$expected = array_valueForKeypath( "expected", $test);
-
-	$name = array_valueForKeypath( "query/name", $test);
-	$year = array_valueForKeypath( "query/year", $test);
-	$xid = array_valueForKeypath( "query/xid", $test);
-
-	echo "Searching for series "
-		. $name . " - "
-		. $year . " - "
-		. $xid . PHP_EOL;
-	$results = $connection->series_searchFilteredForYear($name, $year);
-	if ( is_array($results) && count($results) == 1 ) {
-		echo "	found single match" . PHP_EOL;
-		compareComicVineDetails( $expected, array_pop($results) );
-	}
-	else {
-		var_dump($results);
-		foreach( $results as $dict ) {
-			echo  array_valueForKeypath( "id", $dict) . "\t"
-				. array_valueForKeypath( "name", $dict) . "\t"
-				. array_valueForKeypath( "start_year", $dict) . "\t"
-				. PHP_EOL;
-		}
-	}
-}
-
-die();
-
-$character_tests = array(
-	array(
-		"query" => array(
-			"name" => "Abby Holland",
-			"gender" => "female"
-		),
-		"expected" => array(
-			"name" => "Abby Holland",
-			"gender" => 2,
-			"id" => 21292
-		)
-	),
-	array(
-		"query" => array(
-			"xid" => 1699
-		),
-		"expected" => array(
-			"name" => "Batman",
-			"id" => 1699
-		)
-	)
-);
-
-foreach ( $character_tests as $test ) {
-	$expected = array_valueForKeypath( "expected", $test);
-
-	$name = array_valueForKeypath( "query/name", $test);
-	$gender = array_valueForKeypath( "query/gender", $test);
-	$xid = array_valueForKeypath( "query/xid", $test);
-
-	echo "Searching for characters "
-		. $name . " - "
-		. $gender . " - "
-		. $xid . PHP_EOL;
-	$results = $connection->character_search($xid, $name, $gender);
-	if ( is_array($results) && count($results) == 1 ) {
-		echo "	found single match" . PHP_EOL;
-		compareComicVineDetails( $expected, array_pop($results) );
-	}
-	else {
-		foreach( $results as $dict ) {
-			echo  array_valueForKeypath( "id", $dict) . "\t"
-				. array_valueForKeypath( "name", $dict) . "\t"
-				. array_valueForKeypath( "gender", $dict) . "\t"
-				. PHP_EOL;
-		}
-	}
-}
-
 $issue_tests = array(
-	array(
-		"query" => array(
-			"volume" => 77223,
-			"issue_number" => "6",
-			"cover_date" => "2015-05-31",
-		),
-		"expected" => array(
-			"name" => "Who Holds the Hammer? Who is Thor pt 1",
-			"id" => 482168
-		)
+	"FF 010 (2011) (Digital) (Zone-Empire).cbz" => array(
+		"id" => 294897,
+		"issue_number" => "10",
+		"cover_date" => "2011-12-01",
+		"name" => "What I Need",
+		"volume/name" => "FF",
+		"volume/id" => 39453
 	),
-	array(
-		"query" => array(
-			"volume" => array(68134,77223),
-			"cover_date" => array("2015-01-31", "2015-05-31"),
-		),
-		"expected" => array(
-			"name" => "Who Holds the Hammer? Who is Thor pt 1",
-			"id" => 482168
-		)
-	),
-	array(
-		"query" => array(
-			"volume" => array(68134,77223),
-			"issue_number" => 6
-		),
-		"expected" => array(
-			"name" => "Who Holds the Hammer? Who is Thor pt 1",
-			"id" => 482168
-		)
-	),
-);
-
-foreach ( $issue_tests as $test ) {
-	$expected = array_valueForKeypath( "expected", $test);
-
-	$xid = array_valueForKeypath( "query/xid", $test);
-	$vol = array_valueForKeypath( "query/volume", $test);
-	$name = array_valueForKeypath( "query/name", $test);
-	$aliases = array_valueForKeypath( "query/aliases", $test);
-	$cover_date = array_valueForKeypath( "query/cover_date", $test);
-	$issue_number = array_valueForKeypath( "query/issue_number", $test);
-
-	echo "Searching for issues "
-		. $xid . " - "
-		. $vol . " - "
-		. $name . " - "
-		. $aliases . " - "
-		. $cover_date . " - "
-		. $issue_number . PHP_EOL;
-
-	$results = $connection->issue_search($xid, $vol, $name, $aliases, $cover_date, $issue_number);
-	if ( is_array($results) == false || count($results) == 0 ) {
-		echo "	NO results" . PHP_EOL;
-	}
-	else if ( is_array($results) ) {
-		if ( count($results) == 0 ) {
-			echo "	found single match" . PHP_EOL;
-			compareComicVineDetails( $expected, array_pop($results) );
-		}
-		else {
-			foreach( $results as $dict ) {
-				echo  array_valueForKeypath( "id", $dict) . "\t"
-					. array_valueForKeypath( "issue_number", $dict) . "\t"
-					. array_valueForKeypath( "cover_date", $dict) . "\t"
-					. array_valueForKeypath( "store_date", $dict) . "\t"
-					. array_valueForKeypath( "volume/id", $dict) . "\t"
-					. array_valueForKeypath( "volume/name", $dict) . "\t"
-					. PHP_EOL;
-			}
-		}
-	}
-	else {
-		var_dump($results);
-	}
-}
-
-die();
-$issue_tests = array(
 	"Thor 006 (2015) (digital) (Minutemen-Midas).cbz" => array(
 		"id" => 482168,
 		"issue_number" => "6",
@@ -265,13 +103,53 @@ $issue_tests = array(
 		"volume/name" => "Convergence Batman and the Outsiders",
 		"volume/id" => 81465
 	),
-	"Injustice - Gods Among Us - Year Four 005 (2015) (digital) (Son of Ultron-Empire).cbz" => array(
-		"id" => 482168,
-		"issue_number" => "6",
-		"cover_date" => "2015-05-31",
-		"name" => "Who Holds the Hammer? Who is Thor pt 1",
-		"volume/name" => "Thor",
-		"volume/id" => 77223
+	"Marvel Zombies 001 (2015) (Digital) (Mephisto-Empire).cbz" => array(
+		"id" => 491519,
+		"issue_number" => "1",
+		"cover_date" => "2015-08-31",
+		"name" => "Journey Into Misery: Episode 1",
+		"volume/name" => "Marvel Zombies",
+		"volume/id" => 82505
+	),
+	"Convergence - Action Comics 01 (of 02) (2015) (Digital-Empire)" => array(
+		"id" => 487164,
+		"issue_number" => "1",
+		"cover_date" => "2015-06-01",
+		"name" => "",
+		"volume/name" => "Convergence Action Comics",
+		"volume/id" => 81577
+	),
+	"Tarot Witch Of The Black Rose 071(2011)(2 covers)(Digital)(Tyrant Lizard King-EMPIRE).cbz" => array(
+		"id" => 305156,
+		"issue_number" => "71",
+		"cover_date" => "2011-11-18",
+		"name" => "Temple of the Fallen Mermaids, Part Two",
+		"volume/name" => "Tarot: Witch of the Black Rose",
+		"volume/id" => 19691
+	),
+	"George R.R. Martin's A Game Of Thrones 017 (c2c) (2013).cbz" => array(
+		"id" => 431452,
+		"issue_number" => "17",
+		"cover_date" => "2013-10-01",
+		"name" => "",
+		"volume/name" => "George R.R. Martin's A Game of Thrones",
+		"volume/id" => 42976
+	),
+	"Green Lantern - Lost Army 002 (2015) (Digital-Empire).cbz" => array(
+		"id" => 495248,
+		"issue_number" => "2",
+		"cover_date" => "2015-09-30",
+		"name" => "Part 2",
+		"volume/name" => "Green Lantern: The Lost Army",
+		"volume/id" => 82860
+	),
+	"Zero 018 (2015) (Digital-Empire).cbz" => array(
+		"id" => 493840,
+		"issue_number" => "18",
+		"cover_date" => "2015-07-31",
+		"name" => "Chapter 18: Surrender",
+		"volume/name" => "Zero",
+		"volume/id" => 67426
 	),
 );
 
@@ -285,79 +163,34 @@ foreach( $issue_tests as $filename => $expected ) {
 		. array_valueForKeypath( "issue", $meta) . " - "
 		. array_valueForKeypath( "year", $meta) . PHP_EOL;
 
-	$issues = $connection->searchForIssue(
-		array_valueForKeypath( "name", $meta),
+	$issues = $connection->issue_searchFilteredForSeriesYear(
 		array_valueForKeypath( "issue", $meta),
+		array_valueForKeypath( "name", $meta),
 		array_valueForKeypath( "year", $meta)
 	);
 
-	if ( is_array($issues) && count($issues) == 1 ) {
-		echo "	found single match" . PHP_EOL;
-		compareComicVineDetails( $expected, array_pop($issues) );
-	}
-	else {
-		foreach( $issues as $dict ) {
-			echo "\t"
-				. array_valueForKeypath( "volume/name", $dict) . "\t"
-				. array_valueForKeypath( "volume/id", $dict) . "\t"
-				. levenshtein ( array_valueForKeypath( "name", $meta) , array_valueForKeypath( "volume/name", $dict) )
-				. PHP_EOL;
-		}
-	}
-}
-
-die();
-
-foreach( $issue_tests as $filename => $expected ) {
-	$mediaFilename = new utilities\MediaFilename($filename);
-	$meta = $mediaFilename->updateFileMetaData(null);
-
-	echo PHP_EOL;
-	echo "Searching for "
-		. array_valueForKeypath( "name", $meta) . " - "
-		. array_valueForKeypath( "issue", $meta) . " - "
-		. array_valueForKeypath( "year", $meta) . PHP_EOL;
-
-	$issues = null;
-	$seriesPossible = $connection->search( "volume", array_valueForKeypath( "name", $meta));
-	$seriesPossible = $connection->filterSeriesResultForYear( $seriesPossible, array_valueForKeypath( "year", $meta));
-	if ( $seriesPossible != false ) {
-		$matchVolumeId = array();
-		foreach ($seriesPossible as $key => $item) {
-			$matchVolId[] = $item['id'];
-		}
-
-		$issues = $connection->searchForIssuesMatchingSeriesAndYear(
-			$matchVolId,
-			array_valueForKeypath( "issue", $meta),
-			array_valueForKeypath( "year", $meta)
-		);
-
-		if ( count($issues) == 1 ) {
-			echo "	found single match" . PHP_EOL;
-			compareComicVineDetails( $expected, $issues[0] );
-		}
-		else {
-			echo "	** error found to many issues " . count($issues)  . " searching again " . PHP_EOL;
-			$issues = $connection->searchForIssue(
-				array_valueForKeypath( "name", $meta),
-				array_valueForKeypath( "issue", $meta),
-				array_valueForKeypath( "year", $meta)
-			);
-			if ( is_array($issues) && count($issues) == 1 ) {
+	if ( is_array($issues) ) {
+		switch( count($issues) ) {
+			case 0:
+				echo "	NO match" . PHP_EOL;
+				break;
+			case 1:
 				echo "	found single match" . PHP_EOL;
 				compareComicVineDetails( $expected, array_pop($issues) );
-			}
-			else {
-// 				reportData($issues, array( "id", "volume/name"));
+				break;
+			default:
 				foreach( $issues as $dict ) {
-					echo array_valueForKeypath( "volume/name", $dict) . "\t"
-						. array_valueForKeypath( "volume/id", $dict) . "\t"
+					echo "\t"
+						. array_valueForKeypath( "issue_number", $dict) . "\t"
+						. array_valueForKeypath( "volume/name", $dict) . "\t"
+						. array_valueForKeypath( "cover_date", $dict) . "\t"
 						. levenshtein ( array_valueForKeypath( "name", $meta) , array_valueForKeypath( "volume/name", $dict) )
 						. PHP_EOL;
 				}
-				die( "Failed to find issue" . PHP_EOL);
-			}
+				break;
 		}
+	}
+	else {
+		echo "	NO match " . var_export($issues, true) . PHP_EOL;
 	}
 }

@@ -334,31 +334,63 @@ class ComicVineConnector extends JSON_EndpointConnector
 		);
 	}
 
-	public function series_searchFilteredForYear( $name, $year = 0 )
+	private function series_filterForIssueYear( array $possible, $year = 0 )
 	{
-		$results = $this->series_search( null, $name );
-		if ( is_array($results) == false || count($results) == 0 ) {
-			// try a fuzzy search
-			$results = $this->search( ComicVineConnector::RESOURCE_VOLUME, $name);
-		}
-
-		if ( is_array($results) && count($results) > 0 ) {
+		if ( is_array($possible) && count($possible) > 0 ) {
 			$filtered = array();
 			$year = intval($year);
 
-			foreach( $results as $key => $item ) {
+			foreach( $possible as $key => $item ) {
 				$countOfIssues = isset($item['count_of_issues']) ? intval($item['count_of_issues']) : 1;
 				$itemStartYear = isset($item['start_year']) ? intval($item['start_year']) : 0;
-				if ($year == 0 || ($year >= $itemStartYear && $year - $itemStartYear < ceil($countOfIssues/12))) {
+				$yearDiffRange = ceil($countOfIssues/12) + 1;
+				if ($year == 0 || ($year >= $itemStartYear && $year - $itemStartYear < $yearDiffRange)) {
+// 					echo "accepting $itemStartYear - $countOfIssues - " . $item["name"] . PHP_EOL;
 					$filtered[] = $item;
 				}
 // 				else {
-// 					echo "rejecting $itemStartYear - $countOfIssues - " . $item['name'] . ' ' . PHP_EOL;
+// 					echo "rejecting $itemStartYear - $countOfIssues - " . $item["name"] . PHP_EOL;
 // 				}
 			}
 
 			return $filtered;
 		}
+		return $possible;
+	}
+
+	private function series_filterForCloseName( array $possible, $name = null, $margin = 10 )
+	{
+		if ( is_array($possible) && count($possible) > 0 && is_string($name) && strlen($name) > 0) {
+			$filtered = array();
+
+			$margin = min( $margin, strlen($name) );
+			foreach( $possible as $key => $item ) {
+				 if ( levenshtein( $name, $item["name"] ) < $margin ) {
+// 					echo "accepting levenshtein(" . levenshtein( $name, $item["name"] ) . ") " . $item["name"] . PHP_EOL;
+					$filtered[] = $item;
+				}
+// 				else {
+// 					echo "rejecting levenshtein(" . levenshtein( $name, $item["name"] ) . ") " . $item["name"] . PHP_EOL;
+// 				}
+			}
+
+			return $filtered;
+		}
+		return $possible;
+	}
+
+	public function series_searchFilteredForYear( $name, $year = 0)
+	{
+		$results = $this->series_search( null, $name );
+		$results = $this->series_filterForCloseName( $results, $name, 10 );
+		$results = $this->series_filterForIssueYear( $results, $year );
+		if ( is_array($results) == false || count($results) == 0 ) {
+			// try a fuzzy search
+			$results = $this->search( ComicVineConnector::RESOURCE_VOLUME, $name );
+			$results = $this->series_filterForCloseName( $results, $name, 10 );
+			$results = $this->series_filterForIssueYear( $results, $year );
+		}
+
 		return $results;
 	}
 
@@ -397,7 +429,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 			{
 				Logger::logError( 'Error ' . $json['status_code'] . ': ' . $json['error']
 					. 'with URL: ' . $this->cleanURLForLog($url), get_short_class($this), $this->endpoint());
-				return $json['status_code'] . ': ' . $json['error'];
+				throw new exceptions\EndpointConnnectionException( $json['error'], $json['status_code'] );
 			}
 		}
 		return false;

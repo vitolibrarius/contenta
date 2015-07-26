@@ -67,7 +67,7 @@ class MediaFilename
 		$working = preg_replace("/\\b(tpb|os|one[ -]shot|ogn|gn)/uim", "", $working);
 
 		// remove name dash and replace with ': '
-		$working = preg_replace("/(\\s-\\s)/uim", ": ", $working, 1);
+		$working = preg_replace("/(\\s-\\s)/uim", " ", $working, 1);
 
 		// everything up to issue/year like XYZ Comic 001 2014
 		if (preg_match("/(^.+)(?=\\b[-]?(([0-9]{1,3}\\.[0-9]+|[0-9]{1,4}))\\s+(\\d\\d\\d\\d))/uU", $working, $matches, 0))
