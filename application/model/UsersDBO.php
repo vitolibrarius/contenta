@@ -25,6 +25,10 @@ class UsersDBO extends DataObject
 	public $password_reset_hash;
 	public $password_reset_timestamp;
 
+	public function displayName() {
+		return $this->name;
+	}
+
 	public function isAdmin() {
 		return (isset($this->account_type) && $this->account_type === Users::AdministratorRole);
 	}

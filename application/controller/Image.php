@@ -40,7 +40,7 @@ class Image extends Controller
 		if (isset($modDate) && (strtotime($modDate) == $fileModTime)) {
 			// browser cache content IS current, so we just respond '304 Not Modified'
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT', true, 304);
-			Logger::logWarning('304: Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT' );
+// 			Logger::logWarning('304: Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT' );
 		}
 		else {
 			// Image not cached or cache outdated, we respond '200 OK' and output the image.

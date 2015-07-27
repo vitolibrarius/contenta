@@ -93,14 +93,16 @@ if ( $metadata->isMeta( CONFIG_OVERRIDE ) ) {
 	ConfigOverride( $config, $metadata->getMeta( CONFIG_OVERRIDE ));
 }
 
-$user_api = $metadata->getMeta( "user_api" );;
+$user_api = $metadata->getMeta( "user_api" );
+$user = Model::Named("Users")->userByApiHash($user_api);
+
 $guid = ( ($metadata->isMeta("guid")) ? $metadata->getMeta("guid") : uuid());
 $job_id = ( ($metadata->isMeta("job_id")) ? $metadata->getMeta("job_id") : null);
 $debug = ( ($metadata->isMeta("debug")) ? $metadata->getMeta("debug") : null);
 
-Logger::instance()->setTrace("Daemon", $job_id );
+Logger::instance()->setTrace("Daemon", (is_null($job_id) ? $guid : $job_id) );
 
-Logger::logInfo('starting daemon ', $processorName, $guid);
+Logger::logInfo('starting daemon ', $processorName, ($user ? $user->__toString() : $user_api) );
 try {
 	$job_run_model = Model::Named('Job_Running');
 	$lockfile = appendPath( $workingDir, $processorName . ".lock");
@@ -110,7 +112,7 @@ try {
 			$jobList = $job_run_model->allForProcessorGUID($processorName, $guid );
 			if ( is_array($jobList) == false || count($jobList) == 0) {
 				$jobRunning = $job_run_model->createForProcessor($processorName, $guid, $pid);
-				Logger::logInfo('jobRunning ' .  var_export($jobRunning, true) );
+// 				Logger::logInfo('jobRunning ' .  var_export($jobRunning, true) );
 
 				try {
 					$processor = Processor::Named( $processorName, $guid );
@@ -192,6 +194,6 @@ if ( is_null($debug) && is_sub_dir($workingDir, $config->processingDirectory()) 
 	destroy_dir($workingDir);
 }
 
-Logger::logInfo( 'finished daemon', $processorName, $guid);
+Logger::logInfo( 'finished daemon', $processorName, ($user ? $user->__toString() : $user_api));
 
 ?>
