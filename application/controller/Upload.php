@@ -68,7 +68,6 @@ class Upload extends Controller
 			if ($_SERVER['CONTENT_LENGTH'] > $max_upload_bytes) {
 				Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_INI_SIZE'));
 			}
-			Logger::logError("Upload error, no media available", Session::get('user_name'), Session::get('user_id'));
 			Session::addNegativeFeedback( Localized::Get("Upload", "No media available"));
 			http_response_code(400); // Bad Request
 		}

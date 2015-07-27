@@ -58,6 +58,7 @@ class Session
 	{
 		if ( is_string($message) ) {
 			$_SESSION["feedback_negative"][] = $message;
+			Logger::logError( $message, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 

@@ -154,6 +154,7 @@ class UploadImport extends Processor
 			return $this->convert_cbr();
 		}
 
+		Logger::logError("Accepting import", $this->type, $this->sourceFilename());
 		return true;
 	}
 
