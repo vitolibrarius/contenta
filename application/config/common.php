@@ -246,23 +246,28 @@ function formatSizeUnits($value)
 
 function formattedTimeElapsed ($diff = 0)
 {
-	if ( isset($diff) && intval($diff) > 0) {
-		$tokens = array (
-			31536000 => 'year',
-			2592000 => 'month',
-			604800 => 'week',
-			86400 => 'day',
-			3600 => 'hour',
-			60 => 'minute',
-			1 => 'second'
-		);
+	if ( isset($diff) ) {
+		if ( intval($diff) == 0 ) {
+			return "less than one second";
+		}
+		else if ( intval($diff) > 0 ) {
+			$tokens = array (
+				31536000 => 'year',
+				2592000 => 'month',
+				604800 => 'week',
+				86400 => 'day',
+				3600 => 'hour',
+				60 => 'minute',
+				1 => 'second'
+			);
 
-		foreach ($tokens as $unit => $text) {
-			if ($diff < $unit) {
-				continue;
+			foreach ($tokens as $unit => $text) {
+				if ($diff < $unit) {
+					continue;
+				}
+				$numberOfUnits = floor($diff / $unit);
+				return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
 			}
-			$numberOfUnits = floor($diff / $unit);
-			return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
 		}
 	}
     return '';
