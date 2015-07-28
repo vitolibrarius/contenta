@@ -21,10 +21,10 @@
 							}
 						}
 
-						ksort($groups);
+						krsort($groups);
 						foreach( $groups as $groupName => $values ) {
 							echo "<optgroup label='" . $groupName . "'>";
-							ksort($values);
+							krsort($values);
 							foreach( $values as $file => $display ) {
 								echo "<option value='" . $file . "'>" . $display . "</option>";
 							}

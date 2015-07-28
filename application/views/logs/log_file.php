@@ -44,8 +44,6 @@
 
 	<h2><?php echo (isset($this->filename) ? $this->filename : "no file"); ?></h2>
 
-	<h2><?php echo (isset($this->chunkCount) ? $this->chunkCount : "nothing"); ?></h2>
-
 <div class="mediaData">
 	<table class="Log">
 		<tr>

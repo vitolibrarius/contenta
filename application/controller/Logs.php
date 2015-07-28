@@ -82,15 +82,17 @@ class Logs extends Controller
 				$filedata = file_get_contents(Config::GetLog($filename));
 				$result = preg_replace("/(\\[(\\d\\d\\.\\d\\d\\.\\d\\d\\d\\d\\s-\\s)(\\d\\d:\\d\\d:\\d\\d)])/uU", "=-=-=-=-=-=-=$3", $filedata);
 				$lines = preg_split('/=-=-=-=-=-=-=/', $result, -1, PREG_SPLIT_NO_EMPTY);
+				rsort( $lines );
 				$chunks = array_chunk ( $lines, 100, true);
 				$chunkNum = min( max(0, $chunkNum), (count($chunks) - 1) );
 				$chunkIndex = $chunks[$chunkNum];
 
 				$log_array = array();
 				foreach( $chunkIndex as $line ) {
+					$line = implode("<br>", split_lines($line));
 					$matches = array();
 					$matchCount = preg_match_all(
-						"/(\\d\\d:\\d\\d:\\d\\d)\\s+(info|warning|error)\\s+\\|(((.*):(.*))|(.*))\\|\\s+\\|(((.*):(.*))|(.*))\\|(.*)$/uUm",
+						"/(\\d\\d:\\d\\d:\\d\\d)\\s+(info|warning|error)\\s+\\|(((.*):(.*))|(.*))\\|\\s+\\|(((.*):(.*))|(.*))\\|(.*)$/uUms",
 						$line,
 						$matches
 					);
@@ -107,7 +109,7 @@ class Logs extends Controller
 					}
 					else {
 						$matchCount = preg_match_all(
-							"/(\\d\\d:\\d\\d:\\d\\d)\\s+(info|warning|error)\\s+\\|(.*)\\|\\s+(.*)$/uUm",
+							"/(\\d\\d:\\d\\d:\\d\\d)\\s+(info|warning|error)\\s+\\|(.*)\\|\\s+(.*)$/uUms",
 							$line,
 							$matches
 						);

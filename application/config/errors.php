@@ -61,7 +61,7 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
         }
 
 		//echo "$backtrace, $errfile, $errline";
- 		\Logger::LogError( $backtrace, $errfile, $errline );
+ 		\Logger::LogError( $backtrace, shortendPath($errfile), $errline );
 		return true;
 	}
 
