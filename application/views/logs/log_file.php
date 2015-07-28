@@ -63,8 +63,12 @@
 			else {
 				echo "<tr class='" . $log['type'] . "'><td>" . $log['time'] . "</td>"
 					. "<td>" . $log['type'] . "</td>"
-					. "<td>" . $log['trace'] . " " . $log['trace_id'] . "</td>"
-					. "<td>" . $log['context'] . " " . $log['context_id'] . "</td>"
+					. "<td>" . (isset($log['trace']) ? $log['trace'] : "")
+						. " " . (isset($log['trace_id']) ? "<br>" . $log['trace_id'] : "")
+						. "</td>"
+					. "<td>" . (isset($log['context']) ? $log['context'] : "")
+						. " " .(isset($log['context_id']) ? "<br>" . $log['context_id'] : "")
+						. "</td>"
 					. "<td>" . $log['message'] . "</td>"
 					. "</tr>";
 			}
