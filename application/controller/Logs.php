@@ -98,10 +98,10 @@ class Logs extends Controller
 						$log_array[] = array(
 							"time" => $matches[1][0],
 							"type" => $matches[2][0],
-							"trace" => $matches[3][0],
-// 							"trace_id" => $matches[5][0],
-							"context" => $matches[8][0],
-// 							"context_id" => $matches[7][0],
+							"trace" => (isset($matches[5][0]) ? $matches[5][0] : $matches[7][0]),
+ 							"trace_id" => $matches[6][0],
+							"context" => (isset($matches[10][0]) ? $matches[10][0] : $matches[12][0]),
+							"context_id" => $matches[11][0],
 							"message" => $matches[13][0],
 						);
 					}
@@ -125,6 +125,7 @@ class Logs extends Controller
 					}
 				}
 
+				$this->view->pageCurrent = $chunkNum;
 				$this->view->chunkCount = count($chunks);
 				$this->view->logArray = $log_array;
 
