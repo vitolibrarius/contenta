@@ -24,7 +24,7 @@
 		$max = $this->pageCurrent + 5;
 	}
 	if ( $min > 0 ) {
-		echo '<li><a href="'. Config::Web('/AdminUploadRepair/index/0') .'">First</a></li><li>....</li>';
+		echo '<li><a href="#">First</a></li><li>....</li>';
 	}
 	for ($x = $min; $x < $max; $x++) {
 		if ( $x == $this->pageCurrent ) {
@@ -33,11 +33,10 @@
 		else {
 			echo '<li>';
 		}
-		echo '<a href="'. Config::Web('/AdminUploadRepair/index', $x) . '">' . $x . '</a></li>';
+		echo '<a href="#">' . $x . '</a></li>';
 	}
 	if ( $max < $this->chunkCount -1 ) {
-		echo '<li>....</li><li><a href="'. Config::Web('/AdminUploadRepair/index', ($this->chunkCount -1))
-			. '">' . $this->chunkCount . '</a></li>';
+		echo '<li>....</li><li><a href="#">' . $this->chunkCount . '</a></li>';
 	}
 	?>
 	</ul>
