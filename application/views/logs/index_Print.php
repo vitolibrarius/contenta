@@ -1,0 +1,1 @@
+<p>When using 'Print' logging, the messages from the system will become part of the server response.  It has limited debugging value and really no value for a real deployment.  I suggest changing it to 'File' or 'Database'.</p>
