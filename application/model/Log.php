@@ -77,14 +77,17 @@ class Log extends Model
 		if ( isset($message) && strlen($message) > 0 ) {
 			$likes[] = Qualifier::LikeQualifier( Log::message, $message . '%' );
 		}
-		$select->where( Qualifier::OrQualifier( $likes ));
+
+		if ( count($likes) > 0 ) {
+			$select->where( Qualifier::AndQualifier( $likes ));
+		}
 
 		if ( $direction != 'desc' && $direction != 'asc') {
 			$direction = 'desc';
 		}
 		$select->orderBy( array( array($direction => Log::id) ) );
 
-		return $select->fetchAll();
+ 		return $select->fetchAll();
 	}
 }
 ?>

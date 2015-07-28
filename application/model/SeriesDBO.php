@@ -52,6 +52,13 @@ class SeriesDBO extends DataObject
 		return false;
 	}
 
+	public function availableSummary() {
+		return
+			(isset($this->pub_available) ? $this->pub_available : 0 )
+			. " / "
+			. (isset($this->pub_count) ? $this->pub_count : count($this->allPublications()) );
+	}
+
 	public function setPublisher( model\PublisherDBO $pubObj )
 	{
 		if ( isset($pubObj, $pubObj->id) && (isset($this->publisher_id) == false || $pubObj->id != $this->publisher_id) ) {

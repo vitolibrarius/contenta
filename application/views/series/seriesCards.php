@@ -5,9 +5,11 @@
 <?php else: ?>
 	<?php
 		$card = new html\Card();
+		$card->setDisplayDescriptionKey( "shortDescription" );
 		$card->setDetailKeys( array(
 			model\Series::publisher_id => "publisherName",
-			model\Series::start_year => model\Series::start_year
+			model\Series::start_year => model\Series::start_year,
+			model\Series::pub_count => "availableSummary",
 			)
 		);
 		foreach($this->listArray as $key => $value) {

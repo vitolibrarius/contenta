@@ -91,9 +91,7 @@ class View
 	public function render($filename, $render_without_header_and_footer = false)
 	{
 		// page without header and footer, for whatever reason
-		if ($render_without_header_and_footer == true) {
-			require VIEWS_PATH . $filename . '.php';
-		} else {
+		if ( file_exists(VIEWS_PATH . $filename . '.php')) {
 			$current = htmlentities($_SERVER['REQUEST_URI']);
 			if ( endsWith($current, '/index') ) {
 				Session::clearCurrentPageStack();
@@ -111,9 +109,16 @@ class View
 			$this->addScript( dirname($filename) . '.js' );
 			$this->addScript( $filename . '.js' );
 
-			require VIEWS_PATH . '_templates/header.php';
+			if ($render_without_header_and_footer == false) {
+				require VIEWS_PATH . '_templates/header.php';
+			}
 			require VIEWS_PATH . $filename . '.php';
-			require VIEWS_PATH . '_templates/footer.php';
+			if ($render_without_header_and_footer == false) {
+				require VIEWS_PATH . '_templates/footer.php';
+			}
+		}
+		else {
+			header('location: ' . Config::Web('/error/index'));
 		}
 	}
 

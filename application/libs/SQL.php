@@ -143,6 +143,18 @@ abstract class SQL
 	abstract public function sqlParameters();
 	abstract public function sqlStatement();
 
+	public function __toString()
+	{
+		$str = null;
+		try {
+			$str = $this->sqlStatement() . ';  ' . var_export($this->sqlParameters(), true);
+		}
+		catch ( \Exception $e ) {
+			$str = get_class($this) . '__toString() : ' . $e;
+		}
+		return $str;
+	}
+
 	public function where( db\Qualifier $qualifier )
 	{
 		if ( isset( $this->qualifier, $qualifier) ) {
