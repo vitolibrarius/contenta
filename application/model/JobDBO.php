@@ -5,6 +5,7 @@ namespace model;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use utilities\CronEvaluator as CronEvaluator;
 
 use model\Job_Type as Job_Type;
 
@@ -31,6 +32,23 @@ class JobDBO extends DataObject
 	}
 
 	public function nextDate() {
+		if ( isset($this->next) ) {
+			if ( $this->next < time() ) {
+				try {
+					$m = (isset($this->minute) ? $this->minute : null);
+					$h = (isset($this->hour) ? $this->hour : null);
+					$d = (isset($this->dayOfWeek) ? $this->dayOfWeek : null);
+
+					$cronEval = new CronEvaluator( $m, $h, $d );
+					$nextRunDate = $cronEval->nextDate();
+					$this->{Job::next}($nextRunDate->getTimestamp());
+					return date("M d, Y H:i", $nextRunDate->getTimestamp());
+				}
+				catch ( \Exception $ve ) {
+					return $ve;
+				}
+			}
+		}
 		return $this->formattedDate( Job::next, "M d, Y H:i" );
 	}
 

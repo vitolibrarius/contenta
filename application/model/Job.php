@@ -153,22 +153,28 @@ class Job extends Model
 
 	function validate_minute($object = null, $value)
 	{
+		$required = is_null($object) || (isset($object->minute) == false);
 		try {
 			CronEvaluator::validateExpressionPart( CronEvaluator::MINUTE, $value );
 		}
 		catch ( \Exception $ve ) {
-			return Localized::ModelValidation($this->tableName(), Job::minute, $ve->getMessage() );
+			if ( $required ) {
+				return Localized::ModelValidation($this->tableName(), Job::minute, $ve->getMessage() );
+			}
 		}
 		return null;
 	}
 
 	function validate_hour($object = null, $value)
 	{
+		$required = is_null($object) || (isset($object->hour) == false);
 		try {
 			CronEvaluator::validateExpressionPart( CronEvaluator::HOUR, $value );
 		}
 		catch ( \Exception $ve ) {
-			return Localized::ModelValidation($this->tableName(), Job::hour, $ve->getMessage() );
+			if ( $required ) {
+				return Localized::ModelValidation($this->tableName(), Job::hour, $ve->getMessage() );
+			}
 		}
 		return null;
 	}
@@ -184,11 +190,14 @@ class Job extends Model
 
 	function validate_dayOfWeek($object = null, $value)
 	{
+		$required = is_null($object) || (isset($object->dayOfWeek) == false);
 		try {
 			CronEvaluator::validateExpressionPart( CronEvaluator::DAYOFWEEK, $value );
 		}
 		catch ( \Exception $ve ) {
-			return Localized::ModelValidation($this->tableName(), Job::dayOfWeek, $ve->getMessage() );
+			if ( $required ) {
+				return Localized::ModelValidation($this->tableName(), Job::dayOfWeek, $ve->getMessage() );
+			}
 		}
 		return null;
 	}
