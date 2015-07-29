@@ -46,8 +46,6 @@ class Auth
 				Session::set('user_account_type', $user->account_type);
 
 				Model::Named('Users')->stampLoginTimestamp($user);
-				Logger::logInfo("User logged In (API)", Session::get('user_name'), Session::get('user_id'));
-
 				$login_successful = true;
 			}
 		}
@@ -108,8 +106,6 @@ class Auth
 			Session::addNegativeFeedback(Localized::Get("Auth", "PASSWORD_WRONG_3_TIMES"));
 			return false;
 		}
-
-		Session::addPositiveFeedback( var_export($user, true));
 
 		$VERIFIED_PASSWORD = false;
 		if ( PHP_VERSION_ID > 50500 )
@@ -196,7 +192,6 @@ class Auth
 					Session::set('user_account_type', $user->account_type);
 
 					$user_model->stampLoginTimestamp($user);
-					Logger::logInfo("User logged In (cookie)", Session::get('user_name'), Session::get('user_id'));
 
 					$login_successful = true;
 				}

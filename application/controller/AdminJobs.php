@@ -49,7 +49,9 @@ class AdminJobs extends Admin
 			if ( $jobId > 0 ) {
 				$obj = $model->objectForId($jobId);
 				if ( $obj != false ) {
-					$pid = DaemonizeJob( $obj );
+					$user = Model::Named('Users')->objectForId(Session::Get('user_id'));
+
+					$pid = DaemonizeJob( $obj, $user );
 					Session::addPositiveFeedback(Localized::GlobalLabel( "Running process id " ) . $pid);
 					sleep(2);
 					header('location: ' . Config::Web('/AdminJobs/index'));
