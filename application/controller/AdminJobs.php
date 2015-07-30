@@ -94,7 +94,7 @@ class AdminJobs extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Job');
 			$this->view->model = $model;
-			$this->view->addStylesheet("select2.css");
+			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
 			if ( $jobId > 0 ) {
@@ -122,7 +122,7 @@ class AdminJobs extends Admin
 	function edit_new()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$this->view->addStylesheet("select2.css");
+			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
 			$values = splitPOSTValues($_POST);

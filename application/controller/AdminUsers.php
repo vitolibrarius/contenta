@@ -33,7 +33,7 @@ class AdminUsers extends Admin
 	function editUser($uid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$this->view->addStylesheet("select2.css");
+			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
 			$user_model = Model::Named('Users');

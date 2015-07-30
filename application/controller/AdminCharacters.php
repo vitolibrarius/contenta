@@ -92,7 +92,7 @@ class AdminCharacters extends Admin
 	function editCharacter($oid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$this->view->addStylesheet("select2.css");
+			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
 			$model = Model::Named('Character');

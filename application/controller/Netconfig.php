@@ -32,7 +32,7 @@ class Netconfig extends Controller
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Endpoint');
 			$this->view->model = $model;
-			$this->view->addStylesheet("select2.css");
+			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
 			if ( $netId > 0 ) {
@@ -60,7 +60,7 @@ class Netconfig extends Controller
 	function edit_new()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$this->view->addStylesheet("select2.css");
+			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
 			$values = splitPOSTValues($_POST);

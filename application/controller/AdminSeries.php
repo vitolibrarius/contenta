@@ -43,6 +43,9 @@ class AdminSeries extends Admin
 	function serieslist()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->addStylesheet("select2.min.css");
+			$this->view->addScript("select2.min.js");
+
 			$model = Model::Named('Series');
 			$this->view->model = $model;
 			$this->view->render( '/series/index');
@@ -94,7 +97,7 @@ class AdminSeries extends Admin
 	function editSeries($oid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$this->view->addStylesheet("select2.css");
+			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
 			$model = Model::Named('Series');
