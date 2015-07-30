@@ -9,6 +9,10 @@ use \Auth as Auth;
 use \Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
+
+use \SQL as SQL;
+use db\Qualifier as Qualifier;
+
 use model\Users as Users;
 use model\Publisher as Publisher;
 
@@ -26,6 +30,25 @@ class Api extends Controller
 	{
 		if ( Auth::handleLoginWithAPI($userHash) && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->render( '/admin/index' );
+		}
+	}
+
+	function publishers( $userHash = null)
+	{
+		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
+			$qualifiers = array();
+			if ( isset($_GET['q']) && strlen($_GET['q']) > 0) {
+				$qualifiers[] = Qualifier::LikeQualifier( Publisher::name, '%' . $_GET['q'] . '%' );
+			}
+
+			$select = SQL::Select( Model::Named("Publisher"), array( Publisher::id, Publisher::name ));
+			if ( count($qualifiers) > 0 ) {
+				$select->where( Qualifier::AndQualifier( $qualifiers ));
+			}
+			$select->orderBy( array(Publisher::name) );
+			$publishers = $select->limit(-1)->fetchAll();
+
+			$this->view->renderJson( $publishers );
 		}
 	}
 

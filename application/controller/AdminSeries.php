@@ -56,12 +56,25 @@ class AdminSeries extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Series');
-			$this->view->model = $model;
-			$this->view->listArray = SQL::Select( $model )
-				->where( Qualifier::LikeQualifier( Series::name, $_GET['name'] . '%' ))
-				->orderBy( $model->sortOrder() )
-				->fetchAll();
+			$qualifiers = array();
+			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
+				$qualifiers[] = Qualifier::LikeQualifier( Series::search_name, '%' . $_GET['name'] . '%' );
+			}
+			if ( isset($_GET['year']) && strlen($_GET['year']) == 4 ) {
+				$qualifiers[] = Qualifier::GreaterThanEqual( Series::start_year, $_GET['year'] );
+			}
+			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
+				$qualifiers[] = Qualifier::Equals( Series::publisher_id, $_GET['publisher_id'] );
+			}
 
+			$select = SQL::Select($model);
+			if ( count($qualifiers) > 0 ) {
+				$select->where( Qualifier::AndQualifier( $qualifiers ));
+			}
+			$select->orderBy( $model->sortOrder() );
+
+			$this->view->model = $model;
+			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminSeries/editSeries";
 			$this->view->deleteAction = "/AdminSeries/deleteSeries";
 			$this->view->render( '/series/seriesCards', true);
