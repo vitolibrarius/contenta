@@ -18,7 +18,7 @@ abstract class Qualifier extends SQL
 	const LESS_THAN			= '<';
 	const LESS_THAN_EQ		= '<=';
 	const GREATER_THAN		= '>';
-	const GREATER_THAN_EQ	= '=>';
+	const GREATER_THAN_EQ	= '>=';
 	const LIKE_Q			= 'LIKE';
 	const IS_Q				= 'IS';
 	const IS_NULL_Q			= 'IS NULL';
@@ -88,12 +88,24 @@ abstract class Qualifier extends SQL
 	public static function AndQualifier()
 	{
 		$qualifiers = array_flatten( func_get_args(), 'db\Qualifier' );
+		if ( is_array($qualifiers) == false || count( $qualifiers ) == 0) {
+			throw new \Exception( "AND requires sub-qualifiers" );
+		}
+		if ( count( $qualifiers ) == 1 ) {
+			return array_pop($qualifiers);
+		}
 		return new AndQualifier( $qualifiers );
 	}
 
 	public static function OrQualifier()
 	{
 		$qualifiers = array_flatten( func_get_args(), 'db\Qualifier' );
+		if ( is_array($qualifiers) == false || count( $qualifiers ) == 0) {
+			throw new \Exception( "OR requires sub-qualifiers" );
+		}
+		if ( count( $qualifiers ) == 1 ) {
+			return array_pop($qualifiers);
+		}
 		return new OrQualifier( $qualifiers );
 	}
 
