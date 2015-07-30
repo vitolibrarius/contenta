@@ -302,7 +302,17 @@
                 "label": "Description"
             },
             "publisher_id": {
-                "label": "Publisher"
+                "label": "Publisher",
+                "search": "Select Publisher"
+            },
+            "pub_active": {
+                "label": "Actively publishing"
+            },
+            "pub_wanted": {
+                "label": "Wanted for collection"
+            },
+            "year": {
+                "search": "Publication Start Year"
             }
         },
         "Series": {
@@ -465,7 +475,8 @@
     },
     "Auth": {
         "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator",
-        "PASSWORD_WRONG": "Username or password mismatch.  Please check and retry."
+        "PASSWORD_WRONG": "Username or password mismatch.  Please check and retry.",
+        "LOGIN_FAILED": "Login Failed"
     },
     "Upload": {
         "title": "Upload media file",
