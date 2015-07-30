@@ -26,7 +26,7 @@
 
 <form id='searchForm' name='searchForm'>
 	<div>
-		<div style="display: inline-block;">
+		<div style="display: inline-block; min-width: 300px;">
 		<select name="searchPublisher" id="searchPublisher"
 				class="text_input">
 			<option value="-1"><?php echo Localized::ModelSearch($this->model->tableName(), "publisher_id" ); ?></option>
