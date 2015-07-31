@@ -187,8 +187,8 @@ abstract class SQL
 		if ($statement == false || $statement->execute($params) == false) {
 			$errPoint = ($statement ? $statement : Database::instance());
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-			Logger::logSQLError($table, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, null);
-			throw new \Exception("Error executing change to " . $table . " table");
+			Logger::logSQLError("raw", 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, $params);
+			throw new \Exception("Error executing raw sql");
 		}
 
 		if ( is_null($comment) == false) {
