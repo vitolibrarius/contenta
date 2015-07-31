@@ -109,6 +109,7 @@ class Story_ArcDBO extends DataObject
 
 	public function notify( $type = 'none', $object = null )
 	{
+// 		Logger::logInfo( $this . " Notified $type " . $object );
 		if ( $object instanceof DataObject ) {
 			switch( $object->tableName() ) {
 				case 'media':
@@ -125,7 +126,7 @@ class Story_ArcDBO extends DataObject
 					break;
 				case 'publication':
 				case 'story_arc_publication':
-					if ( $type === Model::NotifyInserted || $type === Model::NotifyDeleted ) {
+					if ( $type === Model::NotifyInserted || $type === Model::NotifyUpdated || $type === Model::NotifyDeleted ) {
 						\SQL::raw(
 							"update story_arc set pub_count = ( "
 								. "select count(*) from story_arc_publication join publication on "

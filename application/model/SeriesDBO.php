@@ -159,6 +159,7 @@ class SeriesDBO extends DataObject
 
 	public function notify( $type = 'none', $object = null )
 	{
+// 		Logger::logInfo( $this . " Notified $type " . $object );
 		if ( $object instanceof DataObject ) {
 			switch( $object->tableName() ) {
 				case 'media':
@@ -172,7 +173,7 @@ class SeriesDBO extends DataObject
 					}
 					break;
 				case 'publication':
-					if ( $type === Model::NotifyInserted || $type === Model::NotifyDeleted ) {
+					if ( $type === Model::NotifyInserted || $type === Model::NotifyUpdated || $type === Model::NotifyDeleted ) {
 						\SQL::raw(
 							"update series set pub_count = ( "
 								. "select count(*) from publication where publication.series_id = series.id"
