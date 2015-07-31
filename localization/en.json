@@ -236,7 +236,8 @@
                 "label": "Character Details"
             },
             "publisher_id": {
-                "label": "Publisher"
+                "label": "Publisher",
+                "search": "Select Publisher"
             },
             "AdditionalLegend": {
                 "label": "Additional Features"

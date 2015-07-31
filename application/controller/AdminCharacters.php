@@ -40,6 +40,9 @@ class AdminCharacters extends Admin
 	function characterlist()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->addStylesheet("select2.min.css");
+			$this->view->addScript("select2.min.js");
+
 			$model = Model::Named('Character');
 			$this->view->model = $model;
 			$this->view->render( '/characters/index');
@@ -50,13 +53,22 @@ class AdminCharacters extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Character');
-			$select = SQL::Select( $model )
-				->where( Qualifier::LikeQualifier( Character::name, $_GET['name'] . '%' ))
-				->orderBy( $model->sortOrder() );
+			$qualifiers = array();
+			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
+				$qualifiers[] = Qualifier::LikeQualifier( Character::name, '%' . $_GET['name'] . '%' );
+			}
+			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
+				$qualifiers[] = Qualifier::Equals( Character::publisher_id, $_GET['publisher_id'] );
+			}
+
+			$select = SQL::Select($model);
+			if ( count($qualifiers) > 0 ) {
+				$select->where( Qualifier::AndQualifier( $qualifiers ));
+			}
+			$select->orderBy( $model->sortOrder() );
 
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
-
 			$this->view->editAction = "/AdminCharacters/editCharacter";
 			$this->view->deleteAction = "/AdminCharacters/deleteCharacter";
 			$this->view->render( '/characters/characterCards', true);

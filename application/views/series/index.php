@@ -47,16 +47,11 @@
 	</div>
 </form>
 
-<p id="logs"></p>
-
 <div id='ajaxDiv'></div>
 
 
 <script type="text/javascript">
 $(document).ready(function($) {
-        function log(text) {
-          $('#logs').append(text + '<br>');
-        }
 	$("#searchPublisher").select2({
 		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'publisher_id' ); ?>",
 		allowClear: true,
