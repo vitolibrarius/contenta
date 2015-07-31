@@ -108,5 +108,24 @@ class PublicationDBO extends DataObject
 		$model = Model::Named('Story_Arc_Publication');
 		return $model->create($object, $this);
 	}
-}
 
+	public function notify( $type = 'none', $object = null )
+	{
+		if ( $object instanceof DataObject ) {
+			switch( $object->tableName() ) {
+				case 'media':
+					if ( $type === Model::NotifyInserted || $type === Model::NotifyDeleted ) {
+						\SQL::raw(
+							"update publication set media_count = ( "
+								. "select count(*) from media where media.publication_id = publication.id "
+								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+}

@@ -29,6 +29,7 @@ class Publication extends Model
 	public function tableName() { return Publication::TABLE; }
 	public function tablePK() { return Publication::id; }
 	public function sortOrder() { return array(Publication::name); }
+	public function notifyKeypaths() { return array( "series" ); }
 
 	public function allColumnNames()
 	{

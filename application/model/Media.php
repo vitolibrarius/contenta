@@ -30,6 +30,7 @@ class Media extends Model
 	public function tableName() { return Media::TABLE; }
 	public function tablePK() { return Media::id; }
 	public function sortOrder() { return array(Media::type_id, Media::filename); }
+	public function notifyKeypaths() { return array( "publication", "publication/series", "publication/story_arcs" ); }
 
 	public function allColumnNames()
 	{

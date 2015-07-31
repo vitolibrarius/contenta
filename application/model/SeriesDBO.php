@@ -156,5 +156,44 @@ class SeriesDBO extends DataObject
 		}
 		return false;
 	}
+
+	public function notify( $type = 'none', $object = null )
+	{
+		if ( $object instanceof DataObject ) {
+			switch( $object->tableName() ) {
+				case 'media':
+					if ( $type === Model::NotifyInserted || $type === Model::NotifyDeleted ) {
+						\SQL::raw(
+							"update series set pub_available = ( "
+								. "select count(*) from publication where publication.series_id = series.id AND publication.media_count > 0 "
+								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+					}
+					break;
+				case 'publication':
+					if ( $type === Model::NotifyInserted || $type === Model::NotifyDeleted ) {
+						\SQL::raw(
+							"update series set pub_count = ( "
+								. "select count(*) from publication where publication.series_id = series.id"
+								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+						\SQL::raw(
+							"update series set pub_cycle = ( "
+								. "select (julianday(max(pub_date), 'unixepoch') - julianday(min(pub_date), 'unixepoch')) / count(*) "
+								. "from publication where publication.series_id = series.id"
+								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+					}
+					break;
+
+				default:
+					Logger::logError( $this . " Notified about unknown value " . $object );
+					break;
+			}
+		}
+	}
 }
 

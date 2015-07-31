@@ -12,6 +12,10 @@ abstract class Model
 {
 	const HTML_ATTR_SEPARATOR = '-';
 
+	const NotifyInserted = 'inserted';
+	const NotifyUpdated = 'updated';
+	const NotifyDeleted = 'deleted';
+
 	const IconName = 'Icon';
 	const ThumbnailName = 'Thumbnail';
 
@@ -59,6 +63,25 @@ abstract class Model
 	abstract public function tablePK();
 	abstract public function sortOrder();
 	abstract public function allColumnNames();
+
+	public function notifyKeypaths() { return array(); }
+	public function processNotification( $type = 'none', $dbo )
+	{
+		$keypaths = $this->notifyKeypaths();
+		foreach ( $keypaths as $kp ) {
+			$target = dbo_valueForKeypath( $kp, $dbo );
+			if ( $target instanceof DataObject ) {
+				$target->notify( $type, $dbo );
+			}
+			else if ( is_array( $target ) ) {
+				foreach( $target as $subtarget ) {
+					if ( $subtarget instanceof DataObject ) {
+						$subtarget->notify( $type, $dbo );
+					}
+				}
+			}
+		}
+	}
 
 	public function allColumns() {
 		return implode(",", $this->allColumnNames() );
@@ -306,6 +329,9 @@ abstract class Model
 
 				$insert = \SQL::Insert($this)->addRecord($values);
 				$obj = $insert->commitTransaction();
+
+				$this->processNotification( Model::NotifyInserted, $obj );
+
 				return array( $obj, null );
 			}
 
@@ -333,8 +359,13 @@ abstract class Model
 				$mediaPurged = (file_exists($object->mediaPath()) == false || destroy_dir($object->mediaPath()) );
 			}
 
-			$deleteTransaction = \SQL::DeleteObject( $object );
-			return ($mediaPurged) && ($deleteTransaction->commitTransaction());
+			if ( $mediaPurged == true ) {
+				$deleteTransaction = \SQL::DeleteObject( $object )->commitTransaction();
+				if ( $deleteTransaction ) {
+					$this->processNotification( Model::NotifyDeleted, $object );
+					return $deleteTransaction;
+				}
+			}
 		}
 		return false;
 	}
@@ -359,8 +390,11 @@ abstract class Model
 					}
 				}
 
-				$update = \SQL::UpdateObject($object, $values);
-				return $update->commitTransaction();
+				$update = \SQL::UpdateObject($object, $values)->commitTransaction();
+				if ( $update ) {
+					$this->processNotification( Model::NotifyUpdated, $object );
+				}
+				return $update;
 			}
 
 			// create failed, log validation errors

@@ -21,6 +21,7 @@ class Story_Arc_Publication extends Model
 	public function tableName() { return Story_Arc_Publication::TABLE; }
 	public function tablePK() { return Story_Arc_Publication::id; }
 	public function sortOrder() { return array(Story_Arc_Publication::story_arc_id, Story_Arc_Publication::publication_id); }
+	public function notifyKeypaths() { return array( "story_arc" ); }
 
 	public function allColumnNames()
 	{

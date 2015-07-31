@@ -148,5 +148,12 @@ class DataObject
 		}
 		return null;
 	}
+
+	/* notifications of changes in the object graph
+	 */
+	public function notify( $type = 'none', $object = null )
+	{
+		echo PHP_EOL . PHP_EOL . "------------------".PHP_EOL."$this ->notify( $type,  $object)". PHP_EOL.PHP_EOL;
+	}
 }
 ?>

@@ -106,5 +106,49 @@ class Story_ArcDBO extends DataObject
 		$model = Model::Named('Story_Arc_Publication');
 		return $model->create($this, $publication);
 	}
+
+	public function notify( $type = 'none', $object = null )
+	{
+		if ( $object instanceof DataObject ) {
+			switch( $object->tableName() ) {
+				case 'media':
+					if ( $type === Model::NotifyInserted || $type === Model::NotifyDeleted ) {
+						\SQL::raw(
+							"update story_arc set pub_available = ( "
+								. "select count(*) from story_arc_publication join publication on "
+								. "story_arc_publication.publication_id = publication.id "
+								. "where story_arc_publication.story_arc_id = story_arc.id AND publication.media_count > 0"
+								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+					}
+					break;
+				case 'publication':
+				case 'story_arc_publication':
+					if ( $type === Model::NotifyInserted || $type === Model::NotifyDeleted ) {
+						\SQL::raw(
+							"update story_arc set pub_count = ( "
+								. "select count(*) from story_arc_publication join publication on "
+								. "story_arc_publication.publication_id = publication.id "
+								. "where story_arc_publication.story_arc_id = story_arc.id"
+								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+						\SQL::raw(
+							"update story_arc set pub_cycle = ( "
+								. "select (julianday(max(publication.pub_date), 'unixepoch') - julianday(min(publication.pub_date), 'unixepoch')) / count(*) "
+								. "from story_arc_publication join publication on story_arc_publication.publication_id = publication.id "
+								. "where story_arc_publication.story_arc_id = story_arc.id"
+								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+					}
+					break;
+				default:
+					Logger::logError( $this . " Notified about unknown value " . $object );
+					break;
+			}
+		}
+	}
 }
 
