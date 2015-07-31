@@ -28,13 +28,26 @@ abstract class Model
 
 	const TO_ONE_TYPE = 'toOneRelationship';
 
+	private static $_named_models = null;
+
 	public static function Named($name)
 	{
+		if ( is_null(Model::$_named_models) ) {
+			Model::$_named_models = array();
+		}
+
+		if ( isset(Model::$_named_models[$name]) ) {
+			return Model::$_named_models[$name];
+		}
+
 		// converts table names like "log_level" to "Log_Level" to match the classname
 		$parts = explode("_", $name);
 		$parts = array_map('ucfirst', $parts);
 		$className = "model\\" . implode("_", $parts);
-		return new $className();
+		$model = new $className();
+		Model::$_named_models[$name] = $model;
+
+		return $model;
 	}
 
 	public function __construct()
