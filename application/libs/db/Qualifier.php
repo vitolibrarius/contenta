@@ -44,9 +44,12 @@ abstract class Qualifier extends SQL
 		$this->parameterPrefix = Qualifier::NextParameterPrefix();
 	}
 
-	public function prefixedAttribute( $attribute = '' )
+	public function prefixedAttribute( $attribute = '', $suffix = '' )
 	{
-		return ':' . (strlen($this->parameterPrefix) == 0 ? '' : $this->parameterPrefix . '_') . sanitize($attribute, true, true);
+		return ':'
+			. (strlen($this->parameterPrefix) == 0 ? '' : $this->parameterPrefix . '_')
+			. sanitize($attribute, true, true)
+			. (strlen($suffix) == 0 ? '' : $suffix);
 	}
 
 	public static function PK( DataObject $data = null, $prefix = '' )
@@ -83,6 +86,11 @@ abstract class Qualifier extends SQL
 			$qualifiers[] = Qualifier::Equals( "xsource", $xsrc);
 		}
 		return Qualifier::AndQualifier( $qualifiers );
+	}
+
+	public static function IN( $attribute, array $inArray = null, $prefix = '' )
+	{
+		return new InQualifier( $attribute, $inArray, $prefix );
 	}
 
 	public static function AndQualifier()
@@ -275,14 +283,15 @@ class InQualifier extends Qualifier
 			throw new \Exception( "Must specify the in values" );
 		}
 		$this->attribute = $key;
-		$this->inArray = $values;
+		$this->inArray = array_unique($values);
 	}
 
 	public function sqlParameters()
 	{
 		$args = array();
+		$count = 0;
 		foreach( $this->inArray as $idx => $value ) {
-			$param = $this->prefixedAttribute( $this->attribute );
+			$param = $this->prefixedAttribute( $this->attribute, ($count++));
 			$args[$param] = $value;
 		}
 
@@ -293,8 +302,9 @@ class InQualifier extends Qualifier
 	{
 		$attr = (strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.') . $this->attribute;
 		$args = array();
+		$count = 0;
 		foreach( $this->inArray as $idx => $value ) {
-			$args[] = $this->prefixedAttribute( $this->attribute );
+			$args[] = $this->prefixedAttribute( $this->attribute, ($count++) );
 		}
 		return $attr . " ". Qualifier::IN_Q . " (" . implode(",", $args) . ")";
 	}
