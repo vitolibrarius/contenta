@@ -8,6 +8,8 @@ use \Model as Model;
 use \Logger as Logger;
 
 use model\Log_Level as Log_Level;
+
+use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
 class Log extends Model
