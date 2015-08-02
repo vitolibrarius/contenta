@@ -41,6 +41,30 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		parent::__construct($guid);
 	}
 
+	public function importImages( $mediaObject, array $cvDetails = array() )
+	{
+		if ( $mediaObject->hasAdditionalMedia() ) {
+			$forceImages = array_valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
+			if ( $forceImages == true || $mediaObject->hasIcons() == false ) {
+				Logger::logInfo( "$mediaObject importing images", $this->type, $this->guid );
+				$imageURL = array_valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
+				if ( is_null($imageURL) == false ) {
+					$this->importImage( $mediaObject, Model::IconName, $imageURL );
+				}
+
+				$imageURL = array_valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
+				if ( is_null($imageURL) == false ) {
+					$this->importImage( $mediaObject, Model::ThumbnailName, $imageURL );
+				}
+			}
+			else {
+				Logger::logInfo( "$mediaObject Not importing images (forceImages = $forceImages, hasIcons = " . $mediaObject->hasIcons() . ")",
+					$this->type, $this->guid );
+			}
+		}
+		return false;
+	}
+
 	public function importImage( $mediaObject, $imagename = Model::IconName, $sourceurl )
 	{
 		if ( isset($sourceurl) && $mediaObject->hasAdditionalMedia() ) {

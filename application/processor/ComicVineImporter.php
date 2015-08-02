@@ -51,33 +51,6 @@ class ComicVineImporter extends ContentMetadataImporter
 		return new ComicVineConnector($comicVine);
 	}
 
-	public function importImages( $mediaObject, array $cvDetails = array() )
-	{
-		if ( $mediaObject->hasAdditionalMedia() ) {
-			$forceImages = array_valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
-			if ( $forceImages == true || $mediaObject->hasIcons() == false ) {
-				$imageURL = array_valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
-				if ( is_null($imageURL) == false ) {
-					$this->importImage( $mediaObject, Model::IconName, $imageURL );
-				}
-
-				$imageURL = array_valueForKeypath(ComicVineImporter::META_IMPORT_LARGE_ICON, $cvDetails);
-				if ( is_null($imageURL) == false ) {
-					$this->importImage( $mediaObject, Model::ThumbnailName, $imageURL );
-				}
-			}
-		}
-		return false;
-	}
-
-	public function setMetaBoolean( $path, $newValue = false )
-	{
-		$oldValue = $this->getMeta( $path );
-		if ( $oldValue == null || $oldValue == false ) {
-			$this->setMeta( $path, $newValue );
-		}
-	}
-
 	/** Import maps between ComicVine keypaths and model attributes */
 	public function descriptionForRecord( Array $cvRecord = array() )
 	{
