@@ -41,6 +41,8 @@
 		<div style="display: inline-block;">
 		<input type="number" name="searchYear" id="searchYear"
 			class="text_input"
+			min="1950"
+			max="<?php echo intval(date("Y") + 1); ?>"
 			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "year" ); ?>"
 			value="">
 		</div>
