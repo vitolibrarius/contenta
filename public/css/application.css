@@ -309,7 +309,7 @@ a.btn:hover {
 	height:     100%;
 	width:      100%;
 	background: rgba( 255, 255, 255, .8 )
-				url("../img/ajax-loader.gif")
+				url("../select2-spinner.gif")
 				50% 50%
 				no-repeat;
 }
@@ -387,6 +387,7 @@ a.btn:hover {
 form {
 	display: inline-block;
 	margin-bottom: 20px;
+	margin-left: 10px;
 }
 
 fieldset {
@@ -465,6 +466,7 @@ textarea {
 
 label.checkbox,
 label.radio {
+    vertical-align: middle;
 	display:inline-block;
     width:19px;
     height:19px;
@@ -473,6 +475,7 @@ label.radio {
 label + input[type="checkbox"],
 label + input[type="radio"] {
     display:block;
+    vertical-align: middle;
 }
 
 input[type="button"],
@@ -740,8 +743,9 @@ span.icon.favorite:before		{ content:"\2665"; color: red; font-size: 32px; }
 .card .feature .details {
 	display: inline;
 	position:absolute;
-	top:60px;
+	top:30px;
 	right: 0;
+	width:100px;
 }
 
 .card .feature .details span {
