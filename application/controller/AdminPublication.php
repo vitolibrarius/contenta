@@ -39,6 +39,9 @@ class AdminPublication extends Admin
 	function index()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->addStylesheet("select2.min.css");
+			$this->view->addScript("select2.min.js");
+
 			$model = Model::Named('Publication');
 			$this->view->model = $model;
 			$this->view->render( '/publication/index');
@@ -47,15 +50,54 @@ class AdminPublication extends Admin
 
 	function searchPublication()
 	{
-		\Logger::LogError( "searchPublication" );
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Publication');
-			$this->view->model = $model;
-			$this->view->listArray = SQL::Select( $model )
-				->where( Qualifier::LikeQualifier( Publication::name, $_GET['name'] . '%' ))
-				->orderBy( $model->sortOrder() )
-				->fetchAll();
+			$qualifiers = array();
+			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
+				$qualifiers[] = Qualifier::LikeQualifier( Publication::name, '%' . $_GET['name'] . '%' );
+			}
+			if ( isset($_GET['issue']) && strlen($_GET['issue']) > 0) {
+				$qualifiers[] = Qualifier::Equals( Publication::issue_num, $_GET['issue'] );
+			}
+			if ( isset($_GET['year']) && strlen($_GET['year']) == 4 ) {
+				$start = strtotime("01-01-" . $_GET['year'] . " 00:00");
+				$end = strtotime("31-12-" . $_GET['year'] . " 23:59");
+				$qualifiers[] = Qualifier::Between( Publication::pub_date, $start, $end );
+			}
+			if ( isset($_GET['media']) && $_GET['media'] === 'true') {
+				$qualifiers[] = Qualifier::GreaterThan( Publication::media_count, 0 );
+			}
+			if ( isset($_GET['character_id']) && is_array($_GET['character_id']) && count($_GET['character_id']) > 0 ) {
+				$pub_idArray = Model::Named("Publication_Character")->publicationIdForCharacterIdArray($_GET['character_id']);
+				if ( is_array($pub_idArray) && count($pub_idArray) > 0 ) {
+					$qualifiers[] = Qualifier::IN( Publication::id, $pub_idArray );
+				}
+				else {
+					$qualifiers[] = Qualifier::Equals( Publication::id, 0 );
+				}
+			}
+			if ( isset($_GET['series_name']) && strlen($_GET['series_name']) > 0) {
+				$select = \SQL::Select( Model::Named('Series'), array(Series::id))
+					->where(Qualifier::LikeQualifier( Series::search_name, '%' . $_GET['series_name'] . '%' ));
+				$series_idArray = array_map(function($stdClass) {return $stdClass->{Series::id}; },
+					$select->fetchAll());
 
+				if ( is_array($series_idArray) && count($series_idArray) > 0 ) {
+					$qualifiers[] = Qualifier::IN( Publication::series_id, $series_idArray );
+				}
+				else {
+					$qualifiers[] = Qualifier::Equals( Publication::id, 0 );
+				}
+			}
+
+			$select = SQL::Select($model);
+			if ( count($qualifiers) > 0 ) {
+				$select->where( Qualifier::AndQualifier( $qualifiers ));
+			}
+			$select->orderBy( $model->sortOrder() );
+
+			$this->view->model = $model;
+			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminPublication/editPublication";
 			$this->view->deleteAction = "/AdminPublication/deletePublication";
 			$this->view->render( '/publication/publicationCards', true);

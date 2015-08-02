@@ -61,7 +61,7 @@ class AdminSeries extends Admin
 				$qualifiers[] = Qualifier::LikeQualifier( Series::search_name, '%' . $_GET['name'] . '%' );
 			}
 			if ( isset($_GET['year']) && strlen($_GET['year']) == 4 ) {
-				$qualifiers[] = Qualifier::GreaterThanEqual( Series::start_year, $_GET['year'] );
+				$qualifiers[] = Qualifier::Equals( Series::start_year, $_GET['year'] );
 			}
 			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
 				$qualifiers[] = Qualifier::Equals( Series::publisher_id, $_GET['publisher_id'] );

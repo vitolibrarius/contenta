@@ -8,6 +8,7 @@ use \Model as Model;
 use \Localized as Localized;
 use \Logger as Logger;
 
+use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
 class Publication_Character extends Model
@@ -48,6 +49,20 @@ class Publication_Character extends Model
 	public function allForCharacter($obj)
 	{
 		return $this->allObjectsForFK(Publication_Character::character_id, $obj);
+	}
+
+	public function publicationIdForCharacterIdArray( array $obj = null)
+	{
+		if ( is_array($obj) && count($obj) > 0 ) {
+			$select = SQL::Select($this, array( Publication_Character::publication_id ));
+			$select->where( Qualifier::IN( Publication_Character::character_id, $obj ));
+			$select->groupBy( array( Publication_Character::publication_id ) );
+			$select->having( array("count(" . Publication_Character::publication_id. ") = " . count($obj)) );
+
+			$publication_idArray = $select->fetchAll();
+			return array_map(function($stdClass) {return $stdClass->{Publication_Character::publication_id}; }, $publication_idArray);
+		}
+		return array();
 	}
 
 	public function countForCharacter( model\CharacterDBO $obj = null)

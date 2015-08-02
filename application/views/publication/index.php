@@ -15,38 +15,6 @@
 	});
 </script>
 
-<script language="javascript" type="text/javascript">
-	$(function () {
-		$('#searchForm').submit(function(e){
-			e.preventDefault();
-			$.ajax({
-				type: "GET",
-				url: "<?php echo Config::Web('/AdminPublication/searchPublication'); ?>",
-				data: {name: $('input#searchField').val()},
-				dataType: "text",
-				success: function(msg){
-					var ajaxDisplay = document.getElementById('ajaxDiv');
-					ajaxDisplay.innerHTML = msg;
-				}
-			});
-		});
-		$("#searchField").keyup(function () {
-			delay( function(){
-				$.ajax({
-					type: "GET",
-					url: "<?php echo Config::Web('/AdminPublication/searchPublication'); ?>",
-					data: {name: $('input#searchField').val()},
-					dataType: "text",
-					success: function(msg){
-						var ajaxDisplay = document.getElementById('ajaxDiv');
-						ajaxDisplay.innerHTML = msg;
-					}
-				});
-			}, 1000 );
-		});
-	});
-</script>
-
 <div class="paging">
 	<ul>
 		<li><a href="<?php echo Config::Web('/AdminPublishers/index'); ?>">Publishers</a></li>
@@ -56,13 +24,113 @@
 	</ul>
 </div>
 
-<form id='searchForm' name='searchForm' style="display: block; ">
-	<input type="text" name="searchField" id="searchField"
-		placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
-		value="">
+<form id='searchForm' name='searchForm'>
+	<div>
+		<div style="display: inline-block;">
+		<input type="text" name="searchSeries" id="searchSeries"
+			class="text_input"
+			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "series_id" ); ?>"
+			value="">
+		</div>
+		<div style="display: inline-block; min-width: 300px;">
+		<select name="searchCharacter" id="searchCharacter"
+				class="text_input">
+		</select>
+		</div>
+		<div style="display: inline-block;">
+		<input type="text" name="searchName" id="searchName"
+			class="text_input"
+			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
+			value="">
+		</div>
+		<div style="display: inline-block;">
+		<input type="number" name="searchIssue" id="searchIssue"
+			min="0"
+			class="text_input"
+			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "issue_num" ); ?>"
+			value="">
+		</input>
+		</div>
+		<div style="display: inline-block;">
+		<input type="number" name="searchYear" id="searchYear"
+			min="1950"
+			max="<?php echo intval(date("Y") + 1); ?>"
+			class="text_input"
+			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "pub_date" ); ?>"
+			value="">
+		</input>
+		</div>
+		<div style="display: inline-block; width: 110px; background-color: white; padding:4px;">
+		<label class="checkbox" for="searchMedia" >
+			<input type="checkbox"  name="searchMedia" id="searchMedia"
+				class="text_input"
+				value="1"
+				checked>
+			</input>
+			Has Media
+			</label>
+		</div>
+	</div>
 </form>
 
 <div id='ajaxDiv'></div>
+
+<script type="text/javascript">
+$(document).ready(function($) {
+	$("#searchCharacter").select2({
+		multiple: true,
+		width: '100%',
+		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'characters' ); ?>",
+		allowClear: true,
+		ajax: {
+			url: "<?php echo Config::Web('/Api/characters'); ?>",
+			dataType: 'json',
+			delay: 250,
+			data: function (params) {
+				return {
+					q: params.term, // search term
+					page: params.page
+				};
+			},
+			processResults: function (data) {
+				return {
+					results: $.map(data, function(obj) {
+						return { id: obj.id, text: obj.name };
+					})
+				};
+			},
+			cache: true
+		}
+	}).on("change", function(e) {
+		delay( refresh(), 250 );
+	});
+
+	$(".text_input").on('keyup change', function () {
+		delay( refresh(), 250 );
+	});
+
+	function refresh() {
+		$.ajax({
+			type: "GET",
+			url: "<?php echo Config::Web('/AdminPublication/searchPublication'); ?>",
+			data: {
+				series_name: $('#searchSeries').val(),
+				character_id: $('#searchCharacter').val(),
+				name: $('input#searchName').val(),
+				issue: $('input#searchIssue').val(),
+				media: $('input#searchMedia').is(':checked'),
+				year:  $('input#searchYear').val()
+			},
+			dataType: "text",
+			success: function(msg){
+				var ajaxDisplay = document.getElementById('ajaxDiv');
+				ajaxDisplay.innerHTML = msg;
+			}
+		});
+	};
+	refresh();
+});
+</script>
 
 <script type="text/javascript">
 $(document).ready(function($) {

@@ -330,6 +330,18 @@
         "publication": {
             "name": {
                 "search": "Issue Name"
+            },
+            "series_id": {
+                "search": "Series Name"
+            },
+            "pub_date": {
+                "search": "Published Year"
+            },
+            "characters": {
+                "search": "Characters"
+            },
+            "issue_num": {
+                "search": "Issue Number"
             }
         },
         "job": {
