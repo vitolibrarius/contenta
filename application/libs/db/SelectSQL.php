@@ -16,6 +16,7 @@ class SelectSQL extends SQL
 	public $columns;
 	public $order;
 	public $group;
+	public $having;
 	public $limit = 50;
 
     public function __construct(Model $model, array $columns = null, Qualifier $qualifier = null)
@@ -68,6 +69,12 @@ class SelectSQL extends SQL
 		return $this;
 	}
 
+	public function having(array $having = null)
+	{
+		$this->having = $having;
+		return $this;
+	}
+
 	public function sqlParameters()
 	{
 		return (isset($this->qualifier) ? $this->qualifier->sqlParameters() : null);
@@ -90,6 +97,11 @@ class SelectSQL extends SQL
 		if ( isset($this->group) ) {
 			$components[] = SQL::SQL_GROUP;
 			$components[] = implode(",", $this->group);
+		}
+
+		if ( isset($this->having) ) {
+			$components[] = SQL::SQL_HAVING;
+			$components[] = implode(",", $this->having);
 		}
 
 		if ( isset($this->order) ) {
