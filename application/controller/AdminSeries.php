@@ -58,7 +58,7 @@ class AdminSeries extends Admin
 			$model = Model::Named('Series');
 			$qualifiers = array();
 			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
-				$qualifiers[] = Qualifier::LikeQualifier( Series::search_name, '%' . $_GET['name'] . '%' );
+				$qualifiers[] = Qualifier::Like( Series::search_name, normalizeSearchString($_GET['name']));
 			}
 			if ( isset($_GET['year']) && strlen($_GET['year']) == 4 ) {
 				$qualifiers[] = Qualifier::Equals( Series::start_year, $_GET['year'] );

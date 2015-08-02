@@ -54,7 +54,7 @@ class AdminPublication extends Admin
 			$model = Model::Named('Publication');
 			$qualifiers = array();
 			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
-				$qualifiers[] = Qualifier::LikeQualifier( Publication::name, '%' . $_GET['name'] . '%' );
+				$qualifiers[] = Qualifier::Like( Publication::name, $_GET['name']);
 			}
 			if ( isset($_GET['issue']) && strlen($_GET['issue']) > 0) {
 				$qualifiers[] = Qualifier::Equals( Publication::issue_num, $_GET['issue'] );
@@ -78,7 +78,7 @@ class AdminPublication extends Admin
 			}
 			if ( isset($_GET['series_name']) && strlen($_GET['series_name']) > 0) {
 				$select = \SQL::Select( Model::Named('Series'), array(Series::id))
-					->where(Qualifier::LikeQualifier( Series::search_name, '%' . $_GET['series_name'] . '%' ));
+					->where( Qualifier::Like( Series::search_name, normalizeSearchString($_GET['series_name'])) );
 				$series_idArray = array_map(function($stdClass) {return $stdClass->{Series::id}; },
 					$select->fetchAll());
 
@@ -89,6 +89,8 @@ class AdminPublication extends Admin
 					$qualifiers[] = Qualifier::Equals( Publication::id, 0 );
 				}
 			}
+
+						Session::addPositiveFeedback("select ".$select);
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {

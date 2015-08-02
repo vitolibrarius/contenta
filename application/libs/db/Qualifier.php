@@ -3,6 +3,8 @@
 namespace db;
 
 use \Database as Database;
+use \PDO as PDO;
+
 use \Localized as Localized;
 use \Logger as Logger;
 use \Model as Model;
@@ -126,13 +128,13 @@ abstract class Qualifier extends SQL
 		return new NotQualifier( $qual );
 	}
 
-	public static function LikeQualifier( $key = null, $value = null, $prefix = '')
+	public static function Like( $key = null, $value = null, $like = SQL::SQL_LIKE_BOTH, $prefix = '')
 	{
 		if ( is_null($key) || is_null($value) ) {
 			throw new \Exception( "Must specify attribute key/value" );
 		}
 
-		return new BasicQualifier( $key, Qualifier::LIKE_Q, $value, $prefix );
+		return new LikeQualifier( $key, $value, $like, $prefix );
 	}
 
 	public static function Equals( $key = null, $value = null, $prefix = '')
@@ -388,5 +390,22 @@ class JoinQualifier extends Qualifier
 	public function sqlStatement()
 	{
 		return $this->att_a_prefix . "." . $this->att_a . " = " . $this->att_b_prefix . "." . $this->att_b;
+	}
+}
+
+class LikeQualifier extends BasicQualifier
+{
+	public $likeFormat;
+
+	public function __construct( $key = null, $v = null, $like = SQL::SQL_LIKE_BOT, $prefix = '')
+	{
+		parent::__construct($key, Qualifier::LIKE_Q, $v, $prefix);
+		$this->likeFormat = $like;
+	}
+
+	public function sqlParameters()
+	{
+		$value = sprintf($this->likeFormat, $this->value);
+		return array( $this->prefixedAttribute( $this->attribute ) => $value );
 	}
 }

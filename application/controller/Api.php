@@ -39,7 +39,7 @@ class Api extends Controller
 		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
 			$qualifiers = array();
 			if ( isset($_GET['q']) && strlen($_GET['q']) > 0) {
-				$qualifiers[] = Qualifier::LikeQualifier( Publisher::name, '%' . $_GET['q'] . '%' );
+				$qualifiers[] = Qualifier::Like( Publisher::name, $_GET['q'] );
 			}
 
 			$select = SQL::Select( Model::Named("Publisher"), array( Publisher::id, Publisher::name ));
@@ -58,7 +58,7 @@ class Api extends Controller
 		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
 			$qualifiers = array();
 			if ( isset($_GET['q']) && strlen($_GET['q']) > 0) {
-				$qualifiers[] = Qualifier::LikeQualifier( Character::name, '%' . $_GET['q'] . '%' );
+				$qualifiers[] = Qualifier::Like( Character::name, $_GET['q']);
 			}
 
 			$select = SQL::Select( Model::Named("Character"), array( Character::id, Character::name ));

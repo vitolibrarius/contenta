@@ -26,6 +26,10 @@ abstract class SQL
 	const SQL_JOIN		= 'JOIN';
 	const SQL_JOIN_LEFT	= 'LEFT JOIN';
 
+	const SQL_LIKE_BEFORE =	'%%%s';
+	const SQL_LIKE_AFTER =	'%s%%';
+	const SQL_LIKE_BOTH =	'%%%s%%';
+
 	const SQL_HAVING	= 'HAVING';
 	const SQL_GROUP		= 'GROUP BY';
 	const SQL_ORDER		= 'ORDER BY';

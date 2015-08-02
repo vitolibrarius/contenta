@@ -137,7 +137,7 @@ class Series extends Model
 
 	public function seriesLike($partialName) {
 		return \SQL::Select( $this )
-			->where( Qualifier::LikeQualifier( Series::search_name, normalizeSearchString($partialName) . '%' ))
+			->where( Qualifier::Like( Series::search_name, normalizeSearchString($partialName), SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
 			->limit( 50 )
 			->fetchAll();

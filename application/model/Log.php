@@ -60,22 +60,22 @@ class Log extends Model
 
 		$likes = array();
 		if ( isset($trace) && strlen($trace) > 0 ) {
-			$likes[] = Qualifier::LikeQualifier( Log::trace, $trace . '%' );
+			$likes[] = Qualifier::Like( Log::trace, $trace, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($trace_id) && strlen($trace_id) > 0 ) {
-			$likes[] = Qualifier::LikeQualifier( Log::trace_id, $trace_id . '%' );
+			$likes[] = Qualifier::Like( Log::trace_id, $trace_id, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($context) && strlen($context) > 0 ) {
-			$likes[] = Qualifier::LikeQualifier( Log::context, $context . '%' );
+			$likes[] = Qualifier::Like( Log::context, $context, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($context_id) && strlen($context_id) > 0 ) {
-			$likes[] = Qualifier::LikeQualifier( Log::context_id, $context_id . '%' );
+			$likes[] = Qualifier::Like( Log::context_id, $context_id, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($level) && strlen($level) > 0 && $level != "any") {
-			$likes[] = Qualifier::LikeQualifier( Log::level, $level . '%' );
+			$likes[] = Qualifier::Like( Log::level, $level, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($message) && strlen($message) > 0 ) {
-			$likes[] = Qualifier::LikeQualifier( Log::message, $message . '%' );
+			$likes[] = Qualifier::Like( Log::message, $message, SQL::SQL_LIKE_AFTER );
 		}
 
 		if ( count($likes) > 0 ) {

@@ -55,7 +55,7 @@ class AdminCharacters extends Admin
 			$model = Model::Named('Character');
 			$qualifiers = array();
 			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
-				$qualifiers[] = Qualifier::LikeQualifier( Character::name, '%' . $_GET['name'] . '%' );
+				$qualifiers[] = Qualifier::Like( Character::name, '%' . $_GET['name'] . '%' );
 			}
 			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
 				$qualifiers[] = Qualifier::Equals( Character::publisher_id, $_GET['publisher_id'] );
