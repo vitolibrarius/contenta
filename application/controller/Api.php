@@ -15,6 +15,7 @@ use db\Qualifier as Qualifier;
 
 use model\Users as Users;
 use model\Publisher as Publisher;
+use model\Character as Character;
 
 /**
  * Class Admin
@@ -49,6 +50,25 @@ class Api extends Controller
 			$publishers = $select->limit(-1)->fetchAll();
 
 			$this->view->renderJson( $publishers );
+		}
+	}
+
+	function characters( $userHash = null)
+	{
+		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
+			$qualifiers = array();
+			if ( isset($_GET['q']) && strlen($_GET['q']) > 0) {
+				$qualifiers[] = Qualifier::LikeQualifier( Character::name, '%' . $_GET['q'] . '%' );
+			}
+
+			$select = SQL::Select( Model::Named("Character"), array( Character::id, Character::name ));
+			if ( count($qualifiers) > 0 ) {
+				$select->where( Qualifier::AndQualifier( $qualifiers ));
+			}
+			$select->orderBy( array(Character::name) );
+			$characters = $select->limit(-1)->fetchAll();
+
+			$this->view->renderJson( $characters );
 		}
 	}
 
