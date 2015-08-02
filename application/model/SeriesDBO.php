@@ -187,6 +187,13 @@ class SeriesDBO extends DataObject
 								. ") where id = :myid;",
 							array( ":myid" => $this->id)
 						);
+						\SQL::raw(
+							"update series set pub_active = ( "
+								. "select (((julianday('now') - julianday(max(pub_date), 'unixepoch'))/365) < 1)"
+								. "from publication where publication.series_id = series.id"
+								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
 					}
 					break;
 
