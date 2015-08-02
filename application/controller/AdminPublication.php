@@ -90,8 +90,6 @@ class AdminPublication extends Admin
 				}
 			}
 
-						Session::addPositiveFeedback("select ".$select);
-
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
