@@ -6,9 +6,8 @@
 	<?php
 		$card = new html\Card();
 		$card->setDetailKeys( array(
-			model\Character::publisher_id => "publisherName",
+			model\Character::realname => model\Character::realname,
 			model\Character::gender => model\Character::gender,
-			model\Character::realname => model\Character::realname
 			)
 		);
 		foreach($this->listArray as $key => $value) {

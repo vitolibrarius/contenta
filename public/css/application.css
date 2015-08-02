@@ -751,12 +751,24 @@ span.icon.favorite:before		{ content:"\2665"; color: red; font-size: 32px; }
 .card .feature .details span {
 	display: block;
 	word-wrap:break-word;
+	text-align: center;
 	font-size: 0.8em;
 }
 
-.card .feature .details span.year {
-	font-size: 18px;
+.card .feature .details span.realname,
+.card .feature .details span.start_year,
+.card .feature .details span.series_id {
+	font-weight: bold;
+	font-size: 1em;
 }
+
+.card .feature .details span.gender,
+.card .feature .details span.pub_count,
+.card .feature .details span.issue_num {
+	font-size: 1.5em;
+	color: rgb(52, 36, 155);
+}
+
 
 .card .caption {
 	display: block;
