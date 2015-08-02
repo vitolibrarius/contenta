@@ -117,6 +117,20 @@ abstract class Processor
 		return $this->metadata()->getMeta($key);
 	}
 
+	public function setMetaBoolean( $path, $newValue = false )
+	{
+		$oldValue = $this->getMeta( $path );
+		if ( $oldValue == null || $oldValue == false ) {
+			$this->setMeta( $path, $newValue );
+		}
+	}
+
+	public function getMetaBoolean( $path, $default = false)
+	{
+		$oldValue = $this->getMeta( $path );
+		return ( is_null($oldValue) ? boolval($default) : $oldValue );
+	}
+
 	public function daemonizeProcess()
 	{
 		if ( Session::isUserLoggedIn() ) {
