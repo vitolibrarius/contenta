@@ -19,6 +19,7 @@
 	<ul>
 		<li><a href="<?php echo Config::Web('/AdminPublishers/index'); ?>">Publishers</a></li>
 		<li><a href="<?php echo Config::Web('/AdminSeries/index'); ?>">Series</a></li>
+		<li><a href="<?php echo Config::Web('/AdminStoryArcs/index'); ?>">Story Arcs</a></li>
 		<li><a href="<?php echo Config::Web('/AdminPublication/index'); ?>">Publications</a></li>
 		<li><a href="<?php echo Config::Web( '/AdminCharacters/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a></li>
 	</ul>

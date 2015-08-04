@@ -54,6 +54,10 @@
 				<p>All Characters</p>
 			</div>
 			<div class="admin_card_item">
+				<a href="<?php echo Config::Web('/AdminStoryArcs/index'); ?>">Story Arcs</a>
+				<p>All Story Arcs</p>
+			</div>
+			<div class="admin_card_item">
 				<a href="<?php echo Config::Web('/AdminSeries/index'); ?>">Series</a>
 				<p>Flagged series</p>
 			</div>

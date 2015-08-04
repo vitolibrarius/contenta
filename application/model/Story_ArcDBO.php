@@ -41,10 +41,6 @@ class Story_ArcDBO extends DataObject
 		return (isset($this->pub_wanted) && $this->pub_wanted == Model::TERTIARY_TRUE);
 	}
 
-	public function displayDescription() {
-		return $this->shortDescription();
-	}
-
 	public function publisher() {
 		if ( isset($this->publisher_id) ) {
 			$model = Model::Named('Publisher');
@@ -138,6 +134,14 @@ class Story_ArcDBO extends DataObject
 						\SQL::raw(
 							"update story_arc set pub_cycle = ( "
 								. "select (julianday(max(publication.pub_date), 'unixepoch') - julianday(min(publication.pub_date), 'unixepoch')) / count(*) "
+								. "from story_arc_publication join publication on story_arc_publication.publication_id = publication.id "
+								. "where story_arc_publication.story_arc_id = story_arc.id"
+								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+						\SQL::raw(
+							"update story_arc set pub_active = ( "
+								. "select (((julianday('now') - julianday(max(pub_date), 'unixepoch'))/365) < 1) "
 								. "from story_arc_publication join publication on story_arc_publication.publication_id = publication.id "
 								. "where story_arc_publication.story_arc_id = story_arc.id"
 								. ") where id = :myid;",
