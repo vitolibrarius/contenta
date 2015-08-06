@@ -5,10 +5,10 @@
 <?php else: ?>
 	<?php
 		$card = new html\Card();
-// 		$card->setDetailKeys( array(
-// 			model\Character::gender => model\Character::gender,
-// 			)
-// 		);
+		$card->setDetailKeys( array(
+			model\Series::pub_count => "availableSummary",
+			)
+		);
 		foreach($this->listArray as $key => $value) {
 			if ( isset($this->editAction) ) {
 				$card->setEditPath( $this->editAction . '/' . $value->id );

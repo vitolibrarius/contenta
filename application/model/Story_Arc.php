@@ -156,5 +156,53 @@ class Story_Arc extends Model
 
 		return false;
 	}
+
+	/* EditableModelInterface */
+	function validate_name($object = null, $value)
+	{
+		if (empty($value))
+		{
+			return Localized::ModelValidation($this->tableName(), Story_Arc::name, "FIELD_EMPTY");
+		}
+		else if (strlen($value) > 256 )
+		{
+			return Localized::ModelValidation($this->tableName(), Story_Arc::name, "FIELD_TOO_LONG" );
+		}
+		return null;
+	}
+
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Story_Arc::name
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
+
+	public function attributesFor($object = null, $type = null ) {
+		return array(
+			Story_Arc::name => Model::TEXT_TYPE,
+			Story_Arc::desc => Model::TEXTAREA_TYPE,
+			Story_Arc::publisher_id => Model::TO_ONE_TYPE
+		);
+	}
+
+	public function attributeOptions($object = null, $type = null, $attr) {
+		switch ($attr) {
+			case Story_Arc::publisher_id:
+				$model = Model::Named('Publisher');
+				return $model->allObjects(0);
+			default:
+				return null;
+		}
+		return null;
+	}
+
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)
+	{
+		return null;
+	}
 }
 ?>

@@ -23,6 +23,8 @@ use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
 use model\Story_Arc as Story_Arc;
+use model\Story_Arc_Character as Story_Arc_Character;
+use model\Series as Series;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
@@ -53,9 +55,33 @@ class AdminStoryArcs extends Admin
 			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
 				$qualifiers[] = Qualifier::Like( Story_Arc::name, $_GET['name'] );
 			}
-// 			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
-// 				$qualifiers[] = Qualifier::Equals( Character::publisher_id, $_GET['publisher_id'] );
-// 			}
+			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
+				$qualifiers[] = Qualifier::Equals( Story_Arc::publisher_id, $_GET['publisher_id'] );
+			}
+			if ( isset($_GET['series_name']) && strlen($_GET['series_name']) > 0) {
+				$select = \SQL::Select( Model::Named('Series'), array(Series::id))
+					->where( Qualifier::Like( Series::search_name, normalizeSearchString($_GET['series_name'])) );
+				$series_idArray = array_map(function($stdClass) {return $stdClass->{Series::id}; },
+					$select->fetchAll());
+
+				$storyArcsIds = Model::Named("Story_Arc_Series")->storyArcIdForAnySeriesIdArray( $series_idArray );
+
+				if ( is_array($storyArcsIds) && count($storyArcsIds) > 0 ) {
+					$qualifiers[] = Qualifier::IN( Story_Arc::id, $storyArcsIds );
+				}
+				else {
+					$qualifiers[] = Qualifier::Equals( Story_Arc::id, 0 );
+				}
+			}
+			if ( isset($_GET['character_id']) && is_array($_GET['character_id']) && count($_GET['character_id']) > 0 ) {
+				$idArray = Model::Named("Story_Arc_Character")->storyArcIdForCharacterIdArray($_GET['character_id']);
+				if ( is_array($idArray) && count($idArray) > 0 ) {
+					$qualifiers[] = Qualifier::IN( Story_Arc::id, $idArray );
+				}
+				else {
+					$qualifiers[] = Qualifier::Equals( Story_Arc::id, 0 );
+				}
+			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
@@ -180,7 +206,8 @@ class AdminStoryArcs extends Admin
 
 					$importer->enqueue_story_arc( array( "xid" => $object->xid), true, true );
 					$importer->daemonizeProcess();
-					$this->editStoryArc($oid);
+					sleep(2);
+					header('location: ' . Config::Web('/AdminStoryArcs/editStoryArc/' . $oid));
 				}
 				else {
 					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) );

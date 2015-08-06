@@ -21,7 +21,7 @@
 		<li><a href="<?php echo Config::Web('/AdminSeries/index'); ?>">Series</a></li>
 		<li><a href="<?php echo Config::Web('/AdminCharacters/index'); ?>">Characters</a></li>
 		<li><a href="<?php echo Config::Web('/AdminPublication/index'); ?>">Publications</a></li>
-		<li><a href="<?php echo Config::Web( '/AdminCharacters/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a></li>
+		<li><a href="<?php echo Config::Web( '/AdminStoryArcs/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a></li>
 	</ul>
 </div>
 
@@ -31,6 +31,17 @@
 		<select name="searchPublisher" id="searchPublisher"
 				class="text_input">
 			<option></option>
+		</select>
+		</div>
+		<div style="display: inline-block;">
+		<input type="text" name="searchSeries" id="searchSeries"
+			class="text_input"
+			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "series_id" ); ?>"
+			value="">
+		</div>
+		<div style="display: inline-block; min-width: 300px;">
+		<select name="searchCharacter" id="searchCharacter"
+				class="text_input">
 		</select>
 		</div>
 		<div style="display: inline-block;">
@@ -72,6 +83,34 @@ $(document).ready(function($) {
 		delay( refresh(), 250 );
 	});
 
+	$("#searchCharacter").select2({
+		multiple: true,
+		width: '100%',
+		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'characters' ); ?>",
+		allowClear: true,
+		ajax: {
+			url: "<?php echo Config::Web('/Api/characters'); ?>",
+			dataType: 'json',
+			delay: 250,
+			data: function (params) {
+				return {
+					q: params.term, // search term
+					page: params.page
+				};
+			},
+			processResults: function (data) {
+				return {
+					results: $.map(data, function(obj) {
+						return { id: obj.id, text: obj.name };
+					})
+				};
+			},
+			cache: true
+		}
+	}).on("change", function(e) {
+		delay( refresh(), 250 );
+	});
+
 	$(".text_input").on('keyup change', function () {
 		delay( refresh(), 250 );
 	});
@@ -81,6 +120,8 @@ $(document).ready(function($) {
 			type: "GET",
 			url: "<?php echo Config::Web('/AdminStoryArcs/searchStoryArcs'); ?>",
 			data: {
+				series_name: $('#searchSeries').val(),
+				character_id: $('#searchCharacter').val(),
 				publisher_id: $('#searchPublisher').val(),
 				name: $('input#searchName').val()
 			},

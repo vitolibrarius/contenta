@@ -8,6 +8,7 @@ use \Model as Model;
 use \Localized as Localized;
 use \Logger as Logger;
 
+use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
 class Story_Arc_Series extends Model
@@ -38,6 +39,20 @@ class Story_Arc_Series extends Model
 		}
 
 		return false;
+	}
+
+	public function storyArcIdForAnySeriesIdArray( array $obj = null)
+	{
+		if ( is_array($obj) && count($obj) > 0 ) {
+			$select = SQL::Select($this, array( Story_Arc_Series::story_arc_id ));
+			$select->where( Qualifier::IN( Story_Arc_Series::series_id, $obj ));
+// 			$select->groupBy( array( Story_Arc_Series::story_arc_id ) );
+// 			$select->having( array("count(" . Story_Arc_Series::story_arc_id. ") = " . count($obj)) );
+
+			$idArray = $select->fetchAll();
+			return array_map(function($stdClass) {return $stdClass->{Story_Arc_Series::story_arc_id}; }, $idArray);
+		}
+		return array();
 	}
 
 	public function allForStory_Arc(model\Story_ArcDBO $obj)

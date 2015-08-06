@@ -421,6 +421,43 @@
             "created": {
                 "label": "Date Applied"
             }
+        },
+        "story_arc": {
+            "name": {
+                "search": "Story Arc Name",
+                "label": "Name"
+            },
+            "publisher_id": {
+                "search": "Select Publisher",
+                "label": "Publisher"
+            },
+            "series_id": {
+                "search": "Series Name"
+            },
+            "characters": {
+                "search": "Characters"
+            },
+            "FormLegend": {
+                "label": "Story Arc Details"
+            },
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "xupdated": {
+                "label": "Last Updated"
+            },
+            "mediaPath": {
+                "label": "Media Path"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
+            },
+            "desc": {
+                "label": "Description"
+            }
         }
     },
     "Logs": {
@@ -546,6 +583,13 @@
         "Running Processes": "Running Processes",
         "JobsRunningLink": {
             "name": "Currently Running"
+        }
+    },
+    "AdminStoryArcs": {
+        "title": "Story Arc Administration",
+        "index": {
+            "DeleteDescription": "This will permanently delete this story arc ",
+            "DeleteConfirmation": "Are you sure you want to continue?"
         }
     }
 }

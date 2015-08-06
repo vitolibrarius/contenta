@@ -41,6 +41,13 @@ class Story_ArcDBO extends DataObject
 		return (isset($this->pub_wanted) && $this->pub_wanted == Model::TERTIARY_TRUE);
 	}
 
+	public function availableSummary() {
+		return
+			(isset($this->pub_available) ? $this->pub_available : 0 )
+			. " / "
+			. (isset($this->pub_count) ? $this->pub_count : count($this->allPublications()) );
+	}
+
 	public function publisher() {
 		if ( isset($this->publisher_id) ) {
 			$model = Model::Named('Publisher');
