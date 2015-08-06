@@ -7,7 +7,7 @@ use \ClassNotFoundException as ClassNotFoundException;
 use \DataObject as DataObject;
 use \Config as Config;
 
-use html\Generator as H;
+use html\Element as H;
 
 class Card
 {
@@ -170,76 +170,74 @@ class Card
 
 	public function render( DataObject $record = null )
 	{
-		$this->record = $record;
-		H::figure( array( "class" => "card"), function() {
-			H::div( array( "class" => "feature" ), function() {
-				H::div( array( "class" => "feature_top" ), function() {
-					H::div( array( "class" => "feature_top_left" ), function() {
-						H::a( array("href" => $this->selectPath()), function() {
-							H::img( array( "src" => $this->thumbnailPath($this->record), "class" => "thumbnail recordType" ));
-						});
-					});
-					H::div( array( "class" => "feature_top_right" ), function() {
-						H::div( array( "class" => "feature_top_right_top" ), function() {
-							H::img( array( "src" => $this->publisherIconPath($this->record), "class" => "icon publisher" ));
-						});
+		$card = H::figure( array( "class" => "card"),
+			H::div( array( "class" => "feature" ),
+				H::div( array( "class" => "feature_top" ),
+					H::div( array( "class" => "feature_top_left" ),
+						H::a( array("href" => $this->selectPath()),
+							H::img( array( "src" => $this->thumbnailPath($record), "class" => "thumbnail recordType" ))
+						)
+					),
+					H::div( array( "class" => "feature_top_right" ),
+						H::div( array( "class" => "feature_top_right_top" ),
+							H::img( array( "src" => $this->publisherIconPath($record), "class" => "icon publisher" ))
+						),
 
-						H::div( array( "class" => "feature_top_right_middle" ), function() {
-							H::span( array( "class" => "details" ), function() {
+						H::div( array( "class" => "feature_top_right_middle" ),
+							H::span( array( "class" => "details" ), function() use($record) {
 								foreach( $this->detailKeys() as $key => $keypath ) {
-									H::span( array( "class" => $key ), $this->record->{$keypath}() );
+									$c[] = H::span( array( "class" => $key ), $record->{$keypath}() );
 								}
-							});
-						});
+								return (isset($c) ? $c : null);
+							})
+						),
 
-						H::div( array( "class" => "feature_top_right_bottom" ), function() {
-							H::div( array( "class" => "actions" ), function() {
-
+						H::div( array( "class" => "feature_top_right_bottom" ),
+							H::div( array( "class" => "actions" ), function() use($record) {
 								$editPath = $this->editPath();
 								if (isset($editPath) && is_null($editPath) == false) {
-									H::a( array("href" => $editPath ), function() {
-										H::span( array( "class" => "icon edit"));
-									});
+									$c[] = H::a( array("href" => $editPath ),
+										H::span( array( "class" => "icon edit"))
+									);
 								}
 
 								$flagPath = $this->flagPath();
 								if (isset($flagPath) && is_null($flagPath) == false) {
-									H::a( array("href" => $flagPath ), function() {
-										H::span( array( "class" => "icon flag"));
-									});
+									$c[] = H::a( array("href" => $flagPath ),
+										H::span( array( "class" => "icon flag"))
+									);
 								}
 
 								$favoritePath = $this->favoritePath();
 								if (isset($favoritePath) && is_null($favoritePath) == false) {
-									H::a( array("href" => $favoritePath ), function() {
-										H::span( array( "class" => "icon favorite"));
-									});
+									$c[] = H::a( array("href" => $favoritePath ),
+										H::span( array( "class" => "icon favorite"))
+									);
 								}
 
 								$deletePath = $this->deletePath();
 								if (isset($deletePath) && is_null($deletePath) == false) {
-									H::a( array("href" => "#", "class" => "confirm", "action" => $deletePath), function() {
-										H::span( array( "class" => "icon recycle"));
-									});
+									$c[] = H::a( array("href" => "#", "class" => "confirm", "action" => $deletePath),
+										H::span( array( "class" => "icon recycle"))
+									);
 								}
-							});
-						});
-					});
-				});
-			});
+								return (isset($c) ? $c : null);
+							})
+						)
+					)
+				)
+			),
 
-			H::div( array("class" => "clear") );
+			H::div( array("class" => "clear") ),
 
-			H::figcaption( array("class" => "caption"), function() {
-				H::a( array("href" => $this->selectPath()), function() {
-					$keypath = $this->displayNameKey();
-					H::em( $this->record->{$keypath}() );
-				});
+			H::figcaption( array("class" => "caption"),
+				H::a( array("href" => $this->selectPath()),
+					H::em( $record->{$this->displayNameKey()}() )
+				),
 
-				$keypath = $this->displayDescriptionKey();
-				H::p( $this->record->{$keypath}() );
-			});
-		});
-		unset($this->record);
+				H::p( $record->{$this->displayDescriptionKey()}() )
+			)
+		);
+		return $card->render();
 	}
 }
