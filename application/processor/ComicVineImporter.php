@@ -104,6 +104,16 @@ class ComicVineImporter extends ContentMetadataImporter
 		return $issueNum;
 	}
 
+	public function convert_pub_count($pub_count = null)
+	{
+		if (isset($pub_count) && strlen($pub_count) > 0 && intval($pub_count) > 0) {
+			return intval($pub_count);
+		}
+
+		return null;
+	}
+
+
 	public function convert_start_year($start_year = null)
 	{
 		if (isset($start_year) && strlen($start_year) == 4) {
@@ -183,6 +193,7 @@ class ComicVineImporter extends ContentMetadataImporter
 			"name"				=> Story_Arc::name,
 			"deck" 				=> Story_Arc::desc,
 			"description" 		=> "description",
+			"count_of_issue_appearances" => Story_Arc::pub_count,
 			"site_detail_url"	=> Story_Arc::xurl,
 			"image/tiny_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
 			"image/icon_url" 	=> ComicVineImporter::META_IMPORT_LARGE_ICON
