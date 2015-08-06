@@ -436,33 +436,33 @@ reportData($media,  array(
 	)
 );
 
-\SQL::raw( "update publication set media_count = (select count(*) from media where media.publication_id = publication.id)" );
-\SQL::raw( "update series set pub_count = (select count(*) from publication where publication.series_id = series.id)" );
-\SQL::raw( "update series set pub_available = (select count(*) from publication where publication.series_id = series.id AND publication.media_count > 0)" );
-\SQL::raw( "update story_arc set pub_count = "
-	. "(select count(*) from story_arc_publication join publication on story_arc_publication.publication_id = publication.id"
-	. " where story_arc_publication.story_arc_id = story_arc.id)" );
-\SQL::raw( "update story_arc set pub_available = "
-	. "(select count(*) from story_arc_publication join publication on story_arc_publication.publication_id = publication.id"
-	. " where story_arc_publication.story_arc_id = story_arc.id AND publication.media_count > 0)" );
+// \SQL::raw( "update publication set media_count = (select count(*) from media where media.publication_id = publication.id)" );
+// \SQL::raw( "update series set pub_count = (select count(*) from publication where publication.series_id = series.id)" );
+// \SQL::raw( "update series set pub_available = (select count(*) from publication where publication.series_id = series.id AND publication.media_count > 0)" );
+// \SQL::raw( "update story_arc set pub_count = "
+// 	. "(select count(*) from story_arc_publication join publication on story_arc_publication.publication_id = publication.id"
+// 	. " where story_arc_publication.story_arc_id = story_arc.id)" );
+// \SQL::raw( "update story_arc set pub_available = "
+// 	. "(select count(*) from story_arc_publication join publication on story_arc_publication.publication_id = publication.id"
+// 	. " where story_arc_publication.story_arc_id = story_arc.id AND publication.media_count > 0)" );
 
-\SQL::raw( "update series set pub_cycle = (
-	select (julianday(max(pub_date), 'unixepoch') - julianday(min(pub_date), 'unixepoch')) / count(*)
-	from publication where publication.series_id = series.id)" );
+// \SQL::raw( "update series set pub_cycle = (
+// 	select (julianday(max(pub_date), 'unixepoch') - julianday(min(pub_date), 'unixepoch')) / count(*)
+// 	from publication where publication.series_id = series.id)" );
 
-\SQL::raw( "update story_arc set pub_cycle = (
-	select (julianday(max(publication.pub_date), 'unixepoch') - julianday(min(publication.pub_date), 'unixepoch')) / count(*)
-	from story_arc_publication join publication on story_arc_publication.publication_id = publication.id
-	where story_arc_publication.story_arc_id = story_arc.id)" );
+// \SQL::raw( "update story_arc set pub_cycle = (
+// 	select (julianday(max(publication.pub_date), 'unixepoch') - julianday(min(publication.pub_date), 'unixepoch')) / count(*)
+// 	from story_arc_publication join publication on story_arc_publication.publication_id = publication.id
+// 	where story_arc_publication.story_arc_id = story_arc.id)" );
 
-\SQL::raw( "update series set pub_active = (
-	select (((julianday('now') - julianday(max(pub_date), 'unixepoch'))/365) < 1)
-	from publication where publication.series_id = series.id)" );
+// \SQL::raw( "update series set pub_active = (
+// 	select (((julianday('now') - julianday(max(pub_date), 'unixepoch'))/365) < 1)
+// 	from publication where publication.series_id = series.id)" );
 
-\SQL::raw( "update story_arc set pub_active = (
-	select (((julianday('now') - julianday(max(pub_date), 'unixepoch'))/365) < 1)
-	from story_arc_publication join publication on story_arc_publication.publication_id = publication.id
-	where story_arc_publication.story_arc_id = story_arc.id)" );
+// \SQL::raw( "update story_arc set pub_active = (
+// 	select (((julianday('now') - julianday(max(pub_date), 'unixepoch'))/365) < 1)
+// 	from story_arc_publication join publication on story_arc_publication.publication_id = publication.id
+// 	where story_arc_publication.story_arc_id = story_arc.id)" );
 
 
 my_echo( );
