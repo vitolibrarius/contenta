@@ -7,7 +7,6 @@
 		$card = new html\Card();
 		$card->setDisplayDescriptionKey( "shortDescription" );
 		$card->setDetailKeys( array(
-			model\Series::publisher_id => "publisher/name",
 			model\Series::start_year => model\Series::start_year,
 			model\Series::pub_count => "availableSummary",
 			)
