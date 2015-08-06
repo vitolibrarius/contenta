@@ -209,9 +209,10 @@ class AdminPublication extends Admin
 						$importer->setEndpoint($endpoint);
 					}
 
-					$importer->importPublicationValues( null, $object->xid, null, true);
+					$importer->enqueue_publication( array( "xid" => $object->xid), true, true );
 					$importer->daemonizeProcess();
-					$this->editPublication($oid);
+					sleep(2);
+					header('location: ' . Config::Web('/AdminPublication/editPublication/' . $oid));
 				}
 				else {
 					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) );

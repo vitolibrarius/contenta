@@ -329,10 +329,12 @@
         },
         "publication": {
             "name": {
-                "search": "Issue Name"
+                "search": "Issue Name",
+                "label": "Issue Name"
             },
             "series_id": {
-                "search": "Series Name"
+                "search": "Series Name",
+                "label": "Series Name"
             },
             "pub_date": {
                 "search": "Published Year"
@@ -341,7 +343,29 @@
                 "search": "Characters"
             },
             "issue_num": {
-                "search": "Issue Number"
+                "search": "Issue Number",
+                "label": "Issue Number"
+            },
+            "FormLegend": {
+                "label": "Publication Details"
+            },
+            "desc": {
+                "label": "Description"
+            },
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "xupdated": {
+                "label": "Last Updated"
+            },
+            "mediaPath": {
+                "label": "Media Path"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
             }
         },
         "job": {
