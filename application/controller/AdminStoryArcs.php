@@ -148,7 +148,7 @@ class AdminStoryArcs extends Admin
 	function saveStoryArc($oid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$model = Model::Named('StoryArc');
+			$model = Model::Named('Story_Arc');
 			$values = splitPOSTValues($_POST);
 
 			if ( $oid > 0 ) {
