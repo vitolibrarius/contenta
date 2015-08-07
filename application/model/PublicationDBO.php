@@ -66,6 +66,13 @@ class PublicationDBO extends DataObject
 		return false;
 	}
 
+	public function seriesName() {
+		if ( isset($this->series_id) ) {
+			return $this->series()->name;
+		}
+		return '';
+	}
+
 	public function setSeries( model\SeriesDBO $series ) {
 		if ( isset($series, $series->id) && (isset($this->series_id) == false || $series->id != $this->series_id) ) {
 			$updates = array();
