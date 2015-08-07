@@ -426,6 +426,14 @@ class ComicVineImporter extends ContentMetadataImporter
 				if ( is_array($pubReference) ) {
 					$pubEnqueued = $this->preprocessRelationship( Model::Named('Publisher'), $path, $pubReference, $this->importMap_publisher() );
 				}
+
+				// only preload the publications if the story_arc is wanted for download
+				$issuesReference = array_valueForKeypath("issues", $record);
+				if ( is_array($issuesReference) && $object->isWanted() ) {
+					foreach ( $issuesReference as $issue ) {
+						$enqueued = $this->preprocessRelationship( Model::Named('Publication'), $path, $issue, $this->importMap_publication() );
+					}
+				}
 			}
 		}
 
@@ -527,7 +535,9 @@ class ComicVineImporter extends ContentMetadataImporter
 								$object->setPublisher( $relatedObj );
 								break;
 							case "story_arc":
-								$object->joinToStory_Arc( $relatedObj );
+								if ( $object->isWanted() ) {
+									$object->joinToStory_Arc( $relatedObj );
+								}
 								break;
 							default:
 								Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
@@ -605,6 +615,9 @@ class ComicVineImporter extends ContentMetadataImporter
 						switch( $table ) {
 							case "publisher":
 								$object->setPublisher( $relatedObj );
+								break;
+							case "publication":
+								$object->joinToPublication( $relatedObj );
 								break;
 							default:
 								Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );

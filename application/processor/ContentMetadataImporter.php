@@ -46,7 +46,6 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		if ( $mediaObject->hasAdditionalMedia() ) {
 			$forceImages = array_valueForKeypath(ComicVineImporter::META_IMPORT_FORCE_ICON, $cvDetails);
 			if ( $forceImages == true || $mediaObject->hasIcons() == false ) {
-				Logger::logInfo( "$mediaObject importing images", $this->type, $this->guid );
 				$imageURL = array_valueForKeypath(ComicVineImporter::META_IMPORT_SMALL_ICON, $cvDetails);
 				if ( is_null($imageURL) == false ) {
 					$this->importImage( $mediaObject, Model::IconName, $imageURL );
@@ -187,7 +186,6 @@ abstract class ContentMetadataImporter extends EndpointImporter
 			if ( is_array($errorList) ) {
 				throw new Exception("Failed to create new object " . var_export($errorList, true));
 			}
-
 		}
 
 		return ($object == false) ? null : $object;
@@ -227,9 +225,6 @@ abstract class ContentMetadataImporter extends EndpointImporter
 					$object->addAlias( $alias );
 				}
 			}
-			else {
-				Logger::LogWarning( "$object does not support aliases '" . array_valueForKeypath("aliases", $metaRecord) . "'", $this->type, $this->guid );
-			}
 		}
 
 		$updates = array();
@@ -268,7 +263,7 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				$objects = $objectModel->allObjectsNeedingExternalUpdate($size);
 
 				foreach( $objects as $idx => $object ) {
-					Logger::logInfo( "Enqueuing $idx: " . $object, $this->type, $this->guid );
+// 					Logger::logInfo( "Enqueuing $idx: " . $object, $this->type, $this->guid );
 					call_user_func_array(array($this, $methodName), array( array( "xid" => $object->xid), true, true) );
 				}
 				$this->strictErrors = false;
