@@ -95,6 +95,11 @@ abstract class Qualifier extends SQL
 		return new InQualifier( $attribute, $inArray, $prefix );
 	}
 
+	public static function InSubQuery( $attribute, SQL $subQuery = null, $prefix = '' )
+	{
+		return new InSubQueryQualifier( $attribute, $subQuery, $prefix );
+	}
+
 	public static function AndQualifier()
 	{
 		$qualifiers = array_flatten( func_get_args(), 'db\Qualifier' );
@@ -309,6 +314,35 @@ class InQualifier extends Qualifier
 			$args[] = $this->prefixedAttribute( $this->attribute, ($count++) );
 		}
 		return $attr . " ". Qualifier::IN_Q . " (" . implode(",", $args) . ")";
+	}
+}
+
+class InSubQueryQualifier extends Qualifier
+{
+	public $attribute;
+	public $subQuery;
+	public function __construct( $key = null, SQL $subQuery = null, $prefix = '')
+	{
+		parent::__construct(null);
+		if ( is_null($key) ) {
+			throw new \Exception( "Must specify attribute key" );
+		}
+		if ( is_null($subQuery)) {
+			throw new \Exception( "Must specify the subquery" );
+		}
+		$this->attribute = $key;
+		$this->subQuery = $subQuery;
+	}
+
+	public function sqlParameters()
+	{
+		return $this->subQuery->sqlParameters();
+	}
+
+	public function sqlStatement()
+	{
+		$attr = (strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.') . $this->attribute;
+		return $attr . " ". Qualifier::IN_Q . " (" . $this->subQuery->sqlStatement() . ")";
 	}
 }
 
