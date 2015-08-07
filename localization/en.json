@@ -366,6 +366,9 @@
             },
             "Thumbnail": {
                 "label": "Thumbnail"
+            },
+            "publisher_id": {
+                "search": "Select Publisher"
             }
         },
         "job": {
@@ -481,6 +484,12 @@
             },
             "desc": {
                 "label": "Description"
+            },
+            "pub_active": {
+                "label": "Actively publishing"
+            },
+            "pub_wanted": {
+                "label": "Wanted for collection"
             }
         }
     },
@@ -615,5 +624,8 @@
             "DeleteDescription": "This will permanently delete this story arc ",
             "DeleteConfirmation": "Are you sure you want to continue?"
         }
+    },
+    "AdminWanted": {
+        "title": "Wanted Publication Administration"
     }
 }

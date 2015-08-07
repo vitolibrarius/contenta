@@ -25,6 +25,10 @@
 				<a href="<?php echo Config::Web('/AdminUploadRepair/index'); ?>"><?php echo $this->label( "RepairLink", "name" ); ?></a>
 				<p><?php echo $this->label( "RepairLink", "desc" ); ?></p>
 			</div>
+			<div class="admin_card_item">
+				<a href="<?php echo Config::Web('/AdminWanted/index'); ?>">Wanted Publications</a>
+				<p>Wanted</p>
+			</div>
 		</div>
 
 		<div class="admin_card">

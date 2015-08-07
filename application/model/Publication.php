@@ -8,6 +8,7 @@ use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
 
+use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
 class Publication extends Model
@@ -55,6 +56,44 @@ class Publication extends Model
 			}
 		}
 		return parent::joinAttributes( $joinModel );
+	}
+
+	public function allObjectsNeedingExternalUpdate($limit = -1)
+	{
+		$series_model = Model::Named('Series');
+		$saj_model = Model::Named('Story_Arc_Publication');
+		$qualifiers[] = Qualifier::OrQualifier(
+			Qualifier::Equals( Publication::media_count, 0 ),
+			Qualifier::IsNull( Publication::media_count )
+		);
+		$qualifiers[] = Qualifier::OrQualifier(
+			Qualifier::InSubQuery( Publication::series_id,
+				SQL::Select($series_model, array("id"))->where(Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE ))->limit(0)
+			),
+			Qualifier::InSubQuery( Publication::id,
+				SQL::SelectJoin($saj_model, array("publication_id"))
+					->joinOn( $saj_model, Model::Named("Story_Arc"), null, Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE))
+					->limit(0)
+			)
+		);
+		$qualifiers[] = Qualifier::IsNotNull( "xid" );
+		$qualifiers[] = Qualifier::OrQualifier(
+			Qualifier::IsNull( "xupdated" ),
+			Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * 7)) )
+		);
+
+		$select = SQL::Select($this);
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::AndQualifier( $qualifiers ));
+		}
+		$select->orderBy( $this->sortOrder() );
+		$select->limit( $limit );
+		$wantedFirst = $select->fetchAll();
+		if ( is_array($wantedFirst) && count($wantedFirst) > 0) {
+			return $wantedFirst;
+		}
+
+		return parent::allObjectsNeedingExternalUpdate($limit);
 	}
 
 	public function publicationForSeriesExternal(model\SeriesDBO $series = null, $issue_xid = null, $xsource = null)
