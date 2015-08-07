@@ -84,6 +84,7 @@ class JoinSQL extends SQL
 			array_setValueForKeypath("join/".$destination->tableName()."/joinOn",
 				Qualifier::JoinQualifier( $sourcePrefix, $src, $nextPrefix, $dest), $this->joinMeta);
     	}
+    	return $this;
 	}
 
     public function objectBasedSelect()
