@@ -32,19 +32,26 @@ class Image extends Controller
 	private function imageResponse( $graphicFileName = null, $type = 'png' )
 	{
 		$fileModTime = filemtime($graphicFileName);
+		$fileEtag = hash(HASH_DEFAULT_ALGO, $graphicFileName . $fileModTime);
 
 		if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
 			$modDate = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
 		}
 
-		if (isset($modDate) && (strtotime($modDate) == $fileModTime)) {
+		$clientEtag = '';
+		if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+			$clientEtag = trim($_SERVER['HTTP_IF_NONE_MATCH']);
+		}
+
+		if (isset($modDate) && (strtotime($modDate) == $fileModTime) && $clientEtag == $fileEtag) {
 			// browser cache content IS current, so we just respond '304 Not Modified'
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT', true, 304);
-// 			Logger::logWarning('304: Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT' );
 		}
 		else {
 			// Image not cached or cache outdated, we respond '200 OK' and output the image.
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s', $fileModTime).' GMT', true, 200);
+			header('Etag: ' . $fileEtag);
+			header('Cache-Control: no-transform,public');
 			header('Content-Type: image/' . $type);
 			header('Content-transfer-encoding: binary');
 			header('Content-length: ' . filesize($graphicFileName));
@@ -66,8 +73,10 @@ class Image extends Controller
 
 	function thumbnail($table = null, $id = null)
 	{
+		Logger::logWarning("Thumbnail for: $table / $id ", $table, $id );
 		if (isset($table, $id)) {
 			$image = hashedImagePath( $table, $id, Model::ThumbnailName );
+			Logger::logWarning("Thumbnail image: $image", $table, $id );
 			if ( is_null($image) ) {
 				$image = 'public/img/default_thumbnail_' . $table . '.png';
 			}
