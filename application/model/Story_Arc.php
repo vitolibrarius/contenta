@@ -185,7 +185,9 @@ class Story_Arc extends Model
 		return array(
 			Story_Arc::name => Model::TEXT_TYPE,
 			Story_Arc::desc => Model::TEXTAREA_TYPE,
-			Story_Arc::publisher_id => Model::TO_ONE_TYPE
+			Story_Arc::publisher_id => Model::TO_ONE_TYPE,
+			Story_Arc::pub_active => Model::FLAG_TYPE,
+			Story_Arc::pub_wanted => Model::FLAG_TYPE
 		);
 	}
 
