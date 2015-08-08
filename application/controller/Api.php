@@ -16,6 +16,7 @@ use db\Qualifier as Qualifier;
 use model\Users as Users;
 use model\Publisher as Publisher;
 use model\Character as Character;
+use model\Story_Arc as Story_Arc;
 
 /**
  * Class Admin
@@ -66,6 +67,28 @@ class Api extends Controller
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
 			$select->orderBy( array(Character::name) );
+			$characters = $select->limit(-1)->fetchAll();
+
+			$this->view->renderJson( $characters );
+		}
+	}
+
+	function story_arcs( $userHash = null)
+	{
+		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
+			$qualifiers = array();
+			if ( isset($_GET['q']) && strlen($_GET['q']) > 0) {
+				$qualifiers[] = Qualifier::Like( Story_Arc::name, $_GET['q']);
+			}
+			if ( isset($_GET['r']) && ($_GET['r'] == 'wanted')) {
+				$qualifiers[] = Qualifier::Equals( Story_Arc::pub_wanted, Model::TERTIARY_TRUE);
+			}
+
+			$select = SQL::Select( Model::Named("Story_Arc"), array( Story_Arc::id, Story_Arc::name ));
+			if ( count($qualifiers) > 0 ) {
+				$select->where( Qualifier::AndQualifier( $qualifiers ));
+			}
+			$select->orderBy( array(Story_Arc::name) );
 			$characters = $select->limit(-1)->fetchAll();
 
 			$this->view->renderJson( $characters );
