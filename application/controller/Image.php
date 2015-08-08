@@ -73,10 +73,8 @@ class Image extends Controller
 
 	function thumbnail($table = null, $id = null)
 	{
-		Logger::logWarning("Thumbnail for: $table / $id ", $table, $id );
 		if (isset($table, $id)) {
 			$image = hashedImagePath( $table, $id, Model::ThumbnailName );
-			Logger::logWarning("Thumbnail image: $image", $table, $id );
 			if ( is_null($image) ) {
 				$image = 'public/img/default_thumbnail_' . $table . '.png';
 			}
