@@ -235,23 +235,24 @@ abstract class Model
 		return $select->fetchAll();
 	}
 
-	public function allObjectsForFK($relatedAttribute, DataObject $sourceObject, array $sortOrder = null)
+	public function allObjectsForFK($relatedAttribute, DataObject $sourceObject, array $sortOrder = null, $limit = 0)
 	{
 		return SQL::Select( $this, null, db\Qualifier::FK( $relatedAttribute, $sourceObject ) )
 			->orderBy($sortOrder)
+			->limit($limit)
 			->fetchAll();
 	}
 
-	public function allObjectsForFKWithValue($relatedAttribute, DataObject $sourceObject, $key, $value = null, array $sortOrder = null)
+	public function allObjectsForFKWithValue($relatedAttribute, DataObject $sourceObject, $key, $value = null, array $sortOrder = null, $limit = 0)
 	{
 		if ( is_null($value) ) {
-			return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, db\Qualifier::IsNull( $key ), $sortOrder);
+			return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, db\Qualifier::IsNull( $key ), $sortOrder, $limit);
 		}
 
-		return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, db\Qualifier::Equals( $key, $value ), $sortOrder);
+		return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, db\Qualifier::Equals( $key, $value ), $sortOrder, $limit);
 	}
 
-	public function allObjectsForFKAndQualifier($relatedAttribute, DataObject $sourceObject, db\Qualifier $qual = null, array $sortOrder = null)
+	public function allObjectsForFKAndQualifier($relatedAttribute, DataObject $sourceObject, db\Qualifier $qual = null, array $sortOrder = null, $limit = 0)
 	{
 		if ( is_null($qual) ) {
 			throw new \Exception( "Qualifier cannot be null" );
@@ -261,6 +262,7 @@ abstract class Model
 		$select = SQL::Select( $this );
 		$select->where( db\Qualifier::AndQualifier($qual, $fkQual));
 		$select->orderBy($sortOrder);
+		$select->limit($limit);
 		return $select->fetchAll();
 	}
 
