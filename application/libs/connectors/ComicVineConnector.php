@@ -85,12 +85,12 @@ class ComicVineConnector extends JSON_EndpointConnector
 			. ($type == null ? '' : $type . "-") . $id . "/?" . http_build_query($params);
 
 		try {
-			$details = $this->performRequest( $detail_url, false );
+			list($details, $headers) = $this->performRequest( $detail_url, false );
 		}
 		catch ( \Exception $e ) {
 			Logger::logException( $e );
 			try {
-				$details = $this->performRequest( $detail_url, true );
+				list($details, $headers) = $this->performRequest( $detail_url, true );
 			}
 			catch ( \Exception $e2 ) {
 				Logger::logException( $e2 );
@@ -177,7 +177,8 @@ class ComicVineConnector extends JSON_EndpointConnector
 		}
 
 		$search_url = $this->endpointBaseURL() . "/search/?" . http_build_query($params);
-		return $this->performRequest( $search_url );
+		list($details, $headers) = $this->performRequest( $search_url );
+		return $details;
 	}
 
 	private function addFilter( array &$filters, $key, $value )
@@ -255,7 +256,8 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 		$search_url = $this->endpointBaseURL() ."/". $resource . "s/?" . http_build_query($params);
 // 		echo $this->cleanURLForLog($search_url) . PHP_EOL;
-		return $this->performRequest( $search_url );
+		list($details, $headers) = $this->performRequest( $search_url );
+		return $details;
 	}
 
 	public function character_search($xid = null, $name = null, $gender = null)
@@ -419,12 +421,12 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 	public function performRequest($url, $force = true)
 	{
-		$json = parent::performRequest($url, $force);
+		list($json, $headers) = parent::performRequest($url, $force);
 		if ( $json != false )
 		{
 			if ( $json['status_code'] == 1)
 			{
-				return $json['results'];
+				return array($json['results'], $headers);
 			}
 			else
 			{

@@ -26,7 +26,7 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 	public function performRequest($url, $force = false)
 	{
 		if (empty($url) == false) {
-			$data = parent::performRequest($url, $force);
+			list($data, $headers) = parent::performRequest($url, $force);
 			if ( $data != false )
 			{
 				$json = json_decode($data, true);
@@ -42,7 +42,7 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 				if ( $this->isDebuggingResponses() ) {
 					$this->debugData(json_encode($json, JSON_PRETTY_PRINT), $this->cleanURLForLog($url) . ".txt" );
 				}
-				return $json;
+				return array($json, $headers);
 			}
 			else {
 				Logger::logError( 'Error (?) with url: ' . var_export($data, true),

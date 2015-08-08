@@ -41,7 +41,8 @@ class NewznabConnector extends RSSConnector
 
 		// https://www.usenet-crawler.com/api?t=caps
 		$detail_url = $this->endpointBaseURL() . "?" . http_build_query($params);
-		return $this->performRequest( $detail_url );
+		list($details, $headers) = $this->performRequest( $detail_url );
+		return $details;
 	}
 
 	public function searchBooks( $title, $author = null) {
@@ -56,7 +57,8 @@ class NewznabConnector extends RSSConnector
 
 		// https://www.usenet-crawler.com/api?t=caps
 		$detail_url = $this->endpointBaseURL() . "?" . http_build_query($params);
-		return $this->performRequest( $detail_url );
+		list($details, $headers) = $this->performRequest( $detail_url );
+		return $details;
 	}
 
 	public function searchComics( $query ) {
@@ -79,7 +81,8 @@ class NewznabConnector extends RSSConnector
 		}
 
 		$detail_url = $this->endpointBaseURL() . "?" . http_build_query($params);
-		return $this->performRequest( $detail_url );
+		list($details, $headers) = $this->performRequest( $detail_url );
+		return $details;
 	}
 
 	public function getNZB( $nzbid = null )
@@ -99,10 +102,10 @@ class NewznabConnector extends RSSConnector
 	public function performRequest($url, $force = false)
 	{
 		$this->xmlDocument = null;
-		$this->xmlDocument = parent::performRequest($url, $force);
+		list($this->xmlDocument, $headers) = parent::performRequest($url, $force);
 		if ( empty($this->xmlDocument) == true ) {
 			throw new \Exception( "No Newznab data" );
 		}
-		return $this->xmlDocument;
+		return array($this->xmlDocument, $headers);
 	}
 }

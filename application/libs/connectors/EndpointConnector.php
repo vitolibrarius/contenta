@@ -12,6 +12,8 @@ use \Model as Model;
 use \Cache as Cache;
 use \Database as Database;
 
+use utilities\Metadata as Metadata;
+
 use model\Users as Users;
 use model\Endpoint as Endpoint;
 use model\EndpointDBO as EndpointDBO;
@@ -142,66 +144,81 @@ abstract class EndpointConnector
 	public function performRequest($url, $force = false)
 	{
 		if (empty($url) == false) {
+			$cacheData = Cache::MakeKey( $url, "data" );
+			$cacheHeaders = Cache::MakeKey( $url, "headers" );
 			// check the cashe for the data, there is no point in calling the same API call multiple times in one day
 			if ( $force == false ) {
-				$data = Cache::Fetch( $url, false, Cache::TTL_DAY );
+				$data = Cache::Fetch( $cacheData, false, Cache::TTL_DAY );
+				$headers = Cache::Fetch( $cacheHeaders, false, Cache::TTL_DAY );
 				if ( $data != false ) {
-					return $data;
+					return array($data, $headers);
 				}
 			}
 
 			if ( function_exists('curl_version') == true) {
-				$cacheKey = Cache::MakeKey( "Cookies", parse_url($url, PHP_URL_HOST));
-				$cookie = Cache::Fetch( $cacheKey, "" );
+// 				$cacheKey = Cache::MakeKey( "Cookies", parse_url($url, PHP_URL_HOST));
+// 				$cookie = Cache::Fetch( $cacheKey, "" );
 
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $url);
 				curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.7.3) Gecko/20041001 Firefox/0.10.1" );
 // 				curl_setopt($ch, CURLOPT_USERAGENT, APP_NAME . "/" . APP_VERSION);
-				curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie );
+// 				curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie );
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true );
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
 				curl_setopt($ch, CURLOPT_AUTOREFERER, true );
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false );	# required for https urls
 				curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
-				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_HEADER, true);
+				curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30 );		# seconds to wait for connection
 				curl_setopt($ch, CURLOPT_TIMEOUT, 180 );			# seconds to wait for completion
 				curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
 
-				$data = curl_exec($ch);
-				$info = curl_getinfo($ch);
-				$http_code = ( empty($info['http_code']) ? -1 : $info['http_code']);
+				$response = curl_exec($ch);
+				$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+				// extract the headers
+				$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+				$headers = http_parse_headers(substr($response, 0, $header_size));
+				$data = substr($response, $header_size);
+
+// 				$whoami = trim(`whoami`);
+// 				$headerLog = new Metadata('/tmp/http_headers_' . $whoami . '.json');
+// 				$info = curl_getinfo($ch);
+// 				$headerLog->setMeta( $url . "/info", $info );
+// 				$headerLog->setMeta( $url . "/headers", $headers );
+// 				$headerLog->setMeta( $url . "/cookie", (isset($headers["Set-Cookie"]) ? $headers["Set-Cookie"] : ''));
 
 				if ( $http_code >= 200 && $http_code < 300 ) {
-					Cache::Store( $cacheKey, $cookie );
-					Cache::Store( $url, $data );
+					Cache::Store( $cacheHeaders, $headers );
+					Cache::Store( $cacheData, $data );
 				}
 				else {
-					\Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
+					Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
 							get_class($this), $this->endpointDisplayName());
-					\Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
+					Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
 						get_class($this), $this->endpointDisplayName());
-					foreach( $info as $http_key => $http_value ) {
-						\Logger::logError( "$http_key = " . var_export($http_value, true), get_class($this), $this->endpointDisplayName());
-					}
+					Logger::logError( "Headers " . var_export($headers, true), get_class($this), $this->endpointDisplayName());
 					$data = false;
 				}
 				curl_close($ch);
 			}
 			else if ( $this->endpointCompressed() == false) {
 				$data = file_get_contents($url);
+				$headers = $http_response_header;
 				if ( $data == false ) {
-					\Logger::logError( 'Error (?) with url: ' . $this->cleanURLForLog($url),
+					Logger::logError( 'Error (?) with url: ' . $this->cleanURLForLog($url),
 						get_class($this), $this->endpointDisplayName());
+					Logger::logError( "Headers " . var_export($headers, true), get_class($this), $this->endpointDisplayName());
 				}
 			}
 			else {
-				\Logger::logError( 'Unable to process compressed url: ' . $this->cleanURLForLog($url),
+				Logger::logError( 'Unable to process compressed url: ' . $this->cleanURLForLog($url),
 					get_class($this), $this->endpointDisplayName());
 			}
 
-			return $data;
+			return array( $data, $headers );
 		}
 		return false;
 	}

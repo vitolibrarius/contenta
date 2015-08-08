@@ -33,9 +33,11 @@ class PreviewsWorldImporter extends EndpointImporter
 		Logger::logInfo( "processingData start", $this->type, $this->guid);
 		$connection = $this->endpointConnector();
 		$endpoint = $this->endpoint();
-		list( $releaseDate, $dataArray) = $connection->performRequest( $endpoint->base_url );
+		list( $dataArray, $headers ) = $connection->performRequest( $endpoint->base_url );
+		$releaseDate = $connection->releaseDate();
 
-		echo "+++ " . $releaseDate . PHP_EOL. PHP_EOL;
+		echo "+++ " . date("M d, Y", $releaseDate) . " " . $releaseDate . PHP_EOL;
+		echo "+++ ETag:" . $headers['ETag'] . PHP_EOL. PHP_EOL;
 
 		foreach( $dataArray as $groupname => $items ) {
 			echo "*** " . $groupname . PHP_EOL;

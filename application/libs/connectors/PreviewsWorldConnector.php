@@ -25,6 +25,11 @@ class PreviewsWorldConnector extends EndpointConnector
 		parent::__construct($endpoint);
 	}
 
+	public function releaseDate()
+	{
+		return $this->releaseDate;
+	}
+
 	public function groupsIgnored()
 	{
 		return array(
@@ -120,13 +125,13 @@ class PreviewsWorldConnector extends EndpointConnector
 	}
 
 
-	public function performRequest($url, $force = false)
+	public function performRequest($url, $force = true)
 	{
 		$this->document = null;
 		$this->releaseDate = null;
 		$duplicateIndex = array();
 
-		$data = parent::performRequest($url, $force);
+		list($data, $headers) = parent::performRequest($url, $force);
 		if ( empty($data) == true ) {
 			throw new \Exception( "No PreviewsWorld data" );
 		}
@@ -148,6 +153,7 @@ class PreviewsWorldConnector extends EndpointConnector
 					$currentGroupName = $line[0];
 					if ( startsWith($currentGroupName, 'New Releases For ')) {
 						$this->releaseDate = substr($currentGroupName, strlen('New Releases For '));
+						$this->releaseDate = strtotime($this->releaseDate);
 					}
 				}
 				else if( in_array($currentGroupName, $this->groupsIgnored()) == false) {
@@ -184,6 +190,6 @@ class PreviewsWorldConnector extends EndpointConnector
 			}
 		}
 
-		return array( $this->releaseDate, $this->document);
+		return array( $this->document, $headers );
 	}
 }
