@@ -150,10 +150,14 @@ class AdminStoryArcs extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Story_Arc');
 			$values = splitPOSTValues($_POST);
+			if ( isset($values[$model->tableName()], $values[$model->tableName()][Story_Arc::pub_wanted]) == false ) {
+				$values[$model->tableName()][Story_Arc::pub_wanted] = Model::TERTIARY_FALSE;
+			}
 
 			if ( $oid > 0 ) {
 				$object = $model->objectForId($oid);
 				if ( $object != false ) {
+					$oldIsWanted = $object->isWanted();
 					$errors = $model->updateObject($object, $values[$model->tableName()]);
 					if ( is_array($errors) ) {
 						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
@@ -163,8 +167,24 @@ class AdminStoryArcs extends Admin
 						$this->editStoryArc($oid);
 					}
 					else {
+						$object = $model->refreshObject($object);
+						if ( $object->isWanted() && $oldIsWanted == false ) {
+							// now a wanted story_arc, ensure the publications are updated
+							$endpoint = $object->externalEndpoint();
+							if ( $endpoint != false ) {
+								$importer = new ComicVineImporter( $model->tableName() . "_" .$object->xid );
+								$importer->setEndpoint($endpoint);
+								$importer->enqueue_story_arc( array( "xid" => $object->xid), true, true );
+								foreach( $object->publications() as $publication ) {
+									if ( $publication->series() == null || isset($publication->xupdated) == false) {
+										$importer->enqueue_publication( array( "xid" => $publication->xid), true, true );
+									}
+								}
+								$importer->daemonizeProcess();
+							}
+						}
 						Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-						$this->index();
+						header('location: ' . Config::Web('/AdminStoryArcs/editStoryArc/' . $oid));
 					}
 				}
 				else {
@@ -173,17 +193,17 @@ class AdminStoryArcs extends Admin
 				}
 			}
 			else {
-				list($obj, $error) = $model->createObject($values[$model->tableName()]);
+				list($object, $error) = $model->createObject($values[$model->tableName()]);
 				if ( is_array($errors) ) {
 					Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
 					foreach ($errors as $attr => $errMsg ) {
 						Session::addValidationFeedback( $errMsg );
 					}
-					$this->editCharacter();
+					header('location: ' . Config::Web('/AdminStoryArcs/editStoryArc/'));
 				}
 				else {
 					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-					$this->index();
+					header('location: ' . Config::Web('/AdminStoryArcs/editStoryArc/' . $object->id));
 				}
 			}
 		}

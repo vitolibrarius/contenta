@@ -132,10 +132,14 @@ class AdminSeries extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Series');
 			$values = splitPOSTValues($_POST);
+			if ( isset($values[$model->tableName()], $values[$model->tableName()][Series::pub_wanted]) == false ) {
+				$values[$model->tableName()][Series::pub_wanted] = Model::TERTIARY_FALSE;
+			}
 
 			if ( $oid > 0 ) {
 				$object = $model->objectForId($oid);
 				if ( $object != false ) {
+					$oldIsWanted = $object->isWanted();
 					$errors = $model->updateObject($object, $values[$model->tableName()]);
 					if ( is_array($errors) ) {
 						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
@@ -145,8 +149,24 @@ class AdminSeries extends Admin
 						$this->editSeries($oid);
 					}
 					else {
+						$object = $model->refreshObject($object);
+						if ( $object->isWanted() && $oldIsWanted == false ) {
+							// now a wanted series, ensure the publications are updated
+							$endpoint = $object->externalEndpoint();
+							if ( $endpoint != false ) {
+								$importer = new ComicVineImporter( $model->tableName() . "_" .$object->xid );
+								$importer->setEndpoint($endpoint);
+								$importer->enqueue_series( array( "xid" => $object->xid), true, true );
+								foreach( $object->publications() as $publication ) {
+									if ( isset($publication->xupdated) == false) {
+										$importer->enqueue_publication( array( "xid" => $publication->xid), true, true );
+									}
+								}
+								$importer->daemonizeProcess();
+							}
+						}
 						Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-						$this->serieslist();
+						header('location: ' . Config::Web('/AdminSeries/editSeries/' . $oid));
 					}
 				}
 				else {
