@@ -89,6 +89,13 @@ class AdminPublication extends Admin
 					$qualifiers[] = Qualifier::Equals( Publication::id, 0 );
 				}
 			}
+			if ( isset($_GET['story_arc_id']) && is_array($_GET['story_arc_id']) && count($_GET['story_arc_id']) > 0 ) {
+				$qualifiers[] = Qualifier::InSubQuery( Publication::id,
+					SQL::Select(Model::Named('Story_Arc_Publication'), array("publication_id"))
+						->where( Qualifier::IN( "story_arc_id", $_GET['story_arc_id']))
+						->limit(0)
+				);
+			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {

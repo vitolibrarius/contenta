@@ -25,6 +25,7 @@ use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
 use model\Publication as Publication;
+use model\Series as Series;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
@@ -46,14 +47,6 @@ class AdminWanted extends Admin
 	function searchWanted()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-/**
-sqlite> SELECT a.id,a.name,a.media_count
-FROM publication AS a
-	where (a.series_id in ( select id from series where pub_wanted = 1)
-		or a.id in ( select c.publication_id from story_arc_publication AS c, story_arc AS b where c.story_arc_id = b.id   and b.pub_wanted = 1))
-	and (a.media_count is null or a.media_count = 0);
-*/
-
 			$model = Model::Named('Publication');
 			$series_model = Model::Named('Series');
 			$saj_model = Model::Named('Story_Arc_Publication');
@@ -73,35 +66,43 @@ FROM publication AS a
 				)
 			);
 
+			// input filters
+			if ( isset($_GET['story_arc_id']) && is_array($_GET['story_arc_id']) && count($_GET['story_arc_id']) > 0 ) {
+				$qualifiers[] = Qualifier::InSubQuery( Publication::id,
+					SQL::Select($saj_model, array("publication_id"))
+						->where( Qualifier::IN( "story_arc_id", $_GET['story_arc_id']))
+						->limit(0)
+				);
+			}
+			if ( isset($_GET['year']) && strlen($_GET['year']) == 4 ) {
+				$start = strtotime("01-01-" . $_GET['year'] . " 00:00");
+				$end = strtotime("31-12-" . $_GET['year'] . " 23:59");
+				$qualifiers[] = Qualifier::Between( Publication::pub_date, $start, $end );
+			}
+			if ( isset($_GET['issue']) && strlen($_GET['issue']) > 0) {
+				$qualifiers[] = Qualifier::Equals( Publication::issue_num, $_GET['issue'] );
+			}
+			if ( isset($_GET['series_name']) && strlen($_GET['series_name']) > 0) {
+				$select = \SQL::Select( Model::Named('Series'), array(Series::id))
+					->where( Qualifier::Like( Series::search_name, normalizeSearchString($_GET['series_name'])) );
+				$series_idArray = array_map(function($stdClass) {return $stdClass->{Series::id}; },
+					$select->fetchAll());
+
+				if ( is_array($series_idArray) && count($series_idArray) > 0 ) {
+					$qualifiers[] = Qualifier::IN( Publication::series_id, $series_idArray );
+				}
+				else {
+					$qualifiers[] = Qualifier::Equals( Publication::id, 0 );
+				}
+			}
+
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
-			$select->orderBy( $model->sortOrder() );
+			$select->orderBy( array( array(SQL::SQL_ORDER_DESC => Publication::pub_date)) );
 
-// 			$select = SQL::SelectJoin($model, null, $otherPubQual);
-// 			$select->joinOn(
-// 				Model::Named("Publication"),
-// 				Model::Named("Series"),
-// 				null,
-// 				Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE)
-// 			);
-// 			$select->joinOn(
-// 				Model::Named("Publication"),
-// 				Model::Named("Story_Arc_Publication"),
-// 				null,
-// 				null
-// 			);
-// 			$select->joinOn(
-// 				Model::Named("Story_Arc_Publication"),
-// 				Model::Named("Story_Arc"),
-// 				null,
-// 				Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE)
-// 			);
-
-// 			$select->orderBy( $model->sortOrder() );
-//
- 						Session::addPositiveFeedback("select ". $select);
+//  						Session::addPositiveFeedback("select ". $select);
 
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();

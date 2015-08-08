@@ -38,11 +38,10 @@
 				class="text_input">
 		</select>
 		</div>
-		<div style="display: inline-block;">
-		<input type="text" name="searchName" id="searchName"
-			class="text_input"
-			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
-			value="">
+		<div style="display: inline-block; min-width: 300px;">
+		<select name="searchStoryArcs" id="searchStoryArcs"
+				class="text_input">
+		</select>
 		</div>
 		<div style="display: inline-block;">
 		<input type="number" name="searchIssue" id="searchIssue"
@@ -106,6 +105,34 @@ $(document).ready(function($) {
 		delay( refresh(), 250 );
 	});
 
+	$("#searchStoryArcs").select2({
+		multiple: true,
+		width: '100%',
+		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'story_arcs' ); ?>",
+		allowClear: true,
+		ajax: {
+			url: "<?php echo Config::Web('/Api/story_arcs'); ?>",
+			dataType: 'json',
+			delay: 250,
+			data: function (params) {
+				return {
+					q: params.term, // search term
+					page: params.page
+				};
+			},
+			processResults: function (data) {
+				return {
+					results: $.map(data, function(obj) {
+						return { id: obj.id, text: obj.name };
+					})
+				};
+			},
+			cache: true
+		}
+	}).on("change", function(e) {
+		delay( refresh(), 250 );
+	});
+
 	$(".text_input").on('keyup change', function () {
 		delay( refresh(), 250 );
 	});
@@ -117,7 +144,7 @@ $(document).ready(function($) {
 			data: {
 				series_name: $('#searchSeries').val(),
 				character_id: $('#searchCharacter').val(),
-				name: $('input#searchName').val(),
+				story_arc_id: $('#searchStoryArcs').val(),
 				issue: $('input#searchIssue').val(),
 				media: $('input#searchMedia').is(':checked'),
 				year:  $('input#searchYear').val()

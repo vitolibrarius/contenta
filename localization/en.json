@@ -219,7 +219,7 @@
             },
             "name": {
                 "label": "Name",
-                "search": "Search name",
+                "search": "Character name",
                 "FIELD_EMPTY": "Name field was empty",
                 "FIELD_TOO_LONG": "Name field was more than 256 characters"
             },
@@ -266,8 +266,8 @@
         },
         "series": {
             "name": {
-                "search": "Search",
-                "label": "Name"
+                "search": "Series Name",
+                "label": "Series Name"
             },
             "SearchLegend": {
                 "label": "Query ComicVine Series"
@@ -313,7 +313,7 @@
                 "label": "Wanted for collection"
             },
             "year": {
-                "search": "Publication Start Year"
+                "search": "Year"
             }
         },
         "Series": {
@@ -337,10 +337,10 @@
                 "label": "Series Name"
             },
             "pub_date": {
-                "search": "Published Year"
+                "search": "Year"
             },
             "characters": {
-                "search": "Characters"
+                "search": "Select Characters"
             },
             "issue_num": {
                 "search": "Issue Number",
@@ -369,6 +369,9 @@
             },
             "publisher_id": {
                 "search": "Select Publisher"
+            },
+            "story_arcs": {
+                "search": "Select Story Arcs"
             }
         },
         "job": {
@@ -452,7 +455,7 @@
         "story_arc": {
             "name": {
                 "search": "Story Arc Name",
-                "label": "Name"
+                "label": "Story Arc Name"
             },
             "publisher_id": {
                 "search": "Select Publisher",
@@ -462,7 +465,7 @@
                 "search": "Series Name"
             },
             "characters": {
-                "search": "Characters"
+                "search": "Select Characters"
             },
             "FormLegend": {
                 "label": "Story Arc Details"
