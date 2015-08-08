@@ -122,8 +122,6 @@ class AdminSeries extends Admin
 			$this->view->additionalAction = "/AdminSeries/updatedAdditional";
 
 			$this->view->render( '/edit/series');
-
-			\Logger::loginfo("Editing Series " . $oid, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 

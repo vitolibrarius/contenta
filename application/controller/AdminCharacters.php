@@ -116,8 +116,6 @@ class AdminCharacters extends Admin
 			$this->view->additionalAction = "/AdminCharacters/updatedAdditional";
 
 			$this->view->render( '/edit/character');
-
-			\Logger::loginfo("Editing Character " . $oid, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 

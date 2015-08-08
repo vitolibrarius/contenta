@@ -140,8 +140,6 @@ class AdminStoryArcs extends Admin
 			$this->view->additionalAction = "/AdminStoryArcs/updatedAdditional";
 
 			$this->view->render( '/edit/story_arc');
-
-			\Logger::loginfo("Editing StoryArc " . $oid, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 

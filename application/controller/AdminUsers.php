@@ -46,8 +46,6 @@ class AdminUsers extends Admin
 
  			$this->view->userTypes = $user_model->userTypes();
 			$this->view->render( '/edit/users');
-
-			Logger::loginfo("Editing user " . $uid, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 

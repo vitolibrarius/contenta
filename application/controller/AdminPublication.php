@@ -152,8 +152,6 @@ class AdminPublication extends Admin
 			$this->view->additionalAction = "/AdminPublication/updatedAdditional";
 
 			$this->view->render( '/edit/publication');
-
-			\Logger::loginfo("Editing Publication " . $oid, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 
