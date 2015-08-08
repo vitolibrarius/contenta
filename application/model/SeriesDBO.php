@@ -56,7 +56,7 @@ class SeriesDBO extends DataObject
 		return
 			(isset($this->pub_available) ? $this->pub_available : 0 )
 			. " / "
-			. (isset($this->pub_count) ? $this->pub_count : count($this->allPublications()) );
+			. (isset($this->pub_count) ? $this->pub_count : count($this->publications()) );
 	}
 
 	public function setPublisher( model\PublisherDBO $pubObj )
@@ -81,7 +81,7 @@ class SeriesDBO extends DataObject
 		return $yearStr;
 	}
 
-	public function allPublications() {
+	public function publications() {
 		$model = Model::Named('Publication');
 		return $model->allForSeries($this);
 	}
