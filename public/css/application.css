@@ -860,15 +860,15 @@ span.icon.favorite:before		{ content:"\2665"; color: red; font-size: 32px; }
 	box-sizing:content-box
 }
 
-.tag {
+.badge > li.low {
 	color:#505050;
 	background:#eaefef;
 	border:0px white;
 }
 
-.character {
-	color:#505050;
-	background:#93d66f;
+.badge > li.high {
+	color: green;
+	background: white;
 	border:0px white;
 }
 
