@@ -125,7 +125,7 @@ class PreviewsWorldConnector extends EndpointConnector
 	}
 
 
-	public function performRequest($url, $force = true)
+	public function performRequest($url, $force = false)
 	{
 		$this->document = null;
 		$this->releaseDate = null;
