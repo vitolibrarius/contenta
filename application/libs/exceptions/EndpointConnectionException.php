@@ -2,7 +2,7 @@
 
 namespace exceptions;
 
-class EndpointConnnectionException extends \Exception
+class EndpointConnectionException extends \Exception
 {
 	public function __construct($message, $code = 0 ) {
 		parent::__construct($message, $code);
