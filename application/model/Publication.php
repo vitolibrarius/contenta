@@ -96,6 +96,35 @@ class Publication extends Model
 		return parent::allObjectsNeedingExternalUpdate($limit);
 	}
 
+	public function publicationsLike($seriesName = '', $issue = null, $year = null)
+	{
+		if ( is_string($seriesName) && strlen($seriesName) ) {
+			$qualifiers = array();
+
+			if ( isset($issue) && strlen($issue) > 0) {
+				$qualifiers[] = Qualifier::Equals( Publication::issue_num, $issue );
+			}
+			if ( isset($year) && strlen($year) == 4 ) {
+				$start = strtotime("01-01-" . $year . " 00:00");
+				$end = strtotime("31-12-" . $year . " 23:59");
+				$qualifiers[] = Qualifier::Between( Publication::pub_date, $start, $end );
+			}
+
+			$searchName = normalizeSearchString( $seriesName );
+			$qualifiers[] = Qualifier::InSubQuery( Publication::series_id,
+				SQL::Select(Model::Named("Series"), array("id"))->where(Qualifier::Like( Series::search_name, $searchName ))->limit(0)
+			);
+
+			if ( count($qualifiers) > 0 ) {
+				$select = SQL::Select($this);
+				$select->where( Qualifier::AndQualifier( $qualifiers ));
+				$select->orderBy( $this->sortOrder() );
+				return $select->fetchAll();
+			}
+		}
+		return false;
+	}
+
 	public function publicationForSeriesExternal(model\SeriesDBO $series = null, $issue_xid = null, $xsource = null)
 	{
 		$matches = $this->allObjectsForFKAndQualifier(Publication::series_id, $series, Qualifier::XID($issue_xid, $xsource));
