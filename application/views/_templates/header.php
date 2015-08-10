@@ -85,7 +85,7 @@
 	<div id="content">
 		<h1>
 		<?php if (isset($this->controllerName)): ?>
-			<a href="<?php echo Config::Web($this->controllerName); ?>">
+			<a href="<?php echo Config::Web($this->controllerName, (isset($this->controllerAction) ? $this->controllerAction : null)); ?>">
 		<?php endif; ?>
 			<?php echo $this->viewTitle(); ?>
 		<?php if (isset($this->controllerName)): ?>
