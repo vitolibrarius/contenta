@@ -67,7 +67,7 @@ $testdata = array(
 		"year" => "2008",
 		"extension" => "cbz",
 		"issue" => "01",
-		"name" => "30 Days of Night: 30 Days 'till Death",
+		"name" => "30 Days of Night 30 Days 'till Death",
 	),
 	"300.cbz" => array(
 		"clean" => "300",
@@ -93,32 +93,32 @@ $testdata = array(
 		"year" => "2000",
 		"extension" => "cbz",
 		"issue" => "01",
-		"name" => "Batman: Knightfall Part 01 - Broken Bat",
+		"name" => "Batman Knightfall Part 01 - Broken Bat",
 	),
 	"Batman - Knightfall Part 02 - Who Rules The Night 2000 Digital - TheHand-Empire.cbz" => array(
 		"clean" => "Batman - Knightfall Part 02 - Who Rules The Night 2000 Digital - TheHand-Empire",
 		"extension" => "cbz",
 		"year" => "2000",
 		"issue" => "02",
-		"name" => "Batman: Knightfall Part 02 - Who Rules The Night",
+		"name" => "Batman Knightfall Part 02 - Who Rules The Night",
 	),
 	"Batman - The Dark Knight 002.cbz" => array(
 		"clean" => "Batman - The Dark Knight 002",
 		"extension" => "cbz",
 		"issue" => "002",
-		"name" => "Batman: The Dark Knight",
+		"name" => "Batman The Dark Knight",
 	),
 	"Batman - The Dark Knight 007.cbz" => array(
 		"clean" => "Batman - The Dark Knight 007",
 		"extension" => "cbz",
 		"issue" => "007",
-		"name" => "Batman: The Dark Knight",
+		"name" => "Batman The Dark Knight",
 	),
 	"Batman - Year One 1987 Digital - TheHand-Empire.cbz" => array(
 		"clean" => "Batman - Year One 1987 Digital - TheHand-Empire",
 		"extension" => "cbz",
 		"year" => "1987",
-		"name" => "Batman: Year One",
+		"name" => "Batman Year One",
 	),
 	"Batman 80-Page Giant 2011 2011 Digital - TheHand-Empire.cbz" => array(
 		"extension" => "cbz",
@@ -184,13 +184,13 @@ $testdata = array(
 		"clean" => "Batman, Vampire Trilogy - Bloodstorm - Book 2",
 		"extension" => "cbz",
 		"volume" => "Book 2",
-		"name" => "Batman, Vampire Trilogy: Bloodstorm -",
+		"name" => "Batman, Vampire Trilogy Bloodstorm -",
 	),
 	"Batman, Vampire Trilogy - Crimson Mist - Book 3.cbz" => array(
 		"clean" => "Batman, Vampire Trilogy - Crimson Mist - Book 3",
 		"extension" => "cbz",
 		"volume" => "Book 3",
-		"name" => "Batman, Vampire Trilogy: Crimson Mist -",
+		"name" => "Batman, Vampire Trilogy Crimson Mist -",
 	),
 	"Ben 10 002 2013 digital-Empire.cbz" => array(
 		"extension" => "cbz",
@@ -225,7 +225,7 @@ $testdata = array(
 		"year" => "2015",
 		"issue" => "003",
 		"extension" => "cbz",
-		"name" => "Angela: Asgard's Assassin",
+		"name" => "Angela Asgard's Assassin",
 	),
 	"1872 #1 SWA.cbz" => array(
 		"clean" => "1872 1 SWA",
@@ -250,6 +250,13 @@ $testdata = array(
 		"extension" => "cbz",
 		"name" => "ARROW SEASON 2.5",
 		"issue" => "10",
+	),
+	"Swamp Thing 012(1974)(FB-DCP)(C2C).cbz" => array(
+		"clean" => "Swamp Thing 012 1974 FB-DCP C2C",
+		"year" => "1974",
+		"extension" => "cbz",
+		"name" => "Swamp Thing",
+		"issue" => "012",
 	),
 );
 

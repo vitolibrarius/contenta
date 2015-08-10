@@ -16,13 +16,13 @@ class MediaFilename
 
 	public function parseYearFromFilename( $filename )
 	{
-		if (preg_match_all("/\\b(\\d\\d\\d\\d)\\b/u", $filename, $matches, 0))
+		if (preg_match_all("/\\b(\\d{4})\\b/uU", $filename, $matches, 0))
 		{
 			$matches = array_reverse($matches[1]);
 			$curYear = intval(date("Y"));
 			foreach ($matches as $key => $value) {
 				$year = intval($value);
-				if ( $year > 1980 && $year <= $curYear) {
+				if ( $year > 1900 && $year <= $curYear) {
 					return $year;
 				}
 			}
