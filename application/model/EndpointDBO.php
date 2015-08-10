@@ -28,7 +28,7 @@ class EndpointDBO extends DataObject
 
 	public function displayName() {
 		$type = $this->type();
-		return (empty($type) ? 'Unknown' : $type->name) . " " . $this->name;
+		return $this->name . ' (' . (empty($type) ? 'Unknown' : $type->code) . ')';
 	}
 
 	public function type() {
