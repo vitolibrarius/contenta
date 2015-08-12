@@ -87,12 +87,12 @@ class ComicVineConnector extends JSON_EndpointConnector
 			. ($type == null ? '' : $type . "-") . $id . "/?" . http_build_query($params);
 
 		try {
-			list($details, $headers) = $this->performRequest( $detail_url, false );
+			list($details, $headers) = $this->performGET( $detail_url, false );
 		}
 		catch ( \Exception $e ) {
 			Logger::logException( $e );
 			try {
-				list($details, $headers) = $this->performRequest( $detail_url, true );
+				list($details, $headers) = $this->performGET( $detail_url, true );
 			}
 			catch ( \Exception $e2 ) {
 				Logger::logException( $e2 );
@@ -179,7 +179,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 		}
 
 		$search_url = $this->endpointBaseURL() . "/search/?" . http_build_query($params);
-		list($details, $headers) = $this->performRequest( $search_url );
+		list($details, $headers) = $this->performGET( $search_url );
 		return $details;
 	}
 
@@ -258,7 +258,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 		$search_url = $this->endpointBaseURL() ."/". $resource . "s/?" . http_build_query($params);
 // 		echo $this->cleanURLForLog($search_url) . PHP_EOL;
-		list($details, $headers) = $this->performRequest( $search_url );
+		list($details, $headers) = $this->performGET( $search_url );
 		return $details;
 	}
 
@@ -421,9 +421,9 @@ class ComicVineConnector extends JSON_EndpointConnector
 		return $results;
 	}
 
-	public function performRequest($url, $force = true)
+	public function performGET($url, $force = true)
 	{
-		list($json, $headers) = parent::performRequest($url, $force);
+		list($json, $headers) = parent::performGET($url, $force);
 		if ( $json != false )
 		{
 			if ( $json['status_code'] == 1)

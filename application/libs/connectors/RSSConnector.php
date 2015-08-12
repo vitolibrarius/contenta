@@ -39,10 +39,10 @@ class RSSConnector extends XML_EndpointConnector
 		parent::__construct($endpoint);
 	}
 
-	public function performRequest($url, $force = false)
+	public function performGET($url, $force = false)
 	{
 		$this->xmlDocument = null;
-		list($this->xmlDocument, $headers) = parent::performRequest($url, $force);
+		list($this->xmlDocument, $headers) = parent::performGET($url, $force);
 		if ( empty($this->xmlDocument) == true ) {
 			throw new \Exception( "No rss data" );
 		}

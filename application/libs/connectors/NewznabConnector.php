@@ -7,9 +7,12 @@ use \Logger as Logger;
 use \Model as Model;
 use \Cache as Cache;
 use \Database as Database;
+use \SimpleXMLElement as SimpleXMLElement;
 
 use model\Endpoint as Endpoint;
 use model\EndpointDBO as EndpointDBO;
+
+use utilities\MediaFilename as MediaFilename;
 
 class NewznabException extends \Exception {}
 
@@ -41,7 +44,7 @@ class NewznabConnector extends RSSConnector
 
 		// https://www.usenet-crawler.com/api?t=caps
 		$detail_url = $this->endpointBaseURL() . "?" . http_build_query($params);
-		list($details, $headers) = $this->performRequest( $detail_url );
+		list($details, $headers) = $this->performGET( $detail_url );
 		return $details;
 	}
 
@@ -57,7 +60,7 @@ class NewznabConnector extends RSSConnector
 
 		// https://www.usenet-crawler.com/api?t=caps
 		$detail_url = $this->endpointBaseURL() . "?" . http_build_query($params);
-		list($details, $headers) = $this->performRequest( $detail_url );
+		list($details, $headers) = $this->performGET( $detail_url );
 		return $details;
 	}
 
@@ -81,7 +84,7 @@ class NewznabConnector extends RSSConnector
 		}
 
 		$detail_url = $this->endpointBaseURL() . "?" . http_build_query($params);
-		list($details, $headers) = $this->performRequest( $detail_url );
+		list($details, $headers) = $this->performGET( $detail_url );
 		return $details;
 	}
 
@@ -99,13 +102,46 @@ class NewznabConnector extends RSSConnector
 		return null;
 	}
 
-	public function performRequest($url, $force = false)
+	public function performGET($url, $force = false)
 	{
-		$this->xmlDocument = null;
-		list($this->xmlDocument, $headers) = parent::performRequest($url, $force);
-		if ( empty($this->xmlDocument) == true ) {
+		list($xmlDocument, $headers) = parent::performGET($url, $force);
+		if ( empty($xmlDocument) == true ) {
 			throw new \Exception( "No Newznab data" );
 		}
-		return array($this->xmlDocument, $headers);
+
+		if ( $xmlDocument instanceof SimpleXMLElement) {
+			$results = array();
+			foreach ($xmlDocument->channel->item as $key => $item) {
+				$record['title'] = (isset($item->title) ? $item->title : '');
+				$record['guid'] = (isset($item->guid) ? $item->guid : $item->link);
+				$record['publishedDate'] = strtotime($item->pubDate);
+				$record['url'] = $item->link;
+				$record['password'] = false;
+				$record['desc'] = strip_tags($item->description);
+				if (isset($item->enclosure, $item->enclosure['url'])) {
+					$record['url'] = $item->enclosure['url'];
+					$record['len'] = $item->enclosure['length'];
+					$record['type'] = $item->enclosure['type'];
+				}
+				$children = $item->children('newznab', true);
+				foreach( $children as $node ) {
+					$attr = $node->attributes();
+					if ( $attr['name'] === 'password' ) {
+						$record['password'] = boolval($attr['value']);
+					}
+				}
+
+				if ( isset($item->title) ) {
+					$mediaFilename = new MediaFilename($item->title);
+					$record['metadata'] = $mediaFilename->updateFileMetaData(null);
+				}
+
+// 				$newznadAttr = $item->newznab:attr
+				$results[] = $record;
+			}
+			return array( $results, $headers );
+		}
+
+		return array($xmlDocument, $headers);
 	}
 }

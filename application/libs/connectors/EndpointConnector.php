@@ -141,7 +141,7 @@ abstract class EndpointConnector
 
 	/* perform the URL request and return the data
 	*/
-	public function performRequest($url, $force = false)
+	public function performGET($url, $force = false)
 	{
 		if (empty($url) == false) {
 			$cacheData = Cache::MakeKey( $url, "data" );

@@ -34,7 +34,7 @@ class RSSImporter extends EndpointImporter
 		Logger::logInfo( "processingData start", $this->type, $this->guid);
 		$connection = $this->endpointConnector();
 		$endpoint = $this->endpoint();
-		list($xml, $headers) = $connection->performRequest( $endpoint->base_url );
+		list($xml, $headers) = $connection->performGET( $endpoint->base_url );
 		if ( $xml instanceof SimpleXMLElement) {
 			$rss_model = Model::Named('RSS');
 			$count = 0;

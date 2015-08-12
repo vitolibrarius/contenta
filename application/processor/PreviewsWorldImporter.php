@@ -33,7 +33,7 @@ class PreviewsWorldImporter extends EndpointImporter
 		Logger::logInfo( "processingData start", $this->type, $this->guid);
 		$connection = $this->endpointConnector();
 		$endpoint = $this->endpoint();
-		list( $dataArray, $headers ) = $connection->performRequest( $endpoint->base_url );
+		list( $dataArray, $headers ) = $connection->performGET( $endpoint->base_url );
 		$releaseDate = $connection->releaseDate();
 
 		echo "+++ " . date("M d, Y", $releaseDate) . " " . $releaseDate . PHP_EOL;

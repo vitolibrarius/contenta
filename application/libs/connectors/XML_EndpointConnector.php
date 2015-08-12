@@ -18,10 +18,10 @@ abstract class XML_EndpointConnector extends EndpointConnector
 		parent::__construct($endpoint);
 	}
 
-	public function performRequest($url, $force = false)
+	public function performGET($url, $force = false)
 	{
 		if (empty($url) == false) {
-			list($data, $headers) = parent::performRequest($url, $force);
+			list($data, $headers) = parent::performGET($url, $force);
 			if ( $data != false )
 			{
 				libxml_use_internal_errors(true);

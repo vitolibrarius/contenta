@@ -125,13 +125,13 @@ class PreviewsWorldConnector extends EndpointConnector
 	}
 
 
-	public function performRequest($url, $force = false)
+	public function performGET($url, $force = false)
 	{
 		$this->document = null;
 		$this->releaseDate = null;
 		$duplicateIndex = array();
 
-		list($data, $headers) = parent::performRequest($url, $force);
+		list($data, $headers) = parent::performGET($url, $force);
 		if ( empty($data) == true ) {
 			throw new \Exception( "No PreviewsWorld data" );
 		}
