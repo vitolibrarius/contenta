@@ -66,8 +66,9 @@ abstract class EndpointImporter extends Processor
 		return false;
 	}
 
-	public function setEndpoint($point) {
-		if ( is_a($point, '\model\EndpointDBO')) {
+	public function setEndpoint(EndpointDBO $point = null)
+	{
+		if ( is_null($point) == false ) {
 			if ($point->isEnabled() ) {
 				$this->endpoint = $point;
 				$this->setMeta(EndpointImporter::META_ENDPOINT_DISPLAY, $point->displayName() );

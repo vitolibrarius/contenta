@@ -31,8 +31,9 @@ class ComicVineImporter extends ContentMetadataImporter
 		parent::__construct($guid);
 	}
 
-	public function setEndpoint($point) {
-		if ( is_a($point, '\model\EndpointDBO')) {
+	public function setEndpoint(EndpointDBO $point = null)
+	{
+		if ( is_null($point) == false ) {
 			$type = $point->type();
 			if ( $type == false || $type->code != Endpoint_Type::ComicVine ) {
 				throw new Exception("Endpoint " . $point->displayName() . " is is not for " . Endpoint_Type::ComicVine);
