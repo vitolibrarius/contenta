@@ -120,7 +120,7 @@ class Migration_14 extends Migrator
 				Job_Type::name => "SABnzbd status",
 				Job_Type::code => "sabnzbd",
 				Job_Type::desc => "Update the download status from SABnzbd",
-				Job_Type::processor => "FluxStatusUpdator",
+				Job_Type::processor => "FluxStatusUpdater",
 				Job_Type::parameter => null,
 				Job_Type::scheduled => Model::TERTIARY_TRUE,
 				Job_Type::requires_endpoint => Model::TERTIARY_TRUE
