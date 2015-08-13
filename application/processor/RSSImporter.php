@@ -10,6 +10,7 @@ use \SimpleXMLElement as SimpleXMLElement;
 
 use model\Endpoint_Type as Endpoint_Type;
 use model\Endpoint as Endpoint;
+use model\EndpointDBO as EndpointDBO;
 
 class RSSImporter extends EndpointImporter
 {
