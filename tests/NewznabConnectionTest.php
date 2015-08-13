@@ -19,6 +19,8 @@
 	require SYSTEM_PATH .'tests/_ResetConfig.php';
 	require SYSTEM_PATH .'tests/_Data.php';
 
+use \SimpleXMLElement as SimpleXMLElement;
+
 use connectors\NewznabConnector as NewznabConnector;
 
 use model\Character as Character;
@@ -47,7 +49,7 @@ use model\Job_Running as Job_Running;
 use model\Job as Job;
 
 $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
-SetConfigRoot( $root );
+SetConfigRoot( $root, false );
 
 my_echo( );
 my_echo( "Creating Database" );
@@ -77,6 +79,36 @@ if ( is_array($points) == false || count($points) == 0) {
 	loadData( $ep_model, array($metadata->readMetadata()), array( "name", "type", "base_url", "api_key") );
 }
 
+function reportXML( $xml, $root, $name )
+{
+	if ( $xml instanceof SimpleXMLElement ) {
+		$xml->asXML( appendPath($root, $name) );
+		foreach ($xml->channel->item as $key => $item) {
+			$name = $item->title . ".nzb";
+			$url = $item->link;
+			if (isset($item->enclosure, $item->enclosure['url'])) {
+				$url = $item->enclosure['url'];
+			}
+			$nzb = file_get_contents($url);
+			if ( $nzb != null ) {
+				my_echo( "	" . $name );
+				file_put_contents(appendPath($root, $name), $nzb);
+			}
+		}
+		my_echo( "---------------------------------------" );
+	}
+	else if ( is_array( $xml ) ) {
+		foreach ($xml as $key => $item) {
+			my_echo( var_export($item, true));
+		}
+		my_echo( "---------------------------------------" );
+	}
+	else {
+		my_echo( $name . " = " . var_export($xml, true));
+		my_echo( "---------------------------------------" );
+	}
+}
+
 $points = $ep_model->allForTypeCode(Endpoint_Type::Newznab);
 ($points != false && count($points) > 0) || die('No endpoint defined');
 
@@ -85,32 +117,17 @@ $epoint = $points[0];
 my_echo( "Search capabilities" );
 $connection = new NewznabConnector( $epoint );
 $xml = $connection->capabilities();
-$xml->asXML( appendPath($root, 'capabilities.xml') );
+reportXML($xml, $root, 'capabilities.xml');
 
 my_echo( "Search superman" );
 $xml = $connection->search("superman", null, null);
-$xml->asXML( appendPath($root, 'search_1.xml') );
+reportXML($xml, $root, 'search_1.xml');
 
 my_echo( "Search superman (comics)" );
 $xml = $connection->searchComics("superman");
-$xml->asXML( appendPath($root, 'search_2.xml') );
-
-if ( $xml instanceof SimpleXMLElement) {
-	foreach ($xml->channel->item as $key => $item) {
-		$name = $item->title . ".nzb";
-		$url = $item->link;
-		if (isset($item->enclosure, $item->enclosure['url'])) {
-			$url = $item->enclosure['url'];
-		}
-		$nzb = file_get_contents($url);
-		if ( $nzb != null ) {
-			my_echo( "	" . $name );
-			file_put_contents(appendPath($root, $name), $nzb);
-		}
-	}
-}
+reportXML($xml, $root, 'search_2.xml');
 
 my_echo( "Search Stephen King (books)" );
 $xml = $connection->searchBooks("*", "Stephen King");
-$xml->asXML( appendPath($root, 'search_3.xml') );
+reportXML($xml, $root, 'search_3.xml');
 
