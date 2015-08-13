@@ -171,6 +171,12 @@
             },
             "FormLegend": {
                 "label": "Connection Details"
+            },
+            "newznab": {
+                "search": "Search"
+            },
+            "endpoint_id": {
+                "search": "Select Endpoint"
             }
         },
         "publisher": {
@@ -629,6 +635,7 @@
         }
     },
     "AdminWanted": {
-        "title": "Wanted Publication Administration"
+        "title": "Wanted Publication Administration",
+        "Search Newznab": "Search Newznab"
     }
 }

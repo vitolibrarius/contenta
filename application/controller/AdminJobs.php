@@ -30,11 +30,6 @@ class AdminJobs extends Admin
 	function index()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-		$table_fields = \SQL::pragma_TableInfo(Job::TABLE);
-		if ( isset($table_fields[ Job::elapsed ]) == false ) {
-			\SQL::raw("ALTER TABLE " . Job::TABLE . " ADD COLUMN " . Job::elapsed . " integer", null,"Adding the elapsed column to Job");
-		}
-
 			$model = Model::Named('Job');
 			$this->view->model = $model;
 			$this->view->objects = $model->allObjects();

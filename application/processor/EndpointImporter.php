@@ -66,6 +66,12 @@ abstract class EndpointImporter extends Processor
 		return false;
 	}
 
+	public function setEndpointId( $endpoint_id = 0)
+	{
+		$endp = Model::Named( "Endpoint" )->objectForId( $endpoint_id );
+		$this->setEndpoint( $endp );
+	}
+
 	public function setEndpoint(EndpointDBO $point = null)
 	{
 		if ( is_null($point) == false ) {

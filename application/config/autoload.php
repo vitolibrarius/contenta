@@ -29,7 +29,7 @@ class Autoloader
             }
         }
 
-// 		echo PHP_EOL . $filename . PHP_EOL;
+// 		Logger::logError( 'Failed to load ' . $filename);
 
         throw new ClassNotFoundException($className);
         return FALSE;

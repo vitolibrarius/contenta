@@ -745,7 +745,7 @@ span.icon.favorite:before		{ content:"\2665"; color: red; font-size: 32px; }
 	position:absolute;
 	top:30px;
 	right: 0;
-	width:100px;
+	width:60%;
 }
 
 .card .feature .details span {
