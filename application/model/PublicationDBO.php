@@ -32,6 +32,14 @@ class PublicationDBO extends DataObject
 		return $this->name;
 	}
 
+	public function searchString() {
+		return $this->seriesName() . " " . $this->paddedIssueNum() . " " . $this->publishedYear();
+	}
+
+	public function paddedIssueNum() {
+		return (isset($this->issue_num) ? str_pad($this->issue_num, 3, "0", STR_PAD_LEFT) : '');
+	}
+
 	public function mediaCount() {
 		return (isset($this->media_count) ? $this->media_count : 0);
 	}

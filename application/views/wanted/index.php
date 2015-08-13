@@ -1,3 +1,9 @@
+<div class="paging">
+	<ul>
+		<li><a href="<?php echo Config::Web('/AdminWanted/newznab'); ?>">Manual Search</a></li>
+	</ul>
+</div>
+
 <form id='searchForm' name='searchForm'>
 	<div>
 		<div style="display: inline-block;">
@@ -114,5 +120,45 @@ $(document).ready(function($) {
 		});
 	};
 	refresh();
+});
+$(document).ajaxComplete(function(){
+	$('body').on('click', 'a.nzb', function (e) {
+		var safe_guid = $(this).attr('data-safe_guid');
+		$.ajax({
+			type: "GET",
+			url: "<?php echo Config::Web('/AdminWanted/downloadNewznab'); ?>",
+			data: {
+				endpoint_id: $(this).attr('data-endpoint_id'),
+				name: $(this).attr('data-name'),
+				guid: $(this).attr('data-guid'),
+				nzburl: $(this).attr('data-url'),
+				postedDate: $(this).attr('data-postedDate')
+			},
+			dataType: "text",
+			success: function(msg){
+				var divId = "ajaxDiv_"+safe_guid;
+				var ajaxDisplay = document.getElementById(divId);
+				ajaxDisplay.innerHTML = msg;
+			}
+		});
+		e.stopPropagation();
+		return false;
+	});
+	$('body').on('click', 'a.srch', function (e) {
+		var pub_id = $(this).attr('data-pub_id');
+		$(this).fadeOut(100).hide();
+		$.ajax({
+			type: "GET",
+			url: "<?php echo Config::Web('/AdminWanted/newznabQuicksearch/');?>"+pub_id,
+			dataType: "text",
+			success: function(msg){
+				var divId = "ajaxDiv_"+pub_id;
+				var ajaxDisplay = document.getElementById(divId);
+				ajaxDisplay.innerHTML = msg;
+			}
+		});
+		e.stopPropagation();
+		return false;
+	});
 });
 </script>

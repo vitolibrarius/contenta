@@ -29,6 +29,10 @@
 				<a href="<?php echo Config::Web('/AdminWanted/index'); ?>">Wanted Publications</a>
 				<p>Wanted</p>
 			</div>
+			<div class="admin_card_item">
+				<a href="<?php echo Config::Web('/AdminWanted/newznab'); ?>">Manual Search (NZB)</a>
+				<p>Search any configured Newznab sites for specific content</p>
+			</div>
 		</div>
 
 		<div class="admin_card">

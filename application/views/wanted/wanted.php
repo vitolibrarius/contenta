@@ -1,41 +1,43 @@
-<div class="mediaData">
-	<table>
-		<tr>
-			<th></th>
-			<th>Issue</th>
-			<th>Published</th>
-			<th>Series / Issue Details</th>
-			<th>Story Arcs</th>
-			<th></th>
-		</tr>
-	<?php if ( is_array($this->listArray) && count($this->listArray) > 0) : ?>
-	<?php foreach ($this->listArray as $key => $publication): ?>
-		<tr>
-			<td><img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $publication->id); ?>"
-				class="thumbnail recordType" />
-			</td>
-			<td class="issue"><?php echo $publication->issue_num; ?></td>
-			<td class="published"><?php echo $publication->publishedMonthYear(); ?></td>
-			<td class="name">
-				<h4><?php echo $publication->seriesName(); ?></h4>
-				<h5><?php echo $publication->name; ?></h5>
-				<span class="description"><?php echo $publication->desc; ?></span>
-			</td>
-			<td>
-				<ul class="badge story_arc">
-				<?php foreach ($publication->story_arcs() as $key => $story_arc): ?>
-					<li class="story_arc <?php echo ($story_arc->isWanted() ? 'high' : 'low'); ?>">
-						<nobr><?php echo $story_arc->name; ?></nobr>
-					</li>
-				<?php endforeach; ?>
-				</ul>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	<?php else : ?>
-		<tr>
-			<td colspan=6>No matching records</td>
-		</tr>
-	<?php endif; ?>
-	</table>
-</div>
+<?php if ( is_array($this->listArray) && count($this->listArray) > 0) : ?>
+<?php foreach ($this->listArray as $key => $publication): ?>
+<figure class="card" style="width: 380px;">
+	<div class="feature">
+		<div class="feature_top">
+			<div class="feature_top_left">
+				<a href="#">
+					<img src="<?php echo Config::Web( "Image", "thumbnail", "publication", $publication->id);?>" class="thumbnail publication">
+				</a>
+			</div>
+			<div class="feature_top_right">
+				<div class="feature_top_right_top">
+					<?php if ($publication->publisher() != null) : ?>
+						<img src="<?php echo Config::Web( "Image", "icon", "publisher", $publication->publisher()->id);?>"
+							class="icon publisher">
+					<?php endif; ?>
+				</div>
+				<div class="feature_top_right_middle">
+					<span class="details">
+						<span class="series_id"><?php echo $publication->seriesName(); ?></span>
+						<span class="pub_name"><?php echo $publication->name; ?></span>
+						<span class="issue_num"><?php echo $publication->issue_num; ?></span>
+						<span class="pub_date"><?php echo $publication->publishedMonthYear(); ?></span>
+					</span>
+				</div>
+				<div class="feature_top_right_bottom">
+				<a href="#" class="srch btn" style="white-space:nowrap;"
+					data-pub_id="<?php echo $publication->id; ?>">Search now</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="clear"></div>
+
+	<figcaption class="caption">
+		<div id="ajaxDiv_<?php echo $publication->id;?>"></div>
+	</figcaption>
+</figure>
+<?php endforeach; ?>
+<?php else : ?>
+	No matching records
+<?php endif; ?>

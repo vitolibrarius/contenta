@@ -65,7 +65,8 @@ class NewznabConnector extends RSSConnector
 	}
 
 	public function searchComics( $query ) {
-		return $this->search($query, null, array(NewznabConnector::NEWZNAB_CAT_BOOK,NewznabConnector::NEWZNAB_CAT_COMIC));
+		$details = $this->search($query, null, array(NewznabConnector::NEWZNAB_CAT_BOOK,NewznabConnector::NEWZNAB_CAT_COMIC));
+		return ( $details instanceof SimpleXMLElement ? null : $details );
 	}
 
 	public function search($query, array $groups = null, array $categories = null)
@@ -109,19 +110,20 @@ class NewznabConnector extends RSSConnector
 			throw new \Exception( "No Newznab data" );
 		}
 
-		if ( $xmlDocument instanceof SimpleXMLElement) {
+		if ( $xmlDocument instanceof SimpleXMLElement && isset($xmlDocument->channel, $xmlDocument->channel->item) ) {
 			$results = array();
 			foreach ($xmlDocument->channel->item as $key => $item) {
-				$record['title'] = (isset($item->title) ? $item->title : '');
-				$record['guid'] = (isset($item->guid) ? $item->guid : $item->link);
+				$record['title'] = (string)(isset($item->title) ? $item->title : '');
+				$record['guid'] = (string)(isset($item->guid) ? $item->guid : $item->link);
+				$record['safe_guid'] = sanitize( $record['guid'] );
 				$record['publishedDate'] = strtotime($item->pubDate);
-				$record['url'] = $item->link;
+				$record['url'] = (string)$item->link;
 				$record['password'] = false;
-				$record['desc'] = strip_tags($item->description);
+				$record['desc'] = strip_tags((string)$item->description);
 				if (isset($item->enclosure, $item->enclosure['url'])) {
-					$record['url'] = $item->enclosure['url'];
-					$record['len'] = $item->enclosure['length'];
-					$record['type'] = $item->enclosure['type'];
+					$record['url'] = (string)$item->enclosure['url'];
+					$record['len'] = (string)$item->enclosure['length'];
+					$record['type'] = (string)$item->enclosure['type'];
 				}
 				$children = $item->children('newznab', true);
 				foreach( $children as $node ) {
@@ -136,7 +138,6 @@ class NewznabConnector extends RSSConnector
 					$record['metadata'] = $mediaFilename->updateFileMetaData(null);
 				}
 
-// 				$newznadAttr = $item->newznab:attr
 				$results[] = $record;
 			}
 			return array( $results, $headers );

@@ -15,8 +15,10 @@ use \Processor as Processor;
 use processor\ComicVineImporter as ComicVineImporter;
 use processor\UploadImport as UploadImport;
 use processor\ImportManager as ImportManager;
+use processor\FluxImporter as FluxImporter;
 
 use controller\Admin as Admin;
+use connectors\NewznabConnector as NewznabConnector;
 
 use model\Users as Users;
 use model\Endpoint as Endpoint;
@@ -107,6 +109,117 @@ class AdminWanted extends Admin
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->render( '/wanted/wanted', true);
+		}
+	}
+
+	function newznab($pubId = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->addStylesheet("select2.min.css");
+			$this->view->addScript("select2.min.js");
+
+			if ( $pubId > 0 ) {
+				$publication = Model::Named('Publication')->objectForId( $pubId );
+				if ( $publication != false ) {
+					$this->view->searchString = $publication->searchString();
+				}
+			}
+
+			$model = Model::Named('Endpoint');
+			$this->view->endpoints = $model->allForTypeCode(Endpoint_Type::Newznab);
+			$this->view->setLocalizedViewTitle("Search Newznab");
+			$this->view->controllerAction = "newznab";
+			$this->view->model = $model;
+			$this->view->render( '/wanted/newznab');
+		}
+	}
+
+	function searchNewznab()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			if ( isset($_GET['endpoint_id'], $_GET['search']) && strlen($_GET['search']) > 4) {
+				$model = Model::Named('Endpoint');
+				$endpoint = $model->objectForId( $_GET['endpoint_id'] );
+
+				try {
+					$connection = new NewznabConnector( $endpoint );
+					$this->view->endpoint_id = $_GET['endpoint_id'];
+					$this->view->fluxModel = Model::Named('Flux');
+					$this->view->results = $connection->searchComics($_GET['search']);
+				}
+				catch ( \Exception $e ) {
+					Session::addNegativeFeedback( $e->getMessage() );
+				}
+			}
+			$this->view->render( '/wanted/newznab_results', true);
+		}
+	}
+
+	function newznabQuicksearch($pubId = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$points = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::Newznab);
+			if ( $points == false || count($points) == 0) {
+				echo '<section class="feedback error">' . Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) . Endpoint_Type::Newznab. '</section>';
+			}
+			else if ( $pubId > 0 ) {
+				$publication = Model::Named('Publication')->objectForId( $pubId );
+				if ( $publication != false ) {
+					$endpoint = $points[0];
+					try {
+						$connection = new NewznabConnector( $endpoint );
+						$this->view->endpoint_id = $endpoint->id;
+						$this->view->fluxModel = Model::Named('Flux');
+						$results = $connection->searchComics($publication->searchString());
+						if ( is_array($results) == false ) {
+							$results = $connection->searchComics($publication->seriesName() . " " . $publication->paddedIssueNum());
+						}
+						$this->view->results = $results;
+						$this->view->render( '/wanted/newznab_quick', true);
+					}
+					catch ( \Exception $e ) {
+						echo '<section class="feedback error">' . $e->getMessage(). '</section>';
+					}
+				}
+				else {
+					echo '<section class="feedback error">No publication found</section>';
+				}
+			}
+			else {
+				echo '<section class="feedback error">No publication identified</section>';
+			}
+		}
+	}
+
+	function downloadNewznab()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			if ( isset($_GET['endpoint_id'], $_GET['name'], $_GET['guid'], $_GET['url'], $_GET['postedDate'])) {
+				$name = $_GET['name'];
+				$endpoint_id = $_GET['endpoint_id'];
+				$guid = $_GET['guid'];
+				$url = $_GET['nzburl'];
+				$postedDate = $_GET['postedDate'];
+
+				$points = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::SABnzbd);
+				if ( $points == false || count($points) == 0) {
+					Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) . Endpoint_Type::SABnzbd);
+					header('location: ' . Config::Web('/netconfig/index'));
+				}
+				else {
+					$source = Model::Named('Endpoint')->objectForId($endpoint_id);
+
+					$fluxImporter = new FluxImporter();
+					$fluxImporter->setEndpoint( $points[0] );
+					$fluxImporter->importFluxValues( $source, $name, $guid, $postedDate, $url );
+					$fluxImporter->daemonizeProcess();
+
+					echo "<em>Importing ..</em>";
+				}
+			}
+			else {
+				echo "nope";
+			}
 		}
 	}
 }
