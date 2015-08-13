@@ -42,23 +42,23 @@ class RSSImporter extends EndpointImporter
 			$rss_model = Model::Named('RSS');
 			$count = 0;
 			foreach ($xml->channel->item as $key => $item) {
-				$guid = (isset($item->guid) ? $item->guid : $item->link);
+				$guid = (string)(isset($item->guid) ? $item->guid : $item->link);
 				$publishedDate = strtotime($item->pubDate);
-				$url = $item->link;
+				$url = (string)$item->link;
 				$len = 0;
 				$type = null;
 				$password = false;
 				if (isset($item->enclosure, $item->enclosure['url'])) {
-					$url = $item->enclosure['url'];
-					$len = $item->enclosure['length'];
-					$type = $item->enclosure['type'];
+					$url = (string)$item->enclosure['url'];
+					$len = (string)$item->enclosure['length'];
+					$type = (string)$item->enclosure['type'];
 				}
 
 				$rss = $rss_model->objectForEndpointGUID($endpoint, $guid);
 				if ( $rss instanceof RSSDBO ) {
 					$rss = $rss_model->update( $rss,
-						$item->title,
-						strip_tags($item->description),
+						(string)$item->title,
+						strip_tags((string)$item->description),
 						$publishedDate,
 						$url,
 						$len,
@@ -69,8 +69,8 @@ class RSSImporter extends EndpointImporter
 				}
 				else {
 					$rss = $rss_model->create( $endpoint,
-						$item->title,
-						strip_tags($item->description),
+						(string)$item->title,
+						strip_tags((string)$item->description),
 						$publishedDate,
 						$guid,
 						$url,
