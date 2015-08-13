@@ -11,6 +11,7 @@ use \SimpleXMLElement as SimpleXMLElement;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Endpoint as Endpoint;
 use model\EndpointDBO as EndpointDBO;
+use model\RSSDBO as RSSDBO;
 
 class RSSImporter extends EndpointImporter
 {
@@ -54,7 +55,7 @@ class RSSImporter extends EndpointImporter
 				}
 
 				$rss = $rss_model->objectForEndpointGUID($endpoint, $guid);
-				if ( $rss instanceof model\RSSDBO ) {
+				if ( $rss instanceof RSSDBO ) {
 					$rss = $rss_model->update( $rss,
 						$item->title,
 						strip_tags($item->description),
