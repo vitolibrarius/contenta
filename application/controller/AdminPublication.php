@@ -44,7 +44,7 @@ class AdminPublication extends Admin
 
 			$model = Model::Named('Publication');
 			$this->view->model = $model;
-			$this->view->render( '/publication/index');
+			$this->view->render( '/admin/publicationIndex');
 		}
 	}
 
@@ -107,7 +107,7 @@ class AdminPublication extends Admin
 			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminPublication/editPublication";
 			$this->view->deleteAction = "/AdminPublication/deletePublication";
-			$this->view->render( '/publication/publicationCards', true);
+			$this->view->render( '/admin/publicationCards', true);
 		}
 	}
 

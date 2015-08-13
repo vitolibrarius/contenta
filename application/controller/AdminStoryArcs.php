@@ -43,7 +43,7 @@ class AdminStoryArcs extends Admin
 
 			$model = Model::Named('Story_Arc');
 			$this->view->model = $model;
-			$this->view->render( '/story_arcs/index');
+			$this->view->render( '/admin/story_arcIndex');
 		}
 	}
 
@@ -95,7 +95,7 @@ class AdminStoryArcs extends Admin
 			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminStoryArcs/editStoryArc";
 			$this->view->deleteAction = "/AdminStoryArcs/deleteStoryArc";
-			$this->view->render( '/story_arcs/story_arcCards', true);
+			$this->view->render( '/admin/story_arcCards', true);
 		}
 	}
 

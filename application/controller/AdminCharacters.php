@@ -34,18 +34,13 @@ class AdminCharacters extends Admin
 {
 	function index()
 	{
-		$this->characterlist();
-	}
-
-	function characterlist()
-	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
 			$model = Model::Named('Character');
 			$this->view->model = $model;
-			$this->view->render( '/characters/index');
+			$this->view->render( '/admin/characterIndex');
 		}
 	}
 
@@ -71,7 +66,7 @@ class AdminCharacters extends Admin
 			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminCharacters/editCharacter";
 			$this->view->deleteAction = "/AdminCharacters/deleteCharacter";
-			$this->view->render( '/characters/characterCards', true);
+			$this->view->render( '/admin/characterCards', true);
 		}
 	}
 
@@ -97,7 +92,7 @@ class AdminCharacters extends Admin
 			else {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
 			}
-			$this->characterlist();
+			header('location: ' . Config::Web('/AdminCharacters/index' ));
 		}
 	}
 
@@ -134,11 +129,11 @@ class AdminCharacters extends Admin
 						foreach ($errors as $attr => $errMsg ) {
 							Session::addValidationFeedback($errMsg);
 						}
-						$this->editCharacter($oid);
+						header('location: ' . Config::Web('/AdminCharacters/editCharacter', $oid ));
 					}
 					else {
 						Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-						$this->characterlist();
+						header('location: ' . Config::Web('/AdminCharacters/index' ));
 					}
 				}
 				else {
@@ -153,11 +148,11 @@ class AdminCharacters extends Admin
 					foreach ($errors as $attr => $errMsg ) {
 						Session::addValidationFeedback( $errMsg );
 					}
-					$this->editCharacter();
+					header('location: ' . Config::Web('/AdminCharacters/editCharacter' ));
 				}
 				else {
 					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-					$this->characterlist();
+					header('location: ' . Config::Web('/AdminCharacters/index' ));
 				}
 			}
 		}
@@ -180,7 +175,7 @@ class AdminCharacters extends Admin
 
 					$importer->enqueue_character( array( "xid" => $object->xid), true, true );
 					$importer->daemonizeProcess();
-					$this->editCharacter($oid);
+					header('location: ' . Config::Web('/AdminCharacters/editCharacter', $oid ));
 				}
 				else {
 					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) );
@@ -200,7 +195,7 @@ class AdminCharacters extends Admin
 			$ep_model = Model::Named('Endpoint');
 			$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 			if ( $points == false || count($points) == 0) {
-				Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) );
+				Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) . Endpoint_Type::ComicVine);
 				header('location: ' . Config::Web('/netconfig/index'));
 			}
 			else {
@@ -280,7 +275,7 @@ class AdminCharacters extends Admin
 					$importer->daemonizeProcess();
 				}
 
-				$this->characterlist();
+				header('location: ' . Config::Web('/AdminCharacters/index' ));
 			}
 		}
 	}

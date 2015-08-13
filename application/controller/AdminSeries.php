@@ -37,18 +37,13 @@ class AdminSeries extends Admin
 {
 	function index()
 	{
-		$this->serieslist();
-	}
-
-	function serieslist()
-	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
 			$model = Model::Named('Series');
 			$this->view->model = $model;
-			$this->view->render( '/series/index');
+			$this->view->render( '/admin/seriesIndex');
 		}
 	}
 
@@ -77,7 +72,7 @@ class AdminSeries extends Admin
 			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminSeries/editSeries";
 			$this->view->deleteAction = "/AdminSeries/deleteSeries";
-			$this->view->render( '/series/seriesCards', true);
+			$this->view->render( '/admin/seriesCards', true);
 		}
 	}
 
@@ -103,7 +98,7 @@ class AdminSeries extends Admin
 			else {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
 			}
-			$this->serieslist();
+			header('location: ' . Config::Web('/AdminSeries/index' ));
 		}
 	}
 
@@ -183,7 +178,7 @@ class AdminSeries extends Admin
 				}
 				else {
 					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-					$this->serieslist();
+					header('location: ' . Config::Web('/AdminSeries/index' ));
 				}
 			}
 		}
@@ -310,7 +305,7 @@ class AdminSeries extends Admin
 					$importer->daemonizeProcess();
 				}
 
-				$this->serieslist();
+				header('location: ' . Config::Web('/AdminSeries/editSeries/' . $existing->id));
 			}
 		}
 	}
