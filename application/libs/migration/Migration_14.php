@@ -32,6 +32,7 @@ use model\Endpoint_Type as Endpoint_Type;
 use model\Endpoint as Endpoint;
 use model\RSS as RSS;
 use model\Job_Type as Job_Type;
+use model\Flux as Flux;
 
 
 class Migration_14 extends Migrator
@@ -50,6 +51,56 @@ class Migration_14 extends Migrator
 
 	public function sqlite_upgrade()
 	{
+		/** FLUX */
+		$sql = 'CREATE TABLE IF NOT EXISTS ' . Flux::TABLE . " ( "
+			. Flux::id . " INTEGER PRIMARY KEY, "
+			. Flux::publication_id . " INTEGER, "
+			. Flux::created . " INTEGER, "
+			. Flux::name . " TEXT, "
+			. Flux::flux_hash . " TEXT, "
+			. Flux::flux_error . " INTEGER, "
+			. Flux::src_endpoint . " INTEGER, "
+			. Flux::src_guid . " TEXT, "
+			. Flux::src_status . " TEXT, "
+			. Flux::src_pub_date . " INTEGER, "
+			. Flux::src_url . " TEXT, "
+			. Flux::dest_endpoint . " INTEGER, "
+			. Flux::dest_guid . " TEXT, "
+			. Flux::dest_status . " TEXT, "
+			. Flux::dest_submission . " INTEGER, "
+			. "FOREIGN KEY (". Flux::publication_id .") REFERENCES " . Publication::TABLE . "(" . Publication::id . "),"
+			. "FOREIGN KEY (". Flux::src_endpoint .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . "),"
+			. "FOREIGN KEY (". Flux::dest_endpoint .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
+			. ")";
+		$this->sqlite_execute( Flux::TABLE, $sql, "Create table " . Flux::TABLE );
+
+		/** NEW INDEXES */
+		$indexStatements = array(
+			array(
+				Migrator::IDX_TABLE => Flux::TABLE,
+				Migrator::IDX_COLS => array( Flux::src_endpoint, Flux::src_guid ),
+				Migrator::IDX_UNIQUE => true
+			),
+			array(
+				Migrator::IDX_TABLE => Flux::TABLE,
+				Migrator::IDX_COLS => array( Flux::dest_endpoint, Flux::dest_guid ),
+				Migrator::IDX_UNIQUE => true
+			),
+			array(
+				Migrator::IDX_TABLE => Flux::TABLE,
+				Migrator::IDX_COLS => array( Flux::flux_hash )
+			),
+		);
+		foreach( $indexStatements as $config ) {
+			$table = $config[Migrator::IDX_TABLE];
+			$columns = $config[Migrator::IDX_COLS];
+			$indexName = $table . '_' . implode("", $columns);
+			$unique = (isset($config[Migrator::IDX_UNIQUE]) ? boolval($config[Migrator::IDX_UNIQUE]) : false);
+
+			$statement = 'CREATE ' . ($unique ? 'UNIQUE' : '') . ' INDEX IF NOT EXISTS ' . $indexName
+				. ' on ' . $table . '(' . implode(",", $columns) . ')';
+			$this->sqlite_execute( $table, $statement, "Index on " . $table );
+		}
 	}
 
 	public function sqlite_postUpgrade()
@@ -62,6 +113,15 @@ class Migration_14 extends Migrator
 				Job_Type::desc => "Load publication data from metadata endpoints (like ComicVine) in batches of 20",
 				Job_Type::processor => "ComicVineImporter",
 				Job_Type::parameter => json_encode(array( "enqueueBatch" => array("publication", 20)), JSON_PRETTY_PRINT),
+				Job_Type::scheduled => Model::TERTIARY_TRUE,
+				Job_Type::requires_endpoint => Model::TERTIARY_TRUE
+			),
+			array(
+				Job_Type::name => "SABnzbd status",
+				Job_Type::code => "sabnzbd",
+				Job_Type::desc => "Update the download status from SABnzbd",
+				Job_Type::processor => "FluxStatusUpdator",
+				Job_Type::parameter => null,
 				Job_Type::scheduled => Model::TERTIARY_TRUE,
 				Job_Type::requires_endpoint => Model::TERTIARY_TRUE
 			)
