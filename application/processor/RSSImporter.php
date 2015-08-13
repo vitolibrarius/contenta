@@ -11,7 +11,7 @@ use \SimpleXMLElement as SimpleXMLElement;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Endpoint as Endpoint;
 use model\EndpointDBO as EndpointDBO;
-use model\RSSDBO as RSSDBO;
+use model\RssDBO as RssDBO;
 
 class RSSImporter extends EndpointImporter
 {
@@ -39,7 +39,7 @@ class RSSImporter extends EndpointImporter
 		$endpoint = $this->endpoint();
 		list($xml, $headers) = $connection->performGET( $endpoint->base_url );
 		if ( $xml instanceof SimpleXMLElement) {
-			$rss_model = Model::Named('RSS');
+			$rss_model = Model::Named('Rss');
 			$count = 0;
 			foreach ($xml->channel->item as $key => $item) {
 				$guid = (string)(isset($item->guid) ? $item->guid : $item->link);
@@ -55,7 +55,7 @@ class RSSImporter extends EndpointImporter
 				}
 
 				$rss = $rss_model->objectForEndpointGUID($endpoint, $guid);
-				if ( $rss instanceof RSSDBO ) {
+				if ( $rss instanceof RssDBO ) {
 					$rss = $rss_model->update( $rss,
 						(string)$item->title,
 						strip_tags((string)$item->description),

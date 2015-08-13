@@ -11,7 +11,7 @@ use \Logger as Logger;
 use utilities\MediaFilename as MediaFilename;
 use model\Endpoint as Endpoint;
 
-class RSS extends Model
+class Rss extends Model
 {
 	const TABLE =		'rss';
 	const id =			'id';
@@ -33,22 +33,22 @@ class RSS extends Model
 	const enclosure_hash =		'enclosure_hash';
 	const enclosure_password =	'enclosure_password';
 
-	public function tableName() { return RSS::TABLE; }
-	public function tablePK() { return RSS::id; }
-	public function sortOrder() { return array(RSS::title, RSS::pub_date); }
+	public function tableName() { return Rss::TABLE; }
+	public function tablePK() { return Rss::id; }
+	public function sortOrder() { return array(Rss::title, Rss::pub_date); }
 
 	public function allColumnNames()
 	{
 		return array(
-			RSS::id, RSS::endpoint_id, RSS::created,
-			RSS::title, RSS::desc, RSS::pub_date, RSS::guid, RSS::clean_name, RSS::clean_issue, RSS::clean_year,
-			RSS::enclosure_url, RSS::enclosure_length, RSS::enclosure_mime, RSS::enclosure_hash, RSS::enclosure_password
+			Rss::id, Rss::endpoint_id, Rss::created,
+			Rss::title, Rss::desc, Rss::pub_date, Rss::guid, Rss::clean_name, Rss::clean_issue, Rss::clean_year,
+			Rss::enclosure_url, Rss::enclosure_length, Rss::enclosure_mime, Rss::enclosure_hash, Rss::enclosure_password
 		);
 	}
 
 	public function objectForEndpointGUID( EndpointDBO $endpoint = null, $guid )
 	{
-		return $this->singleObjectForKeyValues( array( RSS::endpoint_id => $endpoint->id, RSS::guid => $guid ) );
+		return $this->singleObjectForKeyValues( array( Rss::endpoint_id => $endpoint->id, Rss::guid => $guid ) );
 	}
 
 	public function create( EndpointDBO $endpoint = null, $title, $desc, $pub_date, $guid, $encl_url = null, $encl_length = 0, $encl_mime = 'application/x-nzb', $encl_hash = null, $encl_password = false )
@@ -58,23 +58,23 @@ class RSS extends Model
 			$meta = $mediaFilename->updateFileMetaData(null);
 
 			$params = array(
-				RSS::created => time(),
-				RSS::title => $title,
-				RSS::desc => $desc,
-				RSS::pub_date => $pub_date,
-				RSS::guid => $guid,
-				RSS::clean_name => $meta['name'],
-				RSS::clean_issue => (isset($meta['issue']) ? $meta['issue'] : null),
-				RSS::clean_year => (isset($meta['year']) ? $meta['year'] : null),
-				RSS::enclosure_url => $encl_url,
-				RSS::enclosure_length => $encl_length,
-				RSS::enclosure_mime => $encl_mime,
-				RSS::enclosure_hash => $encl_hash,
-				RSS::enclosure_password => ($encl_password) ? 1 : 0,
+				Rss::created => time(),
+				Rss::title => $title,
+				Rss::desc => $desc,
+				Rss::pub_date => $pub_date,
+				Rss::guid => $guid,
+				Rss::clean_name => $meta['name'],
+				Rss::clean_issue => (isset($meta['issue']) ? $meta['issue'] : null),
+				Rss::clean_year => (isset($meta['year']) ? $meta['year'] : null),
+				Rss::enclosure_url => $encl_url,
+				Rss::enclosure_length => $encl_length,
+				Rss::enclosure_mime => $encl_mime,
+				Rss::enclosure_hash => $encl_hash,
+				Rss::enclosure_password => ($encl_password) ? 1 : 0,
 			);
 
 			if ( isset($endpoint) ) {
-				$params[RSS::endpoint_id] = $endpoint->id;
+				$params[Rss::endpoint_id] = $endpoint->id;
 			}
 
 			list( $obj, $errorList ) = $this->createObject($params);
@@ -87,7 +87,7 @@ class RSS extends Model
 		return false;
 	}
 
-	public function update( RSSDBO $obj = null, $title, $desc, $pub_date, $encl_url = null, $encl_length = 0, $encl_mime = 'application/x-nzb', $encl_hash = null, $encl_password = false )
+	public function update( RssDBO $obj = null, $title, $desc, $pub_date, $encl_url = null, $encl_length = 0, $encl_mime = 'application/x-nzb', $encl_hash = null, $encl_password = false )
 	{
 		if ( isset( $obj ) && is_null($obj) == false ) {
 			$updates = array();
@@ -96,40 +96,40 @@ class RSS extends Model
 				$mediaFilename = new MediaFilename($title);
 				$meta = $mediaFilename->updateFileMetaData(null);
 
-				$updates[RSS::title] = $title;
-				$updates[RSS::clean_name] = $meta['name'];
-				$updates[RSS::clean_issue] = (isset($meta['issue']) ? $meta['issue'] : null);
-				$updates[RSS::clean_year] = (isset($meta['year']) ? $meta['year'] : null);
+				$updates[Rss::title] = $title;
+				$updates[Rss::clean_name] = $meta['name'];
+				$updates[Rss::clean_issue] = (isset($meta['issue']) ? $meta['issue'] : null);
+				$updates[Rss::clean_year] = (isset($meta['year']) ? $meta['year'] : null);
 			}
 
 			if (isset($desc) && strlen($desc) > 0) {
 				if ( $desc != $obj->desc ) {
-					$updates[RSS::desc] = strip_tags($desc);
+					$updates[Rss::desc] = strip_tags($desc);
 				}
 			}
 
 			if (isset($pub_date) && (isset($obj->pub_date) == false || $pub_date != $obj->pub_date)) {
-				$updates[RSS::pub_date] = $pub_date;
+				$updates[Rss::pub_date] = $pub_date;
 			}
 
 			if (isset($encl_url) && (isset($obj->enclosure_url) == false || $encl_url != $obj->enclosure_url)) {
-				$updates[RSS::enclosure_url] = $encl_url;
+				$updates[Rss::enclosure_url] = $encl_url;
 			}
 
 			if (isset($encl_length) && (isset($obj->enclosure_length) == false || $encl_length != $obj->enclosure_length)) {
-				$updates[RSS::enclosure_length] = $encl_length;
+				$updates[Rss::enclosure_length] = $encl_length;
 			}
 
 			if (isset($encl_mime) && (isset($obj->enclosure_mime) == false || $encl_mime != $obj->enclosure_mime)) {
-				$updates[RSS::enclosure_mime] = $encl_mime;
+				$updates[Rss::enclosure_mime] = $encl_mime;
 			}
 
 			if (isset($encl_hash) && (isset($obj->enclosure_hash) == false || $encl_hash != $obj->enclosure_hash)) {
-				$updates[RSS::enclosure_hash] = $encl_hash;
+				$updates[Rss::enclosure_hash] = $encl_hash;
 			}
 
 			if (isset($encl_password) && (isset($obj->enclosure_password) == false || boolval($encl_password) != boolval($obj->enclosure_password))) {
-				$updates[RSS::enclosure_password] = (($encl_password) ? 1 : 0);
+				$updates[Rss::enclosure_password] = (($encl_password) ? 1 : 0);
 			}
 
 			if ( count($updates) > 0 ) {

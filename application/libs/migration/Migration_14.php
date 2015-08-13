@@ -30,7 +30,7 @@ use model\Media_Type as Media_Type;
 use model\Media as Media;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Endpoint as Endpoint;
-use model\RSS as RSS;
+use model\Rss as Rss;
 use model\Job_Type as Job_Type;
 use model\Flux as Flux;
 

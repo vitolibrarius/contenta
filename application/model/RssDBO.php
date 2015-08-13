@@ -14,7 +14,7 @@ use model\Endpoint as Endpoint;
 
 use db\Qualifier as Qualifier;
 
-class RSSDBO extends DataObject
+class RssDBO extends DataObject
 {
 	public $endpoint_id;
 	public $created;

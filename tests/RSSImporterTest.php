@@ -88,7 +88,7 @@ $importer->processData();
 
 my_echo();
 
-$rss = Model::Named("RSS")->allObjects();
+$rss = Model::Named("Rss")->allObjects();
 reportData($rss,  array(
 	"clean_year",
 	"clean_issue",

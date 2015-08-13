@@ -28,7 +28,7 @@ use model\Publication_Character as Publication_Character;
 use model\Media_Type as Media_Type;
 use model\Media as Media;
 use model\Endpoint as Endpoint;
-use model\RSS as RSS;
+use model\Rss as Rss;
 
 
 class Migration_12 extends Migrator
@@ -48,30 +48,30 @@ class Migration_12 extends Migrator
 	public function sqlite_upgrade()
 	{
 		/** RSS */
-		$sql = 'CREATE TABLE IF NOT EXISTS ' . RSS::TABLE . " ( "
-			. RSS::id . " INTEGER PRIMARY KEY, "
-			. RSS::endpoint_id . " INTEGER, "
-			. RSS::created . " INTEGER, "
-			. RSS::title . " TEXT, "
-			. RSS::desc . " TEXT, "
-			. RSS::pub_date . " INTEGER, "
-			. RSS::guid . " TEXT, "
-			. RSS::clean_name . " TEXT, "
-			. RSS::clean_issue . " TEXT, "
-			. RSS::clean_year . " INTEGER, "
-			. RSS::enclosure_url . " TEXT, "
-			. RSS::enclosure_length . " INTEGER, "
-			. RSS::enclosure_mime . " TEXT, "
-			. RSS::enclosure_hash . " TEXT, "
-			. RSS::enclosure_password . " INTEGER, "
-			. "FOREIGN KEY (". RSS::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
+		$sql = 'CREATE TABLE IF NOT EXISTS ' . Rss::TABLE . " ( "
+			. Rss::id . " INTEGER PRIMARY KEY, "
+			. Rss::endpoint_id . " INTEGER, "
+			. Rss::created . " INTEGER, "
+			. Rss::title . " TEXT, "
+			. Rss::desc . " TEXT, "
+			. Rss::pub_date . " INTEGER, "
+			. Rss::guid . " TEXT, "
+			. Rss::clean_name . " TEXT, "
+			. Rss::clean_issue . " TEXT, "
+			. Rss::clean_year . " INTEGER, "
+			. Rss::enclosure_url . " TEXT, "
+			. Rss::enclosure_length . " INTEGER, "
+			. Rss::enclosure_mime . " TEXT, "
+			. Rss::enclosure_hash . " TEXT, "
+			. Rss::enclosure_password . " INTEGER, "
+			. "FOREIGN KEY (". Rss::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
 			. ")";
-		$this->sqlite_execute( RSS::TABLE, $sql, "Create table " . RSS::TABLE );
+		$this->sqlite_execute( Rss::TABLE, $sql, "Create table " . Rss::TABLE );
 
 		$indexStatements = array(
-			array( Migrator::IDX_TABLE => RSS::TABLE, Migrator::IDX_COLS => array( RSS::title ) ),
-			array( Migrator::IDX_TABLE => RSS::TABLE, Migrator::IDX_COLS => array( RSS::clean_name ) ),
-			array( Migrator::IDX_TABLE => RSS::TABLE, Migrator::IDX_COLS => array( RSS::endpoint_id, RSS::guid ), Migrator::IDX_UNIQUE => true ),
+			array( Migrator::IDX_TABLE => Rss::TABLE, Migrator::IDX_COLS => array( Rss::title ) ),
+			array( Migrator::IDX_TABLE => Rss::TABLE, Migrator::IDX_COLS => array( Rss::clean_name ) ),
+			array( Migrator::IDX_TABLE => Rss::TABLE, Migrator::IDX_COLS => array( Rss::endpoint_id, Rss::guid ), Migrator::IDX_UNIQUE => true ),
 		);
 		foreach( $indexStatements as $config ) {
 			$table = $config[Migrator::IDX_TABLE];
