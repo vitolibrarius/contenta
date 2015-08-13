@@ -1,3 +1,96 @@
+Version 0.4.0:
+* 2e60996 -  (HEAD, master) Some test classes (Thu Aug 13 12:53:10 2015 -0600) <Vito Librarius>
+* c8e436e -  Added manual newznab search and integration with the wanted list for manual downloads (Thu Aug 13 12:52:52 2015 -0600) <Vito Librarius>
+* ff507f1 -  added performPOST to endpoints and a SABnzbd connector to process downloaded nab files (Thu Aug 13 12:51:38 2015 -0600) <Vito Librarius>
+* 861bd09 -  Processors to handle downloads and track them in SABnzbd (Thu Aug 13 12:50:31 2015 -0600) <Vito Librarius>
+* 2d97ce1 -  Added table to track downloads that are in Flux (Thu Aug 13 12:50:00 2015 -0600) <Vito Librarius>
+* c7fbc52 -  Small adjustments to ui (Thu Aug 13 12:49:14 2015 -0600) <Vito Librarius>
+* 98d0d02 -  (origin/master, origin/HEAD) small change in the api for setEndpoint (Wed Aug 12 15:53:54 2015 -0600) <Vito Librarius>
+* 683498a -  Change message signature to performGET(), to be followed with performPOST() .. soon (Tue Aug 11 18:26:21 2015 -0600) <Vito Librarius>
+* 84531b3 -  Hmmm, 3 n's in Connection .. how'd I miss that? (Mon Aug 10 14:11:12 2015 -0600) <Vito Librarius>
+* 16d27d3 -  oops, turn of automatic forcing of connection.  Resume using cache (Mon Aug 10 11:11:03 2015 -0600) <Vito Librarius>
+* da792a0 -  allows customizing the header action, instead of the default controller/index (Mon Aug 10 11:10:27 2015 -0600) <Vito Librarius>
+* 004610a -  added a simple caned query for publications (Mon Aug 10 11:09:45 2015 -0600) <Vito Librarius>
+* 0438276 -  Shorten default display description (Mon Aug 10 11:09:14 2015 -0600) <Vito Librarius>
+* e92982f -  Tweaking the filename parsing (Mon Aug 10 11:08:56 2015 -0600) <Vito Librarius>
+* f5394a5 -  Change the Connector performRequest() to return both data and response headers (Sat Aug 8 14:14:29 2015 -0600) <Vito Librarius>
+* e852dd6 -  function doesn't seem to exist on my mac (Sat Aug 8 14:07:02 2015 -0600) <Vito Librarius>
+* 118534b -  removed some logging (Sat Aug 8 12:17:02 2015 -0600) <Vito Librarius>
+* c3fba29 -  badge highlights (Sat Aug 8 11:28:17 2015 -0600) <Vito Librarius>
+* cfba0eb -  standardized on publications() instead of allPublications() (Sat Aug 8 11:28:01 2015 -0600) <Vito Librarius>
+* 5021b2c -  added limit variable to the all**() methods (Sat Aug 8 11:27:36 2015 -0600) <Vito Librarius>
+* 981ef22 -  removed logs (Sat Aug 8 11:27:08 2015 -0600) <Vito Librarius>
+* c4aa987 -  Api search support for story arcs (Sat Aug 8 11:26:56 2015 -0600) <Vito Librarius>
+* f9f08a8 -  fixed defect where checkbox for wanted is not a form field if it is unchecked (Sat Aug 8 11:26:39 2015 -0600) <Vito Librarius>
+* 8e7d896 -  Added filters to wanted publication report, and added story_arc filter to publication admin page (Sat Aug 8 11:25:55 2015 -0600) <Vito Librarius>
+* 9a11fe1 -  Added generated eTag to image links to enhance cache by client (Fri Aug 7 10:13:58 2015 -0600) <Vito Librarius>
+* d304b7a -  Initial view page for wanted publications based on flagged series and story arcs (Fri Aug 7 10:13:18 2015 -0600) <Vito Librarius>
+* d19834b -  Typo in model name (Fri Aug 7 10:10:55 2015 -0600) <Vito Librarius>
+* 1031492 -  Publication that import due to story_arc may not have series records attached (Fri Aug 7 10:10:36 2015 -0600) <Vito Librarius>
+* bd49e3b -  Updated importer to reduce some logging, and to conditionally support issues attached to a story arc, only if the story arc is flagged as wanted (Fri Aug 7 10:09:39 2015 -0600) <Vito Librarius>
+* b2b88e3 -  Allow story_arc to edit active and wanted flags (Fri Aug 7 10:08:02 2015 -0600) <Vito Librarius>
+* 739e09d -  Starting to collect SQL updates for next release (Fri Aug 7 10:07:24 2015 -0600) <Vito Librarius>
+* 8472235 -  Added InSubQuery qualifier (Fri Aug 7 10:06:45 2015 -0600) <Vito Librarius>
+* 3c19ada -  return self to allow method chaining (Fri Aug 7 10:05:54 2015 -0600) <Vito Librarius>
+* 19da2e6 -  Typo, UserDBO should be UsersDBO (Fri Aug 7 10:05:31 2015 -0600) <Vito Librarius>
+* a1803ad -  these are now embedded in the notification scheme (Thu Aug 6 13:59:18 2015 -0600) <Vito Librarius>
+* f765774 -  grab the story_arc pub count, if there is one (Thu Aug 6 13:58:51 2015 -0600) <Vito Librarius>
+* 53d91de -  removed publisher from series display cards (Wed Aug 5 21:46:44 2015 -0600) <Vito Librarius>
+* 2537cc6 -  Added Publication Admin edit page (Wed Aug 5 21:46:22 2015 -0600) <Vito Librarius>
+* 941e966 -  fleshed out some of the story arc admin features (Wed Aug 5 21:45:47 2015 -0600) <Vito Librarius>
+* 6753863 -  rewrote the html\Generator as html\Element .  this design is similar but does not use as much closure. (Wed Aug 5 21:39:23 2015 -0600) <Vito Librarius>
+* 8ea3147 -  Created initial admin view of story arcs (Tue Aug 4 10:43:33 2015 -0600) <Vito Librarius>
+* 94f6677 -  removed log/feedback (Sun Aug 2 16:35:52 2015 -0600) <Vito Librarius>
+* 41c40a0 -  moved some messages around (Sun Aug 2 16:35:35 2015 -0600) <Vito Librarius>
+* f22e632 -  convenience methods (Sun Aug 2 16:34:47 2015 -0600) <Vito Librarius>
+* aa70a77 -  missing namespace (Sun Aug 2 16:34:21 2015 -0600) <Vito Librarius>
+* e65d4c1 -  changed to custom Like qualifier subclass to manage wildcards consistently (Sun Aug 2 16:08:38 2015 -0600) <Vito Librarius>
+* ea30668 -  Updated style and display cards (Sun Aug 2 15:10:12 2015 -0600) <Vito Librarius>
+* ce27a43 -  update active flag on series that have not published in the last 12 months (Sun Aug 2 14:39:19 2015 -0600) <Vito Librarius>
+* 25cfd7d -  Move feedback headers so they can display in AJAX responses (Sun Aug 2 14:38:56 2015 -0600) <Vito Librarius>
+* da2e04f -  Publication admin ajax filters (Sun Aug 2 14:38:29 2015 -0600) <Vito Librarius>
+* cb0e971 -  Details for the publication card (Sun Aug 2 14:37:21 2015 -0600) <Vito Librarius>
+* 503b665 -  year min/max values for Series start_date (Sun Aug 2 14:37:05 2015 -0600) <Vito Librarius>
+* e8f5f79 -  fixed spinner reference (Sun Aug 2 14:35:27 2015 -0600) <Vito Librarius>
+* 552282e -  Fixed spinner reference (Sun Aug 2 14:35:11 2015 -0600) <Vito Librarius>
+* 2e397ec -  character search api (Sun Aug 2 11:31:23 2015 -0600) <Vito Librarius>
+* 9b11923 -  In qualifier needs unique parameters for multiple values (Sun Aug 2 11:30:56 2015 -0600) <Vito Librarius>
+* de5ccfd -  Select statements supporting the having clause (Sun Aug 2 11:30:26 2015 -0600) <Vito Librarius>
+* 5f12f3a -  Added search filters to Character admin page (Fri Jul 31 17:35:55 2015 -0600) <Vito Librarius>
+* 846e771 -  Update counts when publications are updated (Thu Jul 30 21:02:49 2015 -0600) <Vito Librarius>
+* 08317db -  fixed logging error (Thu Jul 30 19:51:41 2015 -0600) <Vito Librarius>
+* d45308a -  Added a CRUD notification scheme so objects can update summery values when changes occur (Thu Jul 30 19:51:31 2015 -0600) <Vito Librarius>
+* 1018d1a -  (daemons) RSS importer should clean up (Thu Jul 30 18:29:14 2015 -0600) <Vito Librarius>
+* d57bbf1 -  Uniquing models, there's no need to allocate one every time (Thu Jul 30 18:28:47 2015 -0600) <Vito Librarius>
+* c70087d -  Allow clear of current select2 item (Wed Jul 29 20:47:39 2015 -0600) <Vito Librarius>
+* 973f0fe -  Added some localization values for the series admin search (Wed Jul 29 20:33:43 2015 -0600) <Vito Librarius>
+* f60b36d -  widen the publisher space (Wed Jul 29 20:32:30 2015 -0600) <Vito Librarius>
+* 2260aeb -  fixed typo and added null/empty array checks for AND and OR qualifiers (Wed Jul 29 20:29:41 2015 -0600) <Vito Librarius>
+* 79a0931 -  Update to Admin series filtering using select2 and ajax (Wed Jul 29 20:29:08 2015 -0600) <Vito Librarius>
+* 74d8b18 -  rolling out update to select2 stylesheet (Wed Jul 29 20:27:55 2015 -0600) <Vito Librarius>
+* 04ae833 -  Updated select2 javascript to 4.0 (Wed Jul 29 20:24:38 2015 -0600) <Vito Librarius>
+* 425be1e -  Update series external updated date (Wed Jul 29 10:27:24 2015 -0600) <Vito Librarius>
+* 0d59489 -  removed API login logging (Tue Jul 28 20:38:33 2015 -0600) <Vito Librarius>
+* dc00d08 -  Fixes for error occuring when saving updates to jobs (Tue Jul 28 18:22:31 2015 -0600) <Vito Librarius>
+* 521725c -  support an elapsed time of < 1 second (Tue Jul 28 16:13:26 2015 -0600) <Vito Librarius>
+* 3c6f264 -  reversed log sort order and support multiline messages (Tue Jul 28 15:08:35 2015 -0600) <Vito Librarius>
+* 2e4b5aa -  unset variable guards (Tue Jul 28 14:45:47 2015 -0600) <Vito Librarius>
+* 40a697e -  paging is not working yet (Tue Jul 28 14:40:52 2015 -0600) <Vito Librarius>
+* ea7ce1a -  file logging is good enough (Tue Jul 28 14:39:12 2015 -0600) <Vito Librarius>
+* 8fc5e31 -  added log pages for all types of log sinks (Tue Jul 28 12:36:00 2015 -0600) <Vito Librarius>
+* 7be4240 -  Updated database log view to support auto refresh and searching (Mon Jul 27 18:22:56 2015 -0600) <Vito Librarius>
+* e21e03b -  More logging tweaks (Mon Jul 27 11:08:53 2015 -0600) <Vito Librarius>
+* 056e0c5 -  updating logging to make it easier to understand (Mon Jul 27 10:54:49 2015 -0600) <Vito Librarius>
+* e228b65 -  hmmm, where issue count is zero (Sun Jul 26 14:44:45 2015 -0600) <Vito Librarius>
+* eb5833f -  Allow admin reprocessing to reset meta-data (Sun Jul 26 14:30:36 2015 -0600) <Vito Librarius>
+* 923589f -  tweaking the filtering for series year (Sun Jul 26 13:52:10 2015 -0600) <Vito Librarius>
+* fe59050 -  continuing to refine the comic vine search results (Sun Jul 26 11:32:42 2015 -0600) <Vito Librarius>
+* 8ffcd37 -  test and review of the deleteObject functions (Sat Jul 25 20:15:54 2015 -0600) <Vito Librarius>
+* 53a0bdc -  small model window defect fixed (Sat Jul 25 20:14:59 2015 -0600) <Vito Librarius>
+* cf0cc30 -  fixed usage of sort order (Sat Jul 25 19:04:22 2015 -0600) <Vito Librarius>
+* e7c2eb0 -  Changed the createObject to return an array( newObject, arra(validation error)) so I can use it like list($obj, $errors) = $model->createObject( $params ); (Sat Jul 25 16:57:13 2015 -0600) <Vito Librarius>
+* 9af80f6 -  these references failed in the test production environment (Sat Jul 25 15:36:22 2015 -0600) <Vito Librarius>
+
 Version 0.3.0:
 * 3df1d0f -  (HEAD, master) Added some useful summarizing fields for series and story arc to track total publications, pubs available, and average number of days between pub_date (Sat Jul 25 15:02:41 2015 -0600) <Vito Librarius>
 * d7593cf -  small typos fixed (Sat Jul 25 13:55:20 2015 -0600) <Vito Librarius>
