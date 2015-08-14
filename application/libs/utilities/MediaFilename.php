@@ -66,11 +66,15 @@ class MediaFilename
 		// remove one shot
 		$working = preg_replace("/\\b(tpb|os|one[ -]shot|ogn|gn)/uim", "", $working);
 
-		// remove name dash and replace with ': '
-		$working = preg_replace("/(\\s-\\s)/uim", " ", $working, 1);
+		// remove name dash and replace with ' '
+		// change "Astro-City-The-Dark-Age-Book-Three - 1 - 2009" to "Astro City The Dark Age Book Three - 1 - 2009"
+		if ( preg_match("/(\\D+-){3,}/uiU", $working) > 0 ) {
+			$working = preg_replace("/((\\D+)-)+/uiU", "$2 ", $working);
+		}
+ 		$working = preg_replace("/(\\s-\\s)/uim", " ", $working, 1);
 
 		// everything up to issue/year like XYZ Comic 001 2014
-		if (preg_match("/(^.+)(?=\\b[-]?(([0-9]{1,3}\\.[0-9]+|[0-9]{1,4}))\\s+(\\d\\d\\d\\d))/uU", $working, $matches, 0))
+		if (preg_match("/(^.+)(?=\\b[-]?(([0-9]{1,3}\\.[0-9]+|[0-9]{1,4}))\\s+(\\d{4}))/uU", $working, $matches, 0))
 		{
 // 			echo "everything up to issue/year like $working" .PHP_EOL;
 			return $matches[1];

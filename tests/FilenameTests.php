@@ -258,6 +258,14 @@ $testdata = array(
 		"name" => "Swamp Thing",
 		"issue" => "012",
 	),
+	"Astro-City-The-Dark-Age-Book-Three - 1 - 2009.cbr" => array(
+		"clean" => "Astro-City-The-Dark-Age-Book-Three - 1 - 2009",
+		"year" => "2009",
+		"extension" => "cbr",
+		"name" => "Astro City The Dark Age Book Three",
+		"issue" => "1",
+	),
+
 );
 
 $hasErrors = false;
