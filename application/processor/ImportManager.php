@@ -11,6 +11,7 @@ use \Session as Session;
 
 use utilities\Metadata as Metadata;
 use utilities\FileWrapper as FileWrapper;
+use utilities\Stopwatch as Stopwatch;
 
 class ImportManager extends Processor
 {
@@ -149,9 +150,10 @@ class ImportManager extends Processor
 				$process_meta = Metadata::forDirectory($processDir);
 				if ( $process_meta->isMeta( UploadImport::META_THUMBNAIL ) ) {
 					$thumbailFile = $process_meta->getMeta(UploadImport::META_THUMBNAIL);
-					if ( file_exists($thumbailFile) ) {
+					$thumbnailPath = appendPath($processDir, $thumbailFile);
+					if ( file_exists($thumbnailPath) ) {
 						$mimeType = 'image/' . file_ext($thumbailFile);
-						$image = file_get_contents(appendPath($processDir, $thumbailFile));
+						$image = file_get_contents($thumbnailPath);
 					}
 				}
 
@@ -172,7 +174,6 @@ class ImportManager extends Processor
 				}
 			}
 		}
-
 		return array( $image, $mimeType );
 	}
 

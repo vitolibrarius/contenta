@@ -56,10 +56,10 @@ abstract class ContentMetadataImporter extends EndpointImporter
 					$this->importImage( $mediaObject, Model::ThumbnailName, $imageURL );
 				}
 			}
-			else {
-				Logger::logInfo( "$mediaObject Not importing images (forceImages = $forceImages, hasIcons = " . $mediaObject->hasIcons() . ")",
-					$this->type, $this->guid );
-			}
+// 			else {
+// 				Logger::logInfo( "$mediaObject Not importing images (forceImages = $forceImages, hasIcons = " . $mediaObject->hasIcons() . ")",
+// 					$this->type, $this->guid );
+// 			}
 		}
 		return false;
 	}

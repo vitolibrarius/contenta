@@ -104,6 +104,22 @@ class UploadImport extends Processor
 		return false;
 	}
 
+	private function generateThumbnail()
+	{
+		$wrapper = $this->sourceFileWrapper();
+		if ( $wrapper != null ) {
+			$imageFile = $wrapper->firstImageThumbnailName();
+			if ( is_null($imageFile) == false ) {
+				$mimeType = 'image/' . file_ext($imageFile);
+				$image = $wrapper->wrappedThumbnailForName($imageFile, 100, 100);
+
+				$thumbailFile = "Thumbnail." . file_ext($imageFile);
+				file_put_contents($this->workingDirectory($thumbailFile), $image);
+				$this->setMeta(UploadImport::META_THUMBNAIL, $thumbailFile);
+			}
+		}
+	}
+
 	public function setMediaForImport( $path = null, $filename = null )
 	{
 		if ( is_null($path) || is_null($filename) ) {
@@ -253,13 +269,17 @@ class UploadImport extends Processor
 		}
 
 		if ($this->hasResultsMetadata() == false && $this->processSearch() == false ) {
+			$this->setMeta( UploadImport::META_STATUS, "NO_METADATA_FOUND");
 			Logger::logError( "No media metadata found for importing", $this->type, $this->sourceFilename());
+			$this->generateThumbnail();
 			return;
 		}
 
 		$issue = $this->getMeta( UploadImport::META_RESULTS_ISSUES );
 		if (count($issue) > 1) {
+			$this->setMeta( UploadImport::META_STATUS, "MULTIPLE_METADATA");
 			Logger::logError( "Multiple media metadata found for importing", $this->type, $this->sourceFilename());
+			$this->generateThumbnail();
 			return;
 		}
 
