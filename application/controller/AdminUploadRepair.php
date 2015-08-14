@@ -68,22 +68,7 @@ class AdminUploadRepair extends Admin
 			$mimeType = null;
 			if ( is_null($processKey) == false ) {
 				$processor = Processor::Named("ImportManager", 0);
-				$wrapper = $processor->fileWrapper($processKey);
-				if ( $wrapper != null ) {
-					$filelist = $wrapper->wrapperContents();
-					$intDex = intval($idx);
-
-					if (($intDex >= 0) && ($intDex < count($filelist))) {
-						$mimeType = 'image/' . file_ext($filelist[$intDex]);
-						$image = $wrapper->wrappedThumbnailForName($filelist[$intDex], 200, 200);
-					}
-					else {
-						Logger::logWarning('thumbnail bad index?');
-					}
-				}
-				else {
-					Logger::logWarning('thumbnail no processor?');
-				}
+				list( $image, $mimeType ) = $processor->indexedThumbnail($processKey, $idx, 200, 200);
 			}
 			else {
 				Logger::logWarning('thumbnail source missing?');

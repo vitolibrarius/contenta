@@ -34,6 +34,7 @@ class UploadImport extends Processor
 	const META_STATUS = 'status';
 
 	const META_THUMBNAIL = 'thumbnail';
+	const META_INDEXED_THUMBNAIL = 'images';
 
 	const META_RESULTS = 'results';
 	const META_RESULTS_ISSUES = 'results/issues';
@@ -104,18 +105,41 @@ class UploadImport extends Processor
 		return false;
 	}
 
-	private function generateThumbnail()
+	private function generateThumbnails()
 	{
 		$wrapper = $this->sourceFileWrapper();
 		if ( $wrapper != null ) {
-			$imageFile = $wrapper->firstImageThumbnailName();
-			if ( is_null($imageFile) == false ) {
-				$mimeType = 'image/' . file_ext($imageFile);
-				$image = $wrapper->wrappedThumbnailForName($imageFile, 100, 100);
+			// small thumbnail
+			$thumbnail = $this->getMeta( UploadImport::META_THUMBNAIL );
+			if ( is_string($thumbail) == false || file_exists($this->workingDirectory($thumbail)) == false ) {
+				$imageFile = $wrapper->firstImageThumbnailName();
+				if ( is_null($imageFile) == false ) {
+					$mimeType = 'image/' . file_ext($imageFile);
+					$image = $wrapper->wrappedThumbnailForName($imageFile, 100, 100);
 
-				$thumbailFile = "Thumbnail." . file_ext($imageFile);
-				file_put_contents($this->workingDirectory($thumbailFile), $image);
-				$this->setMeta(UploadImport::META_THUMBNAIL, $thumbailFile);
+					$thumbailFile = "Thumbnail." . file_ext($imageFile);
+					file_put_contents($this->workingDirectory($thumbailFile), $image);
+					$this->setMeta(UploadImport::META_THUMBNAIL, $thumbailFile);
+				}
+			}
+
+
+			// generate a bigger image for the first detail inspect page
+			$idx = 0;
+			$indexKey = $idx . "_200x200";
+			$indexPath = appendPath( UploadImport::META_INDEXED_THUMBNAIL, $indexKey );
+			$thumbnail = $this->getMeta( $indexPath );
+			if ( is_string($thumbail) == false || file_exists($this->workingDirectory($thumbail)) == false ) {
+				$filelist = $wrapper->wrapperContents();
+				$imageFile = $filelist[$idx];
+				if ( is_null($imageFile) == false ) {
+					$mimeType = 'image/' . file_ext($imageFile);
+					$image = $wrapper->wrappedThumbnailForName($imageFile, 200, 200);
+
+					$thumbailFile = $indexKey . "." . file_ext($imageFile);
+					file_put_contents($this->workingDirectory($thumbailFile), $image);
+					$this->setMeta($indexKey, $thumbailFile);
+				}
 			}
 		}
 	}
@@ -271,7 +295,7 @@ class UploadImport extends Processor
 		if ($this->hasResultsMetadata() == false && $this->processSearch() == false ) {
 			$this->setMeta( UploadImport::META_STATUS, "NO_METADATA_FOUND");
 			Logger::logError( "No media metadata found for importing", $this->type, $this->sourceFilename());
-			$this->generateThumbnail();
+			$this->generateThumbnails();
 			return;
 		}
 
@@ -279,7 +303,7 @@ class UploadImport extends Processor
 		if (count($issue) > 1) {
 			$this->setMeta( UploadImport::META_STATUS, "MULTIPLE_METADATA");
 			Logger::logError( "Multiple media metadata found for importing", $this->type, $this->sourceFilename());
-			$this->generateThumbnail();
+			$this->generateThumbnails();
 			return;
 		}
 

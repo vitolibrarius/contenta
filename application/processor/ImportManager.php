@@ -177,6 +177,49 @@ class ImportManager extends Processor
 		return array( $image, $mimeType );
 	}
 
+	function indexedThumbnail($processKey = null, $idx = 0, $width = 100, $height = 100)
+	{
+		$image = null;
+		$mimeType = null;
+
+		if ( is_null( $processKey ) == false ) {
+			$importQueue = $this->uploadDir();
+			$processDir = appendPath($importQueue, $processKey);
+			if ( is_dir($processDir) ) {
+				$process_meta = Metadata::forDirectory($processDir);
+				$indexKey = appendPath( UploadImport::META_INDEXED_THUMBNAIL, $idx."_".$width."x".$height );
+				if ( $process_meta->isMeta( $indexKey ) ) {
+					$thumbailFile = $process_meta->getMeta($indexKey);
+					$thumbnailPath = appendPath($processDir, $thumbailFile);
+					if ( file_exists($thumbnailPath) ) {
+						$mimeType = 'image/' . file_ext($thumbailFile);
+						$image = file_get_contents($thumbnailPath);
+					}
+				}
+
+				if ( is_null($image)) {
+					$filename = $process_meta->getMeta(UploadImport::META_MEDIA_FILENAME);
+					$wrapper = FileWrapper::instance(appendPath($importQueue, $processKey, $filename));
+					if ( $wrapper != null ) {
+						$filelist = $wrapper->wrapperContents();
+						$intDex = intval($idx);
+
+						if (($intDex >= 0) && ($intDex < count($filelist))) {
+							$imageFile = $filelist[$intDex];
+							$mimeType = 'image/' . file_ext($filelist[$intDex]);
+							$image = $wrapper->wrappedThumbnailForName($imageFile, $width, $height);
+
+							$thumbailFile =  $idx."_".$width."x".$height.".".file_ext($imageFile);
+							file_put_contents(appendPath($processDir, $thumbailFile), $image);
+							$process_meta->setMeta($indexKey, $thumbailFile);
+						}
+					}
+				}
+			}
+		}
+		return array( $image, $mimeType );
+	}
+
 	function fileWrapper($processKey = null)
 	{
 		if ( is_null( $processKey ) == false ) {
