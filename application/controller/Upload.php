@@ -141,6 +141,7 @@ class Upload extends Controller
 					}
 					else {
 						$importer->generateThumbnails();
+						$importer->resetSearchCriteria();
 					}
 					Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success') .' "'. $_FILES['mediaFile']['name'] .'"');
 					$uploadSuccess = true;
