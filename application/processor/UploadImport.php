@@ -107,7 +107,7 @@ class UploadImport extends Processor
 		return false;
 	}
 
-	private function generateThumbnails()
+	public function generateThumbnails()
 	{
 		$wrapper = $this->sourceFileWrapper();
 		if ( $wrapper != null ) {

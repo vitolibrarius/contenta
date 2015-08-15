@@ -139,6 +139,9 @@ class Upload extends Controller
 						Session::addPositiveFeedback("running count is " . count($running));
 						$importer->daemonizeProcess();
 					}
+					else {
+						$importer->generateThumbnails();
+					}
 					Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success') .' "'. $_FILES['mediaFile']['name'] .'"');
 					$uploadSuccess = true;
 				}
