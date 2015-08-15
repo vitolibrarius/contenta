@@ -8,7 +8,8 @@
             "Logs": "Logs",
             "Series": "Series",
             "Profile": "Profile",
-            "Login": "Login"
+            "Login": "Login",
+            "Story Arcs": "Story Arcs"
         },
         "WebsiteLink": "Website",
         "HelpLink": "Help",
@@ -422,7 +423,7 @@
                 "label": "Last Elapsed"
             },
             "next": {
-                "FIELD_EMPTY": "Unable to calculate next job execute time.  Please check the schedule for minute\/hour\/day of week"
+                "FIELD_EMPTY": "Unable to calculate next job execute time.  Please check the schedule for minute-hour-day of week"
             }
         },
         "job_running": {
@@ -588,7 +589,10 @@
         },
         "Upload success": "Upload success",
         "Reprocessing": "Reprocessing",
-        "Processing": "Processing"
+        "Processing": "Processing",
+        "Already imported": "Already imported",
+        "FILE_CORRUPT": "Corrupt file format",
+        "Unsupported Mime Type": "Unsupported Mime Type"
     },
     "AdminSeries": {
         "title": "Series Administration",

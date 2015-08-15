@@ -15,6 +15,8 @@ use model\Media_TypeDBO as Media_TypeDBO;
 
 use db\Qualifier as Qualifier;
 
+use exceptions\ImportMediaException as ImportMediaException;
+
 class Media extends Model
 {
 	const TABLE =			'media';
@@ -87,11 +89,11 @@ class Media extends Model
 	public function create( PublicationDBO $publication = null, Media_TypeDBO $type = null, $original_file = null, $checksum = '', $size = 0 )
 	{
 		if ( is_null($publication) ) {
-			Logger::logError('Publication is a required parameter');
+			throw new ImportMediaException( 'Publication is a required parameter');
 		}
 
 		if ( is_null($type) ) {
-			Logger::logError('Media_Type is a required parameter');
+			throw new ImportMediaException( 'Media_Type is a required parameter');
 		}
 
 		$existing = $this->mediaForChecksum($checksum);
@@ -115,7 +117,7 @@ class Media extends Model
 			return $obj;
 		}
 		else {
-			Logger::logError('Media already exists for checksum ' . $checksum);
+			throw new ImportMediaException( 'Media already exists for checksum ' . $checksum);
 		}
 		return false;
 	}

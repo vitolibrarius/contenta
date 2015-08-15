@@ -14,6 +14,8 @@ use \Processor as Processor;
 
 use model\Users as Users;
 
+use exceptions\ImportMediaException as ImportMediaException;
+
 /**
  * Class Error
  * The index controller
@@ -110,7 +112,7 @@ class Upload extends Controller
 		}
 		else if ( in_array($_FILES['mediaFile']['type'], $this->allowedMimeTypes()) == false )
 		{
-			Session::addNegativeFeedback( Localized::Get("Upload", "Unsupported Mime Type" ) . $_FILES['mediaFile']['type']);
+			Session::addNegativeFeedback( Localized::Get("Upload", "Unsupported Mime Type" ) . ' "' . $_FILES['mediaFile']['type'] . '"');
 			http_response_code(415); // Unsupported Media Type
 		}
 		else
@@ -119,19 +121,25 @@ class Upload extends Controller
 			$contentHash = hash_file(HASH_DEFAULT_ALGO, $_FILES['mediaFile']['tmp_name']);
 			$root = Config::GetProcessing();
 			$workingDir = appendPath($root, "UploadImport", $contentHash );
+			$existing = Model::Named('Media')->mediaForChecksum($contentHash);
 
 			if ( is_dir($workingDir) == true ) {
-				Session::addNegativeFeedback( Localized::Get("Upload", 'Hash Exists'));
+				Session::addNegativeFeedback( Localized::Get("Upload", 'Hash Exists') .' "'. $_FILES['mediaFile']['name'] . '"' );
+			}
+			else if ( $existing instanceof model\MediaDBO ) {
+				Session::addNegativeFeedback(Localized::Get("Upload", 'Already imported') .' "'. $existing->publication()->searchString() .'"');
 			}
 			else {
-				$importer = Processor::Named('UploadImport', $contentHash);
-				if ( $importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name'])) == true ) {
-					Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success'));
+				try {
+					$importer = Processor::Named('UploadImport', $contentHash);
+					$importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name']));
 					$importer->daemonizeProcess();
+
+					Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success') .' "'. $_FILES['mediaFile']['name'] .'"');
 					$uploadSuccess = true;
 				}
-				else {
-					Session::addNegativeFeedback('Identified as ' . ' (' . $pubObj->name . ')  issue ' . $pubObj->issue);
+				catch ( ImportMediaException $me ) {
+					Session::addNegativeFeedback( Localized::Get("Upload", $me->getMessage() ));
 				}
 			}
 		}

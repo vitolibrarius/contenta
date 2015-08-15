@@ -13,6 +13,8 @@ use utilities\MediaFilename as MediaFilename;
 use utilities\Metadata as Metadata;
 use connectors\ComicVineConnector as ComicVineConnector;
 
+use exceptions\ImportMediaException as ImportMediaException;
+
 use model\Endpoint_Type as Endpoint_Type;
 use model\PublicationDBO as PublicationDBO;
 
@@ -147,13 +149,11 @@ class UploadImport extends Processor
 	public function setMediaForImport( $path = null, $filename = null )
 	{
 		if ( is_null($path) || is_null($filename) ) {
-			Logger::logError("Unable to import -null- for media file", $this->type, $this->sourceFilename());
-			return false;
+			throw new ImportMediaException( "NULL_FILENAME" );
 		}
 
 		if ( file_exists($path) == false ) {
-			Logger::logError("No media file at " . $path, $this->type, $this->sourceFilename());
-			return false;
+			throw new ImportMediaException( "FILE_DOES_NOT_EXIST" );
 		}
 
 		$this->createWorkingDirectory();
@@ -168,8 +168,8 @@ class UploadImport extends Processor
 		if ( is_uploaded_file( $path ) ) {
 			move_uploaded_file($path, $this->workingDirectory($workingFile));
 		}
-		else {
-			rename($path, $this->workingDirectory($workingFile)) || die('Failed to move ' . $path);
+		else if (rename($path, $this->workingDirectory($workingFile)) == false ) {
+			throw new ImportMediaException('Failed to move ' . $path);
 		}
 
 		if ($this->getMeta(UploadImport::META_MEDIA_EXT) == 'cbz' ) {
@@ -184,8 +184,7 @@ class UploadImport extends Processor
 					$this->renameMedia( $newFilename );
 				}
 				else {
-					Logger::logWarning($this->getMeta(UploadImport::META_MEDIA_FILENAME) . " not a valid archive", $this->type, $this->sourceFilename() );
-					return false;
+					throw new ImportMediaException( "FILE_CORRUPT" );
 				}
 			}
 		}
@@ -194,7 +193,7 @@ class UploadImport extends Processor
 			return $this->convert_cbr();
 		}
 
-		Logger::logError("Accepting import", $this->type, $this->sourceFilename());
+		Logger::logInfo("Accepting import", $this->type, $this->sourceFilename());
 		return true;
 	}
 
@@ -362,13 +361,16 @@ class UploadImport extends Processor
 				}
 			}
 			else {
-				Logger::logError( "Media error " . var_export($media, true), $this->type, $this->sourceFilename());
+				throw new ImportMediaException( "Create Media error " . (is_bool($media) ? '' : var_export($media, true)));
 			}
+		}
+		catch ( ImportMediaException $me ) {
+			Logger::logError( $me->getMessage(),$this->type, $this->sourceFilename());
+			$this->setMeta( UploadImport::META_STATUS, $me->getMessage() );
 		}
 		catch ( \Exception $e ) {
 			Logger::logException( $e );
 			$this->setMeta( UploadImport::META_STATUS, "IMPORTER_ERROR" );
-			return;
 		}
 
 		Logger::logInfo( "processingData end", $this->type, $this->sourceFilename());
