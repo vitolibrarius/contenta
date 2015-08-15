@@ -102,7 +102,7 @@ $debug = ( ($metadata->isMeta("debug")) ? $metadata->getMeta("debug") : null);
 
 Logger::instance()->setTrace("Daemon", (is_null($job_id) ? $guid : $job_id) );
 
-Logger::logInfo('starting daemon ', $processorName, ($user ? $user->__toString() : $user_api) );
+// Logger::logInfo('starting daemon ', $processorName, ($user ? $user->__toString() : $user_api) );
 try {
 	$job_run_model = Model::Named('Job_Running');
 	$lockfile = appendPath( $workingDir, $processorName . ".lock");
@@ -130,7 +130,7 @@ try {
 			}
 		}
 		else {
-			Logger::logInfo('Running daemon for specific job ' . $job_id);
+// 			Logger::logInfo('Running daemon for specific job ' . $job_id);
 			$job_model = Model::Named('Job');
 			$jobObj = $job_model->objectForId( $job_id );
 			if ( $jobObj instanceof model\JobDBO ) {
@@ -194,6 +194,6 @@ if ( is_null($debug) && is_sub_dir($workingDir, $config->processingDirectory()) 
 	destroy_dir($workingDir);
 }
 
-Logger::logInfo( 'finished daemon', $processorName, ($user ? $user->__toString() : $user_api));
+// Logger::logInfo( 'finished daemon', $processorName, ($user ? $user->__toString() : $user_api));
 
 ?>
