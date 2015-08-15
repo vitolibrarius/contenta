@@ -77,16 +77,9 @@ $points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 $epoint = $points[0];
 echo "Connecting using " . $epoint . PHP_EOL;
 $connection = new ComicVineConnector($epoint);
+// $connection->trace = true;
 
 $issue_tests = array(
-	"FF 010 (2011) (Digital) (Zone-Empire).cbz" => array(
-		"id" => 294897,
-		"issue_number" => "10",
-		"cover_date" => "2011-12-01",
-		"name" => "What I Need",
-		"volume/name" => "FF",
-		"volume/id" => 39453
-	),
 	"Thor 006 (2015) (digital) (Minutemen-Midas).cbz" => array(
 		"id" => 482168,
 		"issue_number" => "6",
@@ -94,6 +87,14 @@ $issue_tests = array(
 		"name" => "Who Holds the Hammer? Who is Thor pt 1",
 		"volume/name" => "Thor",
 		"volume/id" => 77223
+	),
+	"FF 010 (2011) (Digital) (Zone-Empire).cbz" => array(
+		"id" => 294897,
+		"issue_number" => "10",
+		"cover_date" => "2011-12-01",
+		"name" => "What I Need",
+		"volume/name" => "FF",
+		"volume/id" => 39453
 	),
 	"Convergence - Batman and the Outsiders 002 (2015) (Digital) (ThatGuy-Empire).cbz"  => array(
 		"id" => 489237,
@@ -151,17 +152,24 @@ $issue_tests = array(
 		"volume/name" => "Zero",
 		"volume/id" => 67426
 	),
+	"Planetary - 18 - 2004.cbz" => array(
+		"id" => 54545,
+		"issue_number" => "18",
+		"cover_date" => "2004-02-24",
+		"name" => "The Gun Club",
+		"volume/name" => "Planetary",
+		"volume/id" => 7506
+	),
 );
 
 foreach( $issue_tests as $filename => $expected ) {
 	$mediaFilename = new utilities\MediaFilename($filename);
 	$meta = $mediaFilename->updateFileMetaData(null);
 
-	echo PHP_EOL;
 	echo "Searching for "
 		. array_valueForKeypath( "name", $meta) . " - "
 		. array_valueForKeypath( "issue", $meta) . " - "
-		. array_valueForKeypath( "year", $meta) . PHP_EOL;
+		. array_valueForKeypath( "year", $meta);
 
 	$issues = $connection->issue_searchFilteredForSeriesYear(
 		array_valueForKeypath( "issue", $meta),
@@ -175,12 +183,11 @@ foreach( $issue_tests as $filename => $expected ) {
 				echo "	NO match" . PHP_EOL;
 				break;
 			case 1:
-				echo "	found single match" . PHP_EOL;
 				compareComicVineDetails( $expected, array_pop($issues) );
 				break;
 			default:
 				foreach( $issues as $dict ) {
-					echo "\t"
+					echo  PHP_EOL . "\t"
 						. array_valueForKeypath( "issue_number", $dict) . "\t"
 						. array_valueForKeypath( "volume/name", $dict) . "\t"
 						. array_valueForKeypath( "cover_date", $dict) . "\t"

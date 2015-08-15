@@ -47,6 +47,8 @@ class ComicVineConnector extends JSON_EndpointConnector
 	const ISSUE_FIELDS =		"id,aliases,character_credits,cover_date,deck,description,image,issue_number,name,person_credits,site_detail_url,story_arc_credits,volume";
 	const PERSON_FIELDS =		"id,aliases,birth,country,created_characters,deck,description,gender,hometown,image,issues,name,site_detail_url,story_arc_credits,volume_credits";
 
+	public $trace = false;
+
 	public static function allResourceNames()
 	{
 		return array(
@@ -225,6 +227,15 @@ class ComicVineConnector extends JSON_EndpointConnector
 		}
 	}
 
+	private function addDateRangeForYear( array&$filters, $key, $year = null )
+	{
+		if (is_null($year) == false ) {
+			// YYYY-MM-DD|YYYY-MM-DD
+			$year = intval($year);
+			$filters[$key] = $year . "-01-01|" . $year . "-12-31";
+		}
+	}
+
 	public function resource_filtered( $resource, array $filters, $sort = null, $fields = null)
 	{
 		if ( isset($resource) == false || is_string($resource) == false || in_array($resource, ComicVineConnector::allResourceNames()) == false ) {
@@ -321,15 +332,18 @@ class ComicVineConnector extends JSON_EndpointConnector
 		);
 	}
 
-	public function issue_search($xid = null, $vol = null, $name = null, $aliases = null, $cover_date = null, $issue_number = null)
+	public function issue_search($xid = null, $vol = null, $name = null, $aliases = null, $coverYear = null, $issue_number = null)
 	{
 		$filters = array();
 		$this->addIntFilter( $filters, 'id', $xid );
 		$this->addIntFilter( $filters, 'volume', $vol );
-		$this->addFilter( $filters, 'cover_date', $cover_date );
+		$this->addDateRangeForYear( $filters, 'cover_date', $coverYear );
 		$this->addIntFilter( $filters, 'issue_number', $issue_number );
 		$this->addStrFilter( $filters, 'name', $name );
 		$this->addStrFilter( $filters, 'alias', $aliases );
+
+		if ( $this->trace) echo "	filters - " . var_export($filters, true) . PHP_EOL;
+
 		return $this->resource_filtered(
 			ComicVineConnector::RESOURCE_ISSUE,
 			$filters,
@@ -347,14 +361,14 @@ class ComicVineConnector extends JSON_EndpointConnector
 			foreach( $possible as $key => $item ) {
 				$countOfIssues = max(1, isset($item['count_of_issues']) ? intval($item['count_of_issues']) : 1);
 				$itemStartYear = isset($item['start_year']) ? intval($item['start_year']) : 0;
-				$yearDiffRange = ceil($countOfIssues/12) * 1.5;
-				if ($year == 0 || ($year >= $itemStartYear && $year - $itemStartYear <= $yearDiffRange)) {
-// 					echo "accepting $itemStartYear - $countOfIssues - " . $item["name"] . PHP_EOL;
+				//$yearDiffRange = ceil($countOfIssues/12) * 1.6;
+				if ($year == 0 || ($year >= $itemStartYear)) { // && $year - $itemStartYear <= $yearDiffRange)) {
+					if ( $this->trace)  echo "accepting $itemStartYear - $countOfIssues - " . $item["name"] . PHP_EOL;
 					$filtered[] = $item;
 				}
-// 				else {
-// 					echo "rejecting $itemStartYear - $countOfIssues - $yearDiffRange ||" . $item["id"] . " - ". $item["name"] . PHP_EOL;
-// 				}
+				else if ( $this->trace) {
+					echo "rejecting $itemStartYear - $countOfIssues - $yearDiffRange ||" . $item["id"] . " - ". $item["name"] . PHP_EOL;
+				}
 			}
 
 			return $filtered;
@@ -367,15 +381,15 @@ class ComicVineConnector extends JSON_EndpointConnector
 		if ( is_array($possible) && count($possible) > 0 && is_string($name) && strlen($name) > 0) {
 			$filtered = array();
 
-			$margin = min( $margin, strlen($name) );
+			$margin = min( $margin, (strlen($name)/2) );
 			foreach( $possible as $key => $item ) {
 				 if ( levenshtein( $name, $item["name"] ) < $margin ) {
-// 					echo "accepting levenshtein(" . levenshtein( $name, $item["name"] ) . ") " . $item["name"] . PHP_EOL;
+					if ( $this->trace) echo "accepting levenshtein(" . levenshtein( $name, $item["name"] ) . ") " . $item["name"] . PHP_EOL;
 					$filtered[] = $item;
 				}
-// 				else {
-// 					echo "rejecting levenshtein(" . levenshtein( $name, $item["name"] ) . ") " . $item["name"] . PHP_EOL;
-// 				}
+				else if ( $this->trace)  {
+					echo "rejecting levenshtein(" . levenshtein( $name, $item["name"] ) . ") " . $item["name"] . PHP_EOL;
+				}
 			}
 
 			return $filtered;
@@ -386,13 +400,19 @@ class ComicVineConnector extends JSON_EndpointConnector
 	public function series_searchFilteredForYear( $name, $year = 0)
 	{
 		$results = $this->series_search( null, $name );
+		if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) =" . count($results) . PHP_EOL;
 		$results = $this->series_filterForCloseName( $results, $name, 10 );
+		if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) close =" . count($results) . PHP_EOL;
 		$results = $this->series_filterForIssueYear( $results, $year );
+		if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) year =" . count($results) . PHP_EOL;
 		if ( is_array($results) == false || count($results) == 0 ) {
 			// try a fuzzy search
 			$results = $this->search( ComicVineConnector::RESOURCE_VOLUME, $name );
+			if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) fuzzy =" . count($results) . PHP_EOL;
 			$results = $this->series_filterForCloseName( $results, $name, 10 );
+			if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) fuzzy close =" . count($results) . PHP_EOL;
 			$results = $this->series_filterForIssueYear( $results, $year );
+			if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) fuzzy year =" . count($results) . PHP_EOL;
 		}
 
 		return $results;
@@ -409,7 +429,10 @@ class ComicVineConnector extends JSON_EndpointConnector
 				$results
 			);
 
-			$results = $this->issue_search( null, $matchVolumeId, null, null, null, $issueNumber);
+			if ( $this->trace) echo "issue_searchFilteredForSeriesYear volumes = " . var_export($matchVolumeId, true) .PHP_EOL;
+			$results = $this->issue_search( null, $matchVolumeId, null, null, $year, $issueNumber);
+			if ( $this->trace) echo  "issue_searchFilteredForSeriesYear results = " . count($results) . PHP_EOL;
+
 			if ( is_array($results) ) {
 				usort($results, function($a, $b) use ($name) {
 					$a_series_name = array_valueForKeypath( "volume/name", $a );
@@ -418,9 +441,9 @@ class ComicVineConnector extends JSON_EndpointConnector
 				});
 			}
 		}
-// 		else {
-// 			Logger::logError( "issue_searchFilteredForSeriesYear no results" );
-// 		}
+		else if ( $this->trace) {
+			Logger::logError( "issue_searchFilteredForSeriesYear no results" );
+		}
 		return $results;
 	}
 
