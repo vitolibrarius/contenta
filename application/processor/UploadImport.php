@@ -113,15 +113,15 @@ class UploadImport extends Processor
 		if ( $wrapper != null ) {
 			// small thumbnail
 			$thumbnail = $this->getMeta( UploadImport::META_THUMBNAIL );
-			if ( is_string($thumbail) == false || file_exists($this->workingDirectory($thumbail)) == false ) {
+			if ( is_string($thumbnail) == false || file_exists($this->workingDirectory($thumbnail)) == false ) {
 				$imageFile = $wrapper->firstImageThumbnailName();
 				if ( is_null($imageFile) == false ) {
 					$mimeType = 'image/' . file_ext($imageFile);
 					$image = $wrapper->wrappedThumbnailForName($imageFile, 100, 100);
 
-					$thumbailFile = "Thumbnail." . file_ext($imageFile);
-					file_put_contents($this->workingDirectory($thumbailFile), $image);
-					$this->setMeta(UploadImport::META_THUMBNAIL, $thumbailFile);
+					$thumbnailFile = "Thumbnail." . file_ext($imageFile);
+					file_put_contents($this->workingDirectory($thumbnailFile), $image);
+					$this->setMeta(UploadImport::META_THUMBNAIL, $thumbnailFile);
 				}
 			}
 
@@ -131,16 +131,16 @@ class UploadImport extends Processor
 			$indexKey = $idx . "_200x200";
 			$indexPath = appendPath( UploadImport::META_INDEXED_THUMBNAIL, $indexKey );
 			$thumbnail = $this->getMeta( $indexPath );
-			if ( is_string($thumbail) == false || file_exists($this->workingDirectory($thumbail)) == false ) {
+			if ( is_string($thumbnail) == false || file_exists($this->workingDirectory($thumbnail)) == false ) {
 				$filelist = $wrapper->wrapperContents();
 				$imageFile = $filelist[$idx];
 				if ( is_null($imageFile) == false ) {
 					$mimeType = 'image/' . file_ext($imageFile);
 					$image = $wrapper->wrappedThumbnailForName($imageFile, 200, 200);
 
-					$thumbailFile = $indexKey . "." . file_ext($imageFile);
-					file_put_contents($this->workingDirectory($thumbailFile), $image);
-					$this->setMeta($indexKey, $thumbailFile);
+					$thumbnailFile = $indexKey . "." . file_ext($imageFile);
+					file_put_contents($this->workingDirectory($thumbnailFile), $image);
+					$this->setMeta($indexKey, $thumbnailFile);
 				}
 			}
 		}

@@ -149,10 +149,10 @@ class ImportManager extends Processor
 			if ( is_dir($processDir) ) {
 				$process_meta = Metadata::forDirectory($processDir);
 				if ( $process_meta->isMeta( UploadImport::META_THUMBNAIL ) ) {
-					$thumbailFile = $process_meta->getMeta(UploadImport::META_THUMBNAIL);
-					$thumbnailPath = appendPath($processDir, $thumbailFile);
+					$thumbnailFile = $process_meta->getMeta(UploadImport::META_THUMBNAIL);
+					$thumbnailPath = appendPath($processDir, $thumbnailFile);
 					if ( file_exists($thumbnailPath) ) {
-						$mimeType = 'image/' . file_ext($thumbailFile);
+						$mimeType = 'image/' . file_ext($thumbnailFile);
 						$image = file_get_contents($thumbnailPath);
 					}
 				}
@@ -166,9 +166,9 @@ class ImportManager extends Processor
 							$mimeType = 'image/' . file_ext($imageFile);
 							$image = $wrapper->wrappedThumbnailForName($imageFile, 100, 100);
 
-							$thumbailFile = "Thumbnail." . file_ext($imageFile);
-							file_put_contents(appendPath($processDir, $thumbailFile), $image);
-							$process_meta->setMeta(UploadImport::META_THUMBNAIL, $thumbailFile);
+							$thumbnailFile = "Thumbnail." . file_ext($imageFile);
+							file_put_contents(appendPath($processDir, $thumbnailFile), $image);
+							$process_meta->setMeta(UploadImport::META_THUMBNAIL, $thumbnailFile);
 						}
 					}
 				}
@@ -189,10 +189,10 @@ class ImportManager extends Processor
 				$process_meta = Metadata::forDirectory($processDir);
 				$indexKey = appendPath( UploadImport::META_INDEXED_THUMBNAIL, $idx."_".$width."x".$height );
 				if ( $process_meta->isMeta( $indexKey ) ) {
-					$thumbailFile = $process_meta->getMeta($indexKey);
-					$thumbnailPath = appendPath($processDir, $thumbailFile);
+					$thumbnailFile = $process_meta->getMeta($indexKey);
+					$thumbnailPath = appendPath($processDir, $thumbnailFile);
 					if ( file_exists($thumbnailPath) ) {
-						$mimeType = 'image/' . file_ext($thumbailFile);
+						$mimeType = 'image/' . file_ext($thumbnailFile);
 						$image = file_get_contents($thumbnailPath);
 					}
 				}
@@ -209,9 +209,9 @@ class ImportManager extends Processor
 							$mimeType = 'image/' . file_ext($filelist[$intDex]);
 							$image = $wrapper->wrappedThumbnailForName($imageFile, $width, $height);
 
-							$thumbailFile =  $idx."_".$width."x".$height.".".file_ext($imageFile);
-							file_put_contents(appendPath($processDir, $thumbailFile), $image);
-							$process_meta->setMeta($indexKey, $thumbailFile);
+							$thumbnailFile =  $idx."_".$width."x".$height.".".file_ext($imageFile);
+							file_put_contents(appendPath($processDir, $thumbnailFile), $image);
+							$process_meta->setMeta($indexKey, $thumbnailFile);
 						}
 					}
 				}
