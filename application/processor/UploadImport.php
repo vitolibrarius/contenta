@@ -323,10 +323,15 @@ class UploadImport extends Processor
 		$importer = Processor::Named('ComicVineImporter', $this->sourceFilename() );
 		$importer->setEndpoint($points[0]);
 
+		$existingSeries = Model::Named("Series")->objectForExternal(
+			array_valueForKeypath( "volume/id", $matchingIssue),
+			$importer->endpointTypeCode()
+		);
+		$seriesNeedsUpdate = ($existingSeries == false || $existingSeries->needsEndpointUpdate());
 		$importer->enqueue_series( array(
 			"xid" => array_valueForKeypath( "volume/id", $matchingIssue),
 			"name" => array_valueForKeypath( "volume/name", $matchingIssue),
-			), true, true
+			), $seriesNeedsUpdate, $seriesNeedsUpdate
 		);
 
 		$importer->enqueue_publication( array(

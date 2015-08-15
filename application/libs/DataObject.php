@@ -149,6 +149,19 @@ class DataObject
 		return null;
 	}
 
+	public function needsEndpointUpdate()
+	{
+		if ( isset( $this->xsource) ) {
+			return (isset($this->xupdated) == false || $this->xupdated < (time() - (3600 * 24 * 7)) );
+		}
+		return false;
+	}
+
+	public function needsEndpointUpdateString()
+	{
+		return ($this->needsEndpointUpdate() ? "Update yes" : "No Update needed");
+	}
+
 	/* notifications of changes in the object graph
 	 */
 	public function notify( $type = 'none', $object = null )
