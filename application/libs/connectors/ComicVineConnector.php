@@ -348,12 +348,12 @@ class ComicVineConnector extends JSON_EndpointConnector
 				$countOfIssues = max(1, isset($item['count_of_issues']) ? intval($item['count_of_issues']) : 1);
 				$itemStartYear = isset($item['start_year']) ? intval($item['start_year']) : 0;
 				$yearDiffRange = ceil($countOfIssues/12) * 1.5;
-				if ($year == 0 || ($year >= $itemStartYear && $year - $itemStartYear < $yearDiffRange)) {
+				if ($year == 0 || ($year >= $itemStartYear && $year - $itemStartYear <= $yearDiffRange)) {
 // 					echo "accepting $itemStartYear - $countOfIssues - " . $item["name"] . PHP_EOL;
 					$filtered[] = $item;
 				}
 // 				else {
-// 					echo "rejecting $itemStartYear - $countOfIssues - " . $item["id"] . " - ". $item["name"] . PHP_EOL;
+// 					echo "rejecting $itemStartYear - $countOfIssues - $yearDiffRange ||" . $item["id"] . " - ". $item["name"] . PHP_EOL;
 // 				}
 			}
 
@@ -390,7 +390,6 @@ class ComicVineConnector extends JSON_EndpointConnector
 		$results = $this->series_filterForIssueYear( $results, $year );
 		if ( is_array($results) == false || count($results) == 0 ) {
 			// try a fuzzy search
-// 			echo " trying fizzy search" . PHP_EOL;
 			$results = $this->search( ComicVineConnector::RESOURCE_VOLUME, $name );
 			$results = $this->series_filterForCloseName( $results, $name, 10 );
 			$results = $this->series_filterForIssueYear( $results, $year );
@@ -409,6 +408,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 				},
 				$results
 			);
+
 			$results = $this->issue_search( null, $matchVolumeId, null, null, null, $issueNumber);
 			if ( is_array($results) ) {
 				usort($results, function($a, $b) use ($name) {
@@ -418,6 +418,9 @@ class ComicVineConnector extends JSON_EndpointConnector
 				});
 			}
 		}
+// 		else {
+// 			Logger::logError( "issue_searchFilteredForSeriesYear no results" );
+// 		}
 		return $results;
 	}
 
