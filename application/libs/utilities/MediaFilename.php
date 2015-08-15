@@ -68,7 +68,7 @@ class MediaFilename
 
 		// remove name dash and replace with ' '
 		// change "Astro-City-The-Dark-Age-Book-Three - 1 - 2009" to "Astro City The Dark Age Book Three - 1 - 2009"
-		if ( preg_match("/(\\D+-){3,}/uiU", $working) > 0 ) {
+		if ( preg_match("/(\\s-\\s\\d{1,3}\\s-\\s\\d{4})/uiU", $working) > 0 ) {
 			$working = preg_replace("/((\\D+)-)+/uiU", "$2 ", $working);
 		}
  		$working = preg_replace("/(\\s-\\s)/uim", " ", $working, 1);
