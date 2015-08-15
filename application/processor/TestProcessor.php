@@ -47,8 +47,6 @@ class TestProcessor extends Processor
 
 	public function processData()
 	{
-		Logger::logInfo( "processingData start", $this->type, $this->guid);
-
 		echo ". items = $this->items" . PHP_EOL;
 		foreach( $this->list as $idx=>$item ) {
 			echo ". . $idx = $item" . PHP_EOL;
@@ -58,6 +56,5 @@ class TestProcessor extends Processor
 			sleep(1);
 		}
 		echo PHP_EOL;
-		Logger::logInfo( "processingData end", $this->type, $this->guid);
 	}
 }

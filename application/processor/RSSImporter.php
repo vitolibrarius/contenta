@@ -34,7 +34,6 @@ class RSSImporter extends EndpointImporter
 
 	public function processData()
 	{
-		Logger::logInfo( "processingData start", $this->type, $this->guid);
 		$connection = $this->endpointConnector();
 		$endpoint = $this->endpoint();
 		list($xml, $headers) = $connection->performGET( $endpoint->base_url );
@@ -89,6 +88,5 @@ class RSSImporter extends EndpointImporter
 		}
 
 		$this->setPurgeOnExit(true);
-		Logger::logInfo( "processingData end", $this->type, $this->guid);
 	}
 }

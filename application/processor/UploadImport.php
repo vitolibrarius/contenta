@@ -281,8 +281,6 @@ class UploadImport extends Processor
 
 	public function processData()
 	{
-		Logger::logInfo( "processingData start", $this->type, $this->sourceFilename() );
-
 		$wrapper = FileWrapper::instance($this->importFilePath());
 		$testStatus = $wrapper->testWrapper($errorCode);
 		if ($errorCode != 0 || $this->getMeta(UploadImport::META_MEDIA_EXT) != 'cbz' ) {
@@ -372,8 +370,6 @@ class UploadImport extends Processor
 			Logger::logException( $e );
 			$this->setMeta( UploadImport::META_STATUS, "IMPORTER_ERROR" );
 		}
-
-		Logger::logInfo( "processingData end", $this->type, $this->sourceFilename());
 	}
 
 	public function convert_cbr()

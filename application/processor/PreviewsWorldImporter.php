@@ -31,7 +31,6 @@ class PreviewsWorldImporter extends EndpointImporter
 
 	public function processData()
 	{
-		Logger::logInfo( "processingData start", $this->type, $this->guid);
 		$connection = $this->endpointConnector();
 		$endpoint = $this->endpoint();
 		list( $dataArray, $headers ) = $connection->performGET( $endpoint->base_url );
@@ -49,7 +48,5 @@ class PreviewsWorldImporter extends EndpointImporter
 					. PHP_EOL;
 			}
 		}
-
-		Logger::logInfo( "processingData end", $this->type, $this->guid);
 	}
 }
