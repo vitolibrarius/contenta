@@ -133,8 +133,12 @@ class Upload extends Controller
 				try {
 					$importer = Processor::Named('UploadImport', $contentHash);
 					$importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name']));
-					$importer->daemonizeProcess();
 
+					$running = Model::Named("Job_Running")->allForProcessorGUID('UploadImport', null);
+					if ( count($running) < 8 ) {
+						Session::addPositiveFeedback("running count is " . count($running));
+						$importer->daemonizeProcess();
+					}
 					Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success') .' "'. $_FILES['mediaFile']['name'] .'"');
 					$uploadSuccess = true;
 				}

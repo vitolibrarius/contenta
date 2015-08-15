@@ -47,6 +47,9 @@ class Job_Running extends Model
 				)
 			)->fetchAll();
 		}
+		else if ( isset($processorName) ) {
+			return SQL::Select( $this, null, Qualifier::Equals( Job_Running::processor, $processorName) )->fetchAll();
+		}
 
 		return false;
 	}
