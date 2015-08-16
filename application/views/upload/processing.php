@@ -72,8 +72,8 @@
 	$runningJobs = $this->job_model->allForProcessorGUID('UploadImport', $key );
 	$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
 ?>
-<figure class="card <?php if ( $running == true ) { echo 'blocked'; } ?>" style="width: 380px;">
-	<div class="feature" id="fig_<?php echo $key; ?>">
+<figure class="card" style="width: 380px;">
+	<div class="feature <?php if ( $running == true ) { echo 'blocked'; } ?>" id="fig_<?php echo $key; ?>">
 		<div class="feature_top">
 			<div class="feature_top_left">
 					<?php if ( $running == false ) : ?>
