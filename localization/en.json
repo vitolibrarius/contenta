@@ -598,7 +598,8 @@
         "MULTIPLE_MATCHES": "Multiple matches found, please review",
         "unknown": "No search data found, please reprocess",
         "NO_METADATA_FOUND": "No matches found",
-        "BUSY_NO_SEARCH": "System busy, search suspended"
+        "BUSY_NO_SEARCH": "System busy, search suspended",
+        "Finishing Import": "Finishing Import"
     },
     "AdminSeries": {
         "title": "Series Administration",

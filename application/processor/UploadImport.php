@@ -273,6 +273,7 @@ class UploadImport extends Processor
 			if ( is_array($issues) ) {
 				$result = array_filterForKeyValue( $issues, array( "id"=>$issueId));
 				$this->setMeta( UploadImport::META_RESULTS_ISSUES, $result );
+				$this->setMeta( UploadImport::META_STATUS, "Finishing Import" );
 				return true;
 			}
 		}

@@ -265,6 +265,8 @@ class AdminUploadRepair extends Admin
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {
 			if ( ImportManager::IsEditable($processKey) == true ) {
 				$importMgr = Processor::Named("ImportManager", 0);
+				$importMgr->clearMetadataFor( $processKey );
+
 				$processor = Processor::Named("UploadImport", $processKey);
 				if ( $processor != false ) {
 					$message = $processor->getMeta(UploadImport::META_MEDIA_NAME);
