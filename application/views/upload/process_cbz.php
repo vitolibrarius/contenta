@@ -33,7 +33,7 @@
 
 <script type="text/javascript">
 <!--
-images = [<?php foreach ($this->fileWrapper->wrapperContents() as $index => $item) {
+images = [<?php foreach ($this->fileWrapper->imageContents() as $index => $item) {
 	echo "'" . Config::Web('/AdminUploadRepair/thumbnail', $this->key, $index) . "', ";
 }?>];
 fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key); ?>/";

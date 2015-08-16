@@ -15,6 +15,7 @@ use \Processor as Processor;
 use model\Users as Users;
 
 use exceptions\ImportMediaException as ImportMediaException;
+use processor\UploadImport as UploadImport;
 
 /**
  * Class Error
@@ -135,13 +136,13 @@ class Upload extends Controller
 					$importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name']));
 
 					$running = Model::Named("Job_Running")->allForProcessorGUID('UploadImport', null);
-					if ( count($running) < 8 ) {
-						Session::addPositiveFeedback("running count is " . count($running));
+					if ( count($running) < 6 ) {
 						$importer->daemonizeProcess();
 					}
 					else {
 						$importer->generateThumbnails();
 						$importer->resetSearchCriteria();
+						$importer->setMeta( UploadImport::META_STATUS, "BUSY_NO_SEARCH");
 					}
 					Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success') .' "'. $_FILES['mediaFile']['name'] .'"');
 					$uploadSuccess = true;

@@ -86,7 +86,7 @@ class AdminUploadRepair extends Admin
 				$processor = Processor::Named("ImportManager", 0);
 				$wrapper = $processor->fileWrapper($processKey);
 				if ( $wrapper != null ) {
-					$filelist = $wrapper->wrapperContents();
+					$filelist = $wrapper->imageContents();
 					$intDex = intval($idx);
 
 					if (($intDex >= 0) && ($intDex < count($filelist))) {

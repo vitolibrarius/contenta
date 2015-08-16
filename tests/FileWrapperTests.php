@@ -101,7 +101,7 @@ if (is_file($options['f']) ) {
 					getImage($wrapper, $options['e']);
 				}
 				else {
-					$list = $wrapper->wrapperContents();
+					$list = $wrapper->imageContents();
 					getImage($wrapper, $list[0]);
 				}
 			}

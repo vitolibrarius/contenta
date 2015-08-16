@@ -132,7 +132,7 @@ class UploadImport extends Processor
 			$indexPath = appendPath( UploadImport::META_INDEXED_THUMBNAIL, $indexKey );
 			$thumbnail = $this->getMeta( $indexPath );
 			if ( is_string($thumbnail) == false || file_exists($this->workingDirectory($thumbnail)) == false ) {
-				$filelist = $wrapper->wrapperContents();
+				$filelist = $wrapper->imageContents();
 				$imageFile = $filelist[$idx];
 				if ( is_null($imageFile) == false ) {
 					$mimeType = 'image/' . file_ext($imageFile);

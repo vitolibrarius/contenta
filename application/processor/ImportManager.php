@@ -209,7 +209,7 @@ class ImportManager extends Processor
 					$filename = $process_meta->getMeta(UploadImport::META_MEDIA_FILENAME);
 					$wrapper = FileWrapper::instance(appendPath($importQueue, $processKey, $filename));
 					if ( $wrapper != null ) {
-						$filelist = $wrapper->wrapperContents();
+						$filelist = $wrapper->imageContents();
 						$intDex = intval($idx);
 
 						if (($intDex >= 0) && ($intDex < count($filelist))) {

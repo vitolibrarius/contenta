@@ -99,6 +99,28 @@ abstract class FileWrapper
 		return basename($this->sourcepath);
 	}
 
+	public function imageContents()
+	{
+		$content = $this->wrapperContents();
+		$images = array();
+		if ( is_array($content) ) {
+			foreach( $content as $item ) {
+				$originalExt = file_ext($item);
+				if ( in_array($originalExt, array('jpg','jpeg','gif','png')) == true ) {
+					$images[] = $item;
+				}
+			}
+		}
+		else if ( is_string($content) ) {
+			$originalExt = file_ext($content);
+			if ( in_array($originalExt, array('jpg','jpeg','gif','png')) == true ) {
+				$images[] = $content;
+			}
+		}
+
+		return $images;
+	}
+
 	public function wrapperContentCount()
 	{
 		$content = $this->wrapperContents();
@@ -136,23 +158,8 @@ abstract class FileWrapper
 
 	public function firstImageThumbnailName()
 	{
-		$content = $this->wrapperContents();
-		if ( is_array($content) ) {
-			foreach( $content as $item ) {
-				$originalExt = file_ext($item);
-				if ( in_array($originalExt, array('jpg','jpeg','gif','png')) == true ) {
-					return $item;
-				}
-			}
-		}
-		else if ( is_string($content) ) {
-			$originalExt = file_ext($content);
-			if ( in_array($originalExt, array('jpg','jpeg','gif','png')) == true ) {
-				return $content;
-			}
-		}
-
-		return null;
+		$content = $this->imageContents();
+		return (count($content) > 0 ? $content[0] : null);
 	}
 
 	public function unwrapToDirectory($dest = null)

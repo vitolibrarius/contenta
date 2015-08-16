@@ -597,7 +597,8 @@
         "COMICVINE_SUCCESS": "Match found, requires user commit",
         "MULTIPLE_MATCHES": "Multiple matches found, please review",
         "unknown": "No search data found, please reprocess",
-        "NO_METADATA_FOUND": "No matches found"
+        "NO_METADATA_FOUND": "No matches found",
+        "BUSY_NO_SEARCH": "System busy, search suspended"
     },
     "AdminSeries": {
         "title": "Series Administration",
