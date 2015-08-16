@@ -540,7 +540,7 @@ form .omega { margin-right:0;}
 	background: #dae5f4;
 }
 
-.mediaData table tr.blocked {
+.blocked {
 	background-color: pink;
 }
 
@@ -603,7 +603,8 @@ form .omega { margin-right:0;}
 */
 span.icon {
     color: grey;
-    font-size: 24px;
+    font-size: 2em;
+    padding: .5em;
 }
 span.icon.true:before	{ content:"\2713"; }
 span.icon.false:before	{ content:"\2717"; }

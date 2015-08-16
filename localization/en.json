@@ -592,7 +592,11 @@
         "Processing": "Processing",
         "Already imported": "Already imported",
         "FILE_CORRUPT": "Corrupt file format",
-        "Unsupported Mime Type": "Unsupported Mime Type"
+        "Unsupported Mime Type": "Unsupported Mime Type",
+        "NO_MATCHES": "Search failed to find series/issue",
+        "COMICVINE_SUCCESS": "Match found, requires user commit",
+        "MULTIPLE_MATCHES": "Multiple matches found, please review",
+        "unknown": "No search data found, please reprocess"
     },
     "AdminSeries": {
         "title": "Series Administration",

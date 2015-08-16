@@ -7,6 +7,9 @@
 			$(".rpc_spinner." + $(this).attr('data_key')).show();
 			var ajaxDiv = $("#ajaxDiv_" + $(this).attr('data_key'));
 
+			var fig = $("#fig_" + $(this).attr('data_key')).addClass("blocked");
+			var anchor = $("#a_" + $(this).attr('data_key')).removeAttr("href");
+
 			$.ajax({
 				type: "GET",
 				url: $(this).attr('data_action'),
@@ -63,39 +66,38 @@
 	</ul>
 </div>
 
-<div class="mediaData">
-	<table>
-		<tr>
-			<th></th>
-			<th>Type</th>
-			<th>Name</th>
-			<th>Size</th>
-			<th></th>
-		</tr>
-	<?php if ($this->active): ?>
-	<?php foreach ($this->active as $key => $value): ?>
-		<?php
-			$runningJobs = $this->job_model->allForProcessorGUID('UploadImport', $key );
-			$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
-		?>
-		<tr <?php if ( $running == true ) { echo 'class="blocked"'; } ?> >
-			<td>
-				<?php if ( $running == false ) : ?>
-					<a href="<?php echo Config::Web('/AdminUploadRepair/editUnprocessed', $key); ?>">
-				<?php endif; ?>
-				<img src="<?php echo Config::Web('/AdminUploadRepair/firstThumbnail', $key) ?>" class="thumbnail">
-				<?php if ( $running == false ) : ?>
-					</a>
-				<?php endif; ?>
-			</td>
-			<td><?php echo (isset($value, $value['filename']) ? file_ext($value['filename']) : 'Unknown'); ?></td>
-			<td>
-				<h3 class="path"><?php echo (isset($value, $value['name']) ? $value['name'] : $value['filename']); ?></h3>
-				<a href="#" limit="5" name="<?php echo $key; ?>" class="ajaxLogs">Logs</a>
-				<div id="ajaxDiv_<?php echo $key; ?>" ></div>
-			</td>
-			<td><?php echo (isset($value, $value['size']) ? formatSizeUnits($value['size']) : 'Unknown'); ?></td>
-			<td>
+<?php if ($this->active): ?>
+<?php foreach ($this->active as $key => $value): ?>
+<?php
+	$runningJobs = $this->job_model->allForProcessorGUID('UploadImport', $key );
+	$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
+?>
+<figure class="card <?php if ( $running == true ) { echo 'blocked'; } ?>" style="width: 380px;">
+	<div class="feature" id="fig_<?php echo $key; ?>">
+		<div class="feature_top">
+			<div class="feature_top_left">
+					<?php if ( $running == false ) : ?>
+						<a href="<?php echo Config::Web('/AdminUploadRepair/editUnprocessed', $key); ?>" id="a_<?php echo $key; ?>">
+					<?php endif; ?>
+					<img src="<?php echo Config::Web('/AdminUploadRepair/firstThumbnail', $key) ?>" class="thumbnail">
+					<?php if ( $running == false ) : ?>
+						</a>
+					<?php endif; ?>
+			</div>
+			<div class="feature_top_right">
+				<div class="feature_top_right_top">
+				</div>
+				<div class="feature_top_right_middle">
+					<span class="details">
+						<span class="series_id">
+							<?php echo (isset($value, $value['name']) ? $value['name'] : $value['filename']); ?>
+						</span><br>
+						<span class="issue_num">
+							<?php echo (isset($value, $value['size']) ? formatSizeUnits($value['size']) : 'Unknown'); ?>
+						</span>
+					</span>
+				</div>
+				<div class="feature_top_right_bottom">
 				<?php
 					$spinDisplay = "none";
 					$toolsDisplay = "inline";
@@ -120,9 +122,20 @@
 				</div>
 				<img class="rpc_spinner <?php echo $key; ?>" style="display:<?php echo $spinDisplay; ?>;"
 					src="<?php echo Config::Web('/public/select2-spinner.gif'); ?>" />
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	<?php endif; ?>
-	</table>
-</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="clear"></div>
+
+	<figcaption class="caption">
+		<a href="#"><em>
+			<?php echo Localized::Get("Upload", (isset($value, $value['status']) ? $value['status'] : 'unknown')); ?>
+		</em></a>
+		<div id="ajaxDiv_<?php echo $key; ?>" ></div>
+	</figcaption>
+</figure>
+<?php endforeach; ?>
+<?php endif; ?>

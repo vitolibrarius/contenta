@@ -83,6 +83,7 @@ class ImportManager extends Processor
 						else {
 							$process_meta = Metadata::forDirectory($fullpath);
 							$current[$dir] = $process_meta->getMeta(UploadImport::META_MEDIA);
+							$current[$dir]['status'] = $process_meta->getMeta('status');
 						}
 					}
 				}
