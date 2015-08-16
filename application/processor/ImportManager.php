@@ -108,6 +108,13 @@ class ImportManager extends Processor
 		return array();
 	}
 
+	function clearMetadataFor($processKey = null) {
+		if ( is_string($processKey) ) {
+			$this->setMeta( appendPath(ImportManager::IMPORTS, $processKey), null );
+		}
+	}
+
+
 	function chunkedArray() {
 		$array = $this->processData();
 		return array_chunk ( $array, 10, true);

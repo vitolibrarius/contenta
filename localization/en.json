@@ -593,10 +593,11 @@
         "Already imported": "Already imported",
         "FILE_CORRUPT": "Corrupt file format",
         "Unsupported Mime Type": "Unsupported Mime Type",
-        "NO_MATCHES": "Search failed to find series/issue",
+        "NO_MATCHES": "Search failed to find series\/issue",
         "COMICVINE_SUCCESS": "Match found, requires user commit",
         "MULTIPLE_MATCHES": "Multiple matches found, please review",
-        "unknown": "No search data found, please reprocess"
+        "unknown": "No search data found, please reprocess",
+        "NO_METADATA_FOUND": "No matches found"
     },
     "AdminSeries": {
         "title": "Series Administration",
@@ -645,5 +646,12 @@
     "AdminWanted": {
         "title": "Wanted Publication Administration",
         "Search Newznab": "Search Newznab"
+    },
+    "DisplaySeries": {
+        "title": "DisplaySeries\/title",
+        "index": {
+            "DeleteDescription": "DisplaySeries\/index\/DeleteDescription",
+            "DeleteConfirmation": "DisplaySeries\/index\/DeleteConfirmation"
+        }
     }
 }
