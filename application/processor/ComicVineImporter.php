@@ -674,4 +674,30 @@ class ComicVineImporter extends ContentMetadataImporter
 
 		return $object;
 	}
+
+	function refreshPublicationsForObject( $object = null )
+	{
+		if ( is_null($object) == false) {
+			$object = $object->model()->refreshObject($object);
+			$objTable = $object->tableName();
+			$needsUpdate = $object->needsEndpointUpdate();
+			if ( $needsUpdate == true ) {
+				$enqueue_method = 'enqueue_' . $objTable;
+				if (method_exists($this, $enqueue_method)) {
+					$this->$enqueue_method( array( "xid" => $object->xid), true, true );
+				}
+			}
+
+			if (method_exists($object, "publications")) {
+				$publications = $object->publications();
+				if ( is_array($publications) ) {
+					foreach( $publications as $publication ) {
+						$pubNeedsUpdate = $publication->needsEndpointUpdate();
+						$this->enqueue_publication( array( "xid" => $publication->xid), $pubNeedsUpdate, $pubNeedsUpdate );
+					}
+				}
+			}
+		}
+	}
+
 }

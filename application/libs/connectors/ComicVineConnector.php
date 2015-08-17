@@ -367,7 +367,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 					$filtered[] = $item;
 				}
 				else if ( $this->trace) {
-					echo "rejecting $itemStartYear - $countOfIssues - $yearDiffRange ||" . $item["id"] . " - ". $item["name"] . PHP_EOL;
+					echo "rejecting $itemStartYear - $countOfIssues ||" . $item["id"] . " - ". $item["name"] . PHP_EOL;
 				}
 			}
 

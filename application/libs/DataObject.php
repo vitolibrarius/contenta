@@ -162,6 +162,8 @@ class DataObject
 		return ($this->needsEndpointUpdate() ? "Update yes" : "No Update needed");
 	}
 
+	public function isWanted() { return false; }
+
 	/* notifications of changes in the object graph
 	 */
 	public function notify( $type = 'none', $object = null )

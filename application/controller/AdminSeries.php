@@ -70,6 +70,7 @@ class AdminSeries extends Admin
 
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
+			$this->view->toggleWantedAction = "/AdminSeries/toggleWantedSeries";
 			$this->view->editAction = "/AdminSeries/editSeries";
 			$this->view->deleteAction = "/AdminSeries/deleteSeries";
 			$this->view->render( '/admin/seriesCards', true);
@@ -120,6 +121,44 @@ class AdminSeries extends Admin
 		}
 	}
 
+	function toggleWantedSeries($oid = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			if ( $oid > 0 ) {
+				$model = Model::Named('Series');
+				$object = $model->objectForId($oid);
+				if ( $object != false ) {
+					$oldIsWanted = $object->isWanted();
+					$newIsWanted = ($object->isWanted() ? MODEL::TERTIARY_FALSE : MODEL::TERTIARY_TRUE);
+					$values[Series::pub_wanted] = $newIsWanted;
+					$errors = $model->updateObject($object, $values);
+					if ( is_array($errors) ) {
+						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
+						foreach ($errors as $attr => $errMsg ) {
+							Session::addValidationFeedback($errMsg);
+						}
+					}
+					else {
+						if ( $newIsWanted == MODEL::TERTIARY_TRUE ) {
+							// now a wanted series, ensure the publications are updated
+							$endpoint = $object->externalEndpoint();
+							if ( $endpoint != false ) {
+								$importer = new ComicVineImporter( $model->tableName() . "_" .$object->xid );
+								$importer->setEndpoint($endpoint);
+								$importer->refreshPublicationsForObject( $object );
+								$importer->daemonizeProcess();
+							}
+							return "yes";
+						}
+						else {
+							return "no";
+						}
+					}
+				}
+			}
+		}
+	}
+
 	function saveSeries($oid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
@@ -142,19 +181,13 @@ class AdminSeries extends Admin
 						$this->editSeries($oid);
 					}
 					else {
-						$object = $model->refreshObject($object);
 						if ( $object->isWanted() && $oldIsWanted == false ) {
 							// now a wanted series, ensure the publications are updated
 							$endpoint = $object->externalEndpoint();
 							if ( $endpoint != false ) {
 								$importer = new ComicVineImporter( $model->tableName() . "_" .$object->xid );
 								$importer->setEndpoint($endpoint);
-								$importer->enqueue_series( array( "xid" => $object->xid), true, true );
-								foreach( $object->publications() as $publication ) {
-									if ( isset($publication->xupdated) == false) {
-										$importer->enqueue_publication( array( "xid" => $publication->xid), true, true );
-									}
-								}
+								$importer->refreshPublicationsForObject( $object );
 								$importer->daemonizeProcess();
 							}
 						}
