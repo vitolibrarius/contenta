@@ -315,6 +315,7 @@ class UploadImport extends Processor
 			return false;
 		}
 
+		$this->setMeta( UploadImport::META_STATUS, "Finishing Import" );
 		Logger::logInfo( "Found match importing "
 			. array_valueForKeypath( "volume/name", $matchingIssue)
 			. " - " . array_valueForKeypath( "issue_number", $matchingIssue)
