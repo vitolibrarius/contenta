@@ -29,13 +29,13 @@
 ?>
 	<tr>
 		<th>Existing Content</th>
-		<th><nobr>
-			<?php
-				echo '<img src="' .
-					Config::Web( "Image", "icon", "publisher", $seriesObj->publisher_id)
-					. '" class="thumbnail" /> ';
+		<th>
+			<nobr>
+			<?php if ( is_null($publisher) == false ) {
+				echo '<img src="' . Config::Web( "Image", "icon", "publisher", $publisher->id) . '" class="thumbnail" /> ';
 				echo '<span class="publisher name">' . $publisher->name . '</span>';
-			?></nobr>
+			} ?>
+			</nobr>
 		</th>
 
 		<th colspan="3" class="name"><?php echo $seriesObj->name; ?></th>
