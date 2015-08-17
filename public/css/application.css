@@ -604,7 +604,7 @@ form .omega { margin-right:0;}
 span.icon {
     color: grey;
     font-size: 2em;
-    padding: .5em;
+    padding: 1px;
 }
 span.icon.true:before	{ content:"\2713"; }
 span.icon.false:before	{ content:"\2717"; }

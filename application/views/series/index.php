@@ -88,7 +88,7 @@ $(document).ready(function($) {
 	function refresh() {
 		$.ajax({
 			type: "GET",
-			url: "<?php echo Config::Web('/AdminSeries/searchSeries'); ?>",
+			url: "<?php echo Config::Web('/DisplaySeries/searchSeries'); ?>",
 			data: {
 				publisher_id: $('#searchPublisher').val(),
 				name: $('input#searchName').val(),

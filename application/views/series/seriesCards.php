@@ -9,6 +9,7 @@
 		$card->setDetailKeys( array(
 			model\Series::start_year => model\Series::start_year,
 			model\Series::pub_count => "availableSummary",
+			"needsUpdate" => "needsEndpointUpdateString"
 			)
 		);
 		foreach($this->listArray as $key => $value) {
