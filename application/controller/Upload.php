@@ -16,6 +16,7 @@ use model\Users as Users;
 
 use exceptions\ImportMediaException as ImportMediaException;
 use processor\UploadImport as UploadImport;
+use utilities\FileWrapper as FileWrapper;
 
 /**
  * Class Error
@@ -119,37 +120,71 @@ class Upload extends Controller
 		else
 		{
 			$extension = file_ext($_FILES['mediaFile']['name']);
-			$contentHash = hash_file(HASH_DEFAULT_ALGO, $_FILES['mediaFile']['tmp_name']);
-			$root = Config::GetProcessing();
-			$workingDir = appendPath($root, "UploadImport", $contentHash );
-			$existing = Model::Named('Media')->mediaForChecksum($contentHash);
-
-			if ( is_dir($workingDir) == true ) {
-				Session::addNegativeFeedback( Localized::Get("Upload", 'Hash Exists') .' "'. $_FILES['mediaFile']['name'] . '"' );
+			$wrapper = FileWrapper::force($_FILES['mediaFile']['tmp_name'], $extension);
+			$validFormat = true;
+			if ( $wrapper->testWrapper() != null ) {
+				// something is wrong with the file
+				switch( $extension ) {
+					case 'cbz':
+						// check to see if it is actually a cbr
+						$rar_wrapper = FileWrapper::force($_FILES['mediaFile']['tmp_name'], 'cbr');
+						if ( $rar_wrapper->testWrapper() != null ) {
+							$validFormat = false;
+						}
+						break;
+					case 'cbr':
+						// check to see if it is actually a cbz
+						$rar_wrapper = FileWrapper::force($_FILES['mediaFile']['tmp_name'], 'cbz');
+						if ( $rar_wrapper->testWrapper() != null ) {
+							$validFormat = false;
+						}
+						break;
+					default:
+						$validFormat = false;
+						break;
+				}
 			}
-			else if ( $existing instanceof model\MediaDBO ) {
-				Session::addNegativeFeedback(Localized::Get("Upload", 'Already imported') .' "'. $existing->publication()->searchString() .'"');
+
+			if ( $validFormat == true ) {
+				$contentHash = hash_file(HASH_DEFAULT_ALGO, $_FILES['mediaFile']['tmp_name']);
+				$root = Config::GetProcessing();
+				$workingDir = appendPath($root, "UploadImport", $contentHash );
+				$existing = Model::Named('Media')->mediaForChecksum($contentHash);
+
+				if ( is_dir($workingDir) == true ) {
+					Session::addNegativeFeedback( Localized::Get("Upload", 'Hash Exists') .' "'. $_FILES['mediaFile']['name'] . '"' );
+					http_response_code(415); // Unsupported Media Type
+				}
+				else if ( $existing instanceof model\MediaDBO ) {
+					Session::addNegativeFeedback(Localized::Get("Upload", 'Already imported') .' "'. $existing->publication()->searchString() .'"');
+					http_response_code(415); // Unsupported Media Type
+				}
+				else {
+					try {
+						$importer = Processor::Named('UploadImport', $contentHash);
+						$importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name']));
+
+						$running = Model::Named("Job_Running")->allForProcessorGUID('UploadImport', null);
+						if ( count($running) < 6 ) {
+							$importer->daemonizeProcess();
+						}
+						else {
+							$importer->generateThumbnails();
+							$importer->resetSearchCriteria();
+							$importer->setMeta( UploadImport::META_STATUS, "BUSY_NO_SEARCH");
+						}
+						Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success') .' "'. $_FILES['mediaFile']['name'] .'"');
+						$uploadSuccess = true;
+					}
+					catch ( ImportMediaException $me ) {
+						Session::addNegativeFeedback( Localized::Get("Upload", $me->getMessage() ));
+						http_response_code(415); // Unsupported Media Type
+					}
+				}
 			}
 			else {
-				try {
-					$importer = Processor::Named('UploadImport', $contentHash);
-					$importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name']));
-
-					$running = Model::Named("Job_Running")->allForProcessorGUID('UploadImport', null);
-					if ( count($running) < 6 ) {
-						$importer->daemonizeProcess();
-					}
-					else {
-						$importer->generateThumbnails();
-						$importer->resetSearchCriteria();
-						$importer->setMeta( UploadImport::META_STATUS, "BUSY_NO_SEARCH");
-					}
-					Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success') .' "'. $_FILES['mediaFile']['name'] .'"');
-					$uploadSuccess = true;
-				}
-				catch ( ImportMediaException $me ) {
-					Session::addNegativeFeedback( Localized::Get("Upload", $me->getMessage() ));
-				}
+				Session::addNegativeFeedback( Localized::Get("Upload", "FILE_CORRUPT" ) . ' "' . $_FILES['mediaFile']['name'] . '"');
+				http_response_code(415); // Unsupported Media Type
 			}
 		}
 		return $uploadSuccess;
