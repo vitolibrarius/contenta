@@ -1,5 +1,28 @@
 <?php if ( is_array($this->listArray) && count($this->listArray) > 0) : ?>
-<?php foreach ($this->listArray as $key => $publication): ?>
+<?php
+	$seriesGroups = array();
+	foreach ($this->listArray as $publication) {
+		$series_id = $publication->series_id;
+		if ( is_null($series_id) ) {
+			$series_id = 0;
+		}
+
+		$seriesGroups[$series_id][] = $publication;
+	}
+?>
+
+<?php foreach ($seriesGroups as $series_id => $publicationArray): ?>
+<h2><?php
+	$groupName = "Unknown";
+	if ( $series_id > 0 ) {
+		$seriesObj = Model::Named('Series')->objectForId( $series_id );
+		if ( $seriesObj != false ) {
+			$groupName = $seriesObj->name;
+		}
+	}
+	echo $groupName;
+?></h2>
+<?php foreach ($publicationArray as $key => $publication): ?>
 <figure class="card" style="width: 380px;">
 	<div class="feature">
 		<div class="feature_top">
@@ -37,6 +60,7 @@
 		<div id="ajaxDiv_<?php echo $publication->id;?>"></div>
 	</figcaption>
 </figure>
+<?php endforeach; ?>
 <?php endforeach; ?>
 <?php else : ?>
 	No matching records

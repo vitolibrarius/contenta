@@ -102,7 +102,11 @@ class AdminWanted extends Admin
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
-			$select->orderBy( array( array(SQL::SQL_ORDER_DESC => Publication::pub_date)) );
+			$select->orderBy( array(
+					array(SQL::SQL_ORDER_ASC => Publication::series_id),
+					array(SQL::SQL_ORDER_DESC => Publication::issue_num)
+				)
+			);
 
 //  						Session::addPositiveFeedback("select ". $select);
 
