@@ -71,9 +71,34 @@ class DisplaySeries extends Controller
 
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
+ 			$this->view->detailAction = "/DisplaySeries/details";
 // 			$this->view->editAction = "/AdminSeries/editSeries";
 // 			$this->view->deleteAction = "/AdminSeries/deleteSeries";
 			$this->view->render( '/series/seriesCards', true);
+		}
+	}
+
+	function details($oid = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			if ( $oid > 0 ) {
+				$model = Model::Named('Series');
+				$object = $model->objectForId($oid);
+				if ( $object != false ) {
+					$this->view->model = $model;
+					$this->view->setViewTitle($object->name);
+					$this->view->detail = $object;
+					$this->view->render( '/series/seriesDetails' );
+				}
+				else {
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					$this->view->render('/error/index');
+				}
+			}
+			else {
+				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+				$this->view->render('/error/index');
+			}
 		}
 	}
 }

@@ -238,7 +238,7 @@ abstract class Model
 	public function allObjectsForFK($relatedAttribute, DataObject $sourceObject, array $sortOrder = null, $limit = 0)
 	{
 		return SQL::Select( $this, null, db\Qualifier::FK( $relatedAttribute, $sourceObject ) )
-			->orderBy($sortOrder)
+			->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) )
 			->limit($limit)
 			->fetchAll();
 	}

@@ -113,4 +113,52 @@ class Api extends Controller
 			$this->view->renderJson( $json );
 		}
 	}
+
+	function mediaPayload( $id, $userHash = null )
+	{
+		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
+			$media_model = Model::Named('Media');
+			$user_model = Model::Named('Users');
+
+			$user = $user_model->objectForId(Session::get('user_id'));
+			$mediaObj = $media_model->objectForId($id);
+			if ( $mediaObj != false )
+			{
+				$path = $mediaObj->contentaPath();
+				$etag = $mediaObj->{Media_checksum};
+
+				if ( file_exists($path) == true )
+				{
+// 					$user->flagMediaAsRead($mediaObj);
+					if ( !empty($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag) {
+						header('HTTP/1.1 304 Not Modified');
+						header('Content-Length: 0');
+						exit;
+					}
+
+					$expiry = 604800; // (60*60*24*7)
+					header('ETag: ' . $etag);
+					header('Last-Modified: '. gmdate('D, d M Y H:i:s', time()) .' GMT');
+					header('Expires:'. gmdate('D, d M Y H:i:s', time() + $expiry) .' GMT');
+					header('Content-Description: File Transfer');
+					header('Content-Type: application/x-cbz');
+					header('Content-Disposition: attachment; filename=' . basename($path));
+					header('Pragma: public');
+					header('Content-Length: ' . filesize($path));
+					ob_clean();
+					flush();
+					readfile($path);
+				}
+				else
+				{
+					header('location: error/index');
+				}
+			}
+			else
+			{
+				header('location: error/index');
+			}
+		}
+	}
+
 }

@@ -168,7 +168,7 @@ class Card
 		$this->displayDescriptionKey = $key;
 	}
 
-	public function render( DataObject $record = null )
+	public function render( DataObject $record = null, \Closure $callback = null )
 	{
 		$card = H::figure( array( "class" => "card"),
 			H::div( array( "class" => "feature" ),
@@ -189,6 +189,9 @@ class Card
 									$c[] = H::span( array( "class" => $key ), $record->{$keypath}() );
 								}
 								return (isset($c) ? $c : null);
+							}),
+							H::div( array( "class" => "actions" ), function() use($callback) {
+								return (is_null($callback) ? null : $callback());
 							})
 						),
 

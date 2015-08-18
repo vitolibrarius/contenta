@@ -13,6 +13,9 @@
 			)
 		);
 		foreach($this->listArray as $key => $value) {
+			if ( isset($this->detailAction) ) {
+				$card->setSelectPath( $this->detailAction . '/' . $value->id );
+			}
 			if ( isset($this->editAction) ) {
 				$card->setEditPath( $this->editAction . '/' . $value->id );
 			}
