@@ -67,6 +67,21 @@ class Application
 							$this->url_controller->{$this->url_action}();
 						}
 					}
+					else if ( is_a($this->url_controller, "controller\\Dav") ) {
+						if (isset($this->url_parameter_3)) {
+							$this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3);
+						}
+						elseif (isset($this->url_parameter_2)) {
+							$this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2);
+						}
+						elseif (isset($this->url_parameter_1)) {
+							$this->url_controller->{$this->url_action}($this->url_parameter_1);
+						}
+						else {
+							// if no parameters given, just call the method without arguments
+							$this->url_controller->{$this->url_action}();
+						}
+					}
 					else {
 						Session::addNegativeFeedback( "Unknown URL action " . $this->url_action );
 						Logger::logError( "Controller " . $controllerClass . " does not implement " . $this->url_action,

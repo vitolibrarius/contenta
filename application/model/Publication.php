@@ -235,6 +235,11 @@ class Publication extends Model
 		return $this->allObjectsForFK(Publication::series_id, $obj);
 	}
 
+	public function activePublicationsForSeries(model\SeriesDBO $obj = null)
+	{
+		return $this->allObjectsForFKAndQualifier(Publication::series_id, $obj, Qualifier::GreaterThan(Publication::media_count, 0));
+	}
+
 	public function deleteAllForSeries($obj)
 	{
 		$success = true;

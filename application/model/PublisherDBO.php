@@ -39,4 +39,9 @@ class PublisherDBO extends DataObject
 		}
 		return null;
 	}
+
+	public function series() {
+		$model = Model::Named('Series');
+		return $model->allForPublisher($this);
+	}
 }
