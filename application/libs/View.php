@@ -160,6 +160,18 @@ class View
 		echo json_encode($content, JSON_PRETTY_PRINT);
 	}
 
+	public function render_xml($filename)
+	{
+		// page without header and footer, for whatever reason
+		if ( file_exists(VIEWS_PATH . $filename . '.php')) {
+			header('Content-Type: text/xml; charset="utf-8"');
+			require VIEWS_PATH . $filename . '.php';
+		}
+		else {
+			header('location: ' . Config::Web('/error/index'));
+		}
+	}
+
 	/**
 	 * Checks if the passed string is the currently active controller.
 	 * Useful for handling the navigation's active/non-active link.

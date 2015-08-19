@@ -37,6 +37,7 @@ class Dav extends Controller
 	{
         $req_method  = strtolower($_SERVER["REQUEST_METHOD"]);
         $action_method = 'dav_' . $req_method;
+// 		Logger::logInfo( "WebDav method '".$_SERVER["REQUEST_METHOD"]."'" );
 
 		$resourcePath = rtrim($_SERVER["REQUEST_URI"], '/');
 		$web_dir = Config::Web("Dav");
@@ -159,9 +160,6 @@ class Dav extends Controller
 
 	function dav_propfind($resourcePath = null)
 	{
-        header('Content-Type: text/xml; charset="utf-8"');
-		http_response_code(207); // Multi-Status
-
 		$depth = "infinity";
         if (isset($_SERVER['HTTP_DEPTH'])) {
             $depth = $_SERVER["HTTP_DEPTH"];
@@ -219,10 +217,13 @@ class Dav extends Controller
 			$this->view->props_requested = $propsRequested;
 			$this->view->href = $href;
 			$this->view->resources = $resources;
-			$this->view->render( '/dav/propfind', true );
+
+			http_response_code(207); // Multi-Status
+
+			$this->view->render_xml( '/dav/propfind');
 
 // ob_start();
-// 			$this->view->render( '/dav/propfind', true );
+// 			$this->view->render_xml( '/dav/propfind' );
 // $xml = ob_get_clean();
 //
 // 			file_put_contents('/tmp/webdav_propfind_' . sanitize($resourcePath) . "-" . $depth . '.txt', $xml);
@@ -241,7 +242,7 @@ class Dav extends Controller
 
     function dav_get($resourcePath = null)
     {
-		$resources = $this->resourcesFor( $resourcePath, $depth );
+		$resources = $this->resourcesFor( $resourcePath, 0 );
 		if ( is_array($resources) && count($resources) == 1 ) {
 			$mediaObj = $resources[0]->media();
 			if ( $mediaObj != false ) {
