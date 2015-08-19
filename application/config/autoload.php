@@ -24,7 +24,7 @@ class Autoloader
 		$filename = implode(DIRECTORY_SEPARATOR, $parts) . ".php";
         if (file_exists($filename)) {
             include($filename);
-            if (class_exists($className)) {
+            if (class_exists($className) || interface_exists($className)) {
                 return TRUE;
             }
         }
