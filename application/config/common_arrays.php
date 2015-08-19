@@ -27,19 +27,17 @@
 			$result = $array;
 			$path = array_filter( explode($separator, $keypath), 'strlen');
 			foreach ($path as $idx => $item) {
-				if (isset($result) ) {
-					if ( is_array($result) && isset($result[$item])) {
-						$result = $result[$item];
-					}
-					else if ( property_exists($result, $item)) {
-						$result = $result->{$item};
-					}
-					else if (method_exists($result, $item)) {
-						$result = $result->{$item}();
-					}
-					else {
-						return null;
-					}
+				if ( is_null($result) || is_bool($result) ) {
+					return $result;
+				}
+				else if ( is_array($result) ) {
+					$result = (isset($result[$item]) ? $result[$item] : null);
+				}
+				else if ( property_exists($result, $item)) {
+					$result = $result->{$item};
+				}
+				else if (method_exists($result, $item)) {
+					$result = $result->{$item}();
 				}
 				else {
 					return null;

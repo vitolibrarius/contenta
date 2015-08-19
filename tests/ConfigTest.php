@@ -13,19 +13,17 @@
 	require SYSTEM_PATH .'application/config/common.php';
 	require SYSTEM_PATH .'application/config/errors.php';
 	require SYSTEM_PATH .'application/libs/Config.php';
+	require SYSTEM_PATH .'application/libs/Cache.php';
 
 	require SYSTEM_PATH .'tests/_ResetConfig.php';
 	require SYSTEM_PATH .'tests/_Data.php';
 
-	try {
+	use connectors\ComicVineConnector as ComicVineConnector;
 
-		$config = Config::instance();
+	use model\Endpoint as Endpoint;
+	use model\Endpoint_Type as Endpoint_Type;
 
-		echo "Internet/appname = " . $config->get("Internet/appname") . PHP_EOL;
+$root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
+SetConfigRoot( $root, false );
 
-		echo "Repository/path = " . Config::Get("Repository/path") . PHP_EOL;
-		echo "Repository/NoSuchValue = " . $config->get("Repository/NoSuchValue", 'Default') . PHP_EOL;
-	}
-	catch (Exception $e) {
-		echo "Error :" . $e . PHP_EOL;
-	}
+my_echo ( "Debug/localized = " . Config::Get("Debug/localized") );
