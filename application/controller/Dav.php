@@ -33,16 +33,6 @@ use webdav\DavModelFile as DavModelFile;
 
 class Dav extends Controller
 {
-    var $uri;
-    var $base_uri;
-    var $path;
-    var $http_auth_realm = "PHP WebDAV";
-    var $dav_powered_by = "";
-    var $_if_header_uris = array();
-    var $_http_status = "200 OK";
-    var $_prop_encoding = "utf-8";
-    var $_SERVER;
-
 	public function __call($method, $args)
 	{
         $req_method  = strtolower($_SERVER["REQUEST_METHOD"]);
@@ -56,6 +46,18 @@ class Dav extends Controller
 
         if (empty($resourcePath)) {
             $resourcePath = "/";
+        }
+
+        if ( $req_method != 'options' || $resourcePath != '/' ) {
+			$auth_type = isset($_SERVER["AUTH_TYPE"]) ? $_SERVER["AUTH_TYPE"] : null;
+	        $auth_user = isset($_SERVER["PHP_AUTH_USER"]) ? $_SERVER["PHP_AUTH_USER"] : null;
+	        $auth_pw   = isset($_SERVER["PHP_AUTH_PW"]) ? $_SERVER["PHP_AUTH_PW"] : null;
+
+			if ( Auth::httpAuthenticate($auth_type, $auth_user, $auth_pw) == false ) {
+				header('WWW-Authenticate: Basic realm="'.(Config::AppName()).' WebDav"');
+				http_response_code(401); // Unauthorized
+				return;
+			}
         }
 
         if (method_exists($this, $action_method)) {
@@ -244,7 +246,7 @@ class Dav extends Controller
 			$mediaObj = $resources[0]->media();
 			if ( $mediaObj != false ) {
 				$path = $mediaObj->contentaPath();
-				$etag = $mediaObj->{Media_checksum};
+				$etag = $mediaObj->checksum;
 
 				if ( file_exists($path) == true )
 				{

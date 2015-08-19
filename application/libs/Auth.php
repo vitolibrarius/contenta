@@ -216,4 +216,64 @@ class Auth
 		// @see http://stackoverflow.com/a/686166/1114320
 		setcookie('rememberme', false, time() - (3600 * 3650), Config::Web('/'), $domain);
 	}
+
+	public static function httpAuthenticate($auth_type = 'Basic', $auth_user, $auth_pw)
+	{
+		// we do negative-first checks here
+		if (!isset($auth_user) OR empty($auth_user)) {
+			return false;
+		}
+		if (!isset($auth_pw) OR empty($auth_pw)) {
+			return false;
+		}
+
+		$user_model = Model::Named("Users");
+		$user = $user_model->userByName($auth_user);
+		if ( $user == false ) {
+			Logger::logError( "Authentication failed for $auth_type, $auth_user, $auth_pw" );
+			return false;
+		}
+
+		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
+		if (($user->failed_logins >= 3) AND ($user->last_failed_login > (time()-30))) {
+			return false;
+		}
+
+		if ($user->active != 1) {
+			return false;
+		}
+
+		$VERIFIED_PASSWORD = false;
+		if ( PHP_VERSION_ID > 50500 )
+		{
+			$VERIFIED_PASSWORD = password_verify($auth_pw, $user->password_hash);
+		}
+		else if (hash(HASH_DEFAULT_ALGO, $auth_pw) === $user->password_hash)
+		{
+			$VERIFIED_PASSWORD = true;
+		}
+
+		if ($VERIFIED_PASSWORD == true)
+		{
+			// login process, write the user data into session
+			Session::init();
+			Session::set('user_logged_in', true);
+			Session::set('user_id', $user->id);
+			Session::set('user_name', $user->name);
+			Session::set('user_email', $user->email);
+			Session::set('user_account_type', $user->account_type);
+
+			// return true to make clear the login was successful
+			return true;
+
+		} else {
+			// increment the failed login counter for that user
+			$user_model->increaseFailedLogin($user);
+			Logger::logError( "Authentication failed for $auth_type, $auth_user, $auth_pw" );
+			return false;
+		}
+
+		// default return
+		return false;
+	}
 }
