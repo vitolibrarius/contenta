@@ -31,6 +31,12 @@
 					if ( isset($result[$item])) {
 						$result = $result[$item];
 					}
+					else if ( property_exists($result, $item)) {
+						$result = $result->{$item};
+					}
+					else if (method_exists($result, $item)) {
+						$result = $result->{$item}();
+					}
 					else {
 						return null;
 					}
