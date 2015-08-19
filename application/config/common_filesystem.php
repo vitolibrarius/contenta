@@ -60,6 +60,7 @@ function appendPath()
         	$finalPath .= DIRECTORY_SEPARATOR;
 		}
 	}
+	$finalPath = str_replace("//", "/", $finalPath);
     return $finalPath;
 }
 
