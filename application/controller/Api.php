@@ -125,7 +125,7 @@ class Api extends Controller
 			if ( $mediaObj != false )
 			{
 				$path = $mediaObj->contentaPath();
-				$etag = $mediaObj->{Media_checksum};
+				$etag = $mediaObj->checksum;
 
 				if ( file_exists($path) == true )
 				{
