@@ -27,8 +27,8 @@
 			$result = $array;
 			$path = array_filter( explode($separator, $keypath), 'strlen');
 			foreach ($path as $idx => $item) {
-				if (isset($result) && is_array($result) ) {
-					if ( isset($result[$item])) {
+				if (isset($result) ) {
+					if ( is_array($result) && isset($result[$item])) {
 						$result = $result[$item];
 					}
 					else if ( property_exists($result, $item)) {
