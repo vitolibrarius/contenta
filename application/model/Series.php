@@ -274,7 +274,7 @@ class Series extends Model
 		switch ($attr) {
 			case Series::publisher_id:
 				$model = Model::Named('Publisher');
-				return $model->allObjects();
+				return $model->allObjects(null, -1);
 			default:
 				return null;
 		}
@@ -297,6 +297,27 @@ class Series extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	public function attributeIsEditable($object = null, $type = null, $attr)
+	{
+		if ( is_null($object) == false && $object->hasExternalEndpoint()) {
+			switch ($attr) {
+				case Series::publisher_id:
+				case Series::name:
+				case Series::desc:
+				case Series::start_year:
+				case Series::issue_count:
+				case Series::xurl:
+				case Series::xsource:
+				case Series::xid:
+				case Series::xupdated:
+					return false;
+				default:
+					break;
+			}
+		}
+		return parent::attributeIsEditable($object, $type, $attr);
 	}
 }
 

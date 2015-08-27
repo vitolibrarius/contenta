@@ -137,6 +137,12 @@ class DataObject
 		return null;
 	}
 
+	public function hasExternalEndpoint()
+	{
+		$endpoint = $this->externalEndpoint();
+		return (is_null($endpoint) ? false : true);
+	}
+
 	public function externalEndpoint()
 	{
 		if ( isset( $this->xsource) ) {
