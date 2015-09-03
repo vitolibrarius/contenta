@@ -19,7 +19,10 @@
 			<div id="github">
 				<a target="ContentWeb" href="https://github.com/vitolibrarius/contenta"> <?php echo Localized::GlobalLabel("WebsiteLink"); ?></a> |
 				<a target="ContentWiki" href="https://github.com/vitolibrarius/contenta/wiki"> <?php echo Localized::GlobalLabel("HelpLink"); ?></a> |
-				<a target="ContentIssues" href="https://github.com/vitolibrarius/contenta/issues/new"> <?php echo Localized::GlobalLabel("AddIssueLink"); ?></a>
+				<a target="ContentIssues"
+					href="https://github.com/vitolibrarius/contenta/issues/new?title=<?php
+						echo urlencode('Problem on ' . Config::Web($this->controllerName, (isset($this->controllerAction) ? $this->controllerAction : 'index'))); ?>"
+				><?php echo Localized::GlobalLabel("AddIssueLink"); ?></a>
 			</div>
 			<div id="version">
 				<?php echo Localized::GlobalLabel("Release"); ?>: <?php echo currentVersionNumber(); ?>
