@@ -9,12 +9,12 @@
 	<link rel="icon" type="image/png" href="<?php echo Config::Web('public/img/Logo_favicon.png'); ?>" />
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/ui-lightness/jquery-ui.css" />
+	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/jquery/v1.11.2/themes/ui-lightness/jquery-ui.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/application.css'); ?>" />
 
 	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
-	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-	<script type="text/javascript" src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+	<script type="text/javascript" src="<?php echo Config::Web('/public/js/jquery/v1.11.1/jquery.min.js'); ?>"></script>
+	<script type="text/javascript" src="<?php echo Config::Web('/public/js/jquery/v1.11.2/jquery-ui.js'); ?>"></script>
 	<script type="text/javascript" src="<?php echo Config::Web('/public/js/application.js'); ?>"></script>
 
 	<!-- Custom component stylesheets and scripts -->
