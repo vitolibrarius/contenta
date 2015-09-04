@@ -58,7 +58,7 @@
 		$issue_message .= "# Outstanding issues" .PHP_EOL;
 		foreach( $json as $issue ) {
 			if ( $issue['number'] == $branchId ) {
-				$fix_message = "Fixes #" . $branchId . "\t" . $issue['title'] .PHP_EOL;
+				$fix_message = "Fixes Issue #" . $branchId . "\t" . $issue['title'] .PHP_EOL;
 			}
 			$issue_message .= "#\t" . $issue['number'] . "\t" . $issue['title'] .PHP_EOL;
 		}
