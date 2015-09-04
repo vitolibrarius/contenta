@@ -1,16 +1,21 @@
 #! /usr/local/bin/php
 <?php
-
-	$messageFile = $argv[1];
-	$message = file_get_contents($messageFile);
-
 	$TTL = 60;
 	$user=exec('whoami');
+
+	$messageFile = (isset($argv[1]) ? $argv[1] : null);
+	$message = (isset($argv[1]) ? file_get_contents($messageFile) : "");
+
+    $currentBranchName = exec('git rev-parse --abbrev-ref HEAD');
+	$branchPattern = "/^(\\w+)-(\\d{1,32})/";
+    preg_match($branchPattern, $currentBranchName, $matches);
+    $branchId = (isset($matches[2])) ? $matches[2] : "";
+    $fix_message = "";
+
 	$cached = "/tmp/contenta-issues-$user.json";
 	$use_cache = false;
 	if (@file_exists($cached) && filemtime($cached) > (time() - ($TTL))) {
 		$use_cache = true;
-		echo "using cached" .PHP_EOL;
 	}
 
 	if ( $use_cache == true ) {
@@ -48,21 +53,23 @@
 		}
 	}
 
+	$issue_message = "";
 	if (isset($json) && is_array($json)) {
-		$message .= "# Outstanding issues" .PHP_EOL;
+		$issue_message .= "# Outstanding issues" .PHP_EOL;
 		foreach( $json as $issue ) {
-			$message .= "#\t" . $issue['number'] . "\t" . $issue['title'] .PHP_EOL;
+			if ( $issue['number'] == $branchId ) {
+				$fix_message = "Fixes #" . $branchId . "\t" . $issue['title'] .PHP_EOL;
+			}
+			$issue_message .= "#\t" . $issue['number'] . "\t" . $issue['title'] .PHP_EOL;
 		}
 	}
 
-    $currentBranchName = exec('git rev-parse --abbrev-ref HEAD');
-    $branchPattern = '/^([a-zA-Z]{1,32}-[0-9]{1,32})[-_]?/';
-    preg_match($branchPattern, $currentBranchName, $matches);
-    $branchId = (isset($matches[1])) ? $matches[1] : "";
-
-	$message .= PHP_EOL . "Fixes #" . $branchId . PHP_EOL;
-	file_put_contents($messageFile, $message);
+	$message = $fix_message . PHP_EOL . $issue_message . $message;
+	if ( isset($argv[1]) ) {
+		file_put_contents($messageFile, $message);
+	}
+	else {
+		echo $message;
+	}
 
 ?>
-
-# echo "fixes #" >> "$1"
