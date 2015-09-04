@@ -49,7 +49,7 @@
 	}
 
 	if (isset($json) && is_array($json)) {
-		$message .= "#\tOutstanding issues" .PHP_EOL;
+		$message .= "# Outstanding issues" .PHP_EOL;
 		foreach( $json as $issue ) {
 			$message .= "#\t" . $issue['number'] . "\t" . $issue['title'] .PHP_EOL;
 		}
