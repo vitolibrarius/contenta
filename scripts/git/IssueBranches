@@ -1,0 +1,93 @@
+#! /usr/bin/env php
+<?php
+
+function sanitize($string) {
+	$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+				   "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;",
+				   "&#8212;", "", ".", ",", "<", ">", "/", "?");
+	$clean = trim(str_replace($strip, "", strip_tags($string)));
+	$clean = preg_replace('/\s+/', "-", $clean);
+	$clean = substr($clean, 0, 60);
+	return (function_exists('mb_strtolower')) ? mb_strtolower($clean, 'UTF-8') : strtolower($clean);
+}
+
+	$TTL = 60;
+	$user=exec('whoami');
+
+	$branches  = array();
+	$branchList  = array();
+	$currentBranch = "";
+	exec( "git branch", $branchList );
+	foreach( $branchList as $branch ) {
+		if (strpos($branch, "* ") === 0) {
+			$currentBranch = trim( substr($branch, 2));
+			$branches[$currentBranch] = $currentBranch;
+		}
+		else {
+			$tbranch = trim( $branch );
+			$branches[$tbranch] = $tbranch;
+		}
+	}
+
+	if ( $currentBranch != "master" ) {
+		echo PHP_EOL;
+		echo "--------------------------" . PHP_EOL;
+		echo " Please switch to the master branch" . PHP_EOL;
+		echo "--------------------------" . PHP_EOL;
+		exit(1);
+	}
+
+	$cached = "/tmp/contenta-issues-$user.json";
+	$use_cache = false;
+	if (@file_exists($cached) && filemtime($cached) > (time() - ($TTL))) {
+		$use_cache = true;
+	}
+
+	if ( $use_cache == true ) {
+		$data = file_get_contents($cached);
+		if ( $data != false ) {
+			$json = json_decode($data, true);
+			if ( json_last_error() != 0 ) {
+				@unlink( $cached );
+			}
+		}
+		else {
+			@unlink( $cached );
+		}
+	}
+
+	if (isset($json) == false) {
+		$url = "https://api.github.com/repos/vitolibrarius/contenta/issues";
+		$context = array(
+			'http' => array(
+				'ignore_errors' => true,
+				'method' => "GET",
+				'header'=>	"Accept-language: en\r\n" .
+							"User-Agent: PHP/5.2.9\r\n",
+							"Content-Type: application/json\r\n"
+			)
+		);
+
+
+		$data = file_get_contents($url, false, stream_context_create($context));
+		if ( $data != false ) {
+			$json = json_decode($data, true);
+			if ( json_last_error() == 0 ) {
+				file_put_contents( $cached, json_encode($json, JSON_PRETTY_PRINT) );
+			}
+		}
+	}
+
+	if (isset($json) && is_array($json)) {
+		foreach( $json as $issue ) {
+			$branchName = sanitize('issue ' . $issue['number'] . ' ' . $issue['title']);
+			if ( isset( $branches[$branchName] ) == false ) {
+				echo "creating " . $branchName .PHP_EOL;
+				exec( "git branch " . $branchName, $branchList );
+			}
+		}
+	}
+	else {
+		echo "Failed to find github issue list" .PHP_EOL;
+	}
+?>
