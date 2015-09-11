@@ -1,0 +1,71 @@
+/* Table data */
+.mediaData {
+	clear: both;
+}
+
+.mediaData table {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+	margin-left: auto;
+	margin-right:auto;
+}
+
+.mediaData table th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+
+.mediaData table td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+
+.mediaData tr.no-media td {
+	background-color: pink;
+}
+
+.mediaData td.issue {
+	font-size: 2em;
+	text-align:center
+}
+
+.mediaData td.published {
+	font-size: 1.2em;
+	text-align:center
+}
+
+.mediaData td.name {
+	vertical-align:top;
+}
+
+.mediaData td.name > h3,
+.mediaData td.name > h4 {
+	margin: 0 0 .5em 0;
+}
+
+.description {
+	display: block;
+	font-size: 11px;
+	color: #999;
+	background: white;
+	height:100px;
+	overflow:scroll;
+	border:1px solid white;
+	border-radius:5px;
+	margin-right:5px;
+	padding: 4px;
+}
+
+.mediaData td.name > span * {
+	margin:0;
+}

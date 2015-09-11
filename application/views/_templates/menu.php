@@ -66,43 +66,30 @@ class Menu {
 	 */
 	public function render(array $attrs = NULL, $current = NULL, array $items = NULL)
 	{
-		static $i;
-
 		$items = empty($items) ? $this->items : $items;
 		$current = empty($current) ? $this->current : $current;
 		$attrs = empty($attrs) ? $this->attrs : $attrs;
-
-		$i++;
 
 		$menu = '<ul' . self::attributes($attrs) . '>';
 
 		foreach ($items as $key => $item)
 		{
 			$has_children = isset($item['children']);
+			$current_class = "";
 
-			$class = array();
-
-			$has_children ? $class[] = 'parent' : NULL;
-
-			if ( ! empty($current))
-			{
-				if ($current_class = self::current($current, $item))
-				{
-					$class[] = $current_class;
-				}
+			if ( empty($current) == false ) {
+				$current_class = self::current($current, $item);
 			}
 
-			$classes = ! empty($class) ? self::attributes(array('class' => implode(' ', $class))) : NULL;
+			$classes = self::attributes(array('class' => $current_class));
 
+			$menu .= '<!-- ' . $current_class . ' -->';
 			$menu .= '<li'.$classes.'><a href="'.$item['url'].'">'.$item['title'].'</a>';
 			$menu .= $has_children ? $this->render(array('class'=>'sub-menu'), $current, $item['children']) : NULL;
 			$menu .= '</li>';
 		}
 
 		$menu .= '</ul>';
-
-		$i--;
-
 		return $menu;
 	}
 
@@ -163,8 +150,7 @@ class Menu {
 			return ' '.$attrs;
 
 		$compiled = '';
-		foreach ($attrs as $key => $val)
-		{
+		foreach ($attrs as $key => $val) {
 			$compiled .= ' '.$key.'="'.htmlspecialchars($val).'"';
 		}
 
@@ -180,13 +166,11 @@ class Menu {
 	 */
 	protected static function current($current, array $item)
 	{
-		if ($current === $item['url'])
+		if ( strtolower($current) === strtolower($item['url']) ) {
 			return 'active current';
-
-		else
-		{
-			if (self::active($item, $current, 'url'))
-				return 'active';
+		}
+		else if (self::active($item, $current, 'url')) {
+			return 'active';
 		}
 
 		return '';

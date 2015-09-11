@@ -1,7 +1,8 @@
-<div><!-- container -->
-	<div><!-- top -->
-		<div style="padding:15px; display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
-			<form method="post" style="min-width: 380px;" accept-charset="utf-8"
+	<section id="content">
+		<div class="row">
+			<div class="grid_4">
+
+			<form method="post" accept-charset="utf-8"
 				action="<?php echo Config::Web($this->saveAction); ?>/<?php echo (isset($this->object)) ? $this->object->id : null; ?>"
 				name="editForm">
 
@@ -36,11 +37,12 @@
 				</div>
 				</fieldset>
 			</form>
-		</div>
 
+			</div>
 		<?php if (isset($this->object, $this->additionalAction) && null != $this->object->externalEndpoint()) : ?>
-		<div style="padding:15px; display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
-			<form method="post" style="min-width: 380px;"
+			<div class="grid_4">
+
+			<form method="post"
 				action="<?php echo Config::Web($this->additionalAction); ?>/<?php echo (isset($this->object)) ? $this->object->id : null; ?>"
 				name="editForm">
 
@@ -68,7 +70,9 @@
 				</div>
 				</fieldset>
 			</form>
-		</div>
+
+			</div>
 		<?php endif; ?>
-	</div>
-</div><!-- container -->
+
+		</div>
+	</section>

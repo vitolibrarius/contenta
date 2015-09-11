@@ -9,13 +9,18 @@
 	<link rel="icon" type="image/png" href="<?php echo Config::Web('public/img/Logo_favicon.png'); ?>" />
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/jquery/v1.11.2/themes/ui-lightness/jquery-ui.css'); ?>" />
-	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/application.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/lib/select2.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta-card.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta-forms.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta-modal.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta-tables.css'); ?>" />
 
 	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
-	<script type="text/javascript" src="<?php echo Config::Web('/public/js/jquery/v1.11.1/jquery.min.js'); ?>"></script>
-	<script type="text/javascript" src="<?php echo Config::Web('/public/js/jquery/v1.11.2/jquery-ui.js'); ?>"></script>
-	<script type="text/javascript" src="<?php echo Config::Web('/public/js/application.js'); ?>"></script>
+	<script type="text/javascript" src="<?php echo Config::Web('/public/js/lib/jquery-2.1.4.js'); ?>"></script>
+	<script type="text/javascript" src="<?php echo Config::Web('/public/js/lib/select2.min.js'); ?>"></script>
+	<script type="text/javascript" src="<?php echo Config::Web('/public/js/contenta.js'); ?>"></script>
+	<script type="text/javascript" src="<?php echo Config::Web('/public/js/contenta-modal.js'); ?>"></script>
 
 	<!-- Custom component stylesheets and scripts -->
 <?php
@@ -35,30 +40,30 @@
 	webRoot="<?php echo Config::Web(); ?>";
 //-->
 </script>
-
-
 </head>
-<body>
 
-<div id="container">
-	<header>
-		<div class='title-box'>
-			<div id="apptitle"><a href="<?php echo Config::Web() ?>/"><?php echo Config::AppName(); ?></a></div>
-			<nav>
-				<a href="#" id="menu-icon"></a>
-				<?php
+
+<body>
+<!-- header area -->
+    <header class="wrapper clearfix">
+        <div id="banner">
+        	<div id="logo"><a href="<?php echo Config::Web() ?>/">
+        		<img src="<?php echo Config::Web('/public/img/ContentaHeader.png'); ?>" alt="logo"></a>
+        	</div>
+        </div>
+
+        <!-- main navigation -->
+        <nav id="topnav" role="navigation">
+          <div class="toggle">Menu</div>
+			<?php
 				include 'menu.php';
 
 				$menu = menu::factory();
+				$menu->class = "menu";
+				$menu->id = "menu-main";
 
 				if (Session::get('user_logged_in') == true)
 				{
-					$backtr = Session::peekCurrentPage();
-					if (isset( $backtr ) == true)
-					{
-						$menu->add( ' Back', '/index/back');
-					}
-
 					if (Session::get('user_account_type') === model\Users::AdministratorRole )
 					{
 						$menu->add( Localized::GlobalLabel("Menu", "Admin"), '/admin/index');
@@ -74,24 +79,31 @@
 					$menu->add(Localized::GlobalLabel("Menu", "Login"), '/login/index');
 				}
 
-				$menu->current = 'level-three.php';
+				$menu->current = Config::Web($this->controllerName, (isset($this->controllerAction) ? $this->controllerAction : 'index'));
 
 				echo $menu;
-				?>
-			</nav>
-			<div class="clear-both"></div>
-		</div>
-	</header>
+			?>
+		</nav><!-- end main navigation -->
+    </header><!-- end header -->
 
-	<div id="content">
-		<h1>
-		<?php if (isset($this->controllerName)): ?>
-			<a href="<?php echo Config::Web($this->controllerName, (isset($this->controllerAction) ? $this->controllerAction : null)); ?>">
-		<?php endif; ?>
-			<?php echo $this->viewTitle(); ?>
-		<?php if (isset($this->controllerName)): ?>
-			</a>
-		<?php endif; ?>
-		</h1>
-		<section class="main">
 
+	<section id="page-header" class="clearfix">
+		<div class="wrapper">
+		   <div class="row">
+			<div class="grid_12">
+				<h1>
+				<?php if (isset($this->controllerName)): ?>
+					<a href="<?php echo Config::Web($this->controllerName, (isset($this->controllerAction) ? $this->controllerAction : null)); ?>">
+				<?php endif; ?>
+					<?php echo $this->viewTitle(); ?>
+				<?php if (isset($this->controllerName)): ?>
+					</a>
+				<?php endif; ?>
+				</h1>
+			</div>
+		</div><!-- end row -->
+	   </div><!-- end wrapper -->
+	</section><!-- end page-header area -->
+
+	<!-- main content area -->
+	<div id="main-content" class="wrapper">

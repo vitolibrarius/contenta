@@ -32,7 +32,7 @@ $realObj = (isset($this->object)) ? $this->object : null;
 <div><!-- container -->
 	<div><!-- top -->
 		<div style="padding:15px; display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
-			<form method="post" style="min-width: 380px;" accept-charset="utf-8"
+			<form method="post" accept-charset="utf-8"
 				action="<?php echo Config::Web($this->searchAction . (is_null($realObj) ? '' : '/' . $realObj->id) ); ?>"
 				id="searchForm" name="searchForm">
 

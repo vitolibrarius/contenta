@@ -1,5 +1,9 @@
-<div style="padding:15px; display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
-	<form method="post" style="min-width: 380px;" name="login"
+	<section id="content">
+		<div class="row">
+			<div class="grid_4"></div>
+			<div class="grid_4">
+
+	<form method="post" name="login"
 		action="<?php echo Config::Web( (isset($this->loginActionPath) ? $this->loginActionPath : '/Login/login') )?>">
 
 		<fieldset>
@@ -40,7 +44,10 @@
 
 		</fieldset>
 	</form>
-</div>
+			</div>
+			<div class="grid_4"></div>
+		</div>
+	</section>
 
 <?php if (isset($this->marquee)): ?>
 <div id="marquee">
