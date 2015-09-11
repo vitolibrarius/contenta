@@ -14,23 +14,19 @@
 	<link rel="shortcut icon" href="public/img/Logo_favicon.png"  type="image/png">
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="public/css/lib/select2.css" />
 	<link rel="stylesheet" href="public/css/contenta.css" />
 	<link rel="stylesheet" href="public/css/card.css" />
-	<link rel="stylesheet" href="public/css/contenta-forms.css" />
+	<link rel="stylesheet" href="public/css/contenta-modal.css" />
 
 	<script type="text/javascript" src="public/js/lib/jquery-2.1.4.js"></script>
-	<script type="text/javascript" src="public/js/select2.min.js"></script>
 	<script type="text/javascript" src="public/js/contenta.js"></script>
-
-	<script>
-		$(document).ready(function() {
-			$("#publisher").select2( { width: '100%' } )
-		});
-	</script>
+	<script type="text/javascript" src="public/js/contenta-modal.js"></script>
 
 	<!-- Custom component stylesheets and scripts -->
 	<!--meta http-equiv="refresh" content="5" -->
+<style>
+</style>
+
 </head>
 
 <body id="home">
@@ -76,22 +72,7 @@
 
 	<section id="page-header" class="clearfix">
 		<div class="wrapper">
-			<div class="row">
-				<div class="grid_2">
-					<img class="thumbnail cbz" src="public/img/thumb_01.jpg"><br>
-				</div>
-				<div class="grid_6">
-					<h1>Edit Series Title</h1>
-					<div class="validation">
-						<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
-						<p class="item">Uncaught exception: Traceback (most recent call last</p>
-					</div>
-				</div>
-				<div class="grid_4">
-					<p>Last Updated From ComicVine: <em>Sep 08, 2015</em>
-        		    <a href="#" class="button">Refresh Metadata</a></p>
-				</div>
-			</div>
+			<h1>Internal page header</h1>
 		</div>
 	</section>
 
@@ -99,68 +80,59 @@
 <div class="wrapper" id="main">
 
 	<section id="content">
-		<div class="row">
-			<div class="grid_4">
-				<form name="series_edit">
-					<fieldset>
-						<legend>Series Details</legend>
+      <div class="row">
+        <div class="grid_12">
+            <h1>New issues</h1>
+        </div>
 
-						<div>
-							<label for="name">Name</label>
-							<input type="text" id="name" placeholder="Batman"/>
-						</div>
+        <div class="grid_3">
 
-						<div>
-							<label for="publisher">Publisher</label>
-							<select id="publisher">
-								<option value="1" data-foo="pub_3.png" selected>DC Comics</option>
-								<option value="2" data-foo="pub_7.jpeg">Marvel</option>
-								<option value="3" data-foo="pub_11.jpeg" >Image</option>
-								<option value="4" data-foo="pub_63.jpeg" >whatever</option>
-								<option value="5" data-foo="pub_63.jpeg" >None</option>
-							</select>
-						</div>
+		<figure class="card">
+			<div class="figure_top">
+				<div class="figure_image">
+						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_01.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
+					</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+						<p class="issues">3 / 6 Issues</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
+						<a href="#" class="confirm" alt="Delete">
+							<span class="icon trash"></span>
+						</a>
 
-						<div>
-							<label for="year">Start Year</label>
-							<input type="text" id="year" placeholder="2000"/>
-						</div>
-
-						<div>
-							<label for="issues">Issues</label>
-							<input type="text" id="issues" placeholder="1"/>
-						</div>
-
-						<div>
-							<label for="desc">Description</label>
-							<textarea type="text" id="desc" placeholder="2000">Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada! </textarea>
-						</div>
-
-						<div>
-							<label class="checkbox" for="series-pub_active">
-							<input class="flag_input" type="checkbox" name="series-pub_active" checked="">
-								Actively publishing
-							</label>
-						</div>
-						<div>
-							<label class="checkbox" for="series-pub_wanted">
-							<input class="flag_input" type="checkbox" name="series-pub_wanted">
-								Wanted for collection
-							</label>
-						</div>
-
-						<div class="half">
-							<input type="reset" onclick="ajaxFunction()" value="Reset"/>
-						</div>
-
-						<div class="half omega">
-							<input type="submit" onclick="ajaxFunction()" value="Save"/>
-						</div>
-					</fieldset>
-				</form>
+					</div>
+				</div>
 			</div>
+			<figcaption class="caption">
+				<a href="SeriesDetail.html"><em>caption title</em></a>
+				Behold, a featured item
+			</figcaption>
+		</figure>
+
 		</div>
+	</div>
 	</section>
+
+<!-- content area -->
+	<section id="content">
+                <h1>Header 1</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+	</section>
+<!-- #end content area -->
 
 </div>
 <!-- #end div #main .wrapper -->
@@ -185,5 +157,22 @@
 </footer>
 <!-- #end footer area -->
 
+<script language="javascript" type="text/javascript">
+	// Wait until the DOM has loaded before querying the document
+	$(document).ready(function(){
+		var list = $('a.confirm');
+		$('a.confirm').click(function(e){
+			modal.open({
+				heading: 'Confirm Delete',
+				img: 'public/img/thumb_01.jpg',
+				description: 'This will permanently delete this media  <br /><em>Filename.cbz</em>',
+				confirm: 'Are you sure you want to continue?',
+				actionLabel: 'Delete',
+				action: $(this).attr('data_action')
+			});
+			e.preventDefault();
+		});
+	});
+</script>
 </body>
 </html>

@@ -1,5 +1,7 @@
-<!doctype html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,117 +9,221 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!-- CSS -->
-	<link rel="stylesheet" href="public/css/application.css" />
-	<link rel="stylesheet" href="public/css/admin.css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
-	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-	<script type="text/javascript" src="public/js/application.js"></script>
+	<link rel="shortcut icon" href="public/img/Logo_favicon.png"  type="image/png">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="public/css/contenta.css" />
+	<link rel="stylesheet" href="public/css/card.css" />
+
+	<script type="text/javascript" src="public/js/lib/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="public/js/contenta.js"></script>
 
 	<!-- Custom component stylesheets and scripts -->
 	<!--meta http-equiv="refresh" content="5" -->
 
 </head>
-<body>
 
-<div id="container">
-	<header>
-		<div class='title-box'>
-			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
-			<nav>
-				<a href="BasicPage.html" id="menu-icon"></a>
-				<ul>
-					<li><a href="Admin.html">Admin</a></li>
-					<li><a href="Logs.html">Logs</a></li>
-					<li><a href="Series.html">Series</a></li>
-					<li><a href="#">Profile</a></li>
-				</ul>
-			</nav>
-			<div class="clear-both"></div>
+<body id="home">
+
+<!-- header area -->
+    <header class="wrapper clearfix">
+
+        <div id="banner">
+        	<div id="logo"><a href="BasicPage.html"><img src="public/img/ContentaHeader.png" alt="logo"></a></div>
+        </div>
+
+        <!-- main navigation -->
+        <nav id="topnav" role="navigation">
+          <div class="toggle">Menu</div>
+          <ul class="menu" id="menu-main">
+              <li><a href="BasicPage.html">Home</a></li>
+              <li class="current"><a href="Admin.html">Admin</a></li>
+              <li><a href="Series.html">Series</a>
+                  <ul>
+                      <li>
+                          <a href="#">menu item 3.1</a>
+                      </li>
+                      <li class="current">
+                          <a href="#">menu item 3.2</a>
+                          <ul>
+                              <li><a href="#">menu item 3.2.1</a></li>
+                              <li><a href="#">menu item 3.2.2 with longer link name</a></li>
+                              <li><a href="#">menu item 3.2.3</a></li>
+                              <li><a href="#">menu item 3.2.4</a></li>
+                              <li><a href="#">menu item 3.2.5</a></li>
+                          </ul>
+                      </li>
+                      <li><a href="#">menu item 3.3</a></li>
+                      <li><a href="#">menu item 3.4</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="BasicInternalPage.html">Plain Page</a>
+              </li>
+          </ul>
+		</nav><!-- end main navigation -->
+
+    </header><!-- end header -->
+
+	<section id="page-header" class="clearfix">
+		<div class="wrapper">
+			<h1>Administration</h1>
 		</div>
-	</header>
-
-	<div id="content">
-	<h2>Admin</h2>
-
-	<section class="feedback success">
-		<p class="item">Group RedBlade has released dvdrip of 2013 movie “Canopy”. Enjoy!</pre></p>
 	</section>
 
-	<section class="feedback error">
-		<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
-		<p class="item">Uncaught exception: Traceback (most recent call last</p>
+<!-- main content area -->
+<div class="wrapper" id="main">
+
+<!-- content area -->
+	<section id="content">
+		<div class="row">
+			<div class="grid_3">
+				<div class="admin_card">
+					<div class="admin_card_top">
+						<img src="public/img/admin-users.png">
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminUsers/userlist">Users</a>
+						<p>User List and administration</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminUsers/editUser">Add User</a>
+						<p>Create a new user record</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="grid_3">
+				<div class="admin_card">
+					<div class="admin_card_top">
+						<img src="public/img/admin-uploads.png">
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/Upload/index">Upload</a>
+						<p>Upload new media content</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="Processing.html">Repair Processing</a>
+						<p>Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminWanted/index">Wanted Publications</a>
+						<p>Wanted</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminWanted/newznab">Manual Search (NZB)</a>
+						<p>Search any configured Newznab sites for specific content</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="grid_3">
+				<div class="admin_card">
+					<div class="admin_card_top">
+						<img src="public/img/admin-daemons.png">
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminJobs/index">Scheduled Jobs</a>
+						<p>Admin JobsLink desc</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminJobs/runningIndex">Currently Running</a>
+						<p>Admin JobsRunningLink desc</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="grid_3">
+				<div class="admin_card">
+					<div class="admin_card_top">
+						<img src="public/img/admin-publications.png">
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminPublishers/index">Publishers</a>
+						<p>All Publishers</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminCharacters/index">Characters</a>
+						<p>All Characters</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminStoryArcs/index">Story Arcs</a>
+						<p>All Story Arcs</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminSeries/index">Series</a>
+						<p>Flagged series</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/AdminPublication/index">Publications</a>
+						<p>Flagged issues</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="grid_3">
+				<div class="admin_card">
+					<div class="admin_card_top">
+						<img src="public/img/admin-network.png">
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/netconfig/index">
+							Endpoints</a>
+						<p>Configured network endpoints (RSS, ComicVine, ..)</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/netconfig/edit">
+							Add Endpoint</a>
+						<p>Create a new network endpoint connection</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="grid_3">
+				<div class="admin_card">
+					<div class="admin_card_top">
+						<img src="public/img/admin-processing.png">
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/upgrade/index">
+							Check Configuration</a>
+						<p>Review current version and configuration values</p>
+					</div>
+					<div class="admin_card_item">
+						<a href="/contenta/upgrade/upgradeEligibility">
+							Check Version</a>
+						<p>Check for new versions of this software and upgrade if necessary</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
 	</section>
-
-	<section class="main">
-
-	<div class="admin_group">
-		<div class="admin_card">
-			<div class="admin_card_top">
-				<img src="public/img/admin-users.png">
-			</div>
-			<div class="admin_card_item">
-				<a href="#">Users</a>
-				<p>User List and administration</p>
-			</div>
-			<div class="admin_card_item">
-				<a href="#">Add User</a>
-				<p>Register new users</p>
-			</div>
-		</div>
-
-		<div class="admin_card">
-			<div class="admin_card_top">
-				<img src="public/img/admin-processing.png">
-			</div>
-			<div class="admin_card_item">
-				<a href="#">Upload</a>
-				<p>Upload new media content</p>
-			</div>
-			<div class="admin_card_item">
-				<a href="Processing.html">Repair Processing</a>
-				<p>Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content</p>
-			</div>
-		</div>
-
-		<div class="admin_card">
-			<div class="admin_card_top">
-				<img src="public/img/admin-publications.png">
-			</div>
-			<div class="admin_card_item">
-				<a href="#">Series</a>
-				<p>Flagged series</p>
-			</div>
-			<div class="admin_card_item">
-				<a href="#">Publications</a>
-				<p>Flagged issues</p>
-			</div>
-		</div>
-
-		<div class="admin_card">
-			<div class="admin_card_top">
-				<img src="public/img/admin-network.png">
-			</div>
-			<div class="admin_card_item">
-				<a href="#">Endpoints</a>
-				<p>Configured network endpoints (RSS, ComicVine, ..)</p>
-			</div>
-			<div class="admin_card_item">
-				<a href="#">Add New Endpoint</a>
-				<p>Create a new connection</p>
-			</div>
-		</div>
-
-	</div>
-
-	</section>
-
-	</div>
-
-	<footer>
-	</footer>
+<!-- #end content area -->
 </div>
+<!-- #end div #main .wrapper -->
+
+<!-- footer area -->
+<footer>
+	<div id="colophon" class="wrapper clearfix">
+        <div class="grid_4 left">
+			<a target="ContentWeb" href="https://github.com/vitolibrarius/contenta"> Website</a> |
+			<a target="ContentWiki" href="https://github.com/vitolibrarius/contenta/wiki"> Help</a> |
+			<a target="ContentIssues"
+				href="https://github.com/vitolibrarius/contenta/issues/new?body=Problem+on+%2Fcontenta%2FLogin%2Findex"
+			>Report Issue</a>
+		</div>
+        <div class="grid_4 middle">
+			Release: 0.4.0<br><em>4e5f1df094f610cbd2fb5260523845fa82adabf1</em>
+		</div>
+        <div class="grid_4 right">
+			Local site is 5 COMMITS BEHIND
+		</div>
+	</div>
+</footer>
+<!-- #end footer area -->
+
 </body>
 </html>
-

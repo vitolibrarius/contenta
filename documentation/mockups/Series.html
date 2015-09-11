@@ -1,447 +1,522 @@
-<!doctype html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Contenta - Series</title>
+	<title>Contenta - Admin</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="refresh" content="10">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+	<link rel="shortcut icon" href="public/img/Logo_favicon.png"  type="image/png">
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="public/css/application.css" />
-	<link rel="stylesheet" href="public/css/series.css" />
+	<link rel="stylesheet" href="public/css/lib/select2.css" />
+	<link rel="stylesheet" href="public/css/contenta.css" />
+	<link rel="stylesheet" href="public/css/contenta-forms.css" />
+	<link rel="stylesheet" href="public/css/card.css" />
 
-	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
-	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-	<script type="text/javascript" src="public/js/application.js"></script>
+	<script type="text/javascript" src="public/js/lib/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="public/js/lib/select2.min.js"></script>
+	<script type="text/javascript" src="public/js/contenta.js"></script>
 
 	<!-- Custom component stylesheets and scripts -->
 	<!--meta http-equiv="refresh" content="5" -->
 
+	<script>
+		$(document).ready(function() {
+			$("#searchPublisher").select2( { width: '100%' } )
+		});
+	</script>
+
 </head>
-<body>
 
-<div id="container">
-	<header>
-		<div class='title-box'>
-			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
-			<nav>
-				<a href="BasicPage.html" id="menu-icon"></a>
-				<ul>
-					<li><a href="Admin.html">Admin</a></li>
-					<li><a href="Logs.html">Logs</a></li>
-					<li><a href="Series.html">Series</a></li>
-					<li><a href="#">Profile</a></li>
-				</ul>
-			</nav>
-			<div class="clear-both"></div>
+<body id="home">
+
+<!-- header area -->
+    <header class="wrapper clearfix">
+
+        <div id="banner">
+        	<div id="logo"><a href="BasicPage.html"><img src="public/img/ContentaHeader.png" alt="logo"></a></div>
+        </div>
+
+        <!-- main navigation -->
+        <nav id="topnav" role="navigation">
+          <div class="toggle">Menu</div>
+          <ul class="menu" id="menu-main">
+              <li><a href="BasicPage.html">Home</a></li>
+              <li><a href="Admin.html">Admin</a></li>
+              <li class="current"><a href="Series.html">Series</a>
+                  <ul>
+                      <li>
+                          <a href="#">menu item 3.1</a>
+                      </li>
+                      <li class="current">
+                          <a href="#">menu item 3.2</a>
+                          <ul>
+                              <li><a href="#">menu item 3.2.1</a></li>
+                              <li><a href="#">menu item 3.2.2 with longer link name</a></li>
+                              <li><a href="#">menu item 3.2.3</a></li>
+                              <li><a href="#">menu item 3.2.4</a></li>
+                              <li><a href="#">menu item 3.2.5</a></li>
+                          </ul>
+                      </li>
+                      <li><a href="#">menu item 3.3</a></li>
+                      <li><a href="#">menu item 3.4</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="BasicInternalPage.html">Plain Page</a>
+              </li>
+          </ul>
+		</nav><!-- end main navigation -->
+
+    </header><!-- end header -->
+
+
+<section id="page-header" class="clearfix">
+    <div class="wrapper">
+	<form id="searchForm" name="searchForm">
+       <div class="row">
+			<div class="grid_3">
+				<select id="searchPublisher" class="select_input"  name="searchPublisher">
+					<option value="-1"> - Select Publisher - </option>
+					<option value="131">12-Gauge Comics</option>
+					<option value="80">2000AD</option>
+					<option value="135">2nd Coming Comics</option>
+					<option value="65">AAM/Markosia</option>
+					<option value="24">Abstract Studio</option>
+					<option value="138">Acclaim</option>
+					<option value="71">Action Lab</option>
+					<option value="144">Alterna Comics</option>
+					<option value="100">Amalgam Comics</option>
+					<option value="38">America's Best Comics</option>
+					<option value="143">American Gothic Press</option>
+					<option value="51">Amigo Comics</option>
+					<option value="108">Antarctic Press</option>
+					<option value="97">Apple</option>
+					<option value="63">Arcana Studio</option>
+					<option value="127">Archaia</option>
+					<option value="124">Archie Adventure Series</option>
+					<option value="17">Archie Comics</option>
+					<option value="58">Art of Fiction</option>
+					<option value="22">Aspen MLT</option>
+					<option value="113">Astorina</option>
+					<option value="44">Atlas</option>
+					<option value="14">Avatar Press</option>
+					<option value="155">Aw Yeah Comics!</option>
+					<option value="114">Awesome Comics</option>
+					<option value="39">Benitez Productions</option>
+					<option value="103">Big Dog Ink</option>
+					<option value="116">BlackMagicWolf Productions</option>
+					<option value="59">Blind Ferret</option>
+					<option value="11">Boom! Studios</option>
+					<option value="9">Boundless Comics</option>
+					<option value="146">Brainstorm</option>
+					<option value="8">Broadsword Comics</option>
+					<option value="128">Bubble</option>
+					<option value="90">C4 Comics</option>
+					<option value="111">Cahaba Producttions</option>
+					<option value="89">Caliber Comics</option>
+					<option value="62">Chaos! Comics</option>
+					<option value="136">Chapterhouse Comics</option>
+					<option value="130">Charlton</option>
+					<option value="45">Chick Publications</option>
+					<option value="73">Cinebook</option>
+					<option value="50">Cliffhanger</option>
+					<option value="35">Coffin Comics</option>
+					<option value="37">Comico</option>
+					<option value="66">Comixtribe</option>
+					<option value="101">Continuity</option>
+					<option value="148">Dance Panda Comics</option>
+					<option value="98">Dark Circle Comics</option>
+					<option value="12">Dark Horse Comics</option>
+				</select>
+			</div>
+			<div class="grid_3">
+				<input type="text" name="searchName" id="searchName" class="text_input" placeholder="Series Name" value="">
+			</div>
+			<div class="grid_1">
+				<input type="number" name="searchYear" id="searchYear" class="text_input" min="1950" max="2016" placeholder="Year" value="">
+			</div>
+
+		</div><!-- end row -->
+	</form>
+	</div><!-- end wrapper -->
+</section><!-- end page-header area -->
+
+
+
+
+
+<!-- main content area -->
+<div id="main" class="wrapper">
+
+
+<!-- content area -->
+	<section id="content">
+      <div class="row">
+        <div class="grid_3">
+		<figure class="card">
+			<div class="figure_top">
+				<div class="figure_image">
+						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_01.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
+					</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
+				<p class="description">Behold, a featured item</p>
+			</figcaption>
+		</figure>
 		</div>
-	</header>
 
-	<div id="content">
-	<h2>Series</h2>
-
-	<section class="feedback success">
-		<p class="item">Group RedBlade has released dvdrip of 2013 movie “Canopy”. Enjoy!</pre></p>
-	</section>
-
-	<section class="feedback error">
-		<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
-		<p class="item">Uncaught exception: Traceback (most recent call last</p>
-	</section>
-
-	<section class="main">
-
+        <div class="grid_3">
 		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_01.jpg" /></a>
+			<div class="figure_top">
+				<div class="figure_image">
+					<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_435.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_63.jpeg" />
 					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_7.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon no" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon yes" href="#"></a></div>
-							</div>
-						</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="clear"/>
 			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-				Behold, a featured item
-			</figcaption>
-		</figure>
-
-		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_20.jpg" /></a>
-					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_63.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon yes" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon no" href="#"></a></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="clear"/>
-			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-			Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly military drone on the target slowly closes. With time running out, the soldiers begin to question what the real motives are behind the ordered lethal attack
+			<p class="description">Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly ..</p>
 </figcaption>
 		</figure>
+		</div>
 
+        <div class="grid_3">
 		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_435.jpg" /></a>
-					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_11.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon yes" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon no" href="#"></a></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="clear"/>
-			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-				And yet another</figcaption>
-		</figure>
-
-
-		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
+			<div class="figure_top">
+				<div class="figure_image">
 						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_01.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
 					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_7.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon no" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon yes" href="#"></a></div>
-							</div>
-						</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="clear"/>
 			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-				Behold, a featured item
+				<p class="description">Behold, a featured item</p>
 			</figcaption>
 		</figure>
+		</div>
 
+        <div class="grid_3">
 		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_20.jpg" /></a>
+			<div class="figure_top">
+				<div class="figure_image">
+					<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_20.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_63.jpeg" />
 					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_63.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon yes" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon no" href="#"></a></div>
-							</div>
-						</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="clear"/>
 			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-			Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly military drone on the target slowly closes. With time running out, the soldiers begin to question what the real motives are behind the ordered lethal attack
+			<p class="description">Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly ..</p>
 </figcaption>
 		</figure>
+		</div>
 
+        <div class="grid_3">
 		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_435.jpg" /></a>
-					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_11.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon yes" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon no" href="#"></a></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="clear"/>
-			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-				And yet another</figcaption>
-		</figure>
-
-		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
+			<div class="figure_top">
+				<div class="figure_image">
 						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_01.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
 					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_7.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon no" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon yes" href="#"></a></div>
-							</div>
-						</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="clear"/>
 			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-				Behold, a featured item
+				<p class="description">Behold, a featured item</p>
 			</figcaption>
 		</figure>
+		</div>
 
+        <div class="grid_3">
 		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_20.jpg" /></a>
+			<div class="figure_top">
+				<div class="figure_image">
+					<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_435.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_63.jpeg" />
 					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_63.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon yes" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon no" href="#"></a></div>
-							</div>
-						</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="clear"/>
 			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-			Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly military drone on the target slowly closes. With time running out, the soldiers begin to question what the real motives are behind the ordered lethal attack
+			<p class="description">Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly ..</p>
 </figcaption>
 		</figure>
+		</div>
 
+        <div class="grid_3">
 		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_435.jpg" /></a>
+			<div class="figure_top">
+				<div class="figure_image">
+					<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_20.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
 					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_11.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon yes" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon no" href="#"></a></div>
-							</div>
-						</div>
+					<div class="figure_detail_middle">
+						<p class="large">1996</p>
+						<p class="issues">3 / 6 Issues</p>
+						<p>Update yes</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="clear"/>
-			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-				And yet another</figcaption>
+			<figcaption class="caption"><a href="SeriesDetail.html"><em>1963</em></a>
+			<p class="description">1963&nbsp; is a collection of six issues created by Alan Moore, focusing on the Silver Age with original...</p>
+</figcaption>
 		</figure>
+		</div>
 
+        <div class="grid_3">
 		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_01.jpg" /></a>
+			<div class="figure_top">
+				<div class="figure_image">
+					<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_20.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_63.jpeg" />
 					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_7.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon no" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon yes" href="#"></a></div>
-							</div>
-						</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="clear"/>
 			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-				Behold, a featured item
+			<p class="description">Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly ..</p>
+</figcaption>
+		</figure>
+		</div>
+
+        <div class="grid_3">
+		<figure class="card">
+			<div class="figure_top">
+				<div class="figure_image">
+						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_01.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
+					</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
+				<p class="description">Behold, a featured item</p>
 			</figcaption>
 		</figure>
+		</div>
 
+        <div class="grid_3">
 		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_20.jpg" /></a>
+			<div class="figure_top">
+				<div class="figure_image">
+					<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_435.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_63.jpeg" />
 					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_63.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon yes" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon no" href="#"></a></div>
-							</div>
-						</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="clear"/>
 			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-			Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly military drone on the target slowly closes. With time running out, the soldiers begin to question what the real motives are behind the ordered lethal attack
+			<p class="description">Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly ..</p>
 </figcaption>
 		</figure>
+		</div>
 
+        <div class="grid_3">
 		<figure class="card">
-			<div class="feature">
-				<div class="feature_top">
-					<div class="feature_top_left">
-						<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_435.jpg" /></a>
+			<div class="figure_top">
+				<div class="figure_image">
+					<a href="SeriesDetail.html"><img class="thumbnail cbz" src="public/img/thumb_20.jpg" /></a>
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_63.jpeg" />
 					</div>
-					<div class="feature_top_right">
-						<div class="feature_top_right_top">
-							<img class="icon publisher" src="public/img/pub_11.jpeg" />
-						</div>
-						<div class="feature_top_right_middle">
-							<span class="details">
-								<span class="year">2001</span>
-								<span class="issues">3 / 6 Issues</span>
-							</span>
-						</div>
-						<div class="feature_top_right_bottom">
-							<div class="actions">
-								<div class="edit"><a class="edit_icon" href="SeriesEdit.html"></a></div>
-								<div class="flag"><a class="flag_icon yes" href="#"></a></div>
-								<div class="favorite"><a class="favorite_icon no" href="#"></a></div>
-							</div>
-						</div>
+					<div class="figure_detail_middle">
+						<p class="large">2001</p>
+						<p class="issues">3 / 6 Issues</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<a href="SeriesEdit.html">
+							<span class="icon edit"></span>
+						</a>
+						<a href="#">
+							<span class="icon favorite on"></span>
+						</a>
 					</div>
 				</div>
 			</div>
-			<div class="clear"/>
 			<figcaption class="caption"><a href="SeriesDetail.html"><em>caption title</em></a>
-				And yet another</figcaption>
+			<p class="description">Two soldiers are tasked with deciding the fate of a terrorist with a single push of a button. As the action plays out in real time, their window to use a deadly ..</p>
+</figcaption>
 		</figure>
+        </div>
+
+	  </div><!-- end row -->
+	</section><!-- end content area -->
+
+  </div><!-- #end div #main .wrapper -->
 
 
-	</section>
-
+<!-- footer area -->
+<footer>
+	<div id="colophon" class="wrapper clearfix">
+        <div class="grid_4 left">
+			<a target="ContentWeb" href="https://github.com/vitolibrarius/contenta"> Website</a> |
+			<a target="ContentWiki" href="https://github.com/vitolibrarius/contenta/wiki"> Help</a> |
+			<a target="ContentIssues"
+				href="https://github.com/vitolibrarius/contenta/issues/new?body=Problem+on+%2Fcontenta%2FLogin%2Findex"
+			>Report Issue</a>
+		</div>
+        <div class="grid_4 middle">
+			Release: 0.4.0<br><em>4e5f1df094f610cbd2fb5260523845fa82adabf1</em>
+		</div>
+        <div class="grid_4 right">
+			Local site is 5 COMMITS BEHIND
+		</div>
 	</div>
+</footer>
+<!-- #end footer area -->
 
-	<footer>
-	</footer>
-</div>
 </body>
+
 </html>
 
