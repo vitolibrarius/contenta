@@ -15,6 +15,7 @@
 	padding-bottom: 2px;
 	border-bottom: 2px groove #888;
 	position: relative;
+	min-height: 170px;
 }
 .figure_image,
 .figure_details {

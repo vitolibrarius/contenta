@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta-modal.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta-tables.css'); ?>" />
 
-	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
+	<!-- Scripts -->
 	<script type="text/javascript" src="<?php echo Config::Web('/public/js/lib/jquery-2.1.4.js'); ?>"></script>
 	<script type="text/javascript" src="<?php echo Config::Web('/public/js/lib/select2.min.js'); ?>"></script>
 	<script type="text/javascript" src="<?php echo Config::Web('/public/js/contenta.js'); ?>"></script>

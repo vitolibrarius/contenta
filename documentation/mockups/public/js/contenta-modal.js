@@ -8,7 +8,7 @@
 					<p class="modal_desc">This will permanently delete this media  <br>
 					<em>Filename.cbz</em></p>
 					<p class="modal_confirm">Are you sure you want to continue?</p>
-					<a class="btn" style="float:right" href="undefined">Delete</a>
+					<a class="button" style="float:right" href="undefined">Delete</a>
 				</div>
 				<div style="float:left ; width:20%;"><img src="public/img/thumb_01.jpg" class="icon"></div>
 			</div>
@@ -45,7 +45,7 @@ var modal = (function(){
 		$right.empty().append(
 			'<p class="modal_desc">' + settings.description + '</p>' +
 			'<p class="modal_confirm">' + settings.confirm + '</p>' +
-			'<a class="btn" style="float:right" href="' + settings.action + '">' + settings.actionLabel + '</a>'
+			'<a class="button" style="float:right" href="' + settings.action + '">' + settings.actionLabel + '</a>'
 		);
 
 		$panel.css({

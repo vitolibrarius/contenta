@@ -114,6 +114,8 @@ textarea {
 	height: 10em;
 }
 
+fieldset br { clear: both; }
+
 form .half { float:left; width:49%;}
 form .third { float:left; width:32%;}
 form .half,

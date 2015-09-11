@@ -18,32 +18,28 @@
 	}
 ?>
 
-
-<div class="mediaData">
-	<table>
+<section>
 
 <?php foreach ($map as $series_xid => $seriesObj): ?>
 <?php
 	$searchHits = $existingGroups[$series_xid];
 	$publisher = $seriesObj->publisher();
 ?>
-	<tr>
-		<th>Existing Content</th>
-		<th>
-			<nobr>
+	<div class="row">
+		<div class="grid_2">
 			<?php if ( is_null($publisher) == false ) {
 				echo '<img src="' . Config::Web( "Image", "icon", "publisher", $publisher->id) . '" class="thumbnail" /> ';
 				echo '<span class="publisher name">' . $publisher->name . '</span>';
 			} ?>
-			</nobr>
-		</th>
-
-		<th colspan="3" class="name"><?php echo $seriesObj->name; ?></th>
-	</tr>
+		</div>
+		<div class="grid_10">
+			<h2>Existing Content for <em><?php echo $seriesObj->name; ?></em></h2>
+		</div>
+	</div>
 
 	<?php foreach ($searchHits as $idx => $item): ?>
-		<tr>
-			<td class="name">
+		<div class="row">
+			<div class="grid_2">
 				<?php
 					$issue_xid = array_valueForKeypath( "id", $item );
 					$issue = $seriesObj->publicationForExternal( $issue_xid, model\Endpoint_Type::ComicVine);
@@ -67,14 +63,15 @@
 						echo "New Issue";
 					}
 				?>
-			</td>
-
-			<td class="issue"><?php echo $item['issue_number']; ?></td>
-			<td class="published">
+			</div>
+			<div class="grid_1">
+				<?php echo $item['issue_number']; ?>
+			</div>
+			<div class="grid_1">
 				<img src="<?php echo $item['image']['thumb_url'] ?>" class="thumbnail" /><br>
 				<nobr><?php echo $item['cover_date']; ?></nobr>
-			</td>
-			<td class="name">
+			</div>
+			<div class="grid_4">
 				<h3>
 					<a target="comicvine" href="<?php echo $item['site_detail_url']; ?>">
 						<img class="icon" src="<?php echo Model::Named('Endpoint_Type')->ComicVine()->favicon_url; ?>"
@@ -87,30 +84,37 @@
 					if ( isset($item['deck']) && strlen($item['deck']) > 0) { echo $item['deck']; }
 					else if (isset($item['description']) ) { echo $item['description']; }
 				?></span>
-			</td>
-			<td>
-				<a class="btn" href="<?php echo Config::Web('/AdminUploadRepair/comicVine_accept/', $this->key, $item['id']); ?>">Accept</a>
-			</td>
-		</tr>
+			</div>
+			<div class="grid_1">
+				<a class="button" href="<?php echo Config::Web('/AdminUploadRepair/comicVine_accept/', $this->key, $item['id']); ?>">Accept</a>
+			</div>
+		</div>
+
 	<?php endforeach; ?>
 
 <?php endforeach; ?>
 
 <?php if ( count($unknownGroups) > 0 ): ?>
-	<tr>
-		<th colspan="5" class="name">New Content</th>
-	</tr>
+	<div class="row">
+		<div class="grid_2">
+		</div>
+		<div class="grid_10">
+			<h2>New Content</h2>
+		</div>
+	</div>
 
 	<?php foreach ($unknownGroups as $idx => $item): ?>
-		<tr>
-			<td class="name"></td>
-
-			<td class="issue"><?php echo $item['issue_number']; ?></td>
-			<td class="published">
+		<div class="row">
+			<div class="grid_2">
+			</div>
+			<div class="grid_1">
+				<?php echo $item['issue_number']; ?>
+			</div>
+			<div class="grid_1">
 				<img src="<?php echo $item['image']['thumb_url'] ?>" class="thumbnail" /><br>
 				<nobr><?php echo $item['cover_date']; ?></nobr>
-			</td>
-			<td class="name">
+			</div>
+			<div class="grid_4">
 				<h3>
 					<a target="comicvine" href="<?php echo $item['site_detail_url']; ?>">
 						<img class="icon" src="<?php echo Model::Named('Endpoint_Type')->ComicVine()->favicon_url; ?>"
@@ -123,17 +127,16 @@
 					if ( isset($item['deck']) && strlen($item['deck']) > 0) { echo $item['deck']; }
 					else if (isset($item['description']) ) { echo $item['description']; }
 				?></span>
-			</td>
-			<td>
-				<a class="btn" href="<?php echo Config::Web('/AdminUploadRepair/comicVine_accept/', $this->key, $item['id']); ?>">Accept</a>
-			</td>
-		</tr>
+			</div>
+			<div class="grid_1">
+				<a class="button" href="<?php echo Config::Web('/AdminUploadRepair/comicVine_accept/', $this->key, $item['id']); ?>">Accept</a>
+			</div>
+		</div>
 	<?php endforeach; ?>
 <?php endif; ?>
-
-	</table>
-</div>
 
 <?php else: ?>
 No results found
 <?php endif; ?>
+
+</section>

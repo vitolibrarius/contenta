@@ -171,32 +171,28 @@ class Card
 	public function render( DataObject $record = null, \Closure $callback = null )
 	{
 		$card = H::figure( array( "class" => "card"),
-			H::div( array( "class" => "feature" ),
-				H::div( array( "class" => "feature_top" ),
-					H::div( array( "class" => "feature_top_left" ),
+				H::div( array( "class" => "figure_top" ),
+					H::div( array( "class" => "figure_image" ),
 						H::a( array("href" => $this->selectPath()),
 							H::img( array( "src" => $this->thumbnailPath($record), "class" => "thumbnail recordType" ))
 						)
 					),
-					H::div( array( "class" => "feature_top_right" ),
-						H::div( array( "class" => "feature_top_right_top" ),
+					H::div( array( "class" => "figure_details" ),
+						H::div( array( "class" => "figure_detail_top" ),
 							H::img( array( "src" => $this->publisherIconPath($record), "class" => "icon publisher" ))
 						),
 
-						H::div( array( "class" => "feature_top_right_middle" ),
-							H::span( array( "class" => "details" ), function() use($record) {
+						H::div( array( "class" => "figure_detail_middle" ),
+							function() use($record) {
 								foreach( $this->detailKeys() as $key => $keypath ) {
-									$c[] = H::span( array( "class" => $key ), $record->{$keypath}() );
+									$c[] = H::p( array( "class" => $key ), $record->{$keypath}() );
 								}
 								return (isset($c) ? $c : null);
-							}),
-							H::div( array( "class" => "actions" ), function() use($callback) {
-								return (is_null($callback) ? null : $callback());
-							})
+							}
 						),
 
-						H::div( array( "class" => "feature_top_right_bottom" ),
-							H::div( array( "class" => "actions" ), function() use($record) {
+						H::div( array( "class" => "figure_detail_bottom" ),
+							function() use($record) {
 								$editPath = $this->editPath();
 								if (isset($editPath) && is_null($editPath) == false) {
 									$c[] = H::a( array("href" => $editPath ),
@@ -225,13 +221,10 @@ class Card
 									);
 								}
 								return (isset($c) ? $c : null);
-							})
+							}
 						)
 					)
-				)
 			),
-
-			H::div( array("class" => "clear") ),
 
 			H::figcaption( array("class" => "caption"),
 				H::a( array("href" => $this->selectPath()),

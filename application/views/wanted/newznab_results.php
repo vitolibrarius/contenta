@@ -8,6 +8,11 @@
 		}
 	}
 ?>
+<section>
+    <div class="wrapper">
+		<div class="row">
+			<div class="grid_12">
+
 <div class="mediaData">
 	<table>
 		<tr>
@@ -35,7 +40,7 @@
 				<?php $flux = $this->fluxModel->objectForSourceIdEndpointGUID( $this->endpoint_id, $item['guid'] );
 					if ($flux == false ) : ?>
 						<div id="ajaxDiv_<?php echo $item['safe_guid']; ?>">
-						<a href="#" class="nzb btn" style="white-space:nowrap;"
+						<a href="#" class="nzb button" style="white-space:nowrap;"
 							data-name="<?php echo $item['title']; ?>"
 							data-endpoint_id="<?php echo $this->endpoint_id; ?>"
 							data-guid="<?php echo $item['guid']; ?>"
@@ -84,3 +89,7 @@
 	<?php endif; ?>
 	</table>
 </div>
+  			</div>
+		</div>
+	</div>
+</section>
