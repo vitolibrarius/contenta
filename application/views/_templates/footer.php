@@ -1,10 +1,25 @@
-			</section>
-		</div> <!-- content -->
+	</div>
+	<!-- #end div #main .wrapper -->
 
-		<div id="ajaxSpinner" class="spinner"></div>
+	<div id="ajaxSpinner" class="spinner"></div>
 
-		<footer>
-			<div id="remote">
+	<!-- footer area -->
+	<footer>
+		<div id="colophon" class="wrapper clearfix">
+			<div class="grid_4 left">
+				<a target="ContentWeb" href="https://github.com/vitolibrarius/contenta"> <?php echo Localized::GlobalLabel("WebsiteLink"); ?></a> |
+				<a target="ContentWiki" href="https://github.com/vitolibrarius/contenta/wiki"> <?php echo Localized::GlobalLabel("HelpLink"); ?></a> |
+				<a target="ContentIssues"
+					href="https://github.com/vitolibrarius/contenta/issues/new?body=<?php
+						echo urlencode('Problem on ' . Config::Web($this->controllerName, (isset($this->controllerAction) ? $this->controllerAction : 'index'))); ?>"
+				><?php echo Localized::GlobalLabel("AddIssueLink"); ?></a>
+			</div>
+			<div class="grid_4 middle">
+				<?php echo Localized::GlobalLabel("Release"); ?>: <?php echo currentVersionNumber(); ?>
+                <br />
+				<em><?php echo currentVersionHash(); ?></em>
+			</div>
+			<div class="grid_4 right">
 				<?php if (Session::get('user_logged_in') == true && Session::get('user_account_type') === \model\Users::AdministratorRole ) :?>
 					<?php
 						$git = new utilities\Git(SYSTEM_PATH);
@@ -16,20 +31,8 @@
 					<?php endif; ?>
 				<?php endif; ?>
 			</div>
-			<div id="github">
-				<a target="ContentWeb" href="https://github.com/vitolibrarius/contenta"> <?php echo Localized::GlobalLabel("WebsiteLink"); ?></a> |
-				<a target="ContentWiki" href="https://github.com/vitolibrarius/contenta/wiki"> <?php echo Localized::GlobalLabel("HelpLink"); ?></a> |
-				<a target="ContentIssues"
-					href="https://github.com/vitolibrarius/contenta/issues/new?body=<?php
-						echo urlencode('Problem on ' . Config::Web($this->controllerName, (isset($this->controllerAction) ? $this->controllerAction : 'index'))); ?>"
-				><?php echo Localized::GlobalLabel("AddIssueLink"); ?></a>
-			</div>
-			<div id="version">
-				<?php echo Localized::GlobalLabel("Release"); ?>: <?php echo currentVersionNumber(); ?>
-                <br />
-				<em><?php echo currentVersionHash(); ?></em>
-			</div>
-		</footer>
-	</div> <!-- container -->
+		</div>
+	</footer>
+	<!-- #end footer area -->
 </body>
 </html>

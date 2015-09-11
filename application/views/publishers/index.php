@@ -25,6 +25,9 @@
 	</ul>
 </div>
 
+<section id="content">
+	<div class="row">
+
 <?php if (is_array($this->list) && count($this->list) > 0 ): ?>
 	<?php
 		$card = new html\Card();
@@ -35,9 +38,14 @@
 		foreach($this->list as $key => $value) {
 			$card->setEditPath( $this->editAction . '/' . $value->id );
 			$card->setDeletePath( $this->deleteAction . '/' . $value->id );
+			echo '<div class="grid_3">' . PHP_EOL;
 			echo $card->render($value);
+			echo '</div>' . PHP_EOL;
 		}
 	?>
 <?php else: ?>
 	<?php echo 'No publishers yet. Create some !'; ?>
 <?php endif ?>
+
+	</div>
+</section>

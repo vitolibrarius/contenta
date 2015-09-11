@@ -20,7 +20,7 @@
 				} ?></span>
 			<span class="nobreak">
 				<?php if ($this->model->objectForExternal($record['id'], model\Endpoint_Type::ComicVine) == false) : ?>
-				<a class="btn" href="<?php echo Config::Web( $this->importAction, $record['id'], $record['name'] ); ?>">Import</a>
+				<a class="button" href="<?php echo Config::Web( $this->importAction, $record['id'], $record['name'] ); ?>">Import</a>
 				<?php endif; ?>
 			</span>
 		</div>

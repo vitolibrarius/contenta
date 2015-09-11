@@ -1,11 +1,9 @@
-.admin_group {
-	text-align: center;
-}
-
+/** admin menu cards */
 .admin_card {
+	text-align: center;
 	display: inline-block;
 	position: relative;
-	width: 225px;
+	width: 100%;
 	margin: 10px;
 	vertical-align: top;
 	background-color: #eee;

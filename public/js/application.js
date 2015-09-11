@@ -100,7 +100,7 @@ var modal = (function(){
 		$right.empty().append(
 			'<p class="modal_desc">' + settings.description + '</p>' +
 			'<p class="modal_confirm">' + settings.confirm + '</p>' +
-			'<a class="btn" style="float:right" href="' + settings.action + '">' + settings.actionLabel + '</a>'
+			'<a class="button" style="float:right" href="' + settings.action + '">' + settings.actionLabel + '</a>'
 		);
 
 		$panel.css({

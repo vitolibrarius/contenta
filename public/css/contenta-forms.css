@@ -1,0 +1,124 @@
+/* forms and input boxes */
+form {
+	display: inline-block;
+	width: 100%;
+}
+
+fieldset {
+    padding: 20px;
+	border: 2px solid #aaa;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	background: #eee;
+}
+
+fieldset > div.collapse {
+	display: none;
+}
+
+fieldset > div.show_hidden a {
+    border: 0;
+    padding: 6px;
+    background-color: #2C2F3B;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+fieldset legend {
+	padding: 0.5em;
+	color: #999;
+    background-color: #eee;
+	font-size: 0.9em;
+	text-align:left;
+	font-weight: bold;
+	border: 2px solid #aaa;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	width: 100%;
+}
+
+label {
+	display:block;
+	margin-bottom: 2px;
+	white-space: nowrap;
+	padding: 4px 0;
+}
+
+label > span {
+	display: block;
+	font-size: .9em;
+	color: #999;
+	white-space: normal;
+}
+
+input, select, textarea {
+    padding: 8px;
+    border: 0;
+    width:100%;
+}
+
+input[type="text"][disabled] {
+    background: #dddddd;
+   -webkit-text-fill-color: rgba(0, 0, 0, 1);
+   -webkit-opacity: 1;
+   color: rgba(0, 0, 0, 1);
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="file"],
+input[type="radio"],
+input[type="password"],
+input[type="checkbox"],
+textarea {
+    color: #555;
+    font-weight: bold;
+   	border-bottom: 2px solid green;
+}
+
+label.checkbox,
+label.radio {
+    vertical-align: middle;
+	display:inline-block;
+    width:19px;
+    height:19px;
+
+}
+
+label + input[type="checkbox"],
+label + input[type="radio"] {
+    display:inline-block;
+    width:19px;
+    height:19px;
+}
+
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	margin-top: .8em;
+    background-color: green;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+select {
+  white-space: nowrap;
+}
+
+textarea {
+	height: 10em;
+}
+
+fieldset br { clear: both; }
+
+form .half { float:left; width:49%;}
+form .third { float:left; width:32%;}
+form .half,
+form .third {margin-right:2%;}
+form .omega { margin-right:0;}
+

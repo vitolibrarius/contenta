@@ -40,9 +40,9 @@ fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key)
 //-->
 </script>
 
-<div><!-- container -->
-	<div><!-- top -->
-		<div style="padding:15px; display:inline-block;"><!-- left -->
+<section>
+	<div class="row">
+		<div class="grid_2">
 			<div id="slideshow">
 				<img src="<?php echo Config::Web('/AdminUploadRepair/thumbnail', $this->key, 0); ?>" id="page">
 				<span class="button" id="leftArrow"></span>
@@ -50,10 +50,10 @@ fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key)
 			</div>
 
 			<div>
-				<a id="fullsizelink" class="btn" target="FullSizedImage" href="#">Fullsized Image</a>
+				<a id="fullsizelink" class="button" target="FullSizedImage" href="#">Fullsized Image</a>
 			</div>
 		</div>
-		<div style="display:inline-block; top:0; width: auto; vertical-align:top;"><!-- right -->
+		<div class="grid_8">
 			<form action="<?php echo Config::Web('/AdminUploadRepair/cbz_updateMetadata/', $this->key) ?>" method="post">
 				<fieldset>
 					<legend><h3 class="path"><?php echo $this->source['name']; ?></h3></legend>
@@ -71,28 +71,24 @@ fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key)
 					</div>
 					<br>
 
-					<label for="series">Series Name</label>
-					<input type="text" name="series" placeholder="Justice League United"
-						value="<?php echo (isset($this->search['name']) ? $this->search['name'] : ''); ?>" />
-
-					<div class="third">
-						<label for="volume">Volume</label>
-						<input type="text" name="volume" placeholder=""
-							value="<?php echo (isset($this->search['volume']) ? $this->search['volume'] : ''); ?>" />
+					<div class="">
+						<label for="series">Series Name</label>
+						<input type="text" name="series" placeholder="Justice League United"
+							value="<?php echo (isset($this->search['name']) ? $this->search['name'] : ''); ?>" />
 					</div>
 
-					<div class="third">
+					<div class="half">
 						<label for="issue">Issue</label>
 						<input type="text" name="issue" placeholder="01"
 							value="<?php echo (isset($this->search['issue']) ? $this->search['issue'] : ''); ?>" />
 					</div>
 
-					<div class="third omega">
+					<div class="half omega">
 						<label for="year">Published Year</label>
 						<input type="text" name="year" placeholder="2014"
 							value="<?php echo (isset($this->search['year']) ? $this->search['year'] : '');  ?>" />
 					</div>
-					<br />
+					<br>
 
 					<div class="half">
 						<label></label>
@@ -106,15 +102,12 @@ fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key)
 
 				</fieldset>
 			</form>
-			<div id="ajaxDiv_<?php echo $this->key; ?>"></div>
-
 		</div>
 	</div>
+</section>
 
-	<div style=""> <!-- bottom -->
-		<div id='comicVineTable'></div>
-	</div>
-</div><!-- container -->
+<div id='comicVineTable'></div>
+
 
 <script language="javascript" type="text/javascript">
 $(document).ready(function() {

@@ -1,0 +1,76 @@
+.card {
+	min-height:260px;
+	width: 100%;
+	margin: 20px 0px;
+	padding: 4px;
+	vertical-align: top;
+	background-color: #eee;
+	box-shadow: 2px 2px 4px #aaa;
+	border:1px solid #ccc;
+}
+.card:hover {
+	background-color: #ddf;
+}
+.figure_top {
+	padding-bottom: 2px;
+	border-bottom: 2px groove #888;
+	position: relative;
+}
+.figure_image,
+.figure_details {
+	display: inline-block;
+}
+.figure_image {
+	width: 40%;
+}
+.figure_details {
+/* 	background-color: red; */
+	width: 55%;
+	height: 100%;
+}
+.card .caption {
+	display: block;
+	padding-top: 4px;
+}
+.figure_detail_top,
+.figure_detail_middle,
+.figure_detail_bottom {
+	text-align: center;
+	display: block;
+}
+
+.figure_detail_top {
+	position: absolute;
+	top:0;
+	right: 0;
+}
+.figure_detail_middle {
+	position: static;
+	vertical-align: top;
+/* 	background-color: grey; */
+}
+.figure_detail_middle p {
+	margin: 0px;
+}
+.figure_detail_middle .large {
+	font-size: 1.6em;
+}
+.figure_detail_bottom {
+	margin-top: 10px;
+/* 	background-color: blue; */
+}
+.figure_detail_bottom a {
+	margin: 5px;
+}
+.card .caption em {
+	font-weight: bold;
+	color:red;
+}
+.card .caption:empty {
+	border-top-style: hidden;
+}
+.card .caption p.description {
+	font-size: 0.75em;
+	max-height : 100px;
+	overflow : auto;
+}

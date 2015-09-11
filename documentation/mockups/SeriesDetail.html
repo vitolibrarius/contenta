@@ -1,305 +1,338 @@
-<!doctype html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Contenta - Series Details</title>
+	<title>Contenta - Admin</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!-- CSS -->
-	<link rel="stylesheet" href="public/css/application.css" />
-	<link rel="stylesheet" href="public/css/SeriesDetail.css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-	<!-- in case you wonder: That's the cool-kids-protocol-free way to load jQuery -->
-	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-	<script type="text/javascript" src="public/js/application.js"></script>
+	<link rel="shortcut icon" href="public/img/Logo_favicon.png"  type="image/png">
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="public/css/lib/select2.css" />
+	<link rel="stylesheet" href="public/css/contenta.css" />
+	<link rel="stylesheet" href="public/css/contenta-forms.css" />
+	<link rel="stylesheet" href="public/css/contenta-card.css" />
+
+	<script type="text/javascript" src="public/js/lib/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="public/js/select2.min.js"></script>
+	<script type="text/javascript" src="public/js/contenta.js"></script>
 
 	<!-- Custom component stylesheets and scripts -->
 	<!--meta http-equiv="refresh" content="5" -->
 
 </head>
-<body>
 
-<div id="container">
-	<header>
-		<div class='title-box'>
-			<div id="apptitle"><a href="BasicPage.html">Contenta</a></div>
-			<nav>
-				<a href="BasicPage.html" id="menu-icon"></a>
-				<ul>
-					<li><a href="Admin.html">Admin</a></li>
-					<li><a href="Logs.html">Logs</a></li>
-					<li><a href="Series.html">Series</a></li>
-					<li><a href="#">Profile</a></li>
-				</ul>
-			</nav>
-			<div class="clear-both"></div>
-		</div>
-	</header>
+<body id="home">
 
-	<div id="content">
-	<section class="feedback success">
-		<p class="item">Group RedBlade has released dvdrip of 2013 movie “Canopy”. Enjoy!</pre></p>
-	</section>
+<!-- header area -->
+    <header class="wrapper clearfix">
 
-	<section class="feedback error">
-		<p class="item">Could not find Issue 5 of Abe Sapien(2013)</p>
-		<p class="item">Uncaught exception: Traceback (most recent call last</p>
-	</section>
+        <div id="banner">
+        	<div id="logo"><a href="BasicPage.html"><img src="public/img/ContentaHeader.png" alt="logo"></a></div>
+        </div>
 
-	<section class="main">
-		<h2>Series Title</h2>
+        <!-- main navigation -->
+        <nav id="topnav" role="navigation">
+          <div class="toggle">Menu</div>
+          <ul class="menu" id="menu-main">
+              <li><a href="BasicPage.html">Home</a></li>
+              <li><a href="Admin.html">Admin</a></li>
+              <li class="current"><a href="Series.html">Series</a>
+                  <ul>
+                      <li>
+                          <a href="#">menu item 3.1</a>
+                      </li>
+                      <li class="current">
+                          <a href="#">menu item 3.2</a>
+                          <ul>
+                              <li><a href="#">menu item 3.2.1</a></li>
+                              <li><a href="#">menu item 3.2.2 with longer link name</a></li>
+                              <li><a href="#">menu item 3.2.3</a></li>
+                              <li><a href="#">menu item 3.2.4</a></li>
+                              <li><a href="#">menu item 3.2.5</a></li>
+                          </ul>
+                      </li>
+                      <li><a href="#">menu item 3.3</a></li>
+                      <li><a href="#">menu item 3.4</a></li>
+                  </ul>
+              </li>
+              <li>
+                  <a href="BasicInternalPage.html">Plain Page</a>
+              </li>
+          </ul>
+		</nav><!-- end main navigation -->
 
-		<div class="series_wrapper">
-		  <div class="series sidebar">
+    </header><!-- end header -->
 
-			<img class="thumbnail cbz" src="public/img/thumb_01.jpg" /><br>
-			<div class="actions">
-				<div class="edit"><a class="edit_icon" href="SeriesEdit.html">&nbsp;</a></div>
-				<div class="flag"><a class="flag_icon no" href="#">&nbsp;</a></div>
-				<div class="favorite"><a class="favorite_icon yes" href="#">&nbsp;</a></div>
+<section id="page-header" class="clearfix">
+	<div class="wrapper">
+		<div class="row">
+			<div class="grid_10">
+				<h2>Series Title</h2>
 			</div>
+			<div class="grid_2">
+				<div class="actions">
+					<a href="SeriesEdit.html">
+						<span class="icon edit"></span>
+					</a>
+					<a href="#">
+						<span class="icon favorite on"></span>
+					</a>
+				</div>
+			</div>
+		</div><!-- end row -->
+		<div class="row">
+			<div class="grid_2">
+				<img class="thumbnail cbz" src="public/img/thumb_01.jpg"><br>
+			</div>
+			<div class="grid_7 ">
+				<p class="series description">Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series  JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada!  In the aftermath of FOREVER EVIL, Adam Strange is caught up in an adventure across the far reaches of the cosmos that will unite an unexpected team of heroes including Supergirl, Hawkman, Green Arrow, Stargirl, Martian Manhunter and Animal Man – but if they’re on the team, who exactly is Canadian? Plus: Don’t miss the debut of a new Canadian hero who will have a huge effect on the group!</p>
+			</div><!-- end grid_7 -->
+			<div class="grid_3 rightfloat">
+				<div style="max-height : 90px; overflow : auto; ">
+				<ul class="badge">
+				<li class="character"><a href="#">Batman</a></li>
+				<li class="character"><a href="#">Supergirl</a></li>
+				<li class="character"><a href="#">Green Arrow</a></li>
+				<li class="character"><a href="#">Martian Manhunter</a></li>
+				<li class="character"><a href="#">Stargirl</a></li>
+				<li class="character"><a href="#">Hawkman</a></li>
+				<li class="character"><a href="#">Lobo</a></li>
+				<li class="character"><a href="#">Animal Man</a></li>
+				<li class="character"><a href="#">Adam Strange</a></li>
+				<li class="character"><a href="#">Equinox</a></li>
+				<li class="character"><a href="#">Byth</a></li>
+				<li class="character"><a href="#">Sardath</a></li>
+				<li class="character"><a href="#">Alanna Strange</a></li>
+				<li class="character"><a href="#">Ultra the Multi-Alien</a></li>
+				<li class="character"><a href="#">The Unimaginable</a></li>
+				</ul>
+				</div>
 
-			<div style='padding:10px;; font-size: 12px; '>Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series  JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada!  In the aftermath of FOREVER EVIL, Adam Strange is caught up in an adventure across the far reaches of the cosmos that will unite an unexpected team of heroes including Supergirl, Hawkman, Green Arrow, Stargirl, Martian Manhunter and Animal Man – but if they’re on the team, who exactly is Canadian? Plus: Don’t miss the debut of a new Canadian hero who will have a huge effect on the group!</div>
-
-		<ul class="badge characters">
-			<li class="character">Batman</li>
-			<li class="character">Supergirl</li>
-			<li class="character">Green Arrow</li>
-			<li class="character">Martian Manhunter</li>
-			<li class="character">Stargirl</li>
-			<li class="character">Hawkman</li>
-			<li class="character">Lobo</li>
-			<li class="character">Animal Man</li>
-			<li class="character">Adam Strange</li>
-			<li class="character">Equinox</li>
-			<li class="character">Byth</li>
-			<li class="character">Sardath</li>
-			<li class="character">Alanna Strange</li>
-			<li class="character">Ultra the Multi-Alien</li>
-			<li class="character">The Unimaginable</li>
-		</ul>
-		<ul class="badge tags">
-			<li class="tag">The New 52</li>
-			<li class="tag">Bombshell Variant</li>
-			<li class="tag">Batman 75th Anniversary Variant</li>
-			<li class="tag">DC Universe Selfie Variant</li>
-			<li class="tag">The New 52</li>
-			<li class="tag">Bombshell Variant</li>
-			<li class="tag">Batman 75th Anniversary Variant</li>
-			<li class="tag">DC Universe Selfie Variant</li>
-		</ul>
-
-		  </div>
-
-		  <div class="issues column">
-
-		<div class="mediaData">
-		<table>
-			<tbody><tr>
-				<th>Issue</th>
-				<th>Published</th>
-				<th>Name</th>
-				<th></th>
-				<th></th>
-			</tr>
-			<tr>
-				<td class="issue">
-					0 <br>
-					<div class="actions">
-						<div class="edit"><a class="edit_icon" href="PublicationEdit.html">&nbsp;</a></div>
-						<div class="flag"><a class="flag_icon no" href="#">&nbsp;</a></div>
-					</div>
-				</td>
-				<td class="published"><img src="public/img/issue_7006.png" class="thumbnail"><br><nobr>Jun 30, 2014</nobr></td>
-				<td class="name"><h4>Justice League Canada, Part 1 of 5</h4><span><p style=""><em>Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada!</em></p><p style=""><em>In the aftermath of FOREVER EVIL, Adam Strange is caught up in an adventure across the far reaches of the cosmos that will unite an unexpected team of heroes including Supergirl, Hawkman, Green Arrow, Stargirl, Martian Manhunter and Animal Man – but if they’re on the team, who exactly is Canadian? Plus: Don’t miss the debut of a new Canadian hero who will have a huge effect on the group!</em></p></span>				</td>
-				<td>
-					<div class="media epub">
-						<div class="media_detail">
-							<div class="format">epub</div>
-							<div class="size">35 Mb</div>
-						</div>
-						<div class="actions">
-							<div class="download"><a href="#"><img src="public/img/download.png" />&nbsp;</a></div>
-							<div class="slideshow"><a href="#"><img src="public/img/slideshow.png" />&nbsp;</a></div>
-						</div>
-					</div>
-				</td>
-				<td>
-					<ul class="badge tags">
+				<div style="max-height : 90px; overflow : auto; ">
+				<ul class="badge">
+				<li class="story_arc"><a href="#">The New 52</a></li>
+				<li class="story_arc"><a href="#">Bombshell Variant</a></li>
+				<li class="story_arc"><a href="#">Batman 75th Anniversary Variant</a></li>
+				<li class="story_arc"><a href="#">DC Universe Selfie Variant</a></li>
+				<li class="story_arc"><a href="#">The New 52</a></li>
+				<li class="story_arc"><a href="#">Bombshell Variant</a></li>
+				<li class="story_arc"><a href="#">Batman 75th Anniversary Variant</a></li>
+				<li class="story_arc"><a href="#">DC Universe Selfie Variant</a></li>
+				</ul>
+				</div>
+			</div>
+		</div><!-- end row -->
+		<div class="row">
+			<div class="grid_12">
+				<div class="paging">
+					<ul>
+						<li class="current"><a href="#">0-9</a></li>
+						<li><a href="#">10-20</a></li>
 					</ul>
-				</td>
-			</tr>
+				</div>
+			</div>
+		</div><!-- end row -->
+	</div><!-- end wrapper -->
+</section><!-- end page-header area -->
 
-			<tr>
-				<td class="issue">1<br>
-					<div class="actions">
-						<div class="edit"><a class="edit_icon" href="PublicationEdit.html">&nbsp;</a></div>
-						<div class="flag"><a class="flag_icon no" href="#">&nbsp;</a></div>
-					</div></td>
-				<td class="published">
-					<img src="public/img/issue_7006.png" class="thumbnail"><br>
-					<nobr>Jul 31, 2014</nobr>				</td>
-				<td class="name"><h4>Justice League Canada, Part 2 of 5</h4><span><p style=""><em>In Canada, the team of Animal Man, Green Arrow, Martian Manhunter and Stargirl is joined by Adam Strange to fight an unstoppable forced called the Unimaginable.</em></p></span>				</td>
-				<td>
-					<div class="media cbz">
-						<div class="media_detail">
-							<div class="format">cbz</div>
-							<div class="size">350.5 Mb</div>
-						</div>
+
+<!-- main content area -->
+<div class="wrapper" id="main">
+
+	<section id="content">
+      <div class="row">
+
+        <div class="grid_3">
+		<figure class="card">
+			<div class="figure_top">
+				<div class="figure_image">
+					<img style="height: 160px;" src="public/img/issue_7006.png" class="thumbnail">
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
+					</div>
+					<div class="figure_detail_middle">
+						<p class="large">0</p>
+						<p class="issues">Jun 30, 2014</p>
+						<p class="issues">35 Mb</p>
+					</div>
+					<div class="figure_detail_bottom">
 						<div class="actions">
-							<div class="download"><a href="#"><img src="public/img/download.png" /></a></div>
-							<div class="slideshow"><a href="#"><img src="public/img/slideshow.png" /></a></div>
+							<a href="#" title="Flag content for review"><span class="icon flag on"></span></a>
+							<a href="#" title="Download"><img src="public/img/download.png"></a>
+							<a href="#" title="Slideshow" target="slideshow"><img src="public/img/slideshow.png"></a>
 						</div>
 					</div>
-				</td>
-				<td>
-					<ul class="badge tags">
-					</ul>
-				</td>
-			</tr>
-
-			<tr>
-				<td class="issue">2<br>
-					<div class="actions">
-						<div class="edit"><a class="edit_icon" href="PublicationEdit.html">&nbsp;</a></div>
-						<div class="flag"><a class="flag_icon no" href="#">&nbsp;</a></div>
-					</div></td>
-				<td class="published">
-					<img src="public/img/issue_7006.png" class="thumbnail"><br>
-					<nobr>Aug 31, 2014</nobr>				</td>
-				<td class="name"><h4>Justice League Canada, Part 3 of 5</h4><span><p style=""><em>It’s all out battle issue as Hawkman has a showdown with Lobo as the League is teleported to Rann to face the shape-changing alien called Byth! This looks like a job for Supergirl!</em></p></span>				</td>
-				<td>
-					<div class="media epub">
-						<div class="media_detail">
-							<div class="format">epub</div>
-							<div class="size">35 Mb</div>
-						</div>
-						<div class="actions">
-							<div class="download"><a href="#"><img src="public/img/download.png" /></a></div>
-							<div class="slideshow"><a href="#"><img src="public/img/slideshow.png" /></a></div>
-						</div>
-					</div>
-				</td>
-				<td>
-					<ul class="badge tags">
-					</ul>
-				</td>
-
-
-
-			</tr>
-						<tr>
-				<td class="issue">3<br>
-					<div class="actions">
-						<div class="edit"><a class="edit_icon" href="PublicationEdit.html">&nbsp;</a></div>
-						<div class="flag"><a class="flag_icon no" href="#">&nbsp;</a></div>
-					</div></td>
-				<td class="published">
-					<img src="public/img/issue_7006.png" class="thumbnail"><br>
-					<nobr>Sep 30, 2014</nobr>				</td>
-				<td class="name"><h4>Justice League Canada, Part 4 of 5</h4><span><p style=""><em>So many questions hang over this nascent team. Will Hawkman sacrifice himself to save Rann, one of Thanagar’s enemies? Will Alanna and Adam ever be reunited? Can Miiyahbin face her fears and become the hero she’s meant to be? And the answer to all of this spells death for one of them.</em></p></span>				</td>
-				<td>
-					<div class="media epub">
-						<div class="media_detail">
-							<div class="format">epub</div>
-							<div class="size">35 Mb</div>
-						</div>
-						<div class="actions">
-							<div class="download"><a href="#"><img src="public/img/download.png" /></a></div>
-							<div class="slideshow"><a href="#"><img src="public/img/slideshow.png" /></a></div>
-						</div>
-					</div>
-				</td>
-				<td>
-					<ul class="badge tags">
-						<li class="tag">One</li>
-						<li class="tag">two</li>
-					</ul>
-				</td>
-
-
-
-			</tr>
-						<tr>
-				<td class="issue">4<br>
-					<div class="actions">
-						<div class="edit"><a class="edit_icon" href="PublicationEdit.html">&nbsp;</a></div>
-						<div class="flag"><a class="flag_icon no" href="#">&nbsp;</a></div>
-					</div></td>
-				<td class="published">
-					<img src="public/img/issue_7006.png" class="thumbnail"><br>
-					<nobr>Oct 31, 2014</nobr>				</td>
-				<td class="name"><h4>Justice League Canada, Conclusion</h4><span><p style=""><em>Justice League Canada’s first adventure comes to an explosive end!</em></p></span>				</td>
-				<td>
-					<div class="media epub">
-						<div class="media_detail">
-							<div class="format">epub</div>
-							<div class="size">35 Mb</div>
-						</div>
-						<div class="actions">
-							<div class="download"><a href="#"><img src="public/img/download.png" /></a></div>
-							<div class="slideshow"><a href="#"><img src="public/img/slideshow.png" /></a></div>
-						</div>
-					</div>
-					<div class="media cbz">
-						<div class="media_detail">
-							<div class="format">cbz</div>
-							<div class="size">35 Mb</div>
-						</div>
-						<div class="actions">
-							<div class="download"><a href="#"><img src="public/img/download.png" /></a></div>
-							<div class="slideshow"><a href="#"><img src="public/img/slideshow.png" /></a></div>
-						</div>
-					</div>
-				</td>
-				<td>
-					<ul class="badge tags">
-						<li class="tag">One</li>
-						<li class="tag">two</li>
-					</ul>
-				</td>
-
-
-
-			</tr>
-			<tr class="no-media">
-				<td class="issue">400<br>
-					<div class="actions">
-						<div class="edit"><a class="edit_icon" href="PublicationEdit.html">&nbsp;</a></div>
-						<div class="flag"><a class="flag_icon no" href="#">&nbsp;</a></div>
-					</div></td>
-				<td class="published">
-					<img src="public/img/issue_7006.png" class="thumbnail"><br>
-					<nobr>Oct 31, 2014</nobr>				</td>
-				<td class="name">
-					<h4>Justice League Canada, Conclusion</h4><span><p style=""><em>Justice League Canada’s first adventure comes to an explosive end!</em></p></span>
-				</td>
-				<td>
-				</td>
-				<td>
-					<ul class="badge tags">
-					</ul>
-				</td>
-
-
-			</tr>
-		</tbody>
-	</table>
-	</div>
-
-		  </div>
-
-		  <div class="clear"></div>
+				</div>
+			</div>
+			<figcaption class="caption">
+				<em>Justice League Canada, Part 1 of 5</em>
+				<p class="description">Top comics writer Jeff Lemire teams with superstar artist Mike McKone for the all-new monthly series JUSTICE LEAGUE UNITED, starring the new team of powerful heroes Earth calls Justice League Canada!<br>
+				In the aftermath of FOREVER EVIL, Adam Strange is caught up in an adventure across the far reaches of the cosmos that will unite an unexpected team of heroes including Supergirl, Hawkman, Green Arrow, Stargirl, Martian Manhunter and Animal Man – but if they’re on the team, who exactly is Canadian? Plus: Don’t miss the debut of a new Canadian hero who will have a huge effect on the group!</p>
+			</figcaption>
+		</figure>
 		</div>
 
-	</section>
-	</div>
+        <div class="grid_3">
+		<figure class="card">
+			<div class="figure_top">
+				<div class="figure_image">
+					<img style="height: 160px;" src="public/img/issue_7006.png" class="thumbnail">
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
+					</div>
+					<div class="figure_detail_middle">
+						<p class="large">1</p>
+						<p class="issues">Jul 31, 2014</p>
+						<p class="issues">35 Mb</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<div class="actions">
+							<a href="#" title="Flag content for review"><span class="icon flag on"></span></a>
+							<a href="#" title="Download"><img src="public/img/download.png"></a>
+							<a href="#" title="Slideshow" target="slideshow"><img src="public/img/slideshow.png"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<figcaption class="caption">
+				<em>Justice League Canada, Part 2 of 5</em>
+				<p class="description">In Canada, the team of Animal Man, Green Arrow, Martian Manhunter and Stargirl is joined by Adam Strange to fight an unstoppable forced called the Unimaginable</p>
+			</figcaption>
+		</figure>
+		</div>
 
-	<footer>
-	</footer>
-</div>
+        <div class="grid_3">
+		<figure class="card">
+			<div class="figure_top">
+				<div class="figure_image">
+					<img style="height: 160px;" src="public/img/issue_7006.png" class="thumbnail">
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
+					</div>
+					<div class="figure_detail_middle">
+						<p class="large">2</p>
+						<p class="issues">Aug 31, 2014</p>
+						<p class="issues">35 Mb</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<div class="actions">
+							<a href="#" title="Flag content for review"><span class="icon flag on"></span></a>
+							<a href="#" title="Download"><img src="public/img/download.png"></a>
+							<a href="#" title="Slideshow" target="slideshow"><img src="public/img/slideshow.png"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<figcaption class="caption">
+				<em>Justice League Canada, Part 3 of 5</em>
+				<p class="description">It’s all out battle issue as Hawkman has a showdown with Lobo as the League is teleported to Rann to face the shape-changing alien called Byth! This looks like a job for Supergirl</p>
+			</figcaption>
+		</figure>
+		</div>
+
+        <div class="grid_3">
+		<figure class="card">
+			<div class="figure_top">
+				<div class="figure_image">
+					<img style="height: 160px;" src="public/img/issue_7006.png" class="thumbnail">
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
+					</div>
+					<div class="figure_detail_middle">
+						<p class="large">3</p>
+						<p class="issues">Sept 30, 2014</p>
+						<p class="issues">35 Mb</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<div class="actions">
+							<a href="#" title="Flag content for review"><span class="icon flag on"></span></a>
+							<a href="#" title="Download"><img src="public/img/download.png"></a>
+							<a href="#" title="Slideshow" target="slideshow"><img src="public/img/slideshow.png"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<figcaption class="caption">
+				<em>Justice League Canada, Part 4 of 5</em>
+				<p class="description">So many questions hang over this nascent team. Will Hawkman sacrifice himself to save Rann, one of Thanagar’s enemies? Will Alanna and Adam ever be reunited? Can Miiyahbin face her fears and become the hero she’s meant to be? And the answer to all of this spells death for one of them</p>
+			</figcaption>
+		</figure>
+		</div>
+
+        <div class="grid_3">
+		<figure class="card">
+			<div class="figure_top">
+				<div class="figure_image">
+					<img style="height: 160px;" src="public/img/issue_7006.png" class="thumbnail">
+				</div>
+				<div class="figure_details">
+					<div class="figure_detail_top">
+						<img class="icon publisher" src="public/img/pub_7.jpeg" />
+					</div>
+					<div class="figure_detail_middle">
+						<p class="large">4</p>
+						<p class="issues">Oct 31, 2014</p>
+						<p class="issues">35 Mb</p>
+					</div>
+					<div class="figure_detail_bottom">
+						<div class="actions">
+							<a href="#" title="Flag content for review"><span class="icon flag on"></span></a>
+							<a href="#" title="Download"><img src="public/img/download.png"></a>
+							<a href="#" title="Slideshow" target="slideshow"><img src="public/img/slideshow.png"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<figcaption class="caption">
+				<em>Justice League Canada, Conclusion</em>
+				<p class="description">Justice League Canada’s first adventure comes to an explosive end!</p>
+			</figcaption>
+		</figure>
+		</div>
+
+	</div>
+	</section>
+</div><!-- #end div #main .wrapper -->
+
+
+
+
+<!-- footer area -->
+<footer>
+	<div id="colophon" class="wrapper clearfix">
+        <div class="grid_4 left">
+			<a target="ContentWeb" href="https://github.com/vitolibrarius/contenta"> Website</a> |
+			<a target="ContentWiki" href="https://github.com/vitolibrarius/contenta/wiki"> Help</a> |
+			<a target="ContentIssues"
+				href="https://github.com/vitolibrarius/contenta/issues/new?body=Problem+on+%2Fcontenta%2FLogin%2Findex"
+			>Report Issue</a>
+		</div>
+        <div class="grid_4 middle">
+			Release: 0.4.0<br><em>4e5f1df094f610cbd2fb5260523845fa82adabf1</em>
+		</div>
+        <div class="grid_4 right">
+			Local site is 5 COMMITS BEHIND
+		</div>
+	</div>
+</footer>
+<!-- #end footer area -->
+
 </body>
+
 </html>
 

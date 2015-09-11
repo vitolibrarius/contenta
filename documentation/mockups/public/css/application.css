@@ -280,7 +280,7 @@ section.feedback.error{
 }
 
 /** Button */
-a.btn {
+a.button {
 	display:inline-block;
 	float:left;
 	background: #3498db;
@@ -299,7 +299,7 @@ a.btn {
 	text-decoration: bold;
 }
 
-a.btn:hover {
+a.button:hover {
 	background: #3cb0fd;
 	background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
 	background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);

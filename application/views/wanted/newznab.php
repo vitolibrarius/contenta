@@ -4,26 +4,30 @@
 	</ul>
 </div>
 
-<form id='searchForm' name='searchForm'>
-	<div>
-		<div style="display: inline-block; min-width: 300px;">
-		<select name="searchEndpoint" id="searchEndpoint"
-				class="text_input">
-			<?php foreach ($this->endpoints as $key => $endpoint) {
-				echo '<option value="' . $endpoint->pkValue() . '"';
-				echo '>' . $endpoint->displayName() . '</option>';
-			}
-			?>
-		</select>
+<section>
+    <div class="wrapper">
+	<form id='searchForm' name='searchForm'>
+		<div class="row">
+			<div class="grid_3">
+				<select name="searchEndpoint" id="searchEndpoint"
+						class="text_input">
+					<?php foreach ($this->endpoints as $key => $endpoint) {
+						echo '<option value="' . $endpoint->pkValue() . '"';
+						echo '>' . $endpoint->displayName() . '</option>';
+					}
+					?>
+				</select>
+			</div>
+			<div class="grid_4">
+				<input type="text" name="searchName" id="searchName"
+					class="text_input"
+					placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "newznab" ); ?>"
+					value="<?php echo (isset($this->searchString)?$this->searchString:''); ?>">
+			</div>
 		</div>
-		<div style="display: inline-block; width: 600px;">
-		<input type="text" name="searchName" id="searchName"
-			class="text_input"
-			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "newznab" ); ?>"
-			value="<?php echo (isset($this->searchString)?$this->searchString:''); ?>">
-		</div>
+	</form>
 	</div>
-</form>
+</section>
 
 <div id='ajaxDiv'></div>
 
