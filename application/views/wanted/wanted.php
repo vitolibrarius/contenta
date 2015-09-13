@@ -69,5 +69,6 @@
 <?php else : ?>
 	No matching records
 <?php endif; ?>
+</div>
 
 </section>

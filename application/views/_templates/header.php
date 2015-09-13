@@ -5,6 +5,7 @@
 <head>
 	<title><?php echo Config::AppName(); ?> - <?php echo $this->viewTitle(); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 
 	<link rel="icon" type="image/png" href="<?php echo Config::Web('public/img/Logo_favicon.png'); ?>" />
 

@@ -1,3 +1,24 @@
+var delay = (function(){
+	var timer = 0;
+	return function(callback, millisec){
+		clearTimeout (timer);
+		timer = setTimeout(callback, millisec);
+	};
+})();
+
+$(document).on({
+	ajaxStart: function() {
+		delay( function(){
+			$('.spinner').fadeIn(1000);
+		}, 100 );
+	},
+	ajaxStop: function() {
+		delay( function(){
+			$('.spinner').fadeOut();
+		}, 100 );
+	}
+});
+
 $(document).ready(function() {
 	var button = $('#topnav > div');
 	var menu = $('#topnav > ul');
