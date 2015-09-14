@@ -25,30 +25,32 @@
 	</ul>
 </div>
 
-<form id='searchForm' name='searchForm'>
-	<div>
-		<div style="display: inline-block; min-width: 300px;">
-		<select name="searchPublisher" id="searchPublisher"
-				class="text_input">
-			<option></option>
-		</select>
+<section>
+	<form id='searchForm' name='searchForm'>
+	<div class="row">
+		<div class="grid_3">
+			<select name="searchPublisher" id="searchPublisher"
+					class="text_input">
+				<option></option>
+			</select>
 		</div>
-		<div style="display: inline-block;">
-		<input type="text" name="searchName" id="searchName"
-			class="text_input"
-			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
-			value="">
+		<div class="grid_3">
+			<input type="text" name="searchName" id="searchName"
+				class="text_input"
+				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
+				value="">
 		</div>
-		<div style="display: inline-block;">
-		<input type="number" name="searchYear" id="searchYear"
-			class="text_input"
-			min="1950"
-			max="<?php echo intval(date("Y") + 1); ?>"
-			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "year" ); ?>"
-			value="">
+		<div class="grid_1">
+			<input type="number" name="searchYear" id="searchYear"
+				class="text_input"
+				min="1950"
+				max="<?php echo intval(date("Y") + 1); ?>"
+				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "year" ); ?>"
+				value="">
 		</div>
 	</div>
-</form>
+	</form>
+</section>
 
 <div id='ajaxDiv'></div>
 

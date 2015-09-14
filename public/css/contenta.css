@@ -105,7 +105,8 @@ span.icon.favorite:before	{ content:"\2665"; color: grey; font-size: 32px; }
 }
 
 .paging ul li {
-	padding: 5px;
+	padding: 5px 10px;
+	margin: 5px 5px;
 	border: 1px solid #000;
 	list-style: none;
 	display: inline;
@@ -271,10 +272,10 @@ a.button {
 	border-radius:7px;
 	color:#fff;
 	display:block;
-	float:left;
-	margin:10px 15px 10px 0;
+	margin:10px 0px 10px 0;
 	padding:10px;
 	text-decoration:none;
+	text-align:center;
 }
 a.button:hover { background:#8dbc01; }
 

@@ -1,21 +1,25 @@
 <?php use html\Element as H ?>
 
-<div class="series_wrapper">
-	<div class="series sidebar">
-		<img class="thumbnail cbz" src="<?php echo Config::Web( "Image", "thumbnail", "series", $this->detail->id); ?>" /><br>
-		<div class="actions">
+<section>
+	<div class="row">
+		<div class="grid_2">
+			<img class="thumbnail cbz" src="<?php echo Config::Web( "Image", "thumbnail", "series", $this->detail->id); ?>" />
 		</div>
-
-		<div class="description"><?php echo $this->detail->shortDescription(); ?></div>
-
-		<ul class="badge characters">
-		<?php foreach ($this->detail->characters(10) as $character): ?>
-			<li class="character"><?php echo $character->name; ?></li>
-		<?php endforeach; ?>
-		</ul>
+		<div class="grid_4">
+			<p class="description"><?php echo $this->detail->shortDescription(); ?></p>
+		</div>
+		<div class="grid_4">
+			<ul class="badge characters">
+			<?php foreach ($this->detail->characters(10) as $character): ?>
+				<li class="character"><?php echo $character->name; ?></li>
+			<?php endforeach; ?>
+			</ul>
+		</div>
 	</div>
+</section>
 
-
+<section>
+	<div class="row">
 <?php if (empty($this->detail->publications())): ?>
 	<div style="background:hsl(326,50%,75%)">
 		There are no publications
@@ -37,6 +41,7 @@
 			if ( isset($this->deleteAction) ) {
 	 			$card->setDeletePath( $this->deleteAction . '/' . $value->id );
 			}
+			echo '<div class="grid_2">' . PHP_EOL;
 			echo $card->render($value, function() use($value) {
 						$all_media = $value->media();
 						if ( is_array($all_media) ) {
@@ -52,7 +57,10 @@
 						return (isset($c) ? $c : null);
 					}
 				);
+			echo '</div>' . PHP_EOL;
 		}
 	?>
 <?php endif; ?>
 </div>
+	</div>
+</section>

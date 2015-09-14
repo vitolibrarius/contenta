@@ -78,6 +78,7 @@ textarea {
     color: #555;
     font-weight: bold;
    	border-bottom: 2px solid green;
+   	height: 30px;
 }
 
 label.checkbox,
@@ -122,3 +123,6 @@ form .half,
 form .third {margin-right:2%;}
 form .omega { margin-right:0;}
 
+ul.select2-selection__rendered {
+	padding: 0px;
+}

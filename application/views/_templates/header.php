@@ -10,7 +10,7 @@
 	<link rel="icon" type="image/png" href="<?php echo Config::Web('public/img/Logo_favicon.png'); ?>" />
 
 	<!-- CSS -->
-	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/lib/select2.css'); ?>" />
+	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/lib/select2.min.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta-card.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta-forms.css'); ?>" />
