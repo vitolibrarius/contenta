@@ -12,18 +12,17 @@
 
 #modalDialog {
 	position:absolute;
-	background:rgba(0,0,0,0.35);
+	background: white;
 	border-radius:14px;
 	padding:6px;
 	max-width:80%;
+	border: 6px solid rgba(0,0,0,0.35);;
 	-moz-box-shadow: 1px 1px 3px #000;
 	-webkit-box-shadow: 1px 1px 3px #000;
 	box-shadow: 1px 1px 3px #000;
 }
 
 #modalContent {
-	border-radius:8px;
-	background:#fff;
 	padding:10px;
 }
 
@@ -62,8 +61,8 @@ a.close, a.close:visited
 	display:block;
 	width:34px;
 	height:34px;
-	top:-7px;
-	right:-7px;
+	top:-15px;
+	right:-15px;
 	background:#0099ff;
 	color: white;;
 	line-height: 34px;

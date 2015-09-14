@@ -23,7 +23,7 @@ var modal = (function(){
 	method.open = function (settings) {
 		var $heading = $('<h2></h2>').empty().append(settings.heading);
 		var $left = $('<div id="modalLeft"></div>').append('<img src="' + settings.img + '" class="icon"></img>');
-		var $right = $('<div id=modalRight"></div>').append(
+		var $right = $('<div id="modalRight"></div>').append(
 			'<p class="modal_desc">' + settings.description + '</p>' +
 			'<p class="modal_confirm">' + settings.confirm + '</p>' +
 			'<a class="button" href="' + settings.action + '">' + settings.actionLabel + '</a>'
