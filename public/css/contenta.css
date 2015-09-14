@@ -105,7 +105,8 @@ span.icon.favorite:before	{ content:"\2665"; color: grey; font-size: 32px; }
 }
 
 .paging ul li {
-	padding: 5px;
+	padding: 5px 10px;
+	margin: 5px 5px;
 	border: 1px solid #000;
 	list-style: none;
 	display: inline;
@@ -233,11 +234,13 @@ nav .menu li li li a {
 .grid_10,
 .grid_11,
 .grid_12 {
-	margin-bottom:10px;
+	margin-bottom:5px;
 	position: relative;
     min-height: 1px;
     padding-left: 10px;
     padding-right: 10px;
+
+/* 	border: 1px solid #999 */
 }
 
 body 					{ background:#fff; }
@@ -269,10 +272,10 @@ a.button {
 	border-radius:7px;
 	color:#fff;
 	display:block;
-	float:left;
-	margin:10px 15px 10px 0;
+	margin:10px 0px 10px 0;
 	padding:10px;
 	text-decoration:none;
+	text-align:center;
 }
 a.button:hover { background:#8dbc01; }
 
@@ -290,19 +293,31 @@ a.button:hover { background:#8dbc01; }
   clear: both;
 }
 
-@media only screen and (min-width: 481px) {
+/* iPhone 5 & 5S in portrait & landscape */
+@media only screen and (min-device-width : 320px) and (max-device-width : 568px)
+{
+	* {
+	}
 	#banner{
 		float:left;
 		text-align:left;
-		margin-bottom:-20px;
+		margin-bottom:-10px;
+	}
+	#logo{
+		max-width:200px;
 	}
 	nav .toggle {
 		margin-top:10px;
 		float:right;
 	}
+	#page-header {
+		padding: 10px 0;
+	}
 }
 
-@media only screen and (min-width: 920px) {
+/* iPad portrait or greater */
+@media only screen and (min-width: 768px)
+{
 	header		{ padding:0; }
 	.wrapper 	{ margin: .75em auto; }
 	#banner {
@@ -435,17 +450,10 @@ a.button:hover { background:#8dbc01; }
 	#page-header [class*="grid_"] { margin-bottom:0px;}
 }
 
-@media only screen and (min-width: 1030px) { }
-@media only screen and (min-width: 1240px) { }
-
-/* retina (2x) */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-       only screen and (min--moz-device-pixel-ratio: 1.5),
-       only screen and (min-device-pixel-ratio: 1.5) {
+/* iPad in portrait & landscape */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px)
+{
 }
-
-/* iPHONE 5 */
-@media (device-height: 568px) and (-webkit-min-device-pixel-ratio: 2) { }
 
 /* PRINT */
 @media print {

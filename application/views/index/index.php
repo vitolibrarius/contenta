@@ -13,6 +13,9 @@
 <br />
 <?php endif; ?>
 
+<section id="content">
+	<div class="row">
+
 <?php if (Session::get('user_logged_in') == true):?>
 
 	<?php
@@ -37,9 +40,13 @@
 // 			if ( isset($this->deleteAction) ) {
 // 	 			$card->setDeletePath( $this->deleteAction . '/' . $value->id );
 // 			}
+			echo '<div class="grid_3">' . PHP_EOL;
 			echo $card->render($media);
+			echo '</div>' . PHP_EOL;
 		}
 	?>
 
 <?php endif; ?>
 
+	</div>
+</section>

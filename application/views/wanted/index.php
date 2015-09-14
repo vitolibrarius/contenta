@@ -16,7 +16,7 @@
 			</div>
 			<div class="grid_3">
 				<select name="searchStoryArcs" id="searchStoryArcs"
-						class="text_input">
+						class="text_input" multiple="multiple">
 				</select>
 			</div>
 			<div class="grid_1">
@@ -46,60 +46,59 @@
 
 <script type="text/javascript">
 $(document).ready(function($) {
-// 	$("#searchPublisher").select2({
-// 		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'publisher_id' ); ?>",
-// 		allowClear: true,
-// 		ajax: {
-// 			url: "<?php echo Config::Web('/Api/publishers'); ?>",
-// 			dataType: 'json',
-// 			delay: 250,
-// 			data: function (params) {
-// 				return {
-// 					q: params.term, // search term
-// 					page: params.page
-// 				};
-// 			},
-// 			processResults: function (data) {
-// 				return {
-// 					results: $.map(data, function(obj) {
-// 						return { id: obj.id, text: obj.name };
-// 					})
-// 				};
-// 			},
-// 			cache: true
-// 		}
-// 	}).on("change", function(e) {
-// 		delay( refresh(), 250 );
-// 	});
-//
-// 	$("#searchStoryArcs").select2({
-// 		multiple: true,
-// 		width: '100%',
-// 		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'story_arcs' ); ?>",
-// 		allowClear: true,
-// 		ajax: {
-// 			url: "<?php echo Config::Web('/Api/story_arcs'); ?>",
-// 			dataType: 'json',
-// 			delay: 250,
-// 			data: function (params) {
-// 				return {
-// 					q: params.term, // search term
-// 					r: 'wanted',
-// 					page: params.page
-// 				};
-// 			},
-// 			processResults: function (data) {
-// 				return {
-// 					results: $.map(data, function(obj) {
-// 						return { id: obj.id, text: obj.name };
-// 					})
-// 				};
-// 			},
-// 			cache: true
-// 		}
-// 	}).on("change", function(e) {
-// 		delay( refresh(), 250 );
-// 	});
+	$("#searchPublisher").select2({
+		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'publisher_id' ); ?>",
+		allowClear: true,
+		ajax: {
+			url: "<?php echo Config::Web('/Api/publishers'); ?>",
+			dataType: 'json',
+			delay: 250,
+			data: function (params) {
+				return {
+					q: params.term, // search term
+					page: params.page
+				};
+			},
+			processResults: function (data) {
+				return {
+					results: $.map(data, function(obj) {
+						return { id: obj.id, text: obj.name };
+					})
+				};
+			},
+			cache: true
+		}
+	}).on("change", function(e) {
+		delay( refresh(), 250 );
+	});
+
+	$("#searchStoryArcs").select2({
+		width: '95%',
+		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'story_arcs' ); ?>",
+		allowClear: true,
+		ajax: {
+			url: "<?php echo Config::Web('/Api/story_arcs'); ?>",
+			dataType: 'json',
+			delay: 250,
+			data: function (params) {
+				return {
+					q: params.term, // search term
+					r: 'wanted',
+					page: params.page
+				};
+			},
+			processResults: function (data) {
+				return {
+					results: $.map(data, function(obj) {
+						return { id: obj.id, text: obj.name };
+					})
+				};
+			},
+			cache: true
+		}
+	}).on("change", function(e) {
+		delay( refresh(), 250 );
+	});
 
 	$(".text_input").on('keyup change', function () {
 		delay( refresh(), 250 );

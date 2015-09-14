@@ -1,7 +1,7 @@
 .card {
-	min-height:260px;
+	min-height:300px;
 	width: 100%;
-	margin: 20px 0px;
+	margin: 10px 0px;
 	padding: 4px;
 	vertical-align: top;
 	background-color: #eee;
@@ -15,7 +15,7 @@
 	padding-bottom: 2px;
 	border-bottom: 2px groove #888;
 	position: relative;
-	min-height: 170px;
+	min-height: 130px;
 }
 .figure_image,
 .figure_details {
@@ -23,6 +23,7 @@
 }
 .figure_image {
 	width: 40%;
+	min-height: 110px;
 }
 .figure_details {
 /* 	background-color: red; */
@@ -70,6 +71,11 @@
 .card .caption:empty {
 	border-top-style: hidden;
 }
+.card .caption p {
+	margin-bottom: 0;
+	font-size: .8em;
+}
+
 .card .caption p.description {
 	font-size: 0.75em;
 	max-height : 100px;

@@ -1,80 +1,82 @@
-/*
-	<div id="openConfirm" class="modalDialog" style="width: auto; height: auto; top: 0px; left: 0px; display: block;">
-		<div>
-			<a href="#close" title="Close" class="close">X</a>
-			<h2>Confirm Delete</h2>
-			<div style="width:100%; overflow:hidden;">
-				<div style="float:right; width:75%;">
-					<p class="modal_desc">This will permanently delete this media  <br>
-					<em>Filename.cbz</em></p>
-					<p class="modal_confirm">Are you sure you want to continue?</p>
-					<a class="button" style="float:right" href="undefined">Delete</a>
-				</div>
-				<div style="float:left ; width:20%;"><img src="public/img/thumb_01.jpg" class="icon"></div>
-			</div>
-		</div>
-	</div>
-*/
+
 var modal = (function(){
 	var method = {};
-	var $panel = $('<div id="openConfirm" class="modalDialog"></div>');
-	var $wrapper = $('<div></div>');
-	var $close = $('<a href="#close" title="Close" class="close">X</a>');
-	var $heading = $('<h2>Test</h2>');
-	var $panel_body = $('<div style="width:100%; overflow:hidden;"></div>');
-	var $left = $('<div style="float:left ; width:20%;"></div>');
-	var $right = $('<div style="float:right; width:75%;"></div>');
+	var $overlay;
+	var $modal;
+	var $content;
+	var $close;
 
 	// Center the modal in the viewport
 	method.center = function () {
 		var top, left;
 
-		top = Math.max($(window).height() - $panel.outerHeight(), 0) / 2;
-		left = Math.max($(window).width() - $panel.outerWidth(), 0) / 2;
+		top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2;
+		left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
 
-		$panel.css({
-			top:top,
-			left:left
+		$modal.css({
+			top:top + $(window).scrollTop(),
+			left:left + $(window).scrollLeft()
 		});
 	};
 
 	// Open the modal
 	method.open = function (settings) {
-		$heading.empty().append(settings.heading);
-		$left.empty().append('<img src="' + settings.img + '" class="icon"></img>');
-		$right.empty().append(
+		var $heading = $('<h2></h2>').empty().append(settings.heading);
+		var $left = $('<div id="modalLeft"></div>').append('<img src="' + settings.img + '" class="icon"></img>');
+		var $right = $('<div id=modalRight"></div>').append(
 			'<p class="modal_desc">' + settings.description + '</p>' +
 			'<p class="modal_confirm">' + settings.confirm + '</p>' +
-			'<a class="button" style="float:right" href="' + settings.action + '">' + settings.actionLabel + '</a>'
+			'<a class="button" href="' + settings.action + '">' + settings.actionLabel + '</a>'
 		);
 
-		$panel.css({
+		$content.empty().append($heading, $left, $right);
+
+		var scrollPosition = [
+			self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
+			self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
+		];
+		var html = $('html');
+		html.data('scroll-position', scrollPosition);
+		html.data('previous-overflow', html.css('overflow'));
+		html.css('overflow', 'hidden');
+		window.scrollTo(scrollPosition[0], scrollPosition[1]);
+
+		$modal.css({
 			width: settings.width || 'auto',
 			height: settings.height || 'auto'
 		});
 
 		method.center();
-		$(window).bind('resize.panel', method.center);
-		$panel.show();
+		$(window).bind('resize.modal', method.center);
+		$modal.show();
+		$overlay.show();
 	};
 
 	// Close the modal
 	method.close = function () {
-		$panel.hide();
-		$heading.empty();
-		$left.empty();
-		$right.empty();
-		$(window).unbind('resize.panel');
+		var html = $('html');
+		var scrollPosition = html.data('scroll-position');
+		html.css('overflow', html.data('previous-overflow'));
+		window.scrollTo(scrollPosition[0], scrollPosition[1]);
+
+		$modal.hide();
+		$overlay.hide();
+		$content.empty();
+		$(window).unbind('resize.modal');
 	};
 
 	// Generate the HTML and add it to the document
-	$panel.hide();
-	$panel.append($wrapper);
-	$wrapper.append($close, $heading, $panel_body);
-	$panel_body.append($right, $left);
+	$overlay = $('<div id="overlay"></div>');
+	$modal = $('<div id="modalDialog"></div>');
+	$content = $('<div id="modalContent"></div>');
+	$close = $('<a href="#close" title="Close" class="close">X</a>');
+
+	$modal.hide();
+	$overlay.hide();
+	$modal.append($content, $close);
 
 	$(document).ready(function(){
-		$('body').append($panel);
+		$('body').append($overlay, $modal);
 	});
 
 	$close.click(function(e){

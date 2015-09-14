@@ -7,6 +7,7 @@
 <?php else: ?>
 	<?php
 		$card = new html\Card();
+		$card->setDisplayDescriptionKey( "shortDescription" );
 		$card->setDetailKeys( array(
 			model\Character::realname => model\Character::realname,
 			model\Character::gender => model\Character::gender,
@@ -19,7 +20,7 @@
 			if ( isset($this->deleteAction) ) {
 	 			$card->setDeletePath( $this->deleteAction . '/' . $value->id );
 			}
-			echo '<div class="grid_3">' . PHP_EOL;
+			echo '<div class="grid_2">' . PHP_EOL;
 			echo $card->render($value);
 			echo '</div>' . PHP_EOL;
 		}
