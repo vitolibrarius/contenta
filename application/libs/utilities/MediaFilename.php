@@ -40,8 +40,7 @@ class MediaFilename
 			unset($list[0]);
 			foreach ( array_reverse($list) as $key => $value)
 			{
-				if (preg_match("/^[-]?(([0-9]*\\.[0-9]+|[0-9]{1,3}))\\b/um", $value, $matches, 0))
-				{
+				if (preg_match("/(?<=-|\\b)(([0-9]{1,3}\\.[0-9]+)|([0-9]{1,3}))(?=\\b)/ui", $value, $matches, 0)) {
 					return $matches[0];
 				}
 			}
@@ -61,7 +60,10 @@ class MediaFilename
 	public function parsePublicationNameFromFilename( $filename )
 	{
 		// remove vol / book / covers
-		$working = preg_replace("/((v|vol|book)[\\.\\s]*\\d{1,4})|(\\d[\\.\\s]*covers)/uim", "", $filename);
+		$working = preg_replace("/(\\b(v|vol|book)[\\.\\s]*\\d{1,4})|(\\d[\\.\\s]*covers)/uim", "", $filename);
+
+		// remove No.01
+		$working = preg_replace("/(\\b(No)[\\.\\s]*\\d{1,3})/uim", "", $working);
 
 		// remove one shot
 		$working = preg_replace("/\\b(tpb|os|one[ -]shot|ogn|gn)/uim", "", $working);
@@ -72,6 +74,14 @@ class MediaFilename
 			$working = preg_replace("/((\\D+)-)+/uiU", "$2 ", $working);
 		}
  		$working = preg_replace("/(\\s-\\s)/uim", " ", $working, 1);
+
+		// everything up to Month.Year
+		if (preg_match("/(^.+)(?=\\b[-]?((Jan|Feb|Mar|March|April|May|Jun|June|Jul|July|Aug|Sep|Sept|Oct|Nov|Dec)[\\.\\s]\\d{4}))/uim",
+			$working, $matches, 0))
+		{
+// 			echo "everything up to issue/year like $working" .PHP_EOL;
+			return $matches[1];
+		}
 
 		// everything up to issue/year like XYZ Comic 001 2014
 		if (preg_match("/(^.+)(?=\\b[-]?(([0-9]{1,3}\\.[0-9]+|[0-9]{1,4}))\\s+(\\d{4}))/uU", $working, $matches, 0))
@@ -144,6 +154,9 @@ class MediaFilename
 
 		// remove '_'
 		$clean = preg_replace("/([_])/u", " ", $clean);
+
+		// remove '.' but not 22.3
+		$clean = preg_replace("/(?<=vol(\\.|\\s)\\d)(\\.)|(?<=no(\\.|\\s)\\d)(\\.)|(?<=\\D)(\\.)(?=\\D)/ui", " ", $clean);
 
 		// remove any "of NN" phrase
 		$clean = preg_replace("/(of [\\d]+)/ui", " ", $clean);

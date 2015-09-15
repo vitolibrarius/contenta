@@ -24,6 +24,14 @@ $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root );
 
 $testdata = array(
+	"All.New.Invaders.Vol.1.No.3.May.2014.SCAN.Comic.eBook-iNTENSiTY.cbr" => array(
+		"clean" => "All New Invaders Vol.1 No.3 May.2014.SCAN Comic eBook-iNTENSiTY",
+		"year" => "2014",
+		"extension" => "cbr",
+		"issue" => "3",
+		"volume" => "Vol.1",
+		"name" => "All New Invaders",
+	),
 	"'68 Hallowed Ground 2013 digital Son of Ultron-Empire.cbz" => array(
 		"clean" => "'68 Hallowed Ground 2013 digital Son of Ultron-Empire",
 		"year" => "2013",
@@ -286,6 +294,11 @@ foreach( $testdata as $filename => $expected ) {
 				. (isset($meta[$value]) ? $meta[$value] : 'null') . "'" . PHP_EOL;
 		}
 		echo PHP_EOL;
+	}
+
+	if ( $hasErrors == true ) {
+		echo "Errors encountered" . PHP_EOL;
+		exit(1);
 	}
 }
 
