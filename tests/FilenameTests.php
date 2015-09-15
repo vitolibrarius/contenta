@@ -24,6 +24,14 @@ $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root );
 
 $testdata = array(
+	"All.New.Invaders.Vol.1.No.10.Nov.2014.SCAN.Comic.eBook-iNTENSiTY.cbr" => array(
+		"clean" => "All New Invaders Vol.1 No.10 Nov.2014.SCAN Comic eBook-iNTENSiTY",
+		"year" => "2014",
+		"extension" => "cbr",
+		"issue" => "10",
+		"volume" => "Vol.1",
+		"name" => "All New Invaders",
+	),
 	"All.New.Invaders.Vol.1.No.3.May.2014.SCAN.Comic.eBook-iNTENSiTY.cbr" => array(
 		"clean" => "All New Invaders Vol.1 No.3 May.2014.SCAN Comic eBook-iNTENSiTY",
 		"year" => "2014",
