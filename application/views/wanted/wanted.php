@@ -1,5 +1,3 @@
-<section>
-
 <?php if (is_array($this->listArray) && count($this->listArray) > 0): ?>
 <?php
 	$seriesGroups = array();
@@ -14,22 +12,6 @@
 ?>
 
 <?php foreach($seriesGroups as $series_id => $publicationArray): ?>
-	<div class="row">
-		<div class="grid_12">
-			<h2>
-				<?php $groupName = "Unknown";
-					if ($series_id > 0) {
-						$seriesObj = Model::Named('Series')->objectForId($series_id);
-						if ($seriesObj != false) {
-							$groupName = $seriesObj->name;
-						}
-					}
-					echo $groupName;
-				?>
-			</h2>
-		</div>
-	</div>
-
 	<div class="row">
 		<?php foreach($publicationArray as $key => $publication): ?>
 		<div class="grid_4">
@@ -76,5 +58,3 @@
 <?php else: ?>
 	No matching records
 <?php endif; ?>
-
-</section>

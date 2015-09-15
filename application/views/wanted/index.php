@@ -1,3 +1,40 @@
+<style>
+UL.mytabs {
+	position: relative;
+	z-index: 2;
+}
+UL.mytabs, UL.mytabs LI {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	float: left;
+}
+UL.mytabs LI { padding: 0 5px; }
+UL.mytabs LI A {
+	float: left;
+	padding: 7px;
+	border: 1px solid #CCCCCC;
+	border-bottom: 1px solid #E0E0E0;
+	background: #F0F0F0;
+	text-decoration: none;
+	color: #333333;
+	height: 22px;
+}
+UL.mytabs LI A:HOVER, UL.mytabs LI.current A {
+	background: #FFFFFF;
+}
+UL.mytabs LI.current A {
+	font-weight: bold;
+	font-size: 14px;
+	border-bottom: 1px solid #FFFFFF;
+}
+.row.data {
+	background-color: #e2e2e2;
+	vertical-align: middle;
+	border-bottom: 1px solid #FFFFFF;
+}
+</style>
+
 <div class="paging">
 	<ul>
 		<li><a href="<?php echo Config::Web('/AdminWanted/newznab'); ?>">Manual Search</a></li>
@@ -6,124 +43,48 @@
 
 <section>
     <div class="wrapper">
-	<form id='searchForm' name='searchForm'>
-		<div class="row">
-			<div class="grid_3">
-				<input type="text" name="searchSeries" id="searchSeries"
-					class="text_input"
-					placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "series_id" ); ?>"
-					value="">
+		<?php foreach($this->listArray as $key => $value) : ?>
+		<div class="row data">
+			<div class="grid_6">
+				<h2 style="display: inline">
+					<a href="#" class="wanted" data-series_id="<?php echo $value->id; ?>"><?php echo $value->displayName(); ?></a>
+				</h2>
 			</div>
-			<div class="grid_3">
-				<select name="searchStoryArcs" id="searchStoryArcs"
-						class="text_input" multiple="multiple">
-				</select>
+			<div class="grid_2">
 			</div>
-			<div class="grid_1">
-				<input type="number" name="searchIssue" id="searchIssue"
-					min="0"
-					class="text_input"
-					placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "issue_num" ); ?>"
-					value="">
-				</input>
+			<div class="grid_2">
+				<span><?php echo $value->start_year; ?></span>
 			</div>
-			<div class="grid_1">
-				<input type="number" name="searchYear" id="searchYear"
-					min="1950"
-					max="<?php echo intval(date("Y") + 1); ?>"
-					class="text_input"
-					placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "pub_date" ); ?>"
-					value="">
-				</input>
+			<div class="grid_2">
+				<span style="float: right;">Issues <?php echo $value->pub_available; ?> / <?php echo $value->pub_count; ?></span>
 			</div>
 		</div>
-	</div>
-	</form>
+		<span id='<?php echo "ajaxDiv_" . $value->id; ?>'></span>
+		<?php endforeach; ?>
+    </div>
 </section>
 
-<div id='ajaxDiv'></div>
 
 
 <script type="text/javascript">
-$(document).ready(function($) {
-	$("#searchPublisher").select2({
-		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'publisher_id' ); ?>",
-		allowClear: true,
-		ajax: {
-			url: "<?php echo Config::Web('/Api/publishers'); ?>",
-			dataType: 'json',
-			delay: 250,
-			data: function (params) {
-				return {
-					q: params.term, // search term
-					page: params.page
-				};
-			},
-			processResults: function (data) {
-				return {
-					results: $.map(data, function(obj) {
-						return { id: obj.id, text: obj.name };
-					})
-				};
-			},
-			cache: true
-		}
-	}).on("change", function(e) {
-		delay( refresh(), 250 );
-	});
-
-	$("#searchStoryArcs").select2({
-		width: '95%',
-		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'story_arcs' ); ?>",
-		allowClear: true,
-		ajax: {
-			url: "<?php echo Config::Web('/Api/story_arcs'); ?>",
-			dataType: 'json',
-			delay: 250,
-			data: function (params) {
-				return {
-					q: params.term, // search term
-					r: 'wanted',
-					page: params.page
-				};
-			},
-			processResults: function (data) {
-				return {
-					results: $.map(data, function(obj) {
-						return { id: obj.id, text: obj.name };
-					})
-				};
-			},
-			cache: true
-		}
-	}).on("change", function(e) {
-		delay( refresh(), 250 );
-	});
-
-	$(".text_input").on('keyup change', function () {
-		delay( refresh(), 250 );
-	});
-
-	function refresh() {
+	$('body').on('click', 'a.wanted', function (e) {
+		var safe_guid = "ajaxDiv_"+ $(this).attr('data-series_id');
 		$.ajax({
 			type: "GET",
-			url: "<?php echo Config::Web('/AdminWanted/searchWanted'); ?>",
+			url: "<?php echo Config::Web('/AdminWanted/pubsWanted'); ?>",
 			data: {
-				series_name: $('#searchSeries').val(),
-				story_arc_id: $('#searchStoryArcs').val(),
-				publisher_id: $('#searchPublisher').val(),
-				issue: $('input#searchIssue').val(),
-				year: $('input#searchYear').val()
+				series_id: $(this).attr('data-series_id')
 			},
 			dataType: "text",
 			success: function(msg){
-				var ajaxDisplay = document.getElementById('ajaxDiv');
-				ajaxDisplay.innerHTML = msg;
+				var ajaxDisplay = $('#' + safe_guid);
+				ajaxDisplay.empty().append(msg);
 			}
 		});
-	};
-	refresh();
-});
+		e.stopPropagation();
+		return false;
+	});
+
 $(document).ajaxComplete(function(){
 	$('body').on('click', 'a.nzb', function (e) {
 		var safe_guid = $(this).attr('data-safe_guid');
