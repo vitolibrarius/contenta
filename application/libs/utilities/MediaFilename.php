@@ -76,7 +76,7 @@ class MediaFilename
  		$working = preg_replace("/(\\s-\\s)/uim", " ", $working, 1);
 
 		// everything up to Month.Year
-		if (preg_match("/(^.+)(?=\\b[-]?((Jan|Feb|Mar|March|April|May|Jun|June|Jul|July|Aug|Sep|Sept|Oct|Nov|Dec)[\\.\\s]\\d{4}))/uim",
+		if (preg_match("/(^.+)(?=\\b[-]?((Jan|Feb|Mar|March|Apr|April|May|Jun|June|Jul|July|Aug|Sep|Sept|Oct|Nov|Dec)[\\.\\s]\\d{4}))/uim",
 			$working, $matches, 0))
 		{
 // 			echo "everything up to issue/year like $working" .PHP_EOL;
