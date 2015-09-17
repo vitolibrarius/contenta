@@ -93,6 +93,75 @@ span.icon.favorite:before	{ content:"\2665"; color: grey; font-size: 32px; }
 	border:0px white;
 }
 
+.spinner {
+	display:    none;
+	position:   fixed;
+	z-index:    1000;
+	top:        0;
+	left:       0;
+	height:     100%;
+	width:      100%;
+	background: rgba( 255, 255, 255, .8 )
+				url("../img/ajax-loader.gif")
+				50% 50%
+				no-repeat;
+}
+
+/* Tabs */
+.tabs {
+	padding-left: 40px;
+	padding-right: 40px;
+	padding-top: 8px;
+	list-style: none;
+}
+.tab-content {
+	border:1px solid #ccc;
+	border-radius:8px;
+	margin-bottom:20px;
+	background: -moz-linear-gradient(top, #efefef, white 75%);
+	background: -webkit-gradient(linear, 0 0, 0 75%, from(#efefef), to(white));
+}
+.tabs li {
+	float: left;
+	list-style:none;
+	margin-right:auto;
+	margin-left:auto;
+	padding: 8px;
+	border-top:1px solid #ccc;
+	border-left:1px solid #ccc;
+	border-right:1px solid #ccc;
+	border-top-left-radius:8px;
+	border-top-right-radius:8px;
+	-moz-box-shadow: 0 -2px 2px #dadada;
+	-webkit-box-shadow:  0 -2px 2px #dadada;
+	box-shadow: 0 -2px 2px #dadada;
+	background: -moz-linear-gradient(top, #dedede, white 75%);
+	background: -webkit-gradient(linear, 0 0, 0 75%, from(#dedede), to(white));
+}
+.tabs li a {
+	font-weight:bold;
+	color:#000000;
+	padding:5px 10px 3px 10px;
+	display:block;
+	text-decoration:none;
+}
+.tabs li a.inactive {
+	color: #ababab;
+}
+
+.tabs li a:hover,
+.tabs li a.inactive:hover {
+	color:#889988;
+}
+
+.tab-content {
+	clear:both;
+	padding:10px 0px;
+	width:100%;
+	background-color:#fff;
+	text-align:left;
+}
+
 /** paging */
 .paging {
 	margin: 4px;
@@ -413,8 +482,10 @@ a.button:hover { background:#8dbc01; }
 	}
 
 	.row {
+/*
 		 margin-left: -15px;
 		 margin-right: -15px;
+ */
 	}
 
 	.grid_1 { width: 8.33333333%; }

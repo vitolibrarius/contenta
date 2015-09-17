@@ -25,7 +25,7 @@
 	</ul>
 </div>
 
-<section id="content">
+<section>
 	<div class="row">
 
 <?php if (is_array($this->list) && count($this->list) > 0 ): ?>

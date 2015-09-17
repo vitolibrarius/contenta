@@ -192,7 +192,7 @@ class Card
 						),
 
 						H::div( array( "class" => "figure_detail_bottom" ),
-							function() use($record) {
+							function() use($record, $callback) {
 								$editPath = $this->editPath();
 								if (isset($editPath) && is_null($editPath) == false) {
 									$c[] = H::a( array("href" => $editPath ),
@@ -221,7 +221,10 @@ class Card
 									);
 								}
 								return (isset($c) ? $c : null);
-							}
+							},
+							H::div( array( "class" => "actions" ), function() use($callback) {
+								return (is_null($callback) ? null : $callback());
+							})
 						)
 					)
 			),

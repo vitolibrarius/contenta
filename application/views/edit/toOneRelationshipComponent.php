@@ -1,6 +1,6 @@
 <script>
 	$(document).ready(function() {
-		$("#<?php echo $this->input_id; ?>").select2( { width: 'resolve' } );
+		$("#<?php echo $this->input_id; ?>").select2( { width: '100%' } );
 	});
 </script>
 

@@ -11,6 +11,8 @@ use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
 use \Processor as Processor;
+use \SQL as SQL;
+use db\Qualifier as Qualifier;
 
 use processor\ComicVineImporter as ComicVineImporter;
 use processor\UploadImport as UploadImport;
@@ -19,6 +21,10 @@ use processor\ImportManager as ImportManager;
 use controller\Admin as Admin;
 
 use model\Users as Users;
+use model\Series as Series;
+use model\SeriesDBO as SeriesDBO;
+use model\Publication as Publication;
+use model\PublicationDBO as PublicationDBO;
 use model\Endpoint as Endpoint;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Publisher as Publisher;
@@ -177,6 +183,208 @@ class AdminUploadRepair extends Admin
 			}
 		}
 	}
+
+	function editUnprocessedManually($processKey = null)
+	{
+		if (Auth::handleLogin() && Auth::requireRole('admin')) {
+			if ( ImportManager::IsEditable($processKey) == true ) {
+				$processor = Processor::Named("UploadImport", $processKey);
+
+				$this->view->source = $processor->sourceMetaData();
+				$this->view->search = $processor->searchMetaData();
+				$this->view->fileWrapper = $processor->sourceFileWrapper();
+				$this->view->key = $processKey;
+				$this->view->processor = $processor;
+
+				$ext = $processor->sourceFileExtension();
+
+				$this->view->saveAction = appendPath("/AdminUploadRepair/editUnprocessedManually_publication", $processKey);
+				$this->view->model = Model::Named('Series');
+
+				$this->view->addStylesheet("select2.min.css");
+				$this->view->addStylesheet("slideshow.css");
+
+				$this->view->addScript("slideshow.js");
+				$this->view->addScript("select2.min.js");
+
+				$this->view->render( '/upload/process_' . $ext . '_manualSeries');
+			}
+			else {
+				Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
+				header('location: ' . Config::Web( get_short_class($this), 'index'));
+			}
+		}
+	}
+
+	function editUnprocessedManually_seriesList($processKey = null)
+	{
+		if (Auth::handleLogin() && Auth::requireRole('admin')) {
+			if ( ImportManager::IsEditable($processKey) == true ) {
+				$model = Model::Named('Series');
+				$qualifiers = array();
+				if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
+					$qualifiers[] = Qualifier::Like( Series::search_name, normalizeSearchString($_GET['name']));
+				}
+				if ( isset($_GET['year']) && strlen($_GET['year']) == 4 ) {
+					$qualifiers[] = Qualifier::Equals( Series::start_year, $_GET['year'] );
+				}
+				if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
+					$qualifiers[] = Qualifier::Equals( Series::publisher_id, $_GET['publisher_id'] );
+				}
+
+				$select = SQL::Select($model);
+				if ( count($qualifiers) > 0 ) {
+					$select->where( Qualifier::AndQualifier( $qualifiers ));
+				}
+				$select->orderBy( $model->sortOrder() );
+
+				$this->view->model = $model;
+				$this->view->key = $processKey;
+				$this->view->listArray = $select->fetchAll();
+				$this->view->selectAction = "/AdminUploadRepair/editUnprocessedManually_publication/" . $processKey;
+				$this->view->render( '/admin/seriesCards', true);
+			}
+			else {
+				Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
+				header('location: ' . Config::Web( get_short_class($this), 'index'));
+			}
+		}
+	}
+
+	function editUnprocessedManually_publication($processKey = null, $seriesId = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole('admin')) {
+			if ( ImportManager::IsEditable($processKey) == true ) {
+				$model = Model::Named('Series');
+				$seriesObj = null;
+
+				if ( isset($seriesId) == false || $seriesId == 0) {
+					$values = splitPOSTValues($_POST);
+					if ( isset($values[$model->tableName()], $values[$model->tableName()][Series::pub_wanted]) == false ) {
+						$values[$model->tableName()][Series::pub_wanted] = Model::TERTIARY_FALSE;
+					}
+
+					list($seriesObj, $error) = $model->createObject($values[$model->tableName()]);
+					if ( is_array($errors) ) {
+						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
+						foreach ($errors as $attr => $errMsg ) {
+							Session::addValidationFeedback( $errMsg );
+						}
+					}
+				}
+				else {
+					$seriesObj = $model->objectForId($seriesId);
+				}
+
+				if ( empty($seriesObj) == false ) {
+					$this->view->seriesObj = $seriesObj;
+					$this->view->series_id = $seriesObj->id;
+
+					$processor = Processor::Named("UploadImport", $processKey);
+
+					$this->view->source = $processor->sourceMetaData();
+					$this->view->search = $processor->searchMetaData();
+					$this->view->fileWrapper = $processor->sourceFileWrapper();
+					$this->view->key = $processKey;
+					$this->view->processor = $processor;
+
+					$ext = $processor->sourceFileExtension();
+
+					$this->view->model = Model::Named('Publication');
+					$this->view->listArray = $seriesObj->publications();
+
+					$this->view->addStylesheet("select2.min.css");
+					$this->view->addStylesheet("slideshow.css");
+
+					$this->view->addScript("slideshow.js");
+					$this->view->addScript("select2.min.js");
+					$this->view->saveAction = appendPath("/AdminUploadRepair/editUnprocessedManually_selectMatch", $processKey, $seriesId);
+
+					$this->view->render( '/upload/process_' . $ext . '_manualPublication');
+				}
+				else {
+					$this->editUnprocessedManually_seriesList($processKey);
+				}
+			}
+			else {
+				Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
+				header('location: ' . Config::Web( get_short_class($this), 'index'));
+			}
+		}
+	}
+
+	function editUnprocessedManually_selectMatch($processKey = null, $seriesId = 0, $publicationId = 0)
+	{
+		Logger::logInfo( "editUnprocessedManually_selectMatch starting", $processKey, $seriesId."/".$publicationId);
+		if (Auth::handleLogin() && Auth::requireRole('admin')) {
+			if ( ImportManager::IsEditable($processKey) == true ) {
+				$model = Model::Named('Series');
+				$pub_model = Model::Named('Publication');
+				$seriesObj = $model->objectForId($seriesId);
+
+				if ( $seriesObj instanceof SeriesDBO ) {
+					Logger::logInfo( "Found series " . $seriesObj->name, $processKey, $seriesId."/".$publicationId);
+
+					if ( isset($publicationId) == false || $publicationId == 0) {
+						Logger::logInfo( "Creating new publication", $processKey, $seriesId."/".$publicationId);
+						$values = splitPOSTValues($_POST);
+						list($publicationObj, $error) = $pub_model->createObject($values[$pub_model->tableName()]);
+						if ( is_array($errors) ) {
+							Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
+							foreach ($errors as $attr => $errMsg ) {
+								Session::addValidationFeedback( $errMsg );
+							}
+						}
+					}
+					else {
+						$publicationObj = $pub_model->objectForId($publicationId);
+					}
+
+					if ( $publicationObj instanceof PublicationDBO ) {
+						Logger::logInfo( "Found publication " . $publicationObj->xid, $processKey, $seriesId."/".$publicationId);
+						$importMgr = Processor::Named("ImportManager", 0);
+						$processor = Processor::Named("UploadImport", $processKey);
+						if ( $processor != false ) {
+							$message = $processor->getMeta(UploadImport::META_MEDIA_NAME);
+
+							if ( $processor->selectMatchingPublication( $publicationObj ) == false) {
+								Logger::logInfo( "selectMatchingPublication error", $processKey, $seriesId."/".$publicationId);
+								$this->view->key = $processKey;
+								$this->view->issue = $processor->issueMetaData();
+								$this->view->series_model = Model::Named('Series');
+								$this->view->render( '/processing/comicViewResults', true);
+							}
+							else {
+								Session::addPositiveFeedback(Localized::Get("Upload", 'Processing') . ' "' . $message . '"' );
+								$processor->daemonizeProcess();
+								sleep(2);
+								header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
+							}
+						}
+						else {
+							Session::addNegativeFeedback(Localized::Get("Upload", 'Failed to load processor'));
+							header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
+						}
+					}
+					else {
+						Logger::logInfo( "No publication found !!", $processKey, $seriesId."/".$publicationId);
+						$this->editUnprocessedManually_seriesList($processKey);
+					}
+				}
+				else {
+					Logger::logInfo( "No series found!!!", $processKey, $seriesId."/".$publicationId);
+					Session::addNegativeFeedback(Localized::Get("Upload", 'UnidentifiedManualSeries'));
+					$this->editUnprocessedManually_seriesList($processKey);
+				}
+			}
+			else {
+				Logger::logInfo( "No editable?", $processKey, $seriesId."/".$publicationId);
+				Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
+				header('location: ' . Config::Web( get_short_class($this), 'index'));
+			}
+		}
+	}
+
 
 	/*************** comic vine */
 	function cbz_updateMetadata($processKey)

@@ -13,7 +13,7 @@
 <br />
 <?php endif; ?>
 
-<section id="content">
+<section>
 	<div class="row">
 
 <?php if (Session::get('user_logged_in') == true):?>

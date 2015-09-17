@@ -1,4 +1,4 @@
-	<section id="content">
+	<section>
 		<div class="row">
 <?php if (empty($this->listArray)): ?>
 	<div style="background:hsl(326,50%,75%)">
@@ -14,6 +14,9 @@
 			)
 		);
 		foreach($this->listArray as $key => $value) {
+			if ( isset($this->selectAction) ) {
+				$card->setSelectPath( $this->selectAction . '/' . $value->id );
+			}
 			if ( isset($this->editAction) ) {
 				$card->setEditPath( $this->editAction . '/' . $value->id );
 			}

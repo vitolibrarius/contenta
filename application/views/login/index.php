@@ -1,4 +1,4 @@
-	<section id="content">
+	<section>
 		<div class="row">
 			<div class="grid_4"></div>
 			<div class="grid_4">

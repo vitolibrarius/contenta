@@ -8,6 +8,7 @@ use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
 use \Session as Session;
+use \Localized as Localized;
 
 use utilities\Metadata as Metadata;
 use utilities\FileWrapper as FileWrapper;

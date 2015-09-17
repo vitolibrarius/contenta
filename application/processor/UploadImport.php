@@ -280,6 +280,28 @@ class UploadImport extends Processor
 		return false;
 	}
 
+	public function selectMatchingPublication( PublicationDBO $publication = null )
+	{
+		if ( is_null($publication) == false ) {
+			// clear issues from any autmated searches
+			$this->setMeta( UploadImport::META_RESULTS_ISSUES, null );
+
+			$series = $publication->series();
+			$pub_issue = array();
+			array_setValueForKeypath( "volume/name", $series->name, $pub_issue );
+			array_setValueForKeypath( "volume/id", $series->xid, $pub_issue );
+			array_setValueForKeypath( "id", $publication->xid, $pub_issue );
+			array_setValueForKeypath( "issue_number", $publication->issue_num, $pub_issue );
+			array_setValueForKeypath( "name", $publication->name, $pub_issue );
+			array_setValueForKeypath( "cover_date", $publication->formattedDate( "pub_date", "Y-M-D" ), $pub_issue );
+
+			$this->setMeta( UploadImport::META_RESULTS_ISSUES, array( $pub_issue ) );
+
+			return true;
+		}
+		return false;
+	}
+
 	public function processData()
 	{
 		$wrapper = FileWrapper::instance($this->importFilePath());

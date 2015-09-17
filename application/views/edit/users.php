@@ -4,7 +4,7 @@
 	});
 </script>
 
-	<section id="content">
+	<section>
 		<div class="row">
 			<div class="grid_5">
 

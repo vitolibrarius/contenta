@@ -66,7 +66,7 @@
 	</ul>
 </div>
 
-<section id="content">
+<section>
 	<div class="row">
 
 <?php if ($this->active): ?>

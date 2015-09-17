@@ -1,4 +1,4 @@
-	<section id="content">
+	<section>
 		<div class="row">
 <?php if (empty($this->listArray)): ?>
 	<div style="background:hsl(326,50%,75%)">
