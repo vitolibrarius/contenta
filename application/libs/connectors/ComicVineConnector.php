@@ -66,7 +66,17 @@ class ComicVineConnector extends JSON_EndpointConnector
 		}
 	}
 
-	public function defaultParameters() {
+	public function testConnnector()
+	{
+		$params = $this->defaultParameters();
+		$detail_url = $this->endpointBaseURL() . "/types" . "/?" . http_build_query($params);
+		list( $success, $message, $data ) = $this->performTestConnnector($detail_url);
+
+		return array($success, $message);
+	}
+
+	public function defaultParameters()
+	{
 		$defaultParam = array();
 		$defaultParam["format"] = "json";
 
@@ -74,6 +84,25 @@ class ComicVineConnector extends JSON_EndpointConnector
 			$defaultParam["api_key"] = $this->endpointAPIKey();
 		}
 		return $defaultParam;
+	}
+
+	public function types()
+	{
+		$params = $this->defaultParameters();
+		$detail_url = $this->endpointBaseURL() . "/types" . "/?" . http_build_query($params);
+		try {
+			list($details, $headers) = $this->performGET( $detail_url, false );
+		}
+		catch ( \Exception $e ) {
+			Logger::logException( $e );
+			try {
+				list($details, $headers) = $this->performGET( $detail_url, true );
+			}
+			catch ( \Exception $e2 ) {
+				Logger::logException( $e2 );
+			}
+		}
+		return (isset($details) && is_array($details) ? $details : false);
 	}
 
 	/*

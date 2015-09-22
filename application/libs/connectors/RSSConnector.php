@@ -39,6 +39,27 @@ class RSSConnector extends XML_EndpointConnector
 		parent::__construct($endpoint);
 	}
 
+	public function testConnnector()
+	{
+		$detail_url = $this->endpointBaseURL();
+		list( $success, $message, $data ) = $this->performTestConnnector($detail_url);
+		if ( $success == true ) {
+			if ( isset( $data, $data['version'])) {
+				$channel = $data->channel;
+				$title = (string)(isset($channel->title) ? $channel->title : 'No Channel Title?');
+				$items = (isset($channel->item) ? $channel->item : array());
+
+				$message = $title . PHP_EOL . "(RSS version: " . $data['version'] . ")" .PHP_EOL;
+			}
+			else {
+				$success = false;
+				$message = "Does not seem to be a valid RSS document " . var_export($data, true);
+			}
+		}
+
+		return array($success, $message);
+	}
+
 	public function performGET($url, $force = false)
 	{
 		$this->xmlDocument = null;

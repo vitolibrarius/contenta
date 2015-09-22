@@ -71,6 +71,23 @@ function reportData($array, $columns) {
 	echo PHP_EOL;
 }
 
+function testFilePath($name = null, $purge = false)
+{
+	is_null($name) == false || die( "no test file specified");
+
+	$path = appendPath( SYSTEM_PATH, "tests", $name );
+
+	if ($purge == true && is_file($path) ) {
+		unlink( $path );
+	}
+	return $path;
+}
+
+function testFilePathExists($name = null)
+{
+	$path = testFilePath( $name );
+	return is_file($path);
+}
 
 function loadData( Model $model = null, array $data = array(), array $columns = null )
 {
@@ -91,11 +108,6 @@ function metadataFor($name = null, $purge = false)
 	if ( is_null($name) ) {
 		$name = "test.json";
 	}
-	$path = appendPath( SYSTEM_PATH, "tests", $name );
-
-	if ($purge == true && is_file($path) ) {
-		unlink( $path );
-	}
-
+	$path = testFilePath( $name, $purge );
 	return new Metadata( $path );
 }

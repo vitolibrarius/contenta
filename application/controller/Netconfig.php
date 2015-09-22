@@ -11,6 +11,7 @@ use \Localized as Localized;
 use \Logger as Logger;
 use model\Users as Users;
 use model\Endpoint as Endpoint;
+use model\EndpointDBO as EndpointDBO;
 
 /**
  * Class Endpoint
@@ -40,6 +41,7 @@ class Netconfig extends Controller
 				if ( $netObj != false ) {
 					$this->view->setLocalizedViewTitle("EditRecord");
 					$this->view->saveAction = "netconfig/save";
+					$this->view->testAction = "netconfig/testConnection";
 					$this->view->object = $netObj;
 					$this->view->render( '/edit/endpoint' );
 				}
@@ -52,6 +54,7 @@ class Netconfig extends Controller
 			else {
 				$this->view->setLocalizedViewTitle("NewRecord");
 				$this->view->saveAction = "netconfig/edit_new";
+				$this->view->testAction = "netconfig/testConnection";
 				$this->view->render( '/edit/endpoint_select_type' );
 			}
 		}
@@ -70,6 +73,7 @@ class Netconfig extends Controller
 				if ( is_a($type, "model\\Endpoint_TypeDBO" ) ) {
 					$this->view->setLocalizedViewTitle("NewRecord");
 					$this->view->saveAction = "netconfig/save";
+					$this->view->testAction = "netconfig/testConnection";
 					$this->view->endpoint_type = $type;
 					$this->view->model = Model::Named('Endpoint');
 
@@ -86,6 +90,7 @@ class Netconfig extends Controller
 
 			$this->view->setLocalizedViewTitle("NewRecord");
 			$this->view->saveAction = "netconfig/edit_new";
+			$this->view->testAction = "netconfig/testConnection";
 			$this->view->model = Model::Named('Endpoint');
 			$this->view->render( '/edit/endpoint_select_type' );
 		}
@@ -161,6 +166,36 @@ class Netconfig extends Controller
 			}
 		}
 		$this->index();
+	}
+
+	function testConnection($netId = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Endpoint');
+			if ( $netId > 0 ) {
+				$object = $model->objectForId($netId);
+				if ( $object instanceof EndpointDBO ) {
+					$connection = $object->endpointConnector();
+					list( $success, $message ) = $connection->testConnnector();
+					if ( $success == false ) {
+						Logger::logError( "Error testing connection " . $message, $object, $netId );
+						$message = Localized::GlobalLabel( "Failed" ) . PHP_EOL . $message;
+					}
+					else {
+						$message = Localized::GlobalLabel( "Success" ) . PHP_EOL . $message;
+					}
+					echo $message;
+				}
+				else {
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					echo "could not find $netId";
+				}
+			}
+			else {
+				echo "No id";
+				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+			}
+		}
 	}
 
 }

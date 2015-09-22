@@ -139,6 +139,24 @@ abstract class EndpointConnector
 		return $clean;
 	}
 
+	public function performTestConnnector($url)
+	{
+		$success = true;
+		$message = "";
+		$data = null;
+		try {
+			list($data, $headers) = $this->performGET($url, true);
+		}
+		catch ( \Exception $e ) {
+			$success = false;
+			$message = "exception " . $e->getMessage();
+		}
+
+		return array( $success, $message, $data );
+	}
+
+	abstract public function testConnnector();
+
 	public function performPOST( $url, array $postfields = null, array $headers = null)
 	{
 		echo "perform POST $url" .PHP_EOL;
@@ -229,33 +247,37 @@ abstract class EndpointConnector
 				curl_setopt($ch, CURLOPT_TIMEOUT, 180 );			# seconds to wait for completion
 				curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
 
-				$response = curl_exec($ch);
-				$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				try {
+					$response = curl_exec($ch);
+					$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-				// extract the headers
-				$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-				$headers = http_parse_headers(substr($response, 0, $header_size));
-				$data = substr($response, $header_size);
+					// extract the headers
+					$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+					$headers = http_parse_headers(substr($response, 0, $header_size));
+					$data = substr($response, $header_size);
 
-// 				$whoami = trim(`whoami`);
-// 				$headerLog = new Metadata('/tmp/http_headers_' . $whoami . '.json');
-// 				$info = curl_getinfo($ch);
-// 				$headerLog->setMeta( $url . "/info", $info );
-// 				$headerLog->setMeta( $url . "/headers", $headers );
-// 				$headerLog->setMeta( $url . "/cookie", (isset($headers["Set-Cookie"]) ? $headers["Set-Cookie"] : ''));
+	// 				$whoami = trim(`whoami`);
+	// 				$headerLog = new Metadata('/tmp/http_headers_' . $whoami . '.json');
+	// 				$info = curl_getinfo($ch);
+	// 				$headerLog->setMeta( $url . "/info", $info );
+	// 				$headerLog->setMeta( $url . "/headers", $headers );
+	// 				$headerLog->setMeta( $url . "/cookie", (isset($headers["Set-Cookie"]) ? $headers["Set-Cookie"] : ''));
 
-				if ( $http_code >= 200 && $http_code < 300 ) {
-					Cache::Store( $cacheHeaders, $headers );
-					Cache::Store( $cacheData, $data );
-				}
-				else {
-					Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
+					if ( $http_code >= 200 && $http_code < 300 ) {
+						Cache::Store( $cacheHeaders, $headers );
+						Cache::Store( $cacheData, $data );
+					}
+					else {
+						Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
+								get_class($this), $this->endpointDisplayName());
+						Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
 							get_class($this), $this->endpointDisplayName());
-					Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
-						get_class($this), $this->endpointDisplayName());
-					Logger::logError( "Headers " . var_export($headers, true), get_class($this), $this->endpointDisplayName());
+						throw new ResponseErrorException(curl_error($ch));
+					}
 				}
-				curl_close($ch);
+				finally {
+					curl_close($ch);
+				}
 			}
 			else if ( $this->endpointCompressed() == false) {
 				$data = file_get_contents($url);

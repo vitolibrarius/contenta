@@ -17,55 +17,31 @@
 		exit(1);
 	}
 
-	$cached = "/tmp/contenta-issues-$user.json";
-	$use_cache = false;
-	if (@file_exists($cached) && filemtime($cached) > (time() - ($TTL))) {
-		$use_cache = true;
-	}
+	$url = "https://api.github.com/repos/vitolibrarius/contenta/issues/" . $issueId;
+	$context = array(
+		'http' => array(
+			'ignore_errors' => true,
+			'method' => "GET",
+			'header'=>	"Accept-language: en\r\n" .
+						"User-Agent: PHP/5.2.9\r\n",
+						"Content-Type: application/json\r\n"
+		)
+	);
 
-	if ( $use_cache == true ) {
-		$data = file_get_contents($cached);
-		if ( $data != false ) {
-			$json = json_decode($data, true);
-			if ( json_last_error() != 0 ) {
-				@unlink( $cached );
-			}
-		}
-		else {
-			@unlink( $cached );
-		}
-	}
-
-	if (isset($json) == false) {
-		$url = "https://api.github.com/repos/vitolibrarius/contenta/issues";
-		$context = array(
-			'http' => array(
-				'ignore_errors' => true,
-				'method' => "GET",
-				'header'=>	"Accept-language: en\r\n" .
-							"User-Agent: PHP/5.2.9\r\n",
-							"Content-Type: application/json\r\n"
-			)
-		);
-
-
-		$data = file_get_contents($url, false, stream_context_create($context));
-		if ( $data != false ) {
-			$json = json_decode($data, true);
-			if ( json_last_error() == 0 ) {
-				file_put_contents( $cached, json_encode($json, JSON_PRETTY_PRINT) );
-			}
+	$data = file_get_contents($url, false, stream_context_create($context));
+	if ( $data != false ) {
+		$json = json_decode($data, true);
+		if ( json_last_error() != 0 ) {
+			echo "-----------------------------------------" . PHP_EOL;
+			echo "JSON error" . PHP_EOL . var_export($data, true) . PHP_EOL;
+			echo "-----------------------------------------" . PHP_EOL . PHP_EOL;
+			exit(1);
 		}
 	}
 
 	$issueMatch = null;
-	if (isset($json) && is_array($json)) {
-		foreach( $json as $issue ) {
-			if ( $issue['number'] == $issueId ) {
-				$issueMatch = $issue;
-				break;
-			}
-		}
+	if (isset($json, $json['number']) && $json['number'] == $issueId) {
+		$issueMatch = $json;
 	}
 
 	if ( is_null($issueMatch) ) {

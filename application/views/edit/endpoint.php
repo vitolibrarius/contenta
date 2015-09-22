@@ -22,11 +22,13 @@
 				?>
 					<label>Type</label>
 					<div>
-						<span class="input_restriction" style="width:90%; float:left;"><?php echo $realType->comments; ?></span>
-						<a href="<?php echo $realType->site_url; ?>" target="<?php echo $realType->name; ?>">
-							<img style="display:inline; float:right; max-width: 20px; max-height: 20px;"
-								src="<?php echo $realType->favicon(); ?>">
-						</a>
+						<span class="input_restriction">
+							<a href="<?php echo $realType->site_url; ?>" target="<?php echo $realType->name; ?>">
+								<img style="display:inline; float:right; max-width: 20px; max-height: 20px;"
+									src="<?php echo $realType->favicon(); ?>">
+							</a>
+							<?php echo $realType->comments; ?>
+						</span>
 					</div>
 					<input class="type" type="text" name="displayType" disabled
 						value="<?php echo $realType->displayName(); ?>"
@@ -56,9 +58,37 @@
 				<div class="half omega">
 					<input type="reset"value="<?php echo Localized::GlobalLabel("ResetButton"); ?>"/>
 				</div>
+				<br>
 				</fieldset>
 			</form>
 
 			</div>
+
+			<?php if ( isset($this->object)): ?>
+			<div class="grid_4">
+				<a href="#" class="test button" style="white-space:nowrap;"
+					data-href="<?php echo Config::Web($this->testAction, $this->object->id); ?>"
+					>
+					Test Connection
+				</a>
+				<pre id="ajaxDiv"></pre>
+			</div>
+			<?php endif; ?>
 		</div>
 	</section>
+
+<script type="text/javascript">
+	$('body').on('click', 'a.test', function (e) {
+		$.ajax({
+			type: "GET",
+			url: $(this).attr('data-href'),
+			dataType: "text",
+			success: function(msg){
+				var ajaxDisplay = $('#ajaxDiv');
+				ajaxDisplay.empty().append(msg);
+			}
+		});
+		e.stopPropagation();
+		return false;
+	});
+</script>

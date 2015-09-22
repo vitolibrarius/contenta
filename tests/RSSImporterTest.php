@@ -60,33 +60,42 @@ $rss_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\En
 $ep_model = Model::Named('Endpoint');
 $points = $ep_model->allForTypeCode(Endpoint_Type::RSS);
 if ( is_array($points) == false || count($points) == 0) {
-	$metadata = metadataFor(Endpoint_Type::RSS . ".json");
-	if ( $metadata->isMeta( model\Endpoint::api_key ) == false )
-	{
-		$metadata->setMeta( model\Endpoint::name, "RSS Source" );
-		$metadata->setMeta( model\Endpoint::type_id, $rss_endpoint_type->id );
-		$metadata->setMeta( model\Endpoint::base_url, $rss_endpoint_type->api_url );
-		$metadata->setMeta( model\Endpoint::api_key, "YOUR API KEY HERE" );
-		$metadata->setMeta( model\Endpoint::username, 'vito' );
-		$metadata->setMeta( model\Endpoint::enabled, Model::TERTIARY_TRUE );
-		$metadata->setMeta( model\Endpoint::compressed, Model::TERTIARY_FALSE );
+	$sampleName = Endpoint_Type::RSS . ".json";
+	if ( testFilePathExists($sampleName) == false ) {
+		$samples = array(
+			array(
+				model\Endpoint::name => "binsearch (a.b.c.dcp)",
+				model\Endpoint::type_id => $rss_endpoint_type->id,
+				model\Endpoint::base_url => "http://rss.binsearch.net/rss.php?max=50&g=alt.binaries.comics.dcp",
+				model\Endpoint::api_key => "",
+				model\Endpoint::username => '',
+				model\Endpoint::enabled => Model::TERTIARY_TRUE,
+				model\Endpoint::compressed => Model::TERTIARY_TRUE,
+			),
+		);
 
-		die( "Please configure the RSS.json config file with correct test data" . PHP_EOL);
+		file_put_contents(testFilePath($sampleName), json_encode($samples, JSON_PRETTY_PRINT))
+			|| die( "could not save " . testFilePath($sampleName));
 	}
+	$metadata = metadataFor($sampleName);
+	loadData( $ep_model, $metadata->readMetadata() );
 
-	loadData( $ep_model, array($metadata->readMetadata()), array( "name", "type", "base_url", "api_key") );
+	$points = $ep_model->allForTypeCode(Endpoint_Type::RSS);
 }
 
-$points = $ep_model->allForTypeCode(Endpoint_Type::RSS);
 ($points != false && count($points) > 0) || die('No endpoint defined');
 
-$epoint = $points[0];
+foreach( $points as $epoint ) {
+	my_echo( "-----------------------------------" );
+	my_echo( $epoint );
+	my_echo( "-----------------------------------" );
+	my_echo();
 
-$importer = new RSSImporter( basename(__file__) );
-$importer->setEndpoint($epoint);
-$importer->processData();
-
-my_echo();
+	$importer = new RSSImporter( basename(__file__) );
+	$importer->setEndpoint($epoint);
+	$importer->processData();
+	my_echo();
+}
 
 $rss = Model::Named("Rss")->allObjects();
 reportData($rss,  array(

@@ -30,6 +30,25 @@ class SABnzbdConnector extends JSON_EndpointConnector
 		parent::__construct($endpoint);
 	}
 
+	public function testConnnector()
+	{
+		$success = false;
+		$message = "";
+
+		$params = $this->defaultParameters();
+		$params['mode'] = "qstatus";
+		$status_url = $this->endpointBaseURL() . "?" . http_build_query($params);
+		list( $success, $message, $data ) = $this->performTestConnnector($status_url);
+		if (is_array($json) && isset($json['status'])) {
+			$success = $json['status'];
+			if ( $success == false ) {
+				$message = (isset($json['error']) ? $json['error'] : "unknown connection error");
+			}
+		}
+
+		return array($success, $message);
+	}
+
 	public function defaultParameters() {
 		$defaultParam = array();
 		$defaultParam["output"] = "json";

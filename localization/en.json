@@ -37,7 +37,10 @@
         "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints.",
         "Delete Failure": "Delete Failure",
         "Failed to find request record": "Failed to find request record",
-        "Running process id ": "Running process id "
+        "Running process id ": "Running process id ",
+        "testConnection": "Test Connection",
+        "Success": "Success",
+        "Failed": "Failed"
     },
     "Admin": {
         "title": "Admin",

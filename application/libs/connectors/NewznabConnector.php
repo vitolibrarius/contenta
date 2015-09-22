@@ -27,6 +27,27 @@ class NewznabConnector extends RSSConnector
 		parent::__construct($endpoint);
 	}
 
+	public function testConnnector()
+	{
+		$params = $this->defaultParameters();
+		$params['t'] = 'caps';
+		$detail_url = $this->endpointBaseURL() . "?" . http_build_query($params);
+		list( $success, $message, $data ) = $this->performTestConnnector($detail_url);
+		if ( $success == true ) {
+			if ( isset( $data, $data->server, $data->server['version'])) {
+				$server = $data->server;
+				$title = (string)(isset($server['title']) ? $server['title'] : 'No Title?');
+				$message = $title . PHP_EOL . "(Newznab version: " . $server['version'] . ")" .PHP_EOL;
+			}
+			else {
+				$success = false;
+				$message = "Invalid RSS response " . var_export($data->server, true);
+			}
+		}
+
+		return array($success, $message);
+	}
+
 	public function defaultParameters() {
 		$defaultParam = array();
 		$defaultParam["o"] = "xml";

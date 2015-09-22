@@ -25,6 +25,11 @@ class PreviewsWorldConnector extends EndpointConnector
 		parent::__construct($endpoint);
 	}
 
+	public function testConnnector()
+	{
+		return array(true, "");
+	}
+
 	public function releaseDate()
 	{
 		return $this->releaseDate;
