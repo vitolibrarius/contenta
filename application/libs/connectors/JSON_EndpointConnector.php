@@ -20,7 +20,7 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 
 	public function isDebuggingResponses()
 	{
-		return true;
+		return false;
 	}
 
 	public function performPOST( $url, array $postfields = null, array $headers = null)
