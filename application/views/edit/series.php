@@ -31,7 +31,6 @@
 				?>
 				</div>
 			<?php endforeach; ?>
-			<br>
 
 			<div class="half">
 				<input type="submit" name="edit_submit" value="<?php echo Localized::GlobalLabel("SaveButton"); ?>" />
