@@ -44,49 +44,83 @@
 
 		</div>
 
-	<?php if (isset($this->object, $this->additionalAction) && null != $this->object->externalEndpoint()) : ?>
-		<div class="grid_3">
+		<?php if (isset($this->object, $this->additionalAction) && null != $this->object->externalEndpoint()) : ?>
+			<div class="grid_3">
 
-		<form method="post"
-			action="<?php echo Config::Web($this->additionalAction); ?>/<?php echo (isset($this->object)) ? $this->object->id : null; ?>"
-			name="editForm">
+			<form method="post"
+				action="<?php echo Config::Web($this->additionalAction); ?>/<?php echo (isset($this->object)) ? $this->object->id : null; ?>"
+				name="editForm">
 
-			<fieldset>
-			<legend><?php echo Localized::ModelLabel($this->model->tableName(),"AdditionalLegend"); ?></legend>
+				<fieldset>
+				<legend><?php echo Localized::ModelLabel($this->model->tableName(),"AdditionalLegend"); ?></legend>
 
-				<div class="">
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "xupdated"); ?></label>
-					<input class="xupdated" type="text" name="xupdated" disabled
-						value="<?php echo $this->object->formattedDate('xupdated'); ?>"
-					/>
+					<div class="">
+						<label><?php echo Localized::ModelLabel($this->model->tableName(), "xupdated"); ?></label>
+						<input class="xupdated" type="text" name="xupdated" disabled
+							value="<?php echo $this->object->formattedDate('xupdated'); ?>"
+						/>
+					</div>
+
+					<div class="">
+						<label><?php echo Localized::ModelLabel($this->model->tableName(), "mediaPath"); ?></label>
+						<input class="mediaPath" type="text" name="mediaPath" disabled
+							value="<?php echo $this->object->mediaPath(); ?>"
+						/>
+					</div>
+
+					<div class="">
+						<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::IconName); ?></label>
+						<img src="<?php echo Config::Web( "Image", "icon", $this->model->tableName(), $this->object->id); ?>" />
+					</div>
+
+					<div class="">
+						<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::ThumbnailName); ?></label>
+						<img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $this->object->id); ?>" />
+					</div>
+					<br>
+
+				<div>
+					<input type="submit" name="refreshEndpoint" value="<?php echo Localized::GlobalLabel("RefreshFromEndpoint"); ?>" />
 				</div>
+				</fieldset>
+			</form>
 
-				<div class="">
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "mediaPath"); ?></label>
-					<input class="mediaPath" type="text" name="mediaPath" disabled
-						value="<?php echo $this->object->mediaPath(); ?>"
-					/>
-				</div>
-
-				<div class="">
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::IconName); ?></label>
-					<img src="<?php echo Config::Web( "Image", "icon", $this->model->tableName(), $this->object->id); ?>" />
-				</div>
-
-				<div class="">
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::ThumbnailName); ?></label>
-					<img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $this->object->id); ?>" />
-				</div>
-				<br>
-
-			<div>
-				<input type="submit" name="refreshEndpoint" value="<?php echo Localized::GlobalLabel("RefreshFromEndpoint"); ?>" />
 			</div>
-			</fieldset>
-		</form>
-
-		</div>
-	<?php endif; ?>
+		<?php endif; ?>
 
 	</div>
 </section>
+
+<?php if (isset($this->object)) : ?>
+<section>
+	<div class="row">
+		<?php if (empty($this->object->publications())): ?>
+			<div style="background:hsl(326,50%,75%)">
+				There are no publications
+			</div>
+		<?php else: ?>
+			<?php
+				$card = new html\Card();
+				$card->setDisplayDescriptionKey( "shortDescription" );
+				$card->setDetailKeys( array(
+					model\Publication::issue_num => "issue_num",
+					model\Publication::pub_date => "publishedMonthYear",
+					)
+				);
+
+				foreach($this->object->publications() as $key => $value) {
+					if ( isset($this->editPublicationAction) ) {
+						$card->setEditPath( $this->editPublicationAction . '/' . $value->id );
+					}
+					if ( isset($this->deletePublicationAction) ) {
+						$card->setDeletePath( $this->deletePublicationAction . '/' . $value->id );
+					}
+					echo '<div class="grid_2">' . PHP_EOL;
+					echo $card->render($value);
+					echo '</div>' . PHP_EOL;
+				}
+			?>
+		<?php endif; ?>
+	</div>
+</section>
+<?php endif; ?>

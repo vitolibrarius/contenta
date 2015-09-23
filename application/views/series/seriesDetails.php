@@ -20,47 +20,49 @@
 
 <section>
 	<div class="row">
-<?php if (empty($this->detail->publications())): ?>
-	<div style="background:hsl(326,50%,75%)">
-		There are no publications
-	</div>
-<?php else: ?>
-	<?php
-		$card = new html\Card();
-		$card->setDisplayDescriptionKey( "shortDescription" );
-		$card->setDetailKeys( array(
-			model\Publication::issue_num => "issue_num",
-			model\Publication::pub_date => "publishedMonthYear",
-			)
-		);
+	<?php if (empty($this->detail->publications())): ?>
+		<div style="background:hsl(326,50%,75%)">
+			There are no publications
+		</div>
+	<?php else: ?>
+		<?php
+			$card = new html\Card();
+			$card->setDisplayDescriptionKey( "shortDescription" );
+			$card->setDetailKeys( array(
+				model\Publication::issue_num => "issue_num",
+				model\Publication::pub_date => "publishedMonthYear",
+				)
+			);
 
-		foreach($this->detail->publications() as $key => $value) {
-			if ( isset($this->editAction) ) {
-				$card->setEditPath( $this->editAction . '/' . $value->id );
-			}
-			if ( isset($this->deleteAction) ) {
-	 			$card->setDeletePath( $this->deleteAction . '/' . $value->id );
-			}
-			echo '<div class="grid_2">' . PHP_EOL;
-			echo $card->render($value, function() use($value) {
-						$all_media = $value->media();
-						if ( is_array($all_media) ) {
-							foreach ($all_media as $idx => $media) {
-								$c[] = H::a( array( "href" => Config::Web("/Api/mediaPayload/" . $media->id)),
-											H::img( array( "src" => Config::Web("/public/img/download.png" )))
-										);
-								$c[] = H::a( array( "target" => "slideshow", "href" => Config::Web("/DisplaySeries/mediaSlideshow/".$media->id)),
-											H::img( array( "src" => Config::Web("/public/img/slideshow.png") ))
-										);
+			foreach($this->detail->publications() as $key => $value) {
+				if ( isset($this->editAction) ) {
+					$card->setEditPath( $this->editAction . '/' . $value->id );
+				}
+				if ( isset($this->deleteAction) ) {
+					$card->setDeletePath( $this->deleteAction . '/' . $value->id );
+				}
+				echo '<div class="grid_2">' . PHP_EOL;
+				echo $card->render($value, function() use($value) {
+							$all_media = $value->media();
+							if ( is_array($all_media) ) {
+								foreach ($all_media as $idx => $media) {
+									$c[] = H::a( array( "href" => Config::Web("/Api/mediaPayload/" . $media->id)),
+												H::img( array( "src" => Config::Web("/public/img/download.png" )))
+											);
+									$c[] = H::a( array(
+											"target" => "slideshow",
+											"href" => Config::Web("/DisplaySeries/mediaSlideshow/".$media->id)
+										),
+										H::img( array( "src" => Config::Web("/public/img/slideshow.png") ))
+									);
+								}
 							}
+							return (isset($c) ? $c : null);
 						}
-						return (isset($c) ? $c : null);
-					}
-				);
-			echo '</div>' . PHP_EOL;
-		}
-	?>
-<?php endif; ?>
-</div>
+					);
+				echo '</div>' . PHP_EOL;
+			}
+		?>
+	<?php endif; ?>
 	</div>
 </section>

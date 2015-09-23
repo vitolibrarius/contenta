@@ -116,6 +116,7 @@ class AdminSeries extends Admin
 			}
 			$this->view->saveAction = "/AdminSeries/saveSeries";
 			$this->view->additionalAction = "/AdminSeries/updatedAdditional";
+			$this->view->editPublicationAction = "/AdminPublication/editPublication";
 
 			$this->view->render( '/edit/series');
 		}
