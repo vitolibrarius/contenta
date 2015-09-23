@@ -37,7 +37,7 @@
 <script language="javascript" type="text/javascript">
 	$(document).ready(function($) {
 		$(".logFilter").on('keyup change', function () {
-			delay( refreshJobs(), 100 );
+			delay( refreshJobs(), 250 );
 		});
 		function refreshJobs() {
 			var trace = document.getElementById('trace').value;
@@ -63,6 +63,6 @@
 		refreshJobs();
 		setInterval (function f() {
 			refreshJobs();
-		}, 5000);
+		}, 10000);
 	});
 </script>
