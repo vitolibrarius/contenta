@@ -64,6 +64,19 @@ class Card
 		$this->deletePath = $path;
 	}
 
+	public function wantedPath()
+	{
+		if (isset($this->wantedPath)) {
+			return Config::Web( $this->wantedPath );
+		}
+		return "#";
+	}
+
+	public function setWantedPath( $path = null )
+	{
+		$this->wantedPath = $path;
+	}
+
 	public function flagPath()
 	{
 		if (isset($this->flagPath)) {
@@ -211,6 +224,15 @@ class Card
 								if (isset($favoritePath) && is_null($favoritePath) == false) {
 									$c[] = H::a( array("href" => $favoritePath ),
 										H::span( array( "class" => "icon favorite"))
+									);
+								}
+
+								$supportsWanted = (property_exists($record, "pub_wanted") ? true : false);
+								$isWanted = ($supportsWanted ? ($record->{"pub_wanted"} == true) : false );
+								$wantedPath = $this->wantedPath();
+								if (isset($wantedPath) && is_null($wantedPath) == false && $supportsWanted == true) {
+									$c[] = H::a( array( "class" => "pub_wanted toggle", "data-href" => $wantedPath, "href" => "#" ),
+										H::span( array( "class" => "icon star " . ($isWanted?"on":"")))
 									);
 								}
 

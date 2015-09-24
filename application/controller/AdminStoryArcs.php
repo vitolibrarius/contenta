@@ -94,7 +94,7 @@ class AdminStoryArcs extends Admin
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminStoryArcs/editStoryArc";
-			$this->view->deleteAction = "/AdminStoryArcs/deleteStoryArc";
+			$this->view->wantedAction = "/AdminStoryArcs/toggleWantedStoryArc";
 			$this->view->render( '/admin/story_arcCards', true);
 		}
 	}
@@ -203,6 +203,45 @@ class AdminStoryArcs extends Admin
 				else {
 					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
 					header('location: ' . Config::Web('/AdminStoryArcs/editStoryArc/' . $object->id));
+				}
+			}
+		}
+	}
+
+	function toggleWantedStoryArc($oid = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			if ( $oid > 0 ) {
+				$model = Model::Named('Story_Arc');
+				$object = $model->objectForId($oid);
+				if ( $object != false ) {
+					$oldIsWanted = $object->isWanted();
+					$newIsWanted = ($object->isWanted() ? MODEL::TERTIARY_FALSE : MODEL::TERTIARY_TRUE);
+					$values[Story_Arc::pub_wanted] = $newIsWanted;
+					$errors = $model->updateObject($object, $values);
+					if ( is_array($errors) ) {
+						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
+						foreach ($errors as $attr => $errMsg ) {
+							Session::addValidationFeedback($errMsg);
+						}
+					}
+					else {
+						$object = $model->refreshObject( $object );
+						if ( $newIsWanted == MODEL::TERTIARY_TRUE ) {
+							// now a wanted series, ensure the publications are updated
+							$endpoint = $object->externalEndpoint();
+							if ( $endpoint != false ) {
+								$importer = new ComicVineImporter( $model->tableName() . "_" .$object->xid );
+								$importer->setEndpoint($endpoint);
+								$importer->refreshPublicationsForObject( $object );
+								$importer->daemonizeProcess();
+							}
+							echo json_encode(array(Story_Arc::pub_wanted => true) );
+						}
+						else {
+							echo json_encode(array(Story_Arc::pub_wanted => false) );
+						}
+					}
 				}
 			}
 		}

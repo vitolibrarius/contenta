@@ -59,5 +59,25 @@ $(document).ready(function() {
 		}
 		return false;
 	}) //end click
+});
 
+
+$(document).ajaxComplete(function() {
+	$('a.pub_wanted.toggle').click(function(e){
+		var span = $(this).children("span.icon");
+		var action = $(this).attr("data-href");
+		if (action.length >= 1 ) {
+			$.ajax({
+				type: "GET",
+				url: action,
+				dataType: "text",
+				success: function(msg) {
+					var obj = jQuery.parseJSON( msg );
+					var toggle = (obj.pub_wanted == true);
+					span.toggleClass( "on", toggle );
+				}
+			});
+		}
+		return false; // don't follow the link!
+	});
 });

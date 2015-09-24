@@ -204,7 +204,7 @@ class ComicVineImporter extends ContentMetadataImporter
 	/** PRE-PROCESSING
 	 * imports a minimal record that can later be fleshed out
 	 */
-	public function preprocessRelationship( $model = null, $path = "error", array $cvData = array(), array $map = array() )
+	public function preprocessRelationship( $model = null, $path = "error", array $cvData = array(), array $map = array(), $forceMeta = false, $forceImages = false )
 	{
 		if ( is_null($model) || ($model instanceof \Model) == false) {
 			throw new Exception("Destination Model is required " . var_export($model, true));
@@ -239,7 +239,7 @@ class ComicVineImporter extends ContentMetadataImporter
 			}
 		}
 
-		return $this->enqueue( $model, $importValues, false, false );
+		return $this->enqueue( $model, $importValues, $forceMeta, $forceImages );
 
 	}
 
@@ -381,8 +381,24 @@ class ComicVineImporter extends ContentMetadataImporter
 
 				$issues_array = array_valueForKeypath("issues", $record);
 				if ( is_array($issues_array) ) {
+					$pubModel = Model::Named('Publication');
 					foreach ( $issues_array as $issue ) {
-						$enqueued = $this->preprocessRelationship( Model::Named('Publication'), $path, $issue, $this->importMap_publication() );
+						$destinationNeedsUpdate = $object->isWanted();
+						if ( $object->isWanted() ) {
+							$pub_obj = $pubModel->objectForExternal($issue['id'], $this->endpointTypeCode());
+							if ( $pub_obj instanceof DataObject ) {
+								$destinationNeedsUpdate = $pub_obj->needsEndpointUpdate();
+							}
+						}
+
+						$enqueued = $this->preprocessRelationship(
+							$pubModel,
+							$path,
+							$issue,
+							$this->importMap_publication(),
+							$destinationNeedsUpdate,
+							$destinationNeedsUpdate
+						);
 					}
 				}
 			}
@@ -432,7 +448,14 @@ class ComicVineImporter extends ContentMetadataImporter
 				$issuesReference = array_valueForKeypath("issues", $record);
 				if ( is_array($issuesReference) && $object->isWanted() ) {
 					foreach ( $issuesReference as $issue ) {
-						$enqueued = $this->preprocessRelationship( Model::Named('Publication'), $path, $issue, $this->importMap_publication() );
+						$enqueued = $this->preprocessRelationship(
+							Model::Named('Publication'),
+							$path,
+							$issue,
+							$this->importMap_publication(),
+							true,
+							true
+						);
 					}
 				}
 			}
@@ -681,7 +704,9 @@ class ComicVineImporter extends ContentMetadataImporter
 			$object = $object->model()->refreshObject($object);
 			$objTable = $object->tableName();
 			$needsUpdate = $object->needsEndpointUpdate();
-			if ( $needsUpdate == true ) {
+			$isWanted = $object->isWanted();
+
+			if ( $needsUpdate == true || $isWanted == true ) {
 				$enqueue_method = 'enqueue_' . $objTable;
 				if (method_exists($this, $enqueue_method)) {
 					$this->$enqueue_method( array( "xid" => $object->xid), true, true );
@@ -699,5 +724,4 @@ class ComicVineImporter extends ContentMetadataImporter
 			}
 		}
 	}
-
 }

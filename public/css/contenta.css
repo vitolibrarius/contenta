@@ -50,7 +50,6 @@ span.icon {
     font-size: 2em;
     padding: 1px;
 }
-span.icon.on:before 		{ color:red;}
 
 span.icon.true:before		{ content:"\2713"; }
 span.icon.false:before		{ content:"\2717"; }
@@ -60,8 +59,11 @@ span.icon.recycle:before	{ content:"\2672"; }
 span.icon.retry:before		{ content:"\21BA"; }
 span.icon.run:before		{ content:"\1F3C3"; }
 
-span.icon.flag:before 		{ content:"\2690"; color: grey; font-size: 32px;}
-span.icon.favorite:before	{ content:"\2665"; color: grey; font-size: 32px; }
+span.icon.flag:before 		{ content:"\2690"; }
+span.icon.favorite:before	{ content:"\2665"; }
+span.icon.star:before		{ content:"\2605"; }
+
+span.icon.on:before 		{ color:red;}
 
 .badge {
 	clear: right;

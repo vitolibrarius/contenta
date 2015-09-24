@@ -72,7 +72,7 @@ class AdminSeries extends Admin
 			$this->view->listArray = $select->fetchAll();
 			$this->view->toggleWantedAction = "/AdminSeries/toggleWantedSeries";
 			$this->view->editAction = "/AdminSeries/editSeries";
-			$this->view->deleteAction = "/AdminSeries/deleteSeries";
+			$this->view->wantedAction = "/AdminSeries/toggleWantedSeries";
 			$this->view->render( '/admin/seriesCards', true);
 		}
 	}
@@ -140,6 +140,7 @@ class AdminSeries extends Admin
 						}
 					}
 					else {
+						$object = $model->refreshObject( $object );
 						if ( $newIsWanted == MODEL::TERTIARY_TRUE ) {
 							// now a wanted series, ensure the publications are updated
 							$endpoint = $object->externalEndpoint();
@@ -149,10 +150,10 @@ class AdminSeries extends Admin
 								$importer->refreshPublicationsForObject( $object );
 								$importer->daemonizeProcess();
 							}
-							return "yes";
+							echo json_encode(array(Series::pub_wanted => true) );
 						}
 						else {
-							return "no";
+							echo json_encode(array(Series::pub_wanted => false) );
 						}
 					}
 				}
