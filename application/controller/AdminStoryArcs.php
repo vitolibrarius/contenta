@@ -82,6 +82,9 @@ class AdminStoryArcs extends Admin
 					$qualifiers[] = Qualifier::Equals( Story_Arc::id, 0 );
 				}
 			}
+			if ( isset($_GET['wanted']) && $_GET['wanted'] === 'true') {
+				$qualifiers[] = Qualifier::Equals( Story_Arc::pub_wanted, 1 );
+			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {

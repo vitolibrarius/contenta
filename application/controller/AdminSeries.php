@@ -61,6 +61,9 @@ class AdminSeries extends Admin
 			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
 				$qualifiers[] = Qualifier::Equals( Series::publisher_id, $_GET['publisher_id'] );
 			}
+			if ( isset($_GET['wanted']) && $_GET['wanted'] === 'true') {
+				$qualifiers[] = Qualifier::Equals( Series::pub_wanted, 1 );
+			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
