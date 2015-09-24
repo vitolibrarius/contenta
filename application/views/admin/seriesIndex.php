@@ -48,6 +48,16 @@
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "year" ); ?>"
 				value="">
 		</div>
+		<div class="grid_1">
+			<label class="checkbox" for="searchMedia" >
+				<input type="checkbox"  name="searchWanted" id="searchWanted"
+					class="text_input"
+					value="1"
+					checked>
+				</input>
+				Wanted
+			</label>
+		</div>
 	</div>
 	</form>
 </section>
@@ -94,6 +104,7 @@ $(document).ready(function($) {
 			data: {
 				publisher_id: $('#searchPublisher').val(),
 				name: $('input#searchName').val(),
+				wanted: $('input#searchWanted').is(':checked'),
 				year:  $('input#searchYear').val()
 			},
 			dataType: "text",

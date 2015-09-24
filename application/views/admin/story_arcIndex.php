@@ -28,19 +28,19 @@
 <section>
 	<form id='searchForm' name='searchForm'>
 	<div class="row">
-		<div class="grid_3">
+		<div class="grid_2">
 			<select name="searchPublisher" id="searchPublisher"
 					class="text_input">
 				<option></option>
 			</select>
 		</div>
-		<div class="grid_3">
+		<div class="grid_2">
 			<input type="text" name="searchSeries" id="searchSeries"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "series_id" ); ?>"
 				value="">
 		</div>
-		<div class="grid_3">
+		<div class="grid_2">
 			<select name="searchCharacter" id="searchCharacter"
 					class="text_input">
 			</select>
@@ -50,6 +50,16 @@
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
 				value="">
+		</div>
+		<div class="grid_1">
+			<label class="checkbox" for="searchMedia" >
+				<input type="checkbox"  name="searchWanted" id="searchWanted"
+					class="text_input"
+					value="1"
+					checked>
+				</input>
+				Wanted
+			</label>
 		</div>
 	</div>
 	</form>
@@ -125,6 +135,7 @@ $(document).ready(function($) {
 				series_name: $('#searchSeries').val(),
 				character_id: $('#searchCharacter').val(),
 				publisher_id: $('#searchPublisher').val(),
+				wanted: $('input#searchWanted').is(':checked'),
 				name: $('input#searchName').val()
 			},
 			dataType: "text",
