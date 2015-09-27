@@ -1,6 +1,6 @@
 <style>
 .row.data {
-	background-color: #e2e2e2;
+	background-color: #e3e3e3;
 	vertical-align: middle;
 	border-bottom: 1px solid #FFFFFF;
 }
@@ -8,7 +8,7 @@
 
 <div class="paging">
 	<ul>
-		<li><a href="<?php echo Config::Web('/AdminWanted/index_story_arc'); ?>">Wanted Story Arcs</a></li>
+		<li><a href="<?php echo Config::Web('/AdminWanted/index'); ?>">Wanted Series</a></li>
 	</ul>
 	<ul>
 		<li><a href="<?php echo Config::Web('/AdminWanted/newznab'); ?>">Manual Search</a></li>
@@ -21,7 +21,7 @@
 		<div class="row data">
 			<div class="grid_6">
 				<h2 style="display: inline">
-					<a href="#" class="wanted" data-series_id="<?php echo $value->id; ?>"><?php echo $value->displayName(); ?></a>
+					<a href="#" class="wanted" data-story_arc_id="<?php echo $value->id; ?>"><?php echo $value->displayName(); ?></a>
 				</h2>
 			</div>
 			<div class="grid_2">
@@ -45,12 +45,12 @@
 
 <script type="text/javascript">
 	$('body').on('click', 'a.wanted', function (e) {
-		var safe_guid = "ajaxDiv_"+ $(this).attr('data-series_id');
+		var safe_guid = "ajaxDiv_"+ $(this).attr('data-story_arc_id');
 		$.ajax({
 			type: "GET",
 			url: "<?php echo Config::Web('/AdminWanted/pubsWanted'); ?>",
 			data: {
-				series_id: $(this).attr('data-series_id')
+				story_arc_id: $(this).attr('data-story_arc_id')
 			},
 			dataType: "text",
 			success: function(msg){

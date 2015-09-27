@@ -71,6 +71,35 @@ class AdminWanted extends Admin
 		}
 	}
 
+	function index_story_arc()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->addStylesheet("select2.min.css");
+			$this->view->addScript("select2.min.js");
+
+			$model = Model::Named('Story_Arc');
+
+			$select = SQL::Select($model);
+			$select->where(Qualifier::AndQualifier(
+				Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE ),
+				Qualifier::OrQualifier(
+					Qualifier::IsNull( Series::pub_count),
+					Qualifier::IsNull( Series::pub_available ),
+					Qualifier::AttributeCompare( Series::pub_count, Qualifier::GREATER_THAN, Series::pub_available )
+					)
+				)
+			);
+			$select->orderBy( array( array(SQL::SQL_ORDER_ASC => Series::name)));
+			$select->limit(0);
+
+			//Session::addPositiveFeedback("select ". $select);
+
+			$this->view->model = $model;
+			$this->view->listArray = $select->fetchAll();
+			$this->view->render( '/wanted/index_story_arc');
+		}
+	}
+
 	function pubsWanted()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
@@ -86,6 +115,14 @@ class AdminWanted extends Admin
 			if ( isset($_GET['series_id']) ) {
 				$qualifiers[] = Qualifier::Equals( Publication::series_id, $_GET['series_id']);
 			}
+			if ( isset($_GET['story_arc_id']) ) {
+				$saj_model = Model::Named('Story_Arc_Publication');
+				$qualifiers[] = Qualifier::InSubQuery( Publication::id,
+					SQL::Select($saj_model, array("publication_id"))
+						->where( Qualifier::Equals( "story_arc_id", $_GET['story_arc_id']))
+						->limit(0)
+				);
+			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
@@ -99,31 +136,6 @@ class AdminWanted extends Admin
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->render( '/wanted/wanted', true);
-		}
-	}
-
-	function storyArcIndex()
-	{
-		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$this->view->addStylesheet("select2.min.css");
-			$this->view->addScript("select2.min.js");
-
-			$model = Model::Named('Story_Arc');
-
-			$select = SQL::Select($model);
-			$select->where(Qualifier::AndQualifier(
-				Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE ),
-				Qualifier::NotQualifier( Qualifier::Equals( Story_Arc::pub_count, Story_Arc::pub_available ))
-				)
-			);
-			$select->orderBy( array( array(SQL::SQL_ORDER_ASC => Story_Arc::name)));
-			$select->limit(0);
-
-					Session::addPositiveFeedback( $select->sqlStatement() . "  " . var_export($select->sqlParameters(), true) );
-
-			$this->view->model = $model;
-			$this->view->listArray = $select->fetchAll();
-			$this->view->render( '/wanted/index');
 		}
 	}
 
