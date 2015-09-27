@@ -198,6 +198,11 @@ abstract class Qualifier extends SQL
 
 		throw new \Exception("Unable to join on empty list");
 	}
+
+	public static function AttributeCompare( $keyA = null, $op = Qualifier::EQ, $keyB = null, $prefix = '')
+	{
+		return new AttributeBasicQualifier( $keyA, $op, $keyB, $prefix );
+	}
 }
 
 class OrQualifier extends Qualifier
@@ -373,6 +378,37 @@ class BasicQualifier extends Qualifier
 		return
 			(strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.') . $this->attribute . " "
 			. $this->operator . " " . $this->prefixedAttribute( $this->attribute );
+	}
+}
+
+class AttributeBasicQualifier extends Qualifier
+{
+	public $attributeA;
+	public $operator;
+	public $attributeB;
+
+	public function __construct( $keyA = null, $op = Qualifier::EQ, $keyB = null, $prefix = '')
+	{
+		parent::__construct($prefix);
+		if ( is_null($keyA) || is_null($keyB) ) {
+			throw new \Exception( "Must specify attribute keys (a/b)" );
+		}
+		$this->attributeA = $keyA;
+		$this->operator = $op;
+		$this->attributeB = $keyB;
+	}
+
+	public function sqlParameters()
+	{
+		return null;
+	}
+
+	public function sqlStatement()
+	{
+		return
+			(strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.') . $this->attributeA
+				. " " . $this->operator . " "
+				. (strlen($this->tablePrefix) == 0 ? '' : $this->tablePrefix . '.') . $this->attributeB;
 	}
 }
 

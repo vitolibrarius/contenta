@@ -53,11 +53,17 @@ class AdminWanted extends Admin
 			$select = SQL::Select($series_model);
 			$select->where(Qualifier::AndQualifier(
 				Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE ),
-				Qualifier::NotQualifier( Qualifier::Equals( Series::pub_count, Series::pub_available ))
+				Qualifier::OrQualifier(
+					Qualifier::IsNull( Series::pub_count),
+					Qualifier::IsNull( Series::pub_available ),
+					Qualifier::AttributeCompare( Series::pub_count, Qualifier::GREATER_THAN, Series::pub_available )
+					)
 				)
 			);
 			$select->orderBy( array( array(SQL::SQL_ORDER_ASC => Series::name)));
 			$select->limit(0);
+
+			//Session::addPositiveFeedback("select ". $select);
 
 			$this->view->model = $series_model;
 			$this->view->listArray = $select->fetchAll();

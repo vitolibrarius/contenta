@@ -56,7 +56,10 @@ UL.mytabs LI.current A {
 				<span><?php echo $value->start_year; ?></span>
 			</div>
 			<div class="grid_2">
-				<span style="float: right;">Issues <?php echo $value->pub_available; ?> / <?php echo $value->pub_count; ?></span>
+				<span style="float: right;">
+					Issues <?php echo (isset($value->pub_available)?$value->pub_available:0); ?>
+					/ <?php echo $value->pub_count; ?>
+				</span>
 			</div>
 		</div>
 		<span id='<?php echo "ajaxDiv_" . $value->id; ?>'></span>
