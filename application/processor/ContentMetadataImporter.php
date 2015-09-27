@@ -25,6 +25,7 @@ abstract class ContentMetadataImporter extends EndpointImporter
 {
 	const META_ENQUEUE_ROOT = 	'enqueued/';
 	const META_IMPORT_ROOT = 	'import/';
+	const META_PURGE_ROOT = 	'purge/';
 
 	const META_IMPORT_TYPE = 		'meta_type';
 	const META_IMPORT_XID = 		'xid';
@@ -154,6 +155,96 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		return $this->enqueue( Model::Named('Story_Arc'), $importValues, $forceMeta, $forceImages);
 	}
 
+	// purge records?
+	public function purge_publisher(array $metaRecord = array())
+	{
+		if ( isset($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == false ||
+			strlen($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == 0) {
+			throw new Exception("External ID '" . ContentMetadataImporter::META_IMPORT_XID . "'is required" . var_export($metaRecord, true));
+		}
+
+		$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
+		$object = Model::Named("Publisher")->objectForExternal($xid, $this->endpointTypeCode());
+		if ( $object != false ) {
+			// bump the xupdated date so this object wont take an update slot for awhile
+			return Model::Named("Publisher")->updateObject( $object, array( "xupdated" => time()) );
+		}
+
+		return true;
+	}
+
+	public function purge_series(array $metaRecord = array())
+	{
+		if ( isset($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == false ||
+			strlen($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == 0) {
+			throw new Exception("External ID '" . ContentMetadataImporter::META_IMPORT_XID . "'is required" . var_export($metaRecord, true));
+		}
+
+		$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
+		$object = Model::Named("Series")->objectForExternal($xid, $this->endpointTypeCode());
+		if ( $object != false ) {
+			// bump the xupdated date so this object wont take an update slot for awhile
+			return Model::Named("Series")->updateObject( $object, array( "xupdated" => time()) );
+		}
+
+		return true;
+	}
+
+	public function purge_character(array $metaRecord = array())
+	{
+		if ( isset($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == false ||
+			strlen($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == 0) {
+			throw new Exception("External ID '" . ContentMetadataImporter::META_IMPORT_XID . "'is required" . var_export($metaRecord, true));
+		}
+
+		$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
+		$object = Model::Named("Character")->objectForExternal($xid, $this->endpointTypeCode());
+		if ( $object != false ) {
+			return Model::Named("Character")->deleteObject( $object );
+		}
+		else {
+			// object already purged
+			return true;
+		}
+
+		return false;
+	}
+
+	public function purge_publication(array $metaRecord = array())
+	{
+		if ( isset($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == false ||
+			strlen($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == 0) {
+			throw new Exception("External ID '" . ContentMetadataImporter::META_IMPORT_XID . "'is required" . var_export($metaRecord, true));
+		}
+
+		$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
+		$object = Model::Named("Publication")->objectForExternal($xid, $this->endpointTypeCode());
+		if ( $object != false ) {
+			// bump the xupdated date so this object wont take an update slot for awhile
+			return Model::Named("Publication")->updateObject( $object, array( "xupdated" => time()) );
+		}
+
+		return true;
+	}
+
+	public function purge_story_arc(array $metaRecord = array())
+	{
+		if ( isset($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == false ||
+			strlen($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == 0) {
+			throw new Exception("External ID '" . ContentMetadataImporter::META_IMPORT_XID . "'is required" . var_export($metaRecord, true));
+		}
+
+		$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
+		$object = Model::Named("Story_Arc")->objectForExternal($xid, $this->endpointTypeCode());
+		if ( $object != false ) {
+			// bump the xupdated date so this object wont take an update slot for awhile
+			return Model::Named("Story_Arc")->updateObject( $object, array( "xupdated" => time()) );
+		}
+
+		return true;
+	}
+
+
 	public function preprocess($model = null, array $metaRecord = array())
 	{
 		if ( is_null($model) || ($model instanceof \Model) == false) {
@@ -256,8 +347,8 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				}
 				$objects = $objectModel->allObjectsNeedingExternalUpdate($size);
 
+				Logger::logInfo( "Updating $size $objectType records", $this->type, $this->guid );
 				foreach( $objects as $idx => $object ) {
-// 					Logger::logInfo( "Enqueuing $idx: " . $object, $this->type, $this->guid );
 					call_user_func_array(array($this, $methodName), array( array( "xid" => $object->xid), true, true) );
 				}
 				$this->strictErrors = false;
@@ -291,9 +382,22 @@ abstract class ContentMetadataImporter extends EndpointImporter
 						}
 					}
 					catch ( Exception $e ) {
-						Logger::LogException( $e );
-						if ( $this->strictErrors == true ) {
-							throw $e;
+						switch( $e->getCode() ) {
+							case 101:
+								Logger::logError( $meta[ContentMetadataImporter::META_IMPORT_TYPE] . " not found for xid " . $path,
+									$this->type, $this->guid);
+								// move object to the purge list
+								$this->setMeta( $new, null );
+								$purge = appendPath( ComicVineImporter::META_PURGE_ROOT, $path);
+								$this->setMeta( $purge, $meta );
+								break;
+
+							default:
+								Logger::LogException( $e );
+								if ( $this->strictErrors == true ) {
+									throw $e;
+								}
+								break;
 						}
 					}
 				}
@@ -326,6 +430,30 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				}
 				else {
 					throw new Exception("failed to find processing function " . $finalize_method );
+				}
+			}
+		}
+
+		$toBePurged = $this->getMeta( ComicVineImporter::META_PURGE_ROOT );
+		if ( is_array($toBePurged) && count($toBePurged) > 0 ) {
+			foreach( $toBePurged as $path => $meta ) {
+				$purge_method = 'purge_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
+				if (method_exists($this, $purge_method)) {
+					try {
+						$success_return = $this->$purge_method($meta);
+						if ( is_null($success_return) ) {
+							throw new Exception("purge error " . $purge_method );
+						}
+					}
+					catch ( Exception $e ) {
+						Logger::LogException( $e );
+						if ( $this->strictErrors == true ) {
+							throw $e;
+						}
+					}
+				}
+				else {
+					throw new Exception("failed to find purge function " . $finalize_method );
 				}
 			}
 		}

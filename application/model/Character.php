@@ -170,12 +170,26 @@ class Character extends Model
 		if ( $object != false && $object instanceof model\CharacterDBO)
 		{
 			$alias_model = Model::Named("Character_Alias");
-			if ( $alias_model->deleteAllForCharacter($object) == true ) {
-				return parent::deleteObject($object);
+			if ( $alias_model->deleteAllForCharacter($object) == false ) {
+				throw new exceptions\DeleteObjectException("Failed to delete aliases " . $object, $object->id );
 			}
-			else {
-				throw new exceptions\DeleteObjectException("Failed to delete " . $object, $object->id );
+
+			$pub_char_model = Model::Named("Publication_Character");
+			if ( $pub_char_model->deleteAllForCharacter($object) == false ) {
+				throw new exceptions\DeleteObjectException("Failed to delete publication characters " . $object, $object->id );
 			}
+
+			$story_char_model = Model::Named("Story_Arc_Character");
+			if ( $story_char_model->deleteAllForCharacter($object) == false ) {
+				throw new exceptions\DeleteObjectException("Failed to delete story_arc characters " . $object, $object->id );
+			}
+
+			$series_model = Model::Named("Series_Character");
+			if ( $series_model->deleteAllForCharacter($object) == false ) {
+				throw new exceptions\DeleteObjectException("Failed to delete series characters " . $object, $object->id );
+			}
+
+			return parent::deleteObject($object);
 		}
 
 		return false;

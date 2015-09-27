@@ -117,18 +117,8 @@ class ComicVineConnector extends JSON_EndpointConnector
 		$detail_url = $this->endpointBaseURL() . "/" . $resource . "/"
 			. ($type == null ? '' : $type . "-") . $id . "/?" . http_build_query($params);
 
-		try {
-			list($details, $headers) = $this->performGET( $detail_url, false );
-		}
-		catch ( \Exception $e ) {
-			Logger::logException( $e );
-			try {
-				list($details, $headers) = $this->performGET( $detail_url, true );
-			}
-			catch ( \Exception $e2 ) {
-				Logger::logException( $e2 );
-			}
-		}
+		list($details, $headers) = $this->performGET( $detail_url, false );
+
 		return (isset($details) && is_array($details) ? $details : false);
 	}
 
@@ -481,14 +471,12 @@ class ComicVineConnector extends JSON_EndpointConnector
 		list($json, $headers) = parent::performGET($url, $force);
 		if ( $json != false )
 		{
-			if ( $json['status_code'] == 1)
-			{
+			if ( $json['status_code'] == 1) {
 				return array($json['results'], $headers);
 			}
-			else
-			{
-				Logger::logError( 'Error ' . $json['status_code'] . ': ' . $json['error']
-					. 'with URL: ' . $this->cleanURLForLog($url), get_short_class($this), $this->endpoint());
+			else {
+				Logger::logError( $json['status_code'] . ': ' . $json['error']
+					. ' with URL: ' . $this->cleanURLForLog($url), get_short_class($this), $this->endpoint());
 				throw new EndpointConnectionException( $json['error'], $json['status_code'] );
 			}
 		}

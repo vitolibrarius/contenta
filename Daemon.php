@@ -134,6 +134,8 @@ try {
 			$job_model = Model::Named('Job');
 			$jobObj = $job_model->objectForId( $job_id );
 			if ( $jobObj instanceof model\JobDBO ) {
+				Logger::instance()->setTrace($jobObj->displayName(), $job_id);
+
 				$jobList = $job_run_model->allForJob($jobObj );
 				if ( is_array($jobList) == false || count($jobList) == 0) {
 					$jobRunning = $job_run_model->create($jobObj, $jobObj->jobType(), $processorName, $guid, $pid);
