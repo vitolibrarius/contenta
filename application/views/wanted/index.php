@@ -44,6 +44,7 @@
 
 
 <script type="text/javascript">
+$(document).ready(function(){
 	$('body').on('click', 'a.wanted', function (e) {
 		var safe_guid = "ajaxDiv_"+ $(this).attr('data-series_id');
 		$.ajax({
@@ -55,16 +56,17 @@
 			dataType: "text",
 			success: function(msg){
 				var ajaxDisplay = $('#' + safe_guid);
+				ajaxDisplay.hide();
 				ajaxDisplay.empty().append(msg);
+				ajaxDisplay.fadeIn('slow');
 			}
 		});
 		e.stopPropagation();
 		return false;
 	});
 
-$(document).ajaxComplete(function(){
 	$('body').on('click', 'a.nzb', function (e) {
-		var safe_guid = $(this).attr('data-safe_guid');
+		var ref_guid = "#" + $(this).attr('data-ref_guid');
 		$.ajax({
 			type: "GET",
 			url: "<?php echo Config::Web('/AdminWanted/downloadNewznab'); ?>",
@@ -77,15 +79,17 @@ $(document).ajaxComplete(function(){
 			},
 			dataType: "text",
 			success: function(msg){
-				var divId = "ajaxDiv_"+safe_guid;
-				var ajaxDisplay = document.getElementById(divId);
-				ajaxDisplay.innerHTML = msg;
+				var ajaxDisplay = $(ref_guid);
+				ajaxDisplay.hide();
+				ajaxDisplay.empty().append(msg);
+				ajaxDisplay.fadeIn(100).show();
 			}
 		});
 		e.stopPropagation();
 		return false;
 	});
-	$('body').on('click', 'a.srch', function (e) {
+
+		$('body').on('click', 'a.srch', function (e) {
 		var pub_id = $(this).attr('data-pub_id');
 		$(this).fadeOut(100).hide();
 		$.ajax({
@@ -93,13 +97,15 @@ $(document).ajaxComplete(function(){
 			url: "<?php echo Config::Web('/AdminWanted/newznabQuicksearch/');?>"+pub_id,
 			dataType: "text",
 			success: function(msg){
-				var divId = "ajaxDiv_"+pub_id;
-				var ajaxDisplay = document.getElementById(divId);
-				ajaxDisplay.innerHTML = msg;
+				var ajaxDisplay = $("#ajaxDiv_"+pub_id);
+				ajaxDisplay.hide();
+				ajaxDisplay.empty().append(msg);
+				ajaxDisplay.fadeIn(100).show();
 			}
 		});
 		e.stopPropagation();
 		return false;
 	});
+
 });
 </script>

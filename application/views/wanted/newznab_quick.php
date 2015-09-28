@@ -33,17 +33,15 @@
 			<td>
 				<?php $flux = $this->fluxModel->objectForSourceIdEndpointGUID( $this->endpoint_id, $item['guid'] );
 					if ($flux == false ) : ?>
-						<div id="ajaxDiv_<?php echo $item['safe_guid']; ?>">
+						<div id="dnld_<?php echo $item['safe_guid']; ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"
 							data-name="<?php echo $item['title']; ?>"
 							data-endpoint_id="<?php echo $this->endpoint_id; ?>"
 							data-guid="<?php echo $item['guid']; ?>"
 							data-url="<?php echo $item['url']; ?>"
 							data-postedDate="<?php echo $item['publishedDate']; ?>"
-							data-safe_guid="<?php echo $item['safe_guid']; ?>"
-							>
-							<img style="max-width: 20px; max-height: 20px;" src="<?php echo $endpointType->favicon(); ?>">&nbsp;Download
-						</a>
+							data-ref_guid="dnld_<?php echo $item['safe_guid']; ?>"
+							>Download</a>
 						</div>
 					<?php else: ?>
 						<div>

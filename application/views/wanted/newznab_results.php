@@ -47,9 +47,7 @@
 							data-url="<?php echo $item['url']; ?>"
 							data-postedDate="<?php echo $item['publishedDate']; ?>"
 							data-safe_guid="<?php echo $item['safe_guid']; ?>"
-							>
-							<img style="max-width: 20px; max-height: 20px;" src="<?php echo $endpointType->favicon(); ?>">&nbsp;Download
-						</a>
+							>Download</a>
 						</div>
 					<?php else: ?>
 						<div>
