@@ -25,7 +25,7 @@
 			if ( isset($this->deleteAction) ) {
 				$card->setDeletePath( $this->deleteAction . '/' . $value->id );
 			}
-			echo '<div class="grid_3">' . PHP_EOL;
+			echo '<div class="grid_4">' . PHP_EOL;
 			echo $card->render($value);
 			echo '</div>' . PHP_EOL;
 		}

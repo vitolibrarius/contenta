@@ -37,8 +37,10 @@
 		);
 		foreach($this->list as $key => $value) {
 			$card->setEditPath( $this->editAction . '/' . $value->id );
-			$card->setDeletePath( $this->deleteAction . '/' . $value->id );
-			echo '<div class="grid_2">' . PHP_EOL;
+			if ( isset( $this->deleteAction ) ) {
+				$card->setDeletePath( $this->deleteAction . '/' . $value->id );
+			}
+			echo '<div class="grid_3">' . PHP_EOL;
 			echo $card->render($value);
 			echo '</div>' . PHP_EOL;
 		}

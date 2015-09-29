@@ -115,7 +115,7 @@
 					if ( isset($this->deletePublicationAction) ) {
 						$card->setDeletePath( $this->deletePublicationAction . '/' . $value->id );
 					}
-					echo '<div class="grid_2">' . PHP_EOL;
+					echo '<div class="grid_3">' . PHP_EOL;
 					echo $card->render($value);
 					echo '</div>' . PHP_EOL;
 				}

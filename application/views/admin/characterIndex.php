@@ -38,7 +38,7 @@
 			<input type="text" name="searchName" id="searchName"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
-				value="">
+				value="<?php echo (isset($this->search_name) ? $this->search_name : ''); ?>">
 		</div>
 	</div>
 	</form>

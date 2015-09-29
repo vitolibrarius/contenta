@@ -62,6 +62,14 @@ class AdminCharacters extends Admin
 			}
 			$select->orderBy( $model->sortOrder() );
 
+			if ( count($qualifiers) > 0 ) {
+				$count = SQL::Count( $model, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
+			}
+			else {
+				$count = SQL::Count( $model )->fetch();
+			}
+			$this->view->total = $count->count;
+
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminCharacters/editCharacter";

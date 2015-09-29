@@ -39,7 +39,6 @@ class AdminPublishers extends Admin
 			$this->view->model = $model;
 			$this->view->list = $model->allObjects();
 			$this->view->editAction = "/AdminPublishers/editPublisher";
-			$this->view->deleteAction = "/AdminPublishers/deletePublisher";
 			$this->view->render( '/publishers/index');
 		}
 	}

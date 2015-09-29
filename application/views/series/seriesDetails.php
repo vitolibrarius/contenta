@@ -41,7 +41,7 @@
 				if ( isset($this->deleteAction) ) {
 					$card->setDeletePath( $this->deleteAction . '/' . $value->id );
 				}
-				echo '<div class="grid_2">' . PHP_EOL;
+				echo '<div class="grid_3">' . PHP_EOL;
 				echo $card->render($value, function() use($value) {
 							$all_media = $value->media();
 							if ( is_array($all_media) ) {
