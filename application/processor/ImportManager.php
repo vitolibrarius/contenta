@@ -118,7 +118,7 @@ class ImportManager extends Processor
 
 	function chunkedArray() {
 		$array = $this->processData();
-		return array_chunk ( $array, 10, true);
+		return array_chunk ( $array, 8, true);
 	}
 
 	function totalChunks() {

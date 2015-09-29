@@ -45,7 +45,14 @@ class AdminUploadRepair extends Admin
 			$model = Model::Named("Job_Running");
 			$model->clearFinishedProcesses();
 
+			$sessionKey = get_short_class($this) . "_chunkNum";
+			if ( $chunkNum <= 0 ) {
+				$chunkNum = Session::get( $sessionKey, 0 );
+			}
+
 			$idx = $processor->correctChunkIndex($chunkNum);
+			Session::set( $sessionKey, $idx );
+
 			$this->view->job_model = $model;
 			$this->view->active = $processor->chunk($idx);;
 			$this->view->pageCurrent = $idx;
