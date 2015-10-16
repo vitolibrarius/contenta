@@ -6,8 +6,7 @@ use \Localized as Localized;
 use \Logger as Logger;
 use \Exception as Exception;
 use \Session as Session;
-
-use utilities\Metadata as Metadata;
+use \Metadata as Metadata;
 
 /**
  * Class Processor
@@ -97,7 +96,7 @@ abstract class Processor
 	{
 		if ( isset($this->metatdata) == false) {
 			$this->createWorkingDirectory();
-			$this->metafile = Metadata::forDirectory($this->workingDirectory());
+			$this->metafile = Metadata::forDirectory($this->workingDirectory(), Metadata::TYPE_SQLITE);
 		}
 		return $this->metafile;
 	}

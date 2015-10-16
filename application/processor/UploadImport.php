@@ -7,10 +7,10 @@ use \Migrator as Migrator;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
+use \Metadata as Metadata;
 
 use utilities\FileWrapper as FileWrapper;
 use utilities\MediaFilename as MediaFilename;
-use utilities\Metadata as Metadata;
 use connectors\ComicVineConnector as ComicVineConnector;
 
 use exceptions\ImportMediaException as ImportMediaException;
@@ -378,7 +378,6 @@ class UploadImport extends Processor
 			$media = Model::Named( "Media" )->create( $publication, $cbzType, $filename, $hash, $size );
 			if ( $media instanceof model\MediaDBO ) {
 				if ( rename( $this->importFilePath(), $media->contentaPath()) ) {
-					@copy( $this->workingDirectory(Metadata::DefaultFilename), $media->contentaMetadataPath());
 					$this->setPurgeOnExit(true);
 				}
 				else {

@@ -18,7 +18,8 @@ use \Config as Config;
 use \Logger as Logger;
 use \Processor as Processor;
 use \Model as Model;
-use utilities\Metadata as Metadata;
+use \Metadata as Metadata;
+
 use utilities\Lock as Lock;
 
 define('CONFIG_OVERRIDE', 'ConfigOverride');

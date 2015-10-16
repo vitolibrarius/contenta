@@ -3,7 +3,7 @@
 // guard to ensure basic configuration is loaded
 defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
-use utilities\Metadata as Metadata;
+use \Metadata as Metadata;
 
 function my_echo($string ="") {
 	echo $string . PHP_EOL;

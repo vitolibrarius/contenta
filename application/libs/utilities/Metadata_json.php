@@ -3,35 +3,46 @@
 namespace utilities;
 
 use \Logger as Logger;
+use \Metadata as Metadata;
 
-class Metadata
+class Metadata_json extends Metadata implements \MetadataInterface
 {
 	const DefaultFilename = 'metadata.json';
-	public $path;
-	public $filename;
 	public $jsonData;
 
 	function __construct($fullpath)
 	{
-		$this->path = dirname($fullpath);
-		$this->filename = basename($fullpath);
-		is_dir($this->path) || die("Unable to find directory for " . $this->path);
-
+		parent::__construct($fullpath);
 		$this->readMetadata();
 	}
 
-	public static function forDirectory($fullpath) {
-		return new Metadata(appendPath($fullpath, Metadata::DefaultFilename));
-	}
-
-	public function fullpath() {
-		return appendPath($this->path, $this->filename);
-	}
-
-	public function isMeta($key)
+	public static function hasMetadataFile($path, $filename)
 	{
-		$test = $this->getMeta($key);
-		return (is_null($test) == false);
+		if ( is_dir($path) ) {
+			$file = ((isset($filename) && strlen($filename) > 0) ? $filename : Metadata_json::DefaultFilename);
+			return file_exists(appendPath($path, $file));
+		}
+		return false;
+	}
+
+	public function metaCount($key = null)
+	{
+		if (is_null($key) || strlen($key) == 0) {
+			$data = $this->readMetadata();
+			return count($data);
+		}
+		else {
+			$data = $this->getMeta($key);
+			if (is_null($data) == false) {
+				if ( is_array($data) ) {
+					return count($data);
+				}
+				else {
+					return 1;
+				}
+			}
+		}
+		return 0;
 	}
 
 	/**

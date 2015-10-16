@@ -20,6 +20,7 @@
 	require SYSTEM_PATH .'tests/_Data.php';
 
 use processor\ComicVineImporter as ComicVineImporter;
+use utilities\Stopwatch as Stopwatch;
 
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
@@ -53,6 +54,10 @@ my_echo( );
 my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
+Stopwatch::start();
+
+Stopwatch::start('Setup');
+
 my_echo( "---------- Endpoint ");
 $cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
 ($cv_endpoint_type != false && $cv_endpoint_type->code == 'ComicVine') || die("Could not find Endpoint_Type::ComicVine");
@@ -83,6 +88,9 @@ $points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 $epoint = $points[0];
 
 $metadata = metadataFor( "ComicVineImporter.json", true);
+my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
+	. "++ Setup " . Stopwatch::elapsed('Setup')
+	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );
 
 /***********************************************************************************************/
 my_echo( );
@@ -104,7 +112,12 @@ if ( is_array($publishers) == false || count($publishers) == 0 ) {
 foreach( $publishers as $pub ) {
 	$importer->enqueue_publisher( $pub, true, true);
 }
+
+Stopwatch::start( 'Publisher' );
 $importer->processData();
+my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
+	. "++ Publisher " . Stopwatch::elapsed('Publisher')
+	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );
 
 $publisher_model = Model::Named("Publisher");
 foreach( $publishers as $pub ) {
@@ -137,7 +150,11 @@ $importer->enqueue_character( array( "xid" => 1686, "name" => "Superboy" ), true
 foreach( $series as $sample ) {
 	$importer->enqueue_series( $sample, true, true );
 }
+Stopwatch::start( 'Series' );
 $importer->processData();
+my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
+	. "++ Series " . Stopwatch::elapsed('Series')
+	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );
 
 $series_model = Model::Named("Series");
 foreach( $series as $sample ) {
@@ -174,7 +191,11 @@ if ( is_array($pubs) == false || count($pubs) == 0 ) {
 foreach( $pubs as $sample ) {
 	$importer->enqueue_publication( $sample, true, true );
 }
+Stopwatch::start( 'Publication' );
 $importer->processData();
+my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
+	. "++ Publication " . Stopwatch::elapsed('Publication')
+	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );
 
 $pubs_model = Model::Named("Publication");
 foreach( $pubs as $sample ) {
@@ -260,3 +281,7 @@ foreach( $pubs as $idx => $sample ) {
 
 $allMedia = $media_model->allObjects();
 reportData($allMedia,  array("filename", "original_filename", "publication", "checksum") );
+
+my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
+	. "++ Final " . Stopwatch::elapsed()
+	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );

@@ -7,7 +7,7 @@ define( 'LANG_PATH', SYSTEM_PATH . '/localization/' );
 
 use \Logger as Logger;
 use \Exception as Exception;
-use utilities\Metadata as Metadata;
+use \Metadata as Metadata;
 
 /**
  * Class Localized, for localized user messages
@@ -86,11 +86,7 @@ class Localized
 
 	public function __construct($lang)
 	{
-		$path = appendPath(LANG_PATH, $lang . ".json" );
-		$this->metadata = new Metadata($path);
-		if (file_exists($path) == false ) {
-			$this->metadata->writeMetadata();
-		}
+		$this->metadata = Metadata::forDirectoryAndFile(LANG_PATH, $lang . ".json", Metadata::TYPE_JSON);
 	}
 
 	/**

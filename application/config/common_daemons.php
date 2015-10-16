@@ -11,7 +11,7 @@ function Daemonize( $processorName, $user_api = null, $guid = null, $job_id = nu
 	makeRequiredDirectory($processingRoot, 'processing subdirectory for Daemons' );
 
 	$workingDir = makeUniqueDirectory($processingRoot, $processorName );
-	$metadata = utilities\Metadata::forDirectory( $workingDir );
+	$metadata = Metadata::forDirectory( $workingDir, Metadata::TYPE_JSON );
 
 	$metadata->setMeta( "user_api", $user_api );
 	$metadata->setMeta( "processorName", $processorName );

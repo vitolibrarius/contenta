@@ -22,7 +22,7 @@
 use \Config as Config;
 use \Logger as Logger;
 use \Processor as Processor;
-use utilities\Metadata as Metadata;
+use \Metadata as Metadata;
 
 
 $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");

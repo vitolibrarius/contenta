@@ -7,8 +7,7 @@ use \Localized as Localized;
 use \Logger as Logger;
 use \Model as Model;
 use \Config as Config;
-
-use utilities\Metadata as Metadata;
+use \Metadata as Metadata;
 
 require_once APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model/Character.php';
 require_once APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model/Character_Alias.php';

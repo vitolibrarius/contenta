@@ -36,6 +36,25 @@ function shortendPath($path = '', $numComponents = 3 )
 	return implode(DIRECTORY_SEPARATOR, $parts);
 }
 
+function normalizePath( $path = null, $old = DIRECTORY_SEPARATOR, $new = DIRECTORY_SEPARATOR, $prefix = true, $suffix = false)
+{
+	if ( isset($path) && strlen($path) > 0) {
+		if ( is_null($old) ) {
+			$old = DIRECTORY_SEPARATOR;
+		}
+
+		if ( is_null($new) ) {
+			$new = DIRECTORY_SEPARATOR;
+		}
+
+		$components = array_filter( explode($old, $path), 'strlen');
+		if ( is_array($components) && count($components) > 0) {
+			return (boolval($prefix) ? $new : '') . implode($new, $components) . (boolval($suffix) ? $new : '');
+		}
+	}
+	return null;
+}
+
 function appendPath()
 {
     $finalPath = '';

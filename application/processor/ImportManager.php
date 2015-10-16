@@ -9,8 +9,8 @@ use \Logger as Logger;
 use \Model as Model;
 use \Session as Session;
 use \Localized as Localized;
+use \Metadata as Metadata;
 
-use utilities\Metadata as Metadata;
 use utilities\FileWrapper as FileWrapper;
 use utilities\Stopwatch as Stopwatch;
 
@@ -51,6 +51,14 @@ class ImportManager extends Processor
 	function __construct($guid)
 	{
 		parent::__construct(ImportManager::GUID);
+	}
+
+	function __destruct()
+	{
+		if ( $this->metadata()->metaCount( ImportManager::IMPORTS ) == 0 ) {
+			$this->purgeOnExit = true;
+		}
+		parent::__destruct();
 	}
 
 	private function uploadDir()
@@ -132,7 +140,7 @@ class ImportManager extends Processor
 	function chunk($chunkNum = 0) {
 		$chunked = $this->chunkedArray();
 		$idx = $this->correctChunkIndex($chunkNum);
-		return $chunked[$idx];
+		return ($idx < 0 ? array() : $chunked[$idx]);
 	}
 
 	function chunkNumberFor($processKey = null) {

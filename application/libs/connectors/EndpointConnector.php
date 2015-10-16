@@ -11,8 +11,7 @@ use \Logger as Logger;
 use \Model as Model;
 use \Cache as Cache;
 use \Database as Database;
-
-use utilities\Metadata as Metadata;
+use \Metadata as Metadata;
 
 use model\Users as Users;
 use model\Endpoint as Endpoint;
