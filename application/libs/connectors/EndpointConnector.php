@@ -57,7 +57,7 @@ abstract class EndpointConnector
 			foreach($objects as $name => $object) {
 				if ( $object->isFile() ) {
 					if ($object->getMTime() < (time() - Cache::TTL_DAY)) {
-						unlink($object->getPathname());
+						safe_unlink($object->getPathname());
 					}
 				}
 			}
@@ -271,7 +271,10 @@ abstract class EndpointConnector
 								get_class($this), $this->endpointDisplayName());
 						Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
 							get_class($this), $this->endpointDisplayName());
-						throw new ResponseErrorException(curl_error($ch));
+						throw new ResponseErrorException('Return code (' . $http_code . '): '
+							. http_stringForCode($http_code) . " "
+							. curl_error($ch)
+						);
 					}
 				}
 				finally {

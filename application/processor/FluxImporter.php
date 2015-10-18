@@ -71,7 +71,7 @@ class FluxImporter extends EndpointImporter
 	{
 		$localFile = $this->workingDirectory( "flux_" . $flux->id . "." . file_ext($flux->name));
 		if ( file_exists($localFile) == true ) {
-			unlink($localFile);
+			safe_unlink($localFile);
 		}
 		$nzb = file_get_contents($flux->src_url);
 		if ( $nzb != null ) {

@@ -186,7 +186,7 @@ class zipFileWrapper extends FileWrapper
 		}
 
 		if ( file_exists($destinationPath) == true ) {
-			unlink($destinationPath) || die("Source does not exist $destinationPath");
+			safe_unlink($destinationPath) || die("Source does not exist $destinationPath");
 		}
 
 		$success = Zip($sourcePath, $destinationPath);
@@ -340,8 +340,8 @@ class zipFileWrapper extends FileWrapper
 
 					Cache::Store($cacheThumbKey, $thumbnail);
 
-					unlink($tempPath);
-					unlink($thmbPath);
+					safe_unlink($tempPath);
+					safe_unlink($thmbPath);
 				}
 			}
 			else {

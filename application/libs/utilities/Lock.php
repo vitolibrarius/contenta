@@ -42,7 +42,7 @@ class Lock
 		if (file_exists($this->lockfile)) {
 			$existing = file_get_contents($this->lockfile);
 			if ($existing == $this->mypid ) {
-				unlink($this->lockfile);
+				safe_unlink($this->lockfile);
 			}
 		}
 		return true;

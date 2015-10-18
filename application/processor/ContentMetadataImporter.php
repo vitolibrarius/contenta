@@ -72,7 +72,7 @@ abstract class ContentMetadataImporter extends EndpointImporter
 			if ( empty($filename) == false ) {
 				$imageFile = $mediaObject->imagePath($imagename);
 				if ( is_file($imageFile) ) {
-					unlink($imageFile) || die("failed to remove old file? " . $imageFile);
+					safe_unlink($imageFile) || die("failed to remove old file? " . $imageFile);
 				}
 
 				$newfile = $mediaObject->mediaPath($filename);

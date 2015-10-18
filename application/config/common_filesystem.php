@@ -37,6 +37,30 @@ function safe_mkdir( $path )
 	return false;
 }
 
+function safe_unlink( $path )
+{
+	if (isset($path) && strlen($path) > 0) {
+		if (realpath($path) !== FALSE) {
+			$path = realpath($path);
+		}
+
+		if (is_file($path)) {
+			if (true !== @unlink($path)) {
+				if (is_file($path)) {
+					// There is another problem, we manage it (you could manage it with exceptions as well)
+					$error = error_get_last();
+					trigger_error($error['message'] . ': Failed to unlink ' . $path, E_USER_WARNING);
+				}
+				else {
+					// The file was deleted by a concurrent process, so do nothing, keep calm and carry on
+				}
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
 function findPathForTool($tool)
 {
 	if (exec('which /usr/bin/' . $tool) != null) {
@@ -255,7 +279,7 @@ function is_sub_dir($path = '', $parent_folder = SYSTEM_PATH)
 function destroy_dir($dir)
 {
 	if (file_exists($dir)) {
-		if (!is_dir($dir) || is_link($dir)) return unlink($dir);
+		if (!is_dir($dir) || is_link($dir)) return safe_unlink($dir);
 		foreach (scandir($dir) as $file)
 		{
 			if ($file == '.' || $file == '..') continue;

@@ -52,7 +52,7 @@ abstract class Metadata
 	}
 
 	public function deleteMetadataFile() {
-		return unlink(appendPath($this->path, $this->filename));
+		return safe_unlink(appendPath($this->path, $this->filename));
 	}
 
 

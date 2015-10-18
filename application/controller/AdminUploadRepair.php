@@ -37,7 +37,7 @@ use model\Character_Alias as Character_Alias;
  */
 class AdminUploadRepair extends Admin
 {
-	function index($chunkNum = 0)
+	function index($chunkNum = -1)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$processor = Processor::Named("ImportManager", 0);
@@ -46,7 +46,7 @@ class AdminUploadRepair extends Admin
 			$model->clearFinishedProcesses();
 
 			$sessionKey = get_short_class($this) . "_chunkNum";
-			if ( $chunkNum <= 0 ) {
+			if ( $chunkNum < 0 ) {
 				$chunkNum = Session::get( $sessionKey, 0 );
 			}
 
@@ -413,7 +413,12 @@ class AdminUploadRepair extends Admin
 					else {
 						Session::addNegativeFeedback(Localized::Get("Upload", 'Unknown form submit') . ' ' . var_export($_POST, false));
 					}
-					$processor->processSearch();
+					try {
+						$processor->processSearch();
+					}
+					catch( \Exception $e ) {
+						Session::addNegativeFeedback( $e->getMessage() );
+					}
 
 					$this->view->source = $processor->sourceMetaData();
 					$this->view->search = $processor->searchMetaData();

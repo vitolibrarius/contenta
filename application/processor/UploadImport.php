@@ -51,7 +51,7 @@ class UploadImport extends Processor
 	{
 		if ( is_null($newFilename) == false ) {
 			$dest = $this->workingDirectory($newFilename);
-			(file_exists($dest) == false) || unlink($dest) || die( "Unable to delete old $dest");
+			(file_exists($dest) == false) || safe_unlink($dest) || die( "Unable to delete old $dest");
 			rename($this->importFilePath(), $dest) || die( "Failed to rename to $dest");
 
 			$this->setMeta(UploadImport::META_MEDIA_FILENAME, $newFilename);
@@ -427,7 +427,7 @@ class UploadImport extends Processor
 			{
 				$newFilename = file_ext_strip($filename) . '.cbz';
 				$dest = $this->workingDirectory($newFilename);
-				(file_exists($dest) == false) || unlink($dest) || die( "Unable to delete old $dest");
+				(file_exists($dest) == false) || safe_unlink($dest) || die( "Unable to delete old $dest");
 				$newWrapper = FileWrapper::createWrapperForSource($temp, $dest, 'cbz');
 				if ( $newWrapper != false && $newWrapper->testWrapper() == null )
 				{

@@ -134,7 +134,7 @@ class Cache
 
 		if (file_exists($cache_path))
 		{
-			unlink($cache_path);
+			safe_unlink($cache_path);
 			return true;
 		}
 
@@ -163,7 +163,7 @@ class Cache
 				if ( $object->isFile() ) {
 					if ($object->getMTime() < (time() - Cache::TimeToLive)) {
 						$count++;
-						unlink($object->getPathname());
+						safe_unlink($object->getPathname());
 					}
 				}
 			}
