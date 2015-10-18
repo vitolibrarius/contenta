@@ -67,7 +67,7 @@ abstract class FileWrapper
 
 	public function tempDirectory() {
 		$tempDir = appendPath(sys_get_temp_dir(), hash(HASH_DEFAULT_ALGO, $this->cacheKeyRoot()));
-		is_dir($tempDir) || mkdir($tempDir, 0755) || die('failed to create temp dir ' . $tempDir);
+		safe_mkdir($tempDir) || die('failed to create temp dir ' . $tempDir);
 		return $tempDir;
 	}
 
@@ -434,7 +434,7 @@ class cbrFileWrapper extends FileWrapper
 		{
 			destroy_dir($dest);
 		}
-		mkdir($dest);
+		safe_mkdir($dest);
 
 		$cmd = $this->UNRAR_PATH . ' x -r "' . $this->sourcepath . '" "' . $dest . '"';
 		exec($cmd, $output, $success);

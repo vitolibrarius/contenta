@@ -58,7 +58,7 @@ class Cache
 		$shaKey = sha1($key);
 		$subDir = substr($shaKey, 0, 2);
 		$partialPath = appendPath($rootDir, $subDir);
-		is_dir($partialPath) || mkdir($partialPath, 0755, true) || die('Failed to create cache sub-directory ' . $partialPath);
+		safe_mkdir($partialPath) || die('Failed to create cache sub-directory ' . $partialPath);
 		return appendPath($partialPath, $shaKey);
 	}
 

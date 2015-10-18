@@ -406,7 +406,7 @@ class UploadImport extends Processor
 		if ( is_dir($temp) ) {
 			destroy_dir($temp) || die( "unable to delete $temp" );
 		}
-		mkdir( $temp ) || die( "Unable to create $temp" );
+		safe_mkdir( $temp ) || die( "Unable to create $temp" );
 
 		$filename = $this->getMeta(UploadImport::META_MEDIA_FILENAME);
 		$wrapper = FileWrapper::instance($this->importFilePath());

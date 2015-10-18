@@ -13,6 +13,30 @@ function file_ext($filename)
 	return strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 }
 
+function safe_mkdir( $path )
+{
+	if (isset($path) && strlen($path) > 0) {
+		if (realpath($path) !== FALSE) {
+			$path = realpath($path) . DIRECTORY_SEPARATOR;
+		}
+
+		if (is_dir($path) == false) {
+			if (true !== @mkdir($path, DIR_PERMS, TRUE)) {
+				if (is_dir($path)) {
+					// The directory was created by a concurrent process, so do nothing, keep calm and carry on
+				}
+				else {
+					// There is another problem, we manage it (you could manage it with exceptions as well)
+					$error = error_get_last();
+					trigger_error($error['message'] . ': Failed to create directory ' . $path, E_USER_WARNING);
+				}
+			}
+		}
+		return true;
+	}
+	return false;
+}
+
 function findPathForTool($tool)
 {
 	if (exec('which /usr/bin/' . $tool) != null) {
@@ -102,14 +126,7 @@ function sanitizedPath()
 function makeRequiredDirectory($path, $purpose = 'unknown')
 {
 	isset($path) || die('Required path is not set for ' . $purpose);
-
-	if (realpath($path) !== FALSE)
-	{
-		$path = realpath($path) . DIRECTORY_SEPARATOR;
-	}
-
-	is_dir($path) || mkdir($path, DIR_PERMS, true) ||
-		die('Failed to create ' . $purpose . ' directory ' . $path);
+	return safe_mkdir( $path );
 }
 
 function makeUniqueDirectory( $root, $elements )
@@ -125,7 +142,7 @@ function makeUniqueDirectory( $root, $elements )
 			$working = $path . sprintf( ' - 0x%02x', $index);
 			$full = appendPath($root, $working);
 		}
-		return (mkdir($full , DIR_PERMS , true) ? $full : null);
+		return (safe_mkdir($full) ? $full : null);
 	}
 
 	\Logger::logError("Unable to find root path '" . (string)$root . "'", "Common", "makeUniqueDirectory");

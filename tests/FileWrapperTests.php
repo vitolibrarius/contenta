@@ -59,7 +59,7 @@ if (is_file($options['f']) ) {
 			if ( is_dir($temp) ) {
 				destroy_dir($temp) || die( "unable to delete $temp" );
 			}
-			mkdir( $temp, 0777, true ) || die( "Unable to create $temp" );
+			safe_mkdir( $temp ) || die( "Unable to create $temp" );
 
 			if ( $cmd == 'unwrap' ) {
 				$success = $wrapper->unwrapToDirectory( $temp );
