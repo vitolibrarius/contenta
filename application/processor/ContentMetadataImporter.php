@@ -25,6 +25,7 @@ abstract class ContentMetadataImporter extends EndpointImporter
 {
 	const META_ENQUEUE_ROOT = 	'enqueued/';
 	const META_IMPORT_ROOT = 	'import/';
+	const META_DATA_ROOT =	 	'data/';
 	const META_PURGE_ROOT = 	'purge/';
 
 	const META_IMPORT_TYPE = 		'meta_type';
@@ -98,7 +99,8 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		}
 
 		// this should never happen since the xid is required
-		if ( isset($importValues[ContentMetadataImporter::META_IMPORT_XID]) == false || strlen($importValues[ContentMetadataImporter::META_IMPORT_XID]) == 0) {
+		if ( isset($importValues[ContentMetadataImporter::META_IMPORT_XID]) == false ||
+			strlen($importValues[ContentMetadataImporter::META_IMPORT_XID]) == 0) {
 			throw new Exception("External ID '" . ContentMetadataImporter::META_IMPORT_XID . "'is required" . var_export($importValues, true));
 		}
 
@@ -107,27 +109,31 @@ abstract class ContentMetadataImporter extends EndpointImporter
 			throw new Exception("Import Keys are required");
 		}
 
-		$dir = $model->tableName() . '_' . $importValues[ContentMetadataImporter::META_IMPORT_XID];
-		// check to see if the record has been pre-processed
-		$root = appendPath( ContentMetadataImporter::META_IMPORT_ROOT, $dir);
-		if ( $this->isMeta( $root ) == false ) {
-			// not pre-processed, it may or may not be enqueued
-			$root = appendPath( ContentMetadataImporter::META_ENQUEUE_ROOT, $dir);
-		}
-
-		foreach( $importKeys as $key ) {
-			$value = array_valueForKeypath($key, $importValues);
-			if ( $value != null ) {
-				$this->setMeta( appendPath( $root, $key), $value);
+		$queue_key = $model->tableName() . "_" . $importValues[ContentMetadataImporter::META_IMPORT_XID];
+// 		$data_keypath = appendPath($model->tableName(), $importValues[ContentMetadataImporter::META_IMPORT_XID]);
+		$data_path = appendPath( ContentMetadataImporter::META_DATA_ROOT, $queue_key);
+		if ( $this->isMeta( $data_path ) == false ) {
+			// data lot loaded
+			foreach( $importKeys as $key ) {
+				$value = array_valueForKeypath($key, $importValues);
+				if ( $value != null ) {
+					$this->setMeta( appendPath( $data_path, $key), $value);
+				}
 			}
+			$this->setMeta( appendPath( $data_path, "xsource"), $this->endpointTypeCode());
+			$this->setMetaBoolean( appendPath( $data_path, ContentMetadataImporter::META_IMPORT_FORCE), $forceMeta );
+			$this->setMetaBoolean( appendPath( $data_path, ContentMetadataImporter::META_IMPORT_FORCE_ICON), $forceImages );
+			$this->setMeta( appendPath( $data_path, ContentMetadataImporter::META_IMPORT_TYPE), $model->tableName() );
 		}
 
-		$this->setMeta( appendPath( $root, "xsource"), $this->endpointTypeCode());
-		$this->setMetaBoolean( appendPath( $root, ContentMetadataImporter::META_IMPORT_FORCE), $forceMeta );
-		$this->setMetaBoolean( appendPath( $root, ContentMetadataImporter::META_IMPORT_FORCE_ICON), $forceImages );
-		$this->setMeta( appendPath( $root, ContentMetadataImporter::META_IMPORT_TYPE), $model->tableName() );
+		// check to see if the record has been pre-processed
+		$imported_path = appendPath( ContentMetadataImporter::META_IMPORT_ROOT, $queue_key);
+		if ( $this->isMeta( $imported_path ) == false ) {
+			// not pre-processed, it may or may not be enqueued
+			$this->setMeta( appendPath( ContentMetadataImporter::META_ENQUEUE_ROOT, $queue_key), $queue_key );
+		}
 
-		return $this->getMeta( $root );
+		return $this->getMeta( $data_path );
 	}
 
 	public function enqueue_publisher(array $importValues = array(), $forceMeta = false, $forceImages = false)
@@ -367,11 +373,12 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		$enqueued = $this->getMeta( ComicVineImporter::META_ENQUEUE_ROOT );
 		while ( is_array($enqueued) && count($enqueued) > 0) {
 			// move to imported
-			foreach( $enqueued as $path => $meta ) {
+			foreach( $enqueued as $path => $data_keypath ) {
 				$old = appendPath( ComicVineImporter::META_ENQUEUE_ROOT, $path);
 				$new = appendPath( ComicVineImporter::META_IMPORT_ROOT, $path);
 				$this->setMeta( $old, null );
-				$this->setMeta( $new, $meta );
+				$this->setMeta( $new, $data_keypath );
+				$meta = $this->getMeta( appendPath( ComicVineImporter::META_DATA_ROOT, $path ));
 
 				$pre_process_method = 'preprocess_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $pre_process_method)) {
@@ -412,7 +419,8 @@ abstract class ContentMetadataImporter extends EndpointImporter
 
 		$imported = $this->getMeta( ComicVineImporter::META_IMPORT_ROOT );
 		if ( is_array($imported) && count($imported) > 0 ) {
-			foreach( $imported as $path => $meta ) {
+			foreach( $imported as $path => $data_keypath ) {
+				$meta = $this->getMeta( appendPath( ComicVineImporter::META_DATA_ROOT, $path ));
 				$finalize_method = 'finalize_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $finalize_method)) {
 					try {
@@ -436,7 +444,8 @@ abstract class ContentMetadataImporter extends EndpointImporter
 
 		$toBePurged = $this->getMeta( ComicVineImporter::META_PURGE_ROOT );
 		if ( is_array($toBePurged) && count($toBePurged) > 0 ) {
-			foreach( $toBePurged as $path => $meta ) {
+			foreach( $toBePurged as $path => $data_keypath ) {
+				$meta = $this->getMeta( appendPath( ComicVineImporter::META_DATA_ROOT, $path ));
 				$purge_method = 'purge_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $purge_method)) {
 					try {
@@ -458,7 +467,7 @@ abstract class ContentMetadataImporter extends EndpointImporter
 			}
 		}
 
-		$this->setPurgeOnExit(true);
+// 		$this->setPurgeOnExit(true);
 		return true;
 	}
 }

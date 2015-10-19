@@ -109,5 +109,5 @@ function metadataFor($name = null, $purge = false)
 		$name = "test.json";
 	}
 	$path = testFilePath( $name, $purge );
-	return new Metadata( $path );
+	return Metadata::forDirectoryAndFile( dirname($path), basename($path) );
 }

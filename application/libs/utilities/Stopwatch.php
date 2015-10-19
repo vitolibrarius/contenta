@@ -15,4 +15,11 @@ class StopWatch
 	{
 		return microtime(true) - self::$startTimes[$timerName];
 	}
+
+	public static function clear($timerName = 'default')
+	{
+		if ( isset( self::$startTimes[$timerName])) {
+			unset( self::$startTimes[$timerName] );
+		}
+	}
 }
