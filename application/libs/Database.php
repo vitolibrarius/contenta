@@ -1,5 +1,7 @@
 <?php
 
+use utilities\Stopwatch as Stopwatch;
+
 /**
  * Class Database
  * Creates a PDO database connection. This connection will be passed into the models (so we use
@@ -49,6 +51,7 @@ class Database extends PDO
 
 		$this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 		$this->setAttribute(PDO::ATTR_TIMEOUT, 10000);
+        $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('TraceStatement', array($this)));
 	}
 
 	public function verifyDatabase() {
@@ -61,5 +64,30 @@ class Database extends PDO
 			return ($version != false);
 		}
 		return false;
+	}
+}
+
+class TraceStatement extends PDOStatement {
+    protected $pdo;
+
+    protected function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    public function execute($input_parameters = null)
+    {
+		Stopwatch::start( $this->queryString );
+
+		$success = parent::execute( $input_parameters );
+
+		$elapsed = Stopwatch::elapsed( $this->queryString );
+		if ( $elapsed > 0.25 ) {
+			$msg = 'Slow SQL (' . $elapsed . ' seconds) for [' . $this->queryString . '] ' . (isset($input_parameters) ? var_export($input_parameters, true) : 'No Parameters');
+			Logger::logWarning( $msg );
+		}
+		Stopwatch::clear( $this->queryString );
+
+		return $success;
 	}
 }

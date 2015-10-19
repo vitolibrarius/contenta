@@ -4,6 +4,8 @@ use \Logger as Logger;
 use \Exception as Exception;
 use \ClassNotFoundException as ClassNotFoundException;
 
+use utilities\Stopwatch as Stopwatch;
+
 /**
  * Class Application
  * The heart of the app
@@ -44,6 +46,7 @@ class Application
 				$traceParam .= $this->url_parameter_1;
 			}
 
+			Stopwatch::start( $traceName );
 			Logger::instance()->setTrace( $traceName, $traceParam );
 
 			try {
@@ -102,6 +105,11 @@ class Application
 			catch ( Exception $e ) {
 				Logger::logException( $e );
 				header('location: ' . Config::Web('/error/index'));
+			}
+
+			$elapsed = Stopwatch::elapsed( $traceName );
+			if ( $elapsed > 0.25 ) {
+				Logger::logWarning( "Slow page response $elapsed seconds" );
 			}
 		}
 		else {
