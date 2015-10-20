@@ -77,6 +77,7 @@ class Session
 	public static function addPositiveFeedback($message = null)
 	{
 		if ( is_string($message) ) {
+			Logger::logInfo( $message, Session::get('user_name'), Session::get('user_id'));
 			$_SESSION["feedback_positive"][] = $message;
 		}
 		else {

@@ -111,9 +111,9 @@ abstract class Processor
 		return $this->metadata()->setMeta($key, $value);
 	}
 
-	public function getMeta($key)
+	public function getMeta($key, $default = null)
 	{
-		return $this->metadata()->getMeta($key);
+		return $this->metadata()->getMeta($key, $default);
 	}
 
 	public function setMetaBoolean( $path, $newValue = false )

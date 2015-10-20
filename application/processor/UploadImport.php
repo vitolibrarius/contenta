@@ -9,6 +9,7 @@ use \Logger as Logger;
 use \Model as Model;
 use \Metadata as Metadata;
 
+use processor\ImportManager as ImportManager;
 use utilities\FileWrapper as FileWrapper;
 use utilities\MediaFilename as MediaFilename;
 use connectors\ComicVineConnector as ComicVineConnector;
@@ -83,6 +84,14 @@ class UploadImport extends Processor
 	public function statusMetaData()
 	{
 		return $this->getMeta(UploadImport::META_STATUS);
+	}
+
+	public function setStatusMetaData($status = null)
+	{
+		if ( is_string($status) && strlen($status) > 0) {
+			$this->setMeta( UploadImport::META_STATUS, $status );
+			ImportManager::UpdateStatus( $this->guid, $status );
+		}
 	}
 
 	public function sourceFileExtension()
@@ -237,7 +246,7 @@ class UploadImport extends Processor
 		$ep_model = Model::Named('Endpoint');
 		$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 		if ($points == false || count($points) == 0) {
-			$this->setMeta( UploadImport::META_STATUS, "NO_ENDPOINTS" );
+			$this->setStatusMetaData( "NO_ENDPOINTS" );
 			Logger::logInfo( "No ComicVine Endpoints defined ", $this->type, $this->sourceFilename());
 			return false;
 		}
@@ -250,19 +259,19 @@ class UploadImport extends Processor
 		);
 		if ( $issue == false )
 		{
-			$this->setMeta( UploadImport::META_STATUS, "NO_MATCHES" );
+			$this->setStatusMetaData( "NO_MATCHES" );
 			Logger::logInfo( "No ComicVine matches, unable to import", $this->type, $this->sourceFilename());
 			return false;
 		}
 
 		$this->setMeta( UploadImport::META_RESULTS_ISSUES, $issue );
 		if (count($issue) > 1) {
-			$this->setMeta( UploadImport::META_STATUS, "MULTIPLE_MATCHES" );
+			$this->setStatusMetaData( "MULTIPLE_MATCHES" );
 			Logger::logInfo( "Multiple ComicVine matches, unable to import", $this->type, $this->sourceFilename());
 			return false;
 		}
 
-		$this->setMeta( UploadImport::META_STATUS, "COMICVINE_SUCCESS" );
+		$this->setStatusMetaData( "COMICVINE_SUCCESS" );
 		return true;
 	}
 
@@ -273,7 +282,7 @@ class UploadImport extends Processor
 			if ( is_array($issues) ) {
 				$result = array_filterForKeyValue( $issues, array( "id"=>$issueId));
 				$this->setMeta( UploadImport::META_RESULTS_ISSUES, $result );
-				$this->setMeta( UploadImport::META_STATUS, "Finishing Import" );
+				$this->setStatusMetaData( "Finishing Import" );
 				return true;
 			}
 		}
@@ -307,21 +316,19 @@ class UploadImport extends Processor
 		$wrapper = FileWrapper::instance($this->importFilePath());
 		$testStatus = $wrapper->testWrapper($errorCode);
 		if ($errorCode != 0 || $this->getMeta(UploadImport::META_MEDIA_EXT) != 'cbz' ) {
-			$this->setMeta( UploadImport::META_STATUS, "MEDIA_CORRUPT" );
+			$this->setStatusMetaData( "MEDIA_CORRUPT" );
 			Logger::logInfo( "Media corrupt " . $testStatus, $this->type, $this->sourceFilename());
 			return;
 		}
 
 		if ($this->hasResultsMetadata() == false && $this->processSearch() == false ) {
-			$this->setMeta( UploadImport::META_STATUS, "NO_METADATA_FOUND");
-			Logger::logError( "No media metadata found for importing", $this->type, $this->sourceFilename());
 			$this->generateThumbnails();
 			return;
 		}
 
 		$issue = $this->getMeta( UploadImport::META_RESULTS_ISSUES );
 		if (count($issue) > 1) {
-			$this->setMeta( UploadImport::META_STATUS, "MULTIPLE_METADATA");
+			$this->setStatusMetaData( "MULTIPLE_METADATA");
 			Logger::logError( "Multiple media metadata found for importing", $this->type, $this->sourceFilename());
 			$this->generateThumbnails();
 			return;
@@ -332,12 +339,12 @@ class UploadImport extends Processor
 		$ep_model = Model::Named('Endpoint');
 		$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 		if ($points == false || count($points) == 0) {
-			$this->setMeta( UploadImport::META_STATUS, "NO_ENDPOINTS" );
+			$this->setStatusMetaData( "NO_ENDPOINTS" );
 			Logger::logInfo( "No ComicVine Endpoints defined ", $this->type, $this->sourceFilename());
 			return false;
 		}
 
-		$this->setMeta( UploadImport::META_STATUS, "Finishing Import" );
+		$this->setStatusMetaData( "Finishing Import" );
 		Logger::logInfo( "Found match importing "
 			. array_valueForKeypath( "volume/name", $matchingIssue)
 			. " - " . array_valueForKeypath( "issue_number", $matchingIssue)
@@ -392,11 +399,11 @@ class UploadImport extends Processor
 		}
 		catch ( ImportMediaException $me ) {
 			Logger::logError( $me->getMessage(),$this->type, $this->sourceFilename());
-			$this->setMeta( UploadImport::META_STATUS, $me->getMessage() );
+			$this->setStatusMetaData( $me->getMessage() );
 		}
 		catch ( \Exception $e ) {
 			Logger::logException( $e );
-			$this->setMeta( UploadImport::META_STATUS, "IMPORTER_ERROR" );
+			$this->setStatusMetaData( "IMPORTER_ERROR" );
 		}
 	}
 

@@ -50,6 +50,15 @@ class ImportManager extends Processor
 		return false;
 	}
 
+	public static function UpdateStatus( $hash = null, $status = "UNKNOWN" )
+	{
+		$path = ImportManager::ImportHashPath( $hash );
+		if ( is_string($path) && strlen($path) > 0) {
+			$importer = new ImportManager(null);
+			$importer->setMeta( appendPath( ImportManager::PENDING, $hash ), $status);
+		}
+	}
+
 	function __construct($guid)
 	{
 		parent::__construct(ImportManager::GUID);
@@ -90,13 +99,10 @@ class ImportManager extends Processor
 					}
 
 					$fullpath = appendPath($importQueueDirectory, $dir);
-					if ( is_dir($fullpath) ) {
-						$process_meta = Metadata::forDirectory($fullpath);
-
-						$this->setMeta( appendPath( ImportManager::PENDING, $dir ), $process_meta->getMeta('status'));
-						if ( $this->isMeta( appendPath(ImportManager::IMPORTS, $dir)) == false ) {
-							$this->setMeta( appendPath( ImportManager::IMPORTS, $dir ), $process_meta->getMeta(UploadImport::META_MEDIA));
-						}
+					$metapath = appendPath( ImportManager::PENDING, $dir );
+					if ( is_dir($fullpath) && $this->isMeta($metapath) == false) {
+						$status = $this->getMeta( appendPath(ImportManager::PENDING, $dir), "UNKNOWN");
+						$this->setMeta( appendPath( ImportManager::PENDING, $dir ), $status);
 					}
 				}
 
@@ -110,15 +116,32 @@ class ImportManager extends Processor
 			$lock->unlock();
 		}
 
+		$pending = $this->getMeta( ImportManager::PENDING, array());
+		ksort($pending);
 
-		return $this->getMeta( ImportManager::PENDING );
+		return $pending;
 	}
 
 	function metadataFor($processKey = null) {
 		if ( is_string($processKey) ) {
+			$status = $this->getMeta( appendPath( ImportManager::PENDING, $processKey ), "UNKNOWN");
 			$allData = $this->getMeta( appendPath( ImportManager::IMPORTS, $processKey));
 			if ( is_array($allData) ) {
+				$allData['status'] = $status;
 				return $allData;
+			}
+
+			// data not loaded yet?
+			$fullpath = appendPath($this->uploadDir(), $processKey);
+			if (is_dir($fullpath)) {
+				$process_meta = Metadata::forDirectory($fullpath);
+				$allData = $process_meta->getMeta(UploadImport::META_MEDIA);
+				if ( is_array($allData) ) {
+					$this->setMeta( appendPath( ImportManager::PENDING, $processKey), $process_meta->getMeta('status', "what?"));
+					$this->setMeta( appendPath( ImportManager::IMPORTS, $processKey), $allData );
+					$allData['status'] = $status;
+					return $allData;
+				}
 			}
 		}
 		return array();

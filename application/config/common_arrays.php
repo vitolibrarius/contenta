@@ -63,7 +63,9 @@
 
 			foreach ($path as $idx => $item) {
 				if (isset($subArray[$item]) ) {
-					is_array($subArray[$item]) || die('Bad keypath ' . $keypath);
+					if ( is_array($subArray[$item]) == false) {
+						throw new \Exception('Bad keypath ' . $keypath . " " . var_export($subArray, true));
+					}
 				}
 				else {
 					$subArray[$item] = array();
