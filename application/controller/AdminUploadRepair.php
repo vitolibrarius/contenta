@@ -134,9 +134,6 @@ class AdminUploadRepair extends Admin
 				Session::addPositiveFeedback(Localized::Get("Upload", 'Reprocessing')
 					. ' ' . $importer->getMeta(UploadImport::META_MEDIA_NAME));
 				echo "<b>working ..</b>";
-
-				$importMgr = Processor::Named("ImportManager", 0);
-				$importMgr->clearMetadataFor( $processKey );
 			}
 		}
 	}

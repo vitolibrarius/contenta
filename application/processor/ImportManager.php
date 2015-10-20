@@ -56,8 +56,10 @@ class ImportManager extends Processor
 	{
 		$path = ImportManager::ImportHashPath( $hash );
 		if ( is_string($path) && strlen($path) > 0) {
-			$importer = new ImportManager(null);
-			$importer->setMeta( appendPath( ImportManager::PENDING, $hash ), $status);
+			$root = Config::GetProcessing();
+			$path = appendPath($root, "ImportManager", ImportManager::GUID );
+			$metafile = Metadata::forDirectory($path, Metadata::TYPE_SQLITE);
+			$metafile->setMeta( appendPath( ImportManager::PENDING, $hash ), $status);
 		}
 	}
 
