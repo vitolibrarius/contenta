@@ -84,7 +84,7 @@ class TraceStatement extends PDOStatement {
 		$elapsed = Stopwatch::end( $this->queryString );
 		if ( $elapsed > 0.5 ) {
 			$msg = $this->queryString . ' ' . (isset($input_parameters) ? var_export($input_parameters, true) : 'No Parameters');
-			Logger::logWarning( "Metadata::setMeta( $key, $vmsg )", "Slow SQL", $elapsed . " seconds" );
+			Logger::logWarning( $msg, "Slow SQL", $elapsed . " seconds" );
 		}
 
 		return $success;
