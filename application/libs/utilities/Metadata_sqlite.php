@@ -76,7 +76,7 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 	public function setMeta($key = '', $value = null)
 	{
 		$success = false;
-		$stopwatch = Stopwatch::start( get_short_class($this) . $key );
+		$stopwatch = Stopwatch::start( uuid() );
 
 		if ( isset($key) && strlen($key) > 0) {
 			$success = $this->sqlite_deleteValueForKeypath($key);
@@ -93,7 +93,7 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 		}
 
 		$elapsed = Stopwatch::end( $stopwatch );
-		if ( $elapsed > 0.025 ) {
+		if ( $elapsed > 0.1 ) {
 			$vmsg = "";
 			if ( is_array($value) || is_object($value) ) {
 				$vmsg = gettype($value) . " count(" . count($value) .")";
@@ -116,14 +116,14 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 	{
 		$value = null;
 
-		$stopwatch = Stopwatch::start( get_short_class($this) . $key );
+		$stopwatch = Stopwatch::start( uuid() );
 
 		if ( isset($key) && strlen($key) > 0) {
 			$value = $this->sqlite_valueForKeypath( $key );
 		}
 
 		$elapsed = Stopwatch::end( $stopwatch );
-		if ( $elapsed > 0.025 ) {
+		if ( $elapsed > 0.1 ) {
 			$vmsg = "";
 			if ( is_array($value) || is_object($value) ) {
 				$vmsg = gettype($value) . " count(" . count($value) .")";

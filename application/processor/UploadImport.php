@@ -88,6 +88,7 @@ class UploadImport extends Processor
 
 	public function setStatusMetaData($status = null)
 	{
+		Logger::logInfo("setStatusMetaData( $status ) ", __method__,  $this->sourceFilename());
 		if ( is_string($status) && strlen($status) > 0) {
 			$this->setMeta( UploadImport::META_STATUS, $status );
 			ImportManager::UpdateStatus( $this->guid, $status );
@@ -237,6 +238,7 @@ class UploadImport extends Processor
 
 	public function processSearch()
 	{
+		Logger::logInfo("processSearch( start ) ", __method__,  $this->sourceFilename());
 		// update the query values, but only if they are not already set
 		if ( $this->isMeta(UploadImport::META_QUERY) == false ) {
 			$mediaFilename = new MediaFilename($this->getMeta(UploadImport::META_MEDIA_NAME), true);
@@ -272,6 +274,7 @@ class UploadImport extends Processor
 		}
 
 		$this->setStatusMetaData( "COMICVINE_SUCCESS" );
+		Logger::logInfo("processSearch( end ) ", __method__,  $this->sourceFilename());
 		return true;
 	}
 
@@ -313,6 +316,7 @@ class UploadImport extends Processor
 
 	public function processData()
 	{
+		Logger::logInfo("processData( start ) ", __method__,  $this->sourceFilename());
 		$wrapper = FileWrapper::instance($this->importFilePath());
 		$testStatus = $wrapper->testWrapper($errorCode);
 		if ($errorCode != 0 || $this->getMeta(UploadImport::META_MEDIA_EXT) != 'cbz' ) {
@@ -386,6 +390,7 @@ class UploadImport extends Processor
 			if ( $media instanceof model\MediaDBO ) {
 				if ( rename( $this->importFilePath(), $media->contentaPath()) ) {
 					$this->setPurgeOnExit(true);
+					Logger::logInfo("import complete( end ) ", __method__,  $this->sourceFilename());
 				}
 				else {
 					$errors= error_get_last();
@@ -405,6 +410,7 @@ class UploadImport extends Processor
 			Logger::logException( $e );
 			$this->setStatusMetaData( "IMPORTER_ERROR" );
 		}
+		Logger::logInfo("processData( end ) ", __method__,  $this->sourceFilename());
 	}
 
 	public function convert_cbr()

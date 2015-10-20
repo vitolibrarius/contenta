@@ -155,7 +155,7 @@ class AdminUploadRepair extends Admin
 					Session::addNegativeFeedback( 'Failed to deleted in process files for ' . $filename);
 				}
 
-				header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
+				header('location: ' . Config::Web( get_short_class($this), 'index', $page));
 			}
 			else {
 				Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
