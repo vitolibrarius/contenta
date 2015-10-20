@@ -88,7 +88,7 @@ class UploadImport extends Processor
 
 	public function setStatusMetaData($status = null)
 	{
-		Logger::logInfo("setStatusMetaData( $status ) ", __method__,  $this->sourceFilename());
+		// 		Logger::logInfo("setStatusMetaData( $status ) ", __method__,  $this->sourceFilename());
 		if ( is_string($status) && strlen($status) > 0) {
 			$this->setMeta( UploadImport::META_STATUS, $status );
 			ImportManager::UpdateStatus( $this->guid, $status );
@@ -189,7 +189,7 @@ class UploadImport extends Processor
 				$rar_wrapper = FileWrapper::force($this->importFilePath(), 'cbr');
 				if ( $rar_wrapper->testWrapper() == null ) {
 					// it is a valid RAR file, so rename it and reprocess
-					Logger::logWarning($this->getMeta(UploadImport::META_MEDIA_FILENAME) . " identified as RAR", $this->type, $this->sourceFilename() );
+					Logger::logWarning($this->getMeta(UploadImport::META_MEDIA_FILENAME) . " identified as RAR", __method__, $this->sourceFilename() );
 					$newFilename = file_ext_strip($workingFile) . '.cbr';
 					$this->renameMedia( $newFilename );
 				}
@@ -203,7 +203,7 @@ class UploadImport extends Processor
 			return $this->convert_cbr();
 		}
 
-		Logger::logInfo("Accepting import", $this->type, $this->sourceFilename());
+		Logger::logInfo("Accepting import", __method__, $this->sourceFilename());
 		return true;
 	}
 
@@ -238,7 +238,6 @@ class UploadImport extends Processor
 
 	public function processSearch()
 	{
-		Logger::logInfo("processSearch( start ) ", __method__,  $this->sourceFilename());
 		// update the query values, but only if they are not already set
 		if ( $this->isMeta(UploadImport::META_QUERY) == false ) {
 			$mediaFilename = new MediaFilename($this->getMeta(UploadImport::META_MEDIA_NAME), true);
@@ -249,7 +248,7 @@ class UploadImport extends Processor
 		$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 		if ($points == false || count($points) == 0) {
 			$this->setStatusMetaData( "NO_ENDPOINTS" );
-			Logger::logInfo( "No ComicVine Endpoints defined ", $this->type, $this->sourceFilename());
+			Logger::logInfo( "No ComicVine Endpoints defined ", __method__, $this->sourceFilename());
 			return false;
 		}
 
@@ -262,19 +261,18 @@ class UploadImport extends Processor
 		if ( $issue == false )
 		{
 			$this->setStatusMetaData( "NO_MATCHES" );
-			Logger::logInfo( "No ComicVine matches, unable to import", $this->type, $this->sourceFilename());
+			Logger::logInfo( "No ComicVine matches, unable to import", __method__, $this->sourceFilename());
 			return false;
 		}
 
 		$this->setMeta( UploadImport::META_RESULTS_ISSUES, $issue );
 		if (count($issue) > 1) {
 			$this->setStatusMetaData( "MULTIPLE_MATCHES" );
-			Logger::logInfo( "Multiple ComicVine matches, unable to import", $this->type, $this->sourceFilename());
+			Logger::logInfo( "Multiple ComicVine matches, unable to import", __method__, $this->sourceFilename());
 			return false;
 		}
 
 		$this->setStatusMetaData( "COMICVINE_SUCCESS" );
-		Logger::logInfo("processSearch( end ) ", __method__,  $this->sourceFilename());
 		return true;
 	}
 
@@ -316,12 +314,11 @@ class UploadImport extends Processor
 
 	public function processData()
 	{
-		Logger::logInfo("processData( start ) ", __method__,  $this->sourceFilename());
 		$wrapper = FileWrapper::instance($this->importFilePath());
 		$testStatus = $wrapper->testWrapper($errorCode);
 		if ($errorCode != 0 || $this->getMeta(UploadImport::META_MEDIA_EXT) != 'cbz' ) {
 			$this->setStatusMetaData( "MEDIA_CORRUPT" );
-			Logger::logInfo( "Media corrupt " . $testStatus, $this->type, $this->sourceFilename());
+			Logger::logInfo( "Media corrupt " . $testStatus, __method__, $this->sourceFilename());
 			return;
 		}
 
@@ -333,7 +330,7 @@ class UploadImport extends Processor
 		$issue = $this->getMeta( UploadImport::META_RESULTS_ISSUES );
 		if (count($issue) > 1) {
 			$this->setStatusMetaData( "MULTIPLE_METADATA");
-			Logger::logError( "Multiple media metadata found for importing", $this->type, $this->sourceFilename());
+			Logger::logError( "Multiple media metadata found for importing", __method__, $this->sourceFilename());
 			$this->generateThumbnails();
 			return;
 		}
@@ -344,7 +341,7 @@ class UploadImport extends Processor
 		$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 		if ($points == false || count($points) == 0) {
 			$this->setStatusMetaData( "NO_ENDPOINTS" );
-			Logger::logInfo( "No ComicVine Endpoints defined ", $this->type, $this->sourceFilename());
+			Logger::logInfo( "No ComicVine Endpoints defined ", __method__, $this->sourceFilename());
 			return false;
 		}
 
@@ -353,7 +350,7 @@ class UploadImport extends Processor
 			. array_valueForKeypath( "volume/name", $matchingIssue)
 			. " - " . array_valueForKeypath( "issue_number", $matchingIssue)
 			. " - " . array_valueForKeypath( "cover_date", $matchingIssue)
-			 , $this->type, $this->sourceFilename());
+			 , __method__, $this->sourceFilename());
 
 		$importer = Processor::Named('ComicVineImporter', $this->sourceFilename() );
 		$importer->setEndpoint($points[0]);
@@ -390,11 +387,10 @@ class UploadImport extends Processor
 			if ( $media instanceof model\MediaDBO ) {
 				if ( rename( $this->importFilePath(), $media->contentaPath()) ) {
 					$this->setPurgeOnExit(true);
-					Logger::logInfo("import complete( end ) ", __method__,  $this->sourceFilename());
 				}
 				else {
 					$errors= error_get_last();
-					Logger::logError(  "MOVE ERROR: " . $errors['type'] . ' - ' . $errors['message'], $this->type, $this->sourceFilename());
+					Logger::logError(  "MOVE ERROR: " . $errors['type'] . ' - ' . $errors['message'], __method__, $this->sourceFilename());
 					return false;
 				}
 			}
@@ -403,14 +399,13 @@ class UploadImport extends Processor
 			}
 		}
 		catch ( ImportMediaException $me ) {
-			Logger::logError( $me->getMessage(),$this->type, $this->sourceFilename());
+			Logger::logError( $me->getMessage(), __method__, $this->sourceFilename());
 			$this->setStatusMetaData( $me->getMessage() );
 		}
 		catch ( \Exception $e ) {
 			Logger::logException( $e );
 			$this->setStatusMetaData( "IMPORTER_ERROR" );
 		}
-		Logger::logInfo("processData( end ) ", __method__,  $this->sourceFilename());
 	}
 
 	public function convert_cbr()
@@ -428,7 +423,7 @@ class UploadImport extends Processor
 			// RARX_NOFILES, check for zip
 			$zipFileList = zipFileList($this->importFilePath());
 			if (is_array($zipFileList)) {
-				Logger::logWarning( $filename . " identified as ZIP format", $this->type, $this->sourceFilename() );
+				Logger::logWarning( $filename . " identified as ZIP format", __method__, $this->sourceFilename() );
 				$newFilename = file_ext_strip($filename) . '.cbz';
 				$this->renameMedia( $newFilename );
 				return true;
