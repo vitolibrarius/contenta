@@ -13,10 +13,12 @@ use \Metadata as Metadata;
 
 use utilities\FileWrapper as FileWrapper;
 use utilities\Stopwatch as Stopwatch;
+use utilities\Lock as Lock;
 
 class ImportManager extends Processor
 {
 	const GUID = '60EB7A5B-DCBE-4A42-827F-180087F31620';
+	const PENDING = 'pending';
 	const IMPORTS = 'imports';
 
 	public static function ImportHashPath( $hash = null )
@@ -55,7 +57,7 @@ class ImportManager extends Processor
 
 	function __destruct()
 	{
-		if ( $this->metadata()->metaCount( ImportManager::IMPORTS ) == 0 ) {
+		if ( $this->metadata()->metaCount( ImportManager::PENDING ) == 0 ) {
 			$this->purgeOnExit = true;
 		}
 		parent::__destruct();
@@ -69,49 +71,54 @@ class ImportManager extends Processor
 
 	public function processData()
 	{
-		if ( isset($this->currentItems) == false) {
-			$importQueue = $this->uploadDir();
-
-			$current = array();
-			$old_list = $this->getMeta( ImportManager::IMPORTS );
-			if ( isset($old_list) == false || $old_list == false ) {
-				$old_list = array();
+		$lockfile = $this->workingDirectory( "updating.lock" );
+		$lock = new Lock($lockfile);
+		if (($pid = $lock->lock()) !== false) {
+			$oldPending = $this->getMeta( ImportManager::PENDING );
+			if ( is_array($oldPending) == false) {
+				$oldPending = array();
 			}
 
-			if ( is_dir($importQueue) )
+			$importQueueDirectory = $this->uploadDir();
+			if ( is_dir($importQueueDirectory) )
 			{
-				foreach (scandir($importQueue) as $dir) {
+				foreach (scandir($importQueueDirectory) as $dir) {
 					if ($dir == '.' || $dir == '..') continue;
 
-					$fullpath = appendPath($importQueue, $dir);
+					if (isset($oldPending[$dir])) {
+						unset( $oldPending[$dir] );
+					}
+
+					$fullpath = appendPath($importQueueDirectory, $dir);
 					if ( is_dir($fullpath) ) {
-						if ( isset($old_list[$dir]) == true) {
-							$current[$dir] = $old_list[$dir];
-							unset( $old_list[$dir] );
-						}
-						else {
-							$process_meta = Metadata::forDirectory($fullpath);
-							$current[$dir] = $process_meta->getMeta(UploadImport::META_MEDIA);
-							$current[$dir]['status'] = $process_meta->getMeta('status');
+						$process_meta = Metadata::forDirectory($fullpath);
+
+						$this->setMeta( appendPath( ImportManager::PENDING, $dir ), $process_meta->getMeta('status'));
+						if ( $this->isMeta( appendPath(ImportManager::IMPORTS, $dir)) == false ) {
+							$this->setMeta( appendPath( ImportManager::IMPORTS, $dir ), $process_meta->getMeta(UploadImport::META_MEDIA));
 						}
 					}
 				}
 
-				uasort($current, function($a, $b) {
-					return strnatcmp($a['filename'], $b['filename']);
-				});
+				// remove from queue since the directory is gone
+				foreach( $oldPending as $dir => $status ) {
+					$this->setMeta( appendPath( ImportManager::PENDING, $dir ), null);
+					$this->setMeta( appendPath( ImportManager::IMPORTS, $dir ), null);
+				}
 			}
-			$this->setMeta( ImportManager::IMPORTS, $current );
-			$this->currentItems = $current;
+
+			$lock->unlock();
 		}
-		return $this->currentItems;
+
+
+		return $this->getMeta( ImportManager::PENDING );
 	}
 
 	function metadataFor($processKey = null) {
 		if ( is_string($processKey) ) {
-			$allData = $this->processData();
-			if ( is_array($allData) && isset($allData[$processKey]) ) {
-				return $allData[$processKey];
+			$allData = $this->getMeta( appendPath( ImportManager::IMPORTS, $processKey));
+			if ( is_array($allData) ) {
+				return $allData;
 			}
 		}
 		return array();
@@ -138,9 +145,14 @@ class ImportManager extends Processor
 	}
 
 	function chunk($chunkNum = 0) {
-		$chunked = $this->chunkedArray();
+		$allChunks = $this->chunkedArray();
 		$idx = $this->correctChunkIndex($chunkNum);
-		return ($idx < 0 ? array() : $chunked[$idx]);
+		$list = ($idx < 0 ? array() : $allChunks[$idx]);
+		$chunkMeta = array();
+		foreach( $list as $hash => $status ) {
+			$chunkMeta[$hash] = $this->metadataFor( $hash );
+		}
+		return $chunkMeta;
 	}
 
 	function chunkNumberFor($processKey = null) {

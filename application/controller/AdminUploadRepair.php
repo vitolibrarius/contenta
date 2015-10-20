@@ -54,7 +54,7 @@ class AdminUploadRepair extends Admin
 			Session::set( $sessionKey, $idx );
 
 			$this->view->job_model = $model;
-			$this->view->active = $processor->chunk($idx);;
+			$this->view->active = $processor->chunk($idx);
 			$this->view->pageCurrent = $idx;
 			$this->view->pageCount = $processor->totalChunks();
 			$this->view->render( '/upload/processing' );

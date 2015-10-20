@@ -76,6 +76,8 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 	public function setMeta($key = '', $value = null)
 	{
 		$success = false;
+		$stopwatch = Stopwatch::start( get_short_class($this) . $key );
+
 		if ( isset($key) && strlen($key) > 0) {
 			$success = $this->sqlite_deleteValueForKeypath($key);
 			if ( $success ) {
@@ -89,6 +91,19 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 				}
 			}
 		}
+
+		$elapsed = Stopwatch::end( $stopwatch );
+		if ( $elapsed > 0.025 ) {
+			$vmsg = "";
+			if ( is_array($value) || is_object($value) ) {
+				$vmsg = gettype($value) . " count(" . count($value) .")";
+			}
+			else {
+				$vmsg = var_export($value, true);
+			}
+			Logger::logWarning( "Metadata::setMeta( $key, $vmsg )", "Slow metadata", $elapsed . " seconds" );
+		}
+
 		return $success;
 	}
 
@@ -100,9 +115,25 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 	public function getMeta($key = null, $default = null)
 	{
 		$value = null;
+
+		$stopwatch = Stopwatch::start( get_short_class($this) . $key );
+
 		if ( isset($key) && strlen($key) > 0) {
 			$value = $this->sqlite_valueForKeypath( $key );
 		}
+
+		$elapsed = Stopwatch::end( $stopwatch );
+		if ( $elapsed > 0.025 ) {
+			$vmsg = "";
+			if ( is_array($value) || is_object($value) ) {
+				$vmsg = gettype($value) . " count(" . count($value) .")";
+			}
+			else {
+				$vmsg = var_export($value, true);
+			}
+			Logger::logWarning( "Metadata::getMeta( $key, $vmsg )", "Slow metadata", $elapsed . " seconds" );
+		}
+
 		return (is_null($value) ? $default : $value);
 	}
 

@@ -65,7 +65,6 @@
 	?>
 	</ul>
 </div>
-
 <section>
 	<div class="row">
 

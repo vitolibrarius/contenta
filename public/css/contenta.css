@@ -109,6 +109,10 @@ span.icon.on:before 		{ color:red;}
 				no-repeat;
 }
 
+.blocked {
+ 	background-color: #ff979a;
+}
+
 /* Tabs */
 .tabs {
 	padding-left: 40px;

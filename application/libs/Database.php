@@ -81,12 +81,11 @@ class TraceStatement extends PDOStatement {
 
 		$success = parent::execute( $input_parameters );
 
-		$elapsed = Stopwatch::elapsed( $this->queryString );
+		$elapsed = Stopwatch::end( $this->queryString );
 		if ( $elapsed > 0.25 ) {
 			$msg = 'Slow SQL (' . $elapsed . ' seconds) for [' . $this->queryString . '] ' . (isset($input_parameters) ? var_export($input_parameters, true) : 'No Parameters');
 			Logger::logWarning( $msg );
 		}
-		Stopwatch::clear( $this->queryString );
 
 		return $success;
 	}
