@@ -382,9 +382,9 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				$pre_process_method = 'preprocess_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $pre_process_method)) {
 					try {
-						printMemory( __method__, __line__ );
+						printMemory( __method__, __line__, $pre_process_method . '(' . $data_keypath . ')');
 						$success_return = $this->$pre_process_method($meta);
-						printMemory( __method__, __line__ );
+						printMemory( __method__, __line__,  $pre_process_method . '(' . $data_keypath . ') = ' . var_export($success_return, true));
 						if ( is_null($success_return)) {
 							throw new Exception("pre-processing error " . $pre_process_method );
 						}
@@ -434,7 +434,7 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				$finalize_method = 'finalize_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $finalize_method)) {
 					try {
-						printMemory( __method__, __line__, $finalize_method . '(' . $data_keypath . ')'  );
+						printMemory( __method__, __line__, $finalize_method . '(' . $data_keypath . ')' );
 						$success_return = $this->$finalize_method($meta);
 						printMemory( __method__, __line__, $finalize_method . '(' . $data_keypath . ') = ' . var_export($success_return, true));
 						if ( is_null($success_return) ) {
