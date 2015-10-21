@@ -430,15 +430,15 @@ abstract class ContentMetadataImporter extends EndpointImporter
 			foreach( $imported as $path => $data_keypath ) {
 				printMemory( __method__, __line__ );
 				$meta = $this->getMeta( appendPath( ComicVineImporter::META_DATA_ROOT, $path ));
-				printMemory( __method__, __line__ );
 
 				$finalize_method = 'finalize_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $finalize_method)) {
 					try {
+						printMemory( __method__, __line__, $finalize_method . '(' . $data_keypath . ')'  );
 						$success_return = $this->$finalize_method($meta);
-						printMemory( __method__, __line__ );
+						printMemory( __method__, __line__, $finalize_method . '(' . $data_keypath . ') = ' . var_export($success_return, true));
 						if ( is_null($success_return) ) {
-							throw new Exception("finalize error " . $finalize_method );
+							throw new Exception("finalize error " . $finalize_method . '(' . $data_keypath . ')' );
 						}
 					}
 					catch ( Exception $e ) {
