@@ -352,7 +352,7 @@ class UploadImport extends Processor
 			. " - " . array_valueForKeypath( "cover_date", $matchingIssue)
 			 , __method__, $this->sourceFilename());
 
-		$importer = Processor::Named('ComicVineImporter', $this->sourceFilename() );
+		$importer = Processor::Named('ComicVineImporter', $this->guid );
 		$importer->setEndpoint($points[0]);
 
 		$existingSeries = Model::Named("Series")->objectForExternal(

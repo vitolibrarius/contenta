@@ -376,8 +376,6 @@ abstract class ContentMetadataImporter extends EndpointImporter
 			foreach( $enqueued as $path => $data_keypath ) {
 				$old = appendPath( ComicVineImporter::META_ENQUEUE_ROOT, $path);
 				$new = appendPath( ComicVineImporter::META_IMPORT_ROOT, $path);
-				$this->setMeta( $old, null );
-				$this->setMeta( $new, $data_keypath );
 				$meta = $this->getMeta( appendPath( ComicVineImporter::META_DATA_ROOT, $path ));
 
 				$pre_process_method = 'preprocess_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
@@ -389,6 +387,7 @@ abstract class ContentMetadataImporter extends EndpointImporter
 						}
 					}
 					catch ( Exception $e ) {
+						Logger::logError( "Preprocessing error for " . var_export($meta, true), __method__, $this->guid);
 						switch( $e->getCode() ) {
 							case 101:
 								Logger::logError( $meta[ContentMetadataImporter::META_IMPORT_TYPE] . " not found for xid " . $path,
@@ -407,6 +406,8 @@ abstract class ContentMetadataImporter extends EndpointImporter
 								break;
 						}
 					}
+					$this->setMeta( $old, null );
+					$this->setMeta( $new, $data_keypath );
 				}
 				else {
 					throw new Exception("failed to find processing function " . $pre_process_method );
@@ -467,7 +468,7 @@ abstract class ContentMetadataImporter extends EndpointImporter
 			}
 		}
 
-// 		$this->setPurgeOnExit(true);
+		$this->setPurgeOnExit(true);
 		return true;
 	}
 }

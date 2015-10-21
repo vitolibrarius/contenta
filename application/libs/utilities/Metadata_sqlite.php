@@ -95,7 +95,7 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 		}
 
 		$elapsed = Stopwatch::end( $stopwatch );
-		if ( $elapsed > 0.1 ) {
+		if ( $elapsed > 1.0 ) {
 			$vmsg = "";
 			if ( is_array($value) || is_object($value) ) {
 				$vmsg = gettype($value) . " count(" . count($value) .")";
@@ -125,7 +125,7 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 		}
 
 		$elapsed = Stopwatch::end( $stopwatch );
-		if ( $elapsed > 0.1 ) {
+		if ( $elapsed > 1.0 ) {
 			$vmsg = "";
 			if ( is_array($value) || is_object($value) ) {
 				$vmsg = gettype($value) . " count(" . count($value) .")";
