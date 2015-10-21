@@ -3,6 +3,17 @@
 // guard to ensure basic configuration is loaded
 defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
+	function printMemory( $file, $line )
+	{
+		$unit = array('b','kb','mb','gb','tb','pb');
+		$s = memory_get_usage(true);
+		$p = memory_get_peak_usage(true);
+    	$ms = @round($s/pow(1024,($i=floor(log($s,1024)))),2).' '.$unit[$i];
+    	$mp = @round($p/pow(1024,($i=floor(log($p,1024)))),2).' '.$unit[$i];
+
+		print 'Memory at ' . $file . ':' . $line . ' (' . $ms . ' / ' . $mp . ')' . PHP_EOL;
+	}
+
 	function exceptionHandler($exception)
 	{
 		try {

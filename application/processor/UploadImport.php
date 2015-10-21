@@ -314,6 +314,7 @@ class UploadImport extends Processor
 
 	public function processData()
 	{
+		printMemory( __method__, __line__ );
 		$wrapper = FileWrapper::instance($this->importFilePath());
 		$testStatus = $wrapper->testWrapper($errorCode);
 		if ($errorCode != 0 || $this->getMeta(UploadImport::META_MEDIA_EXT) != 'cbz' ) {
@@ -321,11 +322,13 @@ class UploadImport extends Processor
 			Logger::logInfo( "Media corrupt " . $testStatus, __method__, $this->sourceFilename());
 			return;
 		}
+		printMemory( __method__, __line__ );
 
 		if ($this->hasResultsMetadata() == false && $this->processSearch() == false ) {
 			$this->generateThumbnails();
 			return;
 		}
+		printMemory( __method__, __line__ );
 
 		$issue = $this->getMeta( UploadImport::META_RESULTS_ISSUES );
 		if (count($issue) > 1) {
@@ -334,6 +337,7 @@ class UploadImport extends Processor
 			$this->generateThumbnails();
 			return;
 		}
+		printMemory( __method__, __line__ );
 
 		$matchingIssue = $issue[0];
 
@@ -345,6 +349,7 @@ class UploadImport extends Processor
 			return false;
 		}
 
+		printMemory( __method__, __line__ );
 		$this->setStatusMetaData( "Finishing Import" );
 		Logger::logInfo( "Found match importing "
 			. array_valueForKeypath( "volume/name", $matchingIssue)
@@ -373,9 +378,11 @@ class UploadImport extends Processor
 			), true, true
 		);
 
+		printMemory( __method__, __line__ );
 		try {
 			$importer->processData();
 
+			printMemory( __method__, __line__ );
 			$cbzType = Model::Named( "Media_Type" )->cbz();
 			$pub_xid = array_valueForKeypath( "id", $matchingIssue);
 			$publication = Model::Named("Publication")->objectForExternal($pub_xid, $importer->endpointTypeCode());
@@ -387,6 +394,7 @@ class UploadImport extends Processor
 			if ( $media instanceof model\MediaDBO ) {
 				if ( rename( $this->importFilePath(), $media->contentaPath()) ) {
 					$this->setPurgeOnExit(true);
+					printMemory( __method__, __line__ );
 				}
 				else {
 					$errors= error_get_last();
@@ -406,6 +414,7 @@ class UploadImport extends Processor
 			Logger::logException( $e );
 			$this->setStatusMetaData( "IMPORTER_ERROR" );
 		}
+		printMemory( __method__, __line__ );
 	}
 
 	public function convert_cbr()
