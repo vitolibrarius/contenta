@@ -76,40 +76,29 @@ class Logs extends Controller
 // 				isset($_GET['level']) ? $_GET['level'] : null,
 // 				isset($_GET['message']) ? $_GET['message'] : null
 
+			$this->view->pageCurrent = 0;
+			$this->view->chunkCount = 0;
+			$this->view->logArray = array();
+			$this->view->elapsed = "0 seconds";
+
 			if ( $filename != null ) {
-				$before = microtime(true);
+				$fullpath = Config::GetLog($filename);
+				if ( file_exists($fullpath) && filesize($fullpath) > 0 ) {
+					$before = microtime(true);
+					$filedata = file_get_contents($fullpath);
+					$result = preg_replace("/(\\[(\\d\\d\\.\\d\\d\\.\\d\\d\\d\\d\\s-\\s)(\\d\\d:\\d\\d:\\d\\d)])/uU", "=-=-=-=-=-=-=$3", $filedata);
+					$lines = preg_split('/=-=-=-=-=-=-=/', $result, -1, PREG_SPLIT_NO_EMPTY);
+					rsort( $lines );
+					$chunks = array_chunk ( $lines, 100, true);
+					$chunkNum = min( max(0, $chunkNum), (count($chunks) - 1) );
+					$chunkIndex = $chunks[$chunkNum];
 
-				$filedata = file_get_contents(Config::GetLog($filename));
-				$result = preg_replace("/(\\[(\\d\\d\\.\\d\\d\\.\\d\\d\\d\\d\\s-\\s)(\\d\\d:\\d\\d:\\d\\d)])/uU", "=-=-=-=-=-=-=$3", $filedata);
-				$lines = preg_split('/=-=-=-=-=-=-=/', $result, -1, PREG_SPLIT_NO_EMPTY);
-				rsort( $lines );
-				$chunks = array_chunk ( $lines, 100, true);
-				$chunkNum = min( max(0, $chunkNum), (count($chunks) - 1) );
-				$chunkIndex = $chunks[$chunkNum];
-
-				$log_array = array();
-				foreach( $chunkIndex as $line ) {
-					$line = implode("<br>", split_lines($line));
-					$matches = array();
-					$matchCount = preg_match_all(
-						"/(\\d\\d:\\d\\d:\\d\\d)\\s+(info|warning|error)\\s+\\|(((.*):(.*))|(.*))\\|\\s+\\|(((.*):(.*))|(.*))\\|(.*)$/uUms",
-						$line,
-						$matches
-					);
-					if ( $matchCount == 1 ) {
-						$log_array[] = array(
-							"time" => $matches[1][0],
-							"type" => $matches[2][0],
-							"trace" => (isset($matches[5][0]) ? $matches[5][0] : $matches[7][0]),
- 							"trace_id" => $matches[6][0],
-							"context" => (isset($matches[10][0]) ? $matches[10][0] : $matches[12][0]),
-							"context_id" => $matches[11][0],
-							"message" => $matches[13][0],
-						);
-					}
-					else {
+					$log_array = array();
+					foreach( $chunkIndex as $line ) {
+						$line = implode("<br>", split_lines($line));
+						$matches = array();
 						$matchCount = preg_match_all(
-							"/(\\d\\d:\\d\\d:\\d\\d)\\s+(info|warning|error)\\s+\\|(.*)\\|\\s+(.*)$/uUms",
+							"/(\\d\\d:\\d\\d:\\d\\d)\\s+(info|warning|error)\\s+\\|(((.*):(.*))|(.*))\\|\\s+\\|(((.*):(.*))|(.*))\\|(.*)$/uUms",
 							$line,
 							$matches
 						);
@@ -117,22 +106,40 @@ class Logs extends Controller
 							$log_array[] = array(
 								"time" => $matches[1][0],
 								"type" => $matches[2][0],
-								"trace" => $matches[3][0],
-								"message" => $matches[4][0],
+								"trace" => (isset($matches[5][0]) ? $matches[5][0] : $matches[7][0]),
+								"trace_id" => $matches[6][0],
+								"context" => (isset($matches[10][0]) ? $matches[10][0] : $matches[12][0]),
+								"context_id" => $matches[11][0],
+								"message" => $matches[13][0],
 							);
 						}
 						else {
-							$log_array[] = $line;
+							$matchCount = preg_match_all(
+								"/(\\d\\d:\\d\\d:\\d\\d)\\s+(info|warning|error)\\s+\\|(.*)\\|\\s+(.*)$/uUms",
+								$line,
+								$matches
+							);
+							if ( $matchCount == 1 ) {
+								$log_array[] = array(
+									"time" => $matches[1][0],
+									"type" => $matches[2][0],
+									"trace" => $matches[3][0],
+									"message" => $matches[4][0],
+								);
+							}
+							else {
+								$log_array[] = $line;
+							}
 						}
 					}
+
+					$this->view->pageCurrent = $chunkNum;
+					$this->view->chunkCount = count($chunks);
+					$this->view->logArray = $log_array;
+
+					$after = microtime(true);
+					$this->view->elapsed= ($after-$before) . " seconds";
 				}
-
-				$this->view->pageCurrent = $chunkNum;
-				$this->view->chunkCount = count($chunks);
-				$this->view->logArray = $log_array;
-
-				$after = microtime(true);
-				$this->view->elapsed= ($after-$before) . " seconds";
 			}
 
 			$this->view->filename= $filename;
