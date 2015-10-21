@@ -101,6 +101,15 @@ $guid = ( ($metadata->isMeta("guid")) ? $metadata->getMeta("guid") : uuid());
 $job_id = ( ($metadata->isMeta("job_id")) ? $metadata->getMeta("job_id") : null);
 $debug = ( ($metadata->isMeta("debug")) ? $metadata->getMeta("debug") : null);
 
+/** Configuration environment **/
+echo "Daemon startup" .PHP_EOL;
+echo "Processor: " . $processorName .PHP_EOL;
+echo "User: " . $user .PHP_EOL;
+echo "guid: " . $guid .PHP_EOL;
+echo "job_id: " . $job_id .PHP_EOL;
+echo "Memory: " . ini_get('memory_limit') .PHP_EOL;
+echo PHP_EOL;
+
 Logger::instance()->setTrace("Daemon", (is_null($job_id) ? $guid : $job_id) );
 
 // Logger::logInfo('starting daemon ', $processorName, ($user ? $user->__toString() : $user_api) );

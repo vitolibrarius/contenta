@@ -43,7 +43,6 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 
 	public function metaCount($key = null)
 	{
-		$database = $this->database();
 		$sql = "select COUNT(*) as COUNT from PRIMITIVE";
 		$params = null;
 
@@ -53,15 +52,18 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 			$params = array( ":k" => $normal . "%" );
 		}
 
+		$database = $this->database();
 		$statement = $database->prepare($sql);
 		if ($statement == false || $statement->execute($params) == false) {
 			$errPoint = ($statement ? $statement : $database);
 			$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 			Logger::logSQLError($sql, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, $params);
+			$database = null;
 			throw new \Exception("Error executing change to " . $sql);
 		}
 
 		$value = $statement->fetch();
+		$database = null;
 		if ( $value != null ) {
 			return $value['COUNT'];
 		}
@@ -139,18 +141,20 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 
 	private function sqlite_execute( $sql = null, $params = null )
 	{
-		$database = $this->database();
 		if ( is_null($sql) ) {
 			throw new \Exception("Unable to execute SQL for -null- statement");
 		}
 		else {
+			$database = $this->database();
 			$statement = $database->prepare($sql);
 			if ($statement == false || $statement->execute($params) == false) {
 				$errPoint = ($statement ? $statement : $database);
 				$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 				Logger::logSQLError($sql, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, $params);
+				$database = null;
 				throw new \Exception("Error executing change to " . $sql);
 			}
+			$database = null;
 		}
 	}
 
@@ -176,22 +180,24 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 
 	private function sqlite_valueForKeypath( $keypath )
 	{
-		$database = $this->database();
 		$normal = normalizePath( $keypath, null, null, true, true);
 		if ( is_null($normal) == false && strlen($normal) > 0) {
 			$sql = "select keypath, int_val, real_val, str_val, bool_val, date_val from PRIMITIVE where keypath = :k";
 			$params = array( ":k" => $normal );
 
+			$database = $this->database();
 			$statement = $database->prepare($sql);
 			if ($statement == false || $statement->execute($params) == false) {
 				$errPoint = ($statement ? $statement : $database);
 				$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 				Logger::logSQLError($sql, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, $params);
+				$database = null;
 				throw new \Exception("Error executing change to " . $sql);
 			}
 
 			$value = $statement->fetch();
 			if ( $value != null ) {
+				$database = null;
 				return $this->sqlite_record_value( $value );
 			}
 			else {
@@ -203,6 +209,7 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 					$errPoint = ($statement ? $statement : $database);
 					$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 					Logger::logSQLError($sql, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, $params);
+					$database = null;
 					throw new \Exception("Error executing change to " . $sql);
 				}
 
@@ -217,16 +224,17 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 						$v = $this->sqlite_record_value( $record );
 						$results = array_setValueForKeypath($k, $v, $results);
 					}
+					$database = null;
 					return $results;
 				}
 			}
+			$database = null;
 		}
 		return null;
 	}
 
 	private function sqlite_setValueForKeypath( $keypath, $value )
 	{
-		$database = $this->database();
 		$normal = normalizePath( $keypath, null, null, true, true);
 		if ( is_null($normal) == false && strlen($normal) > 0) {
 			$sql = "insert or replace into PRIMITIVE (keypath, int_val, real_val, str_val, bool_val, date_val) "
@@ -261,13 +269,16 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 					throw new \Exception( "cannot setMeta($key, ?) for " . var_export($value, true));
 			}
 
+			$database = $this->database();
 			$statement = $database->prepare($sql);
 			if ($statement == false || $statement->execute($params) == false) {
 				$errPoint = ($statement ? $statement : $database);
 				$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 				Logger::logSQLError($sql, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, $params);
+				$database = null;
 				throw new \Exception("Error executing change to " . $sql);
 			}
+			$database = null;
 			return true;
 		}
 		return false;
@@ -275,19 +286,22 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 
 	private function sqlite_deleteValueForKeypath( $keypath )
 	{
-		$database = $this->database();
 		$normal = normalizePath( $keypath, null, null, true, true);
 		if ( is_null($normal) == false && strlen($normal) > 0) {
 			$sql = "delete from PRIMITIVE where keypath like :k";
 			$params = array( ":k" => $normal . "%" );
 
+			$database = $this->database();
 			$statement = $database->prepare($sql);
 			if ($statement == false || $statement->execute($params) == false) {
 				$errPoint = ($statement ? $statement : $database);
 				$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
 				Logger::logSQLError($sql, 'sqlite_execute', $errPoint->errorCode(), $pdoError, $sql, $params);
+				$database = null;
 				throw new \Exception("Error executing change to " . $sql);
 			}
+
+			$database = null;
 			return true;
 		}
 		return false;
