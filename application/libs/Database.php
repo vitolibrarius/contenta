@@ -37,6 +37,7 @@ class Database extends PDO
 
 			$this->exec( 'PRAGMA foreign_keys = ON;' );
 			$this->exec( 'PRAGMA busy_timeout = 10000;' );
+			$this->exec( 'PRAGMA journal_mode=WAL;' );
 		}
 		else
 		{
