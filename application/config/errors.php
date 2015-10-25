@@ -14,6 +14,20 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 		print 'Memory at ' . $file . ':' . $line . ' (' . $ms . ' / ' . $mp . ')' . ((isset($cmt) && strlen($cmt) >0) ? ' -- ' . $cmt : '') .PHP_EOL;
 	}
 
+	function printBacktrace($cmt = null)
+	{
+	    $trace = debug_backtrace();
+	    array_shift($trace);
+
+		print ((isset($cmt) && strlen($cmt) >0) ? $cmt.PHP_EOL : '');
+        foreach($trace as $item) {
+            print "\t" . (isset($item['file']) ? shortendPath($item['file'], 3) : '<unknown file>')
+            	. ' ' . (isset($item['line']) ? $item['line'] : '<unknown line>')
+            	. ' calling ' . (isset($item['function']) ? $item['function'] : '<unknown function>') . '()'
+            	. PHP_EOL;
+        }
+	}
+
 	function exceptionHandler($exception)
 	{
 		try {

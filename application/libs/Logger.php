@@ -83,7 +83,7 @@ abstract class Logger implements LoggerInterface {
 		return \Logger::instance()->error( $msg, $clazz, $method );
 	}
 
-	final public static function logException($exception) {
+	final public static function exceptionMessage($exception) {
 		if ( is_a($exception, '\Exception') ) {
 			// these are our templates
 			$traceline = "#%s %s(%s): %s(%s)";
@@ -124,16 +124,15 @@ abstract class Logger implements LoggerInterface {
 				$exception->getLine(),
 				implode("\n", $result)
 			);
-			return \Logger::instance()->error( $msg,	shortendPath($exception->getFile(), 3), $exception->getLine());
+			return array($msg, shortendPath($exception->getFile(), 3), $exception->getLine());
 		}
-		else {
-			return \Logger::instance()->error(
-				get_class($exception)." thrown? Message: " . var_export($exception, true),
-				"File",
-				null
-			);
 
-		}
+		return array(get_class($exception)." thrown? Message: " . var_export($exception, true), "File", null);
+	}
+
+	final public static function logException($exception) {
+		list($message, $file, $line) = Logger::exceptionMessage( $exception );
+		return \Logger::instance()->error( $message, $file, $line );
 	}
 
 	final public static function logFatal($message, $context = null, $context_id = null) {

@@ -52,6 +52,7 @@ class Database extends PDO
 
 		$this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 		$this->setAttribute(PDO::ATTR_TIMEOUT, 10000);
+		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('TraceStatement', array($this)));
 	}
 
@@ -79,13 +80,31 @@ class TraceStatement extends PDOStatement {
     public function execute($input_parameters = null)
     {
 		Stopwatch::start( $this->queryString );
+		$count = 0;
+		$keepTrying = true;
 
-		$success = parent::execute( $input_parameters );
+		while ($keepTrying && $count < 5) {
+			try {
+				$success = parent::execute( $input_parameters );
+				$keepTrying = false;
+			}
+			catch ( \Exception $e ) {
+				$count++;
+				list($message, $file, $line) = Logger::exceptionMessage( $exception );
+				Logger::logToFile( "Try $count : " . $message, $file, $line );
+				usleep(500);
+			}
+		}
 
-		$elapsed = Stopwatch::end( $this->queryString );
-		if ( $elapsed > 0.5 ) {
-			$msg = $this->queryString . ' ' . (isset($input_parameters) ? var_export($input_parameters, true) : 'No Parameters');
-			Logger::logWarning( $msg, "Slow SQL", $elapsed . " seconds" );
+		if ( $count >= 5 && false == $success) {
+			Logger::logToFile( "Failed after 5 tries" );
+		}
+		else {
+			$elapsed = Stopwatch::end( $this->queryString );
+			if ( $elapsed > 0.5 ) {
+				$msg = $this->queryString . ' ' . (isset($input_parameters) ? var_export($input_parameters, true) : 'No Parameters');
+				Logger::logToFile( $msg, "Slow SQL", $elapsed . " seconds" );
+			}
 		}
 
 		return $success;
