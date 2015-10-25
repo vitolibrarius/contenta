@@ -61,7 +61,7 @@ abstract class Logger implements LoggerInterface {
 
 
 	final public static function logToFile($message, $context = null, $context_id = null) {
-		$log = new FileLogger();
+		$log = new loggers\FileLogger();
 		return $log->error( $message, $context, $context_id );
 	}
 
