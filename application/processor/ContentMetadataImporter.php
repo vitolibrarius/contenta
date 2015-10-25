@@ -370,7 +370,6 @@ abstract class ContentMetadataImporter extends EndpointImporter
 
 	public function processData()
 	{
-		printMemory( __method__, __line__ );
 		$enqueued = $this->getMeta( ComicVineImporter::META_ENQUEUE_ROOT );
 		while ( is_array($enqueued) && count($enqueued) > 0) {
 			// move to imported
@@ -382,15 +381,12 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				$pre_process_method = 'preprocess_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $pre_process_method)) {
 					try {
-						printMemory( __method__, __line__, $pre_process_method . '(' . $data_keypath . ')');
 						$success_return = $this->$pre_process_method($meta);
-						printMemory( __method__, __line__,  $pre_process_method . '(' . $data_keypath . ') = ' . var_export($success_return, true));
 						if ( is_null($success_return)) {
 							throw new Exception("pre-processing error " . $pre_process_method );
 						}
 					}
 					catch ( Exception $e ) {
-						printMemory( __method__, __line__ );
 						Logger::logError( "Preprocessing error for " . var_export($meta, true), __method__, $this->guid);
 						switch( $e->getCode() ) {
 							case 101:
@@ -418,31 +414,24 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				}
 			}
 
-			printMemory( __method__, __line__ );
 			// see if anything has been enqueued
 			$enqueued = $this->getMeta( ComicVineImporter::META_ENQUEUE_ROOT );
 		}
 
-		printMemory( __method__, __line__ );
-
 		$imported = $this->getMeta( ComicVineImporter::META_IMPORT_ROOT );
 		if ( is_array($imported) && count($imported) > 0 ) {
 			foreach( $imported as $path => $data_keypath ) {
-				printMemory( __method__, __line__ );
 				$meta = $this->getMeta( appendPath( ComicVineImporter::META_DATA_ROOT, $path ));
 
 				$finalize_method = 'finalize_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $finalize_method)) {
 					try {
-						printMemory( __method__, __line__, $finalize_method . '(' . $data_keypath . ')' );
 						$success_return = $this->$finalize_method($meta);
-						printMemory( __method__, __line__, $finalize_method . '(' . $data_keypath . ') = ' . var_export($success_return, true));
 						if ( is_null($success_return) ) {
 							throw new Exception("finalize error " . $finalize_method . '(' . $data_keypath . ')' );
 						}
 					}
 					catch ( Exception $e ) {
-						printMemory( __method__, __line__ );
 						Logger::LogException( $e );
 						if ( $this->strictErrors == true ) {
 							throw $e;
@@ -454,8 +443,6 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				}
 			}
 		}
-
-		printMemory( __method__, __line__ );
 
 		$toBePurged = $this->getMeta( ComicVineImporter::META_PURGE_ROOT );
 		if ( is_array($toBePurged) && count($toBePurged) > 0 ) {
@@ -481,8 +468,6 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				}
 			}
 		}
-
-		printMemory( __method__, __line__ );
 
 		$this->setPurgeOnExit(true);
 		return true;
