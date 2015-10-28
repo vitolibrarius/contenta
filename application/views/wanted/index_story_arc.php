@@ -62,7 +62,6 @@
 		return false;
 	});
 
-$(document).ajaxComplete(function(){
 	$('body').on('click', 'a.nzb', function (e) {
 		var safe_guid = $(this).attr('data-safe_guid');
 		$.ajax({
@@ -101,5 +100,5 @@ $(document).ajaxComplete(function(){
 		e.stopPropagation();
 		return false;
 	});
-});
+
 </script>

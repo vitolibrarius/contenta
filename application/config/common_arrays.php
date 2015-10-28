@@ -1,5 +1,15 @@
 <?php
 
+	function array_recursive_ksort(&$array)
+	{
+	   foreach ($array as &$value) {
+		  if (is_array($value)) {
+		  	array_recursive_ksort($value);
+		  }
+	   }
+	   return ksort($array);
+	}
+
 	function array_flatten( array $array = array(), $targetClass = null )
 	{
 		$merged = array();

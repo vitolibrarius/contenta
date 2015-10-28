@@ -10,11 +10,15 @@ use \Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
+use \Processor as Processor;
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
 use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
+use exceptions\ImportMediaException as ImportMediaException;
+use processor\UploadImport as UploadImport;
+use utilities\FileWrapper as FileWrapper;
 
 use controller\Admin as Admin;
 
@@ -29,6 +33,8 @@ use model\Series as Series;
 use model\Series_Alias as Series_Alias;
 use model\Series_Character as Series_Character;
 use model\User_Series as User_Series;
+use model\Media as Media;
+use model\MediaDBO as MediaDBO;
 
 /**
  * Class Admin

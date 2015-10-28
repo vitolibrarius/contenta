@@ -54,7 +54,7 @@ class Metadata_json extends Metadata implements \MetadataInterface
 	{
 		if ( isset($key) && strlen($key) > 0) {
 			$newConfiguration = array_setValueForKeypath($key, $value, $this->jsonData);
-			if ( is_array($newConfiguration) ) {
+			if ( is_array($newConfiguration) && array_recursive_ksort($newConfiguration) ) {
 				$this->jsonData = $newConfiguration;
 				$this->writeMetadata();
 				return true;

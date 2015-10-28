@@ -335,6 +335,24 @@
             "filename": {
                 "FIELD_EMPTY": "Filename field was empty",
                 "FIELD_TOO_LONG": "Filename field was more than 256 characters"
+            },
+            "series_id": {
+                "search": "Series Name"
+            },
+            "issue_num": {
+                "search": "Issue Number"
+            },
+            "pub_date": {
+                "search": "Year"
+            },
+            "characters": {
+                "search": "Select Characters"
+            },
+            "story_arcs": {
+                "search": "Select Story Arcs"
+            },
+            "multiple": {
+                "search": "Multiple Copies"
             }
         },
         "publication": {
@@ -382,6 +400,9 @@
             },
             "story_arcs": {
                 "search": "Select Story Arcs"
+            },
+            "media": {
+                "label": "Available Media"
             }
         },
         "job": {
@@ -560,46 +581,6 @@
         "userlist": {
             "DeleteDescription": "This will permanently delete the user.",
             "DeleteConfirmation": "Are you sure you want to continue?"
-        },
-        "UsersLink": {
-            "name": "AdminUsers\/UsersLink\/name",
-            "desc": "AdminUsers\/UsersLink\/desc"
-        },
-        "AddUsersLink": {
-            "name": "AdminUsers\/AddUsersLink\/name",
-            "desc": "AdminUsers\/AddUsersLink\/desc"
-        },
-        "JobsLink": {
-            "name": "AdminUsers\/JobsLink\/name",
-            "desc": "AdminUsers\/JobsLink\/desc"
-        },
-        "JobsRunningLink": {
-            "name": "AdminUsers\/JobsRunningLink\/name",
-            "desc": "AdminUsers\/JobsRunningLink\/desc"
-        },
-        "EndpointsLink": {
-            "name": "AdminUsers\/EndpointsLink\/name",
-            "desc": "AdminUsers\/EndpointsLink\/desc"
-        },
-        "AddEndpointsLink": {
-            "name": "AdminUsers\/AddEndpointsLink\/name",
-            "desc": "AdminUsers\/AddEndpointsLink\/desc"
-        },
-        "VersionLink": {
-            "name": "AdminUsers\/VersionLink\/name",
-            "desc": "AdminUsers\/VersionLink\/desc"
-        },
-        "UpgradeLink": {
-            "name": "AdminUsers\/UpgradeLink\/name",
-            "desc": "AdminUsers\/UpgradeLink\/desc"
-        },
-        "UploadLink": {
-            "name": "AdminUsers\/UploadLink\/name",
-            "desc": "AdminUsers\/UploadLink\/desc"
-        },
-        "RepairLink": {
-            "name": "AdminUsers\/RepairLink\/name",
-            "desc": "AdminUsers\/RepairLink\/desc"
         }
     },
     "AdminCharacters": {
@@ -642,7 +623,8 @@
         "unknown": "No search data found, please reprocess",
         "NO_METADATA_FOUND": "No matches found",
         "BUSY_NO_SEARCH": "System busy, search suspended",
-        "Finishing Import": "Finishing Import"
+        "Finishing Import": "Finishing Import",
+        "REPROCESS": "Reprocess Requested"
     },
     "AdminSeries": {
         "title": "Series Administration",
@@ -659,6 +641,10 @@
         "index": {
             "DeleteDescription": "This will permanently delete this media ",
             "DeleteConfirmation": "Are you sure you want to continue?"
+        },
+        "media": {
+            "DeleteDescription": "AdminUploadRepair\/media\/DeleteDescription",
+            "DeleteConfirmation": "AdminUploadRepair\/media\/DeleteConfirmation"
         }
     },
     "AdminPublication": {
@@ -666,6 +652,12 @@
         "index": {
             "DeleteDescription": "This will permanently delete this Publication.",
             "DeleteConfirmation": "Are you sure you want to continue?"
+        },
+        "media": {
+            "DeleteDescription": "This will permanently delete this media ",
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteButtonText": "Delete",
+            "ReprocessButtonText": "Return to Processing Queue"
         }
     },
     "AdminJobs": {
@@ -693,10 +685,15 @@
         "Search Newznab": "Search Newznab"
     },
     "DisplaySeries": {
-        "title": "DisplaySeries\/title",
+        "title": "Series"
+    },
+    "AdminMedia": {
+        "title": "Media Administration",
         "index": {
-            "DeleteDescription": "DisplaySeries\/index\/DeleteDescription",
-            "DeleteConfirmation": "DisplaySeries\/index\/DeleteConfirmation"
+            "DeleteDescription": "This will permanently delete this media.",
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "ReprocessButtonText": "Return to Processing Queue",
+            "DeleteButtonText": "Delete"
         }
     }
 }

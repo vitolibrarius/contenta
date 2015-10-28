@@ -1,3 +1,5 @@
+<?php use html\Element as H ?>
+
 <section>
 	<div class="row">
 		<div class="grid_6">
@@ -54,30 +56,32 @@
 				<fieldset>
 				<legend><?php echo Localized::ModelLabel($this->model->tableName(),"AdditionalLegend"); ?></legend>
 
-					<div class="">
-						<label><?php echo Localized::ModelLabel($this->model->tableName(), "xupdated"); ?></label>
-						<input class="xupdated" type="text" name="xupdated" disabled
-							value="<?php echo $this->object->formattedDate('xupdated'); ?>"
-						/>
+					<?php $endpointType = $this->object->externalEndpoint()->type(); ?>
+					<label>Metadata Source</label>
+					<div>
+						<span class="input_restriction">
+							<a href="<?php echo $this->object->xurl; ?>" target="<?php echo $endpointType->name; ?>">
+								<?php echo $endpointType->name; ?>
+								<img style="display:inline; float:right; max-width: 20px; max-height: 20px;"
+									src="<?php echo $endpointType->favicon(); ?>">
+							</a>
+						</span>
 					</div>
 
-					<div class="">
-						<label><?php echo Localized::ModelLabel($this->model->tableName(), "mediaPath"); ?></label>
-						<input class="mediaPath" type="text" name="mediaPath" disabled
-							value="<?php echo $this->object->mediaPath(); ?>"
-						/>
-					</div>
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), "xupdated"); ?></label>
+					<input class="xupdated" type="text" name="xupdated" disabled
+						value="<?php echo $this->object->formattedDate('xupdated'); ?>"
+					/>
 
-					<div class="">
+					<div class="half">
 						<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::IconName); ?></label>
 						<img src="<?php echo Config::Web( "Image", "icon", $this->model->tableName(), $this->object->id); ?>" />
 					</div>
 
-					<div class="">
+					<div class="half omega">
 						<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::ThumbnailName); ?></label>
 						<img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $this->object->id); ?>" />
 					</div>
-					<br>
 
 				<div>
 					<input type="submit" name="refreshEndpoint" value="<?php echo Localized::GlobalLabel("RefreshFromEndpoint"); ?>" />
@@ -116,7 +120,23 @@
 						$card->setDeletePath( $this->deletePublicationAction . '/' . $value->id );
 					}
 					echo '<div class="grid_3">' . PHP_EOL;
-					echo $card->render($value);
+					echo $card->render($value, function() use($value) {
+							$all_media = $value->media();
+							if ( is_array($all_media) ) {
+								foreach ($all_media as $idx => $media) {
+									$c[] = H::p( $media->formattedSize(),
+										H::a( array( "href" => Config::Web("/Api/mediaPayload/" . $media->id)),
+												H::img( array( "src" => Config::Web("/public/img/download.png" )))
+											),
+										H::a( array( "target" => "slideshow", "href" => Config::Web("/DisplaySeries/mediaSlideshow/".$media->id)),
+											H::img( array( "src" => Config::Web("/public/img/slideshow.png") ))
+											)
+									);
+								}
+							}
+							return (isset($c) ? $c : null);
+						}
+					);
 					echo '</div>' . PHP_EOL;
 				}
 			?>

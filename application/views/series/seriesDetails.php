@@ -46,14 +46,13 @@
 							$all_media = $value->media();
 							if ( is_array($all_media) ) {
 								foreach ($all_media as $idx => $media) {
-									$c[] = H::a( array( "href" => Config::Web("/Api/mediaPayload/" . $media->id)),
+									$c[] = H::em( $media->formattedSize(),
+										H::a( array( "href" => Config::Web("/Api/mediaPayload/" . $media->id)),
 												H::img( array( "src" => Config::Web("/public/img/download.png" )))
-											);
-									$c[] = H::a( array(
-											"target" => "slideshow",
-											"href" => Config::Web("/DisplaySeries/mediaSlideshow/".$media->id)
-										),
-										H::img( array( "src" => Config::Web("/public/img/slideshow.png") ))
+											),
+										H::a( array( "target" => "slideshow", "href" => Config::Web("/DisplaySeries/mediaSlideshow/".$media->id)),
+											H::img( array( "src" => Config::Web("/public/img/slideshow.png") ))
+											)
 									);
 								}
 							}

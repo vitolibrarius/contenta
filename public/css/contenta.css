@@ -17,6 +17,14 @@ h1, h2, h3, h4, h5, h6 {
 	padding:0;
 }
 
+.group {
+	margin-top: 1em;
+	padding: .5em;
+	background-color: #e2e2e2;
+	vertical-align: middle;
+	border-bottom: 1px solid #FFFFFF;
+}
+
 header	{ padding:15px 0; }
 section	{ /* border: 1px solid green; */ }
 p		{ margin:0 0 1.5em;}

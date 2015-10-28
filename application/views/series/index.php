@@ -1,17 +1,15 @@
 <script language="javascript" type="text/javascript">
 	// Wait until the DOM has loaded before querying the document
-	$(document).ajaxComplete(function(){
-		$('a.confirm').click(function(e){
-			modal.open({
-				heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
-				img: '<?php echo Config::Web("/public/img/Logo_sm.png"); ?>',
-				description: '<?php echo $this->label( "index", "DeleteDescription"); ?>',
-				confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
-				actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
-				action: $(this).attr('action')
-			});
-			e.preventDefault();
+	$('body').on('click', 'a.confirm', function (e) {
+		modal.open({
+			heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
+			img: '<?php echo Config::Web("/public/img/Logo_sm.png"); ?>',
+			description: '<?php echo $this->label( "index", "DeleteDescription"); ?>',
+			confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
+			actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
+			action: $(this).attr('action')
 		});
+		e.preventDefault();
 	});
 </script>
 

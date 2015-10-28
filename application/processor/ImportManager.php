@@ -145,7 +145,7 @@ class ImportManager extends Processor
 				$process_meta = Metadata::forDirectory($fullpath);
 				$allData = $process_meta->getMeta(UploadImport::META_MEDIA);
 				if ( is_array($allData) ) {
-					$status = $process_meta->getMeta('status', "UNKNOWNX");
+					$status = $process_meta->getMeta('status', "UNKNOWN");
 					$this->setMeta( appendPath( ImportManager::PENDING, $processKey), $status);
 					$this->setMeta( appendPath( ImportManager::IMPORTS, $processKey), $allData );
 					$allData['status'] = $status;

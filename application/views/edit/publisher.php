@@ -50,21 +50,32 @@
 				<fieldset>
 				<legend><?php echo Localized::ModelLabel($this->model->tableName(),"AdditionalLegend"); ?></legend>
 
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "xupdated"); ?></label>
-					<input class="xupdated" type="text" name="xupdated" disabled
-						value="<?php echo $this->object->formattedDate('xupdated'); ?>"
-					/>
+				<?php $endpointType = $this->object->externalEndpoint()->type(); ?>
+				<label>Metadata Source</label>
+				<div>
+					<span class="input_restriction">
+						<a href="<?php echo $this->object->xurl; ?>" target="<?php echo $endpointType->name; ?>">
+							<?php echo $endpointType->name; ?>
+							<img style="display:inline; float:right; max-width: 20px; max-height: 20px;"
+								src="<?php echo $endpointType->favicon(); ?>">
+						</a>
+					</span>
+				</div>
 
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "mediaPath"); ?></label>
-					<input class="mediaPath" type="text" name="mediaPath" disabled
-						value="<?php echo $this->object->mediaPath(); ?>"
-					/>
+				<label><?php echo Localized::ModelLabel($this->model->tableName(), "xupdated"); ?></label>
+				<input class="xupdated" type="text" name="xupdated" disabled
+					value="<?php echo $this->object->formattedDate('xupdated'); ?>"
+				/>
 
+				<div class="half">
 					<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::IconName); ?></label>
 					<img src="<?php echo Config::Web( "Image", "icon", $this->model->tableName(), $this->object->id); ?>" />
+				</div>
 
+				<div class="half omega">
 					<label><?php echo Localized::ModelLabel($this->model->tableName(), Model::ThumbnailName); ?></label>
 					<img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $this->object->id); ?>" />
+				</div>
 
 				<div>
 					<input type="submit" name="refreshEndpoint" value="<?php echo Localized::GlobalLabel("RefreshFromEndpoint"); ?>" />

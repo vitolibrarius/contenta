@@ -66,9 +66,7 @@ $(document).ready(function($) {
 			}
 		});
 	};
-});
 
-$(document).ajaxComplete(function(){
 	$('body').on('click', 'a.nzb', function (e) {
 		var safe_guid = $(this).attr('data-safe_guid');
 		$.ajax({

@@ -69,6 +69,12 @@
 					<p>Flagged issues</p>
 				</div>
 			</a>
+			<a href="<?php echo Config::Web('/AdminMedia/index'); ?>">
+				<div class="admin_card_item">
+					<h3>Media</h3>
+					<p>Manage Media Files</p>
+				</div>
+			</a>
 		</div>
 
 			</div>

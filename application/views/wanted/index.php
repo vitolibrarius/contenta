@@ -89,7 +89,7 @@ $(document).ready(function(){
 		return false;
 	});
 
-		$('body').on('click', 'a.srch', function (e) {
+	$('body').on('click', 'a.srch', function (e) {
 		var pub_id = $(this).attr('data-pub_id');
 		$(this).fadeOut(100).hide();
 		$.ajax({

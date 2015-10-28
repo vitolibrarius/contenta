@@ -1,75 +1,66 @@
 <script language="javascript" type="text/javascript">
-	// Wait until the DOM has loaded before querying the document
 	$('body').on('click', 'a.confirm', function (e) {
 		modal.open({
 			heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
-			img: '<?php echo Config::Web("/public/img/Logo_sm.png"); ?>',
-			description: '<?php echo $this->label( "index", "DeleteDescription"); ?>',
+			img: '<?php echo Config::Web("/AdminMedia/thumbnailForMedia/") ?>' + $(this).attr('data_key'),
+			description: '<?php echo $this->label( "index", "DeleteDescription"); ?> <br /><em>' + $(this).attr('data_filename') + '</em>',
 			confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
 			actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
-			action: $(this).attr('action')
+			action: $(this).attr('data_action')
 		});
 		e.preventDefault();
 	});
 </script>
 
-<div class="paging">
-	<ul>
-		<li><a href="<?php echo Config::Web('/AdminPublishers/index'); ?>">Publishers</a></li>
-		<li><a href="<?php echo Config::Web('/AdminSeries/index'); ?>">Series</a></li>
-		<li><a href="<?php echo Config::Web('/AdminCharacters/index'); ?>">Characters</a></li>
-		<li><a href="<?php echo Config::Web('/AdminStoryArcs/index'); ?>">Story Arcs</a></li>
-		<li><a href="<?php echo Config::Web( '/AdminSeries/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a></li>
-	</ul>
-</div>
-
-<form id='searchForm' name='searchForm'>
-	<div>
-		<div style="display: inline-block;">
-		<input type="text" name="searchSeries" id="searchSeries"
-			class="text_input"
-			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "series_id" ); ?>"
-			value="">
-		</div>
-		<div style="display: inline-block; min-width: 300px;">
-		<select name="searchCharacter" id="searchCharacter"
-				class="text_input">
-		</select>
-		</div>
-		<div style="display: inline-block; min-width: 300px;">
-		<select name="searchStoryArcs" id="searchStoryArcs"
-				class="text_input">
-		</select>
-		</div>
-		<div style="display: inline-block;">
-		<input type="number" name="searchIssue" id="searchIssue"
-			min="0"
-			class="text_input"
-			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "issue_num" ); ?>"
-			value="">
-		</input>
-		</div>
-		<div style="display: inline-block;">
-		<input type="number" name="searchYear" id="searchYear"
-			min="1950"
-			max="<?php echo intval(date("Y") + 1); ?>"
-			class="text_input"
-			placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "pub_date" ); ?>"
-			value="">
-		</input>
-		</div>
-		<div style="display: inline-block; width: 110px; background-color: white; padding:4px;">
-		<label class="checkbox" for="searchMedia" >
-			<input type="checkbox"  name="searchMedia" id="searchMedia"
+<section>
+	<form id='searchForm' name='searchForm'>
+	<div class="row">
+		<div class="grid_3">
+			<input type="text" name="searchSeries" id="searchSeries"
 				class="text_input"
-				value="1"
-				checked>
+				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "series_id" ); ?>"
+				value="">
+		</div>
+		<div class="grid_3">
+			<select name="searchCharacter" id="searchCharacter"
+					class="text_input">
+			</select>
+		</div>
+		<div class="grid_3">
+			<select name="searchStoryArcs" id="searchStoryArcs"
+					class="text_input">
+			</select>
+		</div>
+		<div class="grid_1">
+			<input type="number" name="searchIssue" id="searchIssue"
+				min="0"
+				class="text_input"
+				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "issue_num" ); ?>"
+				value="">
 			</input>
-			Has Media
+		</div>
+		<div class="grid_1">
+			<input type="number" name="searchYear" id="searchYear"
+				min="1950"
+				max="<?php echo intval(date("Y") + 1); ?>"
+				class="text_input"
+				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "pub_date" ); ?>"
+				value="">
+			</input>
+		</div>
+		<div class="grid_1">
+			<label class="checkbox" for="searchMedia" >
+				<input type="checkbox"  name="searchMedia" id="searchMedia"
+					class="text_input"
+					value="1"
+					checked>
+				</input>
+				<?php echo Localized::ModelSearch($this->model->tableName(), "multiple" ); ?>
 			</label>
 		</div>
 	</div>
-</form>
+	</form>
+</section>
 
 <div id='ajaxDiv'></div>
 
@@ -138,7 +129,7 @@ $(document).ready(function($) {
 	function refresh() {
 		$.ajax({
 			type: "GET",
-			url: "<?php echo Config::Web('/AdminPublication/searchPublication'); ?>",
+			url: "<?php echo Config::Web('/AdminMedia/searchMedia'); ?>",
 			data: {
 				series_name: $('#searchSeries').val(),
 				character_id: $('#searchCharacter').val(),

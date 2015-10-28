@@ -59,11 +59,8 @@ $(document).ready(function() {
 		}
 		return false;
 	}) //end click
-});
 
-
-$(document).ajaxComplete(function() {
-	$('a.pub_wanted.toggle').click(function(e){
+	$('body').on('click', 'a.pub_wanted.toggle', function (e) {
 		var span = $(this).children("span.icon");
 		var action = $(this).attr("data-href");
 		if (action.length >= 1 ) {
