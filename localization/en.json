@@ -1,137 +1,617 @@
 {
-    "Index": {
-        "title": "Home"
+    "Admin": {
+        "AddEndpointsLink": {
+            "desc": "Create a new network endpoint connection",
+            "name": "Add Endpoint"
+        },
+        "AddUsersLink": {
+            "desc": "Create a new user record",
+            "name": "Add User"
+        },
+        "EndpointsLink": {
+            "desc": "Configured network endpoints (RSS, ComicVine, ..)",
+            "name": "Endpoints"
+        },
+        "JobsLink": {
+            "desc": "Admin JobsLink desc",
+            "name": "Scheduled Jobs"
+        },
+        "JobsRunningLink": {
+            "desc": "Admin JobsRunningLink desc",
+            "name": "Currently Running"
+        },
+        "RepairLink": {
+            "desc": "Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content",
+            "name": "Repair Processing"
+        },
+        "UpgradeLink": {
+            "desc": "Check for new versions of this software and upgrade if necessary",
+            "name": "Check Version"
+        },
+        "UploadLink": {
+            "desc": "Upload new media content",
+            "name": "Upload"
+        },
+        "UsersLink": {
+            "desc": "User List and administration",
+            "name": "Users"
+        },
+        "VersionLink": {
+            "desc": "Review current version and configuration values",
+            "name": "Check Configuration"
+        },
+        "title": "Admin"
+    },
+    "AdminCharacters": {
+        "index": {
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete the character"
+        },
+        "title": "Character Administration"
+    },
+    "AdminJobs": {
+        "EditRecord": "Edit Job Schedule",
+        "JobsRunningLink": {
+            "name": "Currently Running"
+        },
+        "NewRecord": "New Job Schedule",
+        "Running Processes": "Running Processes",
+        "index": {
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete this Job."
+        },
+        "title": "Scheduled Jobs"
+    },
+    "AdminMedia": {
+        "index": {
+            "DeleteButtonText": "Delete",
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete this media.",
+            "ReprocessButtonText": "Return to Processing Queue"
+        },
+        "title": "Media Administration"
+    },
+    "AdminPublication": {
+        "index": {
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete this Publication."
+        },
+        "media": {
+            "DeleteButtonText": "Delete",
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete this media ",
+            "ReprocessButtonText": "Return to Processing Queue"
+        },
+        "title": "Publication Administration"
+    },
+    "AdminPublishers": {
+        "index": {
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete the publisher."
+        },
+        "title": "Publisher Administration"
+    },
+    "AdminSeries": {
+        "index": {
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete this Series."
+        },
+        "title": "Series Administration"
+    },
+    "AdminStoryArcs": {
+        "index": {
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete this story arc "
+        },
+        "title": "Story Arc Administration"
+    },
+    "AdminUploadRepair": {
+        "UploadLink": {
+            "name": "Upload"
+        },
+        "index": {
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete this media "
+        },
+        "title": "Unprocessed Uploads"
+    },
+    "AdminUsers": {
+        "title": "Users",
+        "userlist": {
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete the user."
+        }
+    },
+    "AdminWanted": {
+        "Search Newznab": "Search Newznab",
+        "title": "Wanted Publication Administration"
+    },
+    "Auth": {
+        "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator",
+        "LOGIN_FAILED": "Login Failed",
+        "PASSWORD_WRONG": "Username or password mismatch.  Please check and retry."
+    },
+    "DisplaySeries": {
+        "title": "Series"
+    },
+    "Error": {
+        "title": "Error"
     },
     "GLOBAL": {
-        "Menu": {
-            "Admin": "Admin",
-            "Logs": "Logs",
-            "Series": "Series",
-            "Profile": "Profile",
-            "Login": "Login",
-            "Story Arcs": "Story Arcs"
-        },
-        "WebsiteLink": "Website",
-        "HelpLink": "Help",
-        "AddIssueLink": "Report Issue",
-        "Release": "Release",
-        "SaveButton": "Save",
-        "ResetButton": "Reset",
-        "NextButton": "Next",
         "APIButton": "Generate New API Key",
-        "Validation Errors": "Please check your entries and fix the following errors",
-        "Save Completed": "Save Completed",
-        "Modal": {
-            "Confirm Delete": "Confirm Delete"
-        },
-        "DeleteButton": "Delete",
+        "AddIssueLink": "Report Issue",
         "Delete Completed": "Delete Completed",
+        "Delete Failure": "Delete Failure",
+        "DeleteButton": "Delete",
         "Error": {
             "title": "Error"
         },
-        "MigrateButton": "Migrate",
-        "UpgradeButton": "Upgrade",
-        "LoginButton": "Login",
-        "SearchButton": "Search",
-        "RefreshFromEndpoint": "Refresh From Endpoint",
-        "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints.",
-        "Delete Failure": "Delete Failure",
+        "Failed": "Failed",
         "Failed to find request record": "Failed to find request record",
+        "HelpLink": "Help",
+        "LoginButton": "Login",
+        "Menu": {
+            "Admin": "Admin",
+            "Login": "Login",
+            "Logs": "Logs",
+            "Profile": "Profile",
+            "Series": "Series",
+            "Story Arcs": "Story Arcs"
+        },
+        "MigrateButton": "Migrate",
+        "Modal": {
+            "Confirm Delete": "Confirm Delete"
+        },
+        "NextButton": "Next",
+        "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints.",
+        "RefreshFromEndpoint": "Refresh From Endpoint",
+        "Release": "Release",
+        "ResetButton": "Reset",
         "Running process id ": "Running process id ",
-        "testConnection": "Test Connection",
+        "Save Completed": "Save Completed",
+        "SaveButton": "Save",
+        "SearchButton": "Search",
         "Success": "Success",
-        "Failed": "Failed"
+        "UpgradeButton": "Upgrade",
+        "Validation Errors": "Please check your entries and fix the following errors",
+        "WebsiteLink": "Website",
+        "testConnection": "Test Connection"
     },
-    "Admin": {
-        "title": "Admin",
-        "UsersLink": {
-            "name": "Users",
-            "desc": "User List and administration"
-        },
-        "AddUsersLink": {
-            "name": "Add User",
-            "desc": "Create a new user record"
-        },
-        "UploadLink": {
-            "name": "Upload",
-            "desc": "Upload new media content"
-        },
-        "RepairLink": {
-            "name": "Repair Processing",
-            "desc": "Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content"
-        },
-        "EndpointsLink": {
-            "name": "Endpoints",
-            "desc": "Configured network endpoints (RSS, ComicVine, ..)"
-        },
-        "AddEndpointsLink": {
-            "name": "Add Endpoint",
-            "desc": "Create a new network endpoint connection"
-        },
-        "VersionLink": {
-            "name": "Check Configuration",
-            "desc": "Review current version and configuration values"
-        },
-        "UpgradeLink": {
-            "name": "Check Version",
-            "desc": "Check for new versions of this software and upgrade if necessary"
-        },
-        "JobsLink": {
-            "name": "Scheduled Jobs",
-            "desc": "Admin JobsLink desc"
-        },
-        "JobsRunningLink": {
-            "name": "Currently Running",
-            "desc": "Admin JobsRunningLink desc"
-        }
+    "Index": {
+        "title": "Home"
+    },
+    "Login": {
+        "title": "Login"
+    },
+    "Logs": {
+        "Show Filters": "Show Filters",
+        "title": "Logs"
     },
     "Model": {
+        "Series": {
+            "SUCCESS_CREATE": {
+                "label": "Created new Series"
+            }
+        },
+        "character": {
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "AliasesLegend": {
+                "label": "Aliases"
+            },
+            "FormLegend": {
+                "label": "Character Details"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "SUCCESS_CREATE": {
+                "label": "Created new Character"
+            },
+            "SearchLegend": {
+                "label": "Query ComicVine Characters "
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
+            },
+            "aliases": {
+                "label": "Aliases"
+            },
+            "desc": {
+                "label": "Description"
+            },
+            "gender": {
+                "label": "Gender"
+            },
+            "mediaPath": {
+                "label": "Media Path"
+            },
+            "name": {
+                "FIELD_EMPTY": "Name field was empty",
+                "FIELD_TOO_LONG": "Name field was more than 256 characters",
+                "label": "Name",
+                "search": "Character name"
+            },
+            "publisher_id": {
+                "label": "Publisher",
+                "search": "Select Publisher"
+            },
+            "realname": {
+                "label": "Real Name"
+            },
+            "xupdated": {
+                "label": "Updated from endpoint"
+            }
+        },
+        "endpoint": {
+            "FormLegend": {
+                "label": "Connection Details"
+            },
+            "api_key": {
+                "label": "API Key"
+            },
+            "base_url": {
+                "FIELD_EMPTY": "URL field was empty",
+                "label": "URL"
+            },
+            "compressed": {
+                "label": "Compressed"
+            },
+            "enabled": {
+                "label": "Enabled"
+            },
+            "endpoint_id": {
+                "search": "Select Endpoint"
+            },
+            "name": {
+                "FIELD_EMPTY": "Name field was empty",
+                "label": "Name"
+            },
+            "newznab": {
+                "search": "Search"
+            },
+            "type_id": {
+                "label": "Connection Type"
+            },
+            "username": {
+                "label": "Username"
+            }
+        },
+        "job": {
+            "FormLegend": {
+                "label": "Job Schedule Details"
+            },
+            "dayOfWeek": {
+                "FIELD_EMPTY": "Day of the Week schedule field is required",
+                "label": "Day of the Week"
+            },
+            "elapsed": {
+                "label": "Last Elapsed"
+            },
+            "enabled": {
+                "label": "Enabled"
+            },
+            "endpoint_id": {
+                "FIELD_EMPTY": "You must select an endpoint for this job",
+                "label": "Remote Endpoint"
+            },
+            "hour": {
+                "FIELD_EMPTY": "Hour schedule field is required",
+                "label": "Hour"
+            },
+            "lastDate": {
+                "label": "Last Run Date"
+            },
+            "minute": {
+                "FIELD_EMPTY": "Minute schedule field is required",
+                "label": "Minute"
+            },
+            "next": {
+                "FIELD_EMPTY": "Unable to calculate next job execute time.  Please check the schedule for minute-hour-day of week"
+            },
+            "nextDate": {
+                "label": "Next Run Date"
+            },
+            "one_shot": {
+                "label": "One Shot"
+            },
+            "parameter": {
+                "label": "Parameters"
+            },
+            "type_id": {
+                "label": "Job Type"
+            }
+        },
+        "job_running": {
+            "elapsedTime": {
+                "label": "Elapsed Time"
+            },
+            "guid": {
+                "label": "guid"
+            },
+            "job_id": {
+                "label": "Scheduled Job"
+            },
+            "job_type_id": {
+                "label": "Job Type"
+            },
+            "pid": {
+                "label": "System Process Id"
+            },
+            "processor": {
+                "label": "Processor"
+            }
+        },
+        "media": {
+            "characters": {
+                "search": "Select Characters"
+            },
+            "filename": {
+                "FIELD_EMPTY": "Filename field was empty",
+                "FIELD_TOO_LONG": "Filename field was more than 256 characters"
+            },
+            "issue_num": {
+                "search": "Issue Number"
+            },
+            "multiple": {
+                "search": "Multiple Copies"
+            },
+            "pub_date": {
+                "search": "Year"
+            },
+            "series_id": {
+                "search": "Series Name"
+            },
+            "story_arcs": {
+                "search": "Select Story Arcs"
+            }
+        },
+        "patch": {
+            "created": {
+                "label": "Date Applied"
+            },
+            "name": {
+                "label": "Migration"
+            }
+        },
+        "publication": {
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "FormLegend": {
+                "label": "Publication Details"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
+            },
+            "characters": {
+                "search": "Select Characters"
+            },
+            "desc": {
+                "label": "Description"
+            },
+            "issue_num": {
+                "label": "Issue Number",
+                "search": "Issue Number"
+            },
+            "media": {
+                "label": "Available Media"
+            },
+            "mediaPath": {
+                "label": "Media Path"
+            },
+            "name": {
+                "label": "Issue Name",
+                "search": "Issue Name"
+            },
+            "pub_date": {
+                "search": "Year"
+            },
+            "publisher_id": {
+                "search": "Select Publisher"
+            },
+            "series_id": {
+                "label": "Series Name",
+                "search": "Series Name"
+            },
+            "story_arcs": {
+                "search": "Select Story Arcs"
+            },
+            "xupdated": {
+                "label": "Last Updated"
+            }
+        },
+        "publisher": {
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "FormLegend": {
+                "label": "Publisher Details"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "SUCCESS_CREATE": {
+                "label": "Created new Publisher"
+            },
+            "SearchLegend": {
+                "label": "Query ComicVine Publishers"
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
+            },
+            "mediaPath": {
+                "label": "Media Path"
+            },
+            "name": {
+                "FIELD_EMPTY": "Name field was empty",
+                "FIELD_TOO_LONG": "Name field was more than 256 characters",
+                "label": "Name"
+            },
+            "path": {
+                "label": "Path"
+            },
+            "xsource": {
+                "label": "External Source"
+            },
+            "xupdated": {
+                "label": "Last Update from Endpoint"
+            },
+            "xurl": {
+                "label": "External URL"
+            }
+        },
+        "series": {
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "AliasesLegend": {
+                "label": "Aliases"
+            },
+            "FormLegend": {
+                "label": "Series Details"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "SearchLegend": {
+                "label": "Query ComicVine Series"
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
+            },
+            "aliases": {
+                "label": "Aliases"
+            },
+            "desc": {
+                "label": "Description"
+            },
+            "mediaPath": {
+                "label": "Media Path"
+            },
+            "name": {
+                "label": "Series Name",
+                "search": "Series Name"
+            },
+            "pub_active": {
+                "label": "Actively publishing"
+            },
+            "pub_wanted": {
+                "label": "Wanted for collection"
+            },
+            "publisher_id": {
+                "label": "Publisher",
+                "search": "Select Publisher"
+            },
+            "start_year": {
+                "label": "Start Year"
+            },
+            "xupdated": {
+                "label": "Last Updated"
+            },
+            "year": {
+                "search": "Year"
+            }
+        },
+        "story_arc": {
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
+            "FormLegend": {
+                "label": "Story Arc Details"
+            },
+            "Icon": {
+                "label": "Icon"
+            },
+            "Thumbnail": {
+                "label": "Thumbnail"
+            },
+            "characters": {
+                "search": "Select Characters"
+            },
+            "desc": {
+                "label": "Description"
+            },
+            "mediaPath": {
+                "label": "Media Path"
+            },
+            "name": {
+                "label": "Story Arc Name",
+                "search": "Story Arc Name"
+            },
+            "pub_active": {
+                "label": "Actively publishing"
+            },
+            "pub_wanted": {
+                "label": "Wanted for collection"
+            },
+            "publisher_id": {
+                "label": "Publisher",
+                "search": "Select Publisher"
+            },
+            "series_id": {
+                "search": "Series Name"
+            },
+            "xupdated": {
+                "label": "Last Updated"
+            }
+        },
         "users": {
+            "AdditionalLegend": {
+                "label": "Additional Features"
+            },
             "FormLegend": {
                 "label": "User Details"
             },
-            "name": {
-                "label": "Name",
-                "restriction": "only letters and numbers, 2 to 64 characters",
-                "USERNAME_FIELD_EMPTY": "Username field was empty"
-            },
-            "email": {
-                "label": "Email",
-                "restriction": "please provide a real email address",
-                "EMAIL_DOES_NOT_FIT_PATTERN": "Please enter a valid email address",
-                "EMAIL_FIELD_EMPTY": "Email field was empty"
-            },
-            "password": {
-                "label": "Password",
-                "restriction": "Please note: using a long sentence as a password is much much safer then something like '!c00lPa$$w0rd'. Have a look this interesting <a href='http:\/\/security.stackexchange.com\/questions\/6095\/xkcd-936-short-complex-password-or-long-dictionary-passphrase'> security.stackoverflow.com<\/a> thread",
-                "PASSWORD_REPEAT_WRONG": "Password and password repeat are not the same",
-                "PASSWORD_TOO_SHORT": "Password has a minimum length of 6 characters",
-                "PASSWORD_FIELD_EMPTY": "Password field was empty"
-            },
-            "password_check": {
-                "label": "Check Password"
+            "LoginLegend": {
+                "label": "Login"
             },
             "active": {
                 "label": "Active"
             },
+            "api_hash": {
+                "GenerateError": "An error occurred while generating a new API Key",
+                "label": "API Key"
+            },
             "creation_timestamp": {
                 "label": "Created"
             },
-            "AdditionalLegend": {
-                "label": "Additional Features"
-            },
-            "api_hash": {
-                "label": "API Key",
-                "GenerateError": "An error occurred while generating a new API Key"
+            "email": {
+                "EMAIL_DOES_NOT_FIT_PATTERN": "Please enter a valid email address",
+                "EMAIL_FIELD_EMPTY": "Email field was empty",
+                "label": "Email",
+                "restriction": "please provide a real email address"
             },
             "id": {
                 "label": "ID"
             },
+            "last_failed_login": {
+                "label": "Last Login Failure"
+            },
+            "last_login_timestamp": {
+                "label": "Last Login"
+            },
+            "name": {
+                "USERNAME_FIELD_EMPTY": "Username field was empty",
+                "label": "Name",
+                "restriction": "only letters and numbers, 2 to 64 characters"
+            },
+            "password": {
+                "PASSWORD_FIELD_EMPTY": "Password field was empty",
+                "PASSWORD_REPEAT_WRONG": "Password and password repeat are not the same",
+                "PASSWORD_TOO_SHORT": "Password has a minimum length of 6 characters",
+                "label": "Password",
+                "restriction": "Please note: using a long sentence as a password is much much safer then something like '!c00lPa$$w0rd'. Have a look this interesting <a href='http:\/\/security.stackexchange.com\/questions\/6095\/xkcd-936-short-complex-password-or-long-dictionary-passphrase'> security.stackoverflow.com<\/a> thread"
+            },
+            "password_check": {
+                "label": "Check Password"
+            },
             "type": {
                 "label": "Access Role"
-            },
-            "LoginLegend": {
-                "label": "Login"
             },
             "user_name": {
                 "label": "Username"
@@ -141,559 +621,75 @@
             },
             "user_rememberme": {
                 "label": "Remember Me (for 2 weeks)"
-            },
-            "last_login_timestamp": {
-                "label": "Last Login"
-            },
-            "last_failed_login": {
-                "label": "Last Login Failure"
-            }
-        },
-        "endpoint": {
-            "type_id": {
-                "label": "Connection Type"
-            },
-            "name": {
-                "label": "Name",
-                "FIELD_EMPTY": "Name field was empty"
-            },
-            "base_url": {
-                "label": "URL",
-                "FIELD_EMPTY": "URL field was empty"
-            },
-            "api_key": {
-                "label": "API Key"
-            },
-            "username": {
-                "label": "Username"
-            },
-            "enabled": {
-                "label": "Enabled"
-            },
-            "compressed": {
-                "label": "Compressed"
-            },
-            "FormLegend": {
-                "label": "Connection Details"
-            },
-            "newznab": {
-                "search": "Search"
-            },
-            "endpoint_id": {
-                "search": "Select Endpoint"
-            }
-        },
-        "publisher": {
-            "name": {
-                "label": "Name",
-                "FIELD_EMPTY": "Name field was empty",
-                "FIELD_TOO_LONG": "Name field was more than 256 characters"
-            },
-            "path": {
-                "label": "Path"
-            },
-            "xsource": {
-                "label": "External Source"
-            },
-            "xurl": {
-                "label": "External URL"
-            },
-            "FormLegend": {
-                "label": "Publisher Details"
-            },
-            "SearchLegend": {
-                "label": "Query ComicVine Publishers"
-            },
-            "AdditionalLegend": {
-                "label": "Additional Features"
-            },
-            "xupdated": {
-                "label": "Last Update from Endpoint"
-            },
-            "SUCCESS_CREATE": {
-                "label": "Created new Publisher"
-            },
-            "Icon": {
-                "label": "Icon"
-            },
-            "Thumbnail": {
-                "label": "Thumbnail"
-            },
-            "mediaPath": {
-                "label": "Media Path"
-            }
-        },
-        "character": {
-            "SearchLegend": {
-                "label": "Query ComicVine Characters "
-            },
-            "name": {
-                "label": "Name",
-                "search": "Character name",
-                "FIELD_EMPTY": "Name field was empty",
-                "FIELD_TOO_LONG": "Name field was more than 256 characters"
-            },
-            "realname": {
-                "label": "Real Name"
-            },
-            "desc": {
-                "label": "Description"
-            },
-            "gender": {
-                "label": "Gender"
-            },
-            "FormLegend": {
-                "label": "Character Details"
-            },
-            "publisher_id": {
-                "label": "Publisher",
-                "search": "Select Publisher"
-            },
-            "AdditionalLegend": {
-                "label": "Additional Features"
-            },
-            "xupdated": {
-                "label": "Updated from endpoint"
-            },
-            "SUCCESS_CREATE": {
-                "label": "Created new Character"
-            },
-            "mediaPath": {
-                "label": "Media Path"
-            },
-            "Icon": {
-                "label": "Icon"
-            },
-            "Thumbnail": {
-                "label": "Thumbnail"
-            },
-            "AliasesLegend": {
-                "label": "Aliases"
-            },
-            "aliases": {
-                "label": "Aliases"
-            }
-        },
-        "series": {
-            "name": {
-                "search": "Series Name",
-                "label": "Series Name"
-            },
-            "SearchLegend": {
-                "label": "Query ComicVine Series"
-            },
-            "start_year": {
-                "label": "Start Year"
-            },
-            "FormLegend": {
-                "label": "Series Details"
-            },
-            "AliasesLegend": {
-                "label": "Aliases"
-            },
-            "aliases": {
-                "label": "Aliases"
-            },
-            "AdditionalLegend": {
-                "label": "Additional Features"
-            },
-            "xupdated": {
-                "label": "Last Updated"
-            },
-            "mediaPath": {
-                "label": "Media Path"
-            },
-            "Icon": {
-                "label": "Icon"
-            },
-            "Thumbnail": {
-                "label": "Thumbnail"
-            },
-            "desc": {
-                "label": "Description"
-            },
-            "publisher_id": {
-                "label": "Publisher",
-                "search": "Select Publisher"
-            },
-            "pub_active": {
-                "label": "Actively publishing"
-            },
-            "pub_wanted": {
-                "label": "Wanted for collection"
-            },
-            "year": {
-                "search": "Year"
-            }
-        },
-        "Series": {
-            "SUCCESS_CREATE": {
-                "label": "Created new Series"
-            }
-        },
-        "media": {
-            "filename": {
-                "FIELD_EMPTY": "Filename field was empty",
-                "FIELD_TOO_LONG": "Filename field was more than 256 characters"
-            },
-            "series_id": {
-                "search": "Series Name"
-            },
-            "issue_num": {
-                "search": "Issue Number"
-            },
-            "pub_date": {
-                "search": "Year"
-            },
-            "characters": {
-                "search": "Select Characters"
-            },
-            "story_arcs": {
-                "search": "Select Story Arcs"
-            },
-            "multiple": {
-                "search": "Multiple Copies"
-            }
-        },
-        "publication": {
-            "name": {
-                "search": "Issue Name",
-                "label": "Issue Name"
-            },
-            "series_id": {
-                "search": "Series Name",
-                "label": "Series Name"
-            },
-            "pub_date": {
-                "search": "Year"
-            },
-            "characters": {
-                "search": "Select Characters"
-            },
-            "issue_num": {
-                "search": "Issue Number",
-                "label": "Issue Number"
-            },
-            "FormLegend": {
-                "label": "Publication Details"
-            },
-            "desc": {
-                "label": "Description"
-            },
-            "AdditionalLegend": {
-                "label": "Additional Features"
-            },
-            "xupdated": {
-                "label": "Last Updated"
-            },
-            "mediaPath": {
-                "label": "Media Path"
-            },
-            "Icon": {
-                "label": "Icon"
-            },
-            "Thumbnail": {
-                "label": "Thumbnail"
-            },
-            "publisher_id": {
-                "search": "Select Publisher"
-            },
-            "story_arcs": {
-                "search": "Select Story Arcs"
-            },
-            "media": {
-                "label": "Available Media"
-            }
-        },
-        "job": {
-            "nextDate": {
-                "label": "Next Run Date"
-            },
-            "minute": {
-                "label": "Minute",
-                "FIELD_EMPTY": "Minute schedule field is required"
-            },
-            "hour": {
-                "label": "Hour",
-                "FIELD_EMPTY": "Hour schedule field is required"
-            },
-            "dayOfWeek": {
-                "label": "Day of the Week",
-                "FIELD_EMPTY": "Day of the Week schedule field is required"
-            },
-            "lastDate": {
-                "label": "Last Run Date"
-            },
-            "parameter": {
-                "label": "Parameters"
-            },
-            "one_shot": {
-                "label": "One Shot"
-            },
-            "enabled": {
-                "label": "Enabled"
-            },
-            "type_id": {
-                "label": "Job Type"
-            },
-            "FormLegend": {
-                "label": "Job Schedule Details"
-            },
-            "endpoint_id": {
-                "label": "Remote Endpoint",
-                "FIELD_EMPTY": "You must select an endpoint for this job"
-            },
-            "elapsed": {
-                "label": "Last Elapsed"
-            },
-            "next": {
-                "FIELD_EMPTY": "Unable to calculate next job execute time.  Please check the schedule for minute-hour-day of week"
-            }
-        },
-        "job_running": {
-            "job_type_id": {
-                "label": "Job Type"
-            },
-            "job_id": {
-                "label": "Scheduled Job"
-            },
-            "processor": {
-                "label": "Processor"
-            },
-            "pid": {
-                "label": "System Process Id"
-            },
-            "guid": {
-                "label": "guid"
-            },
-            "elapsedTime": {
-                "label": "Elapsed Time"
             }
         },
         "version": {
             "code": {
                 "label": "Version"
             }
-        },
-        "patch": {
-            "name": {
-                "label": "Migration"
-            },
-            "created": {
-                "label": "Date Applied"
-            }
-        },
-        "story_arc": {
-            "name": {
-                "search": "Story Arc Name",
-                "label": "Story Arc Name"
-            },
-            "publisher_id": {
-                "search": "Select Publisher",
-                "label": "Publisher"
-            },
-            "series_id": {
-                "search": "Series Name"
-            },
-            "characters": {
-                "search": "Select Characters"
-            },
-            "FormLegend": {
-                "label": "Story Arc Details"
-            },
-            "AdditionalLegend": {
-                "label": "Additional Features"
-            },
-            "xupdated": {
-                "label": "Last Updated"
-            },
-            "mediaPath": {
-                "label": "Media Path"
-            },
-            "Icon": {
-                "label": "Icon"
-            },
-            "Thumbnail": {
-                "label": "Thumbnail"
-            },
-            "desc": {
-                "label": "Description"
-            },
-            "pub_active": {
-                "label": "Actively publishing"
-            },
-            "pub_wanted": {
-                "label": "Wanted for collection"
-            }
         }
     },
-    "Logs": {
-        "title": "Logs",
-        "Show Filters": "Show Filters"
-    },
     "Netconfig": {
-        "title": "Network Configuration",
+        "EditRecord": "Edit Configuration",
         "NewRecord": "New Configuration",
         "index": {
-            "DeleteDescription": "This will permanently delete the endpoint.",
-            "DeleteConfirmation": "Are you sure you want to continue?"
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete the endpoint."
         },
-        "EditRecord": "Edit Configuration"
+        "title": "Network Configuration"
     },
     "Upgrade": {
-        "title": "Upgrade",
-        "Current Configuration": "Current Configuration",
         "Application Version": "Application Version",
-        "PHP error log": "PHP error log",
+        "Confirm Upgrade": "Confirm Upgrade",
+        "Current Configuration": "Current Configuration",
         "PHP Memory": "PHP Memory",
         "PHP POST size": "PHP POST size",
         "PHP Upload Filesize": "PHP Upload Filesize",
-        "Confirm Upgrade": "Confirm Upgrade",
+        "PHP Version": "PHP Version",
+        "PHP error log": "PHP error log",
         "Upgrade to": "Upgrade to",
+        "eligibility": {
+            "UpgradeConfirmation": "Are you sure you are ready to upgrade?",
+            "UpgradeDescription": "This will pull the latest changes from the master repository and update your local application."
+        },
+        "index": {
+            "MigrateConfirmation": "Are you sure you are ready to upgrade?",
+            "MigrateDescription": "This will update your database to support the current version."
+        },
         "modal": {
             "Confirm Upgrade": "Confirm Upgrade"
         },
-        "index": {
-            "MigrateDescription": "This will update your database to support the current version.",
-            "MigrateConfirmation": "Are you sure you are ready to upgrade?"
-        },
-        "eligibility": {
-            "UpgradeDescription": "This will pull the latest changes from the master repository and update your local application.",
-            "UpgradeConfirmation": "Are you sure you are ready to upgrade?"
-        },
-        "PHP Version": "PHP Version"
-    },
-    "Error": {
-        "title": "Error"
-    },
-    "Login": {
-        "title": "Login"
-    },
-    "AdminPublishers": {
-        "title": "Publisher Administration",
-        "index": {
-            "DeleteDescription": "This will permanently delete the publisher.",
-            "DeleteConfirmation": "Are you sure you want to continue?"
-        }
-    },
-    "AdminUsers": {
-        "title": "Users",
-        "userlist": {
-            "DeleteDescription": "This will permanently delete the user.",
-            "DeleteConfirmation": "Are you sure you want to continue?"
-        }
-    },
-    "AdminCharacters": {
-        "title": "Character Administration",
-        "index": {
-            "DeleteDescription": "This will permanently delete the character",
-            "DeleteConfirmation": "Are you sure you want to continue?"
-        }
-    },
-    "Auth": {
-        "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator",
-        "PASSWORD_WRONG": "Username or password mismatch.  Please check and retry.",
-        "LOGIN_FAILED": "Login Failed"
+        "title": "Upgrade"
     },
     "Upload": {
-        "title": "Upload media file",
-        "Upload Error": "Upload Error (unknown)",
-        "UPLOAD_ERR_INI_SIZE": "The uploaded file exceeds the upload_max_filesize directive in php.ini",
-        "UPLOAD_ERR_FORM_SIZE": "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form",
-        "UPLOAD_ERR_PARTIAL": "The uploaded file was only partially uploaded",
-        "UPLOAD_ERR_NO_FILE": "No file was uploaded",
-        "UPLOAD_ERR_NO_TMP_DIR": "Missing a temporary folder",
-        "UPLOAD_ERR_CANT_WRITE": "Failed to write file to disk",
-        "UPLOAD_ERR_EXTENSION": "File upload stopped by extension",
-        "No media available": "No media available",
-        "No file selected": "No file selected",
+        "Already imported": "Already imported",
+        "BUSY_NO_SEARCH": "System busy, search suspended",
+        "COMICVINE_SUCCESS": "Match found, requires user commit",
+        "FILE_CORRUPT": "Corrupt file format",
+        "Finishing Import": "Finishing Import",
         "Hash Exists": "Already uploaded",
+        "MULTIPLE_MATCHES": "Multiple matches found, please review",
+        "NO_MATCHES": "Search failed to find series\/issue",
+        "NO_METADATA_FOUND": "No matches found",
+        "No file selected": "No file selected",
+        "No media available": "No media available",
+        "Processing": "Processing",
+        "REPROCESS": "Reprocess Requested",
         "RepairLink": {
             "name": "Repair Processing"
         },
-        "Upload success": "Upload success",
         "Reprocessing": "Reprocessing",
-        "Processing": "Processing",
-        "Already imported": "Already imported",
-        "FILE_CORRUPT": "Corrupt file format",
+        "UPLOAD_ERR_CANT_WRITE": "Failed to write file to disk",
+        "UPLOAD_ERR_EXTENSION": "File upload stopped by extension",
+        "UPLOAD_ERR_FORM_SIZE": "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form",
+        "UPLOAD_ERR_INI_SIZE": "The uploaded file exceeds the upload_max_filesize directive in php.ini",
+        "UPLOAD_ERR_NO_FILE": "No file was uploaded",
+        "UPLOAD_ERR_NO_TMP_DIR": "Missing a temporary folder",
+        "UPLOAD_ERR_PARTIAL": "The uploaded file was only partially uploaded",
         "Unsupported Mime Type": "Unsupported Mime Type",
-        "NO_MATCHES": "Search failed to find series\/issue",
-        "COMICVINE_SUCCESS": "Match found, requires user commit",
-        "MULTIPLE_MATCHES": "Multiple matches found, please review",
-        "unknown": "No search data found, please reprocess",
-        "NO_METADATA_FOUND": "No matches found",
-        "BUSY_NO_SEARCH": "System busy, search suspended",
-        "Finishing Import": "Finishing Import",
-        "REPROCESS": "Reprocess Requested"
-    },
-    "AdminSeries": {
-        "title": "Series Administration",
-        "index": {
-            "DeleteDescription": "This will permanently delete this Series.",
-            "DeleteConfirmation": "Are you sure you want to continue?"
-        }
-    },
-    "AdminUploadRepair": {
-        "title": "Unprocessed Uploads",
-        "UploadLink": {
-            "name": "Upload"
-        },
-        "index": {
-            "DeleteDescription": "This will permanently delete this media ",
-            "DeleteConfirmation": "Are you sure you want to continue?"
-        },
-        "media": {
-            "DeleteDescription": "AdminUploadRepair\/media\/DeleteDescription",
-            "DeleteConfirmation": "AdminUploadRepair\/media\/DeleteConfirmation"
-        }
-    },
-    "AdminPublication": {
-        "title": "Publication Administration",
-        "index": {
-            "DeleteDescription": "This will permanently delete this Publication.",
-            "DeleteConfirmation": "Are you sure you want to continue?"
-        },
-        "media": {
-            "DeleteDescription": "This will permanently delete this media ",
-            "DeleteConfirmation": "Are you sure you want to continue?",
-            "DeleteButtonText": "Delete",
-            "ReprocessButtonText": "Return to Processing Queue"
-        }
-    },
-    "AdminJobs": {
-        "title": "Scheduled Jobs",
-        "index": {
-            "DeleteDescription": "This will permanently delete this Job.",
-            "DeleteConfirmation": "Are you sure you want to continue?"
-        },
-        "EditRecord": "Edit Job Schedule",
-        "NewRecord": "New Job Schedule",
-        "Running Processes": "Running Processes",
-        "JobsRunningLink": {
-            "name": "Currently Running"
-        }
-    },
-    "AdminStoryArcs": {
-        "title": "Story Arc Administration",
-        "index": {
-            "DeleteDescription": "This will permanently delete this story arc ",
-            "DeleteConfirmation": "Are you sure you want to continue?"
-        }
-    },
-    "AdminWanted": {
-        "title": "Wanted Publication Administration",
-        "Search Newznab": "Search Newznab"
-    },
-    "DisplaySeries": {
-        "title": "Series"
-    },
-    "AdminMedia": {
-        "title": "Media Administration",
-        "index": {
-            "DeleteDescription": "This will permanently delete this media.",
-            "DeleteConfirmation": "Are you sure you want to continue?",
-            "ReprocessButtonText": "Return to Processing Queue",
-            "DeleteButtonText": "Delete"
-        }
+        "Upload Error": "Upload Error (unknown)",
+        "Upload success": "Upload success",
+        "title": "Upload media file",
+        "unknown": "No search data found, please reprocess"
     }
 }
