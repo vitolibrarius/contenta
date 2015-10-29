@@ -72,6 +72,50 @@ class Migration_15 extends Migrator
 			$sql = "ALTER TABLE " . Job_Running::TABLE . " ADD COLUMN " . Job_Running::desc . " TEXT";
 			$this->sqlite_execute( Job_Running::TABLE, $sql, "Alter table " . Job_Running::TABLE . " add column '" . Job_Running::desc . "'" );
 		}
+
+		/** NEW INDEXES */
+		$indexStatements = array(
+			array(
+				Migrator::IDX_TABLE => Publication::TABLE,
+				Migrator::IDX_COLS => array( Publication::xid, Publication::xsource )
+			),
+			array(
+				Migrator::IDX_TABLE => Series::TABLE,
+				Migrator::IDX_COLS => array( Series::xid, Series::xsource )
+			),
+			array(
+				Migrator::IDX_TABLE => Story_Arc::TABLE,
+				Migrator::IDX_COLS => array( Story_Arc::xid, Story_Arc::xsource )
+			),
+			array(
+				Migrator::IDX_TABLE => Publisher::TABLE,
+				Migrator::IDX_COLS => array( Publisher::xid, Publisher::xsource )
+			),
+			array(
+				Migrator::IDX_TABLE => Character::TABLE,
+				Migrator::IDX_COLS => array( Character::xid, Character::xsource )
+			),
+			array(
+				Migrator::IDX_TABLE => Media::TABLE,
+				Migrator::IDX_COLS => array( Media::checksum ),
+				Migrator::IDX_UNIQUE => true
+			),
+			array(
+				Migrator::IDX_TABLE => Flux::TABLE,
+				Migrator::IDX_COLS => array( Flux::dest_endpoint, Flux::dest_guid )
+			),
+		);
+		foreach( $indexStatements as $config ) {
+			$table = $config[Migrator::IDX_TABLE];
+			$columns = $config[Migrator::IDX_COLS];
+			$indexName = $table . '_' . implode("", $columns);
+			$unique = (isset($config[Migrator::IDX_UNIQUE]) ? boolval($config[Migrator::IDX_UNIQUE]) : false);
+
+			$statement = 'CREATE ' . ($unique ? 'UNIQUE' : '') . ' INDEX IF NOT EXISTS ' . $indexName
+				. ' on ' . $table . '(' . implode(",", $columns) . ')';
+			$this->sqlite_execute( $table, $statement, "Index on " . $table );
+		}
+
 	}
 
 	public function sqlite_postUpgrade()
