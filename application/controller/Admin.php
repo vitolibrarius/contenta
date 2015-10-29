@@ -9,6 +9,8 @@ use \Auth as Auth;
 use \Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
+use \Config as Config;
+
 use model\Users as Users;
 use model\Publisher as Publisher;
 
@@ -27,7 +29,7 @@ class Admin extends Controller
 	function index()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$migration = new Migration_15("/tmp/");
+			$migration = new Migration_15(Config::GetProcessing());
 			$migration->sqlite_upgrade();
 
 			$this->view->render( '/admin/index' );
