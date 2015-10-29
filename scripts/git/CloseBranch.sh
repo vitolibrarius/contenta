@@ -14,5 +14,6 @@ if [ $BRANCH != "master" ]; then
 	git checkout master
 	git merge $BRANCH
 	git branch -d $BRANCH
+	chmod a+w localization/*.json
 fi
 

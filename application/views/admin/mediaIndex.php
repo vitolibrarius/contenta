@@ -1,12 +1,27 @@
 <script language="javascript" type="text/javascript">
 	$('body').on('click', 'a.confirm', function (e) {
+		var ref_guid = "#media_" + $(this).attr('data_key');
+		var href = $(this).attr('data_action');
 		modal.open({
 			heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
 			img: '<?php echo Config::Web("/AdminMedia/thumbnailForMedia/") ?>' + $(this).attr('data_key'),
 			description: '<?php echo $this->label( "index", "DeleteDescription"); ?> <br /><em>' + $(this).attr('data_filename') + '</em>',
 			confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
 			actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
-			action: $(this).attr('data_action')
+			action: function() {
+				var ajaxDisplay = $(ref_guid);
+				var ssrc = "<?php echo Config::Web('/public/select2-spinner.gif'); ?>";
+				var spin = $('<img class="rpc_spinner" src="' + ssrc + '" />' );
+				ajaxDisplay.empty().append(spin);
+				$.ajax({
+					type: "GET",
+					url: href,
+					success: function(msg){
+						var ajaxDisplay = $(ref_guid);
+						ajaxDisplay.empty().append(msg);
+					}
+				});
+			}
 		});
 		e.preventDefault();
 	});

@@ -50,17 +50,19 @@
 						<img src="<?php echo Config::Web('/AdminMedia/iconForMedia', $media->id) ?>" class="thumbnail">
 					</td>
 					<td>
-						<p><?php echo $media->formattedSize() ?></p>
-						<a href="<?php echo Config::Web('/AdminMedia/reprocessMedia', $media->id); ?>" class="button" alt="Reprocess">
-							<?php echo $this->label( "index", "ReprocessButtonText"); ?>
-						</a>
-						<a href="#" class="confirm button"
-							data_action="<?php echo Config::Web('/AdminMedia/deleteMedia', $media->id); ?>"
-							data_key="<?php echo $media->id; ?>"
-							data_filename="<?php echo (isset($media->filename) ? $media->filename : $media->id); ?>"
-							alt="Delete">
-								<?php echo $this->label( "index", "DeleteButtonText"); ?>
-						</a>
+						<div id="media_<?php echo $media->id; ?>">
+							<p><?php echo $media->formattedSize() ?></p>
+							<a href="<?php echo Config::Web('/AdminMedia/reprocessMedia', $media->id); ?>" class="button" alt="Reprocess">
+								<?php echo $this->label( "index", "ReprocessButtonText"); ?>
+							</a>
+							<a href="#" class="confirm button"
+								data_action="<?php echo Config::Web('/AdminMedia/deleteMedia', $media->id); ?>"
+								data_key="<?php echo $media->id; ?>"
+								data_filename="<?php echo (isset($media->filename) ? $media->filename : $media->id); ?>"
+								alt="Delete">
+									<?php echo $this->label( "index", "DeleteButtonText"); ?>
+							</a>
+						</div>
 					</td>
 					</tr>
 				<?php endforeach; ?>

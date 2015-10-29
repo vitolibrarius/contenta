@@ -224,6 +224,31 @@ class AdminMedia extends Admin
 				$model = Model::Named('Media');
 				$media = $model->objectForId($oid);
 				if ($media instanceof MediaDBO ) {
+					$errors = $model->deleteObject($media);
+					if ( $errors == false ) {
+						$this->view->renderJson( Localized::GlobalLabel( "Delete Failure" ));
+					}
+					else {
+						$this->view->renderJson( Localized::GlobalLabel( "Delete Completed" ));
+					}
+				}
+				else {
+					$this->view->renderJson( Localized::GlobalLabel( "Failed to find request record" ));
+				}
+			}
+			else {
+				$this->view->renderJson( Localized::GlobalLabel( "Failed to find request record" ));
+			}
+		}
+	}
+
+	function deleteMediaOLD($oid = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			if ( $oid > 0 ) {
+				$model = Model::Named('Media');
+				$media = $model->objectForId($oid);
+				if ($media instanceof MediaDBO ) {
 					$publication_id = $media->publication_id;
 					$errors = $model->deleteObject($media);
 					if ( $errors == false ) {

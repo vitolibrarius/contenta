@@ -113,7 +113,7 @@ class Migration_15 extends Migrator
 
 			$statement = 'CREATE ' . ($unique ? 'UNIQUE' : '') . ' INDEX IF NOT EXISTS ' . $indexName
 				. ' on ' . $table . '(' . implode(",", $columns) . ')';
-			$this->sqlite_execute( $table, $statement, "Index on " . $table );
+			$this->sqlite_execute( $table, $statement, "Index on " . $table . '(' . implode(",", $columns) . ')' );
 		}
 
 	}
