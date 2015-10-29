@@ -19,6 +19,7 @@ class Job_Running extends Model
 	const guid =			'guid';
 	const created =			'created';
 	const pid =				'pid';
+	const desc =			'desc';
 
 	public function tableName() { return Job_Running::TABLE; }
 	public function tablePK() { return Job_Running::id; }
@@ -29,7 +30,7 @@ class Job_Running extends Model
 		return array(
 			Job_Running::id, Job_Running::job_id, Job_Running::job_type_id,
 			Job_Running::processor, Job_Running::guid,
-			Job_Running::created, Job_Running::pid
+			Job_Running::created, Job_Running::pid, Job_Running::desc
 		);
 	}
 
@@ -66,7 +67,7 @@ class Job_Running extends Model
 		return $this->allObjectsForFK(Job_Running::job_type_id, $obj );
 	}
 
-	public function createForJob($job_id = null, $processorName, $guid, $pid)
+	public function createForJob($job_id = null, $processorName, $guid, $pid, $desc = null)
 	{
 		$jobObj = null;
 		if ( is_integer($job_id) ) {
@@ -75,13 +76,13 @@ class Job_Running extends Model
 				return $this->create($jobObj, $jobObj->jobType(), $processorName, $guid, $pid);
 			}
 		}
-		return $this->createForCode($jobtype_code, $processorName, $guid, $pid);
+		return $this->createForCode($jobtype_code, $processorName, $guid, $pid, $desc);
 	}
 
-	public function createForProcessor($processorName, $guid, $pid)
+	public function createForProcessor($processorName, $guid, $pid, $desc = null)
 	{
 		if ( isset($processorName, $guid, $pid) ) {
-			return $this->create(null, null, $processorName, $guid, $pid);
+			return $this->create(null, null, $processorName, $guid, $pid, $desc);
 		}
 		else {
 			Logger::LogError( "No values for $processorName, $guid, $pid" );
@@ -89,7 +90,7 @@ class Job_Running extends Model
 		return false;
 	}
 
-	public function createForCode($jobtype_code = null, $processorName, $guid, $pid)
+	public function createForCode($jobtype_code = null, $processorName, $guid, $pid, $desc = null)
 	{
 		$type = false;
 		if ( is_string($jobtype_code) ) {
@@ -106,20 +107,21 @@ class Job_Running extends Model
 				$type = $type_model->objectForId($newObjId);
 			}
 
-			return $this->create(null, $type, $processorName, $guid, $pid);
+			return $this->create(null, $type, $processorName, $guid, $pid, $desc);
 		}
 
 		return false;
 	}
 
-	public function create($jobObj, $jobtypeObj, $processorName, $guid, $pid)
+	public function create($jobObj, $jobtypeObj, $processorName, $guid, $pid, $desc = null)
 	{
 		if ( isset($pid) ) {
 			$params = array(
 				Job_Running::processor => $processorName,
 				Job_Running::guid => $guid,
 				Job_Running::created => time(),
-				Job_Running::pid => $pid
+				Job_Running::pid => $pid,
+				Job_Running::desc => $desc
 			);
 
 			if ( isset($jobObj)  && is_a($jobObj, 'model\JobDBO')) {
@@ -159,6 +161,16 @@ class Job_Running extends Model
 			}
 		}
 		return true;
+	}
+
+	public function updateDesc( $jobrunning = null, $desc = '' )
+	{
+		if ( $jobrunning instanceof Job_RunningDBO && strlen($desc) > 0) {
+			if ( $this->updateObject( $jobrunning, array( Job_Running::desc => $desc )) ) {
+				return $this->refreshObject($jobrunning);
+			}
+		}
+		return false;
 	}
 }
 

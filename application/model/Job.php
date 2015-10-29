@@ -23,6 +23,8 @@ class Job extends Model
 	const created =		'created';
 	const next =		'next';
 	const last_run =	'last_run';
+	const last_fail =	'last_fail';
+	const fail_count =	'fail_count';
 	const parameter =	'parameter';
 	const enabled =		'enabled';
 	const elapsed =		'elapsed';
@@ -37,7 +39,8 @@ class Job extends Model
 		return array(
 			Job::id, Job::type_id, Job::endpoint_id,
 			Job::minute, Job::hour, Job::dayOfWeek, Job::parameter,
-			Job::created, Job::next, Job::last_run, Job::one_shot, Job::enabled, Job::elapsed
+			Job::created, Job::next, Job::last_run, Job::one_shot, Job::enabled, Job::elapsed,
+			Job::last_fail, Job::fail_count
 		);
 	}
 
@@ -120,6 +123,30 @@ class Job extends Model
 		}
 
 		return parent::createObject($values);
+	}
+
+	public function updateFailure( $job = null, $last = null )
+	{
+		if ( $job instanceof JobDBO) {
+			$updates = array( Job::last_fail => $last );
+			$count = 0;
+			if ( null != $last ) {
+				$count = 1;
+				if (isset($job->fail_count) && is_int($job->fail_count)) {
+				 	$count += $job->fail_count;
+				 }
+			}
+			$updates[Job::fail_count] = $count;
+
+			if ( $count > 5 ) {
+				$updates[Job::enabled] = Model::TERTIARY_FALSE;
+			}
+
+			if ( $this->updateObject( $job, $updates) ) {
+				return $this->refreshObject($job);
+			}
+		}
+		return false;
 	}
 
 	public function jobsToRun()

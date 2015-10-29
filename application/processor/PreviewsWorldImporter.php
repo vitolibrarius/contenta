@@ -25,6 +25,7 @@ class PreviewsWorldImporter extends EndpointImporter
 			if ( $type == false || $type->code != Endpoint_Type::PreviewsWorld ) {
 				throw new Exception("Endpoint " . $point->displayName() . " is is not for " . Endpoint_Type::PreviewsWorld);
 			}
+			$this->setJobDescription( "Refreshing " . $point->displayName());
 		}
 		parent::setEndpoint($point);
 	}

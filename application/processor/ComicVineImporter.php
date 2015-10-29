@@ -26,11 +26,6 @@ use model\Story_Arc_Series as Story_Arc_Series;
 
 class ComicVineImporter extends ContentMetadataImporter
 {
-	function __construct($guid)
-	{
-		parent::__construct($guid);
-	}
-
 	public function setEndpoint(EndpointDBO $point = null)
 	{
 		if ( is_null($point) == false ) {
@@ -699,6 +694,8 @@ class ComicVineImporter extends ContentMetadataImporter
 			$objTable = $object->tableName();
 			$needsUpdate = $object->needsEndpointUpdate();
 			$isWanted = $object->isWanted();
+
+			$this->setJobDescription( "Refreshing publications related to " . $object->displayDescription() );
 
 			if ( $needsUpdate == true || $isWanted == true ) {
 				$enqueue_method = 'enqueue_' . $objTable;

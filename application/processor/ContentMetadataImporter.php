@@ -344,6 +344,8 @@ abstract class ContentMetadataImporter extends EndpointImporter
 	public function enqueueBatch( $objectType = '', $size = 0 )
 	{
 		if ( is_numeric($size) ) {
+			$this->setJobDescription( "Refreshing $size $objectType records" );
+
 			$size = min(abs($size), 50);
 			$methodName = 'enqueue_' . $objectType;
 			if (method_exists($this, $methodName)) {

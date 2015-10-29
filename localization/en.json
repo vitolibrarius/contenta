@@ -303,6 +303,9 @@
             "lastDate": {
                 "label": "Last Run Date"
             },
+            "lastFailDate": {
+                "label": "Last Failure"
+            },
             "minute": {
                 "FIELD_EMPTY": "Minute schedule field is required",
                 "label": "Minute"
@@ -324,6 +327,9 @@
             }
         },
         "job_running": {
+            "desc": {
+                "label": "Description"
+            },
             "elapsedTime": {
                 "label": "Elapsed Time"
             },

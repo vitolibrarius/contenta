@@ -23,6 +23,8 @@ class JobDBO extends DataObject
 	public $parameter;
 	public $enabled;
 	public $elapsed;
+	public $last_fail;
+	public $fail_count;
 
 	public $uuid;
 
@@ -54,6 +56,10 @@ class JobDBO extends DataObject
 
 	public function lastDate() {
 		return $this->formattedDate( Job::last_run, "M d, Y H:i" );
+	}
+
+	public function lastFailDate() {
+		return $this->formattedDate( Job::last_fail, "M d, Y H:i" );
 	}
 
 	public function isEnabled() {

@@ -51,6 +51,16 @@ abstract class Processor
 		}
 	}
 
+	public function jobDescription()
+	{
+		return (isset($this->jobDesc) ? $this->jobDesc : '');
+	}
+
+	public function setJobDescription($desc = '')
+	{
+		$this->jobDesc = $desc;
+	}
+
 	public function setPurgeOnExit($trueFalse = false)
 	{
 		$this->purgeOnExit = $trueFalse;

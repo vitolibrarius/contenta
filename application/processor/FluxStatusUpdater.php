@@ -40,6 +40,7 @@ class FluxStatusUpdater extends EndpointImporter
 			if ( $type == false || $type->code != Endpoint_Type::SABnzbd ) {
 				throw new Exception("Endpoint " . $point->displayName() . " is is not for " . Endpoint_Type::SABnzbd);
 			}
+			$this->setJobDescription( "Refreshing " . $point->displayName());
 		}
 		parent::setEndpoint($point);
 	}

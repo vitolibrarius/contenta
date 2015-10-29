@@ -24,6 +24,11 @@ use utilities\Lock as Lock;
 
 define('CONFIG_OVERRIDE', 'ConfigOverride');
 
+function daemon_die($message = '') {
+	Logger::logError('Daemon dying ' . $message );
+	die( $message );
+}
+
 declare(ticks = 1);
 function signal_handler($signo) {
 	Logger::logError('Received signal ' . $signo );
@@ -59,8 +64,8 @@ function ConfigOverride( Config $config, Array $custom = array() )
 	}
 
 	if ( array_valueForKeypath( "Logging/type", $custom ) != null ) {
-		$config->setValue("Logging/type", array_valueForKeypath( "Logging/type", $custom )) || die("Failed to change the configured Logging");
-		$config->setValue("Logging/path", array_valueForKeypath( "Logging/path", $custom )) || die("Failed to change the configured Logging");
+		$config->setValue("Logging/type", array_valueForKeypath( "Logging/type", $custom )) || daemon_die("Failed to change the configured Logging");
+		$config->setValue("Logging/path", array_valueForKeypath( "Logging/path", $custom )) || daemon_die("Failed to change the configured Logging");
 	}
 
 	if ( array_valueForKeypath( "Repository/cache", $custom ) != null ) {
@@ -84,11 +89,11 @@ $config = Config::instance();
 $options = getopt("d:");
 $workingDir = (isset($options['d']) ? $options['d'] : null);
 
-is_dir($workingDir) || die( "Unable to find $workingDir" );
+is_dir($workingDir) || daemon_die( "Unable to find $workingDir" );
 $metadata = Metadata::forDirectory( $workingDir );
 
 $processorName = $metadata->getMeta( "processorName" );
-is_string($processorName) || die( "No processor specified" );
+is_string($processorName) || daemon_die( "No processor specified" );
 
 if ( $metadata->isMeta( CONFIG_OVERRIDE ) ) {
 	ConfigOverride( $config, $metadata->getMeta( CONFIG_OVERRIDE ));
@@ -114,87 +119,71 @@ Logger::instance()->setTrace("Daemon", (is_null($job_id) ? $guid : $job_id) );
 
 // Logger::logInfo('starting daemon ', $processorName, ($user ? $user->__toString() : $user_api) );
 try {
+	$job_model = Model::Named('Job');
 	$job_run_model = Model::Named('Job_Running');
-	$lockfile = appendPath( $workingDir, $processorName . ".lock");
-	$lock = new Lock($lockfile);
-	if (($pid = $lock->lock()) !== false) {
-		if ( is_null($job_id) ) {
-			$jobList = $job_run_model->allForProcessorGUID($processorName, $guid );
-			if ( is_array($jobList) == false || count($jobList) == 0) {
-				$jobRunning = $job_run_model->createForProcessor($processorName, $guid, $pid);
-// 				Logger::logInfo('jobRunning ' .  var_export($jobRunning, true) );
+	$jobRunning = null;
+	$jobObj = null;
+	$jobtypeObj = null;
+	$jobList = null;
+	$pid = getmypid();
 
-				try {
-					$processor = Processor::Named( $processorName, $guid );
-					$processor->processData();
+	// ensure a job is not already running
+	if ( is_null($job_id) ) {
+		$jobList = $job_run_model->allForProcessorGUID($processorName, $guid );
+	}
+	else {
+		$jobObj = $job_model->objectForId( $job_id );
+		if ( $jobObj instanceof model\JobDBO ) {
+			Logger::instance()->setTrace($jobObj->displayName(), $job_id);
+			$jobtypeObj = $jobObj->jobType();
+			$jobList = $job_run_model->allForJob($jobObj );
+		}
+	}
+
+	if ( is_array($jobList) == false || count($jobList) == 0) {
+		$jobRunning = $job_run_model->create($jobObj, $jobtypeObj, $processorName, $guid, $pid);
+		echo "Job running " . var_export($jobRunning, true) .PHP_EOL;
+
+		try {
+			$processor = Processor::Named( $processorName, $guid );
+			if ( null != $jobObj ) {
+				$endpoint = $jobObj->endpoint();
+				if ( $endpoint instanceof model\EndpointDBO ) {
+					if (method_exists($processor, "setEndpoint")) {
+						$processor->setEndpoint( $endpoint );
+					}
+					else {
+						Logger::logError('Job ' . $jobObj . ' has endpoint but processor '
+							. $processorName . ' does not implement setEndpoint()');
+					}
 				}
-				catch (Exception $e) {
-					Logger::logError('Exception ' . $e->getMessage() . ' ' . $e->getTraceAsString() );
-				}
-				if ( $jobRunning instanceof model\Job_RunningDBO ) {
-					$job_run_model->deleteObject($jobRunning);
-				}
+
+				$processor->initializationParams($jobObj->jsonParameters());
 			}
-			else {
-				Logger::logError('Jobs running for ' . $guid . ' are ' . var_export($jobList, true));
+
+			$jobRunning->{"desc"}( $processor->jobDescription() );
+			$processor->processData();
+
+			if ( null != $jobObj ) {
+				// success, calc next job schedule run
+				$jobObj->{"last_run"}(time());
+				$jobObj->{"fail_count"}(0);
+				$jobObj->{"elapsed"}($jobRunning->elapsedSeconds());
 			}
 		}
-		else {
-// 			Logger::logInfo('Running daemon for specific job ' . $job_id);
-			$job_model = Model::Named('Job');
-			$jobObj = $job_model->objectForId( $job_id );
-			if ( $jobObj instanceof model\JobDBO ) {
-				Logger::instance()->setTrace($jobObj->displayName(), $job_id);
-
-				$jobList = $job_run_model->allForJob($jobObj );
-				if ( is_array($jobList) == false || count($jobList) == 0) {
-					$jobRunning = $job_run_model->create($jobObj, $jobObj->jobType(), $processorName, $guid, $pid);
-					try {
-						$processor = Processor::Named( $processorName, $guid );
-
-						$endpoint = $jobObj->endpoint();
-						if ( $endpoint instanceof model\EndpointDBO ) {
-							if (method_exists($processor, "setEndpoint")) {
-								$processor->setEndpoint( $endpoint );
-							}
-							else {
-								Logger::logError('Job ' . $jobObj . ' has endpoint but processor '
-									. $processorName . ' does not implement setEndpoint()');
-							}
-						}
-						else {
-							Logger::logInfo('No endpoint defined ' . $job_id);
-						}
-
-						$processor->initializationParams($jobObj->jsonParameters());
-						$processor->processData();
-
-						// success, calc next job schedule run
-						$jobObj->{"last_run"}(time());
-						$jobObj->{"elapsed"}($jobRunning->elapsedSeconds());
-					}
-					catch (Exception $e) {
-						Logger::logException( $e );
-
-						// disable job???
-						// count failures, disable on 5th fail?
-						$jobObj->{"enabled"}(Model::TERTIARY_FALSE);
-					}
-
-					if ( $jobRunning instanceof model\Job_RunningDBO ) {
-						$job_run_model->deleteObject($jobRunning);
-					}
-				}
-				else {
-					Logger::logError('Jobs running for ' . $jobObj . ' are ' . var_export($jobList, true));
-				}
-			}
-			else {
-				Logger::logError('Failed to find Job for ' . $job_id );
-			}
+		catch (Exception $e) {
+			Logger::logError('Exception ' . $e->getMessage() . ' ' . $e->getTraceAsString() );
+			// disable job???
+			// count failures, disable on 5th fail?
+			// $jobObj->{"enabled"}(Model::TERTIARY_FALSE);
+			$jobObj->updateFailure( $jobObj, time());
 		}
-
-		$lock->unlock();
+		if ( $jobRunning instanceof model\Job_RunningDBO ) {
+			$job_run_model->deleteObject($jobRunning);
+		}
+	}
+	else {
+		Logger::logError('Daemon blocked by running processes ' . var_export($jobList, true));
 	}
 }
 catch ( ClassNotFoundException $exception ) {

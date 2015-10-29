@@ -12,6 +12,8 @@ use \Localized as Localized;
 use model\Users as Users;
 use model\Publisher as Publisher;
 
+use migration\Migration_15 as Migration_15;
+
 /**
  * Class Admin
  * The index controller
@@ -25,6 +27,9 @@ class Admin extends Controller
 	function index()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$migration = new Migration_15("/tmp/");
+			$migration->sqlite_upgrade();
+
 			$this->view->render( '/admin/index' );
 		}
 	}

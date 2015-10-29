@@ -46,6 +46,7 @@
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "hour" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "dayOfWeek" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "lastDate" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "lastFailDate" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "nextDate" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "elapsed" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "one_shot" ); ?></th>
@@ -65,6 +66,7 @@
 					<td><?php echo $value->hour; ?></td>
 					<td><?php echo $value->dayOfWeek; ?></td>
 					<td><?php echo $value->lastDate(); ?></td>
+					<td><?php echo $value->lastFailDate(); ?></td>
 					<td><?php echo $value->nextDate(); ?></td>
 					<td><?php echo $value->elapsedFormatted(); ?></td>
 					<td><span class="icon <?php echo ($value->one_shot ? 'true' : 'false') ?>"></span></td>

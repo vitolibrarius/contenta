@@ -14,6 +14,7 @@ class Job_RunningDBO extends DataObject
 	public $guid;
 	public $created;
 	public $pid;
+	public $desc;
 
 	public function elapsedSeconds()
 	{

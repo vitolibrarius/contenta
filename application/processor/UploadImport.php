@@ -46,6 +46,7 @@ class UploadImport extends Processor
 	function __construct($guid)
 	{
 		parent::__construct($guid);
+		$this->setJobDescription( "Processing " . $this->sourceFilename() );
 	}
 
 	private function renameMedia( $newFilename = null )

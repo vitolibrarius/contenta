@@ -27,6 +27,7 @@ class RSSImporter extends EndpointImporter
 			if ( $type == false || $type->code != Endpoint_Type::RSS ) {
 				throw new Exception("Endpoint " . $point->displayName() . " is is not for " . Endpoint_Type::RSS);
 			}
+			$this->setJobDescription( "Refreshing " . $point->displayName());
 		}
 		parent::setEndpoint($point);
 	}
