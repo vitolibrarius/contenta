@@ -14,7 +14,7 @@ class MediaDBO extends DataObject
 	public $publication_id;
 	public $type_id;
 	public $filename;
-	public $original_file;
+	public $original_filename;
 	public $created;
 	public $checksum;
 	public $size;

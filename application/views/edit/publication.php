@@ -153,7 +153,7 @@
 								<?php echo $this->label( "media", "ReprocessButtonText"); ?>
 							</a>
 							<a href="#" class="confirm button"
-								data_action="<?php echo Config::Web('/AdminMedia/deleteMedia', $media->id); ?>"
+								data_action="<?php echo Config::Web('/AdminPublication/deleteMedia', $media->id); ?>"
 								data_key="<?php echo $media->id; ?>"
 								data_filename="<?php echo (isset($media->filename) ? $media->filename : $media->id); ?>"
 								alt="Delete">

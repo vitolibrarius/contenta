@@ -54,6 +54,35 @@ class AdminPublication extends Admin
 		}
 	}
 
+	function deleteMedia($oid = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			if ( $oid > 0 ) {
+				$model = Model::Named('Media');
+				$media = $model->objectForId($oid);
+				if ($media instanceof MediaDBO ) {
+					$publication_id = $media->publication_id;
+					$errors = $model->deleteObject($media);
+					if ( $errors == false ) {
+						Session::addNegativeFeedback( Localized::GlobalLabel("Delete Failure") );
+					}
+					else {
+						Session::addPositiveFeedback(Localized::GlobalLabel( "Delete Completed" ));
+					}
+					header('location: ' . Config::Web('/AdminPublication/editPublication/' . $publication_id));
+				}
+				else {
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " .var_export($media, true));
+					$this->view->render('/error/index');
+				}
+			}
+			else {
+				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " .$oid);
+				$this->view->render('/error/index');
+			}
+		}
+	}
+
 	function searchPublication()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {

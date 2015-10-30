@@ -183,13 +183,14 @@ class AdminMedia extends Admin
 					}
 					else {
 						try {
+							$importFilename = (isset($media->original_filename) ? $media->original_filename : $media->filename);
 							$importer = Processor::Named('UploadImport', $contentHash);
-							$importer->setMediaForImport($source, $media->filename);
+							$importer->setMediaForImport($source, $importFilename);
 							$importer->generateThumbnails();
 							$importer->resetSearchCriteria();
 							$importer->setMeta( UploadImport::META_STATUS, "REPROCESS");
 
-							Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success') .' "'. $media->filename .'"');
+							Session::addPositiveFeedback(Localized::Get("Upload", 'ReprocessRequested') .' "'. $importFilename .'"');
 
 							// now remove the old media record
 							$errors = $model->deleteObject($media);
@@ -238,35 +239,6 @@ class AdminMedia extends Admin
 			}
 			else {
 				$this->view->renderJson( Localized::GlobalLabel( "Failed to find request record" ));
-			}
-		}
-	}
-
-	function deleteMediaOLD($oid = 0)
-	{
-		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			if ( $oid > 0 ) {
-				$model = Model::Named('Media');
-				$media = $model->objectForId($oid);
-				if ($media instanceof MediaDBO ) {
-					$publication_id = $media->publication_id;
-					$errors = $model->deleteObject($media);
-					if ( $errors == false ) {
-						Session::addNegativeFeedback( Localized::GlobalLabel("Delete Failure") );
-					}
-					else {
-						Session::addPositiveFeedback(Localized::GlobalLabel( "Delete Completed" ));
-					}
-					header('location: ' . Config::Web('/AdminPublication/editPublication/' . $publication_id));
-				}
-				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " .var_export($media, true));
-					$this->view->render('/error/index');
-				}
-			}
-			else {
-				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " .$oid);
-				$this->view->render('/error/index');
 			}
 		}
 	}
