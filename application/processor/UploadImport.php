@@ -35,6 +35,7 @@ class UploadImport extends Processor
 	const META_QUERY_NAME = 'search/name';
 
 	const META_STATUS = 'status';
+	const META_IS_AUTOMATED = 'isAutomatedSelection';
 
 	const META_THUMBNAIL = 'thumbnail';
 	const META_INDEXED_THUMBNAIL = 'images';
@@ -59,6 +60,17 @@ class UploadImport extends Processor
 			$this->setMeta(UploadImport::META_MEDIA_FILENAME, $newFilename);
 			$this->setMeta(UploadImport::META_MEDIA_EXT, file_ext($newFilename));
 		}
+	}
+
+	public function setIsAutomatedImport($yesNo = true)
+	{
+		$this->setMetaBoolean( UploadImport::META_IS_AUTOMATED, $yesNo );
+	}
+
+	/** automated mode by default */
+	public function isAutomatedImport()
+	{
+		return $this->getMetaBoolean(UploadImport::META_IS_AUTOMATED, true);
 	}
 
 	public function importFilePath()
@@ -346,6 +358,24 @@ class UploadImport extends Processor
 			return false;
 		}
 
+		if ( $this->isAutomatedImport() ) {
+			$existingPublication = Model::Named("Publication")->objectForExternal(
+				array_valueForKeypath( "id", $matchingIssue),
+				Endpoint_Type::ComicVine
+			);
+
+			if ( $existingPublication instanceof PublicationDBO ) {
+				$media = $existingPublication->media();
+
+				if (is_array($media) && count($media) > 0) {
+					$this->setStatusMetaData( "EXISTING_MEDIA" );
+					Logger::logInfo( "Media already imported for " .  $existingPublication->searchString(),
+						__method__, $this->sourceFilename());
+					return false;
+				}
+			}
+		}
+
 		$this->setStatusMetaData( "Finishing Import" );
 		Logger::logInfo( "Found match importing "
 			. array_valueForKeypath( "volume/name", $matchingIssue)
@@ -358,7 +388,7 @@ class UploadImport extends Processor
 
 		$existingSeries = Model::Named("Series")->objectForExternal(
 			array_valueForKeypath( "volume/id", $matchingIssue),
-			$importer->endpointTypeCode()
+			Endpoint_Type::ComicVine
 		);
 		$seriesNeedsUpdate = ($existingSeries == false || $existingSeries->needsEndpointUpdate());
 		$importer->enqueue_series( array(
@@ -379,7 +409,7 @@ class UploadImport extends Processor
 
 			$cbzType = Model::Named( "Media_Type" )->cbz();
 			$pub_xid = array_valueForKeypath( "id", $matchingIssue);
-			$publication = Model::Named("Publication")->objectForExternal($pub_xid, $importer->endpointTypeCode());
+			$publication = Model::Named("Publication")->objectForExternal($pub_xid, Endpoint_Type::ComicVine);
 			$filename = $this->getMeta(UploadImport::META_MEDIA_FILENAME);
 			$hash = $this->getMeta(UploadImport::META_MEDIA_HASH);
 			$size = $this->getMeta(UploadImport::META_MEDIA_SIZE);

@@ -1,18 +1,3 @@
-<script language="javascript" type="text/javascript">
-	// Wait until the DOM has loaded before querying the document
-	$('body').on('click', 'a.confirm', function (e) {
-		modal.open({
-			heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
-			img: '<?php echo Config::Web("/public/img/Logo_sm.png"); ?>',
-			description: '<?php echo $this->label( "index", "DeleteDescription"); ?>',
-			confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
-			actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
-			action: $(this).attr('action')
-		});
-		e.preventDefault();
-	});
-</script>
-
 <div class="paging">
 	<ul>
 		<li><a href="<?php echo Config::Web('/AdminPublishers/index'); ?>">Publishers</a></li>

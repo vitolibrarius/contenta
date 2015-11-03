@@ -486,6 +486,7 @@ class AdminUploadRepair extends Admin
 
 				$processor = Processor::Named("UploadImport", $processKey);
 				if ( $processor != false ) {
+					$processor->setIsAutomatedImport(false);
 					$message = $processor->getMeta(UploadImport::META_MEDIA_NAME);
 
 					if ( $processor->selectMatchingIssue($issue_id) == false) {
