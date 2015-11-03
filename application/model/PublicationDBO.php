@@ -37,7 +37,13 @@ class PublicationDBO extends DataObject
 	}
 
 	public function paddedIssueNum() {
-		return (isset($this->issue_num) ? str_pad($this->issue_num, 3, "0", STR_PAD_LEFT) : '');
+		if ( isset($this->issue_num) ) {
+			if ( is_integer($this->issue_num) ) {
+				return str_pad($this->issue_num, 3, "0", STR_PAD_LEFT);
+			}
+			return $this->issue_num;
+		}
+		return '';
 	}
 
 	public function mediaCount() {

@@ -75,7 +75,7 @@ class Migration_13 extends Migrator
 		if ( isset($table_fields[ Series::search_name ]) == false ) {
 			$this->sqlite_execute(
 				Series::TABLE ,
-				"ALTER TABLE " . Series::TABLE . " ADD COLUMN " . Series::search_name . " TEXT",
+				"ALTER TABLE " . Series::TABLE . " ADD COLUMN " . Series::search_name . " TEXT COLLATE NOCASE",
 				"Adding the search_name column to Series"
 			);
 		}

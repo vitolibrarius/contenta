@@ -248,7 +248,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 
 	private function addDateRangeForYear( array&$filters, $key, $year = null )
 	{
-		if (is_null($year) == false ) {
+		if (is_null($year) == false && intval($year) > 1900 ) {
 			// YYYY-MM-DD|YYYY-MM-DD
 			$year = intval($year);
 			$filters[$key] = $year . "-01-01|" . $year . "-12-31";
@@ -357,9 +357,12 @@ class ComicVineConnector extends JSON_EndpointConnector
 		$this->addIntFilter( $filters, 'id', $xid );
 		$this->addIntFilter( $filters, 'volume', $vol );
 		$this->addDateRangeForYear( $filters, 'cover_date', $coverYear );
-		$this->addIntFilter( $filters, 'issue_number', $issue_number );
 		$this->addStrFilter( $filters, 'name', $name );
 		$this->addStrFilter( $filters, 'alias', $aliases );
+// 		$this->addStrFilter( $filters, 'issue_number', $issue_number );
+		if ( is_null($issue_number) == false ) {
+			$filters['issue_number'] = $issue_number;
+		}
 
 		if ( $this->trace) echo "	filters - " . var_export($filters, true) . PHP_EOL;
 
@@ -437,7 +440,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 		return $results;
 	}
 
-	public function issue_searchFilteredForSeriesYear( $issueNumber = 0, $name, $year = 0 )
+	public function issue_searchFilteredForSeriesYear( $issueNumber = '', $name, $year = 0 )
 	{
 		$results = $this->series_searchFilteredForYear( $name, $year );
 		if ( is_array($results) && count($results) > 0 ) {

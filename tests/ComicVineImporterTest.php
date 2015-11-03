@@ -54,234 +54,253 @@ my_echo( );
 my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
-Stopwatch::start();
 
-Stopwatch::start('Setup');
+function configureEndpoint() {
+	my_echo( "---------- Endpoint ");
+	$cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
+	($cv_endpoint_type != false && $cv_endpoint_type->code == 'ComicVine') || die("Could not find Endpoint_Type::ComicVine");
 
-my_echo( "---------- Endpoint ");
-$cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
-($cv_endpoint_type != false && $cv_endpoint_type->code == 'ComicVine') || die("Could not find Endpoint_Type::ComicVine");
+	$ep_model = Model::Named('Endpoint');
+	$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+	if ( is_array($points) == false || count($points) == 0) {
+		$metadata = metadataFor(Endpoint_Type::ComicVine . ".json");
+		if ( $metadata->isMeta( model\Endpoint::api_key ) == false )
+		{
+			$metadata->setMeta( model\Endpoint::name, "My ComicVine" );
+			$metadata->setMeta( model\Endpoint::type_id, $cv_endpoint_type->id );
+			$metadata->setMeta( model\Endpoint::base_url, $cv_endpoint_type->api_url );
+			$metadata->setMeta( model\Endpoint::api_key, "YOUR API KEY HERE" );
+			$metadata->setMeta( model\Endpoint::username, 'vito' );
+			$metadata->setMeta( model\Endpoint::enabled, Model::TERTIARY_TRUE );
+			$metadata->setMeta( model\Endpoint::compressed, Model::TERTIARY_FALSE );
 
-$ep_model = Model::Named('Endpoint');
-$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
-if ( is_array($points) == false || count($points) == 0) {
-	$metadata = metadataFor(Endpoint_Type::ComicVine . ".json");
-	if ( $metadata->isMeta( model\Endpoint::api_key ) == false )
-	{
-		$metadata->setMeta( model\Endpoint::name, "My ComicVine" );
-		$metadata->setMeta( model\Endpoint::type_id, $cv_endpoint_type->id );
-		$metadata->setMeta( model\Endpoint::base_url, $cv_endpoint_type->api_url );
-		$metadata->setMeta( model\Endpoint::api_key, "YOUR API KEY HERE" );
-		$metadata->setMeta( model\Endpoint::username, 'vito' );
-		$metadata->setMeta( model\Endpoint::enabled, Model::TERTIARY_TRUE );
-		$metadata->setMeta( model\Endpoint::compressed, Model::TERTIARY_FALSE );
+			die( "Please configure the ComicVine.json config file with your API key" . PHP_EOL );
+		}
 
-		die( "Please configure the ComicVine.json config file with your API key" . PHP_EOL );
+		loadData( $ep_model, array($metadata->readMetadata()), array( "name", "type", "base_url", "api_key") );
 	}
 
-	loadData( $ep_model, array($metadata->readMetadata()), array( "name", "type", "base_url", "api_key") );
+	$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+	($points != false && count($points) > 0) || die('No endpoint defined');
+
+	return $points[0];
 }
 
-$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
-($points != false && count($points) > 0) || die('No endpoint defined');
+function Publisher($endpoint, $metadata) {
+	/***********************************************************************************************/
+	my_echo( );
+	my_echo( "---------- Publisher ");
+	$importer = new ComicVineImporter( Publisher::TABLE );
+	$importer->setEndpoint($endpoint);
 
-$epoint = $points[0];
-
-$metadata = metadataFor( "ComicVineImporter.json", true);
-my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
-	. "++ Setup " . Stopwatch::elapsed('Setup')
-	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );
-
-/***********************************************************************************************/
-my_echo( );
-my_echo( "---------- Publisher ");
-$importer = new ComicVineImporter( Publisher::TABLE );
-$importer->setEndpoint($points[0]);
-
-$publishers = $metadata->getMeta( Publisher::TABLE );
-if ( is_array($publishers) == false || count($publishers) == 0 ) {
-	$sample = array(
-		array( "xid" => 101, "name" => "Archie Comics" ),
-		array( "xid" => 464, "name" => "Disney" ),
-		array( "xid" => 513, "name" => "Image" )
-	);
-	$metadata->setMeta( Publisher::TABLE, $sample );
 	$publishers = $metadata->getMeta( Publisher::TABLE );
-}
-
-foreach( $publishers as $pub ) {
-	$importer->enqueue_publisher( $pub, true, true);
-}
-
-Stopwatch::start( 'Publisher' );
-$importer->processData();
-my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
-	. "++ Publisher " . Stopwatch::elapsed('Publisher')
-	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );
-
-$publisher_model = Model::Named("Publisher");
-foreach( $publishers as $pub ) {
-	$object = $publisher_model->objectForExternal( $pub["xid"], Endpoint_Type::ComicVine);
-	if ( isset($object) == false || is_a($object, '\model\PublisherDBO') == false || $object->name != $pub["name"]) {
-		my_echo( "Error with " . $pub["xid"] . " - " . $pub["name"] . " found " . var_export( $object, true ));
+	if ( is_array($publishers) == false || count($publishers) == 0 ) {
+		$sample = array(
+			array( "xid" => 101, "name" => "Archie Comics" ),
+			array( "xid" => 464, "name" => "Disney" ),
+			array( "xid" => 513, "name" => "Image" )
+		);
+		$metadata->setMeta( Publisher::TABLE, $sample );
+		$publishers = $metadata->getMeta( Publisher::TABLE );
 	}
+
+	foreach( $publishers as $pub ) {
+		$importer->enqueue_publisher( $pub, true, true);
+	}
+
+	$importer->processData();
+
+	$publisher_model = Model::Named("Publisher");
+	foreach( $publishers as $pub ) {
+		$object = $publisher_model->objectForExternal( $pub["xid"], Endpoint_Type::ComicVine);
+		if ( isset($object) == false || is_a($object, '\model\PublisherDBO') == false || $object->name != $pub["name"]) {
+			my_echo( "Error with " . $pub["xid"] . " - " . $pub["name"] . " found " . var_export( $object, true ));
+		}
+	}
+	my_echo( );
 }
-my_echo( );
 
-/***********************************************************************************************/
-my_echo( );
-my_echo( "---------- Series ");
-$importer = new ComicVineImporter( Series::TABLE );
-$importer->setEndpoint($points[0]);
+function Series($endpoint, $metadata) {
+	/***********************************************************************************************/
+	my_echo( );
+	my_echo( "---------- Series ");
+	$importer = new ComicVineImporter( Series::TABLE );
+	$importer->setEndpoint($endpoint);
 
-$series = $metadata->getMeta( Series::TABLE );
-if ( is_array($series) == false || count($series) == 0 ) {
-	$sample = array(
-		array( "xid" => 42599, "name" => "Swamp Thing" ),
-		array( "xid" => 68136, "name" => "Afterlife With Archie" ),
-		array( "xid" => 26151, "name" => "All-New Savage She-Hulk" )
-	);
-	$metadata->setMeta( Series::TABLE, $sample );
 	$series = $metadata->getMeta( Series::TABLE );
-}
-
-$importer->enqueue_publisher( array( "xid" => 10, "name" => "DC Comics" ), true, true);
-$importer->enqueue_character( array( "xid" => 1686, "name" => "Superboy" ), true, true);
-foreach( $series as $sample ) {
-	$importer->enqueue_series( $sample, true, true );
-}
-Stopwatch::start( 'Series' );
-$importer->processData();
-my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
-	. "++ Series " . Stopwatch::elapsed('Series')
-	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );
-
-$series_model = Model::Named("Series");
-foreach( $series as $sample ) {
-	$object = $series_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
-	if ( isset($object) == false || is_a($object, '\model\SeriesDBO') == false || $object->name != $sample["name"]) {
-		my_echo( "Error with " . $sample["xid"] . " - " . $sample["name"] . " found " . var_export( $object, true ));
+	if ( is_array($series) == false || count($series) == 0 ) {
+		$sample = array(
+			array( "xid" => 42599, "name" => "Swamp Thing" ),
+			array( "xid" => 68136, "name" => "Afterlife With Archie" ),
+			array( "xid" => 26151, "name" => "All-New Savage She-Hulk" )
+		);
+		$metadata->setMeta( Series::TABLE, $sample );
+		$series = $metadata->getMeta( Series::TABLE );
 	}
+
+	$importer->enqueue_publisher( array( "xid" => 10, "name" => "DC Comics" ), true, true);
+	$importer->enqueue_character( array( "xid" => 1686, "name" => "Superboy" ), true, true);
+	foreach( $series as $sample ) {
+		$importer->enqueue_series( $sample, true, true );
+	}
+
+	$importer->processData();
+
+	$series_model = Model::Named("Series");
+	foreach( $series as $sample ) {
+		$object = $series_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
+		if ( isset($object) == false || is_a($object, '\model\SeriesDBO') == false || $object->name != $sample["name"]) {
+			my_echo( "Error with " . $sample["xid"] . " - " . $sample["name"] . " found " . var_export( $object, true ));
+		}
+	}
+
+	my_echo( );
 }
 
-my_echo( );
+function Publication($endpoint, $metadata) {
+	/***********************************************************************************************/
+	my_echo( );
+	my_echo( "---------- Publication ");
+	$importer = new ComicVineImporter( Publication::TABLE );
+	$importer->setEndpoint($endpoint);
 
-/***********************************************************************************************/
-my_echo( );
-my_echo( "---------- Publication ");
-$importer = new ComicVineImporter( Publication::TABLE );
-$importer->setEndpoint($points[0]);
-
-$pubs = $metadata->getMeta( Publication::TABLE );
-if ( is_array($pubs) == false || count($pubs) == 0 ) {
-	$sample = array(
-		array(   "xid" => 319038, "name" => "Swamp Thing", "issue" => 7,
-			"series_xid" => 42599, "series_name" => "Swamp Thing" ),
-		array(   "xid" => 447038, "name" => "Escape From Riverdale Chapter Four: Archibald Rex", "issue" => 4,
-			"series_xid" => 68136, "series_name" => "Afterlife With Archie" ),
-		array(   "xid" => 293263, "name" => "...And Most Of The Costumes Stay On...", "issue" => 1,
-			"series_xid" => 42722, "series_name" => "Catwoman" ),
-		array(   "xid" => 155152, "name" => "W.M.D. Woman of Mass Destruction", "issue" => 1,
-			"series_xid" => 26151, "series_name" => "All-New Savage She-Hulk" )
-	);
-	$metadata->setMeta( Publication::TABLE, $sample );
 	$pubs = $metadata->getMeta( Publication::TABLE );
-}
-
-foreach( $pubs as $sample ) {
-	$importer->enqueue_publication( $sample, true, true );
-}
-Stopwatch::start( 'Publication' );
-$importer->processData();
-my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
-	. "++ Publication " . Stopwatch::elapsed('Publication')
-	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );
-
-$pubs_model = Model::Named("Publication");
-foreach( $pubs as $sample ) {
-	$object = $pubs_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
-	if ( isset($object) == false || is_a($object, '\model\PublicationDBO') == false) {
-		my_echo( "Error with " . $sample["xid"] . " - record not found .. not imported");
+	if ( is_array($pubs) == false || count($pubs) == 0 ) {
+		$sample = array(
+			array(   "xid" => 319038, "name" => "Swamp Thing", "issue" => 7,
+				"series_xid" => 42599, "series_name" => "Swamp Thing" ),
+			array(   "xid" => 447038, "name" => "Escape From Riverdale Chapter Four: Archibald Rex", "issue" => 4,
+				"series_xid" => 68136, "series_name" => "Afterlife With Archie" ),
+			array(   "xid" => 293263, "name" => "...And Most Of The Costumes Stay On...", "issue" => 1,
+				"series_xid" => 42722, "series_name" => "Catwoman" ),
+			array(   "xid" => 442923, "name" => null, "issue" => '20.INH',
+				"series_xid" => 53725, "series_name" => "Iron Man" ),
+			array(   "xid" => 155152, "name" => "W.M.D. Woman of Mass Destruction", "issue" => 1,
+				"series_xid" => 26151, "series_name" => "All-New Savage She-Hulk" )
+		);
+		$metadata->setMeta( Publication::TABLE, $sample );
+		$pubs = $metadata->getMeta( Publication::TABLE );
 	}
-	else {
-		if ( $object->name != $sample["name"] ) {
-			my_echo( "Error with " . $sample["xid"] . " - " . $object->name . " is not " . $sample["name"]);
-		}
 
-		if ( $object->issue_num != $sample["issue"] ) {
-			my_echo( "Error with " . $sample["xid"] . " - " . $object->issue_num . " is not " . $sample["issue"]);
-		}
+	foreach( $pubs as $sample ) {
+		$importer->enqueue_publication( $sample, true, true );
+	}
 
-		if ( $object->series() == false ) {
-			my_echo( "Error with " . $sample["xid"] . " - no series");
+	$importer->processData();
+
+	$series_model = Model::Named("Series");
+	$pubs_model = Model::Named("Publication");
+	foreach( $pubs as $sample ) {
+		$object = $pubs_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
+		if ( isset($object) == false || is_a($object, '\model\PublicationDBO') == false) {
+			my_echo( "Error with " . $sample["xid"] . " - record not found .. not imported");
 		}
 		else {
-			if ( $object->series()->name != $sample["series_name"] ) {
-				my_echo( "Error with " . $sample["xid"] . " - series name " . $object->series()->name
-					. " is not " . $sample["series_name"]);
+			if ( $object->name != $sample["name"] ) {
+				my_echo( "Error with " . $sample["xid"] . " - " . $object->name . " is not " . $sample["name"]);
 			}
 
-			$seriesObj = $series_model->objectForExternal( $sample["series_xid"], Endpoint_Type::ComicVine);
-			if ( $seriesObj == false || ($seriesObj instanceof model\SeriesDBO) == false ) {
-				my_echo( "Error with " . $sample["xid"] . " - expected series not found " .  $sample["series_xid"]
-					. " got " . var_export($seriesObj, true));
+			if ( $object->issue_num != $sample["issue"] ) {
+				my_echo( "Error with " . $sample["xid"] . " - " . $object->issue_num . " is not " . $sample["issue"]);
+			}
+
+			if ( $object->series() == false ) {
+				my_echo( "Error with " . $sample["xid"] . " - no series");
 			}
 			else {
-				if ( $seriesObj->id != $object->series()->id) {
-					my_echo( "Error with " . $sample["xid"] . " - wrong series id " . $seriesObj->id . " found " . var_export( $object, true ));
+				if ( $object->series()->name != $sample["series_name"] ) {
+					my_echo( "Error with " . $sample["xid"] . " - series name " . $object->series()->name
+						. " is not " . $sample["series_name"]);
 				}
 
-				if ( $seriesObj->xid != $object->series()->xid) {
-					my_echo( "Error with " . $sample["xid"] . " - wrong series xid " . $seriesObj->xid . " found " . var_export( $object, true ));
+				$seriesObj = $series_model->objectForExternal( $sample["series_xid"], Endpoint_Type::ComicVine);
+				if ( $seriesObj == false || ($seriesObj instanceof model\SeriesDBO) == false ) {
+					my_echo( "Error with " . $sample["xid"] . " - expected series not found " .  $sample["series_xid"]
+						. " got " . var_export($seriesObj, true));
+				}
+				else {
+					if ( $seriesObj->id != $object->series()->id) {
+						my_echo( "Error with " . $sample["xid"] . " - wrong series id " . $seriesObj->id . " found " . var_export( $object, true ));
+					}
+
+					if ( $seriesObj->xid != $object->series()->xid) {
+						my_echo( "Error with " . $sample["xid"] . " - wrong series xid " . $seriesObj->xid . " found " . var_export( $object, true ));
+					}
 				}
 			}
 		}
 	}
 }
 
-/***********************************************************************************************/
-my_echo( );
-my_echo( "---------- Media ");
+function Media($endpoint, $metadata) {
+	/***********************************************************************************************/
+	my_echo( );
+	my_echo( "---------- Media ");
 
-$cbzType = Model::Named( "Media_Type" )->cbz();
-$media_model = Model::Named("Media");
+	$cbzType = Model::Named( "Media_Type" )->cbz();
+	$series_model = Model::Named("Series");
+	$pubs_model = Model::Named("Publication");
+	$media_model = Model::Named("Media");
 
-$samples = array();
-foreach (glob(SYSTEM_PATH . "/tests/samples/*.cbz") as $file) {
-	$samples[] = $file;
-}
+	$samples = array();
+	foreach (glob(SYSTEM_PATH . "/tests/samples/*.cbz") as $file) {
+		$samples[] = $file;
+	}
 
-foreach( $pubs as $idx => $sample ) {
-	$publication = $pubs_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
-	if ( $publication instanceof model\PublicationDBO ) {
-		$filename = "NoSampleFound";
-		$hash = uuid();
-		$size = rand();
-		$fullpath = null;
-		if ( count( $samples ) >= $idx ) {
-			$fullpath = $samples[$idx];
-			$filename = basename($fullpath);
-			$hash = hash_file(HASH_DEFAULT_ALGO, $fullpath);
-			$size = filesize($fullpath);
-		}
-
-		my_echo( "$idx => $filename for $publication" );
-		$media = $media_model->create( $publication, $cbzType, $filename, $hash, $size );
-		if ( $media instanceof model\MediaDBO ) {
-			$newfile = $media->contentaPath();
-			if ( is_null($fullpath) ) {
-				touch($newfile);
+	foreach( $pubs as $idx => $sample ) {
+		$publication = $pubs_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
+		if ( $publication instanceof model\PublicationDBO ) {
+			$filename = "NoSampleFound";
+			$hash = uuid();
+			$size = rand();
+			$fullpath = null;
+			if ( count( $samples ) >= $idx ) {
+				$fullpath = $samples[$idx];
+				$filename = basename($fullpath);
+				$hash = hash_file(HASH_DEFAULT_ALGO, $fullpath);
+				$size = filesize($fullpath);
 			}
-			else {
-				copy($fullpath, $newfile);
+
+			my_echo( "$idx => $filename for $publication" );
+			$media = $media_model->create( $publication, $cbzType, $filename, $hash, $size );
+			if ( $media instanceof model\MediaDBO ) {
+				$newfile = $media->contentaPath();
+				if ( is_null($fullpath) ) {
+					touch($newfile);
+				}
+				else {
+					copy($fullpath, $newfile);
+				}
 			}
 		}
 	}
+
+	$allMedia = $media_model->allObjects();
+	reportData($allMedia,  array("filename", "original_filename", "publication", "checksum") );
 }
 
-$allMedia = $media_model->allObjects();
-reportData($allMedia,  array("filename", "original_filename", "publication", "checksum") );
+$tests = array('Publisher', 'Series', 'Publication', 'Media');
+$options = getopt( "t:");
+if ( isset( $options['t'] ) && in_array($options['t'], $tests) == false ) {
+	my_echo("Unknown test requested '" .$options['t']. "'");
+	my_echo("Please use one of \n\t" . implode("\n\t", $tests));
+	die();
+}
+else {
+	$tests = array( $options['t'] );
+}
 
+Stopwatch::start();
+$metadata = metadataFor( "ComicVineImporter.json", true);
+$endpoint = configureEndpoint();
+foreach( $tests as $t ) {
+	Stopwatch::start($t);
+	call_user_func_array( $t, array($endpoint, $metadata));
+
+	my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
+		. "++ $t " . Stopwatch::elapsed($t)
+		. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );
+}
 my_echo( PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL
 	. "++ Final " . Stopwatch::elapsed()
 	. PHP_EOL . "+++++++++++++++++++++++++++++++++++++++++++++" . PHP_EOL );

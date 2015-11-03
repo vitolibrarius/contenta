@@ -170,7 +170,8 @@ class TagElement extends Element
 	public function addAttributes( array $attr = array() )
 	{
 		foreach( $attr as $name => $value ) {
-			$this->attributeList[$name] = $value;
+			$v_array = (array)$value;
+			$this->attributeList[$name] = implode(" ", $v_array);
 		}
 		return $this;
 	}

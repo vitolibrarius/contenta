@@ -246,6 +246,12 @@ span.icon.on:before 		{ color:red;}
 	margin:40px 0;
 }
 
+/* properties */
+.property.issue_num {
+	font-size: 2em;
+	color: #666666;
+}
+
 p.series.description {
 	font-size: 0.8em;
 	max-height : 180px;

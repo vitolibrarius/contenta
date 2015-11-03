@@ -80,6 +80,14 @@ $connection = new ComicVineConnector($epoint);
 // $connection->trace = true;
 
 $issue_tests = array(
+	"Iron Man 20 (2014) (digital) (Minutemen-Midas).cbz" => array(
+		"id" => 442923,
+		"issue_number" => "20.INH",
+		"cover_date" => "2014-03-01",
+		"name" => null,
+		"volume/name" => "Iron Man",
+		"volume/id" => 53725
+	),
 	"Thor 006 (2015) (digital) (Minutemen-Midas).cbz" => array(
 		"id" => 482168,
 		"issue_number" => "6",

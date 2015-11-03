@@ -24,10 +24,21 @@ class Migrator
 		Logger::logInfo( "Migrating application to version " . currentVersionNumber(),	"Migrator", "Upgrade" );
 
 		$patches = array();
-		$fetch = \SQL::Select( $patch_model, array("name"))->fetchAll();
-		if ( is_array($fetch) ) {
-			foreach( $fetch as $row ) {
-				$patches[] = $row->name;
+		try {
+			$fetch = \SQL::Select( $patch_model, array("name"))->fetchAll();
+			if ( is_array($fetch) ) {
+				foreach( $fetch as $row ) {
+					$patches[] = $row->name;
+				}
+			}
+		}
+		catch ( \PDOException $pdox ) {
+			if ( $pdox->getCode() == 'HY000' ) {
+				echo $pdox->getMessage() . PHP_EOL;
+			}
+			else {
+				Logger::logException( $pdox );
+				die( "database mogration error" );
 			}
 		}
 

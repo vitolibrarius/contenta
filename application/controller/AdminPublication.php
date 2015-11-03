@@ -302,24 +302,23 @@ class AdminPublication extends Admin
 			}
 			else {
 				$model = Model::Named('Publication');
-				$values = splitPOSTValues($_POST);
-				if ( isset($values, $values[Publication::TABLE], $values[Publication::TABLE][Publication::name]) ) {
-					$name = $values[Publication::TABLE][Publication::name];
-					$year = 0;
-					if ( isset($values[Publication::TABLE][Publication::start_year]) ) {
-						$year = $values[Publication::TABLE][Publication::start_year];
-					}
+				if ( isset($_POST['searchxid']) || isset($_POST['searchseries_name'])
+					|| isset($_POST['searchYear']) || isset($_POST['searchissue'])) {
 					$epoint = $points[0];
+					$xid = (isset($_POST['searchxid']) ? $_POST['searchxid'] : null);
+					$seriesName = (isset($_POST['searchseries_name']) ? $_POST['searchseries_name'] : null);
+					$searchYear = (isset($_POST['searchYear']) ? $_POST['searchYear'] : null);
+					$searchissue = (isset($_POST['searchissue']) ? $_POST['searchissue'] : null);
 					$connection = new ComicVineConnector($epoint);
 
 					$this->view->endpoint = $epoint;
 					$this->view->pub_model = Model::Named("Publisher");
 					$this->view->model = $model;
-					$this->view->results = $connection->series_searchFilteredForYear( $name, $year );
+					$this->view->results = $connection->issue_search($xid, null, null, null, $searchYear, $searchissue);
 					$this->view->importAction = "/AdminPublication/comicVineImportAction";
 				}
 				else {
-					Session::addNegativeFeedback( Localized::ModelSearch( Publication::TABLE, Publication::name, "SEARCH_EMPTY" ));
+					Session::addNegativeFeedback( Localized::ModelSearch( Publication::TABLE, Publication::name, "SEARCH_EMPTY" ). var_export($_POST, true));
 				}
 			}
 

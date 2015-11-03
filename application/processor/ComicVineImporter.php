@@ -91,15 +91,6 @@ class ComicVineImporter extends ContentMetadataImporter
 		return (is_string($coverDate) ? strtotime($coverDate) : $coverDate);
 	}
 
-	public function convert_issue_num($issueNum = null)
-	{
-		if (isset($issueNum) && strlen($issueNum) > 0) {
-			return intval($issueNum);
-		}
-
-		return $issueNum;
-	}
-
 	public function convert_pub_count($pub_count = null)
 	{
 		if (isset($pub_count) && strlen($pub_count) > 0 && intval($pub_count) > 0) {

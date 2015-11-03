@@ -59,7 +59,7 @@ class Migration_8 extends Migrator
 			. Publication::name . "  TEXT COLLATE NOCASE,  "
 			. Publication::desc . "  TEXT,  "
 			. Publication::pub_date . "  INTEGER, "
-			. Publication::issue_num . "  INTEGER, "
+			. Publication::issue_num . "  TEXT, "
 			. Publication::created . "  INTEGER, "
 			. Publication::xurl . "  TEXT, "
 			. Publication::xsource . "  TEXT,  "

@@ -80,6 +80,14 @@ class Migration_15 extends Migrator
 				Migrator::IDX_COLS => array( Publication::xid, Publication::xsource )
 			),
 			array(
+				Migrator::IDX_TABLE => Publication::TABLE,
+				Migrator::IDX_COLS => array( Publication::issue_num )
+			),
+			array(
+				Migrator::IDX_TABLE => Publication::TABLE,
+				Migrator::IDX_COLS => array( Publication::pub_date )
+			),
+			array(
 				Migrator::IDX_TABLE => Series::TABLE,
 				Migrator::IDX_COLS => array( Series::xid, Series::xsource )
 			),

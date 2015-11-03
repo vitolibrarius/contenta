@@ -198,7 +198,7 @@ class Card
 						H::div( array( "class" => "figure_detail_middle" ),
 							function() use($record) {
 								foreach( $this->detailKeys() as $key => $keypath ) {
-									$c[] = H::p( array( "class" => $key ), $record->{$keypath}() );
+									$c[] = H::p( array( "class" => array("property", $record->tableName(), $key) ), $record->{$keypath}() );
 								}
 								return (isset($c) ? $c : null);
 							}

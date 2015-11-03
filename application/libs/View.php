@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \Logger as Logger;
 use \Model as Model;
 
+use html\Element as H;
+
 /**
  * Class View
  *
@@ -232,6 +234,21 @@ class View
 		}
 		// default return of not true
 		return false;
+	}
+	public function renderPropertyForKeypath( $object, $attr, $keypath )
+	{
+		if ( isset( $object, $attr, $keypath ) ) {
+			$c = H::span( array( "class" => array("property", $object->tableName(), $attr) ), (string)$object->{$keypath}() );
+			echo $c->render();
+		}
+	}
+
+	public function renderPropertyValue( $model, $attr, $value )
+	{
+		if ( isset( $model, $attr, $value ) ) {
+			$c = H::span( array( "class" => array("property", $model->tableName(), $attr) ), (string)$value );
+			echo $c->render();
+		}
 	}
 
 	public function renderFormField( $formType = 'text', $object = null, $type = null, $model, $attr, $value = null, $editable = true)

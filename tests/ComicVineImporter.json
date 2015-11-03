@@ -1,60 +1,39 @@
 {
-    "publisher": [
-        {
-            "xid": 101,
-            "name": "Archie Comics"
-        },
-        {
-            "xid": 464,
-            "name": "Disney"
-        },
-        {
-            "xid": 513,
-            "name": "Image"
-        }
-    ],
-    "series": [
-        {
-            "xid": 42599,
-            "name": "Swamp Thing"
-        },
-        {
-            "xid": 68136,
-            "name": "Afterlife With Archie"
-        },
-        {
-            "xid": 26151,
-            "name": "All-New Savage She-Hulk"
-        }
-    ],
     "publication": [
         {
-            "xid": 319038,
-            "name": "Swamp Thing",
             "issue": 7,
+            "name": "Swamp Thing",
+            "series_name": "Swamp Thing",
             "series_xid": 42599,
-            "series_name": "Swamp Thing"
+            "xid": 319038
         },
         {
-            "xid": 447038,
-            "name": "Escape From Riverdale Chapter Four: Archibald Rex",
             "issue": 4,
+            "name": "Escape From Riverdale Chapter Four: Archibald Rex",
+            "series_name": "Afterlife With Archie",
             "series_xid": 68136,
-            "series_name": "Afterlife With Archie"
+            "xid": 447038
         },
         {
-            "xid": 293263,
+            "issue": 1,
             "name": "...And Most Of The Costumes Stay On...",
-            "issue": 1,
+            "series_name": "Catwoman",
             "series_xid": 42722,
-            "series_name": "Catwoman"
+            "xid": 293263
         },
         {
-            "xid": 155152,
-            "name": "W.M.D. Woman of Mass Destruction",
+            "issue": "20.INH",
+            "name": null,
+            "series_name": "Iron Man",
+            "series_xid": 53725,
+            "xid": 442923
+        },
+        {
             "issue": 1,
+            "name": "W.M.D. Woman of Mass Destruction",
+            "series_name": "All-New Savage She-Hulk",
             "series_xid": 26151,
-            "series_name": "All-New Savage She-Hulk"
+            "xid": 155152
         }
     ]
 }

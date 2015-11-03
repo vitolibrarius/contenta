@@ -184,7 +184,7 @@ class Publication extends Model
 		return false;
 	}
 
-	public function create( $series = null, $name, $desc, $issue_num = 0, $xid, $xsrc, $xurl = null )
+	public function create( $series = null, $name, $desc, $issue_num = '', $xid, $xsrc, $xurl = null )
 	{
 		$obj = $this->objectForExternal($xid, $xsrc);
 		if ( $obj == false )
@@ -312,7 +312,7 @@ class Publication extends Model
 		return array(
 			Publication::name => Model::TEXT_TYPE,
 			Publication::desc => Model::TEXTAREA_TYPE,
-			Publication::issue_num => Model::INT_TYPE,
+			Publication::issue_num => Model::TEXT_TYPE,
 			Publication::series_id => Model::TO_ONE_TYPE
 		);
 	}
