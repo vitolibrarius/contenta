@@ -146,6 +146,9 @@ class Upload extends Controller
 			}
 
 			if ( $validFormat == true ) {
+				$contentSize = filesize($_FILES['mediaFile']['tmp_name']);
+				$contentMin = convertToBytes( Config::GetInteger( "UploadImport/MinSize", 5) . "mb");
+				$contentMax = convertToBytes( Config::GetInteger( "UploadImport/MaxSize", 100) . "mb");
 				$contentHash = hash_file(HASH_DEFAULT_ALGO, $_FILES['mediaFile']['tmp_name']);
 				$root = Config::GetProcessing();
 				$workingDir = appendPath($root, "UploadImport", $contentHash );
@@ -161,18 +164,30 @@ class Upload extends Controller
 				}
 				else {
 					try {
+						$running = Model::Named("Job_Running")->allForProcessorGUID('UploadImport', null);
+
 						$importer = Processor::Named('UploadImport', $contentHash);
 						$importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name']));
 
-						$running = Model::Named("Job_Running")->allForProcessorGUID('UploadImport', null);
-						if ( count($running) < 6 ) {
-							$importer->daemonizeProcess();
+						if ( $contentSize < $contentMin ) {
+							$importer->generateThumbnails();
+							$importer->resetSearchCriteria();
+							$importer->setMeta( UploadImport::META_STATUS, "SMALL_FILE");
 						}
-						else {
+						else if ( $contentSize > $contentMax ) {
+							$importer->generateThumbnails();
+							$importer->resetSearchCriteria();
+							$importer->setMeta( UploadImport::META_STATUS, "LARGE_FILE");
+						}
+						else if ( count($running) >= 6 ) {
 							$importer->generateThumbnails();
 							$importer->resetSearchCriteria();
 							$importer->setMeta( UploadImport::META_STATUS, "BUSY_NO_SEARCH");
 						}
+						else {
+							$importer->daemonizeProcess();
+						}
+
 						Session::addPositiveFeedback(Localized::Get("Upload", 'Upload success') .' "'. $_FILES['mediaFile']['name'] .'"');
 						$uploadSuccess = true;
 					}
