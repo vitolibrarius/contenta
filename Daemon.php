@@ -8,6 +8,7 @@ if (realpath($system_path) !== FALSE)
 
 define('SYSTEM_PATH', str_replace("\\", DIRECTORY_SEPARATOR, $system_path));
 define('APPLICATION_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR);
+define('Contenta_Daemon', true );
 
 require APPLICATION_PATH .'config/bootstrap.php';
 require APPLICATION_PATH .'config/autoload.php';

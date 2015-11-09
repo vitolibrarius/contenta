@@ -13,6 +13,8 @@ use \Cache as Cache;
 use \Database as Database;
 use \Metadata as Metadata;
 
+use utilities\EndpointThrottle as EndpointThrottle;
+
 use model\Users as Users;
 use model\Endpoint as Endpoint;
 use model\EndpointDBO as EndpointDBO;
@@ -27,6 +29,7 @@ class ResponseErrorException extends \Exception {}
 abstract class EndpointConnector
 {
 	private $endpoint = null;
+	private $throttle = null;
 
 	public function __construct($point)
 	{
@@ -124,6 +127,13 @@ abstract class EndpointConnector
 		return (isset($this->endpoint) ? $this->endpoint->requiresCompression() : false);
 	}
 
+	public function endpointType() {
+		if ( isset($this->endpoint) ) {
+			return $this->endpoint->type();
+		}
+		return null;
+	}
+
 	public function cleanURLForLog($url) {
 		$clean = urldecode($url);
 		if ( empty($url) == false) {
@@ -137,6 +147,20 @@ abstract class EndpointConnector
 		}
 		return $clean;
 	}
+
+	public function throttleRequestIfRequired() {
+		if ( is_null( $this->throttle ) ) {
+			$type = $this->endpointType();
+			if ( is_a($type, '\model\Endpoint_TypeDBO')) {
+				$this->throttle = new EndpointThrottle($type->code, $type->throttle_hits, $type->throttle_time);
+			}
+		}
+
+		if ( is_null( $this->throttle ) == false ) {
+			$this->throttle->throttle();
+		}
+	}
+
 
 	public function performTestConnnector($url)
 	{
@@ -158,7 +182,7 @@ abstract class EndpointConnector
 
 	public function performPOST( $url, array $postfields = null, array $headers = null)
 	{
-		echo "perform POST $url" .PHP_EOL;
+		$this->throttleRequestIfRequired();
 		if (empty($url) == false && is_array($postfields) && count($postfields) > 0) {
 			if ( function_exists('curl_version') == true) {
 				$ch = curl_init();
@@ -215,6 +239,7 @@ abstract class EndpointConnector
 	*/
 	public function performGET($url, $force = false)
 	{
+		$this->throttleRequestIfRequired();
 		if (empty($url) == false) {
 			$cacheData = Cache::MakeKey( $url, "data" );
 			$cacheHeaders = Cache::MakeKey( $url, "headers" );
