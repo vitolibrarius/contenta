@@ -108,7 +108,7 @@ class Application
 			}
 
 			$elapsed = Stopwatch::elapsed( $traceName );
-			if ( $elapsed > 0.25 ) {
+			if ( $elapsed > 5.0 ) {
 				Logger::logWarning( "Slow page response $elapsed seconds" );
 			}
 		}
