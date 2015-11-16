@@ -103,7 +103,9 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 			else {
 				$vmsg = var_export($value, true);
 			}
-			Logger::logWarning( "Metadata::setMeta( $key, $vmsg )", "Slow metadata", $elapsed . " seconds" );
+			if ( defined('Contenta_Daemon') == false ) {
+				Logger::logWarning( "Metadata::setMeta( $key, $vmsg )", "Slow metadata", $elapsed . " seconds" );
+			}
 		}
 
 		return $success;
@@ -133,7 +135,10 @@ class Metadata_sqlite extends Metadata implements \MetadataInterface
 			else {
 				$vmsg = var_export($value, true);
 			}
-			Logger::logWarning( "Metadata::getMeta( $key, $vmsg )", "Slow metadata", $elapsed . " seconds" );
+
+			if ( defined('Contenta_Daemon') == false ) {
+				Logger::logWarning( "Metadata::getMeta( $key, $vmsg )", "Slow metadata", $elapsed . " seconds" );
+			}
 		}
 
 		return (is_null($value) ? $default : $value);

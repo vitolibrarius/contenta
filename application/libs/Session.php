@@ -58,7 +58,7 @@ class Session
 	{
 		if ( is_string($message) ) {
 			$_SESSION["feedback_negative"][] = $message;
-			Logger::logError( $message, Session::get('user_name'), Session::get('user_id'));
+			Logger::logWarning( $message, Session::get('user_name'), Session::get('user_id'));
 		}
 	}
 
@@ -77,7 +77,6 @@ class Session
 	public static function addPositiveFeedback($message = null)
 	{
 		if ( is_string($message) ) {
-			Logger::logInfo( $message, Session::get('user_name'), Session::get('user_id'));
 			$_SESSION["feedback_positive"][] = $message;
 		}
 		else {

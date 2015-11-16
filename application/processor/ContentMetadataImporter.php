@@ -355,7 +355,6 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				}
 				$objects = $objectModel->allObjectsNeedingExternalUpdate($size);
 
-				Logger::logInfo( "Updating $size $objectType records", $this->type, $this->guid );
 				foreach( $objects as $idx => $object ) {
 					call_user_func_array(array($this, $methodName), array( array( "xid" => $object->xid), true, true) );
 				}

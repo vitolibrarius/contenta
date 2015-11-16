@@ -412,8 +412,8 @@ class cbrFileWrapper extends FileWrapper
 		if ( $success != 0 ) {
 			$errorCode = $success;
 
-			Logger::logWarning( $cmd, 'Unrar', 'command' );
-			Logger::logWarning( 'output ' . var_export($output, true), 'Unrar', $success );
+			//Logger::logWarning( $cmd, 'Unrar', 'command' );
+			//Logger::logWarning( 'output ' . var_export($output, true), 'Unrar', $success );
 			Logger::logError( $this->errorMessage($errorCode), get_class($this), basename($this->sourcepath) );
 		}
 

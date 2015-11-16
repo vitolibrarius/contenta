@@ -530,12 +530,12 @@ class ComicVineImporter extends ContentMetadataImporter
 					$table = substr($path, 0, strrpos($path, '_'));
 					$related_model = Model::Named( $table );
 					if ( $related_model == null ) {
-						throw new Exception( "failed to find model for " . var_export( $relation, true ));
+						throw new Exception( "failed to find model for " . $table);
 					}
 
 					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
 					if ( $relatedObj == false ) {
-						throw new Exception( "failed to find object for " . var_export( $relation, true ));
+						throw new Exception( "failed to find object for $table xid=$relatedId");
 					}
 
 					switch( $table ) {
@@ -568,12 +568,12 @@ class ComicVineImporter extends ContentMetadataImporter
 					$table = substr($path, 0, strrpos($path, '_'));
 					$related_model = Model::Named( $table );
 					if ( $related_model == null ) {
-						throw new Exception( "failed to find model for " . var_export( $relation, true ));
+						throw new Exception( "failed to find model for " . $table);
 					}
 
 					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
 					if ( $relatedObj == false ) {
-						throw new Exception( "failed to find related object for $table->xid = " . var_export( $relatedId, true ));
+						throw new Exception( "failed to find object for $table xid=$relatedId");
 					}
 
 					switch( $table ) {
@@ -610,12 +610,12 @@ class ComicVineImporter extends ContentMetadataImporter
 					$table = substr($path, 0, strrpos($path, '_'));
 					$related_model = Model::Named( $table );
 					if ( $related_model == null ) {
-						throw new Exception( "failed to find model for " . var_export( $relation, true ));
+						throw new Exception( "failed to find model for " . $table);
 					}
 
 					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
 					if ( $relatedObj == false ) {
-						throw new Exception( "failed to find object for " . var_export( $relation, true ));
+						throw new Exception( "failed to find object for $table xid=$relatedId");
 					}
 
 					switch( $table ) {
@@ -646,12 +646,12 @@ class ComicVineImporter extends ContentMetadataImporter
 					$table = substr($path, 0, strrpos($path, '_'));
 					$related_model = Model::Named( $table );
 					if ( $related_model == null ) {
-						throw new Exception( "failed to find model for " . var_export( $relation, true ));
+						throw new Exception( "failed to find model for " . $table);
 					}
 
 					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
 					if ( $relatedObj == false ) {
-						throw new Exception( "failed to find object for " . var_export( $relation, true ));
+						throw new Exception( "failed to find object for $table xid=$relatedId");
 					}
 
 					switch( $table ) {

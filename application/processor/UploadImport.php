@@ -216,7 +216,6 @@ class UploadImport extends Processor
 			return $this->convert_cbr();
 		}
 
-		Logger::logInfo("Accepting import", __method__, $this->sourceFilename());
 		return true;
 	}
 
@@ -274,14 +273,12 @@ class UploadImport extends Processor
 		if ( $issue == false )
 		{
 			$this->setStatusMetaData( "NO_MATCHES" );
-			Logger::logInfo( "No ComicVine matches, unable to import", __method__, $this->sourceFilename());
 			return false;
 		}
 
 		$this->setMeta( UploadImport::META_RESULTS_ISSUES, $issue );
 		if (count($issue) > 1) {
 			$this->setStatusMetaData( "MULTIPLE_MATCHES" );
-			Logger::logInfo( "Multiple ComicVine matches, unable to import", __method__, $this->sourceFilename());
 			return false;
 		}
 
@@ -377,11 +374,11 @@ class UploadImport extends Processor
 		}
 
 		$this->setStatusMetaData( "Finishing Import" );
-		Logger::logInfo( "Found match importing "
-			. array_valueForKeypath( "volume/name", $matchingIssue)
-			. " - " . array_valueForKeypath( "issue_number", $matchingIssue)
-			. " - " . array_valueForKeypath( "cover_date", $matchingIssue)
-			 , __method__, $this->sourceFilename());
+// 		Logger::logInfo( "Found match importing "
+// 			. array_valueForKeypath( "volume/name", $matchingIssue)
+// 			. " - " . array_valueForKeypath( "issue_number", $matchingIssue)
+// 			. " - " . array_valueForKeypath( "cover_date", $matchingIssue)
+// 			 , __method__, $this->sourceFilename());
 
 		$importer = Processor::Named('ComicVineImporter', $this->guid );
 		$importer->setEndpoint($points[0]);

@@ -292,10 +292,10 @@ abstract class EndpointConnector
 						Cache::Store( $cacheData, $data );
 					}
 					else {
-						Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
-								get_class($this), $this->endpointDisplayName());
-						Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
-							get_class($this), $this->endpointDisplayName());
+// 						Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
+// 								get_class($this), $this->endpointDisplayName());
+// 						Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
+// 							get_class($this), $this->endpointDisplayName());
 						throw new ResponseErrorException('Return code (' . $http_code . '): '
 							. http_stringForCode($http_code) . " "
 							. curl_error($ch)

@@ -319,7 +319,6 @@ class AdminUploadRepair extends Admin
 
 	function editUnprocessedManually_selectMatch($processKey = null, $seriesId = 0, $publicationId = 0)
 	{
-		Logger::logInfo( "editUnprocessedManually_selectMatch starting", $processKey, $seriesId."/".$publicationId);
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {
 			if ( ImportManager::IsEditable($processKey) == true ) {
 				$model = Model::Named('Series');
@@ -327,10 +326,7 @@ class AdminUploadRepair extends Admin
 				$seriesObj = $model->objectForId($seriesId);
 
 				if ( $seriesObj instanceof SeriesDBO ) {
-					Logger::logInfo( "Found series " . $seriesObj->name, $processKey, $seriesId."/".$publicationId);
-
 					if ( isset($publicationId) == false || $publicationId == 0) {
-						Logger::logInfo( "Creating new publication", $processKey, $seriesId."/".$publicationId);
 						$values = splitPOSTValues($_POST);
 						list($publicationObj, $error) = $pub_model->createObject($values[$pub_model->tableName()]);
 						if ( is_array($errors) ) {
@@ -345,14 +341,12 @@ class AdminUploadRepair extends Admin
 					}
 
 					if ( $publicationObj instanceof PublicationDBO ) {
-						Logger::logInfo( "Found publication " . $publicationObj->xid, $processKey, $seriesId."/".$publicationId);
 						$importMgr = Processor::Named("ImportManager", 0);
 						$processor = Processor::Named("UploadImport", $processKey);
 						if ( $processor != false ) {
 							$message = $processor->getMeta(UploadImport::META_MEDIA_NAME);
 
 							if ( $processor->selectMatchingPublication( $publicationObj ) == false) {
-								Logger::logInfo( "selectMatchingPublication error", $processKey, $seriesId."/".$publicationId);
 								$this->view->key = $processKey;
 								$this->view->issue = $processor->issueMetaData();
 								$this->view->series_model = Model::Named('Series');

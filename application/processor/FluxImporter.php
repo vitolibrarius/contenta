@@ -145,7 +145,6 @@ class FluxImporter extends EndpointImporter
 								Flux::dest_submission => time()
 							)
 						);
-						Logger::logInfo( "Requesting download for " . $flux->name );
 					}
 					else {
 						$FluxModel->updateObject( $flux,

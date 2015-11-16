@@ -178,7 +178,6 @@ class Netconfig extends Controller
 					$connection = $object->endpointConnector();
 					list( $success, $message ) = $connection->testConnnector();
 					if ( $success == false ) {
-						Logger::logError( "Error testing connection " . $message, $object, $netId );
 						$message = Localized::GlobalLabel( "Failed" ) . PHP_EOL . $message;
 					}
 					else {

@@ -67,8 +67,6 @@ class DisplaySeries extends Controller
 			}
 			$select->orderBy( $model->sortOrder() );
 
-						Session::addPositiveFeedback("select ". $select);
-
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
  			$this->view->detailAction = "/DisplaySeries/details";

@@ -85,7 +85,10 @@ class RSSImporter extends EndpointImporter
 					}
 				}
 			}
-			Logger::logInfo( "Imported $count new RSS items", $this->type, $this->guid);
+
+			if ( $count > 0 ) {
+				Logger::logInfo( "Imported $count new RSS items", $this->type, $this->guid);
+			}
 		}
 
 		$this->setPurgeOnExit(true);

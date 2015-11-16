@@ -82,13 +82,14 @@ class TraceStatement extends PDOStatement {
 		Stopwatch::start( $this->queryString );
 		$count = 0;
 		$keepTrying = true;
+		$success = false;
 
 		while ($keepTrying && $count < 5) {
 			try {
 				$success = parent::execute( $input_parameters );
 				$keepTrying = false;
 			}
-			catch ( \Exception $e ) {
+			catch ( \Exception $exception ) {
 				$count++;
 				list($message, $file, $line) = Logger::exceptionMessage( $exception );
 				Logger::logToFile( "Try $count : " . $message, $file, $line );
@@ -97,7 +98,7 @@ class TraceStatement extends PDOStatement {
 		}
 
 		if ( $count >= 5 && false == $success) {
-			Logger::logToFile( "Failed after 5 tries" );
+			Logger::logToFile( "Failed after $count tries" );
 		}
 		else {
 			$elapsed = Stopwatch::end( $this->queryString );

@@ -155,7 +155,6 @@ class Cache
 		}
 
 		if ( $purge == true ) {
-			Logger::logInfo('Purging Cache', get_class($this));
 			$count = 0;
 			$start = microtime(true);;
 			$objects = new RecursiveIteratorIterator( new RecursiveDirectoryIterator($rootDir), RecursiveIteratorIterator::SELF_FIRST);
