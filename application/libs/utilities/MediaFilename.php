@@ -41,7 +41,7 @@ class MediaFilename
 			foreach ( array_reverse($list) as $key => $value)
 			{
 				if (preg_match("/(?<=-|\\b)(([0-9]{1,3}\\.[0-9]+)|([0-9]{1,3}))(?=\\b)/ui", $value, $matches, 0)) {
-					return $matches[0];
+					return ltrim( $matches[0], '0' );
 				}
 			}
 		}
