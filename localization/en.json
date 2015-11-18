@@ -20,6 +20,10 @@
             "desc": "Admin JobsRunningLink desc",
             "name": "Currently Running"
         },
+        "PendingUpdatesLink": {
+            "desc": "Show the objects that are due to update metadata",
+            "name": "Pending Updates"
+        },
         "RepairLink": {
             "desc": "Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content",
             "name": "Repair Processing"
@@ -490,11 +494,23 @@
             "Thumbnail": {
                 "label": "Thumbnail"
             },
+            "active": {
+                "label": "Model\/series\/active\/label"
+            },
             "aliases": {
                 "label": "Aliases"
             },
             "desc": {
                 "label": "Description"
+            },
+            "isActive": {
+                "label": "Actively publishing"
+            },
+            "lastPublicationDate": {
+                "label": "Last Published"
+            },
+            "lastPublicationIssue": {
+                "label": "Last Issue"
             },
             "mediaPath": {
                 "label": "Media Path"

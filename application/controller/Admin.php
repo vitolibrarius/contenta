@@ -35,4 +35,19 @@ class Admin extends Controller
 			$this->view->render( '/admin/index' );
 		}
 	}
+
+	function updatePending()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Series');
+			if ( isset($_GET['model']) && strlen($_GET['model']) > 0) {
+				$model = Model::Named($_GET['model']);
+			}
+
+			$this->view->model = $model;
+			$this->view->listArray = $model->allObjectsNeedingExternalUpdate(50);
+
+			$this->view->render( '/admin/updatePending' );
+		}
+	}
 }

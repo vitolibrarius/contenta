@@ -111,6 +111,12 @@
 					<p><?php echo $this->label( "JobsLink", "desc" ); ?></p>
 				</div>
 			</a>
+			<a href="<?php echo Config::Web('/Admin/updatePending'); ?>">
+				<div class="admin_card_item">
+					<h3><?php echo $this->label( "PendingUpdatesLink", "name" ); ?></h3>
+					<p><?php echo $this->label( "PendingUpdatesLink", "desc" ); ?></p>
+				</div>
+			</a>
 			<a href="<?php echo Config::Web('/AdminJobs/runningIndex'); ?>">
 				<div class="admin_card_item">
 					<h3><?php echo $this->label( "JobsRunningLink", "name" ); ?></h3>

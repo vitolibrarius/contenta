@@ -107,6 +107,17 @@ class Story_ArcDBO extends DataObject
 		return $select->fetchAll();
 	}
 
+	public function lastPublication()
+	{
+		$select = \SQL::SelectJoin( Model::Named("Publication") );
+		$select->joinOn( Model::Named("Publication"), Model::Named("Story_Arc_Publication"), null,
+			Qualifier::FK( Story_Arc_Publication::story_arc_id, $this)
+		);
+		$select->limit( 1 );
+		$select->orderBy( Model::Named("Publication"), Publication::pub_date);
+		return $select->fetch();
+	}
+
 	public function joinToPublication(model\PublicationDBO $publication) {
 		$model = Model::Named('Story_Arc_Publication');
 		return $model->create($this, $publication);

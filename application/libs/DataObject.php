@@ -105,6 +105,10 @@ class DataObject
 		return '';
 	}
 
+	public function lastXupdated() {
+		return $this->formattedDate( "xupdated" );
+	}
+
 	public function hasAdditionalMedia()
 	{
 		$tbl = $this->tableName();

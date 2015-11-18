@@ -81,6 +81,15 @@ class SeriesDBO extends DataObject
 		return $yearStr;
 	}
 
+	public function lastPublication()
+	{
+		$select = \SQL::Select( Model::Named("Publication") );
+		$select->where( Qualifier::FK( Publication::series_id, $this));
+		$select->limit( 1 );
+		$select->orderBy( array(array(\SQL::SQL_ORDER_DESC => Publication::pub_date)) );
+		return $select->fetch();
+	}
+
 	public function publications() {
 		$model = Model::Named('Publication');
 		return $model->allForSeries($this);
