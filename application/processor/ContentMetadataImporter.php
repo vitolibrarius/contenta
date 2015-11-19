@@ -27,6 +27,7 @@ abstract class ContentMetadataImporter extends EndpointImporter
 	const META_IMPORT_ROOT = 	'import/';
 	const META_DATA_ROOT =	 	'data/';
 	const META_PURGE_ROOT = 	'purge/';
+	const META_FULL_ROOT =	 	'fullmetal/';
 
 	const META_IMPORT_TYPE = 		'meta_type';
 	const META_IMPORT_XID = 		'xid';
@@ -110,7 +111,6 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		}
 
 		$queue_key = $model->tableName() . "_" . $importValues[ContentMetadataImporter::META_IMPORT_XID];
-// 		$data_keypath = appendPath($model->tableName(), $importValues[ContentMetadataImporter::META_IMPORT_XID]);
 		$data_path = appendPath( ContentMetadataImporter::META_DATA_ROOT, $queue_key);
 		if ( $this->isMeta( $data_path ) == false ) {
 			// data lot loaded
@@ -124,6 +124,13 @@ abstract class ContentMetadataImporter extends EndpointImporter
 			$this->setMetaBoolean( appendPath( $data_path, ContentMetadataImporter::META_IMPORT_FORCE), $forceMeta );
 			$this->setMetaBoolean( appendPath( $data_path, ContentMetadataImporter::META_IMPORT_FORCE_ICON), $forceImages );
 			$this->setMeta( appendPath( $data_path, ContentMetadataImporter::META_IMPORT_TYPE), $model->tableName() );
+
+			if ( $forceMeta == true ) {
+				$this->setMeta(
+					appendPath(ContentMetadataImporter::META_FULL_ROOT, $model->tableName(), $queue_key),
+					$importValues[ContentMetadataImporter::META_IMPORT_XID]
+				);
+			}
 		}
 
 		// check to see if the record has been pre-processed
@@ -466,6 +473,25 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				}
 				else {
 					throw new Exception("failed to find purge function " . $finalize_method );
+				}
+			}
+		}
+
+		$order = array( "unknown", Publication::TABLE, Story_Arc::TABLE, Series::TABLE );
+		$fullMetal = $this->getMeta( ContentMetadataImporter::META_FULL_ROOT );
+		if ( is_array($fullMetal) && count($fullMetal) > 0 ) {
+			$alchemist = array_keys($fullMetal);
+			usort($alchemist, function ($a, $b) use ($order) {
+				$pos_a = intval(array_search($a, $order));
+				$pos_b = intval(array_search($b, $order));
+				return $pos_a - $pos_b;
+			});
+
+			foreach( $alchemist as $tableName ) {
+				$list = $this->getMeta( appendPath(ContentMetadataImporter::META_FULL_ROOT, $tableName) );
+				$model = Model::Named($tableName);
+				foreach( $list as $path => $xid ) {
+					$model->updateStatistics( $xid, $this->endpointTypeCode());
 				}
 			}
 		}

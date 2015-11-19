@@ -77,6 +77,12 @@ abstract class Logger implements LoggerInterface {
 		return \Logger::instance()->error( $message, $context, $context_id );
 	}
 
+	final public static function logSQL( $clazz = 'Model', $method = 'unknown', $sql = '', $params = null)
+	{
+		$msg = $sql . (isset($params) ? ' ' . var_export($params, true) : '');
+		return \Logger::instance()->info( $msg, $clazz, $method );
+	}
+
 	final public static function logSQLError( $clazz = 'Model', $method = 'unknown', $pdocode, $pdoError, $sql, $params = null)
 	{
 		$msg = 'PDO Error(' . $pdocode . ') ' . $pdoError . ' for [' . $sql . '] ' . (isset($params) ? var_export($params, true) : 'No Parameters');

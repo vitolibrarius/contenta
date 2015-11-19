@@ -235,6 +235,36 @@ class Series extends Model
 		return false;
 	}
 
+	public function updateStatistics( $xid = 0, $xsource = null )
+	{
+		$object = $this->objectForExternal($xid, $xsource);
+		if ( $object instanceof model\SeriesDBO ) {
+			$params = array( ":series_id" => $object->id );
+			\SQL::raw( "update publication set media_count = (select count(*) from media where media.publication_id = publication.id)"
+				. " where series_id = :series_id", $params);
+
+			\SQL::raw( "update series set pub_count = "
+				. " (select count(*) from publication where publication.series_id = series.id)"
+				. " where id = :series_id", $params);
+
+			\SQL::raw( "update series set pub_available = "
+				. " (select count(*) from publication where publication.series_id = series.id AND publication.media_count > 0)"
+				. " where id = :series_id", $params);
+
+			\SQL::raw( "update series set pub_cycle = "
+				. " (select (julianday(max(pub_date), 'unixepoch') - julianday(min(pub_date), 'unixepoch')) / count(*)"
+				. " from publication where publication.series_id = series.id)"
+				. " where id = :series_id", $params);
+
+			\SQL::raw( "update series set pub_active = "
+				. " (select (((julianday('now') - julianday(max(pub_date), 'unixepoch'))/365) < 1)"
+				. " from publication where publication.series_id = series.id)"
+				. " where id = :series_id", $params);
+		}
+		return true;
+	}
+
+
 	/* EditableModelInterface */
 	function validate_name($object = null, $value)
 	{

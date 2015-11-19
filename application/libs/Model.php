@@ -64,6 +64,8 @@ abstract class Model
 	abstract public function sortOrder();
 	abstract public function allColumnNames();
 
+	public function updateStatistics( $xid = 0, $xsource = null ) { return true; }
+
 	public function notifyKeypaths() { return array(); }
 	public function processNotification( $type = 'none', $dbo )
 	{
@@ -293,19 +295,80 @@ abstract class Model
 		$select->limit($limit);
 		return $select->fetchAll();
 	}
+	public function allObjectsNeverExternalUpdate($limit = -1)
+	{
+		$limit = intval( $limit );
+		/** select items never updated, ie a null xupdated or pub_active */
+		$hasXID = db\Qualifier::IsNotNull( "xid" );
+		$needsQualifiers = array();
+		$needsQualifiers[] = db\Qualifier::IsNull( "xupdated" );
+		if ( $this->hasColumn('pub_active') ) {
+			$needsQualifiers[] = db\Qualifier::IsNull( "pub_active" );
+		}
+		$needsUpdate = db\Qualifier::OrQualifier($needsQualifiers);
+
+		$select = SQL::Select( $this );
+		$select->where( db\Qualifier::AndQualifier( $hasXID, $needsUpdate ));
+		$select->orderBy( array("xupdated") );
+		$select->limit( $limit );
+
+		return $select->fetchAll();
+	}
+
+	public function allObjectsForExternalUpdate($activeOnly = true, $ageInDays = 7, $limit = -1)
+	{
+		$activeOnly = boolval( $activeOnly );
+		// ageInDays >= 0 <= 365
+		$ageInDays = min(max(intval($ageInDays), 0), 365);
+		$limit = intval( $limit );
+
+		$qualifiers = array();
+		$qualifiers[] = db\Qualifier::IsNotNull( "xid" );
+		$qualifiers[] = db\Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * $ageInDays)) );
+		if ( $activeOnly && $this->hasColumn('pub_active') ) {
+			$qualifiers[] = db\Qualifier::Equals( "pub_active", 1 );
+		}
+		$order = array();
+		$order[] = array(SQL::SQL_ORDER_DESC => "xupdated");
+		if ( $this->hasColumn('pub_active') ) {
+			$order[] = array(SQL::SQL_ORDER_DESC => "pub_active");
+		}
+
+		$select = SQL::Select( $this );
+		$select->where( db\Qualifier::AndQualifier( $qualifiers ));
+		$select->orderBy( $order );
+		$select->limit( $limit );
+
+		return $select->fetchAll();
+	}
 
 	public function allObjectsNeedingExternalUpdate($limit = -1)
 	{
-		$select = SQL::Select( $this );
-		$hasXID = db\Qualifier::IsNotNull( "xid" );
-		$needsUpdate = db\Qualifier::OrQualifier(
-			db\Qualifier::IsNull( "xupdated" ),
-			db\Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * 7)) )
-		);
-		$select->where( db\Qualifier::AndQualifier( $hasXID, $needsUpdate ));
-		$select->orderBy( array("xupdated") );
-		$select->limit( intval($limit) );
-		return $select->fetchAll();
+		/**
+select date(xupdated, 'unixepoch'), start_year, pub_active, name from series where (xupdated is null OR xupdated < strftime('%s','now') - (3600*24*7)) order by pub_active, xupdated desc;
+
+		*/
+		$limit = intval( $limit );
+		$unlimited = ( $limit == -1 );
+		$results = $this->allObjectsNeverExternalUpdate($limit);
+		if ( is_array($results) && $unlimited == false ) {
+			$limit = $limit - count($results);
+		}
+
+		if ( $unlimited || $limit > 0 ) {
+			/* look for more results */
+			$more_results = $this->allObjectsForExternalUpdate(true, 7, $limit);
+			if ( is_array($more_results) && $unlimited == false ) {
+				$limit = $limit - count($more_results);
+			}
+			$results = array_unique(array_merge($results, $more_results));
+
+			if ( $unlimited || $limit > 0 ) {
+				$more_results = $this->allObjectsForExternalUpdate(false, 1, $limit);
+				$results = array_unique(array_merge($results, $more_results));
+			}
+		}
+		return $results;
 	}
 
 	/** CRUD - create, read, update, delete */
