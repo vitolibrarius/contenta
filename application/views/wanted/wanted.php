@@ -27,7 +27,6 @@
 						<?php endif; ?>
 					</div>
 					<div class="figure_detail_middle">
-						<p class="series_id"><?php echo $publication->seriesName(); ?></p>
 						<p class="pub_name"><?php echo $publication->name; ?></p>
 						<p class="issue_num"><?php echo $publication->issue_num; ?></p>
 						<p class="pub_date"><?php echo $publication->publishedMonthYear(); ?></p>
@@ -35,6 +34,7 @@
 				</div>
 			</div>
 			<figcaption class="caption">
+				<p class="search_string"><?php echo $publication->searchString(); ?><br></p>
 				<a href="#" class="srch button" style="white-space:nowrap;" data-pub_id="<?php echo $publication->id; ?>">Search now</a>
 				<div id="ajaxDiv_<?php echo $publication->id; ?>"></div>
 			</figcaption>

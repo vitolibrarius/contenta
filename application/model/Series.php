@@ -95,9 +95,6 @@ class Series extends Model
 				$updates[Series::name] = $name;
 				$updates[Series::search_name] = normalizeSearchString($name);
 			}
-			else if ( isset($obj->search_name) == false || strlen($obj->search_name) == 0 ) {
-				$updates[Series::search_name] = normalizeSearchString($obj->name);
-			}
 
 			if (isset($count) && is_numeric($count)) {
 				$intcount = intval($count);
@@ -185,11 +182,18 @@ class Series extends Model
 		return $obj;
 	}
 
-	public function createObject(array $values = array()) {
-		if ( isset( $values[Series::search_name]) == false ) {
-			$values[Series::search_name] = normalizeSearchString($values[Series::name]);
+	public function updateObject(DataObject $object = null, array $values = array())
+	{
+		if ( $object instanceof model\SeriesDBO ) {
+			if ( isset($object, $object->name) ) {
+				$shouldbe = normalizeSearchString($object->name);
+				if ( isset($object->search_name) == false || $object->search_name != $shouldbe ) {
+					$values[Series::search_name] = $shouldbe;
+				}
+			}
 		}
-		return parent::createObject($values);
+
+		return parent::updateObject($object, $values);
 	}
 
 	public function deleteObject( \DataObject $object = null)
@@ -252,13 +256,15 @@ class Series extends Model
 				. " where id = :series_id", $params);
 
 			\SQL::raw( "update series set pub_cycle = "
-				. " (select (julianday(max(pub_date), 'unixepoch') - julianday(min(pub_date), 'unixepoch')) / count(*)"
-				. " from publication where publication.series_id = series.id)"
+				. "CAST( (select (julianday(max(pub_date), 'unixepoch') - julianday(min(pub_date), 'unixepoch')) / count(*)"
+				. " from publication where publication.series_id = series.id) as INT)"
 				. " where id = :series_id", $params);
 
 			\SQL::raw( "update series set pub_active = "
-				. " (select (((julianday('now') - julianday(max(pub_date), 'unixepoch'))/365) < 1)"
-				. " from publication where publication.series_id = series.id)"
+				. "(select case when max(p.pub_date) is null AND series.start_year = strftime('%Y','now') then 1 "
+				. " when julianday(max(p.pub_date), 'unixepoch') > julianday('now') then 1"
+				. " when julianday(max(pub_date), 'unixepoch') + (series.pub_cycle * 2) > julianday('now') then 1"
+				. " else 0 end from publication p where p.series_id = series.id)"
 				. " where id = :series_id", $params);
 		}
 		return true;
@@ -292,6 +298,7 @@ class Series extends Model
 	public function attributesFor($object = null, $type = null ) {
 		return array(
 			Series::name => Model::TEXT_TYPE,
+			Series::search_name => Model::TEXT_TYPE,
 			Series::start_year => Model::INT_TYPE,
 			Series::desc => Model::TEXTAREA_TYPE,
 			Series::publisher_id => Model::TO_ONE_TYPE,

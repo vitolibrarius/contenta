@@ -24,10 +24,20 @@
 					<a href="#" class="wanted" data-series_id="<?php echo $value->id; ?>"><?php echo $value->displayName(); ?></a>
 				</h2>
 			</div>
-			<div class="grid_2">
+			<div class="grid_1">
+				<span><?php echo $value->start_year; ?></span>
+			</div>
+			<div class="grid_1">
+				<span>
+					<span class="icon <?php echo ($value->isActive() ? 'true' : 'false'); ?>"></span>
+				</span>
 			</div>
 			<div class="grid_2">
-				<span><?php echo $value->start_year; ?></span>
+				<span><?php $pub = $value->lastPublication();
+					if ( $pub != false ) {
+						echo "Issue " . $pub->paddedIssueNum() . " - " . $pub->publishedMonthYear();
+					}
+				?></span>
 			</div>
 			<div class="grid_2">
 				<span style="float: right;">

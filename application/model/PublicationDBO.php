@@ -33,12 +33,14 @@ class PublicationDBO extends DataObject
 	}
 
 	public function searchString() {
-		return $this->seriesName() . " " . $this->paddedIssueNum() . " " . $this->publishedYear();
+		return $this->series()->search_name
+			. " " . $this->paddedIssueNum()
+			. ($this->publishedYear() > 1900 ? " " . $this->publishedYear() : '');
 	}
 
 	public function paddedIssueNum() {
 		if ( isset($this->issue_num) ) {
-			if ( is_integer($this->issue_num) ) {
+			if ( is_numeric($this->issue_num) ) {
 				return str_pad($this->issue_num, 3, "0", STR_PAD_LEFT);
 			}
 			return $this->issue_num;
