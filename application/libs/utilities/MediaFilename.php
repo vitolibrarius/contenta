@@ -148,6 +148,11 @@ class MediaFilename
 		// remove the file uniquing number system.  eg: Swamp Thing 007 (2012) (2 covers) (Megan-Empire).1.cbz
 		$clean = preg_replace('/\.1$/', '', $clean);
 
+		// remove 'c2c'
+		if (substr_count($clean, "c2c") >= 1 ) {
+			$clean = str_replace("c2c", "", $clean);
+		}
+
 		// replace parenthetical phrases with spaces
 		$clean = preg_replace("/\\((.*?)\\)/us", " $1 ", $clean);
 		$clean = preg_replace("/\\[(.*?)\\]/u", " $1 ", $clean);

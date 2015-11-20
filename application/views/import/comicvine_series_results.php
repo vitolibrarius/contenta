@@ -50,6 +50,8 @@
 					$record['id'],
 					urlencode(normalizeSearchString($record['name']))
 				); ?>">Import</a>
+				<?php else: ?>
+					Already Imported
 				<?php endif; ?>
 			</span>
 		</div>
