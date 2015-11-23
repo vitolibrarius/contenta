@@ -183,7 +183,7 @@ class Migration_15 extends Migrator
 
 		foreach ($job_data as $dict) {
 			$existing = \SQL::raw( "select id FROM " . Job::TABLE . " where type_id = :type_id",
-				array(":type_id" => $job_data["type_id"]));
+				array(":type_id" => $dict["type_id"]));
 			if ( is_array($existing) && count($existing) > 0) {
 				$cronEval = new CronEvaluator( $dict["minute"], $dict["hour"], $dict["dayOfWeek"]);
 				$dict["next"] = $cronEval->nextDate()->getTimestamp();
