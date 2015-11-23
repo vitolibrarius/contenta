@@ -19,7 +19,7 @@ class MediaFilename
 		if (preg_match_all("/\\b(\\d{4})\\b/uU", $filename, $matches, 0))
 		{
 			$matches = array_reverse($matches[1]);
-			$curYear = intval(date("Y"));
+			$curYear = intval(date("Y")) + 1;
 			foreach ($matches as $key => $value) {
 				$year = intval($value);
 				if ( $year > 1900 && $year <= $curYear) {
