@@ -283,6 +283,9 @@
             }
         },
         "job": {
+            "EndpointNotRequired": {
+                "label": "Not Required"
+            },
             "FormLegend": {
                 "label": "Job Schedule Details"
             },

@@ -58,10 +58,16 @@
 				<?php
 					$runningJobs = \Model::Named("Job_Running")->allForJob($value);
 					$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
+					$endpointRequired = boolval($value->{"jobType/requires_endpoint"}());
+					$endpointEnabled = boolval($value->{"endpoint/enabled"}());
+					$endpointNote = ($endpointRequired
+						? $value->{"endpoint/name"}() . ($endpointEnabled ? "" : " (disabled)")
+						: Localized::ModelLabel($this->model->tableName(), "EndpointNotRequired" )
+					);
 				?>
 				<tr <?php if ( $running == true ) { echo 'class="blocked"'; } ?> >
 					<td><?php echo $value->{"jobType/name"}() . '<br><i>' . $value->jobType()->desc . '</i>'; ?></td>
-					<td><?php echo $value->{"endpoint/name"}() . ($value->{"endpoint/enabled"}() ? "" : " (disabled)"); ?></td>
+					<td><?php echo $endpointNote; ?></td>
 					<td><?php echo $value->minute; ?></td>
 					<td><?php echo $value->hour; ?></td>
 					<td><?php echo $value->dayOfWeek; ?></td>
@@ -76,7 +82,7 @@
 						<a href="<?php echo Config::Web('/AdminJobs/edit/'. $value->id); ?>"><span class="icon edit" /></a>
 						<?php endif; ?>
 					</td>
-					<td><?php if ( $running == false && $value->enabled && $value->{"endpoint/enabled"}() ): ?>
+					<td><?php if ( $running == false && $value->enabled && ($endpointRequired == false || $endpointEnabled) ): ?>
 						<a href="<?php echo Config::Web('/AdminJobs/execute/'. $value->id); ?>"><span class="icon run" /></a>
 						<?php endif; ?>
 					</td>

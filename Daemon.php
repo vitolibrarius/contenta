@@ -86,6 +86,11 @@ function ConfigOverride( Config $config, Array $custom = array() )
 		Logger::logInfo( "processing " . $config->processingDirectory() );
 }
 
+/**
+ * Capture all output
+ */
+ob_start();
+
 $config = Config::instance();
 $options = getopt("d:");
 $workingDir = (isset($options['d']) ? $options['d'] : null);
@@ -143,7 +148,7 @@ try {
 
 	if ( is_array($jobList) == false || count($jobList) == 0) {
 		$jobRunning = $job_run_model->create($jobObj, $jobtypeObj, $processorName, $guid, $pid);
-		echo "Job running " . var_export($jobRunning, true) .PHP_EOL;
+// 		echo "Job running " . var_export($jobRunning, true) .PHP_EOL;
 
 		try {
 			$processor = Processor::Named( $processorName, $guid );
@@ -191,6 +196,9 @@ catch ( ClassNotFoundException $exception ) {
 	Logger::logException( $exception );
 	Logger::logError( 'Failed to find processor ' . $options['p'] );
 }
+
+$log = ob_get_clean();
+Logger::logInfo( $log, "OutputBuffer", $pid );
 
 if ( is_null($debug) && is_sub_dir($workingDir, $config->processingDirectory()) ) {
 	destroy_dir($workingDir);

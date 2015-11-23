@@ -128,6 +128,72 @@ class Migration_15 extends Migrator
 
 	public function sqlite_postUpgrade()
 	{
+		$job_type_model = Model::Named("Job_Type");
+		$types = array(
+			array(
+				Job_Type::name => "Import Queue Reprocessor",
+				Job_Type::code => "reprocessor",
+				Job_Type::desc => "Reprocess items in import queue that paused due to system load",
+				Job_Type::processor => "ImportQueueReprocess",
+				Job_Type::parameter => null,
+				Job_Type::scheduled => Model::TERTIARY_TRUE,
+				Job_Type::requires_endpoint => Model::TERTIARY_FALSE
+			)
+		);
+
+		foreach ($types as $dict) {
+			$existing = \SQL::raw( "select id FROM " . Job_Type::TABLE . " where code = :code", array( ":code" => $dict[Job_Type::code]));
+			if ( is_array($existing) && count($existing) > 0) {
+				$update = \SQL::Update($job_type_model, Qualifier::Equals( "code", $dict[Job_Type::code]), $dict);
+				$update->commitTransaction();
+			}
+			else {
+				$inserts = \SQL::Insert( $job_type_model, array(
+						"name",
+						"code",
+						"desc",
+						"processor",
+						"scheduled",
+						"parameter",
+						"requires_endpoint"
+					)
+				);
+				$inserts->addRecord( $dict );
+				$inserts->commitTransaction(true);
+			}
+		}
+
+		$job_model = Model::Named("Job");
+		$existing = \SQL::raw( "select id, code FROM " . Job_Type::TABLE );
+		$map = array();
+		foreach ($existing as $row) {
+			$map[$row->code] = $row->id;
+		}
+
+		$job_data = array(
+			array(
+				"type_id" => $map["reprocessor"],
+				"minute" => "10",
+				"hour" => "0-8",
+				"dayOfWeek" => "*",
+				"one_shot" => Model::TERTIARY_FALSE,
+				"enabled" => Model::TERTIARY_TRUE
+			)
+		);
+
+		foreach ($job_data as $dict) {
+			$existing = \SQL::raw( "select id FROM " . Job::TABLE . " where type_id = :type_id",
+				array(":type_id" => $job_data["type_id"]));
+			if ( is_array($existing) && count($existing) > 0) {
+				$cronEval = new CronEvaluator( $dict["minute"], $dict["hour"], $dict["dayOfWeek"]);
+				$dict["next"] = $cronEval->nextDate()->getTimestamp();
+
+				$inserts = \SQL::Insert( $job_model, array( "type_id", "minute", "hour", "dayOfWeek", "one_shot", "enabled", "next") );
+				$inserts->addRecord( $dict );
+				$inserts->commitTransaction(true);
+			}
+		}
+
 		return true;
 	}
 }

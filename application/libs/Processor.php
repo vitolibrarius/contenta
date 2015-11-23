@@ -140,13 +140,13 @@ abstract class Processor
 		return ( is_null($oldValue) ? boolval($default) : $oldValue );
 	}
 
-	public function daemonizeProcess()
+	public function daemonizeProcess($debug = false)
 	{
 		if ( Session::isUserLoggedIn() ) {
+			$otherParams = ($debug == true ? array("debug"=>true) : null);
 			$user = Model::Named('Users')->objectForId(Session::Get('user_id'));
-			return Daemonize( get_short_class($this), $user->api_hash, $this->guid);
+			return Daemonize( get_short_class($this), $user->api_hash, $this->guid, null, $otherParams);
 		}
-
 		return false;
 	}
 
