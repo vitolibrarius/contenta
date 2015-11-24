@@ -329,7 +329,7 @@ abstract class Model
 			$qualifiers[] = db\Qualifier::Equals( "pub_active", 1 );
 		}
 		$order = array();
-		$order[] = array(SQL::SQL_ORDER_DESC => "xupdated");
+		$order[] = array(SQL::SQL_ORDER_ASC => "xupdated");
 		if ( $this->hasColumn('pub_active') ) {
 			$order[] = array(SQL::SQL_ORDER_DESC => "pub_active");
 		}
