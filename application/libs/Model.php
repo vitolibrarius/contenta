@@ -315,29 +315,40 @@ abstract class Model
 		return $select->fetchAll();
 	}
 
-	public function allObjectsForExternalUpdate($activeOnly = true, $ageInDays = 7, $limit = -1)
+	public function allObjectsForExternalUpdate($activeOnly = true, $ageInDays = 7, $startYearCutoff = 0, $limit = -1)
 	{
 		$activeOnly = boolval( $activeOnly );
 		// ageInDays >= 0 <= 365
 		$ageInDays = min(max(intval($ageInDays), 0), 365);
 		$limit = intval( $limit );
+		$startYearCutoff = intval($startYearCutoff);
 
 		$qualifiers = array();
 		$qualifiers[] = db\Qualifier::IsNotNull( "xid" );
 		$qualifiers[] = db\Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * $ageInDays)) );
+		if ( $startYearCutoff > 0 && $this->hasColumn('start_year')) {
+			$cutoff = intval(date("Y")) - $startYearCutoff;
+			$qualifiers[] = db\Qualifier::GreaterThan( "start_year", $cutoff);
+		}
 		if ( $activeOnly && $this->hasColumn('pub_active') ) {
 			$qualifiers[] = db\Qualifier::Equals( "pub_active", 1 );
 		}
+
 		$order = array();
-		$order[] = array(SQL::SQL_ORDER_ASC => "xupdated");
+		$order[] = array(SQL::SQL_ORDER_ASC => "date(xupdated, 'unixepoch')");
 		if ( $this->hasColumn('pub_active') ) {
 			$order[] = array(SQL::SQL_ORDER_DESC => "pub_active");
+		}
+		if ( $this->hasColumn('start_year') ) {
+			$order[] = array(SQL::SQL_ORDER_DESC => "start_year");
 		}
 
 		$select = SQL::Select( $this );
 		$select->where( db\Qualifier::AndQualifier( $qualifiers ));
 		$select->orderBy( $order );
 		$select->limit( $limit );
+
+// 		\Session::addNegativeFeedback( $select->sqlStatement() . "; " . var_export($select->sqlParameters(), true));
 
 		return $select->fetchAll();
 	}
@@ -350,22 +361,30 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 		*/
 		$limit = intval( $limit );
 		$unlimited = ( $limit == -1 );
+		// update new items
 		$results = $this->allObjectsNeverExternalUpdate($limit);
 		if ( is_array($results) && $unlimited == false ) {
 			$limit = $limit - count($results);
 		}
 
 		if ( $unlimited || $limit > 0 ) {
-			/* look for more results */
-			$more_results = $this->allObjectsForExternalUpdate(true, 7, $limit);
+			/* all actively published every 14 days */
+			$more_results = $this->allObjectsForExternalUpdate(true, 14, 0, $limit);
 			if ( is_array($more_results) && $unlimited == false ) {
 				$limit = $limit - count($more_results);
 			}
 			$results = array_unique(array_merge($results, $more_results));
 
 			if ( $unlimited || $limit > 0 ) {
-				$more_results = $this->allObjectsForExternalUpdate(false, 1, $limit);
+				// any record not updated in the last month, and started less than 5 years
+				$more_results = $this->allObjectsForExternalUpdate(false, 30, 5, $limit);
 				$results = array_unique(array_merge($results, $more_results));
+
+				// any record not updated in the last 6 months, and started anytime
+				if ( $unlimited || $limit > 0 ) {
+					$more_results = $this->allObjectsForExternalUpdate(false, 180, 0, $limit);
+					$results = array_unique(array_merge($results, $more_results));
+				}
 			}
 		}
 		return $results;

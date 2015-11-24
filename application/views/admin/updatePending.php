@@ -4,6 +4,7 @@
 			<tr>
 				<th></th>
 				<th><?php echo Localized::ModelLabel($this->model->tableName(), "name" ); ?></th>
+				<th><?php echo Localized::ModelLabel($this->model->tableName(), "start_year" ); ?></th>
 				<th><?php echo Localized::ModelLabel($this->model->tableName(), "xupdated" ); ?></th>
 				<th><?php echo Localized::ModelLabel($this->model->tableName(), "lastPublicationDate" ); ?></th>
 				<th><?php echo Localized::ModelLabel($this->model->tableName(), "lastPublicationIssue" ); ?></th>
@@ -14,6 +15,7 @@
 				<tr>
 					<td><img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $value->pkValue()); ?>" class="thumbnail"></td>
 					<td><?php echo $value->name; ?></td>
+					<td><?php echo $value->start_year; ?></td>
 					<td><?php echo $value->lastXupdated(); ?></td>
 					<td><?php echo $lastPub->publishedMonthYear(); ?></td>
 					<td><?php echo $lastPub->issue_num; ?></td>
