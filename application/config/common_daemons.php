@@ -18,8 +18,10 @@ function Daemonize( $processorName, $user_api = null, $guid = null, $job_id = nu
 	$metadata->setMeta( "job_id", $job_id );
 	$metadata->setMeta( "guid", $guid );
 
-	foreach( $other as $keypath => $value ) {
-		$metadata->setMeta( $keypath, $value );
+	if ( is_array($other) ) {
+		foreach( $other as $keypath => $value ) {
+			$metadata->setMeta( $keypath, $value );
+		}
 	}
 
 	$shell = ((PHP_OS === 'Darwin') ? '' : 'nohup ') . 'php ';
