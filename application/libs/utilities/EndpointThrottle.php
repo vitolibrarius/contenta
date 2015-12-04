@@ -49,10 +49,6 @@ class EndpointThrottle
 		if ( defined('Contenta_Daemon') ) {
 			// daemon ratio only half total limit
 			while ( $ratio > 0.95 ) {
-				Logger::logWarning("Connection to $this->code passed " . ROUND($max_ratio*100)
-					. "% throttle limit, pausing for " . ROUND($wait_time / 2) . " seconds",
-					"Daemon", getmypid());
-
 				sleep( $wait_time / 2 );
 				list($count, $mindate) = $this->count();
 				$ratio = $count / $limit;
@@ -61,8 +57,7 @@ class EndpointThrottle
 			}
 		}
 		else if ( $ratio > 0.95 ) {
-			throw new ThrottleOverloadException( "Connection to $this->code passed " . ROUND($ratio*100)
-				. "% throttle limit.", $wait_time );
+			sleep( $pause );
 		}
 		else if ( $ratio >= 0.5 ) {
 			sleep( $pause );

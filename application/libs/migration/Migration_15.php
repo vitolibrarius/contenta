@@ -194,6 +194,10 @@ class Migration_15 extends Migrator
 			}
 		}
 
+		$update = \SQL::Update(Model::Named("Endpoint_Type"), null, array( "throttle_hits" => 1, "throttle_time" => 2));
+		$update->allowFullTableUpdate = true;
+		$update->commitTransaction();
+
 		return true;
 	}
 }
