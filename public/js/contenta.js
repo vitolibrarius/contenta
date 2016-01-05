@@ -145,5 +145,5 @@ $(document).ready(function() {
 	refreshNotifications();
 	setInterval (function f() {
 		refreshNotifications();
-	}, 1000);
+	}, 15000);
 });
