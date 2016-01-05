@@ -15,6 +15,7 @@ class LogDBO extends DataObject
 	public $level;
 	public $created;
 	public $message;
+	public $session;
 
 	public function __toString()
 	{

@@ -31,6 +31,13 @@ class Logs extends Controller
 		}
 	}
 
+	function notifications()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->render( '/logs/index_' . $type);
+		}
+	}
+
 	function log_table()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
@@ -41,7 +48,8 @@ class Logs extends Controller
 				isset($_GET['context']) ? $_GET['context'] : null,
 				isset($_GET['context_id']) ? $_GET['context_id'] : null,
 				isset($_GET['level']) ? $_GET['level'] : null,
-				isset($_GET['message']) ? $_GET['message'] : null
+				isset($_GET['message']) ? $_GET['message'] : null,
+				"desc", 50, true
 			);
 			$this->view->render( '/logs/log_table', true);
 		}

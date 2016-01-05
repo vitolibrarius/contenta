@@ -311,6 +311,39 @@ nav .menu li li li a {
 	padding-left:80px;
 }
 
+#daemons {
+	display: none;
+	margin-right: 10px !important;
+}
+
+#daemons span.badge {
+	background: #BA070F;
+	color: #FFF;
+	margin-top: 4px !important;
+	padding: 5px !important;
+	z-index: 999;
+	border-radius: .8em;
+	border: 2px solid #FFCED5;
+}
+
+#notification_content{
+	position: absolute;
+	bottom: 0;
+	margin: 10px;
+	z-index: 999;
+}
+
+.notification {
+  padding: 8px 35px 8px 14px;
+  margin-bottom: 20px;
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+
 .grid_1,
 .grid_2,
 .grid_3,
@@ -398,6 +431,9 @@ a.button:hover { background:#8dbc01; }
 	nav .toggle {
 		margin-top:10px;
 		float:right;
+	}
+	#daemons {
+		display: none;
 	}
 	#page-header {
 		padding: 10px 0;

@@ -72,6 +72,26 @@ class AdminJobs extends Admin
 		}
 	}
 
+	function json_running()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Job_Running');
+			$model->clearFinishedProcesses();
+
+			$objects = $model->allObjects();
+			$count = 0;
+			if ( is_array($objects) ) {
+				$count = count($objects);
+			}
+
+			$this->view->renderJson( array(
+				"count" => $count,
+				"items" => $objects
+				)
+			);
+		}
+	}
+
 	function ajax_runningTable()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {

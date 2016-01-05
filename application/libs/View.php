@@ -114,8 +114,8 @@ class View
 			if ($render_without_header_and_footer == false) {
 				require VIEWS_PATH . '_templates/header.php';
 			}
-			// echo out the system feedback (error and success messages)
-			$this->renderFeedbackMessages();
+// 			echo out the system feedback (error and success messages)
+// 			$this->renderFeedbackMessages();
 			require VIEWS_PATH . $filename . '.php';
 			if ($render_without_header_and_footer == false) {
 				require VIEWS_PATH . '_templates/footer.php';

@@ -56,6 +56,16 @@ class Menu {
 		return $this;
 	}
 
+	public function addCallback($title, Closure $callback = null)
+	{
+		if ( is_null($callback) == false ) {
+			$this->items[] = array(
+				'title'	=> $title,
+				'callback' => $callback
+			);
+		}
+	}
+
 	/**
 	 * Renders the HTML output for the menu
 	 *
@@ -75,16 +85,23 @@ class Menu {
 		foreach ($items as $key => $item)
 		{
 			$has_children = isset($item['children']);
+			$current_title = (isset($item['title']) ? $item['title'] : '');
 			$current_class = "";
 
-			if ( empty($current) == false ) {
+			if ( empty($current) == false && isset($item['callback']) == false) {
 				$current_class = self::current($current, $item);
 			}
 
 			$classes = self::attributes(array('class' => $current_class));
 
-			$menu .= '<!-- ' . $current_class . ' -->';
-			$menu .= '<li'.$classes.'><a href="'.$item['url'].'">'.$item['title'].'</a>';
+			$menu .= '<!-- ' . $current_title . ' -->';
+			$menu .= '<li'.$classes.'>';
+			if ( isset($item['callback']) ) {
+				$menu .= $item['callback']();
+			}
+			else {
+				$menu .= '<a href="'.$item['url'].'">'.$current_title.'</a>';
+			}
 			$menu .= $has_children ? $this->render(array('class'=>'sub-menu'), $current, $item['children']) : NULL;
 			$menu .= '</li>';
 		}

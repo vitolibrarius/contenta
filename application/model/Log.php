@@ -21,9 +21,9 @@ class Log extends Model
 	const context =		'context';
 	const context_id =	'context_id';
 	const level =		'level';
-	const created =	'created';
-	const message =	'message';
-
+	const created =		'created';
+	const message =		'message';
+	const session =		'session';
 
 	public function tableName() { return Log::TABLE; }
 	public function tablePK() { return Log::id; }
@@ -35,7 +35,8 @@ class Log extends Model
 	public function allColumnNames()
 	{
 		return array(
-			Log::id, Log::trace, Log::trace_id, Log::context, Log::context_id, Log::level, Log::created, Log::message
+			Log::id, Log::trace, Log::trace_id, Log::context, Log::context_id, Log::level, Log::created, Log::message,
+			Log::session
 		);
 	}
 
@@ -51,37 +52,70 @@ class Log extends Model
 			Log::context => $contextName,
 			Log::context_id => $contextId,
 			Log::level => ($levelObj == false ? 'warning' : $levelObj->{Log_Level::code}),
-			Log::message => $message
+			Log::message => $message,
+			Log::session => session_id()
 			)
 		);
 		return true;
 	}
 
-	public function mostRecentLike( $trace = null, $trace_id = null, $context = null, $context_id = null, $level = null, $message = null, $direction="desc", $limit=50) {
-		$select = \SQL::Select( $this )->limit( 50 );
+	public function messagesSince( $sid, $lastCheck )
+	{
+		$lastCheck = intval($lastCheck);
+		$andQ = array();
+		if ( empty($sid) == false) {
+			$andQ[] = Qualifier::Equals( Log::session, $sid );
+		}
+		if ( $lastCheck > 0 ) {
+			$andQ[] = Qualifier::GreaterThan( "created", $lastCheck );
+		}
+		else {
+			Logger::logWarning( "$lastCheck < " . time() );
+		}
 
-		$likes = array();
+		$select = \SQL::Select( $this )
+			->where( Qualifier::AndQualifier( $andQ ))
+			->orderBy( array( array( "desc" => Log::id) ) )
+			->limit( 10 );
+
+// 		Logger::logWarning( $select->__toString() );
+ 		return $select->fetchAll();
+	}
+
+	public function mostRecentLike( $trace = null, $trace_id = null,
+		$context = null, $context_id = null,
+		$level = null, $message = null,
+		$direction="desc", $limit=50, $isAdmin = false)
+	{
+		$select = \SQL::Select( $this )->limit( $limit );
+
+		$andQ = array();
+		$sid = session_id();
+		if ( empty($sid) == false && $isAdmin == false) {
+			$andQ[] = Qualifier::Equals( Log::session, $sid );
+		}
+
 		if ( isset($trace) && strlen($trace) > 0 ) {
-			$likes[] = Qualifier::Like( Log::trace, $trace, SQL::SQL_LIKE_AFTER );
+			$andQ[] = Qualifier::Like( Log::trace, $trace, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($trace_id) && strlen($trace_id) > 0 ) {
-			$likes[] = Qualifier::Like( Log::trace_id, $trace_id, SQL::SQL_LIKE_AFTER );
+			$andQ[] = Qualifier::Like( Log::trace_id, $trace_id, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($context) && strlen($context) > 0 ) {
-			$likes[] = Qualifier::Like( Log::context, $context, SQL::SQL_LIKE_AFTER );
+			$andQ[] = Qualifier::Like( Log::context, $context, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($context_id) && strlen($context_id) > 0 ) {
-			$likes[] = Qualifier::Like( Log::context_id, $context_id, SQL::SQL_LIKE_AFTER );
+			$andQ[] = Qualifier::Like( Log::context_id, $context_id, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($level) && strlen($level) > 0 && $level != "any") {
-			$likes[] = Qualifier::Like( Log::level, $level, SQL::SQL_LIKE_AFTER );
+			$andQ[] = Qualifier::Like( Log::level, $level, SQL::SQL_LIKE_AFTER );
 		}
 		if ( isset($message) && strlen($message) > 0 ) {
-			$likes[] = Qualifier::Like( Log::message, $message, SQL::SQL_LIKE_AFTER );
+			$andQ[] = Qualifier::Like( Log::message, $message, SQL::SQL_LIKE_AFTER );
 		}
 
-		if ( count($likes) > 0 ) {
-			$select->where( Qualifier::AndQualifier( $likes ));
+		if ( count($andQ) > 0 ) {
+			$select->where( Qualifier::AndQualifier( $andQ ));
 		}
 
 		if ( $direction != 'desc' && $direction != 'asc') {

@@ -161,4 +161,29 @@ class Api extends Controller
 		}
 	}
 
+	function notifications( $userHash = null )
+	{
+		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
+			$positive = Session::positiveFeedback();
+			$negative = Session::negativeFeedback();
+			Session::clearAllFeedback();
+
+			$lastCheck = Session::get('user_notification');
+			if ( is_null($lastCheck) || time() - $lastCheck > 100) {
+				Logger::logError( "Last check is $lastCheck" );
+			}
+
+			$logs = Model::Named("Log")->messagesSince( session_id(), $lastCheck );
+			Session::set('user_notification', time());
+
+			$this->view->renderJson( array(
+				"session_id" => session_id(),
+				"positive" => (is_null($positive) ? array() : $positive),
+				"negative" => (is_null($negative) ? array() : $negative),
+				"logs" => (is_array($logs) ? $logs : array())
+				)
+			);
+		}
+	}
+
 }

@@ -35,6 +35,7 @@ use model\Job as Job;
 use model\Job_Type as Job_Type;
 use model\Job_Running as Job_Running;
 use model\Flux as Flux;
+use model\Log as Log;
 
 
 class Migration_15 extends Migrator
@@ -71,6 +72,13 @@ class Migration_15 extends Migrator
 		if ( isset($table_fields[ Job_Running::desc ]) == false ) {
 			$sql = "ALTER TABLE " . Job_Running::TABLE . " ADD COLUMN " . Job_Running::desc . " TEXT";
 			$this->sqlite_execute( Job_Running::TABLE, $sql, "Alter table " . Job_Running::TABLE . " add column '" . Job_Running::desc . "'" );
+		}
+
+		/** Log */
+		$table_fields = \SQL::pragma_TableInfo(Log::TABLE);
+		if ( isset($table_fields[ Log::session ]) == false ) {
+			$sql = "ALTER TABLE " . Log::TABLE . " ADD COLUMN " . Log::session . " TEXT";
+			$this->sqlite_execute( Log::TABLE, $sql, "Alter table " . Log::TABLE . " add column '" . Log::session . "'" );
 		}
 
 		/** NEW INDEXES */
@@ -111,6 +119,10 @@ class Migration_15 extends Migrator
 			array(
 				Migrator::IDX_TABLE => Flux::TABLE,
 				Migrator::IDX_COLS => array( Flux::dest_endpoint, Flux::dest_guid )
+			),
+			array(
+				Migrator::IDX_TABLE => Log::TABLE,
+				Migrator::IDX_COLS => array( Log::session, Log::created )
 			),
 		);
 		foreach( $indexStatements as $config ) {

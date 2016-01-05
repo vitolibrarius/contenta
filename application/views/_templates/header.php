@@ -67,6 +67,11 @@
 				{
 					if (Session::get('user_account_type') === model\Users::AdministratorRole )
 					{
+						$menu->addCallback( "Daemons", function() {
+								return "<div id='daemons' data-href='" . Config::Web("/AdminJobs/json_running") . "'>"
+									. "<span class='badge'>123</span></div>";
+							}
+						);
 						$menu->add( Localized::GlobalLabel("Menu", "Admin"), '/admin/index');
 						$menu->add( Localized::GlobalLabel("Menu", "Logs"), '/logs/index');
 					}
