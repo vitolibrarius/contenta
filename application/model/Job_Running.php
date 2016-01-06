@@ -67,6 +67,12 @@ class Job_Running extends Model
 		return $this->allObjectsForFK(Job_Running::job_type_id, $obj );
 	}
 
+	public function jobForPID($pid = 0)
+	{
+		$pid = intval($pid);
+		return $this->singleObject( Qualifier::Equals( Job_Running::pid, $pid));
+	}
+
 	public function createForJob($job_id = null, $processorName, $guid, $pid, $desc = null)
 	{
 		$jobObj = null;

@@ -31,6 +31,14 @@ class Job_RunningDBO extends DataObject
 		return (empty($job) ? 'Unknown' : $job->displayName() );
 	}
 
+	public function displayDescription() {
+		if ( isset( $this->desc) && empty($this->desc) == false ) {
+			return $this->desc;
+		}
+
+		return $this->displayName();
+	}
+
 	public function job() {
 		$type_model = Model::Named("Job");
 		return (isset($this->job_id) ? $type_model->objectForId($this->job_id) : null);

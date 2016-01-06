@@ -81,6 +81,7 @@ $(document).ready(function() {
 	function refreshDaemons() {
 		var action = $('#daemons').attr("data-href");
 		$.ajax({
+			global: false,
 			type: "GET",
 			url: action,
 			success: function(msg){
@@ -101,6 +102,7 @@ $(document).ready(function() {
 		var action = $('#notification_content').attr("data-href");
 		var delay_milli = 10000;
 		$.ajax({
+			global: false,
 			type: "GET",
 			url: action,
 			success: function(msg) {
