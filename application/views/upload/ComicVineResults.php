@@ -122,7 +122,7 @@
 					</a>
 					<?php echo $item['volume']['name']; ?>
 				</h3>
-				<h4><?php echo $item['name']; ?></h4>
+				<h4><?php if ( isset($item['name']) ) { echo $item['name']; } ?></h4>
 				<span><?php
 					if ( isset($item['deck']) && strlen($item['deck']) > 0) { echo $item['deck']; }
 					else if (isset($item['description']) ) { echo $item['description']; }
