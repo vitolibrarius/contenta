@@ -23,6 +23,9 @@
 	<script type="text/javascript" src="<?php echo Config::Web('/public/js/contenta.js'); ?>"></script>
 	<script type="text/javascript" src="<?php echo Config::Web('/public/js/contenta-modal.js'); ?>"></script>
 
+<?php if (Session::get('user_logged_in') == true) : ?>
+	<script type="text/javascript" src="<?php echo Config::Web('/public/js/contenta-notification.js'); ?>"></script>
+<?php endif; ?>
 	<!-- Custom component stylesheets and scripts -->
 <?php
 	if ( isset($this->additionalStyles)) {
