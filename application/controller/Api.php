@@ -169,9 +169,6 @@ class Api extends Controller
 			Session::clearAllFeedback();
 
 			$lastCheck = Session::get('user_notification');
-			if ( is_null($lastCheck) || time() - $lastCheck > 100) {
-				Logger::logError( "Last check is $lastCheck" );
-			}
 
 			$logs = Model::Named("Log")->messagesSince( session_id(), $lastCheck );
 			Session::set('user_notification', time());
@@ -185,5 +182,4 @@ class Api extends Controller
 			);
 		}
 	}
-
 }
