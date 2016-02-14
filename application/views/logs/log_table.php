@@ -23,7 +23,7 @@
 					. '<td rowspan="2">' . $log->level . '</td>'
 					. '<td>' . $log->trace . '</td>'
 					. '<td>' . $log->context . '</td>'
-					. '<td rowspan="2" class="log_msg">' . $log->message . '</td>'
+					. '<td rowspan="2" class="log_msg" valign="top"><pre>' . $log->message . '</pre></td>'
 					. '</tr>';
 			echo '<tr class="' . $log->level . '">'
 					. '<td>' . $log->trace_id . '</td>'
