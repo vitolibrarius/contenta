@@ -38,7 +38,7 @@ class SABnzbdConnector extends JSON_EndpointConnector
 		$params = $this->defaultParameters();
 		$params['mode'] = "qstatus";
 		$status_url = $this->endpointBaseURL() . "?" . http_build_query($params);
-		list( $success, $message, $data ) = $this->performTestConnnector($status_url);
+		list( $success, $message, $json ) = $this->performTestConnnector($status_url);
 		if (is_array($json) && isset($json['status'])) {
 			$success = $json['status'];
 			if ( $success == false ) {
@@ -184,14 +184,15 @@ class SABnzbdConnector extends JSON_EndpointConnector
 	*/
 	public function delete()
 	{
-		$keys = func_get_args();
-		$teeth = array();
-		foreach( $keys as $akey ) {
-			$teeth = array_merge_recursive($teeth, (array)$akey );
+		if (func_num_args() == 0) {
+			Logger::logError( 'Unable to delete SABnzbd history with -null- identifiers',
+				get_short_class($this), $this->endpoint());
+			return false;
 		}
-		$teeth = array_filter(array_keys($teeth), 'is_string');
 
 		// http://localhost:8080/sabnzbd/api?mode=queue&name=delete&value=SABnzbd_nzo_zt2syz,SABnzbd_nzo_df2hyd,SABnzbd_nzo_op3shfs
+		$keys = func_get_args();
+		$teeth = array_filter($keys, 'is_string');
 		$params = $this->defaultParameters();
 		$params['mode'] = 'queue';
 		$params['name'] = 'delete';

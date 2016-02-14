@@ -76,6 +76,16 @@ $queue = $connection->history();
 echo json_encode($queue, JSON_PRETTY_PRINT);
 my_echo( "---------------------------" );
 
+$history = $connection->historySlots();
+foreach( $history as $slot ) {
+	$sab_id = $slot['nzo_id'];
+	$sab_fail_message = $slot['fail_message'];
+	$sab_status = $slot['status'];
+	my_echo( "$sab_id => " . $slot['name'] . " $sab_status ($sab_fail_message)" );
+}
+
+my_echo( "---------------------------" );
+$del_status = $connection->delete('SABnzbd_nzo_54pQUz');
 die();
 /* Arguments:
 	output=json,

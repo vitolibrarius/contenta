@@ -48,6 +48,7 @@ class FluxStatusUpdater extends EndpointImporter
 	public function processData()
 	{
 		$FluxModel = Model::Named('Flux');
+
 		$incomplete = $FluxModel->destinationIncomplete(-1);
 		if ( is_array($incomplete) && count($incomplete) > 0 ) {
 			$sab_connector = $this->endpointConnector();
