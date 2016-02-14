@@ -71,7 +71,7 @@ class FluxStatusUpdater extends EndpointImporter
 				$flux = $FluxModel->objectForDestinationEndpointGUID($sab_connector->endpoint(), $sab_id);
 				if ( $flux != false ) {
 					// delete the history from SABnzbd
-					$del_status = $sab_connector->delete($sab_id);
+					$del_status = $sab_connector->historyDelete($sab_id);
 					if ( $sab_status == 'Failed' ) {
 						$FluxModel->updateObject( $flux, array(
 								Flux::flux_error => Model::TERTIARY_TRUE,

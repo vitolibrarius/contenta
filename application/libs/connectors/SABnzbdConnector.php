@@ -179,10 +179,7 @@ class SABnzbdConnector extends JSON_EndpointConnector
 		return $history;
 	}
 
-	/**
-		Queue management
-	*/
-	public function delete()
+	public function historyDelete()
 	{
 		if (func_num_args() == 0) {
 			Logger::logError( 'Unable to delete SABnzbd history with -null- identifiers',
@@ -190,7 +187,32 @@ class SABnzbdConnector extends JSON_EndpointConnector
 			return false;
 		}
 
-		// http://localhost:8080/sabnzbd/api?mode=queue&name=delete&value=SABnzbd_nzo_zt2syz,SABnzbd_nzo_df2hyd,SABnzbd_nzo_op3shfs
+		// http://localhost:8080/sabnzbd/api?mode=history&name=delete&value=SABnzbd_nzo_df2hyd,SABnzbd_nzo_op3shfs
+		$keys = func_get_args();
+		$teeth = array_filter($keys, 'is_string');
+		$params = $this->defaultParameters();
+		$params['mode'] = 'history';
+		$params['name'] = 'delete';
+		$params['del_files'] = '1';
+		$params['value'] = implode(',', $teeth);
+
+		$status_url = $this->endpointBaseURL() . "?" . http_build_query($params);
+		list($details, $headers) = $this->performGET( $status_url );
+		return $details;
+	}
+
+	/**
+		Queue management
+	*/
+	public function queueDelete()
+	{
+		if (func_num_args() == 0) {
+			Logger::logError( 'Unable to delete SABnzbd history with -null- identifiers',
+				get_short_class($this), $this->endpoint());
+			return false;
+		}
+
+		// http://localhost:8080/sabnzbd/api?mode=queue&name=delete&value=SABnzbd_nzo_df2hyd,SABnzbd_nzo_op3shfs
 		$keys = func_get_args();
 		$teeth = array_filter($keys, 'is_string');
 		$params = $this->defaultParameters();

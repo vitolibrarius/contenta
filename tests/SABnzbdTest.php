@@ -85,7 +85,9 @@ foreach( $history as $slot ) {
 }
 
 my_echo( "---------------------------" );
-$del_status = $connection->delete('SABnzbd_nzo_54pQUz');
+$del_status = $connection->historyDelete('SABnzbd_nzo_54pQUz');
+echo json_encode($del_status, JSON_PRETTY_PRINT);
+my_echo( "---------------------------" );
 die();
 /* Arguments:
 	output=json,
