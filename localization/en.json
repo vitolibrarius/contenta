@@ -497,7 +497,7 @@
                 "label": "Thumbnail"
             },
             "active": {
-                "label": "Model\/series\/active\/label"
+                "label": "active"
             },
             "aliases": {
                 "label": "Aliases"
@@ -530,6 +530,9 @@
             "publisher_id": {
                 "label": "Publisher",
                 "search": "Select Publisher"
+            },
+            "search_name": {
+                "label": "Name"
             },
             "start_year": {
                 "label": "Start Year"

@@ -150,10 +150,17 @@ class AdminWanted extends Admin
 					$start_date->modify('first day of this month');
 					$end_date->modify('last day of this month');
 
-					$qualifiers[] = Qualifier::Between( Publication::pub_date,
-						$start_date->getTimeStamp(),
-						$end_date->getTimeStamp()
-					);
+					if ( $monthRange == 0 ) {
+						$qualifiers[] = Qualifier::GreaterThanEqual( Publication::pub_date,
+							$start_date->getTimeStamp()
+						);
+					}
+					else {
+						$qualifiers[] = Qualifier::Between( Publication::pub_date,
+							$start_date->getTimeStamp(),
+							$end_date->getTimeStamp()
+						);
+					}
 
 					$series_model = Model::Named('Series');
 					$qualifiers[] = Qualifier::InSubQuery( Publication::series_id,
