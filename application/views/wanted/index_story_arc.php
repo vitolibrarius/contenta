@@ -8,7 +8,10 @@
 
 <div class="paging">
 	<ul>
-		<li><a href="<?php echo Config::Web('/AdminWanted/index'); ?>">Wanted Series</a></li>
+		<li><a href="<?php echo Config::Web('/AdminWanted/index'); ?>">Wanted</a></li>
+	</ul>
+	<ul>
+		<li><a href="<?php echo Config::Web('/AdminWanted/index_series'); ?>">Wanted Series</a></li>
 	</ul>
 	<ul>
 		<li><a href="<?php echo Config::Web('/AdminWanted/newznab'); ?>">Manual Search</a></li>

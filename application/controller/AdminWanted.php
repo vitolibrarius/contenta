@@ -48,6 +48,34 @@ class AdminWanted extends Admin
 			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
+			$pub_model = Model::Named('Publication');
+
+			$select = SQL::Select($pub_model);
+			$select->where(Qualifier::AndQualifier(
+				Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE ),
+				Qualifier::OrQualifier(
+					Qualifier::IsNull( Series::pub_count),
+					Qualifier::IsNull( Series::pub_available ),
+					Qualifier::AttributeCompare( Series::pub_count, Qualifier::GREATER_THAN, Series::pub_available )
+					)
+				)
+			);
+			$select->orderBy( array( array(SQL::SQL_ORDER_ASC => Series::name)));
+			$select->limit(0);
+
+			//Session::addPositiveFeedback("select ". $select);
+
+			$this->view->model = $pub_model;
+			$this->view->render( '/wanted/index');
+		}
+	}
+
+	function index_series()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->addStylesheet("select2.min.css");
+			$this->view->addScript("select2.min.js");
+
 			$series_model = Model::Named('Series');
 
 			$select = SQL::Select($series_model);
@@ -67,7 +95,7 @@ class AdminWanted extends Admin
 
 			$this->view->model = $series_model;
 			$this->view->listArray = $select->fetchAll();
-			$this->view->render( '/wanted/index');
+			$this->view->render( '/wanted/index_series');
 		}
 	}
 
@@ -112,6 +140,30 @@ class AdminWanted extends Admin
 				Qualifier::Equals( Publication::media_count, 0 ),
 				Qualifier::IsNull( Publication::media_count )
 			);
+
+			if ( isset($_GET['date_range']) ) {
+				$monthRange = intval($_GET['date_range']);
+				if ( $monthRange >= 0 ) {
+					$start_date = new \DateTime();
+					$start_date->modify( '-'.$monthRange.' month' );
+					$end_date = clone $start_date;
+					$start_date->modify('first day of this month');
+					$end_date->modify('last day of this month');
+
+					$qualifiers[] = Qualifier::Between( Publication::pub_date,
+						$start_date->getTimeStamp(),
+						$end_date->getTimeStamp()
+					);
+
+					$series_model = Model::Named('Series');
+					$qualifiers[] = Qualifier::InSubQuery( Publication::series_id,
+						SQL::Select($series_model, array("id"))
+						->where( Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE ) )
+						->limit(0)
+					);
+				}
+			}
+
 			if ( isset($_GET['series_id']) ) {
 				$qualifiers[] = Qualifier::Equals( Publication::series_id, $_GET['series_id']);
 			}

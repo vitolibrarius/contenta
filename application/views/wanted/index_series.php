@@ -8,7 +8,7 @@
 
 <div class="paging">
 	<ul>
-		<li><a href="<?php echo Config::Web('/AdminWanted/index_series'); ?>">Wanted Series</a></li>
+		<li><a href="<?php echo Config::Web('/AdminWanted/index'); ?>">Wanted</a></li>
 	</ul>
 	<ul>
 		<li><a href="<?php echo Config::Web('/AdminWanted/index_story_arc'); ?>">Wanted Story Arcs</a></li>
@@ -20,34 +20,37 @@
 
 <section>
     <div class="wrapper">
-		<?php for($offset = 0; $offset < 12; $offset++) : ?>
-		<?php $date = new DateTime();
-			$date->modify('-'.$offset.' months');
-		?>
+		<?php foreach($this->listArray as $key => $value) : ?>
 		<div class="row data">
 			<div class="grid_6">
 				<h2 style="display: inline">
-					<a href="#" class="wanted" data-date_range="<?php echo $offset; ?>">
-						<?php echo $date->format('F Y'); ?></a>
+					<a href="#" class="wanted" data-series_id="<?php echo $value->id; ?>"><?php echo $value->displayName(); ?></a>
 				</h2>
 			</div>
 			<div class="grid_1">
-				<span></span>
+				<span><?php echo $value->start_year; ?></span>
 			</div>
 			<div class="grid_1">
 				<span>
+					<span class="icon <?php echo ($value->isActive() ? 'true' : 'false'); ?>"></span>
 				</span>
 			</div>
 			<div class="grid_2">
-				<span></span>
+				<span><?php $pub = $value->lastPublication();
+					if ( $pub != false ) {
+						echo "Issue " . $pub->paddedIssueNum() . " - " . $pub->publishedMonthYear();
+					}
+				?></span>
 			</div>
 			<div class="grid_2">
 				<span style="float: right;">
+					Issues <?php echo (isset($value->pub_available)?$value->pub_available:0); ?>
+					/ <?php echo $value->pub_count; ?>
 				</span>
 			</div>
 		</div>
-		<span id='<?php echo "ajaxDiv_" . $offset; ?>'></span>
-		<?php endfor; ?>
+		<span id='<?php echo "ajaxDiv_" . $value->id; ?>'></span>
+		<?php endforeach; ?>
     </div>
 </section>
 
@@ -56,12 +59,12 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$('body').on('click', 'a.wanted', function (e) {
-		var safe_guid = "ajaxDiv_"+ $(this).attr('data-date_range');
+		var safe_guid = "ajaxDiv_"+ $(this).attr('data-series_id');
 		$.ajax({
 			type: "GET",
 			url: "<?php echo Config::Web('/AdminWanted/pubsWanted'); ?>",
 			data: {
-				date_range: $(this).attr('data-date_range')
+				series_id: $(this).attr('data-series_id')
 			},
 			dataType: "text",
 			success: function(msg){

@@ -1,5 +1,22 @@
 <?php
 
+date_default_timezone_set('Canada/Mountain');
+
+for ( $i = 0; $i < 10; $i++ ) {
+		$start_date = new DateTime();
+		$start_date->modify( '-'.$i.' month' );
+		$end_date = clone $start_date;
+		$start_date->modify('first day of this month');
+		$end_date->modify('last day of this month');
+		echo $i . ' = ' . $start_date->format('Y-m-d'). " - " . $end_date->format('Y-m-d') . PHP_EOL;
+
+}
+	// $date->modify('first day of this month');
+// 	echo $date->format('Y-m-d') . PHP_EOL;
+// echo time() . ' ' . $date->getTimestamp() . ' ' . time() . PHP_EOL;
+
+
+exit;
 		$order = array( "unknown", "publication", "story_arc", "series" );
 		$fullMetal = array(
 			"publication" => array( "publication_56", 56 ),
