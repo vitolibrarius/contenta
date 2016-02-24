@@ -1,5 +1,8 @@
 <?php
 
+$version = currentVersionNumber();
+define('CONTENTA_USER_AGENT', 'Contenta/'.$version.' (http://github.com/vitolibrarius/contenta; vitolibrarius @ gmail.com)');
+
 function splitPOSTValues($array) {
 	$ret = array();
 	foreach ($array as $key => $value) {

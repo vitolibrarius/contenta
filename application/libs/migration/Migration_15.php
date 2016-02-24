@@ -210,6 +210,21 @@ class Migration_15 extends Migrator
 		$update->allowFullTableUpdate = true;
 		$update->commitTransaction();
 
+		$update = \SQL::Update(Model::Named("Endpoint_Type"),
+			Qualifier::Equals( "code", Endpoint_Type::ComicVine),
+			array(
+				"site_url" => 'http://comicvine.gamespot.com',
+				"api_url" => 'http://comicvine.gamespot.com/api'
+			)
+		);
+		$update->commitTransaction();
+
+		$update = \SQL::Update(Model::Named("Endpoint"),
+			Qualifier::Equals( "base_url", 'http://www.comicvine.com/api'),
+			array( "base_url" => 'http://comicvine.gamespot.com/api' )
+		);
+		$update->commitTransaction();
+
 		return true;
 	}
 }

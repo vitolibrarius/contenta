@@ -37,6 +37,6 @@ So now, what are the requirements?  I told you this would be fun.
 Thats enough to start ..
 
 [logo]: https://raw.githubusercontent.com/vitolibrarius/contenta/master/public/img/Logo_sm.png "Contenta"
-[comicvine]: http://www.comicvine.com
+[comicvine]: http://comicvine.gamespot.com
 
 - vito

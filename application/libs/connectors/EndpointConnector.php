@@ -189,7 +189,7 @@ abstract class EndpointConnector
 				curl_setopt($ch, CURLOPT_URL, $url);
 				curl_setopt($ch, CURLOPT_POST, true);
 				curl_setopt($ch, CURLOPT_VERBOSE, true);
-// 				curl_setopt($ch, CURLOPT_USERAGENT, APP_NAME . "/" . APP_VERSION);
+				curl_setopt($ch, CURLOPT_USERAGENT, CONTENTA_USER_AGENT);
 // 				curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie );
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true );
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
@@ -258,7 +258,7 @@ abstract class EndpointConnector
 
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $url);
-// 				curl_setopt($ch, CURLOPT_USERAGENT, APP_NAME . "/" . APP_VERSION);
+				curl_setopt($ch, CURLOPT_USERAGENT, CONTENTA_USER_AGENT);
 // 				curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie );
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true );
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
