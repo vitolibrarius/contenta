@@ -69,14 +69,11 @@ class Log extends Model
 		if ( $lastCheck > 0 ) {
 			$andQ[] = Qualifier::GreaterThan( "created", $lastCheck );
 		}
-		else {
-			Logger::logWarning( "$lastCheck < " . time() );
-		}
 
 		$select = \SQL::Select( $this )
 			->where( Qualifier::AndQualifier( $andQ ))
 			->orderBy( array( array( "desc" => Log::id) ) )
-			->limit( 10 );
+			->limit( 5 );
 
 // 		Logger::logWarning( $select->__toString() );
  		return $select->fetchAll();
