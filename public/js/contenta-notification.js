@@ -40,7 +40,7 @@ $(document).ready(function() {
 				$.each(msg.negative, function(key,value) {
 					$('<div/>', {
 	                    id: 'notification_' + key,
-                    	class : 'notification alert alert-info',
+                    	class : 'notification alert alert-error',
                     	text: value
 	                }).appendTo('#notification_content')
 					.delay(delay_milli)
@@ -50,7 +50,7 @@ $(document).ready(function() {
 				$.each(msg.logs, function(key,value) {
 					$('<div/>', {
 	                    id: 'notification_' + key,
-                    	class : 'notification alert alert-info',
+                    	class : 'notification alert alert-' + value.level,
                     	text: value.message
 	                }).appendTo('#notification_content')
 					.delay(delay_milli)

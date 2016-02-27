@@ -329,20 +329,31 @@ nav .menu li li li a {
 #notification_content{
 	position: absolute;
 	bottom: 0;
-	margin: 10px;
+	max-width: 600px;
+	margin: 5px;
 	z-index: 999;
 }
 
 .notification {
-  padding: 8px 35px 8px 14px;
-  margin-bottom: 20px;
-  background-color: #fcf8e3;
-  border: 1px solid #fbeed5;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
+	padding: 8px;
+	margin-bottom: 10px;
+	background-color: #D3F1D7;
+	border: 1px solid #55E249;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+    font-size: 0.8em;
 }
 
+.notification.alert-warning {
+	background-color: #fcf8e3;
+	border: 1px solid #fbeed5;
+}
+
+.notification.alert-error {
+	background-color: #FFC7CB;
+	border: 1px solid #FF3120;
+}
 
 .grid_1,
 .grid_2,
