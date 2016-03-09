@@ -276,7 +276,14 @@ class ComicVineImporter extends ContentMetadataImporter
 			$path = appendPath( ContentMetadataImporter::META_DATA_ROOT, Character::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
-				$record = $connection->characterDetails( $xid );
+				try {
+					$record = $connection->characterDetails( $xid );
+				}
+				catch (\Exception $e) {
+					Logger::logError( "Error importing full character $xid: " . $e->getMessage(), $this->type, $this->guid );
+					$record = false;
+				}
+
 				if ( $record == false ) {
 					// try minimal fields
 					$record = $connection->characterDetails( $xid, true );

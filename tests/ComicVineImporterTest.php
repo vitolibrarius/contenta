@@ -140,6 +140,7 @@ function Series($endpoint, $metadata) {
 
 	$importer->enqueue_publisher( array( "xid" => 10, "name" => "DC Comics" ), true, true);
 	$importer->enqueue_character( array( "xid" => 1686, "name" => "Superboy" ), true, true);
+	$importer->enqueue_character( array( "xid" => 1807, "name" => "Superman" ), true, true);
 	foreach( $series as $sample ) {
 		$importer->enqueue_series( $sample, true, true );
 	}
@@ -286,7 +287,7 @@ if ( isset( $options['t'] ) && in_array($options['t'], $tests) == false ) {
 	my_echo("Please use one of \n\t" . implode("\n\t", $tests));
 	die();
 }
-else {
+else if (isset($options['t']) ) {
 	$tests = array( $options['t'] );
 }
 
