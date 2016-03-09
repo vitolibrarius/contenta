@@ -1,13 +1,3 @@
-<div class="paging">
-	<ul>
-		<li><a href="<?php echo Config::Web('/AdminPublishers/index'); ?>">Publishers</a></li>
-		<li><a href="<?php echo Config::Web('/AdminPublication/index'); ?>">Publications</a></li>
-		<li><a href="<?php echo Config::Web('/AdminCharacters/index'); ?>">Characters</a></li>
-		<li><a href="<?php echo Config::Web('/AdminStoryArcs/index'); ?>">Story Arcs</a></li>
-		<li><a href="<?php echo Config::Web( '/AdminSeries/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a></li>
-	</ul>
-</div>
-
 <section>
 	<form id='searchForm' name='searchForm'>
 	<div class="row">

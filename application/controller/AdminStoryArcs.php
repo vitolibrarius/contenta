@@ -142,6 +142,8 @@ class AdminStoryArcs extends Admin
 			$this->view->saveAction = "/AdminStoryArcs/saveStoryArc";
 			$this->view->additionalAction = "/AdminStoryArcs/updatedAdditional";
 			$this->view->editPublicationAction = "/AdminPublication/editPublication";
+			$this->view->editCharacterAction = "/AdminCharacters/editCharacter";
+			$this->view->editSeriesAction = "/AdminSeries/editSeries";
 
 			$this->view->render( '/edit/story_arc');
 		}

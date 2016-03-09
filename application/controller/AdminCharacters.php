@@ -117,6 +117,9 @@ class AdminCharacters extends Admin
 			}
 			$this->view->saveAction = "/AdminCharacters/saveCharacter";
 			$this->view->additionalAction = "/AdminCharacters/updatedAdditional";
+			$this->view->editPublicationAction = "/AdminPublication/editPublication";
+			$this->view->editSeriesAction = "/AdminSeries/editSeries";
+			$this->view->editStoryArcAction = "/AdminStoryArcs/editStoryArc";
 
 			$this->view->render( '/edit/character');
 		}

@@ -69,7 +69,7 @@ class Card
 		if (isset($this->wantedPath)) {
 			return Config::Web( $this->wantedPath );
 		}
-		return "#";
+		return null;
 	}
 
 	public function setWantedPath( $path = null )

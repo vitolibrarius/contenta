@@ -3,7 +3,7 @@
 <section>
 	<div class="row">
 		<div class="grid_2">
-			<img class="thumbnail cbz" src="<?php echo Config::Web( "Image", "thumbnail", "series", $this->detail->id); ?>" />
+			<img class="thumbnail cbz" src="<?php echo Config::Web( "Image", "thumbnail", "story_arc", $this->detail->id); ?>" />
 		</div>
 		<div class="grid_4">
 			<p class="description"><?php echo $this->detail->displayDescription(); ?></p>
@@ -25,17 +25,17 @@
 					<?php endforeach; ?>
 					</ul>
 				<?php endif; ?>
-				<?php $list = $this->detail->story_arcs(10);
+				<?php $list = $this->detail->series(10);
 					if ( is_array($list) && count($list) > 0 ): ?>
-					<h6>Story Arcs</h6>
-					<ul class="badge story_arc">
+					<h6>Series</h6>
+					<ul class="badge series">
 					<?php foreach ($list as $story): ?>
-						<li class="story_arc">
-							<?php if ( isset($this->storyArcAction) ): ?>
-								<a href="<?php echo Config::Web($this->storyArcAction, $story->id); ?>">
+						<li class="series">
+							<?php if ( isset($this->seriesAction) ): ?>
+								<a href="<?php echo Config::Web($this->seriesAction, $story->id); ?>">
 							<?php endif; ?>
 							<?php echo $story->name; ?>
-							<?php if ( isset($this->storyArcAction) ) :?></a><?php endif; ?>
+							<?php if ( isset($this->seriesAction) ) :?></a><?php endif; ?>
 						</li>
 					<?php endforeach; ?>
 					</ul>

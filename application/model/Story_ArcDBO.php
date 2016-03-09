@@ -86,7 +86,7 @@ class Story_ArcDBO extends DataObject
 			Qualifier::FK( Story_Arc_Series::story_arc_id, $this)
 		);
 		$select->limit($limit);
-		$select->orderBy( Model::Named("Series"), Series::popularity, "desc");
+		$select->orderBy( Model::Named("Series"), Series::start_year, "desc");
 		return $select->fetchAll();
 	}
 

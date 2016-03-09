@@ -2,7 +2,7 @@
 
 <section>
 	<div class="row">
-		<div class="grid_6">
+		<div class="grid_4">
 
 		<form method="post" accept-charset="utf-8"
 			action="<?php echo Config::Web($this->saveAction); ?>/<?php echo (isset($this->object)) ? $this->object->id : null; ?>"
@@ -92,6 +92,43 @@
 			</div>
 		<?php endif; ?>
 
+		<?php if (isset($this->object)) : ?>
+			<div class="grid_3">
+				<div class="badges">
+				<?php $list = $this->object->characters(10);
+					if ( is_array($list) && count($list) > 0 ): ?>
+					<h6>Characters</h6>
+					<ul class="badge characters">
+					<?php foreach ($list as $character): ?>
+						<li class="character">
+							<?php if ( isset($this->editCharacterAction) ): ?>
+								<a href="<?php echo Config::Web($this->editCharacterAction, $character->id); ?>">
+							<?php endif; ?>
+							<?php echo $character->name; ?>
+							<?php if ( isset($this->editCharacterAction) ) :?></a><?php endif; ?>
+						</li>
+					<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+				<?php $list = $this->object->story_arcs(10);
+					if ( is_array($list) && count($list) > 0 ): ?>
+					<h6>Story Arcs</h6>
+					<ul class="badge story_arc">
+					<?php foreach ($list as $story): ?>
+						<li class="story_arc">
+							<?php if ( isset($this->editStoryArcAction) ): ?>
+								<a href="<?php echo Config::Web($this->editStoryArcAction, $story->id); ?>">
+							<?php endif; ?>
+							<?php echo $story->name; ?>
+							<?php if ( isset($this->editStoryArcAction) ) :?></a><?php endif; ?>
+						</li>
+					<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
 	</div>
 </section>
 
@@ -128,7 +165,8 @@
 										H::a( array( "href" => Config::Web("/Api/mediaPayload/" . $media->id)),
 												H::img( array( "src" => Config::Web("/public/img/download.png" )))
 											),
-										H::a( array( "target" => "slideshow", "href" => Config::Web("/DisplaySeries/mediaSlideshow/".$media->id)),
+										H::a( array( "target" => "slideshow",
+											"href" => Config::Web("/DisplaySeries/mediaSlideshow/".$media->id)),
 											H::img( array( "src" => Config::Web("/public/img/slideshow.png") ))
 											)
 									);

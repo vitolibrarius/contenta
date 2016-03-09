@@ -73,6 +73,20 @@ span.icon.star:before		{ content:"\2605"; }
 
 span.icon.on:before 		{ color:red;}
 
+.badges h6 {
+	padding: 4px;
+	color: #999;
+	background:#E6E6E6;
+	border-bottom: 1px solid white;
+}
+.badges a,
+.badges a:visited,
+.badges a:active,
+.badges a:hover {
+	color:#ffffff;
+}
+
+
 .badge {
 	clear: right;
 	display:block;
@@ -82,24 +96,30 @@ span.icon.on:before 		{ color:red;}
 
 .badge > li {
 	display:inline-block;
+	color:#ffffff;
 	margin: 2px 0px;
 	padding: 0px 4px;
-	color:#505050;
 	border-top:1px solid white;
 	font-weight:bold;
 	text-align:center;
 	border-radius:4px;
-    font-size: .5em;
+    font-size: .6em;
 }
 
 .badge > li.story_arc {
-	color:#505050;
-	background:#abcabc;
+	background:#6CF;
 	border:0px white;
 }
 .badge > li.character {
-	color:#505050;
 	background:#93d66f;
+	border:0px white;
+}
+.badge > li.series {
+	background:#C6F;
+	border:0px white;
+}
+.badge > li.alias {
+	background:#FC6;
 	border:0px white;
 }
 

@@ -138,6 +138,9 @@
     "DisplaySeries": {
         "title": "Series"
     },
+    "DisplayStories": {
+        "title": "Story Arcs"
+    },
     "Error": {
         "title": "Error"
     },

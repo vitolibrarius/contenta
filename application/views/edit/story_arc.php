@@ -84,6 +84,43 @@
 
 		</div>
 	<?php endif; ?>
+
+	<?php if (isset($this->object)) : ?>
+		<div class="grid_3">
+			<div class="badges">
+				<?php $list = $this->object->series(20);
+					if ( is_array($list) && count($list) > 0 ): ?>
+					<h6>Series</h6>
+					<ul class="badge series">
+					<?php foreach ($list as $series): ?>
+						<li class="series">
+							<?php if ( isset($this->editSeriesAction) ): ?>
+								<a href="<?php echo Config::Web($this->editSeriesAction, $series->id); ?>">
+							<?php endif; ?>
+							<?php echo $series->name; ?>
+							<?php if ( isset($this->editSeriesAction) ) :?></a><?php endif; ?>
+						</li>
+					<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+				<?php $list = $this->object->characters(10);
+					if ( is_array($list) && count($list) > 0 ): ?>
+					<h6>Characters</h6>
+					<ul class="badge characters">
+					<?php foreach ($list as $character): ?>
+						<li class="character">
+							<?php if ( isset($this->editCharacterAction) ): ?>
+								<a href="<?php echo Config::Web($this->editCharacterAction, $character->id); ?>">
+							<?php endif; ?>
+							<?php echo $character->name; ?>
+							<?php if ( isset($this->editCharacterAction) ) :?></a><?php endif; ?>
+						</li>
+					<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
+			</div>
+		</div>
+	<?php endif; ?>
 	</div>
 </section>
 
