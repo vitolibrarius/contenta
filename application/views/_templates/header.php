@@ -71,7 +71,8 @@
 					if (Session::get('user_account_type') === model\Users::AdministratorRole )
 					{
 						$menu->addCallback( "Daemons", function() {
-								return "<div id='daemons' data-href='" . Config::Web("/AdminJobs/json_running") . "'>"
+								return "<div id='daemons' data-href='" . Config::Web("/AdminJobs/json_running")
+									. "' data-page='" . Config::Web("/AdminJobs/runningIndex") ."'>"
 									. "<span class='badge'>123</span></div>";
 							}
 						);

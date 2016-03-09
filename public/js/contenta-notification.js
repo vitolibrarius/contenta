@@ -1,4 +1,10 @@
 $(document).ready(function() {
+	$('#daemons').click( function(e) {
+		var action = $('#daemons').attr("data-page");
+		window.location = action;
+		return false;
+	});
+
 	function refreshDaemons() {
 		var action = $('#daemons').attr("data-href");
 		$.ajax({
