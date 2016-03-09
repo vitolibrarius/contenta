@@ -7,6 +7,7 @@
 <?php else: ?>
 	<?php
 		$card = new html\Card();
+		$card->setDisplayDescriptionKey( "shortDescription" );
 		$card->setDetailKeys( array(
 			model\Story_Arc::pub_count => "availableSummary",
 			)
