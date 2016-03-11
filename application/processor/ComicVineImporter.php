@@ -335,7 +335,14 @@ class ComicVineImporter extends ContentMetadataImporter
 			$path = appendPath( ContentMetadataImporter::META_DATA_ROOT, Series::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
-				$record = $connection->seriesDetails( $xid );
+				try {
+					$record = $connection->seriesDetails( $xid );
+				}
+				catch (\Exception $e) {
+					Logger::logError( "Error importing full series $xid: " . $e->getMessage(), $this->type, $this->guid );
+					$record = false;
+				}
+
 				if ( $record == false ) {
 					$record = $connection->seriesDetails( $xid, true );
 					if ( $record == false ) {
