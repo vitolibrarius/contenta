@@ -123,6 +123,10 @@ echo PHP_EOL;
 
 Logger::instance()->setTrace("Daemon", (is_null($job_id) ? $guid : $job_id) );
 
+// collect the startup logs, then restart the buffer
+$log_startup = ob_get_clean();
+ob_start();
+
 // Logger::logInfo('starting daemon ', $processorName, ($user ? $user->__toString() : $user_api) );
 try {
 	$job_model = Model::Named('Job');
@@ -179,10 +183,12 @@ try {
 		}
 		catch (Exception $e) {
 			Logger::logError('Exception ' . $e->getMessage() . ' ' . $e->getTraceAsString() );
-			// disable job???
-			// count failures, disable on 5th fail?
-			// $jobObj->{"enabled"}(Model::TERTIARY_FALSE);
-			$jobObj->updateFailure( $jobObj, time());
+			if ( null != $jobObj ) {
+				// disable job???
+				// count failures, disable on 5th fail?
+				// $jobObj->{"enabled"}(Model::TERTIARY_FALSE);
+				$jobObj->updateFailure( $jobObj, time());
+			}
 		}
 		if ( $jobRunning instanceof model\Job_RunningDBO ) {
 			$job_run_model->deleteObject($jobRunning);
@@ -197,11 +203,14 @@ catch ( ClassNotFoundException $exception ) {
 	Logger::logError( 'Failed to find processor ' . $options['p'] );
 }
 
-$log = ob_get_clean();
-Logger::logInfo( $log, "OutputBuffer", $pid );
-
 if ( is_null($debug) && is_sub_dir($workingDir, $config->processingDirectory()) ) {
 	destroy_dir($workingDir);
+}
+
+$log = ob_get_clean();
+if ( empty($log) == false ) {
+	// only log if something was generated after startup
+	Logger::logInfo( $log_startup . $log, "OutputBuffer", $pid );
 }
 
 // Logger::logInfo( 'finished daemon', $processorName, ($user ? $user->__toString() : $user_api));

@@ -280,7 +280,7 @@ class ComicVineImporter extends ContentMetadataImporter
 					$record = $connection->characterDetails( $xid );
 				}
 				catch (\Exception $e) {
-					Logger::logError( "Error importing full character $xid: " . $e->getMessage(), $this->type, $this->guid );
+					Logger::logError( "Error importing full character '" . $object->name . "' $xid: " . $e->getMessage(), $this->type, $this->guid );
 					$record = false;
 				}
 
@@ -339,7 +339,7 @@ class ComicVineImporter extends ContentMetadataImporter
 					$record = $connection->seriesDetails( $xid );
 				}
 				catch (\Exception $e) {
-					Logger::logError( "Error importing full series $xid: " . $e->getMessage(), $this->type, $this->guid );
+					Logger::logError( "Error importing full series '" . $object->name . "' $xid: " . $e->getMessage(), $this->type, $this->guid );
 					$record = false;
 				}
 
