@@ -44,8 +44,8 @@ class Migration_5 extends Migrator
 
 		$this->sqlite_execute(
 			Publisher::TABLE,
-			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Publisher::TABLE . '_nameindex on ' . Publisher::TABLE . '(' . Publisher::name . ')',
-			"Unique index on " . Publisher::TABLE
+			'CREATE INDEX IF NOT EXISTS ' . Publisher::TABLE . '_nameindex on ' . Publisher::TABLE . '(' . Publisher::name . ')',
+			"Index on " . Publisher::TABLE
 		);
 	}
 
