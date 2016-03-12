@@ -1,3 +1,182 @@
+Version 0.5.0:
+* 393a0e9 -  (HEAD -> master) Fixes #95	publisher name unique constraint error (Fri Mar 11 17:23:26 2016 -0700) <Vito Librarius>
+* 86dfe80 -  (origin/master, origin/HEAD) Fixes #109	E_ERROR - Call to a member function updateFailure() on a non-object (Thu Mar 10 21:31:20 2016 -0700) <Vito Librarius>
+* 87e9935 -  Fixes #108	Gateway timeout error when updating some data (Thu Mar 10 20:51:05 2016 -0700) <Vito Librarius>
+* 1cfa4d3 -  Fixes #108	Gateway timeout error when updating some characters (Tue Mar 8 20:28:35 2016 -0700) <Vito Librarius>
+* c8ff051 -  issue #82  Added link from job count badge to report for running daemons (Tue Mar 8 18:42:22 2016 -0700) <Vito Librarius>
+* 326f6fa -  Issue #82 shorten story_arc description (Tue Mar 8 17:47:33 2016 -0700) <Vito Librarius>
+* f6d85bd -  Fixes #107	Series and publications should provide links to character and story arc pages (Tue Mar 8 17:42:59 2016 -0700) <Vito Librarius>
+*   2eb848a -  (issue-105-missing-ability-to-read-comics-in-slideshow-style-) Merge branch 'issue-82-misc-typos' (Fri Feb 26 17:57:30 2016 -0700) <Vito Librarius>
+|\  
+| * faea0e5 -  (issue-82-misc-typos) Issue #82	Notification styles and colors (Fri Feb 26 17:56:42 2016 -0700) <Vito Librarius>
+* | 0685c9a -  issue #82 misc-typos (Tue Feb 23 18:00:24 2016 -0700) <Vito Librarius>
+* | e73ddc3 -  Fixes #104	ComicVine API changed name (Tue Feb 23 17:57:53 2016 -0700) <Vito Librarius>
+* | 4133f38 -  Fixes #103	Error in SABnzbdConnector (Sun Feb 14 15:55:49 2016 -0700) <Vito Librarius>
+* | e4dc6a7 -  Fixes #103	Error in SABnzbdConnector (Sun Feb 14 15:35:07 2016 -0700) <Vito Librarius>
+|/  
+* ee6577f -  Issue #82	Misc typos - removed some logging and pre-formatted the log message (Sun Feb 14 13:44:14 2016 -0700) <Vito Librarius>
+*   d7bde60 -  Issue #82 Merge branch 'issue-82-misc-typos' (Sun Feb 14 12:58:33 2016 -0700) <Vito Librarius>
+|\  
+| * f8ea1cb -  Issue #82	Misc typos (Sun Feb 14 12:56:19 2016 -0700) <Vito Librarius>
+* | 145c7e1 -  Fixes #102	Wanted by date should show all in future dates (Sat Feb 13 22:06:37 2016 -0700) <Vito Librarius>
+* | afa68b3 -  Fixes #32	Wanted Publications needs easier way to flip between tracked series/story arcs (Sat Feb 13 18:01:59 2016 -0700) <Vito Librarius>
+* | fce10a0 -  Fixes #96	Undefined variable in views/upload/ComicVineResults.php (Thu Feb 11 16:50:33 2016 -0700) <Vito Librarius>
+* | f0a72de -  Fixes #101	Notification API exception (Thu Feb 11 16:45:14 2016 -0700) <Vito Librarius>
+* | 4e0f7d4 -  Issue #82 - ajax request for notifications and jobs can block when user is not logged in (Tue Jan 5 17:50:51 2016 -0700) <Vito Librarius>
+* | 74550ca -  Issue #82 (Mon Jan 4 21:29:25 2016 -0700) <Vito Librarius>
+* | b7e0ebe -  Issue #82 (Mon Jan 4 21:27:41 2016 -0700) <Vito Librarius>
+* | 0f544da -  Fixes #100	Session feedback and processing list could be notification style instead of only on page loads (Mon Jan 4 21:25:34 2016 -0700) <Vito Librarius>
+* | e2c2ce3 -  (issue-99-pending-queue-datamodel) Fixes #11 - deletes history from SABnzbd after updating Flux (Tue Dec 22 18:41:51 2015 -0700) <Vito Librarius>
+* | 962bca2 -  issue #82 removed temp sql patch (Fri Dec 4 13:47:06 2015 -0700) <Vito Librarius>
+* | 00572d5 -  issue #82 - changed the default throttle to 1 request per 2 seconds for everyone (Fri Dec 4 13:44:22 2015 -0700) <Vito Librarius>
+* | 4a80e93 -  Issue #82      Misc typos (Tue Nov 24 20:08:54 2015 -0700) <Vito Librarius>
+* | 640c424 -  Issue #82      Misc typos - changed the pending series update logic again (Tue Nov 24 12:25:18 2015 -0700) <Vito Librarius>
+* | 93629cd -  Issue #82 Misc typos - change sort order for items needing update (Tue Nov 24 11:23:12 2015 -0700) <Vito Librarius>
+* | 8d53a3c -  Issue #82   Misc typos (Tue Nov 24 09:42:38 2015 -0700) <Vito Librarius>
+* | 6880525 -  Issue #82   Misc typos (Mon Nov 23 15:56:29 2015 -0700) <Vito Librarius>
+* | 73fe7c3 -  Issue #82	Misc typos (Mon Nov 23 08:47:14 2015 -0700) <Vito Librarius>
+* | eb56409 -  Issue #82	Misc typos (Mon Nov 23 08:45:52 2015 -0700) <Vito Librarius>
+|/  
+* 82c099e -  Issue #82	Misc typos - array index name (Mon Nov 23 08:40:42 2015 -0700) <Vito Librarius>
+* 66b5695 -  Fixes #98	Automate handling items in import processing queue (Mon Nov 23 08:37:07 2015 -0700) <Vito Librarius>
+* 9de97ec -  Fixes #97	imported filename parsing should remove 'c2c' (Fri Nov 20 16:15:41 2015 -0700) <Vito Librarius>
+* ea1c1d3 -  Fixes #9 - some improvements in the wanted table and fixes search string for series (Fri Nov 20 15:38:57 2015 -0700) <Vito Librarius>
+* 562f9db -  Fixes #40	Admin pages should allow filter by "needs update" (Thu Nov 19 08:12:15 2015 -0700) <Vito Librarius>
+* af22012 -  Issue #40	Admin pages should allow filter by "needs update" (Tue Nov 17 17:58:26 2015 -0700) <Vito Librarius>
+* 0780959 -  Issue #82	Misc typos - added new script to merge branch changes into master but not delete the branch (Tue Nov 17 10:25:24 2015 -0700) <Vito Librarius>
+* 59ecbb8 -  Fixes #89	Issue number needs to be trim of prefix '0' (Mon Nov 16 12:35:42 2015 -0700) <Vito Librarius>
+* 367ba24 -  (issue-94-import-metadata-finds-error-where-record-is-not-fin, issue-93-multithreaded-access-to-cache-raises-error, issue-92-error-while-downloading-images-from-comicvine) Fixes #91	remove logs with no purpose (Mon Nov 16 11:54:22 2015 -0700) <Vito Librarius>
+* 7e278c3 -  Fixes #90	Slow page response messages are logged too much - increased threshold to 5 seconds (Fri Nov 13 13:44:38 2015 -0700) <Vito Librarius>
+* 7e8e213 -  Fixes #88	ComicVine connections need a throttle (Mon Nov 9 11:47:47 2015 -0700) <Vito Librarius>
+* db6affd -  (issue-80-import-pull-list-from-previewsworld) Fixes #84	Importing new media should remain in the processing queue if the identified publication already has media (Tue Nov 3 10:23:18 2015 -0700) <Vito Librarius>
+* 7bcdc19 -  Fixes #86	Importing media should have a threshold for automated acceptance (Tue Nov 3 09:30:22 2015 -0700) <Vito Librarius>
+* aa77964 -  Fixes #62	Issue_Num on publication should not be an INT actually sqlite will support the same column as a text column, just need to adjust how it is used. (Mon Nov 2 22:34:25 2015 -0700) <Vito Librarius>
+* 47a68bf -  Issue #83 (Fri Oct 30 15:26:56 2015 -0600) <Vito Librarius>
+* fe780bd -  Fixes #85	Returning media should be copied using the "original_filename" (Fri Oct 30 09:46:12 2015 -0600) <Vito Librarius>
+* 3d52ffd -  (issue-83-admin-media-page-is-slow) Issue #82 (Thu Oct 29 13:00:47 2015 -0600) <Vito Librarius>
+* 10cb24c -  Issue #82 (Thu Oct 29 12:59:41 2015 -0600) <Vito Librarius>
+* 5ddc06e -  Fixes #79	Admin Media page should use ajax (Thu Oct 29 12:53:49 2015 -0600) <Vito Librarius>
+* 10799bf -  Fixes #76	Should ensure there are unique indexes on XID/XSOURCE pair (Thu Oct 29 09:35:26 2015 -0600) <Vito Librarius>
+* 55ede98 -  Fixes #23	Jobs running should or could show some description text (Wed Oct 28 22:18:50 2015 -0600) <Vito Librarius>
+* 03924e7 -  (issue-81-create-a-scheduled-processor-to-search-from-items-f) Fixes #78	Localization son files should be sorted (Wed Oct 28 10:22:56 2015 -0600) <Vito Librarius>
+* 5d16907 -  (issue-77-file-wrapper-failure---uploadimport-status-tracking) Fixes #53	Duplicate publication report (Wed Oct 28 10:14:08 2015 -0600) <Vito Librarius>
+* c2b2bad -  Fixes #75	memory issue appears to be caused by sqlite database contention.  when the Db is locked the exception consumes large quantities or memory.  Backing off and retrying appears to be alleviating the issue. (Sun Oct 25 15:30:15 2015 -0600) <Vito Librarius>
+* 128325b -  Issue #75 (Sat Oct 24 18:47:14 2015 -0600) <Vito Librarius>
+* 10aa4e2 -  Issue #75 added more logging and a backoff retry for PDO statements (Sat Oct 24 18:34:13 2015 -0600) <Vito Librarius>
+* 1932b56 -  Issue #75 memory logging message updated (Thu Oct 22 20:39:01 2015 -0600) <Vito Librarius>
+* d3cf2ff -  Issue #75 added journal mode for improved concurrency (Wed Oct 21 14:35:48 2015 -0600) <Vito Librarius>
+* f2d39fd -  Issue #75 more trace (Wed Oct 21 12:26:41 2015 -0600) <Vito Librarius>
+* f82f861 -  Issue #75 more memory tracing (Wed Oct 21 11:56:43 2015 -0600) <Vito Librarius>
+* d122f6d -  Issue #75	Daemon import memory issue (Wed Oct 21 11:26:16 2015 -0600) <Vito Librarius>
+* 6e69ed5 -  Issue #75	Daemon import memory issue (Wed Oct 21 11:07:36 2015 -0600) <Vito Librarius>
+* 12c189e -  Issue #75	Daemon import memory issue (Tue Oct 20 23:32:25 2015 -0600) <Vito Librarius>
+* 58afe35 -  Issue #75	Daemon import memory issue (Tue Oct 20 21:36:05 2015 -0600) <Vito Librarius>
+* 1f2004c -  Issue #75	Daemon import memory issue (Tue Oct 20 20:51:25 2015 -0600) <Vito Librarius>
+* 476bf8b -  Fixes #75	Daemon import memory issue (Tue Oct 20 17:37:51 2015 -0600) <Vito Librarius>
+* 6389e96 -  Issue #75	Daemon import memory issue (Tue Oct 20 17:21:31 2015 -0600) <Vito Librarius>
+* f536eb7 -  Issue #75	Daemon import memory issue (Tue Oct 20 17:16:10 2015 -0600) <Vito Librarius>
+* 765f120 -  Issue #75	Daemon import memory issue (Tue Oct 20 13:39:44 2015 -0600) <Vito Librarius>
+* ec03515 -  Fixes #74	Slow page load for Pending imports (Tue Oct 20 12:53:18 2015 -0600) <Vito Librarius>
+* c1e0712 -  Fixes #74	Slow page load for Pending imports (Tue Oct 20 12:28:52 2015 -0600) <Vito Librarius>
+* 4ad7035 -  Fixes #74	Slow page load for Pending imports (Tue Oct 20 09:33:08 2015 -0600) <Vito Librarius>
+* ebd7c3e -  Fixes #73	Page load and sql query logging when slow - added log message when a single stastement or page load takes longer than 0.25 seconds (Mon Oct 19 16:29:28 2015 -0600) <Vito Librarius>
+* c688e24 -  Fixes #72	Imports can be more efficient - changed the structure of the import queues to reduce the number of transactions required (Mon Oct 19 15:48:06 2015 -0600) <Vito Librarius>
+* 7c71dca -  Fixes #68	Threading issue with Cache - unlink had threading race condition (Sun Oct 18 12:59:42 2015 -0600) <Vito Librarius>
+* 53b74aa -  Fixes #69	Possible threading issue with Imports (Sun Oct 18 12:15:42 2015 -0600) <Vito Librarius>
+* 7d782a3 -  Fixes #71	SQLite metadata class can create deadlocks (Sat Oct 17 14:50:30 2015 -0600) <Vito Librarius>
+* 01c25e1 -  (issue-1-log-reporting-ui-only-supports-database-tables-i-sho) Fixes #70	Metadata file is slow using JSON as backing store (Fri Oct 16 09:47:35 2015 -0600) <Vito Librarius>
+* 30a2b77 -  (issue-56-select2-drop-down-is-not-mobile-friendly, issue-36-publisher-list-needs-paging-or-searching) Issue #36	re-arranging some code.  first step for pagination is store and retrieving previous search criteria (Tue Sep 29 09:44:13 2015 -0600) <Vito Librarius>
+* 40340e9 -  Issue #36	memory for unprocessed so previous page in list is restored (Mon Sep 28 22:09:39 2015 -0600) <Vito Librarius>
+* 67f7318 -  Fixes #67	Performance issue on wanted page (Mon Sep 28 10:20:06 2015 -0600) <Vito Librarius>
+* 395c7f7 -  Fixes #66	wanted list page for story_arcs (Sun Sep 27 15:54:35 2015 -0600) <Vito Librarius>
+* 1a0406b -  Fixes #65	fixed query for corrected list of wanted series (Sun Sep 27 15:25:41 2015 -0600) <Vito Librarius>
+* 1f3fe4d -  (issue-64-some-rss-feeds-report-errors-but-will-work-if-retri, issue-63-git-remote-status-runs-on-every-page) Fixes #61	object errors can now purge teh offending record (characters) or simply bump the xupdated date and log a message. (Sun Sep 27 13:10:00 2015 -0600) <Vito Librarius>
+*   3399793 -  (issue-60-order-by-syntax-for-sql-classes-is-difficult-to-get) Merge branch 'issue-40-admin-pages-should-allow-filter-by-needs-update' (Sun Sep 27 12:00:07 2015 -0600) <Vito Librarius>
+|\  
+| * e860339 -  Fixes #40 (Sun Sep 27 11:59:20 2015 -0600) <Vito Librarius>
+* | 033ec2f -  issue #40 added wanted filter (Thu Sep 24 12:28:19 2015 -0600) <Vito Librarius>
+|/  
+* e627fe1 -  Fixes #48	Added ajax toggle 'star' for wanted.  Also kicks off comicvine refresh (Wed Sep 23 22:27:29 2015 -0600) <Vito Librarius>
+* 1695ab3 -  Fixes #45	Sorting by pub_date/series_id/issue_num (Tue Sep 22 21:41:52 2015 -0600) <Vito Librarius>
+* f172196 -  Fixes #44	Shows publications and link to edit each pub (Tue Sep 22 21:18:03 2015 -0600) <Vito Librarius>
+* 9d71a54 -  Fixes #43	Series was already removed, but I htink Aliases are still appropriate for Character pages (Tue Sep 22 21:00:36 2015 -0600) <Vito Librarius>
+* 5ca91e4 -  Fixes #37	Increased to 10 seconds for refresh (Tue Sep 22 20:51:15 2015 -0600) <Vito Librarius>
+* 5c69c91 -  Fixes #38	turned of logging flag (Tue Sep 22 20:37:04 2015 -0600) <Vito Librarius>
+* 50be89c -  Fixes #41	Make a small script to automate merge? (Tue Sep 22 20:35:06 2015 -0600) <Vito Librarius>
+* 7d3c70c -  Fixes Issue #59	Compressed https responses are not processed correctly - added test button to endpoint edit pages (Tue Sep 22 10:40:36 2015 -0600) <Vito Librarius>
+* 9e3f9d1 -  Fixes #16 added basic manual processing flow for new content (Wed Sep 16 21:21:40 2015 -0600) <Vito Librarius>
+* 4209a79 -  (issue-21-importing-media-list-is-slow-loading-due-to-images-) Fixes #58 again .. added 'Apr' for april (Tue Sep 15 10:30:19 2015 -0600) <Vito Librarius>
+* 1b04869 -  Fixes #58  added support for 2 digits after the "No ##" (Tue Sep 15 10:25:36 2015 -0600) <Vito Librarius>
+* 67b5474 -  Fixes #58 improved parsing (Tue Sep 15 10:13:28 2015 -0600) <Vito Librarius>
+* 8786395 -  Issue #32	Shows report for all series wanted, with option to expand and show all publications withing each. (Mon Sep 14 21:51:22 2015 -0600) <Vito Librarius>
+* d37b1d7 -  Fixes #27 tweaking modal UI for production (Mon Sep 14 14:21:23 2015 -0600) <Vito Librarius>
+*   52fc498 -  # Outstanding issues #	57	Punctuation in newznab file name prevent db match #	56	Select2 drop down is not mobile friendly #	55	Admin list pages don't page #	54	Bad publication identification #	53	Duplicate publication report #	52	Manual Newznab search needs better UI #	51	UploadRepair status sometimes says not match when there are multiple #	50	Admin list pages should remove delete button #	49	Admin list pages should use edit path as select path #	48	Series/Story_arc list pages should edit/display wanted status #	47	Admin Series show newznab searching #	46	Admin Story_arc allow newznab searching #	45	Admin Story_arc should show relevant publications #	44	Admin Series edit should show list of publications #	43	Admin edit pages show unless aliases table #	42	Admin Edit pages should lockdown fields when metadata comes from endpoints #	41	Make a small script to automate merge? #	40	Admin pages should allow filter by "needs update" #	39	Publication wanted search string should remove punctuation #	38	ComicVineConnector stores response files #	37	Log refresh is to frequent #	36	Publisher list needs paging or searching #	35	Wanted Publication search should include all Newznab sites #	34	Need scheduled job to search for wanted publications #	33	wanted publications should show RSS matches #	32	Wanted Publications needs easier way to flip between tracked series/story arcs #	31	Edit panels are unable to toggle Active Publishing to off. #	30	StoryArc edit panel does not show all publishers #	28	AdminUsers/index does not display proper page #	27	Application is not responsive Merge branch 'refs/heads/issue-27-application-is-not-responsive' (Mon Sep 14 14:07:13 2015 -0600) <Vito Librarius>
+|\  
+| * d8382f8 -  Fixes #27	Application is not responsive (Mon Sep 14 14:06:33 2015 -0600) <Vito Librarius>
+| * 950c31c -  Issue #27	layout issues with new styles especially with iPhone viewports (Sun Sep 13 17:14:53 2015 -0600) <Vito Librarius>
+* |   67c850b -  # Outstanding issues #	57	Punctuation in newznab file name prevent db match #	56	Select2 drop down is not mobile friendly #	55	Admin list pages don't page #	54	Bad publication identification #	53	Duplicate publication report #	52	Manual Newznab search needs better UI #	51	UploadRepair status sometimes says not match when there are multiple #	50	Admin list pages should remove delete button #	49	Admin list pages should use edit path as select path #	48	Series/Story_arc list pages should edit/display wanted status #	47	Admin Series show newznab searching #	46	Admin Story_arc allow newznab searching #	45	Admin Story_arc should show relevant publications #	44	Admin Series edit should show list of publications #	43	Admin edit pages show unless aliases table #	42	Admin Edit pages should lockdown fields when metadata comes from endpoints #	41	Make a small script to automate merge? #	40	Admin pages should allow filter by "needs update" #	39	Publication wanted search string should remove punctuation #	38	ComicVineConnector stores response files #	37	Log refresh is to frequent #	36	Publisher list needs paging or searching #	35	Wanted Publication search should include all Newznab sites #	34	Need scheduled job to search for wanted publications #	33	wanted publications should show RSS matches #	32	Wanted Publications needs easier way to flip between tracked series/story arcs #	31	Edit panels are unable to toggle Active Publishing to off. #	30	StoryArc edit panel does not show all publishers #	28	AdminUsers/index does not display proper page #	27	Application is not responsive Merge branch 'refs/heads/issue-27-application-is-not-responsive' (Fri Sep 11 17:10:52 2015 -0600) <Vito Librarius>
+|\ \  
+| |/  
+| * 241ef95 -  Issue #27	several section updated including processing admin and wanted.  The updated select2 has broken some search forms. (Fri Sep 11 17:09:10 2015 -0600) <Vito Librarius>
+| * 5bb409b -  Issue #27 starting to implement responsive grid design (Fri Sep 11 15:01:40 2015 -0600) <Vito Librarius>
+| * 29fcd64 -  Issue #27 changed the name for the contenta-card.css file (Fri Sep 11 13:17:05 2015 -0600) <Vito Librarius>
+| * 431ee60 -  Issue #27 - mocking up new UI layout using grids (Fri Sep 11 09:55:53 2015 -0600) <Vito Librarius>
+* | 4e5f1df -  (issue-57-punctuation-in-newznab-file-name-prevent-db-match, issue-55-admin-list-pages-dont-page, issue-54-bad-publication-identification, issue-52-manual-newznab-search-needs-better-ui, issue-51-uploadrepair-status-sometimes-says-not-match-when-t, issue-50-admin-list-pages-should-remove-delete-button, issue-49-admin-list-pages-should-use-edit-path-as-select-pat, issue-47-admin-series-show-newznab-searching, issue-46-admin-storyarc-allow-newznab-searching, issue-42-admin-edit-pages-should-lockdown-fields-when-metada, issue-39-publication-wanted-search-string-should-remove-punc, issue-35-wanted-publication-search-should-include-all-newzna, issue-34-need-scheduled-job-to-search-for-wanted-publication, issue-33-wanted-publications-should-show-rss-matches, issue-31-edit-panels-are-unable-to-toggle-active-publishing-, issue-30-storyarc-edit-panel-does-not-show-all-publishers) Fixes #29	Report Problem link should populate body (Fri Sep 4 15:58:18 2015 -0600) <Vito Librarius>
+|/  
+* b75bbbc -  (issue-28-adminusersindex-does-not-display-proper-page, issue-13-verify-delete-can-purge-data-and-filesystem-correct, issue-12-user-additions) Fixes #26	Create git branches for each outstanding github issue (Fri Sep 4 12:52:27 2015 -0600) <Vito Librarius>
+* 9d8f7fa -  (issue-8-track-publication-series-that-have-actual-media, issue-15-job-scheduler-needs-cron-features, issue-10-rss-tracking-data) Fixes #25 - list issues on the command line (Fri Sep 4 09:35:02 2015 -0600) <Vito Librarius>
+* 1433aa7 -  Fixes #24	Add git hooks that require a github issue as a pre-commit check (Fri Sep 4 09:17:32 2015 -0600) <Vito Librarius>
+* 7179fb1 -  Issue #24	Add git hooks that require a github issue as a pre-commit check (Thu Sep 3 22:09:52 2015 -0600) <Vito Librarius>
+* f6533d7 -  Message pre-commit can pick up on the issue number from the branch name using the format [alpha]-###-anything (Thu Sep 3 22:01:22 2015 -0600) <Vito Librarius>
+* e0deb94 -  Fixes #24 (Thu Sep 3 21:31:37 2015 -0600) <Vito Librarius>
+* da69e3e -  added basic git commit hooks (Thu Sep 3 21:27:24 2015 -0600) <Vito Librarius>
+* f6ec388 -  fixes # (Thu Sep 3 18:21:19 2015 -0600) <Vito Librarius>
+* 19e5c37 -  Added current page URI to the report issue link (Thu Sep 3 11:23:13 2015 -0600) <Vito Librarius>
+* 31d132e -  Apple's El Capitan dow not like to load referenced css/js.   I guess they think it must be an add tracking package. (Wed Sep 2 21:06:44 2015 -0600) <Vito Librarius>
+* db87f4d -  Need to load all publishers until we fix this (Thu Aug 27 12:01:13 2015 -0400) <Vito Librarius>
+* 0f67e49 -  Added a render_xml method to step away from some assumed HTML response parameters (Wed Aug 19 12:15:01 2015 -0600) <Vito Librarius>
+* ccfd22d -  Fixed again, and added test (Wed Aug 19 11:26:10 2015 -0600) <Vito Librarius>
+* 9d32d20 -  defect (Wed Aug 19 11:18:19 2015 -0600) <Vito Librarius>
+* d450760 -  Added Basic authentication support (Wed Aug 19 11:07:43 2015 -0600) <Vito Librarius>
+* 2235555 -  another typo (Wed Aug 19 11:07:14 2015 -0600) <Vito Librarius>
+* f79fc57 -  hmmm, typo? (Wed Aug 19 10:47:54 2015 -0600) <Vito Librarius>
+* 4f3537a -  basic WebDav supports enough to browse directories and download files (Wed Aug 19 10:47:39 2015 -0600) <Vito Librarius>
+* ee9dd65 -  remove double slashes (Wed Aug 19 10:46:09 2015 -0600) <Vito Librarius>
+* e93c80d -  value for key supports methods and properties (Wed Aug 19 10:45:43 2015 -0600) <Vito Librarius>
+* c16d7a1 -  Support autoloader interfaces. (Wed Aug 19 10:45:21 2015 -0600) <Vito Librarius>
+* f6a8f2a -  First cur at read interfaces (Mon Aug 17 20:03:33 2015 -0600) <Vito Librarius>
+* 11e0c4a -  Non-admin series view (Mon Aug 17 17:52:27 2015 -0600) <Vito Librarius>
+* 3fd1277 -  Added toggle for wanted for series.  Not available in UI yet (Mon Aug 17 17:51:35 2015 -0600) <Vito Librarius>
+* 0c9caad -  Updated status message (Mon Aug 17 15:06:16 2015 -0600) <Vito Librarius>
+* aec5742 -  group wanted publications by series (Mon Aug 17 13:14:44 2015 -0600) <Vito Librarius>
+* bd88a46 -  Catch corrupt files earlier in upload process and reject them (Mon Aug 17 12:41:39 2015 -0600) <Vito Librarius>
+* fb8a01e -  sometimes new series do not have the publisher identified until the full update from comic vine is loaded (Mon Aug 17 10:33:42 2015 -0600) <Vito Librarius>
+* e17a1e2 -  More status messages for imports (Sun Aug 16 13:16:53 2015 -0600) <Vito Librarius>
+* aa19a94 -  better filter for images in the file wrappers. (Sun Aug 16 13:01:26 2015 -0600) <Vito Librarius>
+* 7855fe9 -  refresh status message when reprocessing occurs (Sun Aug 16 12:43:00 2015 -0600) <Vito Librarius>
+* 612fc2a -  moved class to inside the figure (Sun Aug 16 11:55:32 2015 -0600) <Vito Librarius>
+* 8d219e4 -  Updated UI for processing list. (Sun Aug 16 11:52:00 2015 -0600) <Vito Librarius>
+* f68bc3f -  Better parsing or this pattern (Sat Aug 15 17:37:30 2015 -0600) <Vito Librarius>
+* 0de01da -  one more thing (Sat Aug 15 15:53:19 2015 -0600) <Vito Librarius>
+* e632b3f -  No need to get the full series details from CV every time (Sat Aug 15 15:47:32 2015 -0600) <Vito Librarius>
+* 09bdebe -  removed unless process start/end messages (Sat Aug 15 15:31:00 2015 -0600) <Vito Librarius>
+* 206df91 -  Generate thumbnails if processing is delayed (Sat Aug 15 15:19:58 2015 -0600) <Vito Librarius>
+* b6821f1 -  Added support to throttle uploads (Sat Aug 15 14:59:31 2015 -0600) <Vito Librarius>
+* 4dfc896 -  turn down the daemon logging (Sat Aug 15 14:21:35 2015 -0600) <Vito Librarius>
+* 4443112 -  added cover_date range for CV search filter (Sat Aug 15 14:00:46 2015 -0600) <Vito Librarius>
+* b93cef3 -  slightly loosen the year filters (Sat Aug 15 12:30:04 2015 -0600) <Vito Librarius>
+* 9cc7131 -  mis-spelled thumbnail variable (Sat Aug 15 12:05:33 2015 -0600) <Vito Librarius>
+* 80e7855 -  some additional upload error messages (Sat Aug 15 12:05:09 2015 -0600) <Vito Librarius>
+* 4541d0b -  another filename case (Fri Aug 14 17:28:52 2015 -0600) <Vito Librarius>
+* 68e3f31 -  caching more thumbnails for unprocessed files (Fri Aug 14 15:48:32 2015 -0600) <Vito Librarius>
+* 33b2c7d -  pre-extract initial media thumbnail during import (Fri Aug 14 10:11:27 2015 -0600) <Vito Librarius>
+* 656a6d6 -  moved all the admin UI components into the view/admin folder. (Thu Aug 13 16:18:25 2015 -0600) <Vito Librarius>
+* efe6a8b -  typo (Thu Aug 13 15:32:35 2015 -0600) <Vito Librarius>
+* a16ef66 -  Seems the mac case insensitivity breaks RSS on Linux (Thu Aug 13 13:24:59 2015 -0600) <Vito Librarius>
+* 01cdfe1 -  prod also seems to need these values cast to string to ensure proper unique guid values (Thu Aug 13 13:14:50 2015 -0600) <Vito Librarius>
+* 90adcc0 -  And another missing import.  Works in dev .. (Thu Aug 13 13:07:07 2015 -0600) <Vito Librarius>
+* 4ea1ca1 -  Missing import (Thu Aug 13 13:04:25 2015 -0600) <Vito Librarius>
+
 Version 0.4.0:
 * 2e60996 -  (HEAD, master) Some test classes (Thu Aug 13 12:53:10 2015 -0600) <Vito Librarius>
 * c8e436e -  Added manual newznab search and integration with the wanted list for manual downloads (Thu Aug 13 12:52:52 2015 -0600) <Vito Librarius>
