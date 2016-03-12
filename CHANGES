@@ -1,3 +1,6 @@
+Version 0.5.2:
+* c343f03 -  (HEAD -> master) Issue #82 - unable to script the removal of the unique index, so I altered my database by hand and changed the original migration (Sat Mar 12 10:39:04 2016 -0700) <Vito Librarius>
+
 Version 0.5.1:
 * 43f41e9 -  (HEAD -> master) Issue #82 - trying to adjust the git commit messages (Fri Mar 11 18:01:50 2016 -0700) <Vito Librarius>
 * 24f0270 -  Version bump to 0.5.0 Version bump to 0.5.0 (Fri Mar 11 17:34:32 2016 -0700) <Vito Librarius>
