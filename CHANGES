@@ -1,3 +1,7 @@
+Version 0.5.1:
+* 43f41e9 -  (HEAD -> master) Issue #82 - trying to adjust the git commit messages (Fri Mar 11 18:01:50 2016 -0700) <Vito Librarius>
+* 24f0270 -  Version bump to 0.5.0 Version bump to 0.5.0 (Fri Mar 11 17:34:32 2016 -0700) <Vito Librarius>
+
 Version 0.5.0:
 * 393a0e9 -  (HEAD -> master) Fixes #95	publisher name unique constraint error (Fri Mar 11 17:23:26 2016 -0700) <Vito Librarius>
 * 86dfe80 -  (origin/master, origin/HEAD) Fixes #109	E_ERROR - Call to a member function updateFailure() on a non-object (Thu Mar 10 21:31:20 2016 -0700) <Vito Librarius>
