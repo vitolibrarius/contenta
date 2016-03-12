@@ -6,49 +6,54 @@
 	$messageFile = (isset($argv[1]) ? $argv[1] : null);
 	$message = (isset($argv[1]) ? file_get_contents($messageFile) : "");
 
-	$issueIdPattern = "/#(\\d{1,32})/";
-    preg_match($issueIdPattern, $message, $matches);
-    $issueId = (isset($matches[1])) ? $matches[1] : null;
+	$versionBumpPattern = "/(Version bump)/";
+    preg_match($versionBumpPattern, $message, $matches);
+    $versionMatch = (isset($matches[1])) ? $matches[1] : null;
+	if ( is_null($versionMatch) ) {
+		$issueIdPattern = "/#(\\d{1,32})/";
+		preg_match($issueIdPattern, $message, $matches);
+		$issueId = (isset($matches[1])) ? $matches[1] : null;
 
-	if ( is_null($issueId) ) {
-		echo "-----------------------------------------" . PHP_EOL;
-		echo "No issue number specified in commit message" . PHP_EOL;
-		echo "-----------------------------------------" . PHP_EOL . PHP_EOL;
-		exit(1);
-	}
-
-	$url = "https://api.github.com/repos/vitolibrarius/contenta/issues/" . $issueId;
-	$context = array(
-		'http' => array(
-			'ignore_errors' => true,
-			'method' => "GET",
-			'header'=>	"Accept-language: en\r\n" .
-						"User-Agent: PHP/5.2.9\r\n",
-						"Content-Type: application/json\r\n"
-		)
-	);
-
-	$data = file_get_contents($url, false, stream_context_create($context));
-	if ( $data != false ) {
-		$json = json_decode($data, true);
-		if ( json_last_error() != 0 ) {
+		if ( is_null($issueId) ) {
 			echo "-----------------------------------------" . PHP_EOL;
-			echo "JSON error" . PHP_EOL . var_export($data, true) . PHP_EOL;
+			echo "No issue number specified in commit message" . PHP_EOL;
 			echo "-----------------------------------------" . PHP_EOL . PHP_EOL;
 			exit(1);
 		}
-	}
 
-	$issueMatch = null;
-	if (isset($json, $json['number']) && $json['number'] == $issueId) {
-		$issueMatch = $json;
-	}
+		$url = "https://api.github.com/repos/vitolibrarius/contenta/issues/" . $issueId;
+		$context = array(
+			'http' => array(
+				'ignore_errors' => true,
+				'method' => "GET",
+				'header'=>	"Accept-language: en\r\n" .
+							"User-Agent: PHP/5.2.9\r\n",
+							"Content-Type: application/json\r\n"
+			)
+		);
 
-	if ( is_null($issueMatch) ) {
-		echo "-----------------------------------------" . PHP_EOL;
-		echo "Issue #" . $issueId . " was not found in list of open issues" . PHP_EOL;
-		echo "-----------------------------------------" . PHP_EOL . PHP_EOL;
-		exit(1);
+		$data = file_get_contents($url, false, stream_context_create($context));
+		if ( $data != false ) {
+			$json = json_decode($data, true);
+			if ( json_last_error() != 0 ) {
+				echo "-----------------------------------------" . PHP_EOL;
+				echo "JSON error" . PHP_EOL . var_export($data, true) . PHP_EOL;
+				echo "-----------------------------------------" . PHP_EOL . PHP_EOL;
+				exit(1);
+			}
+		}
+
+		$issueMatch = null;
+		if (isset($json, $json['number']) && $json['number'] == $issueId) {
+			$issueMatch = $json;
+		}
+
+		if ( is_null($issueMatch) ) {
+			echo "-----------------------------------------" . PHP_EOL;
+			echo "Issue #" . $issueId . " was not found in list of open issues" . PHP_EOL;
+			echo "-----------------------------------------" . PHP_EOL . PHP_EOL;
+			exit(1);
+		}
 	}
 
 ?>

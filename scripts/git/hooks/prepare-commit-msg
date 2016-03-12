@@ -6,70 +6,71 @@
 	$messageFile = (isset($argv[1]) ? $argv[1] : null);
 	$message = (isset($argv[1]) ? file_get_contents($messageFile) : "");
 
-    $currentBranchName = exec('git rev-parse --abbrev-ref HEAD');
-	$branchPattern = "/^(\\w+)-(\\d{1,32})/";
-    preg_match($branchPattern, $currentBranchName, $matches);
-    $branchId = (isset($matches[2])) ? $matches[2] : "";
-    $fix_message = "";
+	if (isset($argv[2]) == false || $argv[2] != 'message') {
 
-	$cached = "/tmp/contenta-issues-$user.json";
-	$use_cache = false;
-	if (@file_exists($cached) && filemtime($cached) > (time() - ($TTL))) {
-		$use_cache = true;
-	}
+		$currentBranchName = exec('git rev-parse --abbrev-ref HEAD');
+		$branchPattern = "/^(\\w+)-(\\d{1,32})/";
+		preg_match($branchPattern, $currentBranchName, $matches);
+		$branchId = (isset($matches[2])) ? $matches[2] : "";
+		$fix_message = "";
 
-	if ( $use_cache == true ) {
-		$data = file_get_contents($cached);
-		if ( $data != false ) {
-			$json = json_decode($data, true);
-			if ( json_last_error() != 0 ) {
+		$cached = "/tmp/contenta-issues-$user.json";
+		$use_cache = false;
+		if (@file_exists($cached) && filemtime($cached) > (time() - ($TTL))) {
+			$use_cache = true;
+		}
+
+		if ( $use_cache == true ) {
+			$data = file_get_contents($cached);
+			if ( $data != false ) {
+				$json = json_decode($data, true);
+				if ( json_last_error() != 0 ) {
+					@unlink( $cached );
+				}
+			}
+			else {
 				@unlink( $cached );
 			}
 		}
+
+		if (isset($json) == false) {
+			$url = "https://api.github.com/repos/vitolibrarius/contenta/issues";
+			$context = array(
+				'http' => array(
+					'ignore_errors' => true,
+					'method' => "GET",
+					'header'=>	"Accept-language: en\r\n" .
+								"User-Agent: PHP/5.2.9\r\n",
+								"Content-Type: application/json\r\n"
+				)
+			);
+
+			$data = file_get_contents($url, false, stream_context_create($context));
+			if ( $data != false ) {
+				$json = json_decode($data, true);
+				if ( json_last_error() == 0 ) {
+					file_put_contents( $cached, json_encode($json, JSON_PRETTY_PRINT) );
+				}
+			}
+		}
+
+		$issue_message = "";
+		if (isset($json) && is_array($json)) {
+			$issue_message .= "# Outstanding issues" .PHP_EOL;
+			foreach( $json as $issue ) {
+				if ( $issue['number'] == $branchId ) {
+					$fix_message = "Fixes Issue #" . $branchId . "\t" . $issue['title'] .PHP_EOL;
+				}
+				$issue_message .= "#\t" . $issue['number'] . "\t" . $issue['title'] .PHP_EOL;
+			}
+		}
+
+		$message = $fix_message . PHP_EOL . $issue_message . $message;
+		if ( isset($argv[1]) ) {
+			file_put_contents($messageFile, $message);
+		}
 		else {
-			@unlink( $cached );
+			echo $message;
 		}
 	}
-
-	if (isset($json) == false) {
-		$url = "https://api.github.com/repos/vitolibrarius/contenta/issues";
-		$context = array(
-			'http' => array(
-				'ignore_errors' => true,
-				'method' => "GET",
-				'header'=>	"Accept-language: en\r\n" .
-							"User-Agent: PHP/5.2.9\r\n",
-							"Content-Type: application/json\r\n"
-			)
-		);
-
-
-		$data = file_get_contents($url, false, stream_context_create($context));
-		if ( $data != false ) {
-			$json = json_decode($data, true);
-			if ( json_last_error() == 0 ) {
-				file_put_contents( $cached, json_encode($json, JSON_PRETTY_PRINT) );
-			}
-		}
-	}
-
-	$issue_message = "";
-	if (isset($json) && is_array($json)) {
-		$issue_message .= "# Outstanding issues" .PHP_EOL;
-		foreach( $json as $issue ) {
-			if ( $issue['number'] == $branchId ) {
-				$fix_message = "Fixes Issue #" . $branchId . "\t" . $issue['title'] .PHP_EOL;
-			}
-			$issue_message .= "#\t" . $issue['number'] . "\t" . $issue['title'] .PHP_EOL;
-		}
-	}
-
-	$message = $fix_message . PHP_EOL . $issue_message . $message;
-	if ( isset($argv[1]) ) {
-		file_put_contents($messageFile, $message);
-	}
-	else {
-		echo $message;
-	}
-
 ?>
