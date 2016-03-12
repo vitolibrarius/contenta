@@ -136,6 +136,22 @@ class Migration_15 extends Migrator
 			$this->sqlite_execute( $table, $statement, "Index on " . $table . '(' . implode(",", $columns) . ')' );
 		}
 
+		/* remove the unique name constraint from the publisher table */
+		$script = array(
+			'create table pub_X as select * from publisher',
+			'drop table publisher',
+			'CREATE TABLE publisher ( id INTEGER PRIMARY KEY, name TEXT COLLATE NOCASE,  xurl TEXT,  xsource TEXT,  xid TEXT, created INTEGER, updated INTEGER, xupdated INTEGER )',
+			'CREATE INDEX publisher_nameindex on publisher(name)',
+			'CREATE INDEX publisher_xidxsource on publisher(xid,xsource)',
+			'insert into publisher (id, name, xurl, xsource, xid, created, updated, xupdated) select id, name, xurl, xsource, xid, created, updated, xupdated from pub_X',
+			'drop table pub_X'
+		);
+		foreach( $script as $cmd ) {
+			$success = \SQL::raw( $cmd );
+			if ( is_array($success) == false ) {
+				throw new MigrationFailedException("Migration script for publisher failed on line \n'" . $cmd . "'\n" . var_export($success, true));
+			}
+		}
 	}
 
 	public function sqlite_postUpgrade()

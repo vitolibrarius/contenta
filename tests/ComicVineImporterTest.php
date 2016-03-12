@@ -157,14 +157,7 @@ function Series($endpoint, $metadata) {
 
 	my_echo( );
 }
-
-function Publication($endpoint, $metadata) {
-	/***********************************************************************************************/
-	my_echo( );
-	my_echo( "---------- Publication ");
-	$importer = new ComicVineImporter( Publication::TABLE );
-	$importer->setEndpoint($endpoint);
-
+function publicationsMetadata($metadata) {
 	$pubs = $metadata->getMeta( Publication::TABLE );
 	if ( is_array($pubs) == false || count($pubs) == 0 ) {
 		$sample = array(
@@ -182,7 +175,17 @@ function Publication($endpoint, $metadata) {
 		$metadata->setMeta( Publication::TABLE, $sample );
 		$pubs = $metadata->getMeta( Publication::TABLE );
 	}
+	return $pubs;
+}
 
+function Publication($endpoint, $metadata) {
+	/***********************************************************************************************/
+	my_echo( );
+	my_echo( "---------- Publication ");
+	$importer = new ComicVineImporter( Publication::TABLE );
+	$importer->setEndpoint($endpoint);
+
+	$pubs = publicationsMetadata($metadata);
 	foreach( $pubs as $sample ) {
 		$importer->enqueue_publication( $sample, true, true );
 	}
@@ -248,6 +251,7 @@ function Media($endpoint, $metadata) {
 		$samples[] = $file;
 	}
 
+	$pubs = publicationsMetadata($metadata);
 	foreach( $pubs as $idx => $sample ) {
 		$publication = $pubs_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
 		if ( $publication instanceof model\PublicationDBO ) {
@@ -255,7 +259,7 @@ function Media($endpoint, $metadata) {
 			$hash = uuid();
 			$size = rand();
 			$fullpath = null;
-			if ( count( $samples ) >= $idx ) {
+			if ( count( $samples ) > $idx ) {
 				$fullpath = $samples[$idx];
 				$filename = basename($fullpath);
 				$hash = hash_file(HASH_DEFAULT_ALGO, $fullpath);

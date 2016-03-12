@@ -53,16 +53,6 @@ class Publisher extends Model
 		return $this->findExternalOrCreate( '-= Unknown Publisher =-', '-unknown-', 'UNKNOWN', null );
 	}
 
-	public function findOrCreate( $name )
-	{
-		$obj = $this->objForName($name);
-		if ( $obj == false )
-		{
-			$obj = $this->create($name);
-		}
-		return $obj;
-	}
-
 	public function findExternalOrCreate( $name, $xid, $xsrc, $xurl = null )
 	{
 		if ( isset($name, $xid, $xsrc) && strlen($name) && strlen($xid) && strlen($xsrc)) {
