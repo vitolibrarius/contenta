@@ -1,0 +1,16 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id",	"type": "int" },
+        "pattern": { "column": "pattern",	"type": "text",	"collate": "NOCASE" },
+        "type": { "column": "type",	"type": "text" },
+        "created": { "column": "created", "type": "int" },
+        "endpoint_id": { "column": "endpoint_id", "type": "int" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "pull_list_excl",
+    "package": "pull_list",
+    "model": "Pull_List_Exclusion",
+    "dbo": "Pull_List_ExclusionDBO",
+	"sort" : [ "pattern" ],
+	"migration" : 16
+}

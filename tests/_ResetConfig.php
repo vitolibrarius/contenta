@@ -5,6 +5,10 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
 define('TEST_ROOT_PATH', "/tmp/ContentaTest" );
 
+function reset_echo($string ="") {
+	echo $string . PHP_EOL;
+}
+
 function SetConfigRoot($path = null, $purgeFirst = true)
 {
 	if ( is_null($path) ) {
@@ -25,12 +29,12 @@ function SetConfigRoot($path = null, $purgeFirst = true)
 	$config->setValue("Repository/cache", TEST_ROOT_PATH . "/cache" );
 	$config->setValue("Repository/processing", "processing" );
 
-	my_echo( "** Configuration" );
-	my_echo( "Repository " . $config->repositoryDirectory() );
-	my_echo( "media " . $config->mediaDirectory() );
-	my_echo( "cache " . $config->cacheDirectory() );
-	my_echo( "processing " . $config->processingDirectory() );
-	my_echo( "logs " . $config->loggingDirectory() );
+	reset_echo( "** Configuration" );
+	reset_echo( "Repository " . $config->repositoryDirectory() );
+	reset_echo( "media " . $config->mediaDirectory() );
+	reset_echo( "cache " . $config->cacheDirectory() );
+	reset_echo( "processing " . $config->processingDirectory() );
+	reset_echo( "logs " . $config->loggingDirectory() );
 
 	if ( $purgeFirst == true ) {
 		destroy_dir( $path ) || die( "Failed to remove last test run $path");

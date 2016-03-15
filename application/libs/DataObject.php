@@ -180,5 +180,11 @@ class DataObject
 	{
 		echo PHP_EOL . PHP_EOL . "------------------".PHP_EOL."$this ->notify( $type,  $object)". PHP_EOL.PHP_EOL;
 	}
+
+	/* self test for consistency */
+	public function consistencyTest()
+	{
+		return "ok";
+	}
 }
 ?>

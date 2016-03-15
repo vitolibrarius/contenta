@@ -1,0 +1,19 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id",	"type": "int" },
+        "group": { "column": "group",	"type": "text",	"collate": "NOCASE" },
+        "data": { "column": "data",	"type": "text",	"collate": "NOCASE"  },
+		"created": { "column": "created", "type": "int" },
+		"name": { "column": "name",	"type": "text",	"collate": "NOCASE"  },
+        "issue": { "column": "issue", "type": "text" },
+        "year": { "column": "year", "type": "int" },
+        "pull_list_id": { "column": "pull_list_id", "type": "int" }
+    },
+    "primaryKeys": [ "id" ],
+    "package": "pull_list",
+    "table": "pull_list_item",
+    "model": "Pull_List_Item",
+    "dbo": "Pull_List_ItemDBO",
+	"sort" : [ "group", "name", "issue" ],
+	"migration" : 16
+}

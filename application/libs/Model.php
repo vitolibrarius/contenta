@@ -570,4 +570,14 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 		return null;
 	}
 
+	/* self test for consistency */
+	public function consistencyTest()
+	{
+		$allColumnNames = $this->allColumnNames();
+		$pk = $this->tablePK();
+		if ( $this->hasColumn($pk) == false ) {
+			return "$pk not found in columns " . var_export($allColumnNames, true);
+		}
+		return "ok";
+	}
 }
