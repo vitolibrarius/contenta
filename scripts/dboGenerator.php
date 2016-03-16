@@ -142,6 +142,8 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 
 	$instance = new $clazz();
 	echo $clazz . " .. " . $instance->consistencyTest() . PHP_EOL;
+	$m = Model::Named( $package . "\\" . $modelname);
+	echo $package . "\\" . $modelname . " .. " . $m->consistencyTest() . PHP_EOL;
 
 	/** generate dbo file */
 	$Template = new Template(DBO_TEMPLATE);

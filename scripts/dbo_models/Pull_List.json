@@ -1,11 +1,45 @@
 {
     "attributes": {
-        "id": 	{ "column": "id",	"type": "int" },
-        "name": { "column": "name",	"type": "text",	"collate": "NOCASE" },
-        "etag": { "column": "etag",	"type": "text" },
-        "created": { "column": "created", "type": "int" },
-        "published": { "column": "published", "type": "int" },
-        "endpoint_id": { "column": "endpoint_id", "type": "int" }
+        "id": 	{ "column": "id",	"type": "INTEGER" },
+        "name": { "column": "name",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "etag": { "column": "etag",	"type": "TEXT" },
+        "created": { "column": "created", "type": "INTEGER" },
+        "published": { "column": "published", "type": "INTEGER" },
+        "endpoint_id": { "column": "endpoint_id", "type": "INTEGER" }
+    },
+    "relationships" :{
+    	"endpoint" : {
+    		"destination" : "model\\networking\\Endpoint",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false
+    	},
+    	"pull_list_items" : {
+    		"destination" : "model\\pull_list\\Pull_List_Item",
+    		"joins" : [
+    			{ "destinationAttribute": "pull_list_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true
+    	},
+    	"exclusions" : {
+    		"destination" : "model\\pull_list\\Pull_List_Exclusion",
+    		"joins" : [
+    			{ "destinationAttribute": "endpoint_id", "sourceAttribute" : "endpoint_id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true
+    	},
+    	"expansions" : {
+    		"destination" : "model\\pull_list\\Pull_List_Expansion",
+    		"joins" : [
+    			{ "destinationAttribute": "endpoint_id", "sourceAttribute" : "endpoint_id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true
+    	}
     },
     "primaryKeys": [ "id" ],
     "table": "pull_list",

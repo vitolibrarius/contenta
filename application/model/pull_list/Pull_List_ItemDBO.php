@@ -23,6 +23,20 @@ class Pull_List_ItemDBO extends DataObject
 	{
 		return $this->name;
 	}
+
+	public function formattedDateTimeCreated() { return $this->formattedDate( Pull_List_Item::created, "M d, Y H:i" ); }
+	public function formattedDateCreated() {return $this->formattedDate( Pull_List_Item::created, "M d, Y" ); }
+
+	// to-one relationship
+	public function pull_list()
+	{
+		if ( isset( $this->pull_list_id ) ) {
+			$model = Model::Named('model\pull_list\Pull_List');
+			return $model->objectForId($this->pull_list_id);
+		}
+		return false;
+	}
+
 }
 
 ?>
