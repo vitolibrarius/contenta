@@ -434,6 +434,24 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 		return array( false, array());
 	}
 
+	public function deleteAllForKeyValue($key, $value = null)
+	{
+		$success = true;
+		if ( isset($key, $value) ) {
+			$array = $this->allObjectsForKeyValue($key, $value);
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $idx => $obj) {
+					if ($this->deleteObject($obj) == false) {
+						$success = false;
+						throw new exceptions\DeleteObjectException("Failed to delete " . $obj, $obj->id );
+					}
+				}
+				$array = $this->allObjectsForKeyValue($key, $value);
+			}
+		}
+		return $success;
+	}
+
 	public function deleteObject(DataObject $object = null)
 	{
 		if (isset($object) ) {

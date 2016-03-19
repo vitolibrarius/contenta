@@ -2,23 +2,29 @@
 
 namespace model\pull_list;
 
+
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 
 use model\pull_list\Pull_ListDBO as Pull_ListDBO;
 
-/** Sample Creation script
-		$sql = "CREATE TABLE IF NOT EXISTS " . pull_list . " ( "
-			. Pull_List::id . " INTEGER PRIMARY KEY, "
-			. Pull_List::name . " TEXT, "
-			. Pull_List::etag . " TEXT, "
-			. Pull_List::created . " INTEGER, "
-			. Pull_List::published . " INTEGER, "
-			. Pull_List::endpoint_id . " INTEGER, "
-			. "FOREIGN KEY (". Pull_List::endpoint_id .") REFERENCES " . model\networking\Endpoint::TABLE . "(" . model\networking\Endpoint::id . "),"
+/** Sample Creation script */
+		/** PULL_LIST
+		$sql = "CREATE TABLE IF NOT EXISTS pull_list ( "
+			. model\pull_list\Pull_List::id . " INTEGER PRIMARY KEY, "
+			. model\pull_list\Pull_List::name . " TEXT, "
+			. model\pull_list\Pull_List::etag . " TEXT, "
+			. model\pull_list\Pull_List::created . " INTEGER, "
+			. model\pull_list\Pull_List::published . " INTEGER, "
+			. model\pull_list\Pull_List::endpoint_id . " INTEGER, "
+			. "FOREIGN KEY (". model\pull_list\Pull_List::endpoint_id .")"
+				. " REFERENCES " . model\networking\Endpoint::TABLE . "(" . model\networking\Endpoint::id . "),"
 			. ")";
 		$this->sqlite_execute( "pull_list", $sql, "Create table pull_list" );
+
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS pull_list_etag on pull_list (etag)';
+		$this->sqlite_execute( "pull_list", $sql, "Index on pull_list (etag)' );
 */
 class Pull_List extends Model
 {
@@ -40,6 +46,9 @@ class Pull_List extends Model
 Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::published, Pull_List::endpoint_id, 		 );
 	}
 
+	/** * * * * * * * * *
+		Basic search functions
+	 */
 	public function allForName($value)
 	{
 		return $this->allObjectsForKeyValue(Pull_List::name, $value);
@@ -48,7 +57,7 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 	public function allLikeName($value)
 	{
 		return \SQL::Select( $this )
-			->where( Qualifier::Like( Pull_List::name, normalizeSearchString($value), SQL::SQL_LIKE_AFTER ))
+			->where( Qualifier::Like( Pull_List::name, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
 			->limit( 50 )
 			->fetchAll();
@@ -59,45 +68,67 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 	}
 
 
-
-	// to-one relationship
-	public function endpoint()
+	public function allForEndpoint($obj)
 	{
-		if ( isset( $this->endpoint_id ) ) {
-			$model = Model::Named('model\networking\Endpoint');
-			return $model->objectForId($this->endpoint_id);
-		}
-		return false;
+		return $this->allObjectsForFK(Pull_List::endpoint_id, $obj, $this->sortOrder(), 50);
 	}
 
-	// to-many relationship
-	public function pull_list_items()
+	public function joinAttributes( Model $joinModel = null )
 	{
-		if ( isset( $this->id ) ) {
-			$model = Model::Named('model\pull_list\Pull_List_Item');
-			return $model->allObjectsForKeyValue( model\pull_list\Pull_List_Item::pull_list_id, $this->id);
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "endpoint":
+					return array( Pull_List::endpoint_id, "id"  );
+					break;
+				case "pull_list_item":
+					return array( Pull_List::id, "pull_list_id"  );
+					break;
+				case "pull_list_exclusion":
+					return array( Pull_List::endpoint_id, "endpoint_id"  );
+					break;
+				case "pull_list_expansion":
+					return array( Pull_List::endpoint_id, "endpoint_id"  );
+					break;
+				default:
+					break;
+			}
 		}
-
-		return false;
+		return parent::joinAttributes( $joinModel );
 	}
 
-	// to-many relationship
-	public function exclusions()
+	public function create( $endpoint, $name, $etag, $published)
 	{
-		if ( isset( $this->endpoint_id ) ) {
-			$model = Model::Named('model\pull_list\Pull_List_Exclusion');
-			return $model->allObjectsForKeyValue( model\pull_list\Pull_List_Exclusion::endpoint_id, $this->endpoint_id);
-		}
+		$obj = false;
+		if ( isset($endpoint, $name) ) {
+			$params = array(
+				Pull_List::name => $name,
+				Pull_List::etag => $etag,
+				Pull_List::created => time(),
+				Pull_List::published => $published,
+			);
 
-		return false;
+			if ( isset($endpoint)  && is_a($endpoint, DataObject)) {
+				$params[Pull_List::endpoint_id] = $endpoint->id;
+			}
+
+			list( $obj, $errorList ) = $this->createObject($params);
+			if ( is_array($errorList) ) {
+				return $errorList;
+			}
+		}
+		return $obj;
 	}
 
-	// to-many relationship
-	public function expansions()
+	public function deleteObject( \DataObject $object = null)
 	{
-		if ( isset( $this->endpoint_id ) ) {
-			$model = Model::Named('model\pull_list\Pull_List_Expansion');
-			return $model->allObjectsForKeyValue( model\pull_list\Pull_List_Expansion::endpoint_id, $this->endpoint_id);
+		if ( $object instanceof Pull_List )
+		{
+			$pull_list_item_model = Model::Named('model\pull_list\Pull_List_Item');
+			if ( $pull_list_item_model->deleteAllForKeyValue(model\pull_list\Pull_List_Item::pull_list_id, $this->id) == false ) {
+				return false;
+			}
+
+			return parent::deleteObject($object);
 		}
 
 		return false;

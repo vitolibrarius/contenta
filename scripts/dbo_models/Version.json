@@ -1,0 +1,34 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id",	"type": "INTEGER" },
+        "code": { "column": "code",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "nullable": false },
+        "major": { "column": "major",	"type": "INTEGER" },
+        "minor": { "column": "minor",	"type": "INTEGER" },
+        "patch": { "column": "patch",	"type": "INTEGER" },
+        "created": { "column": "created", "type": "DATE" },
+        "hash_code": { "column": "hash_code", "type": "TEXT", "unique": true, "nullable": false }
+    },
+    "relationships" :{
+    	"patches" : {
+    		"destination" : "model\\version\\Patch",
+    		"destinationTable" : "patch",
+    		"joins" : [
+    			{ "destinationAttribute": "version_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	}
+    },
+    "indexes" : [
+    	{ "columns": ["code"], "unique": true },
+    	{ "columns": ["hash_code"], "unique": true },
+    	{ "columns": ["major", "minor", "patch"] }
+    ],
+    "primaryKeys": [ "id" ],
+    "table": "version",
+    "package": "version",
+    "model": "Version",
+    "dbo": "VersionDBO",
+	"sort" : [ "code" ]
+}

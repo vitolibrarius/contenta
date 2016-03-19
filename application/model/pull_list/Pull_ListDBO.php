@@ -24,6 +24,8 @@ class Pull_ListDBO extends DataObject
 
 	public function formattedDateTimeCreated() { return $this->formattedDate( Pull_List::created, "M d, Y H:i" ); }
 	public function formattedDateCreated() {return $this->formattedDate( Pull_List::created, "M d, Y" ); }
+	public function formattedDateTimePublished() { return $this->formattedDate( Pull_List::published, "M d, Y H:i" ); }
+	public function formattedDatePublished() {return $this->formattedDate( Pull_List::published, "M d, Y" ); }
 
 	// to-one relationship
 	public function endpoint()

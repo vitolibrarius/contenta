@@ -74,10 +74,126 @@ class Template
     	return (isset($this->model['model']) ? $this->model['model'] : null);
     }
 
+    public function packageName() {
+		if ( is_null($this->package) ) {
+			return 'model';
+		}
+
+		return 'model\\' . $this->package;
+    }
+
+    public function dboPackageClassName() {
+    	return $this->packageName() . "\\" . $this->dboClassName();
+    }
+
+    public function modelPackageClassName() {
+    	return $this->packageName() . "\\" . $this->modelClassName();
+    }
+
     public function displayAttribute() {
     	$attributes = $this->attributes;
     	if ( is_array($attributes) && isset($attributes['name']) ) {
     		return 'name';
+    	}
+    	return null;
+    }
+
+    public function isPrimaryKey( $name = '' ) {
+    	$pkAttributes = $this->primaryKeys;
+    	if ( is_array($pkAttributes) && in_array($name, $pkAttributes)) {
+    		return true;
+    	}
+    	return false;
+    }
+
+    public function isRelationshipKey( $rel = '' ) {
+    	$relations = $this->relationships;
+    	if ( is_array($relations) ) {
+    		foreach( $relations as $name => $details ) {
+    			$joins = $details['joins'];
+    			foreach( $joins as $idx => $join ) {
+    				if ( isset($join['sourceAttribute']) && $join['sourceAttribute'] == $rel ) {
+    					return true;
+    				}
+    			}
+    		}
+    	}
+    	return false;
+    }
+
+    public function defaultCreationValue( $attr = '' ) {
+    	$details = $this->detailsForAttribute($attr);
+    	if ( is_array($details) && isset($details['type']) ) {
+    		switch ($details['type']) {
+    			case 'BOOLEAN': return "Model::TERTIARY_TRUE";
+    			case 'DATE': return "time()";
+    			case 'TEXT': return "''";
+    			default: break;
+    		}
+    	}
+    	return "null";
+    }
+
+    public function detailsForAttribute( $attr = '' ) {
+    	$attributes = $this->attributes;
+    	if ( is_array($attributes) ) {
+    		return (isset($attributes[$attr]) ? $attributes[$attr] : null);
+    	}
+    	return null;
+    }
+
+    public function detailsForRelationship( $rel = '' ) {
+    	$relations = $this->relationships;
+    	if ( is_array($relations) ) {
+    		return (isset($relations[$rel]) ? $relations[$rel] : null);
+    	}
+    	return null;
+    }
+
+    public function createObjectAttributes() {
+    	$attributes = $this->attributes;
+    	if ( is_array($attributes) ) {
+    		$creationAttr = array();
+    		$ignoreAttr = array( 'created', 'updated' );
+    		foreach( $attributes as $name => $details ) {
+    			if ( $this->isPrimaryKey( $name ) == false
+    				&& $this->isRelationshipKey($name) == false
+    				&& in_array($name, $ignoreAttr) == false ) {
+	    			$creationAttr[$name] = $details;
+    			}
+    		}
+
+    		return $creationAttr;
+    	}
+    	return null;
+    }
+
+    public function mandatoryObjectAttributes() {
+    	$attributes = $this->createObjectAttributes();
+    	if ( is_array($attributes) ) {
+    		$creationAttr = array();
+    		foreach( $attributes as $name => $details) {
+    			if ( isset($details['nullable']) && $details['nullable'] == false ) {
+	    			$creationAttr[$name] = $details;
+    			}
+    		}
+
+    		return $creationAttr;
+    	}
+    	return null;
+    }
+
+    public function createObjectRelations() {
+    	$relations = $this->relationships;
+    	if ( is_array($relations) ) {
+    		$creationAttr = array();
+    		foreach( $relations as $name => $details ) {
+    			if (isset( $details['isMandatory']) && $details['isMandatory']) {
+	    			$creationAttr[$name] = $details;
+    			}
+    		}
+
+    		return $creationAttr;
     	}
     	return null;
     }
@@ -125,6 +241,8 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	echo PHP_EOL . $file .PHP_EOL;
 
 	$model_meta = json_decode(file_get_contents($file), true);
+	is_array($model_meta) || die("Failed to read $file" . PHP_EOL);
+
 	$package = $model_meta['package'];
 	$modelname = $model_meta['model'];
 	$dboname = $model_meta['dbo'];

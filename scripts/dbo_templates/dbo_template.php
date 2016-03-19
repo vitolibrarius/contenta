@@ -1,18 +1,10 @@
-<?php if ( is_null($this->package) ) : ?>
-namespace model;
-<?php else : ?>
-namespace model\<?php echo $this->package; ?>;
-<?php endif; ?>
+namespace <?php echo $this->packageName(); ?>;
 
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 
-<?php if ( is_null($this->package) ) : ?>
-use model\<?php echo $this->modelClassName(); ?> as <?php echo $this->modelClassName(); ?>;
-<?php else : ?>
-use model\<?php echo $this->package . "\\" . $this->modelClassName(); ?> as <?php echo $this->modelClassName(); ?>;
-<?php endif; ?>
+use <?php echo $this->modelPackageClassName(); ?> as <?php echo $this->modelClassName(); ?>;
 
 class <?php echo $this->dboClassName(); ?> extends DataObject
 {
@@ -30,7 +22,7 @@ foreach( $this->attributes as $name => $detailArray ) {
 <?php endif; ?>
 
 <?php foreach( $this->attributes as $name => $detailArray ) : ?>
-<?php if ( $name == 'created' || $name == 'updated' || endsWith($name, 'Date')) : ?>
+<?php if (isset($detailArray['type']) && $detailArray['type'] == 'DATE') : ?>
 	public function formattedDateTime<?php echo ucwords($name); ?>() { return $this->formattedDate( <?php echo $this->modelClassName() . "::" . $name; ?>, "M d, Y H:i" ); }
 	public function formattedDate<?php echo ucwords($name); ?>() {return $this->formattedDate( <?php echo $this->modelClassName() . "::" . $name; ?>, "M d, Y" ); }
 <?php endif; ?>

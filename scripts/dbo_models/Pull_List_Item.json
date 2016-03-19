@@ -2,9 +2,9 @@
     "attributes": {
         "id": 	{ "column": "id",	"type": "INTEGER" },
         "group": { "column": "group",	"type": "TEXT",	"collate": "NOCASE" },
-        "data": { "column": "data",	"type": "TEXT",	"collate": "NOCASE"  },
-		"created": { "column": "created", "type": "INTEGER" },
-		"name": { "column": "name",	"type": "TEXT",	"collate": "NOCASE"  },
+        "data": { "column": "data",	"type": "TEXT",	"collate": "NOCASE", "nullable": false  },
+		"created": { "column": "created", "type": "DATE" },
+		"name": { "column": "name",	"type": "TEXT",	"collate": "NOCASE", "nullable": false  },
         "issue": { "column": "issue", "type": "TEXT" },
         "year": { "column": "year", "type": "INTEGER" },
         "pull_list_id": { "column": "pull_list_id", "type": "INTEGER" }
@@ -18,12 +18,16 @@
     "relationships" :{
     	"pull_list" : {
     		"destination" : "model\\pull_list\\Pull_List",
+    		"destinationTable" : "pull_list",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "pull_list_id" }
     		],
     		"isMandatory": true,
-            "isToMany" : false
+            "isToMany" : false,
+            "ownsDestination" : false
     	}
     },
-	"migration" : 16
+    "indexes" : [
+	   	{ "columns": ["name"] }
+    ]
 }

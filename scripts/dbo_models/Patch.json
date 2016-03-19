@@ -1,0 +1,29 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id",	"type": "INTEGER" },
+        "name": { "column": "name",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "nullable": false},
+        "created": { "column": "created", "type": "DATE" },
+        "version_id": { "column": "version_id", "type": "INTEGER" }
+    },
+    "relationships" :{
+    	"version" : {
+    		"destination" : "model\\version\\Version",
+    		"destinationTable" : "version",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "version_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	}
+    },
+    "indexes" : [
+    	{ "columns": ["name"], "unique": true }
+    ],
+    "primaryKeys": [ "id" ],
+    "table": "patch",
+    "package": "version",
+    "model": "Patch",
+    "dbo": "PatchDBO",
+	"sort" : [ "name" ]
+}
