@@ -18,7 +18,7 @@ use model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 			. model\pull_list\Pull_List_Expansion::created . " INTEGER, "
 			. model\pull_list\Pull_List_Expansion::endpoint_id . " INTEGER, "
 			. "FOREIGN KEY (". model\pull_list\Pull_List_Expansion::endpoint_id .")"
-				. " REFERENCES " . model\networking\Endpoint::TABLE . "(" . model\networking\Endpoint::id . "),"
+				. " REFERENCES " . model\Endpoint::TABLE . "(" . model\Endpoint::id . ")"
 			. ")";
 		$this->sqlite_execute( "pull_list_expansion", $sql, "Create table pull_list_expansion" );
 

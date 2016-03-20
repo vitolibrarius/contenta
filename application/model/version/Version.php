@@ -23,11 +23,11 @@ use model\version\VersionDBO as VersionDBO;
 		$this->sqlite_execute( "version", $sql, "Create table version" );
 
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS version_code on version (code)';
-		$this->sqlite_execute( "version", $sql, "Index on version (code)' );
+		$this->sqlite_execute( "version", $sql, "Index on version (code)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS version_hash_code on version (hash_code)';
-		$this->sqlite_execute( "version", $sql, "Index on version (hash_code)' );
+		$this->sqlite_execute( "version", $sql, "Index on version (hash_code)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS version_majorminorpatch on version (major,minor,patch)';
-		$this->sqlite_execute( "version", $sql, "Index on version (major,minor,patch)' );
+		$this->sqlite_execute( "version", $sql, "Index on version (major,minor,patch)" );
 */
 class Version extends Model
 {
@@ -53,9 +53,9 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 	/** * * * * * * * * *
 		Basic search functions
 	 */
-	public function allForCode($value)
+	public function objectForCode($value)
 	{
-		return $this->allObjectsForKeyValue(Version::code, $value);
+		return $this->singleObjectForKeyValue(Version::code, $value);
 	}
 
 	public function allLikeCode($value)
@@ -66,9 +66,9 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 			->limit( 50 )
 			->fetchAll();
 	}
-	public function allForHash_code($value)
+	public function objectForHash_code($value)
 	{
-		return $this->allObjectsForKeyValue(Version::hash_code, $value);
+		return $this->singleObjectForKeyValue(Version::hash_code, $value);
 	}
 
 
@@ -77,9 +77,6 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
-				case "patch":
-					return array( Version::id, "version_id"  );
-					break;
 				default:
 					break;
 			}
@@ -113,11 +110,6 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 	{
 		if ( $object instanceof Version )
 		{
-			$patch_model = Model::Named('model\version\Patch');
-			if ( $patch_model->deleteAllForKeyValue(model\version\Patch::version_id, $this->id) == false ) {
-				return false;
-			}
-
 			return parent::deleteObject($object);
 		}
 

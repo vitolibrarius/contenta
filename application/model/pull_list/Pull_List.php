@@ -19,12 +19,12 @@ use model\pull_list\Pull_ListDBO as Pull_ListDBO;
 			. model\pull_list\Pull_List::published . " INTEGER, "
 			. model\pull_list\Pull_List::endpoint_id . " INTEGER, "
 			. "FOREIGN KEY (". model\pull_list\Pull_List::endpoint_id .")"
-				. " REFERENCES " . model\networking\Endpoint::TABLE . "(" . model\networking\Endpoint::id . "),"
+				. " REFERENCES " . model\Endpoint::TABLE . "(" . model\Endpoint::id . ")"
 			. ")";
 		$this->sqlite_execute( "pull_list", $sql, "Create table pull_list" );
 
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS pull_list_etag on pull_list (etag)';
-		$this->sqlite_execute( "pull_list", $sql, "Index on pull_list (etag)' );
+		$this->sqlite_execute( "pull_list", $sql, "Index on pull_list (etag)" );
 */
 class Pull_List extends Model
 {
@@ -62,9 +62,9 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 			->limit( 50 )
 			->fetchAll();
 	}
-	public function allForEtag($value)
+	public function objectForEtag($value)
 	{
-		return $this->allObjectsForKeyValue(Pull_List::etag, $value);
+		return $this->singleObjectForKeyValue(Pull_List::etag, $value);
 	}
 
 
@@ -79,15 +79,6 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 			switch ( $joinModel->tableName() ) {
 				case "endpoint":
 					return array( Pull_List::endpoint_id, "id"  );
-					break;
-				case "pull_list_item":
-					return array( Pull_List::id, "pull_list_id"  );
-					break;
-				case "pull_list_exclusion":
-					return array( Pull_List::endpoint_id, "endpoint_id"  );
-					break;
-				case "pull_list_expansion":
-					return array( Pull_List::endpoint_id, "endpoint_id"  );
 					break;
 				default:
 					break;
@@ -123,11 +114,6 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 	{
 		if ( $object instanceof Pull_List )
 		{
-			$pull_list_item_model = Model::Named('model\pull_list\Pull_List_Item');
-			if ( $pull_list_item_model->deleteAllForKeyValue(model\pull_list\Pull_List_Item::pull_list_id, $this->id) == false ) {
-				return false;
-			}
-
 			return parent::deleteObject($object);
 		}
 

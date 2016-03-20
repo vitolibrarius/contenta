@@ -17,12 +17,12 @@ use model\version\PatchDBO as PatchDBO;
 			. model\version\Patch::created . " INTEGER, "
 			. model\version\Patch::version_id . " INTEGER, "
 			. "FOREIGN KEY (". model\version\Patch::version_id .")"
-				. " REFERENCES " . model\version\Version::TABLE . "(" . model\version\Version::id . "),"
+				. " REFERENCES " . model\version\Version::TABLE . "(" . model\version\Version::id . ")"
 			. ")";
 		$this->sqlite_execute( "patch", $sql, "Create table patch" );
 
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS patch_name on patch (name)';
-		$this->sqlite_execute( "patch", $sql, "Index on patch (name)' );
+		$this->sqlite_execute( "patch", $sql, "Index on patch (name)" );
 */
 class Patch extends Model
 {
@@ -45,9 +45,9 @@ Patch::id, Patch::name, Patch::created, Patch::version_id, 		 );
 	/** * * * * * * * * *
 		Basic search functions
 	 */
-	public function allForName($value)
+	public function objectForName($value)
 	{
-		return $this->allObjectsForKeyValue(Patch::name, $value);
+		return $this->singleObjectForKeyValue(Patch::name, $value);
 	}
 
 	public function allLikeName($value)

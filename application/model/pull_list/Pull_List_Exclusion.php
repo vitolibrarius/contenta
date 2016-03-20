@@ -18,7 +18,7 @@ use model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 			. model\pull_list\Pull_List_Exclusion::created . " INTEGER, "
 			. model\pull_list\Pull_List_Exclusion::endpoint_id . " INTEGER, "
 			. "FOREIGN KEY (". model\pull_list\Pull_List_Exclusion::endpoint_id .")"
-				. " REFERENCES " . model\networking\Endpoint::TABLE . "(" . model\networking\Endpoint::id . "),"
+				. " REFERENCES " . model\Endpoint::TABLE . "(" . model\Endpoint::id . ")"
 			. ")";
 		$this->sqlite_execute( "pull_list_excl", $sql, "Create table pull_list_excl" );
 

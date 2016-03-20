@@ -121,6 +121,19 @@ class Template
     	return false;
     }
 
+    public function isUniqueAttribute( $attr = '' ) {
+    	$indexes = $this->indexes;
+    	if ( is_array($indexes) ) {
+    		foreach( $indexes as $details ) {
+    			$columns = (isset($details['columns']) ? $details['columns'] : array());
+    			if ( isset($details['unique']) && $details['unique'] && count($columns) == 1 && in_array($attr, $columns)) {
+					return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+
     public function defaultCreationValue( $attr = '' ) {
     	$details = $this->detailsForAttribute($attr);
     	if ( is_array($details) && isset($details['type']) ) {
@@ -183,7 +196,7 @@ class Template
     	return null;
     }
 
-    public function createObjectRelations() {
+    public function mandatoryObjectRelations() {
     	$relations = $this->relationships;
     	if ( is_array($relations) ) {
     		$creationAttr = array();

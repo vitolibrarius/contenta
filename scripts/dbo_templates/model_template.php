@@ -2,7 +2,7 @@ namespace <?php echo $this->packageName(); ?>;
 
 <?php // setup some script variables
 	$attributeList = (is_array($this->attributes) ? $this->attributes : array());
-	$relationshipList = (is_array($this->relationships) ? $this->relationships : array());
+	$relationshipList = (is_array($this->mandatoryObjectRelations()) ? $this->mandatoryObjectRelations() : array());
 ?>
 
 use \DataObject as DataObject;
@@ -29,12 +29,12 @@ use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassNam
 
 <?php endforeach; ?>
 <?php if (is_array($relationshipList)) : ?>
-<?php $lastkey = key(end($relationshipList)); foreach( $relationshipList as $name => $detailArray ) : ?>
+<?php $lastkey = array_last_key($relationshipList); foreach( $relationshipList as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['isToMany'])) : ?>
 <?php $joins = $detailArray['joins']; if ($detailArray['isToMany'] == false) : ?>
 <?php if (count($joins) == 1) : ?><?php $join = $joins[0]; ?>
 			. "FOREIGN KEY (". <?php echo $this->modelPackageClassName() . "::" . $join["sourceAttribute"]; ?> .")"
-				. " REFERENCES " . <?php echo $detailArray["destination"]; ?>::TABLE . "(" . <?php echo $detailArray["destination"] . "::" .  $join["destinationAttribute"]; ?> . ")<?php echo ($lastkey === $name ? "" : ","); ?>"
+				. " REFERENCES " . <?php echo $detailArray["destination"]; ?>::TABLE . "(" . <?php echo $detailArray["destination"] . "::" .  $join["destinationAttribute"]; ?> . ")<?php echo ($lastkey === $name ? "" : "[$lastkey],"); ?>"
 <?php else : ?>
 			FixMe: relationship <?php echo $name; ?> has multiple joins
 <?php endif; // multiple joins ?>
@@ -53,7 +53,7 @@ use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassNam
 		$indexName = $this->tableName() . '_' . implode("", $columns);
 		$unique = ( (isset($detailArray["unique"]) && $detailArray["unique"]) ? "UNIQUE" : ""); ?>
 		$sql = 'CREATE <?php echo $unique; ?> INDEX IF NOT EXISTS <?php echo $indexName; ?> on <?php echo $this->tableName(); ?> (<?php echo implode(",", $columns); ?>)';
-		$this->sqlite_execute( "<?php echo $this->tableName(); ?>", $sql, "Index on <?php echo $this->tableName(); ?> (<?php echo implode(",", $columns); ?>)' );
+		$this->sqlite_execute( "<?php echo $this->tableName(); ?>", $sql, "Index on <?php echo $this->tableName(); ?> (<?php echo implode(",", $columns); ?>)" );
 <?php endforeach; // loop indexes ?>
 <?php endif; // has indexes ?>
 */
@@ -91,10 +91,17 @@ foreach( $attributeList as $name => $detailArray ) {
 <?php foreach( $attributeList as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['type'])) : ?>
 <?php if ('TEXT' == $detailArray['type']) : ?>
+<?php if ( $this->isUniqueAttribute($name)) : ?>
+	public function objectFor<?php echo ucwords($name); ?>($value)
+	{
+		return $this->singleObjectForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
+	}
+<?php else : ?>
 	public function allFor<?php echo ucwords($name); ?>($value)
 	{
 		return $this->allObjectsForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
 	}
+<?php endif; // unique ?>
 
 <?php if (isset($detailArray['partialSearch']) && $detailArray['partialSearch'] == true) : ?>
 	public function allLike<?php echo ucwords($name); ?>($value)
@@ -148,7 +155,7 @@ foreach( $attributeList as $name => $detailArray ) {
 <?php
 	$createAttrList = array_keys($this->createObjectAttributes());
 	$mandatoryAttrList = array_keys($this->mandatoryObjectAttributes());
-	$createRelationsList = array_keys($this->createObjectRelations());
+	$createRelationsList = array_keys($this->mandatoryObjectRelations());
 ?>
 	public function create( <?php echo implode(', ', array_map(function($item) { return '$' . $item; },
 		array_merge( $createRelationsList, $createAttrList ))); ?>)
@@ -167,7 +174,7 @@ foreach( $attributeList as $name => $detailArray ) {
 <?php endforeach; ?>
 			);
 
-<?php foreach( $this->createObjectRelations() as $name => $detailArray ) : ?>
+<?php foreach( $this->mandatoryObjectRelations() as $name => $detailArray ) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>
 			if ( isset($<?php echo $name; ?>)  && is_a($<?php echo $name; ?>, DataObject)) {

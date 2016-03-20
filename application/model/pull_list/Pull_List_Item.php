@@ -13,7 +13,7 @@ use model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 		/** PULL_LIST_ITEM
 		$sql = "CREATE TABLE IF NOT EXISTS pull_list_item ( "
 			. model\pull_list\Pull_List_Item::id . " INTEGER PRIMARY KEY, "
-			. model\pull_list\Pull_List_Item::group . " TEXT, "
+			. model\pull_list\Pull_List_Item::group_name . " TEXT, "
 			. model\pull_list\Pull_List_Item::data . " TEXT, "
 			. model\pull_list\Pull_List_Item::created . " INTEGER, "
 			. model\pull_list\Pull_List_Item::name . " TEXT, "
@@ -21,18 +21,18 @@ use model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 			. model\pull_list\Pull_List_Item::year . " INTEGER, "
 			. model\pull_list\Pull_List_Item::pull_list_id . " INTEGER, "
 			. "FOREIGN KEY (". model\pull_list\Pull_List_Item::pull_list_id .")"
-				. " REFERENCES " . model\pull_list\Pull_List::TABLE . "(" . model\pull_list\Pull_List::id . "),"
+				. " REFERENCES " . model\pull_list\Pull_List::TABLE . "(" . model\pull_list\Pull_List::id . ")"
 			. ")";
 		$this->sqlite_execute( "pull_list_item", $sql, "Create table pull_list_item" );
 
 		$sql = 'CREATE  INDEX IF NOT EXISTS pull_list_item_name on pull_list_item (name)';
-		$this->sqlite_execute( "pull_list_item", $sql, "Index on pull_list_item (name)' );
+		$this->sqlite_execute( "pull_list_item", $sql, "Index on pull_list_item (name)" );
 */
 class Pull_List_Item extends Model
 {
 	const TABLE = 'pull_list_item';
 	const id = 'id';
-	const group = 'group';
+	const group_name = 'group_name';
 	const data = 'data';
 	const created = 'created';
 	const name = 'name';
@@ -47,15 +47,15 @@ class Pull_List_Item extends Model
 	public function allColumnNames()
 	{
 		return array(
-Pull_List_Item::id, Pull_List_Item::group, Pull_List_Item::data, Pull_List_Item::created, Pull_List_Item::name, Pull_List_Item::issue, Pull_List_Item::year, Pull_List_Item::pull_list_id, 		 );
+Pull_List_Item::id, Pull_List_Item::group_name, Pull_List_Item::data, Pull_List_Item::created, Pull_List_Item::name, Pull_List_Item::issue, Pull_List_Item::year, Pull_List_Item::pull_list_id, 		 );
 	}
 
 	/** * * * * * * * * *
 		Basic search functions
 	 */
-	public function allForGroup($value)
+	public function allForGroup_name($value)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Item::group, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Item::group_name, $value);
 	}
 
 	public function allForData($value)
@@ -93,12 +93,12 @@ Pull_List_Item::id, Pull_List_Item::group, Pull_List_Item::data, Pull_List_Item:
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $pull_list, $group, $data, $name, $issue, $year)
+	public function create( $pull_list, $group_name, $data, $name, $issue, $year)
 	{
 		$obj = false;
 		if ( isset($pull_list, $data, $name) ) {
 			$params = array(
-				Pull_List_Item::group => $group,
+				Pull_List_Item::group_name => $group_name,
 				Pull_List_Item::data => $data,
 				Pull_List_Item::created => time(),
 				Pull_List_Item::name => $name,

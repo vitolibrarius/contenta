@@ -11,7 +11,7 @@ use model\pull_list\Pull_List_Item as Pull_List_Item;
 class Pull_List_ItemDBO extends DataObject
 {
 	public $id;
-	public $group;
+	public $group_name;
 	public $data;
 	public $created;
 	public $name;

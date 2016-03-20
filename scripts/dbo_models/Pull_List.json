@@ -9,7 +9,7 @@
     },
     "relationships" :{
     	"endpoint" : {
-    		"destination" : "model\\networking\\Endpoint",
+    		"destination" : "model\\Endpoint",
     		"destinationTable" : "endpoint",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_id" }

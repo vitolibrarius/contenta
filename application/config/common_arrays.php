@@ -1,4 +1,51 @@
 <?php
+	function array_first_value(&$array)
+	{
+		if (is_array($array) == false)
+			return $array;
+
+		if (count($array) == 0 )
+			return null;
+
+		reset($array);
+		return $array[key($array)];
+	}
+
+	function array_last_value(&$array)
+	{
+		if (is_array($array) == false)
+			return $array;
+
+		if (count($array) == 0 )
+			return null;
+
+		end($array);
+		return $array[key($array)];
+	}
+
+	function array_first_key(&$array)
+	{
+		if (is_array($array) == false)
+			return $array;
+
+		if (count($array) == 0 )
+			return null;
+
+		reset($array);
+		return key($array);
+	}
+
+	function array_last_key(&$array)
+	{
+		if (is_array($array) == false)
+			return $array;
+
+		if (count($array) == 0 )
+			return null;
+
+		end($array);
+		return key($array);
+	}
 
 	function array_recursive_ksort(&$array)
 	{
