@@ -6,6 +6,8 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 
@@ -106,7 +108,7 @@ Pull_List_Item::id, Pull_List_Item::group_name, Pull_List_Item::data, Pull_List_
 				Pull_List_Item::year => $year,
 			);
 
-			if ( isset($pull_list)  && is_a($pull_list, DataObject)) {
+			if ( isset($pull_list)  && is_subclass_of($pull_list, 'DataObject')) {
 				$params[Pull_List_Item::pull_list_id] = $pull_list->id;
 			}
 

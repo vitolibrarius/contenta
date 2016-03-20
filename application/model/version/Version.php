@@ -6,6 +6,8 @@ namespace model\version;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use model\version\VersionDBO as VersionDBO;
 
@@ -60,7 +62,7 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 
 	public function allLikeCode($value)
 	{
-		return \SQL::Select( $this )
+		return SQL::Select( $this )
 			->where( Qualifier::Like( Version::code, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
 			->limit( 50 )
@@ -114,6 +116,23 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 		}
 
 		return false;
+	}
+
+	public function latestVersion(  )
+	{
+		$select = SQL::Select( $this );
+		$qualifiers = array();
+		$qualifiers[] = Qualifier::InSubQuery( 'code', SQL::Aggregate( 'max', Model::Named('Version'), 'code', null, null ), null);
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
+		}
+
+		$result = $select->fetchAll();
+		if ( is_array($result) && count($result) > 1 ) {
+			throw new \Exception( latestVersion . " expected 1 result, but fetched " . count($result) );
+		}
+
+		return (is_array($result) ? $result[0] : false );
 	}
 
 }

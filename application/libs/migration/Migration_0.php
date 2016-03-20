@@ -8,8 +8,8 @@ use \Config as Config;
 use \Logger as Logger;
 use \SQL as SQL;
 
-use model\Version as Version;
-use model\Patch as Patch;
+use model\version\Version as Version;
+use model\version\Patch as Patch;
 
 
 class Migration_0 extends Migrator
@@ -42,6 +42,13 @@ class Migration_0 extends Migrator
 				. ")";
 		$this->sqlite_execute( Version::TABLE, $sql, "Create table " . Version::TABLE );
 
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS version_code on version (code)';
+		$this->sqlite_execute( "version", $sql, "Index on version (code)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS version_hash_code on version (hash_code)';
+		$this->sqlite_execute( "version", $sql, "Index on version (hash_code)" );
+		$sql = 'CREATE  INDEX IF NOT EXISTS version_majorminorpatch on version (major,minor,patch)';
+		$this->sqlite_execute( "version", $sql, "Index on version (major,minor,patch)" );
+
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . Patch::TABLE . " ( "
 				. Patch::id . " INTEGER PRIMARY KEY, "
 				. Patch::name . " TEXT COLLATE NOCASE, "
@@ -50,6 +57,9 @@ class Migration_0 extends Migrator
 				. "FOREIGN KEY (". Patch::version_id .") REFERENCES " . Version::TABLE ." ( ".Version::id." )"
 				. ")";
 		$this->sqlite_execute( Patch::TABLE, $sql, "Create table " . Patch::TABLE );
+
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS patch_name on patch (name)';
+		$this->sqlite_execute( "patch", $sql, "Index on patch (name)" );
 
 		return true;
 	}

@@ -6,6 +6,8 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use model\pull_list\Pull_ListDBO as Pull_ListDBO;
 
@@ -56,7 +58,7 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 
 	public function allLikeName($value)
 	{
-		return \SQL::Select( $this )
+		return SQL::Select( $this )
 			->where( Qualifier::Like( Pull_List::name, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
 			->limit( 50 )
@@ -98,7 +100,7 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 				Pull_List::published => $published,
 			);
 
-			if ( isset($endpoint)  && is_a($endpoint, DataObject)) {
+			if ( isset($endpoint)  && is_subclass_of($endpoint, 'DataObject')) {
 				$params[Pull_List::endpoint_id] = $endpoint->id;
 			}
 

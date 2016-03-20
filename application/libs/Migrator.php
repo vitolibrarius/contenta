@@ -3,10 +3,10 @@
 class MigrationFailedException extends \Exception {}
 
 use \SQL as SQL;
-use model\Version as Version;
-use model\VersionDBO as VersionDBO;
-use model\Patch as Patch;
-use model\PatchDBO as PatchDBO;
+use model\version\Version as Version;
+use model\version\VersionDBO as VersionDBO;
+use model\version\Patch as Patch;
+use model\version\PatchDBO as PatchDBO;
 
 class Migrator
 {
@@ -42,6 +42,7 @@ class Migrator
 			}
 		}
 
+
 		$number = 0;
 		$continue = true;
 		while ( $continue == true ) {
@@ -51,7 +52,17 @@ class Migrator
 					$worker = new $migrationClass($scratchDirectory);
 					$continue = $worker->performMigration();
 					if ( $continue == true ) {
-						$version = $version_model->create($versionNum, $versionHash);
+						$version = $version_model->objectForCode( $versionNum );
+						if ( $version == false ) {
+							$vers = explode(".", $versionNum );
+							$version = $version_model->create(
+								$versionNum,
+								(isset($vers[0]) ? intval($vers[0]) : 0),
+								(isset($vers[1]) ? intval($vers[1]) : 0),
+								(isset($vers[2]) ? intval($vers[2]) : 0),
+								$versionHash
+							);
+						}
 						if ( ($version instanceof VersionDBO ) == false) {
 							throw new MigrationFailedException("Failed to create version record " . var_export($version, true));
 						}
@@ -70,7 +81,17 @@ class Migrator
 					$continue = false;
 
 					// ensure the version is created, even if the patches are already completed in previous versions
-					$version = $version_model->create($versionNum, $versionHash);
+					$version = $version_model->objectForCode( $versionNum );
+					if ( $version == false ) {
+						$vers = explode(".", $versionNum );
+						$version = $version_model->create(
+							$versionNum,
+							(isset($vers[0]) ? intval($vers[0]) : 0),
+							(isset($vers[1]) ? intval($vers[1]) : 0),
+							(isset($vers[2]) ? intval($vers[2]) : 0),
+							$versionHash
+						);
+					}
 				}
 				else {
 					// something else?
@@ -79,6 +100,10 @@ class Migrator
 				break;
 			}
 		}
+
+		$version = $version_model->latestVersion( );
+		var_dump($version);
+
 	}
 
 	public function __construct($scratchDirectory)

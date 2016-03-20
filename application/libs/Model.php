@@ -40,14 +40,26 @@ abstract class Model
 			Model::$_named_models = array();
 		}
 
+		$parts = explode('\\', $name);
+		$name = array_pop($parts);
+		// converts table names like "log_level" to "Log_Level" to match the classname
+		$parts = explode("_", $name);
+		$parts = array_map('ucfirst', $parts);
+		$name = implode("_", $parts);
+		$className = "model\\" . $name;
+
 		if ( isset(Model::$_named_models[$name]) ) {
 			return Model::$_named_models[$name];
 		}
 
-		// converts table names like "log_level" to "Log_Level" to match the classname
-		$parts = explode("_", $name);
-		$parts = array_map('ucfirst', $parts);
-		$className = "model\\" . implode("_", $parts);
+		$path = find_entry_with_name( appendPath( APPLICATION_PATH, "model"), $name . ".php" );
+		if ( is_null($path) == false ) {
+			$package = basename(dirname($path));
+			if ( $package != "model" ) {
+				$className = "model\\" . $package . "\\" . $name;
+			}
+		}
+
 		$model = new $className();
 		Model::$_named_models[$name] = $model;
 

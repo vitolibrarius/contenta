@@ -10,12 +10,23 @@ class DataObject
 {
 	public $id;
 
-	public static function NameForTable( $table_name = null)
+	public static function NameForTable( $name = null)
 	{
-		if ( is_null($table_name) == false) {
-			$parts = explode("_", $table_name);
+		if ( is_null($name) == false) {
+			$parts = explode("_", $name);
 			$parts = array_map('ucfirst', $parts);
-			return 'model\\' . implode("_", $parts) . 'DBO';
+			$name = implode("_", $parts) . 'DBO';
+			$className = "model\\" . $name;
+
+			$path = find_entry_with_name( appendPath( APPLICATION_PATH, "model"), $name . ".php" );
+			if ( is_null($path) == false ) {
+				$package = basename(dirname($path));
+				if ( $package != "model" ) {
+					$className = "model\\" . $package . "\\" . $name;
+				}
+			}
+
+			return $className;
 		}
 		return null;
 	}

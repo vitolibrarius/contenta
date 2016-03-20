@@ -6,6 +6,8 @@ namespace model\version;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use model\version\PatchDBO as PatchDBO;
 
@@ -52,7 +54,7 @@ Patch::id, Patch::name, Patch::created, Patch::version_id, 		 );
 
 	public function allLikeName($value)
 	{
-		return \SQL::Select( $this )
+		return SQL::Select( $this )
 			->where( Qualifier::Like( Patch::name, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
 			->limit( 50 )
@@ -87,7 +89,7 @@ Patch::id, Patch::name, Patch::created, Patch::version_id, 		 );
 				Patch::created => time(),
 			);
 
-			if ( isset($version)  && is_a($version, DataObject)) {
+			if ( isset($version)  && is_subclass_of($version, 'DataObject')) {
 				$params[Patch::version_id] = $version->id;
 			}
 

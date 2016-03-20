@@ -6,6 +6,8 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 
@@ -85,7 +87,7 @@ Pull_List_Exclusion::id, Pull_List_Exclusion::pattern, Pull_List_Exclusion::type
 				Pull_List_Exclusion::created => time(),
 			);
 
-			if ( isset($endpoint)  && is_a($endpoint, DataObject)) {
+			if ( isset($endpoint)  && is_subclass_of($endpoint, 'DataObject')) {
 				$params[Pull_List_Exclusion::endpoint_id] = $endpoint->id;
 			}
 

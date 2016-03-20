@@ -30,5 +30,22 @@
     "package": "version",
     "model": "Version",
     "dbo": "VersionDBO",
-	"sort" : [ "code" ]
+	"sort" : [ "code" ],
+	"fetches" : {
+		"latestVersion": {
+			"maxCount" : 1,
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "InSubQuery",
+					"keyAttribute": "code",
+					"subQuery": {
+						"type": "Aggregate",
+						"function": "max",
+						"keyAttribute": "code"
+					}
+				}
+			]
+		}
+	}
 }

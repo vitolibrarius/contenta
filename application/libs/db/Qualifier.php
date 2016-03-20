@@ -100,6 +100,18 @@ abstract class Qualifier extends SQL
 		return new InSubQueryQualifier( $attribute, $subQuery, $prefix );
 	}
 
+	public static function Combine( $type = "AND", array $qualifiers )
+	{
+		if ( is_array($qualifiers) == false || count( $qualifiers ) == 0) {
+			throw new \Exception( "Combine requires sub-qualifiers" );
+		}
+		if ( count( $qualifiers ) == 1 ) {
+			return array_pop($qualifiers);
+		}
+
+		return ($type == "AND" ? new AndQualifier( $qualifiers ) : new OrQualifier( $qualifiers ));
+	}
+
 	public static function AndQualifier()
 	{
 		$qualifiers = array_flatten( func_get_args(), 'db\Qualifier' );

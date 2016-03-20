@@ -47,20 +47,30 @@ abstract class SQL
 		return $prefix;
 	}
 
-	public static function Sum( Model $model, array $columns = null, db\Qualifier $qualifier = null, array $order = null )
+	public static function Sum( Model $model, $target, array $columns = null, db\Qualifier $qualifier = null, array $order = null )
 	{
-		return \SQL::Aggregate( "sum", $model, $columns, $qualifier, $order);
+		return \SQL::Aggregate( "sum", $model, $target, $columns, $qualifier, $order);
 	}
 
 	public static function Count( Model $model, array $columns = null, db\Qualifier $qualifier = null, array $order = null )
 	{
-		return \SQL::Aggregate( "count", $model, $columns, $qualifier, $order);
+		return \SQL::Aggregate( "count", $model, $model->tablePK(), $columns, $qualifier, $order);
 	}
 
-	public static function Aggregate( $aggregate, Model $model, array $columns = null, db\Qualifier $qualifier = null, array $order = null )
+	public static function Maximum( Model $model, $target, array $columns = null, db\Qualifier $qualifier = null, array $order = null )
+	{
+		return \SQL::Aggregate( "max", $model, $target, $columns, $qualifier, $order);
+	}
+
+	public static function Minimum( Model $model, $target, array $columns = null, db\Qualifier $qualifier = null, array $order = null )
+	{
+		return \SQL::Aggregate( "min", $model, $target, $columns, $qualifier, $order);
+	}
+
+	public static function Aggregate( $aggregate, Model $model, $target = '*', array $columns = null, db\Qualifier $qualifier = null, array $order = null )
 	{
 		$groupBy = false;
-		$newColumns = array( $aggregate . "(*) as " . $aggregate );
+		$newColumns = array( $aggregate . "(" . $target . ") as " . $aggregate );
 		if ( is_array($columns) && count($columns) > 0 ) {
 			$newColumns = array_merge($newColumns, $columns);
 			$groupBy = true;

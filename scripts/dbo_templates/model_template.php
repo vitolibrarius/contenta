@@ -8,6 +8,8 @@ namespace <?php echo $this->packageName(); ?>;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassName(); ?>;
 
@@ -106,7 +108,7 @@ foreach( $attributeList as $name => $detailArray ) {
 <?php if (isset($detailArray['partialSearch']) && $detailArray['partialSearch'] == true) : ?>
 	public function allLike<?php echo ucwords($name); ?>($value)
 	{
-		return \SQL::Select( $this )
+		return SQL::Select( $this )
 			->where( Qualifier::Like( <?php echo $this->modelClassName() . "::" . $name; ?>, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
 			->limit( 50 )
@@ -177,7 +179,7 @@ foreach( $attributeList as $name => $detailArray ) {
 <?php foreach( $this->mandatoryObjectRelations() as $name => $detailArray ) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>
-			if ( isset($<?php echo $name; ?>)  && is_a($<?php echo $name; ?>, DataObject)) {
+			if ( isset($<?php echo $name; ?>)  && is_subclass_of($<?php echo $name; ?>, 'DataObject')) {
 				$params[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $<?php echo $name; ?>->id;
 			}
 <?php endif; // one join ?>
@@ -215,4 +217,32 @@ foreach( $attributeList as $name => $detailArray ) {
 		return false;
 	}
 
+<?php foreach( $this->namedFetches() as $name => $details ) : ?>
+	public function <?php echo $name; ?>( <?php echo (isset($details["arguments"]) ?
+		implode(', ', array_map(function($item) { return '$' . $item; }, $details["arguments"])) : "" ); ?> )
+	{
+		$select = SQL::Select( $this );
+<?php if (isset($details['qualifiers']) && is_array($details['qualifiers'])) : ?>
+		$qualifiers = array();
+<?php foreach( $details['qualifiers'] as $qualDetail ) : ?>
+		$qualifiers[] = <?php echo $this->qualifierString($qualDetail); ?>;
+<?php endforeach; ?>
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( '<?php echo (isset($details["semantic"]) ? $details["semantic"] : "AND"); ?>', $qualifiers ));
+		}
+<?php endif; // qualifiers ?>
+
+		$result = $select->fetchAll();
+<?php if (isset($details["maxCount"]) && $details["maxCount"] == 1) : ?>
+		if ( is_array($result) && count($result) > 1 ) {
+			throw new \Exception( <?php echo $name; ?> . " expected 1 result, but fetched " . count($result) );
+		}
+
+		return (is_array($result) ? $result[0] : false );
+<?php else : ?>
+		return $result;
+<?php endif; // maxResults ?>
+	}
+
+<?php endforeach; // named fetches ?>
 }

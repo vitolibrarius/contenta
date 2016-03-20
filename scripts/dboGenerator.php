@@ -211,6 +211,80 @@ class Template
     	return null;
     }
 
+    public function namedFetches() {
+    	$fetches = $this->fetches;
+		return (is_array($fetches) ? $fetches : array());
+    }
+
+/**
+				{
+					"type" : "InSubQuery",
+					"keyAttribute": "code",
+					"subQuery": {
+						"model": ModelName,
+						"type": "Aggregate",
+						"function": "max",
+						"keyAttribute": "code"
+					}
+				}
+*/
+	public function sqlString( $sqlDetails )
+	{
+		$sqlPHPString = "";
+		$type = (isset($sqlDetails['type']) ? $sqlDetails['type'] : "");
+		$key = (isset($sqlDetails['keyAttribute']) ? $sqlDetails['keyAttribute'] : null);
+		switch( $type ) {
+			case "Aggregate":
+				$function = (isset($sqlDetails['function']) ? $sqlDetails['function'] : null);
+				$modelName = (isset($sqlDetails['model']) ? $sqlDetails['model'] : $this->modelClassName());
+				$qualifiers = (isset($sqlDetails['qualifiers']) ? $sqlDetails['qualifiers'] : array());
+				$qualString = "null";
+				if ( is_array($qualifiers) && count($qualifiers) > 0 ) {
+					if ( count($qualifiers) == 1 ) {
+						$qualString = $this->qualifierString( array_pop($qualifiers) );
+					}
+					else {
+						$semantic = (isset($sqlDetails["semantic"]) ? $sqlDetails["semantic"] : "AND");
+						$qualString = "Qualifier::Combine( '" . $semantic . "', array( "
+							. implode(',\n\t\t', array_map(function($item) { return $this->qualifierString( $item ); }, $qualifiers))
+							. " )";
+					}
+				}
+
+				$sqlPHPString = "SQL::Aggregate( '" . $function . "', Model::Named('" . $modelName . "'), "
+					. "'" . $key . "', " . $qualString . ", null )";
+				break;
+			default:
+				throw new \Exception( "Malformed qualfier details " . var_export($sqlDetails, true));
+		}
+		return $sqlPHPString;
+	}
+
+	public function qualifierString( $qualDetails )
+	{
+		$qualPHPString = "";
+		$type = (isset($qualDetails['type']) ? $qualDetails['type'] : "");
+		$key = (isset($qualDetails['keyAttribute']) ? $qualDetails['keyAttribute'] : null);
+		switch( $type ) {
+			case "InSubQuery":
+				$subDetails = (isset($qualDetails['subQuery']) ? $qualDetails['subQuery'] : array());
+				if ( count($subDetails) == 0 ) {
+					throw new \Exception( "Malformed qualfier missing subquery " . var_export($qualDetails, true));
+				}
+				$subDetailsPHPString = $this->sqlString( $subDetails );
+
+				if ( is_null($key) ) {
+					throw new \Exception( "Malformed qualfier missing key attribute " . var_export($qualDetails, true));
+				}
+
+				$qualPHPString = "Qualifier::InSubQuery( '" . $key . "', " . $subDetailsPHPString. ", null)";
+				break;
+			default:
+				throw new \Exception( "Malformed qualfier details " . var_export($qualDetails, true));
+		}
+		return $qualPHPString;
+	}
+
     public function tableName() {
     	return (isset($this->model['table']) ? $this->model['table'] : null);
     }

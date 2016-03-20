@@ -6,6 +6,8 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
@@ -85,7 +87,7 @@ Pull_List_Expansion::id, Pull_List_Expansion::pattern, Pull_List_Expansion::repl
 				Pull_List_Expansion::created => time(),
 			);
 
-			if ( isset($endpoint)  && is_a($endpoint, DataObject)) {
+			if ( isset($endpoint)  && is_subclass_of($endpoint, 'DataObject')) {
 				$params[Pull_List_Expansion::endpoint_id] = $endpoint->id;
 			}
 
