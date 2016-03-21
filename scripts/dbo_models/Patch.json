@@ -7,7 +7,7 @@
     },
     "relationships" :{
     	"version" : {
-    		"destination" : "model\\version\\Version",
+    		"destination" : "Version",
     		"destinationTable" : "version",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "version_id" }

@@ -31,7 +31,7 @@ class Pull_List_ItemDBO extends DataObject
 	public function pull_list()
 	{
 		if ( isset( $this->pull_list_id ) ) {
-			$model = Model::Named('model\pull_list\Pull_List');
+			$model = Model::Named('Pull_List');
 			return $model->objectForId($this->pull_list_id);
 		}
 		return false;

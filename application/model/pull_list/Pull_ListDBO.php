@@ -31,7 +31,7 @@ class Pull_ListDBO extends DataObject
 	public function endpoint()
 	{
 		if ( isset( $this->endpoint_id ) ) {
-			$model = Model::Named('model\Endpoint');
+			$model = Model::Named('Endpoint');
 			return $model->objectForId($this->endpoint_id);
 		}
 		return false;
@@ -41,8 +41,8 @@ class Pull_ListDBO extends DataObject
 	public function pull_list_items()
 	{
 		if ( isset( $this->id ) ) {
-			$model = Model::Named('model\pull_list\Pull_List_Item');
-			return $model->allObjectsForKeyValue( model\pull_list\Pull_List_Item::pull_list_id, $this->id);
+			$model = Model::Named('Pull_List_Item');
+			return $model->allObjectsForKeyValue( Pull_List_Item::pull_list_id, $this->id);
 		}
 
 		return false;
@@ -52,8 +52,8 @@ class Pull_ListDBO extends DataObject
 	public function exclusions()
 	{
 		if ( isset( $this->endpoint_id ) ) {
-			$model = Model::Named('model\pull_list\Pull_List_Exclusion');
-			return $model->allObjectsForKeyValue( model\pull_list\Pull_List_Exclusion::endpoint_id, $this->endpoint_id);
+			$model = Model::Named('Pull_List_Exclusion');
+			return $model->allObjectsForKeyValue( Pull_List_Exclusion::endpoint_id, $this->endpoint_id);
 		}
 
 		return false;
@@ -63,8 +63,8 @@ class Pull_ListDBO extends DataObject
 	public function expansions()
 	{
 		if ( isset( $this->endpoint_id ) ) {
-			$model = Model::Named('model\pull_list\Pull_List_Expansion');
-			return $model->allObjectsForKeyValue( model\pull_list\Pull_List_Expansion::endpoint_id, $this->endpoint_id);
+			$model = Model::Named('Pull_List_Expansion');
+			return $model->allObjectsForKeyValue( Pull_List_Expansion::endpoint_id, $this->endpoint_id);
 		}
 
 		return false;

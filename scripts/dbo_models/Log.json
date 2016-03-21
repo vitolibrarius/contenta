@@ -1,0 +1,96 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id",	"type": "INTEGER" },
+        "trace": { "column": "trace",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "trace_id": { "column": "trace_id",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "context": { "column": "context",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "context_id": { "column": "context_id",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "message": { "column": "message",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "session": { "column": "session",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "default": "session_id()" },
+        "level": { "column": "level",	"type": "TEXT", "default": "'warning'" },
+        "created": { "column": "created", "type": "DATE" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "log",
+    "package": "logs",
+    "model": "Log",
+    "dbo": "LogDBO",
+	"sort" : [ "created" ],
+    "relationships" :{
+    	"logLevel" : {
+    		"destination" : "Log_Level",
+    		"destinationTable" : "log_level",
+    		"joins" : [
+    			{ "destinationAttribute": "code", "sourceAttribute" : "level" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	}
+    },
+    "indexes" : [
+    	{ "columns": ["etag"], "unique": true }
+    ],
+	"fetches" : {
+		"messagesSince": {
+			"arguments": [ "sessionId", "lastCheck" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Equals",
+					"keyAttribute": "session",
+					"argAttribute": "sessionId",
+					"optional": true
+				},
+				{
+					"type" : "GreaterThan",
+					"keyAttribute": "created",
+					"argAttribute": "lastCheck",
+					"optional": true
+				}
+			]
+		},
+		"mostRecentLike": {
+			"arguments": [ "trace", "trace_id", "context", "context_id", "levelCode", "message" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Like",
+					"keyAttribute": "trace",
+					"argAttribute": "trace",
+					"optional": true
+				},
+				{
+					"type" : "Like",
+					"keyAttribute": "trace_id",
+					"argAttribute": "trace_id",
+					"optional": true
+				},
+				{
+					"type" : "Like",
+					"keyAttribute": "context",
+					"argAttribute": "context",
+					"optional": true
+				},
+				{
+					"type" : "Like",
+					"keyAttribute": "context_id",
+					"argAttribute": "context_id",
+					"optional": true
+				},
+				{
+					"type" : "Like",
+					"keyAttribute": "message",
+					"argAttribute": "message",
+					"optional": true
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "level",
+					"argAttribute": "levelCode",
+					"optional": true
+				}
+			]
+		}
+	}
+}

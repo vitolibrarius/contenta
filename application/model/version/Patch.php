@@ -19,7 +19,7 @@ use model\version\PatchDBO as PatchDBO;
 			. model\version\Patch::created . " INTEGER, "
 			. model\version\Patch::version_id . " INTEGER, "
 			. "FOREIGN KEY (". model\version\Patch::version_id .")"
-				. " REFERENCES " . model\version\Version::TABLE . "(" . model\version\Version::id . ")"
+				. " REFERENCES " . Version::TABLE . "(" . Version::id . ")"
 			. ")";
 		$this->sqlite_execute( "patch", $sql, "Create table patch" );
 
@@ -85,7 +85,7 @@ Patch::id, Patch::name, Patch::created, Patch::version_id, 		 );
 		$obj = false;
 		if ( isset($version, $name) ) {
 			$params = array(
-				Patch::name => $name,
+				Patch::name => (isset($name) ? $name : ''),
 				Patch::created => time(),
 			);
 
@@ -101,7 +101,7 @@ Patch::id, Patch::name, Patch::created, Patch::version_id, 		 );
 		return $obj;
 	}
 
-	public function deleteObject( \DataObject $object = null)
+	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Patch )
 		{

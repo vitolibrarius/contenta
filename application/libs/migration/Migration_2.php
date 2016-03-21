@@ -10,8 +10,8 @@ use \Model as Model;
 use \SQL as SQL;
 
 use model\Users as Users;
-use model\Log_Level as Log_Level;
-use model\Log as Log;
+use model\logs\Log_Level as Log_Level;
+use model\logs\Log as Log;
 
 
 class Migration_2 extends Migrator
@@ -70,7 +70,7 @@ class Migration_2 extends Migrator
 			'fatal' => 'FATAL'
 		);
 		foreach ($log_levels as $code => $name) {
-			if ($log_level_model->logLevelForCode($code) == false)
+			if ($log_level_model->objectForCode($code) == false)
 			{
 				$insert = SQL::Insert( $log_level_model );
 				$insert->addRecord( array(

@@ -26,8 +26,8 @@ class VersionDBO extends DataObject
 	public function patches()
 	{
 		if ( isset( $this->id ) ) {
-			$model = Model::Named('model\version\Patch');
-			return $model->allObjectsForKeyValue( model\version\Patch::version_id, $this->id);
+			$model = Model::Named('Patch');
+			return $model->allObjectsForKeyValue( Patch::version_id, $this->id);
 		}
 
 		return false;

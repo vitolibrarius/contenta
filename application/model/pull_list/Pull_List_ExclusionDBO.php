@@ -24,7 +24,7 @@ class Pull_List_ExclusionDBO extends DataObject
 	public function endpoint()
 	{
 		if ( isset( $this->endpoint_id ) ) {
-			$model = Model::Named('model\Endpoint');
+			$model = Model::Named('Endpoint');
 			return $model->objectForId($this->endpoint_id);
 		}
 		return false;

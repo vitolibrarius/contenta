@@ -9,7 +9,7 @@
     },
     "relationships" :{
     	"endpoint" : {
-    		"destination" : "model\\Endpoint",
+    		"destination" : "Endpoint",
     		"destinationTable" : "endpoint",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_id" }
@@ -19,7 +19,7 @@
             "ownsDestination" : false
     	},
     	"pull_list_items" : {
-    		"destination" : "model\\pull_list\\Pull_List_Item",
+    		"destination" : "Pull_List_Item",
 			"destinationTable" : "pull_list_item",
     		"joins" : [
     			{ "destinationAttribute": "pull_list_id", "sourceAttribute" : "id" }
@@ -29,7 +29,7 @@
             "ownsDestination" : true
     	},
     	"exclusions" : {
-    		"destination" : "model\\pull_list\\Pull_List_Exclusion",
+    		"destination" : "Pull_List_Exclusion",
     		"destinationTable" : "pull_list_exclusion",
     		"joins" : [
     			{ "destinationAttribute": "endpoint_id", "sourceAttribute" : "endpoint_id" }
@@ -39,7 +39,7 @@
             "ownsDestination" : false
     	},
     	"expansions" : {
-    		"destination" : "model\\pull_list\\Pull_List_Expansion",
+    		"destination" : "Pull_List_Expansion",
     		"destinationTable" : "pull_list_expansion",
     		"joins" : [
     			{ "destinationAttribute": "endpoint_id", "sourceAttribute" : "endpoint_id" }

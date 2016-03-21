@@ -10,7 +10,7 @@
     },
     "relationships" :{
     	"patches" : {
-    		"destination" : "model\\version\\Patch",
+    		"destination" : "Patch",
     		"destinationTable" : "patch",
     		"joins" : [
     			{ "destinationAttribute": "version_id", "sourceAttribute" : "id" }

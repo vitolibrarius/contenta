@@ -20,7 +20,7 @@ use model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 			. model\pull_list\Pull_List_Exclusion::created . " INTEGER, "
 			. model\pull_list\Pull_List_Exclusion::endpoint_id . " INTEGER, "
 			. "FOREIGN KEY (". model\pull_list\Pull_List_Exclusion::endpoint_id .")"
-				. " REFERENCES " . model\Endpoint::TABLE . "(" . model\Endpoint::id . ")"
+				. " REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
 			. ")";
 		$this->sqlite_execute( "pull_list_excl", $sql, "Create table pull_list_excl" );
 
@@ -82,8 +82,8 @@ Pull_List_Exclusion::id, Pull_List_Exclusion::pattern, Pull_List_Exclusion::type
 		$obj = false;
 		if ( isset($endpoint, $pattern) ) {
 			$params = array(
-				Pull_List_Exclusion::pattern => $pattern,
-				Pull_List_Exclusion::type => $type,
+				Pull_List_Exclusion::pattern => (isset($pattern) ? $pattern : ''),
+				Pull_List_Exclusion::type => (isset($type) ? $type : 'item'),
 				Pull_List_Exclusion::created => time(),
 			);
 
@@ -99,7 +99,7 @@ Pull_List_Exclusion::id, Pull_List_Exclusion::pattern, Pull_List_Exclusion::type
 		return $obj;
 	}
 
-	public function deleteObject( \DataObject $object = null)
+	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Pull_List_Exclusion )
 		{

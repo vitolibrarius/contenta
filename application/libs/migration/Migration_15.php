@@ -35,7 +35,7 @@ use model\Job as Job;
 use model\Job_Type as Job_Type;
 use model\Job_Running as Job_Running;
 use model\Flux as Flux;
-use model\Log as Log;
+use model\logs\Log as Log;
 
 
 class Migration_15 extends Migrator

@@ -136,6 +136,9 @@ class Template
 
     public function defaultCreationValue( $attr = '' ) {
     	$details = $this->detailsForAttribute($attr);
+    	if (isset($details['default']) ) {
+    		return $details['default'];
+    	}
     	if ( is_array($details) && isset($details['type']) ) {
     		switch ($details['type']) {
     			case 'BOOLEAN': return "Model::TERTIARY_TRUE";
@@ -265,6 +268,8 @@ class Template
 		$qualPHPString = "";
 		$type = (isset($qualDetails['type']) ? $qualDetails['type'] : "");
 		$key = (isset($qualDetails['keyAttribute']) ? $qualDetails['keyAttribute'] : null);
+		$arg = (isset($qualDetails['argAttribute']) ? $qualDetails['argAttribute'] : null);
+
 		switch( $type ) {
 			case "InSubQuery":
 				$subDetails = (isset($qualDetails['subQuery']) ? $qualDetails['subQuery'] : array());
@@ -279,6 +284,39 @@ class Template
 
 				$qualPHPString = "Qualifier::InSubQuery( '" . $key . "', " . $subDetailsPHPString. ", null)";
 				break;
+			case "Equals":
+			case "GreaterThanEquals":
+			case "GreaterThan":
+			case "LessThanEquals":
+			case "LessThan":
+				if ( is_null($key) ) {
+					throw new \Exception( "Malformed qualfier missing key attribute " . var_export($qualDetails, true));
+				}
+				if ( is_null($arg) ) {
+					throw new \Exception( "Malformed qualfier missing arg attribute " . var_export($qualDetails, true));
+				}
+				$qualPHPString = "Qualifier::" . $type . "( '" . $key . "', $" . $arg . ")";
+				break;
+
+			case "Like":
+				if ( is_null($key) ) {
+					throw new \Exception( "Malformed qualfier missing key attribute " . var_export($qualDetails, true));
+				}
+				if ( is_null($arg) ) {
+					throw new \Exception( "Malformed qualfier missing arg attribute " . var_export($qualDetails, true));
+				}
+				$wild = "SQL::SQL_LIKE_AFTER";
+				if (isset($qualDetails['wildcard'])) {
+					if ( strtolower($qualDetails['wildcard']) == "before" ) {
+						$wild = "SQL::SQL_LIKE_BEFORE";
+					}
+					else if ( strtolower($qualDetails['wildcard']) == "both" ) {
+						$wild = "SQL::SQL_LIKE_BOTH";
+					}
+				}
+				$qualPHPString = "Qualifier::Like( '" . $key . "', $" . $arg . ", '" . $wild . "')";
+				break;
+
 			default:
 				throw new \Exception( "Malformed qualfier details " . var_export($qualDetails, true));
 		}

@@ -17,7 +17,7 @@
 	"sort" : [ "group", "name", "issue" ],
     "relationships" :{
     	"pull_list" : {
-    		"destination" : "model\\pull_list\\Pull_List",
+    		"destination" : "Pull_List",
     		"destinationTable" : "pull_list",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "pull_list_id" }

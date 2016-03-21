@@ -53,7 +53,7 @@ foreach( $this->attributes as $name => $detailArray ) {
 <?php if (count($joins) == 1) : ?><?php $join = $joins[0]; ?>
 		if ( isset( $this-><?php echo $join["sourceAttribute"]; ?> ) ) {
 			$model = Model::Named('<?php echo $detailArray["destination"]; ?>');
-			return $model->objectForId($this-><?php echo $join["sourceAttribute"]; ?>);
+			return $model->objectFor<?php echo ucwords($join["destinationAttribute"]); ?>($this-><?php echo $join["sourceAttribute"]; ?>);
 		}
 <?php else : ?>
 			FixMe: relationship <?php echo $name; ?> has multiple joins

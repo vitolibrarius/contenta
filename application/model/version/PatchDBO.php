@@ -27,7 +27,7 @@ class PatchDBO extends DataObject
 	public function version()
 	{
 		if ( isset( $this->version_id ) ) {
-			$model = Model::Named('model\version\Version');
+			$model = Model::Named('Version');
 			return $model->objectForId($this->version_id);
 		}
 		return false;

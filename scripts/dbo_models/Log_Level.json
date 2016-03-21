@@ -1,0 +1,19 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id",	"type": "INTEGER" },
+        "code": { "column": "code",	"type": "TEXT", "nullable": false },
+        "name": { "column": "name",	"type": "TEXT" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "log_level",
+    "package": "logs",
+    "model": "Log_Level",
+    "dbo": "Log_LevelDBO",
+	"sort" : [ "name" ],
+    "relationships" :{
+    },
+    "indexes" : [
+    	{ "columns": ["code"], "unique": true },
+    	{ "columns": ["name"], "unique": true }
+    ]
+}

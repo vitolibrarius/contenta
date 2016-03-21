@@ -23,7 +23,7 @@ use model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 			. model\pull_list\Pull_List_Item::year . " INTEGER, "
 			. model\pull_list\Pull_List_Item::pull_list_id . " INTEGER, "
 			. "FOREIGN KEY (". model\pull_list\Pull_List_Item::pull_list_id .")"
-				. " REFERENCES " . model\pull_list\Pull_List::TABLE . "(" . model\pull_list\Pull_List::id . ")"
+				. " REFERENCES " . Pull_List::TABLE . "(" . Pull_List::id . ")"
 			. ")";
 		$this->sqlite_execute( "pull_list_item", $sql, "Create table pull_list_item" );
 
@@ -100,12 +100,12 @@ Pull_List_Item::id, Pull_List_Item::group_name, Pull_List_Item::data, Pull_List_
 		$obj = false;
 		if ( isset($pull_list, $data, $name) ) {
 			$params = array(
-				Pull_List_Item::group_name => $group_name,
-				Pull_List_Item::data => $data,
+				Pull_List_Item::group_name => (isset($group_name) ? $group_name : ''),
+				Pull_List_Item::data => (isset($data) ? $data : ''),
 				Pull_List_Item::created => time(),
-				Pull_List_Item::name => $name,
-				Pull_List_Item::issue => $issue,
-				Pull_List_Item::year => $year,
+				Pull_List_Item::name => (isset($name) ? $name : ''),
+				Pull_List_Item::issue => (isset($issue) ? $issue : ''),
+				Pull_List_Item::year => (isset($year) ? $year : null),
 			);
 
 			if ( isset($pull_list)  && is_subclass_of($pull_list, 'DataObject')) {
@@ -120,7 +120,7 @@ Pull_List_Item::id, Pull_List_Item::group_name, Pull_List_Item::data, Pull_List_
 		return $obj;
 	}
 
-	public function deleteObject( \DataObject $object = null)
+	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Pull_List_Item )
 		{

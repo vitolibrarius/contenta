@@ -91,12 +91,12 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 		$obj = false;
 		if ( isset($code, $hash_code) ) {
 			$params = array(
-				Version::code => $code,
-				Version::major => $major,
-				Version::minor => $minor,
-				Version::patch => $patch,
+				Version::code => (isset($code) ? $code : ''),
+				Version::major => (isset($major) ? $major : null),
+				Version::minor => (isset($minor) ? $minor : null),
+				Version::patch => (isset($patch) ? $patch : null),
 				Version::created => time(),
-				Version::hash_code => $hash_code,
+				Version::hash_code => (isset($hash_code) ? $hash_code : ''),
 			);
 
 
@@ -108,7 +108,7 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 		return $obj;
 	}
 
-	public function deleteObject( \DataObject $object = null)
+	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Version )
 		{
@@ -123,6 +123,7 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 		$select = SQL::Select( $this );
 		$qualifiers = array();
 		$qualifiers[] = Qualifier::InSubQuery( 'code', SQL::Aggregate( 'max', Model::Named('Version'), 'code', null, null ), null);
+
 		if ( count($qualifiers) > 0 ) {
 			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
 		}

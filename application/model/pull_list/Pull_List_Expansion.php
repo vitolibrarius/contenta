@@ -20,7 +20,7 @@ use model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 			. model\pull_list\Pull_List_Expansion::created . " INTEGER, "
 			. model\pull_list\Pull_List_Expansion::endpoint_id . " INTEGER, "
 			. "FOREIGN KEY (". model\pull_list\Pull_List_Expansion::endpoint_id .")"
-				. " REFERENCES " . model\Endpoint::TABLE . "(" . model\Endpoint::id . ")"
+				. " REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
 			. ")";
 		$this->sqlite_execute( "pull_list_expansion", $sql, "Create table pull_list_expansion" );
 
@@ -82,8 +82,8 @@ Pull_List_Expansion::id, Pull_List_Expansion::pattern, Pull_List_Expansion::repl
 		$obj = false;
 		if ( isset($endpoint, $pattern) ) {
 			$params = array(
-				Pull_List_Expansion::pattern => $pattern,
-				Pull_List_Expansion::replace => $replace,
+				Pull_List_Expansion::pattern => (isset($pattern) ? $pattern : ''),
+				Pull_List_Expansion::replace => (isset($replace) ? $replace : ''),
 				Pull_List_Expansion::created => time(),
 			);
 
@@ -99,7 +99,7 @@ Pull_List_Expansion::id, Pull_List_Expansion::pattern, Pull_List_Expansion::repl
 		return $obj;
 	}
 
-	public function deleteObject( \DataObject $object = null)
+	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Pull_List_Expansion )
 		{

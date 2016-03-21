@@ -14,7 +14,7 @@
 	"sort" : [ "pattern" ],
     "relationships" :{
     	"endpoint" : {
-    		"destination" : "model\\Endpoint",
+    		"destination" : "Endpoint",
     		"destinationTable" : "endpoint",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_id" }

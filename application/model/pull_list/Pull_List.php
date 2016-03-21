@@ -21,7 +21,7 @@ use model\pull_list\Pull_ListDBO as Pull_ListDBO;
 			. model\pull_list\Pull_List::published . " INTEGER, "
 			. model\pull_list\Pull_List::endpoint_id . " INTEGER, "
 			. "FOREIGN KEY (". model\pull_list\Pull_List::endpoint_id .")"
-				. " REFERENCES " . model\Endpoint::TABLE . "(" . model\Endpoint::id . ")"
+				. " REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
 			. ")";
 		$this->sqlite_execute( "pull_list", $sql, "Create table pull_list" );
 
@@ -94,10 +94,10 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 		$obj = false;
 		if ( isset($endpoint, $name) ) {
 			$params = array(
-				Pull_List::name => $name,
-				Pull_List::etag => $etag,
+				Pull_List::name => (isset($name) ? $name : ''),
+				Pull_List::etag => (isset($etag) ? $etag : ''),
 				Pull_List::created => time(),
-				Pull_List::published => $published,
+				Pull_List::published => (isset($published) ? $published : time()),
 			);
 
 			if ( isset($endpoint)  && is_subclass_of($endpoint, 'DataObject')) {
@@ -112,7 +112,7 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 		return $obj;
 	}
 
-	public function deleteObject( \DataObject $object = null)
+	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Pull_List )
 		{

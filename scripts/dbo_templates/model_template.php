@@ -169,7 +169,7 @@ foreach( $attributeList as $name => $detailArray ) {
 <?php foreach( $attributeList as $name => $detailArray ) : ?>
 <?php if ( $this->isPrimaryKey($name) || $this->isRelationshipKey($name) ) : ?>
 <?php elseif ( in_array($name, $createAttrList) ) : ?>
-				<?php echo $this->modelClassName() . "::" . $name; ?> => $<?php echo $name; ?>,
+				<?php echo $this->modelClassName() . "::" . $name; ?> => (isset($<?php echo $name; ?>) ? $<?php echo $name; ?> : <?php echo $this->defaultCreationValue($name); ?>),
 <?php else : ?>
 				<?php echo $this->modelClassName() . "::" . $name; ?> => <?php echo $this->defaultCreationValue($name); ?>,
 <?php endif; // is in create attribute list ?>
@@ -180,7 +180,7 @@ foreach( $attributeList as $name => $detailArray ) {
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>
 			if ( isset($<?php echo $name; ?>)  && is_subclass_of($<?php echo $name; ?>, 'DataObject')) {
-				$params[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $<?php echo $name; ?>->id;
+				$params[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $<?php echo $name . "->" . $join["destinationAttribute"]; ?>;
 			}
 <?php endif; // one join ?>
 <?php endforeach; ?>
@@ -193,7 +193,7 @@ foreach( $attributeList as $name => $detailArray ) {
 		return $obj;
 	}
 
-	public function deleteObject( \DataObject $object = null)
+	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof <?php echo $this->modelClassName(); ?> )
 		{
@@ -225,8 +225,15 @@ foreach( $attributeList as $name => $detailArray ) {
 <?php if (isset($details['qualifiers']) && is_array($details['qualifiers'])) : ?>
 		$qualifiers = array();
 <?php foreach( $details['qualifiers'] as $qualDetail ) : ?>
+<?php if (isset($qualDetail['optional'], $qualDetail['argAttribute']) && boolval($qualDetail['optional'])) : ?>
+		if ( isset($<?php echo $qualDetail['argAttribute']; ?>)) {
+			$qualifiers[] = <?php echo $this->qualifierString($qualDetail); ?>;
+		}
+<?php else : ?>
 		$qualifiers[] = <?php echo $this->qualifierString($qualDetail); ?>;
+<?php endif; // optional ?>
 <?php endforeach; ?>
+
 		if ( count($qualifiers) > 0 ) {
 			$select->where( Qualifier::Combine( '<?php echo (isset($details["semantic"]) ? $details["semantic"] : "AND"); ?>', $qualifiers ));
 		}

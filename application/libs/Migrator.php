@@ -42,7 +42,6 @@ class Migrator
 			}
 		}
 
-
 		$number = 0;
 		$continue = true;
 		while ( $continue == true ) {
@@ -100,10 +99,6 @@ class Migrator
 				break;
 			}
 		}
-
-		$version = $version_model->latestVersion( );
-		var_dump($version);
-
 	}
 
 	public function __construct($scratchDirectory)
