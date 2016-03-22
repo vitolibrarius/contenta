@@ -314,7 +314,7 @@ class Template
 						$wild = "SQL::SQL_LIKE_BOTH";
 					}
 				}
-				$qualPHPString = "Qualifier::Like( '" . $key . "', $" . $arg . ", '" . $wild . "')";
+				$qualPHPString = "Qualifier::Like( '" . $key . "', $" . $arg . ", " . $wild . ")";
 				break;
 
 			default:

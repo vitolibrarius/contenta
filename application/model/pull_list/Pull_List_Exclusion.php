@@ -36,12 +36,22 @@ class Pull_List_Exclusion extends Model
 
 	public function tableName() { return Pull_List_Exclusion::TABLE; }
 	public function tablePK() { return Pull_List_Exclusion::id; }
-	public function sortOrder() { return array( 'asc' => array(Pull_List_Exclusion::pattern, )); }
+	public function sortOrder()
+	{
+		return array(
+			array( 'asc' => Pull_List_Exclusion::pattern)
+		);
+	}
 
 	public function allColumnNames()
 	{
 		return array(
-Pull_List_Exclusion::id, Pull_List_Exclusion::pattern, Pull_List_Exclusion::type, Pull_List_Exclusion::created, Pull_List_Exclusion::endpoint_id, 		 );
+			Pull_List_Exclusion::id,
+			Pull_List_Exclusion::pattern,
+			Pull_List_Exclusion::type,
+			Pull_List_Exclusion::created,
+			Pull_List_Exclusion::endpoint_id
+		);
 	}
 
 	/** * * * * * * * * *
@@ -87,8 +97,13 @@ Pull_List_Exclusion::id, Pull_List_Exclusion::pattern, Pull_List_Exclusion::type
 				Pull_List_Exclusion::created => time(),
 			);
 
-			if ( isset($endpoint)  && is_subclass_of($endpoint, 'DataObject')) {
-				$params[Pull_List_Exclusion::endpoint_id] = $endpoint->id;
+			if ( isset($endpoint) ) {
+				if ( $endpoint instanceof Endpoint) {
+					$params[Pull_List_Exclusion::endpoint_id] = $endpoint->id;
+				}
+				else if (  is_integer($endpoint) ) {
+					$params[Pull_List_Exclusion::endpoint_id] = $endpoint;
+				}
 			}
 
 			list( $obj, $errorList ) = $this->createObject($params);

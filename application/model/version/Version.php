@@ -44,12 +44,24 @@ class Version extends Model
 
 	public function tableName() { return Version::TABLE; }
 	public function tablePK() { return Version::id; }
-	public function sortOrder() { return array( 'asc' => array(Version::code, )); }
+	public function sortOrder()
+	{
+		return array(
+			array( 'asc' => Version::code)
+		);
+	}
 
 	public function allColumnNames()
 	{
 		return array(
-Version::id, Version::code, Version::major, Version::minor, Version::patch, Version::created, Version::hash_code, 		 );
+			Version::id,
+			Version::code,
+			Version::major,
+			Version::minor,
+			Version::patch,
+			Version::created,
+			Version::hash_code
+		);
 	}
 
 	/** * * * * * * * * *
@@ -121,6 +133,7 @@ Version::id, Version::code, Version::major, Version::minor, Version::patch, Vers
 	public function latestVersion(  )
 	{
 		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
 		$qualifiers[] = Qualifier::InSubQuery( 'code', SQL::Aggregate( 'max', Model::Named('Version'), 'code', null, null ), null);
 

@@ -47,9 +47,8 @@ class Logs extends Controller
 				isset($_GET['trace_id']) ? $_GET['trace_id'] : null,
 				isset($_GET['context']) ? $_GET['context'] : null,
 				isset($_GET['context_id']) ? $_GET['context_id'] : null,
-				isset($_GET['level']) ? $_GET['level'] : null,
-				isset($_GET['message']) ? $_GET['message'] : null,
-				"desc", 50, true
+				(isset($_GET['level']) && $_GET['level'] != 'any') ? $_GET['level'] : null,
+				isset($_GET['message']) ? $_GET['message'] : null
 			);
 			$this->view->render( '/logs/log_table', true);
 		}
@@ -59,15 +58,14 @@ class Logs extends Controller
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$log_model = Model::Named("Log");
+
 			$this->view->logArray = $log_model->mostRecentLike(
 				isset($_GET['trace']) ? $_GET['trace'] : null,
 				isset($_GET['trace_id']) ? $_GET['trace_id'] : null,
 				isset($_GET['context']) ? $_GET['context'] : null,
 				isset($_GET['context_id']) ? $_GET['context_id'] : null,
-				isset($_GET['level']) ? $_GET['level'] : null,
-				isset($_GET['message']) ? $_GET['message'] : null,
-				"desc",
-				isset($_GET['limit']) ? $_GET['limit'] : null
+				(isset($_GET['level']) && $_GET['level'] != 'any') ? $_GET['level'] : null,
+				isset($_GET['message']) ? $_GET['message'] : null
 			);
 			$this->view->render( '/logs/log_inline', true);
 		}

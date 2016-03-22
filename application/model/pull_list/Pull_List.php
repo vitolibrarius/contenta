@@ -40,12 +40,23 @@ class Pull_List extends Model
 
 	public function tableName() { return Pull_List::TABLE; }
 	public function tablePK() { return Pull_List::id; }
-	public function sortOrder() { return array( 'asc' => array(Pull_List::name, )); }
+	public function sortOrder()
+	{
+		return array(
+			array( 'asc' => Pull_List::name)
+		);
+	}
 
 	public function allColumnNames()
 	{
 		return array(
-Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::published, Pull_List::endpoint_id, 		 );
+			Pull_List::id,
+			Pull_List::name,
+			Pull_List::etag,
+			Pull_List::created,
+			Pull_List::published,
+			Pull_List::endpoint_id
+		);
 	}
 
 	/** * * * * * * * * *
@@ -100,8 +111,13 @@ Pull_List::id, Pull_List::name, Pull_List::etag, Pull_List::created, Pull_List::
 				Pull_List::published => (isset($published) ? $published : time()),
 			);
 
-			if ( isset($endpoint)  && is_subclass_of($endpoint, 'DataObject')) {
-				$params[Pull_List::endpoint_id] = $endpoint->id;
+			if ( isset($endpoint) ) {
+				if ( $endpoint instanceof Endpoint) {
+					$params[Pull_List::endpoint_id] = $endpoint->id;
+				}
+				else if (  is_integer($endpoint) ) {
+					$params[Pull_List::endpoint_id] = $endpoint;
+				}
 			}
 
 			list( $obj, $errorList ) = $this->createObject($params);

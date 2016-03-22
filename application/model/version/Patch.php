@@ -36,12 +36,21 @@ class Patch extends Model
 
 	public function tableName() { return Patch::TABLE; }
 	public function tablePK() { return Patch::id; }
-	public function sortOrder() { return array( 'asc' => array(Patch::name, )); }
+	public function sortOrder()
+	{
+		return array(
+			array( 'asc' => Patch::name)
+		);
+	}
 
 	public function allColumnNames()
 	{
 		return array(
-Patch::id, Patch::name, Patch::created, Patch::version_id, 		 );
+			Patch::id,
+			Patch::name,
+			Patch::created,
+			Patch::version_id
+		);
 	}
 
 	/** * * * * * * * * *
@@ -89,8 +98,13 @@ Patch::id, Patch::name, Patch::created, Patch::version_id, 		 );
 				Patch::created => time(),
 			);
 
-			if ( isset($version)  && is_subclass_of($version, 'DataObject')) {
-				$params[Patch::version_id] = $version->id;
+			if ( isset($version) ) {
+				if ( $version instanceof Version) {
+					$params[Patch::version_id] = $version->id;
+				}
+				else if (  is_integer($version) ) {
+					$params[Patch::version_id] = $version;
+				}
 			}
 
 			list( $obj, $errorList ) = $this->createObject($params);

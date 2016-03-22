@@ -11,7 +11,9 @@
     "package": "pull_list",
     "model": "Pull_List_Exclusion",
     "dbo": "Pull_List_ExclusionDBO",
-	"sort" : [ "pattern" ],
+	"sort" : [
+		{ "asc": "pattern" }
+	],
     "relationships" :{
     	"endpoint" : {
     		"destination" : "Endpoint",

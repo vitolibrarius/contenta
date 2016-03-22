@@ -34,12 +34,20 @@ class Log_Level extends Model
 
 	public function tableName() { return Log_Level::TABLE; }
 	public function tablePK() { return Log_Level::id; }
-	public function sortOrder() { return array( 'asc' => array(Log_Level::name, )); }
+	public function sortOrder()
+	{
+		return array(
+			array( 'asc' => Log_Level::name)
+		);
+	}
 
 	public function allColumnNames()
 	{
 		return array(
-Log_Level::id, Log_Level::code, Log_Level::name, 		 );
+			Log_Level::id,
+			Log_Level::code,
+			Log_Level::name
+		);
 	}
 
 	/** * * * * * * * * *

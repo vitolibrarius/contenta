@@ -70,21 +70,28 @@ foreach( $attributeList as $name => $detailArray ) {
 
 	public function tableName() { return <?php echo $this->modelClassName(); ?>::TABLE; }
 	public function tablePK() { return <?php echo $this->modelClassName(); ?>::id; }
-	public function sortOrder() { return array( 'asc' => array(<?php
-	foreach( $this->sort as $v ) {
-		echo $this->modelClassName() . "::" . $v . ", ";
+	public function sortOrder()
+	{
+		return array(<?php $sort = $this->sort; $lastKey = array_last_key($sort); foreach( $this->sort as $k => $vector ) {
+			echo "\n\t\t";
+			foreach( $vector as $direction => $key ) {
+				echo "\tarray( '" . $direction . "' => " . $this->modelClassName() . "::" . $key . ")";
+			}
+			if ( $k != $lastKey ) {
+				echo ",";
+			}
+		}?>
+
+		);
 	}
-	?>)); }
 
 	public function allColumnNames()
 	{
-		return array(
-<?php
-foreach( $attributeList as $name => $detailArray ) {
-		echo $this->modelClassName() . "::" . $name . ", ";
-}
-?>
-		 );
+		return array(<?php $lastKey = array_last_key($attributeList); foreach( $attributeList as $name => $detailArray ) {
+			echo "\n\t\t\t" . $this->modelClassName() . "::" . $name . ( $name != $lastKey ? "," : "");
+		} ?>
+
+		);
 	}
 
 	/** * * * * * * * * *
@@ -179,8 +186,14 @@ foreach( $attributeList as $name => $detailArray ) {
 <?php foreach( $this->mandatoryObjectRelations() as $name => $detailArray ) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>
-			if ( isset($<?php echo $name; ?>)  && is_subclass_of($<?php echo $name; ?>, 'DataObject')) {
-				$params[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $<?php echo $name . "->" . $join["destinationAttribute"]; ?>;
+			if ( isset($<?php echo $name; ?>) ) {
+				if ( $<?php echo $name; ?> instanceof <?php echo $detailArray['destination'] ?>) {
+					$params[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $<?php echo $name . "->" . $join["destinationAttribute"]; ?>;
+				}
+<?php $attD = $this->detailsForAttribute($join["sourceAttribute"]); ?>
+				else if ( <?php echo ($attD['type'] == 'INTEGER' ? " is_integer($" : "is_string($") . $name . ")"; ?> ) {
+					$params[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $<?php echo $name; ?>;
+				}
 			}
 <?php endif; // one join ?>
 <?php endforeach; ?>
@@ -222,6 +235,7 @@ foreach( $attributeList as $name => $detailArray ) {
 		implode(', ', array_map(function($item) { return '$' . $item; }, $details["arguments"])) : "" ); ?> )
 	{
 		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
 <?php if (isset($details['qualifiers']) && is_array($details['qualifiers'])) : ?>
 		$qualifiers = array();
 <?php foreach( $details['qualifiers'] as $qualDetail ) : ?>

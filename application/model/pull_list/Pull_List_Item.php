@@ -44,12 +44,27 @@ class Pull_List_Item extends Model
 
 	public function tableName() { return Pull_List_Item::TABLE; }
 	public function tablePK() { return Pull_List_Item::id; }
-	public function sortOrder() { return array( 'asc' => array(Pull_List_Item::group, Pull_List_Item::name, Pull_List_Item::issue, )); }
+	public function sortOrder()
+	{
+		return array(
+			array( 'asc' => Pull_List_Item::group),
+			array( 'asc' => Pull_List_Item::name),
+			array( 'asc' => Pull_List_Item::issue)
+		);
+	}
 
 	public function allColumnNames()
 	{
 		return array(
-Pull_List_Item::id, Pull_List_Item::group_name, Pull_List_Item::data, Pull_List_Item::created, Pull_List_Item::name, Pull_List_Item::issue, Pull_List_Item::year, Pull_List_Item::pull_list_id, 		 );
+			Pull_List_Item::id,
+			Pull_List_Item::group_name,
+			Pull_List_Item::data,
+			Pull_List_Item::created,
+			Pull_List_Item::name,
+			Pull_List_Item::issue,
+			Pull_List_Item::year,
+			Pull_List_Item::pull_list_id
+		);
 	}
 
 	/** * * * * * * * * *
@@ -108,8 +123,13 @@ Pull_List_Item::id, Pull_List_Item::group_name, Pull_List_Item::data, Pull_List_
 				Pull_List_Item::year => (isset($year) ? $year : null),
 			);
 
-			if ( isset($pull_list)  && is_subclass_of($pull_list, 'DataObject')) {
-				$params[Pull_List_Item::pull_list_id] = $pull_list->id;
+			if ( isset($pull_list) ) {
+				if ( $pull_list instanceof Pull_List) {
+					$params[Pull_List_Item::pull_list_id] = $pull_list->id;
+				}
+				else if (  is_integer($pull_list) ) {
+					$params[Pull_List_Item::pull_list_id] = $pull_list;
+				}
 			}
 
 			list( $obj, $errorList ) = $this->createObject($params);

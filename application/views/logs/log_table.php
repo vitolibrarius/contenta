@@ -7,6 +7,7 @@
 </style>
 
 <div class="mediaData">
+<?php if (is_array($this->logArray) && count($this->logArray) > 0): ?>
 	<table class="Log">
 		<tr>
 			<th>Date</th>
@@ -33,4 +34,11 @@
 		}
 	?>
 	</table>
+<?php else: ?>
+	<div class="log_row info">
+		<span class="log_date"><?php echo date('M d, Y  H:i', time()); ?></span>
+		<span class="log_level">info</span>
+		<span class="log_msg"><em>No Log messages found</em></span>
+	</div>
+<?php endif; ?>
 </div>

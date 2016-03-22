@@ -14,7 +14,11 @@
     "table": "pull_list_item",
     "model": "Pull_List_Item",
     "dbo": "Pull_List_ItemDBO",
-	"sort" : [ "group", "name", "issue" ],
+	"sort" : [
+		{ "asc": "group" },
+		{ "asc": "name" },
+		{ "asc": "issue" }
+	],
     "relationships" :{
     	"pull_list" : {
     		"destination" : "Pull_List",

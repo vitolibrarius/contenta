@@ -25,5 +25,7 @@
     "package": "version",
     "model": "Patch",
     "dbo": "PatchDBO",
-	"sort" : [ "name" ]
+	"sort" : [
+		{ "asc": "name" }
+	]
 }

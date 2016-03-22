@@ -57,6 +57,7 @@
     "package": "pull_list",
     "model": "Pull_List",
     "dbo": "Pull_ListDBO",
-	"sort" : [ "name" ],
-	"migration" : 16
+	"sort" : [
+		{ "asc": "name" }
+	]
 }

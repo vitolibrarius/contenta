@@ -46,12 +46,26 @@ class Log extends Model
 
 	public function tableName() { return Log::TABLE; }
 	public function tablePK() { return Log::id; }
-	public function sortOrder() { return array( 'asc' => array(Log::created, )); }
+	public function sortOrder()
+	{
+		return array(
+			array( 'desc' => Log::created)
+		);
+	}
 
 	public function allColumnNames()
 	{
 		return array(
-Log::id, Log::trace, Log::trace_id, Log::context, Log::context_id, Log::message, Log::session, Log::level, Log::created, 		 );
+			Log::id,
+			Log::trace,
+			Log::trace_id,
+			Log::context,
+			Log::context_id,
+			Log::message,
+			Log::session,
+			Log::level,
+			Log::created
+		);
 	}
 
 	/** * * * * * * * * *
@@ -174,8 +188,13 @@ Log::id, Log::trace, Log::trace_id, Log::context, Log::context_id, Log::message,
 				Log::created => time(),
 			);
 
-			if ( isset($logLevel)  && is_subclass_of($logLevel, 'DataObject')) {
-				$params[Log::level] = $logLevel->code;
+			if ( isset($logLevel) ) {
+				if ( $logLevel instanceof Log_Level) {
+					$params[Log::level] = $logLevel->code;
+				}
+				else if ( is_string($logLevel) ) {
+					$params[Log::level] = $logLevel;
+				}
 			}
 
 			list( $obj, $errorList ) = $this->createObject($params);
@@ -199,6 +218,7 @@ Log::id, Log::trace, Log::trace_id, Log::context, Log::context_id, Log::message,
 	public function messagesSince( $sessionId, $lastCheck )
 	{
 		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
 		if ( isset($sessionId)) {
 			$qualifiers[] = Qualifier::Equals( 'session', $sessionId);
@@ -218,21 +238,22 @@ Log::id, Log::trace, Log::trace_id, Log::context, Log::context_id, Log::message,
 	public function mostRecentLike( $trace, $trace_id, $context, $context_id, $levelCode, $message )
 	{
 		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
 		if ( isset($trace)) {
-			$qualifiers[] = Qualifier::Like( 'trace', $trace, 'SQL::SQL_LIKE_AFTER');
+			$qualifiers[] = Qualifier::Like( 'trace', $trace, SQL::SQL_LIKE_AFTER);
 		}
 		if ( isset($trace_id)) {
-			$qualifiers[] = Qualifier::Like( 'trace_id', $trace_id, 'SQL::SQL_LIKE_AFTER');
+			$qualifiers[] = Qualifier::Like( 'trace_id', $trace_id, SQL::SQL_LIKE_AFTER);
 		}
 		if ( isset($context)) {
-			$qualifiers[] = Qualifier::Like( 'context', $context, 'SQL::SQL_LIKE_AFTER');
+			$qualifiers[] = Qualifier::Like( 'context', $context, SQL::SQL_LIKE_AFTER);
 		}
 		if ( isset($context_id)) {
-			$qualifiers[] = Qualifier::Like( 'context_id', $context_id, 'SQL::SQL_LIKE_AFTER');
+			$qualifiers[] = Qualifier::Like( 'context_id', $context_id, SQL::SQL_LIKE_AFTER);
 		}
 		if ( isset($message)) {
-			$qualifiers[] = Qualifier::Like( 'message', $message, 'SQL::SQL_LIKE_AFTER');
+			$qualifiers[] = Qualifier::Like( 'message', $message, SQL::SQL_LIKE_AFTER);
 		}
 		if ( isset($levelCode)) {
 			$qualifiers[] = Qualifier::Equals( 'level', $levelCode);

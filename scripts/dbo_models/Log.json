@@ -15,7 +15,9 @@
     "package": "logs",
     "model": "Log",
     "dbo": "LogDBO",
-	"sort" : [ "created" ],
+	"sort" : [
+		{ "desc": "created" }
+	],
     "relationships" :{
     	"logLevel" : {
     		"destination" : "Log_Level",

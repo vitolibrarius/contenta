@@ -16,16 +16,22 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
 	function printBacktrace($cmt = null)
 	{
+		print backtraceString($cmt);
+	}
+
+	function backtraceString( $cmt = null )
+	{
 	    $trace = debug_backtrace();
 	    array_shift($trace);
 
-		print ((isset($cmt) && strlen($cmt) >0) ? $cmt.PHP_EOL : '');
+		$msg = ((isset($cmt) && strlen($cmt) >0) ? $cmt.PHP_EOL : '');
         foreach($trace as $item) {
-            print "\t" . (isset($item['file']) ? shortendPath($item['file'], 3) : '<unknown file>')
+            $msg .= "\t" . (isset($item['file']) ? shortendPath($item['file'], 3) : '<unknown file>')
             	. ' ' . (isset($item['line']) ? $item['line'] : '<unknown line>')
             	. ' calling ' . (isset($item['function']) ? $item['function'] : '<unknown function>') . '()'
             	. PHP_EOL;
         }
+        return $msg;
 	}
 
 	function exceptionHandler($exception)

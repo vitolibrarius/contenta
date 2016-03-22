@@ -9,7 +9,9 @@
     "package": "logs",
     "model": "Log_Level",
     "dbo": "Log_LevelDBO",
-	"sort" : [ "name" ],
+	"sort" : [
+		{ "asc": "name" }
+	],
     "relationships" :{
     },
     "indexes" : [

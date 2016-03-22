@@ -30,7 +30,9 @@
     "package": "version",
     "model": "Version",
     "dbo": "VersionDBO",
-	"sort" : [ "code" ],
+	"sort" : [
+		{ "asc": "code" }
+	],
 	"fetches" : {
 		"latestVersion": {
 			"maxCount" : 1,

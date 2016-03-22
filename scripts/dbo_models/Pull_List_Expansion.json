@@ -11,7 +11,9 @@
     "package": "pull_list",
     "model": "Pull_List_Expansion",
     "dbo": "Pull_List_ExpansionDBO",
-	"sort" : [ "pattern" ],
+	"sort" : [
+		{ "asc": "pattern" }
+	],
     "relationships" :{
     	"endpoint" : {
     		"destination" : "Endpoint",
