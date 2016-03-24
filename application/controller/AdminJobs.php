@@ -177,6 +177,9 @@ class AdminJobs extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Job');
 			$values = splitPOSTValues($_POST);
+			if ( isset($values[$model->tableName()], $values[$model->tableName()][Job::enabled]) == false ) {
+				$values[$model->tableName()][Job::enabled] = Model::TERTIARY_FALSE;
+			}
 			$success = true;
 
 			if ( $jobId > 0 ) {
