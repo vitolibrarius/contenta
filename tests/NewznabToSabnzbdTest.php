@@ -152,7 +152,7 @@ else {
 			$url = $item['url'];
 				my_echo( "looking for $name" );
 
-			$flux = $FluxModel->objectForSourceEndpointGUID($newznab_point, $guid);
+			$flux = $FluxModel->objectForSourceGUID($guid);
 			if ( $flux == false ) {
 				my_echo( "Found $name" );
 				$flux = $FluxModel->create( null, $name, $newznab_point, $guid, $publishedDate, $url );
@@ -177,7 +177,7 @@ if ( is_array($xml) ) {
 		$publishedDate = $item['publishedDate'];
 		$url = $item['url'];
 
-		$flux = $FluxModel->objectForSourceEndpointGUID($newznab_point, $guid);
+		$flux = $FluxModel->objectForSourceGUID($guid);
 		if ( $flux == false ) {
 			my_echo( "Found $name" );
 			$flux = $FluxModel->create( null, $name, $newznab_point, $guid, $publishedDate, $url );

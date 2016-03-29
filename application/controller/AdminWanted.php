@@ -93,6 +93,7 @@ class AdminWanted extends Admin
 
 			//Session::addPositiveFeedback("select ". $select);
 
+			$this->view->setLocalizedViewTitle("Wanted Series");
 			$this->view->model = $series_model;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->render( '/wanted/index_series');
@@ -122,6 +123,7 @@ class AdminWanted extends Admin
 
 			//Session::addPositiveFeedback("select ". $select);
 
+			$this->view->setLocalizedViewTitle("Wanted Story Arcs");
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->render( '/wanted/index_story_arc');

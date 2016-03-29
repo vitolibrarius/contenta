@@ -6,6 +6,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Config as Config;
 use \Logger as Logger;
+use \SQL as SQL;
 
 use model\Publisher as Publisher;
 use model\Character as Character;
@@ -130,6 +131,15 @@ class PublicationDBO extends DataObject
 	public function joinToStory_Arc($object) {
 		$model = Model::Named('Story_Arc_Publication');
 		return $model->create($object, $this);
+	}
+
+	public function rssMatches() {
+		$model = Model::Named('Rss');
+		return $model->objectsForNameIssueYear(
+			$this->series()->search_name,
+			$this->issue_num,
+			($this->publishedYear() > 1900 ? " " . $this->publishedYear() : '')
+		);
 	}
 
 	public function notify( $type = 'none', $object = null )

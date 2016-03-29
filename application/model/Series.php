@@ -182,20 +182,6 @@ class Series extends Model
 		return $obj;
 	}
 
-	public function updateObject(DataObject $object = null, array $values = array())
-	{
-		if ( $object instanceof model\SeriesDBO ) {
-			if ( isset($object, $object->name) ) {
-				$shouldbe = normalizeSearchString($object->name);
-				if ( isset($object->search_name) == false || $object->search_name != $shouldbe ) {
-					$values[Series::search_name] = $shouldbe;
-				}
-			}
-		}
-
-		return parent::updateObject($object, $values);
-	}
-
 	public function deleteObject( \DataObject $object = null)
 	{
 		if ( $object instanceof model\SeriesDBO )

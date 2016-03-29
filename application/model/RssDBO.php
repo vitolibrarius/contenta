@@ -35,17 +35,36 @@ class RssDBO extends DataObject
 	public $enclosure_password;
 
 	public function displayName() {
-		return $this->title;
+		return $this->clean_name
+			. " " . $this->clean_issue
+			. (intval($this->clean_year) > 1900 ? " " . $this->clean_year : '');
 	}
 
 	public function displayDescription() {
 		return $this->shortDescription();
 	}
 
+	public function safe_guid()
+	{
+		return sanitize($this->guid, true, true);
+	}
+
+	public function publishedMonthYear() {
+		return $this->formattedDate( Rss::pub_date, "M Y" );
+	}
+
 	public function endpoint() {
 		if ( isset($this->endpoint_id) ) {
 			$model = Model::Named('Endpoint');
 			return $model->objectForId($this->endpoint_id);
+		}
+		return false;
+	}
+
+	public function flux() {
+		if ( isset($this->guid) ) {
+			$model = Model::Named('Flux');
+			return $model->objectForSourceGUID($this->guid);
 		}
 		return false;
 	}

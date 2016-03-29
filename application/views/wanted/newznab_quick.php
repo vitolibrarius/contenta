@@ -45,12 +45,12 @@
 						</div>
 					<?php else: ?>
 						<div>
-							<div>
+							<div style="white-space: nowrap;">
 								<span class="icon <?php echo ($flux->isSourceComplete()?'true':'false'); ?>"></span>
 								<?php echo $flux->src_status ; ?>
 							</div>
-							<div>
-								<span style="display:block" class="icon <?php echo ($flux->isError()?'false':'true'); ?>"></span>
+							<div style="white-space: nowrap;">
+								<span class="icon <?php echo ($flux->isError()?'false':'true'); ?>"></span>
 								<?php echo $flux->dest_status ; ?>
 							</div>
 						</div>

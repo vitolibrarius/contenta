@@ -199,15 +199,15 @@ function convertToBytes ($val)
 	{
 		case 'g':
 		case 'gb':
-			$val *= 1024 * 1024 * 1024;
+			$val *= GIGABYTE;
 			break;
 		case 'm':
 		case 'mb':
-			$val *= 1024 * 1024;
+			$val *= MEGABYTE;
 			break;
 		case 'k':
 		case 'kb':
-			$val *= 1024;
+			$val *= KILOBYTE;
 			break;
 	}
 
@@ -217,17 +217,17 @@ function convertToBytes ($val)
 function formatSizeUnits($value)
 {
 	$bytes = convertToBytes($value);
-	if ($bytes >= 1073741824)
+	if ($bytes >= GIGABYTE)
 	{
-		$bytes = number_format($bytes / 1073741824, 2) . ' GB';
+		$bytes = number_format($bytes / GIGABYTE, 2) . ' GB';
 	}
-	elseif ($bytes >= 1048576)
+	elseif ($bytes >= MEGABYTE)
 	{
-		$bytes = number_format($bytes / 1048576, 2) . ' MB';
+		$bytes = number_format($bytes / MEGABYTE, 2) . ' MB';
 	}
-	elseif ($bytes >= 1024)
+	elseif ($bytes >= KILOBYTE)
 	{
-		$bytes = number_format($bytes / 1024, 2) . ' KB';
+		$bytes = number_format($bytes / KILOBYTE, 2) . ' KB';
 	}
 	elseif ($bytes > 1)
 	{

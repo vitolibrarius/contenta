@@ -32,20 +32,27 @@ class Endpoint extends Model
 		);
 	}
 
-	public function allForTypeCode($code = null)
+	public function allForTypeCode($code = null, $enabledOnly = true)
 	{
 		if ( $code != null ) {
 			$type_model = Model::Named('Endpoint_Type');
 			$type = $type_model->endpointTypeForCode($code);
 			if ( $type != false ) {
-				return $this->allForType($type);
+				return $this->allForType($type, $enabledOnly);
 			}
 		}
 		return false;
 	}
 
-	public function allForType($obj)
+	public function allForType($obj, $enabledOnly = true)
 	{
+		if ( $enabledOnly == true ) {
+			return $this->allObjectsForFKWithValue(
+				Endpoint::type_id, $obj,
+				Endpoint::enabled, Model::TERTIARY_TRUE,
+				array(Endpoint::name), 0
+			);
+		}
 		return $this->allObjectsForFK(Endpoint::type_id, $obj, array(Endpoint::name));
 	}
 

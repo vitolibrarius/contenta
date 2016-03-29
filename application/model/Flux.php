@@ -56,6 +56,16 @@ class Flux extends Model
 		);
 	}
 
+	public function objectForSourceGUID( $guid )
+	{
+		return $this->singleObjectForKeyValue( Flux::src_guid, $guid );
+	}
+
+	public function objectForDestinationGUID( $guid )
+	{
+		return $this->singleObjectForKeyValue( Flux::dest_guid, $guid );
+	}
+
 	public function objectForSourceEndpointGUID( EndpointDBO $endpoint = null, $guid )
 	{
 		return $this->singleObjectForKeyValues( array( Flux::src_endpoint => $endpoint->id, Flux::src_guid => $guid ) );
@@ -86,7 +96,7 @@ class Flux extends Model
 		if ( isset($name, $guid, $src, $url)
 			&& empty($name) == false && empty($guid) == false && empty($url) == false && is_null($src) == false ) {
 
-			$obj = $this->objectForSourceEndpointGUID($src, $guid);
+			$obj = $this->objectForSourceGUID($guid);
 			if ( $obj == false ) {
 				$params = array(
 					Flux::created => time(),

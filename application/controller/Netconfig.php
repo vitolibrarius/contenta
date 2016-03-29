@@ -126,9 +126,9 @@ class Netconfig extends Controller
 			}
 			else {
 				list($obj, $error) = $model->createObject($values['endpoint']);
-				if ( is_array($errors) ) {
+				if ( is_array($error) ) {
 					Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
-					foreach ($errors as $attr => $errMsg ) {
+					foreach ($error as $attr => $errMsg ) {
 						Session::addValidationFeedback( $errMsg );
 					}
 					$this->edit_new();

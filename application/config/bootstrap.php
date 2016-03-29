@@ -23,6 +23,10 @@ define('COOKIE_DOMAIN', '.localhost');
 define("HASH_COST_FACTOR", "10");
 define("HASH_DEFAULT_ALGO", "sha256"); // md5?
 
+define("KILOBYTE", 1024);
+define("MEGABYTE", 1024 * 1024);
+define("GIGABYTE", 1024 * 1024 * 1024);
+
 $_utf8_specials = array (
 	"UTF8_PENCIL" => '\u270E',
 	"UTF8_BL_HEART" => '\u2665',

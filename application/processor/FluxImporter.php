@@ -14,6 +14,7 @@ use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Series as Series;
 use model\Publication as Publication;
+use model\PublicationDBO as PublicationDBO;
 use model\Endpoint as Endpoint;
 use model\Endpoint_Type as Endpoint_Type;
 use model\EndpointDBO as EndpointDBO;
@@ -22,6 +23,10 @@ use model\Story_Arc_Character as Story_Arc_Character;
 use model\Story_Arc_Series as Story_Arc_Series;
 use model\Flux as Flux;
 use model\FluxDBO as FluxDBO;
+use model\RssDBO as RssDBO;
+
+use connectors\NewznabConnector as NewznabConnector;
+use processor\NewznabSearchProcessor as NewznabSearchProcessor;
 
 class FluxImporter extends EndpointImporter
 {
@@ -46,6 +51,12 @@ class FluxImporter extends EndpointImporter
 		parent::setEndpoint($point);
 	}
 
+	public function importFluxRSS( RssDBO $rss = null )
+	{
+		$this->importFluxValues( $rss->endpoint(), $rss->displayName(), $rss->guid, $rss->pub_date, $rss->enclosure_url );
+	}
+
+
 	public function importFluxValues( EndpointDBO $endpoint = null, $name = null, $guid = null, $publishedDate = null, $url = null )
 	{
 		if ( is_null($endpoint) || is_null($endpoint) || is_null($endpoint) || is_null($endpoint) || is_null($endpoint) ) {
@@ -65,6 +76,47 @@ class FluxImporter extends EndpointImporter
 		$imports = ($this->isMeta(FluxImporter::META_IMPORTS) ? $this->getMeta(FluxImporter::META_IMPORTS) : array());
 		$imports[] = array(	'flux_id' => $flux->id );
 		$this->setMeta(FluxImporter::META_IMPORTS, $imports);
+	}
+
+
+	public function findPostingsForPublication( PublicationDBO $publication, NewznabConnector $nzbSearch )
+	{
+		if ( isset($publication, $nzbSearch)) {
+			$FluxModel = Model::Named('Flux');
+			$searchEndpoint = $nzbSearch->endpoint();
+
+			$xml = $nzbSearch->searchComics($publication->searchString());
+			if ( is_array($xml) ) {
+// 				Logger::logWarning( "NZB search found " . count($xml) );
+				foreach ($xml as $key => $item) {
+					$guid = $item['guid'];
+					// first check if this is a new item and not password protected
+					$flux = $FluxModel->objectForSourceIdEndpointGUID( $searchEndpoint->id, $guid );
+					if ( $flux == false && (isset($item['password']) == false || $item['password'] == false)) {
+						$seriesName = $item['metadata']['name'];
+						$issue = (isset($item['metadata']['issue']) ? $item['metadata']['issue'] : '');
+						$year = (isset($item['metadata']['year']) ? $item['metadata']['year'] : '');
+						$link = $item['url'];
+						$pubDate = $item['publishedDate'];
+
+						if ( isset($item['len']) && intval($item['len']) > (MEGABYTE * 100)) {
+// 							Logger::logWarning( "Rejecting NZB '$seriesName' $issue ($year) [$guid] for size "
+// 								. formatSizeUnits($item['len']));
+							continue;
+						}
+
+						if ( NewznabSearchProcessor::isAcceptableMatch($publication, $seriesName, $issue, $year) ) {
+// 							Logger::logWarning( "nzb " . $item['metadata']['name'] . " has accepted" );
+							$this->importFluxValues( $nzbSearch->endpoint(), $seriesName.' '.$issue.' ('.$year.')' , $guid, $pubDate, $link );
+							break;
+						}
+					}
+// 					else {
+// 						Logger::logWarning( "nzb " . $item['metadata']['name'] . " has flux " . $flux->src_guid );
+// 					}
+				}
+			}
+		}
 	}
 
 	private function downloadForFlux( FluxDBO $flux )
@@ -116,7 +168,7 @@ class FluxImporter extends EndpointImporter
 			else if (isset($fluxImport['endpoint_id'], $fluxImport['name'],
 				$fluxImport['guid'], $fluxImport['publishedDate'], $fluxImport['url']) ) {
 				$srcEndpoint = Model::Named('Endpoint')->objectForId($fluxImport['endpoint_id']);
-				$flux = $FluxModel->objectForSourceEndpointGUID($srcEndpoint, $fluxImport['guid']);
+				$flux = $FluxModel->objectForSourceGUID($fluxImport['guid']);
 				if ( $flux == false ) {
 					$flux = $FluxModel->create( null,
 						$fluxImport['name'],
@@ -133,27 +185,29 @@ class FluxImporter extends EndpointImporter
 					throw new \Exception( $flux->__toString() . ' cannot import, is in error state ' . $flux->errorReason() );
 				}
 
-				$localFile = $this->downloadForFlux($flux);
-				if ( file_exists($localFile) ) {
-					$upload = $this->endpointConnector()->addNZB( $localFile, $flux->name );
-					if ( is_array($upload) && isset($upload['status'], $upload['nzo_ids']) && $upload['status'] == true ) {
-						$FluxModel->updateObject( $flux,
-							array(
-								Flux::dest_endpoint => $this->endpoint()->id,
-								Flux::dest_status => 'Active',
-								Flux::dest_guid => $upload['nzo_ids'][0],
-								Flux::dest_submission => time()
-							)
-						);
-					}
-					else {
-						$FluxModel->updateObject( $flux,
-							array(
-								Flux::dest_endpoint => $sabnzbd_point,
-								Flux::dest_status => 'Failed ' . var_export($upload, true)
-							)
-						);
-						Logger::logError( "Failed to schedule download for " . $flux->name );
+				if ( $flux->isSourceComplete() == false ) {
+					$localFile = $this->downloadForFlux($flux);
+					if ( file_exists($localFile) ) {
+						$upload = $this->endpointConnector()->addNZB( $localFile, $flux->name );
+						if ( is_array($upload) && isset($upload['status'], $upload['nzo_ids']) && $upload['status'] == true ) {
+							$FluxModel->updateObject( $flux,
+								array(
+									Flux::dest_endpoint => $this->endpoint()->id,
+									Flux::dest_status => 'Active',
+									Flux::dest_guid => $upload['nzo_ids'][0],
+									Flux::dest_submission => time()
+								)
+							);
+						}
+						else {
+							$FluxModel->updateObject( $flux,
+								array(
+									Flux::dest_endpoint => $sabnzbd_point,
+									Flux::dest_status => 'Failed ' . var_export($upload, true)
+								)
+							);
+							Logger::logError( "Failed to schedule download for " . $flux->name );
+						}
 					}
 				}
 			}

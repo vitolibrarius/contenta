@@ -35,6 +35,50 @@
 			</div>
 			<figcaption class="caption">
 				<p class="search_string"><?php echo $publication->searchString(); ?><br></p>
+				<?php $rssMatch = $publication->rssMatches(); if ( is_array($rssMatch) && count($rssMatch) > 0 ) :?>
+				<div class="mediaData">
+					<table>
+						<tr>
+							<th>RSS Item</th>
+							<th>Status</th>
+						</tr>
+				<?php foreach($rssMatch as $rss): ?>
+						<tr>
+							<td>
+								<h4><?php echo $rss->displayName(); ?></h4>
+								<p><?php echo date("M d, Y", $rss->pub_date); ?></p>
+								<p><?php echo formatSizeUnits($rss->enclosure_length); ?></p>
+								<?php echo ($rss->enclosure_password == true ? "<em>**** password protected</em>" : ""); ?>
+							</td>
+							<td>
+					<?php $flux = $rss->flux(); if ($flux == false ) : ?>
+						<div id="dnld_<?php echo $rss->safe_guid(); ?>">
+						<a href="#" class="nzb button" style="white-space:nowrap;"
+							data-name="<?php echo $rss->clean_name; ?>"
+							data-endpoint_id="<?php echo $rss->endpoint_id; ?>"
+							data-guid="<?php echo $rss->guid; ?>"
+							data-url="<?php echo $rss->enclosure_url; ?>"
+							data-postedDate="<?php echo $rss->pub_date; ?>"
+							data-ref_guid="dnld_<?php echo $rss->safe_guid(); ?>"
+							>Download</a>
+						</div>
+					<?php else: ?>
+						<div>
+							<div style="white-space: nowrap;">
+								<span class="icon <?php echo ($flux->isSourceComplete()?'true':'false'); ?>"></span>
+								<?php echo $flux->src_status ; ?>
+							</div>
+							<div style="white-space: nowrap;">
+								<span class="icon <?php echo ($flux->isError()?'false':'true'); ?>"></span>
+								<?php echo $flux->dest_status ; ?>
+							</div>
+						</div>
+					<?php endif; ?>
+							</td>
+						</tr>
+				<?php endforeach; ?>
+				<?php endif; ?>
+				</table>
 				<a href="#" class="srch button" style="white-space:nowrap;" data-pub_id="<?php echo $publication->id; ?>">Search now</a>
 				<div id="ajaxDiv_<?php echo $publication->id; ?>"></div>
 			</figcaption>

@@ -128,7 +128,9 @@
     },
     "AdminWanted": {
         "Search Newznab": "Search Newznab",
-        "title": "Wanted Publication Administration"
+        "Wanted Series": "Wanted Series",
+        "Wanted Story Arcs": "Wanted Story Arcs",
+        "title": "Wanted Publications"
     },
     "Auth": {
         "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator",
@@ -535,7 +537,7 @@
                 "search": "Select Publisher"
             },
             "search_name": {
-                "label": "Name"
+                "label": "Custom Search Name"
             },
             "start_year": {
                 "label": "Start Year"

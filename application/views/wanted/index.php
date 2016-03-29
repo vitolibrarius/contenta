@@ -4,6 +4,9 @@
 	vertical-align: middle;
 	border-bottom: 1px solid #FFFFFF;
 }
+.mediaData table {
+	width: 100%;
+}
 </style>
 
 <div class="paging">
@@ -93,6 +96,10 @@ $(document).ready(function(){
 				ajaxDisplay.hide();
 				ajaxDisplay.empty().append(msg);
 				ajaxDisplay.fadeIn(100).show();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(xhr.status);
+				alert(thrownError);
 			}
 		});
 		e.stopPropagation();

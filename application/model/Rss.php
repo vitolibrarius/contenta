@@ -7,9 +7,12 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Localized as Localized;
 use \Logger as Logger;
+use \SQL as SQL;
 
 use utilities\MediaFilename as MediaFilename;
 use model\Endpoint as Endpoint;
+
+use db\Qualifier as Qualifier;
 
 class Rss extends Model
 {
@@ -49,6 +52,25 @@ class Rss extends Model
 	public function objectForEndpointGUID( EndpointDBO $endpoint = null, $guid )
 	{
 		return $this->singleObjectForKeyValues( array( Rss::endpoint_id => $endpoint->id, Rss::guid => $guid ) );
+	}
+
+	public function objectsForNameIssueYear( $name, $issue, $year )
+	{
+		if ( isset( $name ) ) {
+			$qualifiers = array();
+			$qualifiers[] = Qualifier::Like( Rss::clean_name, $name, SQL::SQL_LIKE_BOTH );
+
+			if ( isset( $issue) && empty($issue) == false) {
+				$qualifiers[] = Qualifier::Equals( Rss::clean_issue, $issue );
+			}
+
+			if ( isset( $year) && empty($year) == false) {
+				$qualifiers[] = Qualifier::Equals( Rss::clean_year, $year );
+			}
+
+			return $this->allObjectsForQualifier( Qualifier::AndQualifier( $qualifiers ) );
+		}
+		return false;
 	}
 
 	public function create( EndpointDBO $endpoint = null, $title, $desc, $pub_date, $guid, $encl_url = null, $encl_length = 0, $encl_mime = 'application/x-nzb', $encl_hash = null, $encl_password = false )
