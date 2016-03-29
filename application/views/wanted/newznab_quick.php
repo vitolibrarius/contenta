@@ -51,7 +51,7 @@
 							</div>
 							<div style="white-space: nowrap;">
 								<span class="icon <?php echo ($flux->isError()?'false':'true'); ?>"></span>
-								<?php echo $flux->dest_status ; ?>
+								<span class="break-word"><?php echo $flux->dest_status ; ?></span>
 							</div>
 						</div>
 					<?php endif; ?>

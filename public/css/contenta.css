@@ -39,6 +39,17 @@ a:hover {
 	text-decoration:none;
 }
 
+.break-word {
+	/* wrap long text and urls */
+	white-space: pre; /* CSS 2.0 */
+	white-space: pre-wrap; /* CSS 2.1 */
+	white-space: pre-line; /* CSS 3.0 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	white-space: -moz-pre-wrap; /* Mozilla */
+	word-wrap: break-word;
+}
+
 /** utf8 icon classes
 	"UTF8_PENCIL" => '\u270E',
 	"UTF8_BL_HEART" => '\u2665',
