@@ -93,7 +93,6 @@ class Series extends Model
 
 			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
 				$updates[Series::name] = $name;
-				$updates[Series::search_name] = normalizeSearchString($name);
 			}
 
 			if (isset($count) && is_numeric($count)) {
