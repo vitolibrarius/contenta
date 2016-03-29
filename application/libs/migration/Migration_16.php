@@ -63,7 +63,7 @@ class Migration_16 extends Migrator
 			array(
 				Job_Type::name => "Newznab Search Processing",
 				Job_Type::code => "newznab_search",
-				Job_Type::desc => "Automated Search for Wanted publications against all Newznab endpoints and submission to a Sabnzbd serice.  Requires at elast one Newznab endpoint and one Sabnzbd endpoint",
+				Job_Type::desc => "Automated Search for Wanted publications against all Newznab endpoints and submission to a Sabnzbd serice.  Requires at least one Newznab endpoint and one Sabnzbd endpoint",
 				Job_Type::processor => "NewznabSearchProcessor",
 				Job_Type::parameter => null,
 				Job_Type::scheduled => Model::TERTIARY_TRUE,
