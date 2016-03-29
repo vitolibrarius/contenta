@@ -104,7 +104,7 @@ class Migration_16 extends Migrator
 			array(
 				"type_id" => $map["newznab_search"],
 				"minute" => "10",
-				"hour" => "0-8",
+				"hour" => "3",
 				"dayOfWeek" => "*",
 				"one_shot" => Model::TERTIARY_FALSE,
 				"enabled" => Model::TERTIARY_TRUE
