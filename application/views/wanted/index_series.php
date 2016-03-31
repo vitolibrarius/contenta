@@ -49,7 +49,7 @@
 				</span>
 			</div>
 		</div>
-		<span id='<?php echo "ajaxDiv_" . $value->id; ?>'></span>
+		<span id='<?php echo "wanted_" . $value->id; ?>'></span>
 		<?php endforeach; ?>
     </div>
 </section>
@@ -59,7 +59,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$('body').on('click', 'a.wanted', function (e) {
-		var safe_guid = "ajaxDiv_"+ $(this).attr('data-series_id');
+		var safe_guid = "wanted_"+ $(this).attr('data-series_id');
 		$.ajax({
 			type: "GET",
 			url: "<?php echo Config::Web('/AdminWanted/pubsWanted'); ?>",

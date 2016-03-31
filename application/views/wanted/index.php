@@ -24,7 +24,7 @@
 <section>
     <div class="wrapper">
 		<?php for($offset = 0; $offset < 12; $offset++) : ?>
-		<?php $date = new DateTime();
+		<?php $date = new DateTime('first day of this month');
 			$date->modify('-'.$offset.' months');
 		?>
 		<div class="row data">
@@ -49,7 +49,7 @@
 				</span>
 			</div>
 		</div>
-		<span id='<?php echo "ajaxDiv_" . $offset; ?>'></span>
+		<span id='<?php echo "wanted_" . $offset; ?>'></span>
 		<?php endfor; ?>
     </div>
 </section>
@@ -59,7 +59,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$('body').on('click', 'a.wanted', function (e) {
-		var safe_guid = "ajaxDiv_"+ $(this).attr('data-date_range');
+		var safe_guid = "wanted_"+ $(this).attr('data-date_range');
 		$.ajax({
 			type: "GET",
 			url: "<?php echo Config::Web('/AdminWanted/pubsWanted'); ?>",
