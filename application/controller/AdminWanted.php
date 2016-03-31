@@ -146,10 +146,9 @@ class AdminWanted extends Admin
 			if ( isset($_GET['date_range']) ) {
 				$monthRange = intval($_GET['date_range']);
 				if ( $monthRange >= 0 ) {
-					$start_date = new \DateTime();
+					$start_date = new \DateTime('first day of this month');
 					$start_date->modify( '-'.$monthRange.' month' );
 					$end_date = clone $start_date;
-					$start_date->modify('first day of this month');
 					$end_date->modify('last day of this month');
 
 					if ( $monthRange == 0 ) {
