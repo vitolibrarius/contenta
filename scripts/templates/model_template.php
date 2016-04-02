@@ -21,6 +21,7 @@ use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassNam
 <?php switch ($detailArray['type']) {
 	case 'DATE':
 	case 'INTEGER':
+	case 'BOOLEAN':
 		$type = 'INTEGER';
 		break;
 	default:
@@ -210,8 +211,8 @@ foreach( $attributeList as $name => $detailArray ) {
 	{
 		if ( $object instanceof <?php echo $this->modelClassName(); ?> )
 		{
-<?php if (is_array($relationshipList)) : ?>
-<?php foreach( $relationshipList as $name => $detailArray ) : ?>
+<?php if (is_array($this->relationships)) : ?>
+<?php foreach( $this->relationships as $name => $detailArray ) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>
 <?php if (isset($detailArray['ownsDestination']) && $detailArray['ownsDestination']) : ?>
@@ -219,6 +220,8 @@ foreach( $attributeList as $name => $detailArray ) {
 			if ( $<?php echo $detailArray["destinationTable"]; ?>_model->deleteAllForKeyValue(<?php echo $detailArray["destination"] . "::" . $join["destinationAttribute"]; ?>, $this-><?php echo $join["sourceAttribute"]; ?>) == false ) {
 				return false;
 			}
+<?php else : // owns destination ?>
+			// does not own <?php echo $detailArray["destination"]; ?>
 
 <?php endif; // owns destination ?>
 <?php endif; // one join ?>

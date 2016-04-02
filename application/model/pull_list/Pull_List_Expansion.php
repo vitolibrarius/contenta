@@ -92,8 +92,8 @@ class Pull_List_Expansion extends Model
 		$obj = false;
 		if ( isset($endpoint, $pattern) ) {
 			$params = array(
-				Pull_List_Expansion::pattern => (isset($pattern) ? $pattern : ''),
-				Pull_List_Expansion::replace => (isset($replace) ? $replace : ''),
+				Pull_List_Expansion::pattern => (isset($pattern) ? $pattern : null),
+				Pull_List_Expansion::replace => (isset($replace) ? $replace : null),
 				Pull_List_Expansion::created => time(),
 			);
 
@@ -118,6 +118,7 @@ class Pull_List_Expansion extends Model
 	{
 		if ( $object instanceof Pull_List_Expansion )
 		{
+			// does not own Endpoint
 			return parent::deleteObject($object);
 		}
 

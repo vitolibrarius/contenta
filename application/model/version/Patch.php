@@ -94,7 +94,7 @@ class Patch extends Model
 		$obj = false;
 		if ( isset($version, $name) ) {
 			$params = array(
-				Patch::name => (isset($name) ? $name : ''),
+				Patch::name => (isset($name) ? $name : null),
 				Patch::created => time(),
 			);
 
@@ -119,6 +119,7 @@ class Patch extends Model
 	{
 		if ( $object instanceof Patch )
 		{
+			// does not own Version
 			return parent::deleteObject($object);
 		}
 

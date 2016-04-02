@@ -105,8 +105,8 @@ class Pull_List extends Model
 		$obj = false;
 		if ( isset($endpoint, $name) ) {
 			$params = array(
-				Pull_List::name => (isset($name) ? $name : ''),
-				Pull_List::etag => (isset($etag) ? $etag : ''),
+				Pull_List::name => (isset($name) ? $name : null),
+				Pull_List::etag => (isset($etag) ? $etag : null),
 				Pull_List::created => time(),
 				Pull_List::published => (isset($published) ? $published : time()),
 			);
@@ -132,6 +132,13 @@ class Pull_List extends Model
 	{
 		if ( $object instanceof Pull_List )
 		{
+			// does not own Endpoint
+			$pull_list_item_model = Model::Named('Pull_List_Item');
+			if ( $pull_list_item_model->deleteAllForKeyValue(Pull_List_Item::pull_list_id, $this->id) == false ) {
+				return false;
+			}
+			// does not own Pull_List_Exclusion
+			// does not own Pull_List_Expansion
 			return parent::deleteObject($object);
 		}
 

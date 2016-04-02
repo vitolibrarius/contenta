@@ -115,11 +115,11 @@ class Pull_List_Item extends Model
 		$obj = false;
 		if ( isset($pull_list, $data, $name) ) {
 			$params = array(
-				Pull_List_Item::group_name => (isset($group_name) ? $group_name : ''),
-				Pull_List_Item::data => (isset($data) ? $data : ''),
+				Pull_List_Item::group_name => (isset($group_name) ? $group_name : null),
+				Pull_List_Item::data => (isset($data) ? $data : null),
 				Pull_List_Item::created => time(),
-				Pull_List_Item::name => (isset($name) ? $name : ''),
-				Pull_List_Item::issue => (isset($issue) ? $issue : ''),
+				Pull_List_Item::name => (isset($name) ? $name : null),
+				Pull_List_Item::issue => (isset($issue) ? $issue : null),
 				Pull_List_Item::year => (isset($year) ? $year : null),
 			);
 
@@ -144,6 +144,7 @@ class Pull_List_Item extends Model
 	{
 		if ( $object instanceof Pull_List_Item )
 		{
+			// does not own Pull_List
 			return parent::deleteObject($object);
 		}
 

@@ -92,7 +92,7 @@ class Pull_List_Exclusion extends Model
 		$obj = false;
 		if ( isset($endpoint, $pattern) ) {
 			$params = array(
-				Pull_List_Exclusion::pattern => (isset($pattern) ? $pattern : ''),
+				Pull_List_Exclusion::pattern => (isset($pattern) ? $pattern : null),
 				Pull_List_Exclusion::type => (isset($type) ? $type : 'item'),
 				Pull_List_Exclusion::created => time(),
 			);
@@ -118,6 +118,7 @@ class Pull_List_Exclusion extends Model
 	{
 		if ( $object instanceof Pull_List_Exclusion )
 		{
+			// does not own Endpoint
 			return parent::deleteObject($object);
 		}
 

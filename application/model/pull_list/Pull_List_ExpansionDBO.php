@@ -10,7 +10,6 @@ use model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 
 class Pull_List_ExpansionDBO extends DataObject
 {
-	public $id;
 	public $pattern;
 	public $replace;
 	public $created;
@@ -19,6 +18,7 @@ class Pull_List_ExpansionDBO extends DataObject
 
 	public function formattedDateTimeCreated() { return $this->formattedDate( Pull_List_Expansion::created, "M d, Y H:i" ); }
 	public function formattedDateCreated() {return $this->formattedDate( Pull_List_Expansion::created, "M d, Y" ); }
+
 
 	// to-one relationship
 	public function endpoint()

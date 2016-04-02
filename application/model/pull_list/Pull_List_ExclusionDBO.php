@@ -10,7 +10,6 @@ use model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
 
 class Pull_List_ExclusionDBO extends DataObject
 {
-	public $id;
 	public $pattern;
 	public $type;
 	public $created;
@@ -19,6 +18,7 @@ class Pull_List_ExclusionDBO extends DataObject
 
 	public function formattedDateTimeCreated() { return $this->formattedDate( Pull_List_Exclusion::created, "M d, Y H:i" ); }
 	public function formattedDateCreated() {return $this->formattedDate( Pull_List_Exclusion::created, "M d, Y" ); }
+
 
 	// to-one relationship
 	public function endpoint()

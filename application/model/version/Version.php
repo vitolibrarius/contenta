@@ -103,12 +103,12 @@ class Version extends Model
 		$obj = false;
 		if ( isset($code, $hash_code) ) {
 			$params = array(
-				Version::code => (isset($code) ? $code : ''),
+				Version::code => (isset($code) ? $code : null),
 				Version::major => (isset($major) ? $major : null),
 				Version::minor => (isset($minor) ? $minor : null),
 				Version::patch => (isset($patch) ? $patch : null),
 				Version::created => time(),
-				Version::hash_code => (isset($hash_code) ? $hash_code : ''),
+				Version::hash_code => (isset($hash_code) ? $hash_code : null),
 			);
 
 
@@ -124,6 +124,10 @@ class Version extends Model
 	{
 		if ( $object instanceof Version )
 		{
+			$patch_model = Model::Named('Patch');
+			if ( $patch_model->deleteAllForKeyValue(Patch::version_id, $this->id) == false ) {
+				return false;
+			}
 			return parent::deleteObject($object);
 		}
 

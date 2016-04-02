@@ -10,7 +10,9 @@ class <?php echo $this->dboClassName(); ?> extends DataObject
 {
 <?php
 foreach( $this->attributes as $name => $detailArray ) {
-	echo "\tpublic \$$name;" . PHP_EOL;
+	if ($name != "id") {
+		echo "\tpublic \$$name;" . PHP_EOL;
+	}
 }
 ?>
 
@@ -22,10 +24,18 @@ foreach( $this->attributes as $name => $detailArray ) {
 <?php endif; ?>
 
 <?php foreach( $this->attributes as $name => $detailArray ) : ?>
-<?php if (isset($detailArray['type']) && $detailArray['type'] == 'DATE') : ?>
+<?php if ($name != "id" && isset($detailArray['type'])) : ?>
+<?php if ($detailArray['type'] == 'DATE') : ?>
 	public function formattedDateTime<?php echo ucwords($name); ?>() { return $this->formattedDate( <?php echo $this->modelClassName() . "::" . $name; ?>, "M d, Y H:i" ); }
 	public function formattedDate<?php echo ucwords($name); ?>() {return $this->formattedDate( <?php echo $this->modelClassName() . "::" . $name; ?>, "M d, Y" ); }
-<?php endif; ?>
+
+<?php elseif ($detailArray['type'] == 'BOOLEAN') : ?>
+	public function is<?php echo ucwords($name); ?>() {
+		return (isset($this-><?php echo $name; ?>) && $this-><?php echo $name; ?> == 1);
+	}
+
+<?php endif; // type ?>
+<?php endif; // has type ?>
 <?php endforeach; ?>
 
 <?php if (is_array($this->relationships)) : ?>

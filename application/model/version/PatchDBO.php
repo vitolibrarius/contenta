@@ -10,7 +10,6 @@ use model\version\Patch as Patch;
 
 class PatchDBO extends DataObject
 {
-	public $id;
 	public $name;
 	public $created;
 	public $version_id;
@@ -22,6 +21,7 @@ class PatchDBO extends DataObject
 
 	public function formattedDateTimeCreated() { return $this->formattedDate( Patch::created, "M d, Y H:i" ); }
 	public function formattedDateCreated() {return $this->formattedDate( Patch::created, "M d, Y" ); }
+
 
 	// to-one relationship
 	public function version()

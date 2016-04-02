@@ -81,8 +81,8 @@ class Log_Level extends Model
 		$obj = false;
 		if ( isset($code) ) {
 			$params = array(
-				Log_Level::code => (isset($code) ? $code : ''),
-				Log_Level::name => (isset($name) ? $name : ''),
+				Log_Level::code => (isset($code) ? $code : null),
+				Log_Level::name => (isset($name) ? $name : null),
 			);
 
 

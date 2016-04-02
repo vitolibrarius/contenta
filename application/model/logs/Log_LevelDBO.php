@@ -10,7 +10,6 @@ use model\logs\Log_Level as Log_Level;
 
 class Log_LevelDBO extends DataObject
 {
-	public $id;
 	public $code;
 	public $name;
 

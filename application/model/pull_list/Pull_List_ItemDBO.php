@@ -10,7 +10,6 @@ use model\pull_list\Pull_List_Item as Pull_List_Item;
 
 class Pull_List_ItemDBO extends DataObject
 {
-	public $id;
 	public $group_name;
 	public $data;
 	public $created;
@@ -26,6 +25,7 @@ class Pull_List_ItemDBO extends DataObject
 
 	public function formattedDateTimeCreated() { return $this->formattedDate( Pull_List_Item::created, "M d, Y H:i" ); }
 	public function formattedDateCreated() {return $this->formattedDate( Pull_List_Item::created, "M d, Y" ); }
+
 
 	// to-one relationship
 	public function pull_list()

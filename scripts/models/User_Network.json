@@ -1,0 +1,40 @@
+{
+	"attributes": {
+        "id": 	{ "column": "id",	"type": "INTEGER" },
+        "user_id": { "column": "user_id",	"type": "INTEGER" },
+        "network_id": { "column": "network_id",	"type": "INTEGER" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "user_network",
+    "package": "network",
+    "model": "User_Network",
+    "dbo": "User_NetworkDBO",
+	"sort" : [
+		{ "asc": "user_id" }
+	],
+    "relationships" :{
+    	"user" : {
+    		"destination" : "Users",
+    		"destinationTable" : "users",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "user_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	},
+    	"network" : {
+    		"destination" : "Network",
+    		"destinationTable" : "network",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "network_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	}
+    },
+	"indexes" : [
+    	{ "columns": ["user_id", "network_id"], "unique": true }
+    ]
+}

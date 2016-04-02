@@ -11,14 +11,15 @@ define('SYSTEM_PATH', str_replace("\\", DIRECTORY_SEPARATOR, $system_path));
 define('APPLICATION_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'application');
 define('MODELS_PATH', APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model');
 
-$models_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dbo_models';
+$models_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'models';
 realpath($models_path) || die( "Could not find 'dbo_models'" );
 
-$templates_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dbo_templates';
+$templates_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates';
 realpath($templates_path) || die( "Could not find 'dbo_templates'" );
 
 define('MODEL_TEMPLATE', $templates_path . DIRECTORY_SEPARATOR . 'model_template.php');
 define('DBO_TEMPLATE', $templates_path . DIRECTORY_SEPARATOR . 'dbo_template.php');
+define('VALIDATION_TEMPLATE', $templates_path . DIRECTORY_SEPARATOR . 'validate_template.php');
 
 require SYSTEM_PATH .'application/config/bootstrap.php';
 require SYSTEM_PATH .'application/config/autoload.php';
@@ -143,7 +144,7 @@ class Template
     		switch ($details['type']) {
     			case 'BOOLEAN': return "Model::TERTIARY_TRUE";
     			case 'DATE': return "time()";
-    			case 'TEXT': return "''";
+    			case 'TEXT': return "null";
     			default: break;
     		}
     	}
@@ -371,6 +372,7 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	$package = $model_meta['package'];
 	$modelname = $model_meta['model'];
 	$dboname = $model_meta['dbo'];
+	$validationname = $model_meta['model'] . '_Validation';
 
 	/** generate model file */
 	$packagePath = appendPath( MODELS_PATH, $package );
@@ -396,6 +398,19 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	file_put_contents( $dbo_file, $dbo_data );
 	$clazz = "model\\" . $package . "\\" . $dboname;
 
+	$instance = new $clazz();
+	echo $clazz . " .. " . $instance->consistencyTest() . PHP_EOL;
+
+	/** generate validation file */
+	$validation_file = appendPath( MODELS_PATH, $package, $validationname) . ".php";
+// 	if ( is_file($validation_file) == false ) {
+// 		$validation_file = appendPath( sys_get_temp_dir(), $validationname) . ".php";
+// 	}
+	$Template = new Template(VALIDATION_TEMPLATE);
+	$Template->setModel($model_meta);
+	$validation_data = $Template->generate();
+	file_put_contents( $validation_file, $validation_data );
+	$clazz = "model\\" . $package . "\\" . $validationname;
 	$instance = new $clazz();
 	echo $clazz . " .. " . $instance->consistencyTest() . PHP_EOL;
 }

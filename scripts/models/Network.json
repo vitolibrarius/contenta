@@ -1,0 +1,29 @@
+{
+    "attributes": {
+        "id": { "column": "id", "type": "INTEGER" },
+        "ip_address": { "column": "ip_address", "type": "TEXT",	"collate": "NOCASE", "nullable": false },
+        "ip_hash": { "column": "ip_hash", "type": "TEXT", "default": "ipToHex($ip_address)" },
+        "created": { "column": "created", "type": "DATE" },
+        "disable": { "column": "disable", "type": "BOOLEAN",  "default": "Model::TERTIARY_FALSE" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "network",
+    "package": "network",
+    "model": "Network",
+    "dbo": "NetworkDBO",
+	"sort" : [
+		{ "asc": "ip_hash" }
+	],
+    "relationships" :{
+    	"user_network" : {
+    		"destination" : "User_Network",
+    		"destinationTable" : "user_network",
+    		"joins" : [
+    			{ "destinationAttribute": "network_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : false
+    	}
+    }
+}

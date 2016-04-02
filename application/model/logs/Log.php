@@ -179,11 +179,11 @@ class Log extends Model
 		$obj = false;
 		if ( isset($logLevel) ) {
 			$params = array(
-				Log::trace => (isset($trace) ? $trace : ''),
-				Log::trace_id => (isset($trace_id) ? $trace_id : ''),
-				Log::context => (isset($context) ? $context : ''),
-				Log::context_id => (isset($context_id) ? $context_id : ''),
-				Log::message => (isset($message) ? $message : ''),
+				Log::trace => (isset($trace) ? $trace : null),
+				Log::trace_id => (isset($trace_id) ? $trace_id : null),
+				Log::context => (isset($context) ? $context : null),
+				Log::context_id => (isset($context_id) ? $context_id : null),
+				Log::message => (isset($message) ? $message : null),
 				Log::session => (isset($session) ? $session : session_id()),
 				Log::created => time(),
 			);
@@ -209,6 +209,7 @@ class Log extends Model
 	{
 		if ( $object instanceof Log )
 		{
+			// does not own Log_Level
 			return parent::deleteObject($object);
 		}
 

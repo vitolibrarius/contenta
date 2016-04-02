@@ -10,7 +10,6 @@ use model\version\Version as Version;
 
 class VersionDBO extends DataObject
 {
-	public $id;
 	public $code;
 	public $major;
 	public $minor;
@@ -21,6 +20,7 @@ class VersionDBO extends DataObject
 
 	public function formattedDateTimeCreated() { return $this->formattedDate( Version::created, "M d, Y H:i" ); }
 	public function formattedDateCreated() {return $this->formattedDate( Version::created, "M d, Y" ); }
+
 
 	// to-many relationship
 	public function patches()

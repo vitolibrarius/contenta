@@ -1,0 +1,55 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id", "type": "INTEGER" },
+        "name": { "column": "name", "type": "TEXT", "collate": "NOCASE", "nullable": false },
+        "email": { "column": "email", "type": "TEXT", "collate": "NOCASE", "nullable": false },
+        "active": { "column": "active", "type": "BOOLEAN" },
+        "account_type": { "column": "account_type", "type": "TEXT", "default": "'user'" },
+        "rememberme_token": { "column": "rememberme_token", "type": "TEXT" },
+        "api_hash": { "column": "api_hash", "type": "TEXT" },
+        "password_reset_hash": { "column": "password_reset_hash", "type": "TEXT" },
+        "activation_hash": { "column": "activation_hash", "type": "TEXT" },
+        "failed_logins": { "column": "failed_logins", "type": "INTEGER", "default": "0" },
+        "creation_timestamp": { "column": "creation_timestamp", "type": "DATE" },
+        "last_login_timestamp": { "column": "last_login_timestamp", "type": "DATE", "default": "null" },
+        "last_failed_login": { "column": "last_failed_login", "type": "DATE", "default": "null" },
+        "password_reset_timestamp": { "column": "password_reset_timestamp", "type": "DATE", "default": "null" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "users",
+    "package": "user",
+    "model": "Users",
+    "dbo": "UsersDBO",
+	"sort" : [
+		{ "asc": "name" }
+	],
+    "relationships" :{
+    	"user_network" : {
+    		"destination" : "User_Network",
+    		"destinationTable" : "user_network",
+    		"joins" : [
+    			{ "destinationAttribute": "user_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"user_series" : {
+    		"destination" : "User_Series",
+    		"destinationTable" : "user_series",
+    		"joins" : [
+    			{ "destinationAttribute": "user_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	}
+    },
+	"indexes" : [
+    	{ "columns": ["rememberme_token"], "unique": true },
+    	{ "columns": ["activation_hash"], "unique": true },
+    	{ "columns": ["api_hash"], "unique": true },
+    	{ "columns": ["email"], "unique": true },
+    	{ "columns": ["name"], "unique": true }
+    ]
+}

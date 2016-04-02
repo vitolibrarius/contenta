@@ -10,7 +10,6 @@ use model\logs\Log as Log;
 
 class LogDBO extends DataObject
 {
-	public $id;
 	public $trace;
 	public $trace_id;
 	public $context;
@@ -23,6 +22,7 @@ class LogDBO extends DataObject
 
 	public function formattedDateTimeCreated() { return $this->formattedDate( Log::created, "M d, Y H:i" ); }
 	public function formattedDateCreated() {return $this->formattedDate( Log::created, "M d, Y" ); }
+
 
 	// to-one relationship
 	public function logLevel()
