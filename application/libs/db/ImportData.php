@@ -290,6 +290,35 @@ class ImportData
 		return $existing;
 	}
 
+	public function importRow_version( Model $model, $rowDir )
+	{
+		$data = $this->dataForRow($rowDir);
+		unset( $data["id"] );
+		$existing = $model->singleObjectForKeyValue( "code", $data['code'] );
+		if ( $existing == false ) {
+			$existing = \SQL::InsertRecord( $model, array(), $data )->commitTransaction();
+			if ( $existing == false ) {
+				throw new Exception("import error " . $rowDir );
+			}
+		}
+		$this->mapPrimaryKey( $model, basename($rowDir), $existing->code );
+		return $existing;
+	}
+
+	public function importRow_patch( Model $model, $rowDir )
+	{
+		$data = $this->dataForRow($rowDir);
+		$existing = $model->singleObjectForKeyValue( "name", $data['name'] );
+		if ( $existing == false ) {
+			$existing = \SQL::InsertRecord( $model, array(), $data )->commitTransaction();
+			if ( $existing == false ) {
+				throw new Exception("import error " . $rowDir );
+			}
+		}
+		$this->mapPrimaryKey( $model, basename($rowDir), $existing->id );
+		return $existing;
+	}
+
 	public function importRow_rss( Model $model, $rowDir )
 	{
 		$data = $this->dataForRow($rowDir);

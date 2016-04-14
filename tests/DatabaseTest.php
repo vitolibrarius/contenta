@@ -59,7 +59,7 @@ my_echo( "---------- Version ");
 $versions = Model::Named('Version')->allObjects();
 reportData($versions,  array( "code", "hash_code" ));
 $patches = Model::Named('Patch')->allObjects();
-reportData($patches,  array( "displayName", "version/code", "formattedDateTimeCreated" ));
+reportData($patches,  array( "displayName", "version/code", "formattedDateTime_created" ));
 
 my_echo( "---------- Endpoint ");
 $cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
