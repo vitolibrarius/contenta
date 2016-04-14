@@ -17,6 +17,31 @@ use \model\network\NetworkDBO as NetworkDBO;
 
 class User_Network extends _User_Network
 {
+	/**
+	 *	Create/Update functions
+	 */
+	public function create( $user, $network)
+	{
+		return $this->base_create(
+			$user,
+			$network
+		);
+	}
+
+	public function update( User_NetworkDBO $obj,
+		$user, $network)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			return $this->base_update(
+				$obj,
+				$user,
+				$network
+			);
+		}
+		return $obj;
+	}
+
+
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			User_Network::user_id => Model::INT_TYPE,

@@ -62,8 +62,8 @@ abstract class _Network extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 	public function objectForIp_address($value)
 	{
@@ -88,7 +88,10 @@ abstract class _Network extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $ip_address, $ip_hash, $disable)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $ip_address, $ip_hash, $disable)
 	{
 		$obj = false;
 		if ( isset($ip_address) ) {
@@ -108,6 +111,36 @@ abstract class _Network extends Model
 		return $obj;
 	}
 
+	public function base_update( NetworkDBO $obj,
+		$ip_address, $ip_hash, $disable)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+			if (isset($ip_address) && (isset($obj->ip_address) == false || $ip_address != $obj->ip_address)) {
+				$updates[Network::ip_address] = $ip_address;
+			}
+			if (isset($ip_hash) && (isset($obj->ip_hash) == false || $ip_hash != $obj->ip_hash)) {
+				$updates[Network::ip_hash] = $ip_hash;
+			}
+			if (isset($disable) && (isset($obj->disable) == false || $disable != $obj->disable)) {
+				$updates[Network::disable] = $disable;
+			}
+
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Network )
@@ -119,6 +152,10 @@ abstract class _Network extends Model
 		return false;
 	}
 
+
+	/**
+	 *	Named fetches
+	 */
 }
 
 ?>

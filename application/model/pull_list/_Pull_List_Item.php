@@ -72,8 +72,8 @@ abstract class _Pull_List_Item extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 	public function allForGroup_name($value)
 	{
@@ -115,7 +115,10 @@ abstract class _Pull_List_Item extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $pull_list, $group_name, $data, $name, $issue, $year)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $pull_list, $group_name, $data, $name, $issue, $year)
 	{
 		$obj = false;
 		if ( isset($pull_list, $data, $name) ) {
@@ -145,6 +148,50 @@ abstract class _Pull_List_Item extends Model
 		return $obj;
 	}
 
+	public function base_update( Pull_List_ItemDBO $obj,
+		$pull_list, $group_name, $data, $name, $issue, $year)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+			if (isset($group_name) && (isset($obj->group_name) == false || $group_name != $obj->group_name)) {
+				$updates[Pull_List_Item::group_name] = $group_name;
+			}
+			if (isset($data) && (isset($obj->data) == false || $data != $obj->data)) {
+				$updates[Pull_List_Item::data] = $data;
+			}
+			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
+				$updates[Pull_List_Item::name] = $name;
+			}
+			if (isset($issue) && (isset($obj->issue) == false || $issue != $obj->issue)) {
+				$updates[Pull_List_Item::issue] = $issue;
+			}
+			if (isset($year) && (isset($obj->year) == false || $year != $obj->year)) {
+				$updates[Pull_List_Item::year] = $year;
+			}
+
+			if ( isset($pull_list) ) {
+				if ( $pull_list instanceof Pull_ListDBO) {
+					$updates[Pull_List_Item::pull_list_id] = $pull_list->id;
+				}
+				else if (  is_integer($pull_list) ) {
+					$updates[Pull_List_Item::pull_list_id] = $pull_list;
+				}
+			}
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Pull_List_Item )
@@ -156,6 +203,24 @@ abstract class _Pull_List_Item extends Model
 		return false;
 	}
 
+	public function deleteAllForPull_list(Pull_ListDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForPull_list($obj);
+			foreach ($array as $key => $value) {
+				if ($this->deleteObject($value) == false) {
+					$success = false;
+					break;
+				}
+			}
+		}
+		return $success;
+	}
+
+	/**
+	 *	Named fetches
+	 */
 }
 
 ?>

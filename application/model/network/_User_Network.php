@@ -58,8 +58,8 @@ abstract class _User_Network extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 
 	public function allForUser($obj)
@@ -88,7 +88,10 @@ abstract class _User_Network extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $user, $network)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $user, $network)
 	{
 		$obj = false;
 		if ( isset($user, $network) ) {
@@ -120,6 +123,43 @@ abstract class _User_Network extends Model
 		return $obj;
 	}
 
+	public function base_update( User_NetworkDBO $obj,
+		$user, $network)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+
+			if ( isset($user) ) {
+				if ( $user instanceof UsersDBO) {
+					$updates[User_Network::user_id] = $user->id;
+				}
+				else if (  is_integer($user) ) {
+					$updates[User_Network::user_id] = $user;
+				}
+			}
+			if ( isset($network) ) {
+				if ( $network instanceof NetworkDBO) {
+					$updates[User_Network::network_id] = $network->id;
+				}
+				else if (  is_integer($network) ) {
+					$updates[User_Network::network_id] = $network;
+				}
+			}
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof User_Network )
@@ -132,6 +172,38 @@ abstract class _User_Network extends Model
 		return false;
 	}
 
+	public function deleteAllForUser(UsersDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForUser($obj);
+			foreach ($array as $key => $value) {
+				if ($this->deleteObject($value) == false) {
+					$success = false;
+					break;
+				}
+			}
+		}
+		return $success;
+	}
+	public function deleteAllForNetwork(NetworkDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForNetwork($obj);
+			foreach ($array as $key => $value) {
+				if ($this->deleteObject($value) == false) {
+					$success = false;
+					break;
+				}
+			}
+		}
+		return $success;
+	}
+
+	/**
+	 *	Named fetches
+	 */
 }
 
 ?>

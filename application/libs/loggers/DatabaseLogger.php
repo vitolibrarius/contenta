@@ -29,7 +29,7 @@ class DatabaseLogger extends Logger
 			throw new \InvalidMessageTypeException('Wrong $level given ' . $level);
 
 		try {
-			$obj = $this->model->create( $level, $trace, $traceId, $context, $contextId, $message, null);
+			$obj = $this->model->base_create( $level, $trace, $traceId, $context, $contextId, $message, null);
 			if ( $obj == false ) {
 				$success = false;
 				Logger::catastrophicFailure();

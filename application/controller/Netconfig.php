@@ -106,7 +106,7 @@ class Netconfig extends Controller
 			if ( $netId > 0 ) {
 				$netObj = $model->objectForId($netId);
 				if ( $netObj != false ) {
-					$errors = $model->updateObject($netObj, $values['endpoint']);
+					list($netObj, $errors) = $model->updateObject($netObj, $values['endpoint']);
 					if ( is_array($errors) ) {
 						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
 						foreach ($errors as $attr => $errMsg ) {

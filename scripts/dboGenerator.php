@@ -181,6 +181,21 @@ class Template
     	return false;
     }
 
+    public function isMandatoryRelationshipKey( $rel = '' ) {
+    	$relations = $this->mandatoryObjectRelations();
+    	if ( is_array($relations) ) {
+    		foreach( $relations as $name => $details ) {
+    			$joins = $details['joins'];
+    			foreach( $joins as $idx => $join ) {
+    				if ( isset($join['sourceAttribute']) && $join['sourceAttribute'] == $rel ) {
+    					return true;
+    				}
+    			}
+    		}
+    	}
+    	return false;
+    }
+
     public function isUniqueAttribute( $attr = '' ) {
     	$indexes = $this->indexes;
     	if ( is_array($indexes) ) {
@@ -243,7 +258,7 @@ class Template
     		$ignoreAttr = array( 'created', 'updated' );
     		foreach( $attributes as $name => $details ) {
     			if ( $this->isPrimaryKey( $name ) == false
-    				&& $this->isRelationshipKey($name) == false
+    				&& $this->isMandatoryRelationshipKey($name) == false
     				&& in_array($name, $ignoreAttr) == false ) {
 	    			$creationAttr[$name] = $details;
     			}
@@ -353,6 +368,32 @@ class Template
 		$arg = (isset($qualDetails['argAttribute']) ? $qualDetails['argAttribute'] : null);
 
 		switch( $type ) {
+			case "Related":
+				$relationName = (isset($qualDetails['relationship']) ? $qualDetails['relationship'] : null);
+				if ( is_null($relationName) ) {
+					throw new \Exception( "Malformed qualfier missing 'relationship' name " . var_export($qualDetails, true));
+				}
+				$relationDetails = $this->detailsForRelationship($relationName);
+				if ( is_null($relationDetails) ) {
+					throw new \Exception( "Malformed qualfier relationship named '" .$relationName. "' was not found");
+				}
+				$joins = (isset($relationDetails['joins']) ? $relationDetails['joins'] : null);
+				if ( is_array($joins) == false || count($joins) != 1 ) {
+					throw new \Exception( "Malformed qualfier relationship named '" .$relationName. "' bad join");
+				}
+				$theJoin = $joins[0];
+				$srcAttribute = (isset($theJoin['sourceAttribute']) ? $theJoin['sourceAttribute'] : null);
+				if ( is_null($srcAttribute) ) {
+					throw new \Exception( "Malformed qualfier relationship named '" .$relationName. "' sourceAttribute not found");
+				}
+
+				if ( is_null($arg) ) {
+					throw new \Exception( "Malformed qualfier missing arg attribute " . var_export($qualDetails, true));
+				}
+
+				$qualPHPString = "Qualifier::FK( '" . $srcAttribute . "', $" . $arg . ")";
+
+				break;
 			case "InSubQuery":
 				$subDetails = (isset($qualDetails['subQuery']) ? $qualDetails['subQuery'] : array());
 				if ( count($subDetails) == 0 ) {
@@ -469,13 +510,13 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	$model_data = $Template->generate();
 	file_put_contents( $model_base_file, $model_data );
 
-	/** generate model file */
-// 		if ( is_file($model_file) == false ) {
+	/** generate model file, only if it does not exist */
+	if ( is_file($model_file) == false ) {
 		$Template = new Template(MODEL_TEMPLATE);
 		$Template->setModel($model_meta);
 		$model_data = $Template->generate();
 		file_put_contents( $model_file, $model_data );
-// 	}
+	}
 
 	$clazz = "model\\" . $package . "\\" . $modelname;
 	$instance = new $clazz();
@@ -488,13 +529,13 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	$dbo_data = $Template->generate();
 	file_put_contents( $dbo_base_file, $dbo_data );
 
-	/** generate dbo file */
-// 		if ( is_file($dbo_file) == false ) {
+	/** generate dbo file, only if it does not exist */
+	if ( is_file($dbo_file) == false ) {
 		$Template = new Template(DBO_TEMPLATE);
 		$Template->setModel($model_meta);
 		$dbo_data = $Template->generate();
 		file_put_contents( $dbo_file, $dbo_data );
-// 	}
+	}
 
 	$clazz = "model\\" . $package . "\\" . $dboname;
 	$instance = new $clazz();

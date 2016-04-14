@@ -77,8 +77,8 @@ abstract class _Log extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 	public function allForTrace($value)
 	{
@@ -183,7 +183,10 @@ abstract class _Log extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
 	{
 		$obj = false;
 		if ( isset($logLevel, $message) ) {
@@ -214,6 +217,53 @@ abstract class _Log extends Model
 		return $obj;
 	}
 
+	public function base_update( LogDBO $obj,
+		$logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+			if (isset($trace) && (isset($obj->trace) == false || $trace != $obj->trace)) {
+				$updates[Log::trace] = $trace;
+			}
+			if (isset($trace_id) && (isset($obj->trace_id) == false || $trace_id != $obj->trace_id)) {
+				$updates[Log::trace_id] = $trace_id;
+			}
+			if (isset($context) && (isset($obj->context) == false || $context != $obj->context)) {
+				$updates[Log::context] = $context;
+			}
+			if (isset($context_id) && (isset($obj->context_id) == false || $context_id != $obj->context_id)) {
+				$updates[Log::context_id] = $context_id;
+			}
+			if (isset($message) && (isset($obj->message) == false || $message != $obj->message)) {
+				$updates[Log::message] = $message;
+			}
+			if (isset($session) && (isset($obj->session) == false || $session != $obj->session)) {
+				$updates[Log::session] = $session;
+			}
+
+			if ( isset($logLevel) ) {
+				if ( $logLevel instanceof Log_LevelDBO) {
+					$updates[Log::level_code] = $logLevel->code;
+				}
+				else if ( is_string($logLevel) ) {
+					$updates[Log::level_code] = $logLevel;
+				}
+			}
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Log )
@@ -225,6 +275,24 @@ abstract class _Log extends Model
 		return false;
 	}
 
+	public function deleteAllForLogLevel(Log_LevelDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForLogLevel($obj);
+			foreach ($array as $key => $value) {
+				if ($this->deleteObject($value) == false) {
+					$success = false;
+					break;
+				}
+			}
+		}
+		return $success;
+	}
+
+	/**
+	 *	Named fetches
+	 */
 	public function messagesSince( $sessionId, $lastCheck )
 	{
 		$select = SQL::Select( $this );

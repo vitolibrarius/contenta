@@ -15,6 +15,41 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 
 class Log extends _Log
 {
+	/**
+	 *	Create/Update functions
+	 */
+	public function create( $logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
+	{
+		return $this->base_create(
+			$logLevel,
+			$trace,
+			$trace_id,
+			$context,
+			$context_id,
+			$message,
+			$session
+		);
+	}
+
+	public function update( LogDBO $obj,
+		$logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			return $this->base_update(
+				$obj,
+				$logLevel,
+				$trace,
+				$trace_id,
+				$context,
+				$context_id,
+				$message,
+				$session
+			);
+		}
+		return $obj;
+	}
+
+
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Log::trace => Model::TEXT_TYPE,

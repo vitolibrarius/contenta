@@ -21,6 +21,35 @@ use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
 class Pull_List extends _Pull_List
 {
+	/**
+	 *	Create/Update functions
+	 */
+	public function create( $endpoint, $name, $etag, $published)
+	{
+		return $this->base_create(
+			$endpoint,
+			$name,
+			$etag,
+			$published
+		);
+	}
+
+	public function update( Pull_ListDBO $obj,
+		$endpoint, $name, $etag, $published)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			return $this->base_update(
+				$obj,
+				$endpoint,
+				$name,
+				$etag,
+				$published
+			);
+		}
+		return $obj;
+	}
+
+
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Pull_List::name => Model::TEXT_TYPE,

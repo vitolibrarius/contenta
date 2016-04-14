@@ -15,6 +15,33 @@ use \model\EndpointDBO as EndpointDBO;
 
 class Pull_List_Expansion extends _Pull_List_Expansion
 {
+	/**
+	 *	Create/Update functions
+	 */
+	public function create( $endpoint, $pattern, $replace)
+	{
+		return $this->base_create(
+			$endpoint,
+			$pattern,
+			$replace
+		);
+	}
+
+	public function update( Pull_List_ExpansionDBO $obj,
+		$endpoint, $pattern, $replace)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			return $this->base_update(
+				$obj,
+				$endpoint,
+				$pattern,
+				$replace
+			);
+		}
+		return $obj;
+	}
+
+
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Pull_List_Expansion::pattern => Model::TEXT_TYPE,

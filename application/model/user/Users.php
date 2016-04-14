@@ -17,6 +17,53 @@ use \model\User_SeriesDBO as User_SeriesDBO;
 
 class Users extends _Users
 {
+	/**
+	 *	Create/Update functions
+	 */
+	public function create( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
+	{
+		return $this->base_create(
+			$name,
+			$email,
+			$active,
+			$account_type,
+			$rememberme_token,
+			$api_hash,
+			$password_reset_hash,
+			$activation_hash,
+			$failed_logins,
+			$creation_timestamp,
+			$last_login_timestamp,
+			$last_failed_login,
+			$password_reset_timestamp
+		);
+	}
+
+	public function update( UsersDBO $obj,
+		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			return $this->base_update(
+				$obj,
+				$name,
+				$email,
+				$active,
+				$account_type,
+				$rememberme_token,
+				$api_hash,
+				$password_reset_hash,
+				$activation_hash,
+				$failed_logins,
+				$creation_timestamp,
+				$last_login_timestamp,
+				$last_failed_login,
+				$password_reset_timestamp
+			);
+		}
+		return $obj;
+	}
+
+
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Users::name => Model::TEXT_TYPE,

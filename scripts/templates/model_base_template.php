@@ -110,8 +110,8 @@ foreach( $objectAttributes as $name => $detailArray ) {
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['type'])) : ?>
@@ -177,12 +177,15 @@ foreach( $objectAttributes as $name => $detailArray ) {
 	}
 <?php endif; // has relationships ?>
 
+	/**
+	 *	Create/Update functions
+	 */
 <?php
 	$createAttrList = array_keys($this->createObjectAttributes());
 	$mandatoryAttrList = array_keys($this->mandatoryObjectAttributes());
 	$createRelationsList = array_keys($this->mandatoryObjectRelations());
 ?>
-	public function create( <?php echo implode(', ', array_map(function($item) { return '$' . $item; },
+	public function base_create( <?php echo implode(', ', array_map(function($item) { return '$' . $item; },
 		array_merge( $createRelationsList, $createAttrList ))); ?>)
 	{
 		$obj = false;
@@ -190,7 +193,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 		array_merge( $createRelationsList, $mandatoryAttrList ))); ?>) ) {
 			$params = array(
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
-<?php if ( $this->isPrimaryKey($name) || $this->isRelationshipKey($name) ) : ?>
+<?php if ( $this->isPrimaryKey($name) || $this->isMandatoryRelationshipKey($name) ) : ?>
 <?php elseif ( in_array($name, $createAttrList) ) : ?>
 				<?php echo $this->modelClassName() . "::" . $name; ?> => (isset($<?php echo $name; ?>) ? $<?php echo $name; ?> : <?php echo $this->defaultCreationValue($name); ?>),
 <?php else : ?>
@@ -222,6 +225,49 @@ foreach( $objectAttributes as $name => $detailArray ) {
 		return $obj;
 	}
 
+	public function base_update( <?php echo $this->dboClassName(); ?> $obj,
+		<?php echo implode(', ', array_map(function($item) { return '$' . $item; },
+			array_merge( $createRelationsList, $createAttrList ))); ?>)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
+<?php if ( $this->isPrimaryKey($name) == false && $this->isMandatoryRelationshipKey($name) == false && in_array($name, $createAttrList) ) : ?>
+			if (isset($<?php echo $name; ?>) && (isset($obj-><?php echo $name; ?>) == false || $<?php echo $name; ?> != $obj-><?php echo $name; ?>)) {
+				$updates[<?php echo $this->modelClassName() . "::" . $name; ?>] = $<?php echo $name; ?>;
+			}
+<?php endif; ?>
+<?php endforeach; ?>
+
+<?php foreach( $this->mandatoryObjectRelations() as $name => $detailArray ) : ?>
+<?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
+<?php $join = $joins[0]; ?>
+			if ( isset($<?php echo $name; ?>) ) {
+				if ( $<?php echo $name; ?> instanceof <?php echo $detailArray['destination'] ?>DBO) {
+					$updates[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $<?php echo $name . "->" . $join["destinationAttribute"]; ?>;
+				}
+<?php $attD = $this->detailsForAttribute($join["sourceAttribute"]); ?>
+				else if ( <?php echo ($attD['type'] == 'INTEGER' ? " is_integer($" : "is_string($") . $name . ")"; ?> ) {
+					$updates[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $<?php echo $name; ?>;
+				}
+			}
+<?php endif; // one join ?>
+<?php endforeach; ?>
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof <?php echo $this->modelClassName(); ?> )
@@ -248,6 +294,31 @@ foreach( $objectAttributes as $name => $detailArray ) {
 		return false;
 	}
 
+<?php foreach( $mandatoryObjectRelations as $name => $detailArray ) : ?>
+<?php if (isset($detailArray['isToMany']) == false || $detailArray['isToMany'] == false) : ?>
+<?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
+<?php $join = $joins[0]; ?>
+	public function deleteAllFor<?php echo ucwords($name); ?>(<?php echo $detailArray['destination'] ?>DBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allFor<?php echo ucwords($name); ?>($obj);
+			foreach ($array as $key => $value) {
+				if ($this->deleteObject($value) == false) {
+					$success = false;
+					break;
+				}
+			}
+		}
+		return $success;
+	}
+<?php endif; // multiple joins ?>
+<?php endif; //  toOne ?>
+<?php endforeach; // looprelationships ?>
+
+	/**
+	 *	Named fetches
+	 */
 <?php foreach( $this->namedFetches() as $name => $details ) : ?>
 	public function <?php echo $name; ?>( <?php echo (isset($details["arguments"]) ?
 		implode(', ', array_map(function($item) { return '$' . $item; }, $details["arguments"])) : "" ); ?> )

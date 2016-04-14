@@ -513,7 +513,7 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 				if ( $update ) {
 					$this->processNotification( Model::NotifyUpdated, $object );
 				}
-				return $update;
+				return array( $update, null );
 			}
 
 			// create failed, log validation errors
@@ -522,12 +522,12 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 				$logMsg .= "\n\t" . $errMsg;
 			}
 			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
-			return $validation;
+			return array( false, $validation );
 		}
 		else {
 			Logger::logError( "Failed to update $object for values " . var_export($values, true) , __METHOD__, $this->tableName() );
 		}
-		return false;
+		return array( false, array());
 	}
 
 	public function updateAgregate($target_table, $agg_table, $agg_target, $agg_function, $target_pk, $agg_fk)

@@ -97,8 +97,8 @@ abstract class _Users extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 	public function objectForName($value)
 	{
@@ -148,7 +148,10 @@ abstract class _Users extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
 	{
 		$obj = false;
 		if ( isset($name, $email) ) {
@@ -177,6 +180,66 @@ abstract class _Users extends Model
 		return $obj;
 	}
 
+	public function base_update( UsersDBO $obj,
+		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
+				$updates[Users::name] = $name;
+			}
+			if (isset($email) && (isset($obj->email) == false || $email != $obj->email)) {
+				$updates[Users::email] = $email;
+			}
+			if (isset($active) && (isset($obj->active) == false || $active != $obj->active)) {
+				$updates[Users::active] = $active;
+			}
+			if (isset($account_type) && (isset($obj->account_type) == false || $account_type != $obj->account_type)) {
+				$updates[Users::account_type] = $account_type;
+			}
+			if (isset($rememberme_token) && (isset($obj->rememberme_token) == false || $rememberme_token != $obj->rememberme_token)) {
+				$updates[Users::rememberme_token] = $rememberme_token;
+			}
+			if (isset($api_hash) && (isset($obj->api_hash) == false || $api_hash != $obj->api_hash)) {
+				$updates[Users::api_hash] = $api_hash;
+			}
+			if (isset($password_reset_hash) && (isset($obj->password_reset_hash) == false || $password_reset_hash != $obj->password_reset_hash)) {
+				$updates[Users::password_reset_hash] = $password_reset_hash;
+			}
+			if (isset($activation_hash) && (isset($obj->activation_hash) == false || $activation_hash != $obj->activation_hash)) {
+				$updates[Users::activation_hash] = $activation_hash;
+			}
+			if (isset($failed_logins) && (isset($obj->failed_logins) == false || $failed_logins != $obj->failed_logins)) {
+				$updates[Users::failed_logins] = $failed_logins;
+			}
+			if (isset($creation_timestamp) && (isset($obj->creation_timestamp) == false || $creation_timestamp != $obj->creation_timestamp)) {
+				$updates[Users::creation_timestamp] = $creation_timestamp;
+			}
+			if (isset($last_login_timestamp) && (isset($obj->last_login_timestamp) == false || $last_login_timestamp != $obj->last_login_timestamp)) {
+				$updates[Users::last_login_timestamp] = $last_login_timestamp;
+			}
+			if (isset($last_failed_login) && (isset($obj->last_failed_login) == false || $last_failed_login != $obj->last_failed_login)) {
+				$updates[Users::last_failed_login] = $last_failed_login;
+			}
+			if (isset($password_reset_timestamp) && (isset($obj->password_reset_timestamp) == false || $password_reset_timestamp != $obj->password_reset_timestamp)) {
+				$updates[Users::password_reset_timestamp] = $password_reset_timestamp;
+			}
+
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Users )
@@ -195,6 +258,10 @@ abstract class _Users extends Model
 		return false;
 	}
 
+
+	/**
+	 *	Named fetches
+	 */
 }
 
 ?>

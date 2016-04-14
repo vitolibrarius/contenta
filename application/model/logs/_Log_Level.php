@@ -54,8 +54,8 @@ abstract class _Log_Level extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 	public function objectForCode($value)
 	{
@@ -80,7 +80,10 @@ abstract class _Log_Level extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $code, $name)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $code, $name)
 	{
 		$obj = false;
 		if ( isset($code) ) {
@@ -98,6 +101,33 @@ abstract class _Log_Level extends Model
 		return $obj;
 	}
 
+	public function base_update( Log_LevelDBO $obj,
+		$code, $name)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+			if (isset($code) && (isset($obj->code) == false || $code != $obj->code)) {
+				$updates[Log_Level::code] = $code;
+			}
+			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
+				$updates[Log_Level::name] = $name;
+			}
+
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Log_Level )
@@ -108,6 +138,10 @@ abstract class _Log_Level extends Model
 		return false;
 	}
 
+
+	/**
+	 *	Named fetches
+	 */
 }
 
 ?>

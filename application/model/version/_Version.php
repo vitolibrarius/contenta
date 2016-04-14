@@ -65,8 +65,8 @@ abstract class _Version extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 	public function objectForCode($value)
 	{
@@ -94,7 +94,10 @@ abstract class _Version extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $code, $major, $minor, $patch)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $code, $major, $minor, $patch)
 	{
 		$obj = false;
 		if ( isset($code) ) {
@@ -115,6 +118,39 @@ abstract class _Version extends Model
 		return $obj;
 	}
 
+	public function base_update( VersionDBO $obj,
+		$code, $major, $minor, $patch)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+			if (isset($code) && (isset($obj->code) == false || $code != $obj->code)) {
+				$updates[Version::code] = $code;
+			}
+			if (isset($major) && (isset($obj->major) == false || $major != $obj->major)) {
+				$updates[Version::major] = $major;
+			}
+			if (isset($minor) && (isset($obj->minor) == false || $minor != $obj->minor)) {
+				$updates[Version::minor] = $minor;
+			}
+			if (isset($patch) && (isset($obj->patch) == false || $patch != $obj->patch)) {
+				$updates[Version::patch] = $patch;
+			}
+
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Version )
@@ -129,6 +165,10 @@ abstract class _Version extends Model
 		return false;
 	}
 
+
+	/**
+	 *	Named fetches
+	 */
 	public function latestVersion(  )
 	{
 		$select = SQL::Select( $this );

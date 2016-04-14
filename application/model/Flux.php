@@ -56,6 +56,11 @@ class Flux extends Model
 		);
 	}
 
+	public function objectForSrc_guid( $guid )
+	{
+		return $this->singleObjectForKeyValue( Flux::src_guid, $guid );
+	}
+
 	public function objectForSourceGUID( $guid )
 	{
 		return $this->singleObjectForKeyValue( Flux::src_guid, $guid );

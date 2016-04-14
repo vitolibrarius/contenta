@@ -59,8 +59,8 @@ abstract class _Pull_List_Expansion extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 	public function allForPattern($value)
 	{
@@ -92,7 +92,10 @@ abstract class _Pull_List_Expansion extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $endpoint, $pattern, $replace)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $endpoint, $pattern, $replace)
 	{
 		$obj = false;
 		if ( isset($endpoint, $pattern) ) {
@@ -119,6 +122,41 @@ abstract class _Pull_List_Expansion extends Model
 		return $obj;
 	}
 
+	public function base_update( Pull_List_ExpansionDBO $obj,
+		$endpoint, $pattern, $replace)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+			if (isset($pattern) && (isset($obj->pattern) == false || $pattern != $obj->pattern)) {
+				$updates[Pull_List_Expansion::pattern] = $pattern;
+			}
+			if (isset($replace) && (isset($obj->replace) == false || $replace != $obj->replace)) {
+				$updates[Pull_List_Expansion::replace] = $replace;
+			}
+
+			if ( isset($endpoint) ) {
+				if ( $endpoint instanceof EndpointDBO) {
+					$updates[Pull_List_Expansion::endpoint_id] = $endpoint->id;
+				}
+				else if (  is_integer($endpoint) ) {
+					$updates[Pull_List_Expansion::endpoint_id] = $endpoint;
+				}
+			}
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Pull_List_Expansion )
@@ -130,6 +168,24 @@ abstract class _Pull_List_Expansion extends Model
 		return false;
 	}
 
+	public function deleteAllForEndpoint(EndpointDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForEndpoint($obj);
+			foreach ($array as $key => $value) {
+				if ($this->deleteObject($value) == false) {
+					$success = false;
+					break;
+				}
+			}
+		}
+		return $success;
+	}
+
+	/**
+	 *	Named fetches
+	 */
 }
 
 ?>

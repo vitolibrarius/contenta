@@ -137,7 +137,7 @@ class AdminSeries extends Admin
 					$oldIsWanted = $object->isWanted();
 					$newIsWanted = ($object->isWanted() ? MODEL::TERTIARY_FALSE : MODEL::TERTIARY_TRUE);
 					$values[Series::pub_wanted] = $newIsWanted;
-					$errors = $model->updateObject($object, $values);
+					list($object, $errors) = $model->updateObject($object, $values);
 					if ( is_array($errors) ) {
 						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
 						foreach ($errors as $attr => $errMsg ) {
@@ -179,7 +179,7 @@ class AdminSeries extends Admin
 				$object = $model->objectForId($oid);
 				if ( $object != false ) {
 					$oldIsWanted = $object->isWanted();
-					$errors = $model->updateObject($object, $values[$model->tableName()]);
+					list($object, $errors) = $model->updateObject($object, $values[$model->tableName()]);
 					if ( is_array($errors) ) {
 						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
 						foreach ($errors as $attr => $errMsg ) {

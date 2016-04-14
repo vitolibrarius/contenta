@@ -58,8 +58,8 @@ abstract class _Patch extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 	public function objectForName($value)
 	{
@@ -94,7 +94,10 @@ abstract class _Patch extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $version, $name)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $version, $name)
 	{
 		$obj = false;
 		if ( isset($version, $name) ) {
@@ -120,6 +123,38 @@ abstract class _Patch extends Model
 		return $obj;
 	}
 
+	public function base_update( PatchDBO $obj,
+		$version, $name)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
+				$updates[Patch::name] = $name;
+			}
+
+			if ( isset($version) ) {
+				if ( $version instanceof VersionDBO) {
+					$updates[Patch::version_id] = $version->id;
+				}
+				else if (  is_integer($version) ) {
+					$updates[Patch::version_id] = $version;
+				}
+			}
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Patch )
@@ -131,6 +166,24 @@ abstract class _Patch extends Model
 		return false;
 	}
 
+	public function deleteAllForVersion(VersionDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForVersion($obj);
+			foreach ($array as $key => $value) {
+				if ($this->deleteObject($value) == false) {
+					$success = false;
+					break;
+				}
+			}
+		}
+		return $success;
+	}
+
+	/**
+	 *	Named fetches
+	 */
 }
 
 ?>

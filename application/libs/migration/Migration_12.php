@@ -11,24 +11,9 @@ use \SQL as SQL;
 
 use utilities\CronEvaluator as CronEvaluator;
 
-use model\Series as Series;
-use model\Publisher as Publisher;
-use model\Series_Alias as Series_Alias;
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
-use model\Series_Character as Series_Character;
-use model\Users as Users;
-use model\User_Series as User_Series;
-use model\Story_Arc as Story_Arc;
-use model\Story_Arc_Character as Story_Arc_Character;
-use model\Story_Arc_Series as Story_Arc_Series;
-use model\Story_Arc_Publication as Story_Arc_Publication;
-use model\Publication as Publication;
-use model\Publication_Character as Publication_Character;
-use model\Media_Type as Media_Type;
-use model\Media as Media;
 use model\Endpoint as Endpoint;
-use model\Rss as Rss;
+
+use \model\network\Rss as Rss;
 
 
 class Migration_12 extends Migrator
@@ -43,7 +28,7 @@ class Migration_12 extends Migrator
 	public function sqlite_upgrade()
 	{
 		/** RSS */
-		$sql = 'CREATE TABLE IF NOT EXISTS ' . Rss::TABLE . " ( "
+		$sql = "CREATE TABLE IF NOT EXISTS rss ( "
 			. Rss::id . " INTEGER PRIMARY KEY, "
 			. Rss::endpoint_id . " INTEGER, "
 			. Rss::created . " INTEGER, "
@@ -60,23 +45,13 @@ class Migration_12 extends Migrator
 			. Rss::enclosure_hash . " TEXT, "
 			. Rss::enclosure_password . " INTEGER, "
 			. "FOREIGN KEY (". Rss::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
-			. ")";
-		$this->sqlite_execute( Rss::TABLE, $sql, "Create table " . Rss::TABLE );
+		. ")";
+		$this->sqlite_execute( "rss", $sql, "Create table rss" );
 
-		$indexStatements = array(
-			array( Migrator::IDX_TABLE => Rss::TABLE, Migrator::IDX_COLS => array( Rss::title ) ),
-			array( Migrator::IDX_TABLE => Rss::TABLE, Migrator::IDX_COLS => array( Rss::clean_name ) ),
-			array( Migrator::IDX_TABLE => Rss::TABLE, Migrator::IDX_COLS => array( Rss::endpoint_id, Rss::guid ), Migrator::IDX_UNIQUE => true ),
-		);
-		foreach( $indexStatements as $config ) {
-			$table = $config[Migrator::IDX_TABLE];
-			$columns = $config[Migrator::IDX_COLS];
-			$indexName = $table . '_' . implode("", $columns);
-			$unique = (isset($config[Migrator::IDX_UNIQUE]) ? boolval($config[Migrator::IDX_UNIQUE]) : false);
-
-			$statement = 'CREATE ' . ($unique ? 'UNIQUE' : '') . ' INDEX IF NOT EXISTS ' . $indexName . ' on ' . $table . '(' . implode(",", $columns) . ')';
-			$this->sqlite_execute( $table, $statement, "Index on " . $table );
-		}
+		$sql = 'CREATE  INDEX IF NOT EXISTS rss_clean_nameclean_issueclean_year on rss (clean_name,clean_issue,clean_year)';
+		$this->sqlite_execute( "rss", $sql, "Index on rss (clean_name,clean_issue,clean_year)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS rss_guid on rss (guid)';
+		$this->sqlite_execute( "rss", $sql, "Index on rss (guid)" );
 	}
 
 	public function sqlite_postUpgrade()

@@ -1,0 +1,98 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id",	"type": "INTEGER" },
+        "endpoint_id": { "column": "endpoint_id", "type": "INTEGER" },
+        "created": { "column": "created", "type": "DATE" },
+        "title": { "column": "title", "length": 256, "type": "TEXT", "nullable": false },
+        "desc": { "column": "desc", "length": 4096, "type": "TEXT" },
+        "pub_date": { "column": "pub_date", "type": "DATE", "nullable": false },
+        "guid": { "column": "guid", "length": 256, "type": "TEXT", "nullable": false },
+		"clean_name": { "column": "clean_name",	"length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": false  },
+        "clean_issue": { "column": "clean_issue", "length": 256, "type": "TEXT" },
+        "clean_year": { "column": "clean_year", "type": "INTEGER" },
+		"enclosure_url": { "column": "enclosure_url",	"length": 256, "type": "TEXT", "nullable": false  },
+        "enclosure_length": { "column": "enclosure_length", "type": "INTEGER" },
+        "enclosure_mime": { "column": "enclosure_mime", "length": 256, "type": "TEXT" },
+        "enclosure_hash": { "column": "enclosure_hash", "length": 256, "type": "TEXT" },
+        "enclosure_password": { "column": "enclosure_hash", "type": "BOOLEAN" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "rss",
+    "package": "network",
+    "model": "Rss",
+    "dbo": "RssDBO",
+	"sort" : [
+		{ "desc": "created" }
+	],
+    "relationships" :{
+    	"endpoint" : {
+    		"destination" : "Endpoint",
+    		"destinationTable" : "endpoint",
+    		"destinationPackage" : "\\model\\",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	},
+       	"flux" : {
+    		"destination" : "Flux",
+    		"destinationTable" : "flux",
+    		"destinationPackage" : "\\model\\",
+    		"joins" : [
+    			{ "destinationAttribute": "src_guid", "sourceAttribute" : "guid" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	}
+    },
+    "indexes" : [
+    	{ "columns": ["clean_name", "clean_issue", "clean_year"] },
+    	{ "columns": ["guid"], "unique": true }
+    ],
+	"fetches" : {
+		"objectsForNameIssueYear": {
+			"arguments": [ "name", "issue", "year" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Like",
+					"wildcard": "both",
+					"keyAttribute": "clean_name",
+					"argAttribute": "name",
+					"optional": true
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "clean_issue",
+					"argAttribute": "issue",
+					"optional": true
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "clean_year",
+					"argAttribute": "year",
+					"optional": true
+				}
+			]
+		},
+		"objectForEndpointGUID": {
+			"arguments": [ "endpoint", "guid" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Related",
+					"relationship": "endpoint",
+					"argAttribute": "endpoint"
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "guid",
+					"argAttribute": "guid"
+				}
+			]
+		}
+	}
+}

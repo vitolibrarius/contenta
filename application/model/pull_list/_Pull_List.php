@@ -70,8 +70,8 @@ abstract class _Pull_List extends Model
 		);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
+	/**
+	 *	Simple fetches
 	 */
 	public function allForName($value)
 	{
@@ -111,7 +111,10 @@ abstract class _Pull_List extends Model
 		return parent::joinAttributes( $joinModel );
 	}
 
-	public function create( $endpoint, $name, $etag, $published)
+	/**
+	 *	Create/Update functions
+	 */
+	public function base_create( $endpoint, $name, $etag, $published)
 	{
 		$obj = false;
 		if ( isset($endpoint, $name) ) {
@@ -139,6 +142,44 @@ abstract class _Pull_List extends Model
 		return $obj;
 	}
 
+	public function base_update( Pull_ListDBO $obj,
+		$endpoint, $name, $etag, $published)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			$updates = array();
+
+			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
+				$updates[Pull_List::name] = $name;
+			}
+			if (isset($etag) && (isset($obj->etag) == false || $etag != $obj->etag)) {
+				$updates[Pull_List::etag] = $etag;
+			}
+			if (isset($published) && (isset($obj->published) == false || $published != $obj->published)) {
+				$updates[Pull_List::published] = $published;
+			}
+
+			if ( isset($endpoint) ) {
+				if ( $endpoint instanceof EndpointDBO) {
+					$updates[Pull_List::endpoint_id] = $endpoint->id;
+				}
+				else if (  is_integer($endpoint) ) {
+					$updates[Pull_List::endpoint_id] = $endpoint;
+				}
+			}
+
+			if ( count($updates) > 0 ) {
+				list($obj, $errorList) = $this->updateObject( $obj, $updates );
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 *	Delete functions
+	 */
 	public function deleteObject( DataObject $object = null)
 	{
 		if ( $object instanceof Pull_List )
@@ -156,6 +197,24 @@ abstract class _Pull_List extends Model
 		return false;
 	}
 
+	public function deleteAllForEndpoint(EndpointDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForEndpoint($obj);
+			foreach ($array as $key => $value) {
+				if ($this->deleteObject($value) == false) {
+					$success = false;
+					break;
+				}
+			}
+		}
+		return $success;
+	}
+
+	/**
+	 *	Named fetches
+	 */
 }
 
 ?>

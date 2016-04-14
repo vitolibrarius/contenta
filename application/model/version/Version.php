@@ -15,6 +15,35 @@ use \model\version\PatchDBO as PatchDBO;
 
 class Version extends _Version
 {
+	/**
+	 *	Create/Update functions
+	 */
+	public function create( $code, $major, $minor, $patch)
+	{
+		return $this->base_create(
+			$code,
+			$major,
+			$minor,
+			$patch
+		);
+	}
+
+	public function update( VersionDBO $obj,
+		$code, $major, $minor, $patch)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			return $this->base_update(
+				$obj,
+				$code,
+				$major,
+				$minor,
+				$patch
+			);
+		}
+		return $obj;
+	}
+
+
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Version::code => Model::TEXT_TYPE,

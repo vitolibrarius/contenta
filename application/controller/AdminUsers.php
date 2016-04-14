@@ -67,7 +67,7 @@ class AdminUsers extends Admin
 			if ( $uid > 0 ) {
 				$userObj = $model->objectForId($uid);
 				if ( $userObj != false ) {
-					$errors = $model->updateObject($userObj, $values['users']);
+					list($userObj, $errors) = $model->updateObject($userObj, $values['users']);
 					if ( is_array($errors) ) {
 						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
 						foreach ($errors as $attr => $errMsg ) {

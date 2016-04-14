@@ -15,6 +15,33 @@ use \model\EndpointDBO as EndpointDBO;
 
 class Pull_List_Exclusion extends _Pull_List_Exclusion
 {
+	/**
+	 *	Create/Update functions
+	 */
+	public function create( $endpoint, $pattern, $type)
+	{
+		return $this->base_create(
+			$endpoint,
+			$pattern,
+			$type
+		);
+	}
+
+	public function update( Pull_List_ExclusionDBO $obj,
+		$endpoint, $pattern, $type)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			return $this->base_update(
+				$obj,
+				$endpoint,
+				$pattern,
+				$type
+			);
+		}
+		return $obj;
+	}
+
+
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Pull_List_Exclusion::pattern => Model::TEXT_TYPE,

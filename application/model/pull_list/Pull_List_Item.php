@@ -15,6 +15,39 @@ use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
 
 class Pull_List_Item extends _Pull_List_Item
 {
+	/**
+	 *	Create/Update functions
+	 */
+	public function create( $pull_list, $group_name, $data, $name, $issue, $year)
+	{
+		return $this->base_create(
+			$pull_list,
+			$group_name,
+			$data,
+			$name,
+			$issue,
+			$year
+		);
+	}
+
+	public function update( Pull_List_ItemDBO $obj,
+		$pull_list, $group_name, $data, $name, $issue, $year)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			return $this->base_update(
+				$obj,
+				$pull_list,
+				$group_name,
+				$data,
+				$name,
+				$issue,
+				$year
+			);
+		}
+		return $obj;
+	}
+
+
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Pull_List_Item::group_name => Model::TEXT_TYPE,

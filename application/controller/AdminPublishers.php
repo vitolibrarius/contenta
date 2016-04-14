@@ -96,7 +96,7 @@ class AdminPublishers extends Admin
 			if ( $pubId > 0 ) {
 				$object = $model->objectForId($pubId);
 				if ( $object != false ) {
-					$errors = $model->updateObject($object, $values[$model->tableName()]);
+					list($object, $errors) = $model->updateObject($object, $values[$model->tableName()]);
 					if ( is_array($errors) ) {
 						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
 						foreach ($errors as $attr => $errMsg ) {

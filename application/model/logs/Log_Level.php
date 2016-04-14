@@ -13,6 +13,31 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 
 class Log_Level extends _Log_Level
 {
+	/**
+	 *	Create/Update functions
+	 */
+	public function create( $code, $name)
+	{
+		return $this->base_create(
+			$code,
+			$name
+		);
+	}
+
+	public function update( Log_LevelDBO $obj,
+		$code, $name)
+	{
+		if ( isset( $obj ) && is_null($obj) == false ) {
+			return $this->base_update(
+				$obj,
+				$code,
+				$name
+			);
+		}
+		return $obj;
+	}
+
+
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Log_Level::code => Model::TEXT_TYPE,
