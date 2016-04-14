@@ -2,129 +2,87 @@
 
 namespace model\pull_list;
 
-
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \SQL as SQL;
-use \db\Qualifier as Qualifier;
+use \Validation as Validation;
 
-use model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
+use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
-/** Sample Creation script */
-		/** PULL_LIST_EXPANSION
-		$sql = "CREATE TABLE IF NOT EXISTS pull_list_expansion ( "
-			. model\pull_list\Pull_List_Expansion::id . " INTEGER PRIMARY KEY, "
-			. model\pull_list\Pull_List_Expansion::pattern . " TEXT, "
-			. model\pull_list\Pull_List_Expansion::replace . " TEXT, "
-			. model\pull_list\Pull_List_Expansion::created . " INTEGER, "
-			. model\pull_list\Pull_List_Expansion::endpoint_id . " INTEGER, "
-			. "FOREIGN KEY (". model\pull_list\Pull_List_Expansion::endpoint_id .")"
-				. " REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
-			. ")";
-		$this->sqlite_execute( "pull_list_expansion", $sql, "Create table pull_list_expansion" );
+/* import related objects */
+use \model\Endpoint as Endpoint;
+use \model\EndpointDBO as EndpointDBO;
 
-*/
-class Pull_List_Expansion extends Model
+class Pull_List_Expansion extends _Pull_List_Expansion
 {
-	const TABLE = 'pull_list_expansion';
-	const id = 'id';
-	const pattern = 'pattern';
-	const replace = 'replace';
-	const created = 'created';
-	const endpoint_id = 'endpoint_id';
-
-	public function tableName() { return Pull_List_Expansion::TABLE; }
-	public function tablePK() { return Pull_List_Expansion::id; }
-	public function sortOrder()
-	{
+	public function attributesFor($object = null, $type = null) {
 		return array(
-			array( 'asc' => Pull_List_Expansion::pattern)
+			Pull_List_Expansion::pattern => Model::TEXT_TYPE,
+			Pull_List_Expansion::replace => Model::TEXT_TYPE,
+			Pull_List_Expansion::created => Model::DATE_TYPE,
+			Pull_List_Expansion::endpoint_id => Model::INT_TYPE
 		);
 	}
 
-	public function allColumnNames()
+	public function attributesMandatory($object = null)
 	{
-		return array(
-			Pull_List_Expansion::id,
-			Pull_List_Expansion::pattern,
-			Pull_List_Expansion::replace,
-			Pull_List_Expansion::created,
-			Pull_List_Expansion::endpoint_id
-		);
-	}
-
-	/** * * * * * * * * *
-		Basic search functions
-	 */
-	public function allForPattern($value)
-	{
-		return $this->allObjectsForKeyValue(Pull_List_Expansion::pattern, $value);
-	}
-
-	public function allForReplace($value)
-	{
-		return $this->allObjectsForKeyValue(Pull_List_Expansion::replace, $value);
-	}
-
-
-	public function allForEndpoint($obj)
-	{
-		return $this->allObjectsForFK(Pull_List_Expansion::endpoint_id, $obj, $this->sortOrder(), 50);
-	}
-
-	public function joinAttributes( Model $joinModel = null )
-	{
-		if ( is_null($joinModel) == false ) {
-			switch ( $joinModel->tableName() ) {
-				case "endpoint":
-					return array( Pull_List_Expansion::endpoint_id, "id"  );
-					break;
-				default:
-					break;
-			}
-		}
-		return parent::joinAttributes( $joinModel );
-	}
-
-	public function create( $endpoint, $pattern, $replace)
-	{
-		$obj = false;
-		if ( isset($endpoint, $pattern) ) {
-			$params = array(
-				Pull_List_Expansion::pattern => (isset($pattern) ? $pattern : null),
-				Pull_List_Expansion::replace => (isset($replace) ? $replace : null),
-				Pull_List_Expansion::created => time(),
+		if ( is_null($object) ) {
+			return array(
+				Pull_List_Expansion::pattern
 			);
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof Endpoint) {
-					$params[Pull_List_Expansion::endpoint_id] = $endpoint->id;
-				}
-				else if (  is_integer($endpoint) ) {
-					$params[Pull_List_Expansion::endpoint_id] = $endpoint;
-				}
-			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
-			}
 		}
-		return $obj;
+		return parent::attributesMandatory($object);
 	}
 
-	public function deleteObject( DataObject $object = null)
+	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
-		if ( $object instanceof Pull_List_Expansion )
-		{
-			// does not own Endpoint
-			return parent::deleteObject($object);
-		}
-
-		return false;
+		// add customization here
+		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
+	/*
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
+	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
+	*/
+
+	public function attributeEditPattern($object = null, $type = null, $attr)
+	{
+		return null;
+	}
+
+	public function attributeOptions($object = null, $type = null, $attr)
+	{
+		if ( $attr = Pull_List_Expansion::endpoint_id ) {
+			$model = Model::Named('Endpoint');
+			return $model->allObjects();
+		}
+		return null;
+	}
+
+	/** Validation */
+	function validate_pattern($object = null, $value)
+	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Expansion::pattern,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_replace($object = null, $value)
+	{
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		return null;
+	}
+	function validate_endpoint_id($object = null, $value)
+	{
+		return null;
+	}
 }
 
 ?>

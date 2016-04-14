@@ -1,8 +1,8 @@
 {
     "attributes": {
         "id": { "column": "id", "type": "INTEGER" },
-        "ip_address": { "column": "ip_address", "type": "TEXT",	"collate": "NOCASE", "nullable": false },
-        "ip_hash": { "column": "ip_hash", "type": "TEXT", "default": "ipToHex($ip_address)" },
+        "ip_address": { "column": "ip_address", "length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": false },
+        "ip_hash": { "column": "ip_hash", "length": 256, "type": "TEXT", "default": "ipToHex($ip_address)" },
         "created": { "column": "created", "type": "DATE" },
         "disable": { "column": "disable", "type": "BOOLEAN",  "default": "Model::TERTIARY_FALSE" }
     },
@@ -14,9 +14,14 @@
 	"sort" : [
 		{ "asc": "ip_hash" }
 	],
+    "indexes" : [
+    	{ "columns": ["ip_address"], "unique": true },
+    	{ "columns": ["ip_hash"], "unique": true }
+    ],
     "relationships" :{
     	"user_network" : {
     		"destination" : "User_Network",
+    		"destinationPackage" : "\\model\\network\\",
     		"destinationTable" : "user_network",
     		"joins" : [
     			{ "destinationAttribute": "network_id", "sourceAttribute" : "id" }

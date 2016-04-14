@@ -2,157 +2,97 @@
 
 namespace model\version;
 
-
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \SQL as SQL;
-use \db\Qualifier as Qualifier;
+use \Validation as Validation;
 
-use model\version\VersionDBO as VersionDBO;
+use \model\version\VersionDBO as VersionDBO;
 
-/** Sample Creation script */
-		/** VERSION
-		$sql = "CREATE TABLE IF NOT EXISTS version ( "
-			. model\version\Version::id . " INTEGER PRIMARY KEY, "
-			. model\version\Version::code . " TEXT, "
-			. model\version\Version::major . " INTEGER, "
-			. model\version\Version::minor . " INTEGER, "
-			. model\version\Version::patch . " INTEGER, "
-			. model\version\Version::created . " INTEGER, "
-			. model\version\Version::hash_code . " TEXT, "
-			. ")";
-		$this->sqlite_execute( "version", $sql, "Create table version" );
+/* import related objects */
+use \model\version\Patch as Patch;
+use \model\version\PatchDBO as PatchDBO;
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS version_code on version (code)';
-		$this->sqlite_execute( "version", $sql, "Index on version (code)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS version_hash_code on version (hash_code)';
-		$this->sqlite_execute( "version", $sql, "Index on version (hash_code)" );
-		$sql = 'CREATE  INDEX IF NOT EXISTS version_majorminorpatch on version (major,minor,patch)';
-		$this->sqlite_execute( "version", $sql, "Index on version (major,minor,patch)" );
-*/
-class Version extends Model
+class Version extends _Version
 {
-	const TABLE = 'version';
-	const id = 'id';
-	const code = 'code';
-	const major = 'major';
-	const minor = 'minor';
-	const patch = 'patch';
-	const created = 'created';
-	const hash_code = 'hash_code';
-
-	public function tableName() { return Version::TABLE; }
-	public function tablePK() { return Version::id; }
-	public function sortOrder()
-	{
+	public function attributesFor($object = null, $type = null) {
 		return array(
-			array( 'asc' => Version::code)
+			Version::code => Model::TEXT_TYPE,
+			Version::major => Model::INT_TYPE,
+			Version::minor => Model::INT_TYPE,
+			Version::patch => Model::INT_TYPE,
+			Version::created => Model::DATE_TYPE
 		);
 	}
 
-	public function allColumnNames()
+	public function attributesMandatory($object = null)
 	{
-		return array(
-			Version::id,
-			Version::code,
-			Version::major,
-			Version::minor,
-			Version::patch,
-			Version::created,
-			Version::hash_code
-		);
-	}
-
-	/** * * * * * * * * *
-		Basic search functions
-	 */
-	public function objectForCode($value)
-	{
-		return $this->singleObjectForKeyValue(Version::code, $value);
-	}
-
-	public function allLikeCode($value)
-	{
-		return SQL::Select( $this )
-			->where( Qualifier::Like( Version::code, $value, SQL::SQL_LIKE_AFTER ))
-			->orderBy( $this->sortOrder() )
-			->limit( 50 )
-			->fetchAll();
-	}
-	public function objectForHash_code($value)
-	{
-		return $this->singleObjectForKeyValue(Version::hash_code, $value);
-	}
-
-
-
-	public function joinAttributes( Model $joinModel = null )
-	{
-		if ( is_null($joinModel) == false ) {
-			switch ( $joinModel->tableName() ) {
-				default:
-					break;
-			}
-		}
-		return parent::joinAttributes( $joinModel );
-	}
-
-	public function create( $code, $major, $minor, $patch, $hash_code)
-	{
-		$obj = false;
-		if ( isset($code, $hash_code) ) {
-			$params = array(
-				Version::code => (isset($code) ? $code : null),
-				Version::major => (isset($major) ? $major : null),
-				Version::minor => (isset($minor) ? $minor : null),
-				Version::patch => (isset($patch) ? $patch : null),
-				Version::created => time(),
-				Version::hash_code => (isset($hash_code) ? $hash_code : null),
+		if ( is_null($object) ) {
+			return array(
+				Version::code
 			);
-
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
-			}
 		}
-		return $obj;
+		return parent::attributesMandatory($object);
 	}
 
-	public function deleteObject( DataObject $object = null)
+	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
-		if ( $object instanceof Version )
-		{
-			$patch_model = Model::Named('Patch');
-			if ( $patch_model->deleteAllForKeyValue(Patch::version_id, $this->id) == false ) {
-				return false;
-			}
-			return parent::deleteObject($object);
-		}
-
-		return false;
+		// add customization here
+		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
-	public function latestVersion(  )
+	/*
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
+	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
+	*/
+
+	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
-		$select = SQL::Select( $this );
-		$select->orderBy( $this->sortOrder() );
-		$qualifiers = array();
-		$qualifiers[] = Qualifier::InSubQuery( 'code', SQL::Aggregate( 'max', Model::Named('Version'), 'code', null, null ), null);
-
-		if ( count($qualifiers) > 0 ) {
-			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
-		}
-
-		$result = $select->fetchAll();
-		if ( is_array($result) && count($result) > 1 ) {
-			throw new \Exception( latestVersion . " expected 1 result, but fetched " . count($result) );
-		}
-
-		return (is_array($result) ? $result[0] : false );
+		return null;
 	}
 
+	public function attributeOptions($object = null, $type = null, $attr)
+	{
+		return null;
+	}
+
+	/** Validation */
+	function validate_code($object = null, $value)
+	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Version::code,
+				"FIELD_EMPTY"
+			);
+		}
+		// make sure Code is unique
+		$existing = $this->objectForCode($value);
+		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Version::code,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_major($object = null, $value)
+	{
+		return null;
+	}
+	function validate_minor($object = null, $value)
+	{
+		return null;
+	}
+	function validate_patch($object = null, $value)
+	{
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		return null;
+	}
 }
 
 ?>

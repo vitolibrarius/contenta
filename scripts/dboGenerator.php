@@ -17,9 +17,10 @@ realpath($models_path) || die( "Could not find 'dbo_models'" );
 $templates_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates';
 realpath($templates_path) || die( "Could not find 'dbo_templates'" );
 
+define('MODEL_BASE_TEMPLATE', $templates_path . DIRECTORY_SEPARATOR . 'model_base_template.php');
 define('MODEL_TEMPLATE', $templates_path . DIRECTORY_SEPARATOR . 'model_template.php');
+define('DBO_BASE_TEMPLATE', $templates_path . DIRECTORY_SEPARATOR . 'dbo_base_template.php');
 define('DBO_TEMPLATE', $templates_path . DIRECTORY_SEPARATOR . 'dbo_template.php');
-define('VALIDATION_TEMPLATE', $templates_path . DIRECTORY_SEPARATOR . 'validate_template.php');
 
 require SYSTEM_PATH .'application/config/bootstrap.php';
 require SYSTEM_PATH .'application/config/autoload.php';
@@ -48,6 +49,8 @@ class Template
 {
     var $model = array();
     var $path_to_file= array();
+    var $destinationRelationMap = null;
+
     function __construct($path_to_file)
     {
          if(!file_exists($path_to_file))
@@ -67,8 +70,16 @@ class Template
     	return (isset($this->model[$key]) ? $this->model[$key] : null);
     }
 
+    public function dboBaseName() {
+    	return "_" . $this->dboClassName();
+    }
+
     public function dboClassName() {
     	return (isset($this->model['dbo']) ? $this->model['dbo'] : null);
+    }
+
+    public function modelBaseName() {
+    	return "_" . $this->modelClassName();
     }
 
     public function modelClassName() {
@@ -84,11 +95,11 @@ class Template
     }
 
     public function dboPackageClassName() {
-    	return $this->packageName() . "\\" . $this->dboClassName();
+    	return "\\" . $this->packageName() . "\\" . $this->dboClassName();
     }
 
     public function modelPackageClassName() {
-    	return $this->packageName() . "\\" . $this->modelClassName();
+    	return "\\" . $this->packageName() . "\\" . $this->modelClassName();
     }
 
     public function displayAttribute() {
@@ -105,6 +116,54 @@ class Template
     		return true;
     	}
     	return false;
+    }
+
+	public function isType_TEXT($name = '') {
+		$type = $this->modelTypeForAttribute($name);
+		return (is_null($type) == false && $type == 'Model::TEXT_TYPE');
+	}
+
+	public function isType_TEXT_URL($name = '') {
+		return ( $this->isType_TEXT() && endsWith($name, '_url') );
+	}
+
+	public function isType_DATE($name = '') {
+		$type = $this->modelTypeForAttribute($name);
+		return (is_null($type) == false && $type == 'Model::DATE_TYPE');
+	}
+
+	public function isType_INTEGER($name = '') {
+		$type = $this->modelTypeForAttribute($name);
+		return (is_null($type) == false && $type == 'Model::INT_TYPE');
+	}
+
+	public function isType_BOOLEAN($name = '') {
+		$type = $this->modelTypeForAttribute($name);
+		return (is_null($type) == false && $type == 'Model::FLAG_TYPE');
+	}
+
+    public function modelTypeForAttribute($name = '') {
+    	$details = $this->detailsForAttribute($name);
+    	$type = null;
+    	if ( is_array($details) ) {
+			$type = 'Model::TEXT_TYPE';
+			if (isset($details['type']) ) {
+				switch ($details['type']) {
+					case 'DATE':
+						$type = "Model::DATE_TYPE";
+						break;
+					case 'INTEGER':
+						$type = "Model::INT_TYPE";
+						break;
+					case 'BOOLEAN':
+						$type = 'Model::FLAG_TYPE';
+						break;
+					default:
+						break;
+				}
+			}
+		}
+    	return $type;
     }
 
     public function isRelationshipKey( $rel = '' ) {
@@ -132,6 +191,16 @@ class Template
     			}
     		}
     	}
+    	return false;
+    }
+
+    public function isMandatoryAttribute( $attr = '' ) {
+    	$details = $this->detailsForAttribute($attr);
+    	if ( is_array($details) ) {
+			if ( isset($details['nullable']) && $details['nullable'] == false ) {
+				return true;
+			}
+		}
     	return false;
     }
 
@@ -220,18 +289,30 @@ class Template
 		return (is_array($fetches) ? $fetches : array());
     }
 
-/**
-				{
-					"type" : "InSubQuery",
-					"keyAttribute": "code",
-					"subQuery": {
-						"model": ModelName,
-						"type": "Aggregate",
-						"function": "max",
-						"keyAttribute": "code"
-					}
+	public function relationshipAliasStatements()
+	{
+		if ( is_null($this->destinationRelationMap) ) {
+			$this->destinationRelationMap = array();
+			$objectRelationships = (is_array($this->relationships) ? $this->relationships : array());;
+
+			foreach( $objectRelationships as $name => $detailArray ) {
+				if ( isset($detailArray['destination'], $detailArray['destinationPackage'], $detailArray['destinationTable']) ) {
+					$destName = $detailArray['destination'];
+					$destPackageName = $detailArray['destinationPackage'];
+					$destTableName = $detailArray['destinationTable'];
+					$this->destinationRelationMap[$destTableName] = array(
+						"use " . $destPackageName . $destName . " as " . $destName . ";",
+						"use " . $destPackageName . $destName . "DBO as " . $destName . "DBO;"
+					);
 				}
-*/
+				else {
+					Logger::logWarning( "Error: relationship " . $name . " missing one of 'destination', 'destinationPackage', 'destinationTable'");
+				}
+			}
+		}
+		return $this->destinationRelationMap;
+	}
+
 	public function sqlString( $sqlDetails )
 	{
 		$sqlPHPString = "";
@@ -372,45 +453,50 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	$package = $model_meta['package'];
 	$modelname = $model_meta['model'];
 	$dboname = $model_meta['dbo'];
-	$validationname = $model_meta['model'] . '_Validation';
+	$model_base_file = appendPath( MODELS_PATH, $package, "_" . $modelname) . ".php";
+	$model_file = appendPath( MODELS_PATH, $package, $modelname) . ".php";
+	$dbo_base_file = appendPath( MODELS_PATH, $package, "_" . $dboname) . ".php";
+	$dbo_file = appendPath( MODELS_PATH, $package, $dboname) . ".php";
 
-	/** generate model file */
+
+	/** create package directory */
 	$packagePath = appendPath( MODELS_PATH, $package );
 	is_dir($packagePath) ||  mkdir($packagePath) || die( 'Failed to created directory ' . $packagePath );
 
-	$Template = new Template(MODEL_TEMPLATE);
+	/** generate base model file */
+	$Template = new Template(MODEL_BASE_TEMPLATE);
 	$Template->setModel($model_meta);
 	$model_data = $Template->generate();
-	$model_file = appendPath( MODELS_PATH, $package, $modelname) . ".php";
-	file_put_contents( $model_file, $model_data );
-	$clazz = "model\\" . $package . "\\" . $modelname;
+	file_put_contents( $model_base_file, $model_data );
 
+	/** generate model file */
+// 		if ( is_file($model_file) == false ) {
+		$Template = new Template(MODEL_TEMPLATE);
+		$Template->setModel($model_meta);
+		$model_data = $Template->generate();
+		file_put_contents( $model_file, $model_data );
+// 	}
+
+	$clazz = "model\\" . $package . "\\" . $modelname;
 	$instance = new $clazz();
 	echo $clazz . " .. " . $instance->consistencyTest() . PHP_EOL;
-	$m = Model::Named( $package . "\\" . $modelname);
-	echo $package . "\\" . $modelname . " .. " . $m->consistencyTest() . PHP_EOL;
 
-	/** generate dbo file */
-	$Template = new Template(DBO_TEMPLATE);
+
+	/** generate dbo base file */
+	$Template = new Template(DBO_BASE_TEMPLATE);
 	$Template->setModel($model_meta);
 	$dbo_data = $Template->generate();
-	$dbo_file = appendPath( MODELS_PATH, $package, $dboname) . ".php";
-	file_put_contents( $dbo_file, $dbo_data );
-	$clazz = "model\\" . $package . "\\" . $dboname;
+	file_put_contents( $dbo_base_file, $dbo_data );
 
-	$instance = new $clazz();
-	echo $clazz . " .. " . $instance->consistencyTest() . PHP_EOL;
-
-	/** generate validation file */
-	$validation_file = appendPath( MODELS_PATH, $package, $validationname) . ".php";
-// 	if ( is_file($validation_file) == false ) {
-// 		$validation_file = appendPath( sys_get_temp_dir(), $validationname) . ".php";
+	/** generate dbo file */
+// 		if ( is_file($dbo_file) == false ) {
+		$Template = new Template(DBO_TEMPLATE);
+		$Template->setModel($model_meta);
+		$dbo_data = $Template->generate();
+		file_put_contents( $dbo_file, $dbo_data );
 // 	}
-	$Template = new Template(VALIDATION_TEMPLATE);
-	$Template->setModel($model_meta);
-	$validation_data = $Template->generate();
-	file_put_contents( $validation_file, $validation_data );
-	$clazz = "model\\" . $package . "\\" . $validationname;
+
+	$clazz = "model\\" . $package . "\\" . $dboname;
 	$instance = new $clazz();
 	echo $clazz . " .. " . $instance->consistencyTest() . PHP_EOL;
 }

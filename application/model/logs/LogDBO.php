@@ -6,33 +6,14 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 
-use model\logs\Log as Log;
+use \model\logs\Log as Log;
 
-class LogDBO extends DataObject
+/* import related objects */
+use \model\logs\Log_Level as Log_Level;
+use \model\logs\Log_LevelDBO as Log_LevelDBO;
+
+class LogDBO extends _LogDBO
 {
-	public $trace;
-	public $trace_id;
-	public $context;
-	public $context_id;
-	public $message;
-	public $session;
-	public $level;
-	public $created;
-
-
-	public function formattedDateTimeCreated() { return $this->formattedDate( Log::created, "M d, Y H:i" ); }
-	public function formattedDateCreated() {return $this->formattedDate( Log::created, "M d, Y" ); }
-
-
-	// to-one relationship
-	public function logLevel()
-	{
-		if ( isset( $this->level ) ) {
-			$model = Model::Named('Log_Level');
-			return $model->objectForCode($this->level);
-		}
-		return false;
-	}
 
 }
 

@@ -2,130 +2,67 @@
 
 namespace model\network;
 
-
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \SQL as SQL;
-use \db\Qualifier as Qualifier;
+use \Validation as Validation;
 
-use model\network\User_NetworkDBO as User_NetworkDBO;
+use \model\network\User_NetworkDBO as User_NetworkDBO;
 
-/** Sample Creation script */
-		/** USER_NETWORK
-		$sql = "CREATE TABLE IF NOT EXISTS user_network ( "
-			. model\network\User_Network::id . " INTEGER PRIMARY KEY, "
-			. model\network\User_Network::user_id . " INTEGER, "
-			. model\network\User_Network::network_id . " INTEGER, "
-			. "FOREIGN KEY (". model\network\User_Network::user_id .")"
-				. " REFERENCES " . Users::TABLE . "(" . Users::id . ")[network],"
-			. "FOREIGN KEY (". model\network\User_Network::network_id .")"
-				. " REFERENCES " . Network::TABLE . "(" . Network::id . ")"
-			. ")";
-		$this->sqlite_execute( "user_network", $sql, "Create table user_network" );
+/* import related objects */
+use \model\users\Users as Users;
+use \model\users\UsersDBO as UsersDBO;
+use \model\network\Network as Network;
+use \model\network\NetworkDBO as NetworkDBO;
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS user_network_user_idnetwork_id on user_network (user_id,network_id)';
-		$this->sqlite_execute( "user_network", $sql, "Index on user_network (user_id,network_id)" );
-*/
-class User_Network extends Model
+class User_Network extends _User_Network
 {
-	const TABLE = 'user_network';
-	const id = 'id';
-	const user_id = 'user_id';
-	const network_id = 'network_id';
-
-	public function tableName() { return User_Network::TABLE; }
-	public function tablePK() { return User_Network::id; }
-	public function sortOrder()
-	{
+	public function attributesFor($object = null, $type = null) {
 		return array(
-			array( 'asc' => User_Network::user_id)
+			User_Network::user_id => Model::INT_TYPE,
+			User_Network::network_id => Model::INT_TYPE
 		);
 	}
 
-	public function allColumnNames()
+
+	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
-		return array(
-			User_Network::id,
-			User_Network::user_id,
-			User_Network::network_id
-		);
+		// add customization here
+		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
-	/** * * * * * * * * *
-		Basic search functions
-	 */
+	/*
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
+	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
+	*/
 
-	public function allForUser($obj)
+	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
-		return $this->allObjectsForFK(User_Network::user_id, $obj, $this->sortOrder(), 50);
-	}
-	public function allForNetwork($obj)
-	{
-		return $this->allObjectsForFK(User_Network::network_id, $obj, $this->sortOrder(), 50);
+		return null;
 	}
 
-	public function joinAttributes( Model $joinModel = null )
+	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( is_null($joinModel) == false ) {
-			switch ( $joinModel->tableName() ) {
-				case "users":
-					return array( User_Network::user_id, "id"  );
-					break;
-				case "network":
-					return array( User_Network::network_id, "id"  );
-					break;
-				default:
-					break;
-			}
+		if ( $attr = User_Network::user_id ) {
+			$model = Model::Named('Users');
+			return $model->allObjects();
 		}
-		return parent::joinAttributes( $joinModel );
-	}
-
-	public function create( $user, $network)
-	{
-		$obj = false;
-		if ( isset($user, $network) ) {
-			$params = array(
-			);
-
-			if ( isset($user) ) {
-				if ( $user instanceof Users) {
-					$params[User_Network::user_id] = $user->id;
-				}
-				else if (  is_integer($user) ) {
-					$params[User_Network::user_id] = $user;
-				}
-			}
-			if ( isset($network) ) {
-				if ( $network instanceof Network) {
-					$params[User_Network::network_id] = $network->id;
-				}
-				else if (  is_integer($network) ) {
-					$params[User_Network::network_id] = $network;
-				}
-			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
-			}
+		if ( $attr = User_Network::network_id ) {
+			$model = Model::Named('Network');
+			return $model->allObjects();
 		}
-		return $obj;
+		return null;
 	}
 
-	public function deleteObject( DataObject $object = null)
+	/** Validation */
+	function validate_user_id($object = null, $value)
 	{
-		if ( $object instanceof User_Network )
-		{
-			// does not own Users
-			// does not own Network
-			return parent::deleteObject($object);
-		}
-
-		return false;
+		return null;
 	}
-
+	function validate_network_id($object = null, $value)
+	{
+		return null;
+	}
 }
 
 ?>

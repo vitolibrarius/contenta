@@ -2,130 +2,91 @@
 
 namespace model\version;
 
-
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \SQL as SQL;
-use \db\Qualifier as Qualifier;
+use \Validation as Validation;
 
-use model\version\PatchDBO as PatchDBO;
+use \model\version\PatchDBO as PatchDBO;
 
-/** Sample Creation script */
-		/** PATCH
-		$sql = "CREATE TABLE IF NOT EXISTS patch ( "
-			. model\version\Patch::id . " INTEGER PRIMARY KEY, "
-			. model\version\Patch::name . " TEXT, "
-			. model\version\Patch::created . " INTEGER, "
-			. model\version\Patch::version_id . " INTEGER, "
-			. "FOREIGN KEY (". model\version\Patch::version_id .")"
-				. " REFERENCES " . Version::TABLE . "(" . Version::id . ")"
-			. ")";
-		$this->sqlite_execute( "patch", $sql, "Create table patch" );
+/* import related objects */
+use \model\version\Version as Version;
+use \model\version\VersionDBO as VersionDBO;
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS patch_name on patch (name)';
-		$this->sqlite_execute( "patch", $sql, "Index on patch (name)" );
-*/
-class Patch extends Model
+class Patch extends _Patch
 {
-	const TABLE = 'patch';
-	const id = 'id';
-	const name = 'name';
-	const created = 'created';
-	const version_id = 'version_id';
-
-	public function tableName() { return Patch::TABLE; }
-	public function tablePK() { return Patch::id; }
-	public function sortOrder()
-	{
+	public function attributesFor($object = null, $type = null) {
 		return array(
-			array( 'asc' => Patch::name)
+			Patch::name => Model::TEXT_TYPE,
+			Patch::created => Model::DATE_TYPE,
+			Patch::version_id => Model::INT_TYPE
 		);
 	}
 
-	public function allColumnNames()
+	public function attributesMandatory($object = null)
 	{
-		return array(
-			Patch::id,
-			Patch::name,
-			Patch::created,
-			Patch::version_id
-		);
-	}
-
-	/** * * * * * * * * *
-		Basic search functions
-	 */
-	public function objectForName($value)
-	{
-		return $this->singleObjectForKeyValue(Patch::name, $value);
-	}
-
-	public function allLikeName($value)
-	{
-		return SQL::Select( $this )
-			->where( Qualifier::Like( Patch::name, $value, SQL::SQL_LIKE_AFTER ))
-			->orderBy( $this->sortOrder() )
-			->limit( 50 )
-			->fetchAll();
-	}
-
-	public function allForVersion($obj)
-	{
-		return $this->allObjectsForFK(Patch::version_id, $obj, $this->sortOrder(), 50);
-	}
-
-	public function joinAttributes( Model $joinModel = null )
-	{
-		if ( is_null($joinModel) == false ) {
-			switch ( $joinModel->tableName() ) {
-				case "version":
-					return array( Patch::version_id, "id"  );
-					break;
-				default:
-					break;
-			}
-		}
-		return parent::joinAttributes( $joinModel );
-	}
-
-	public function create( $version, $name)
-	{
-		$obj = false;
-		if ( isset($version, $name) ) {
-			$params = array(
-				Patch::name => (isset($name) ? $name : null),
-				Patch::created => time(),
+		if ( is_null($object) ) {
+			return array(
+				Patch::name
 			);
-
-			if ( isset($version) ) {
-				if ( $version instanceof Version) {
-					$params[Patch::version_id] = $version->id;
-				}
-				else if (  is_integer($version) ) {
-					$params[Patch::version_id] = $version;
-				}
-			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
-			}
 		}
-		return $obj;
+		return parent::attributesMandatory($object);
 	}
 
-	public function deleteObject( DataObject $object = null)
+	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
-		if ( $object instanceof Patch )
-		{
-			// does not own Version
-			return parent::deleteObject($object);
-		}
-
-		return false;
+		// add customization here
+		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
+	/*
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
+	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
+	*/
+
+	public function attributeEditPattern($object = null, $type = null, $attr)
+	{
+		return null;
+	}
+
+	public function attributeOptions($object = null, $type = null, $attr)
+	{
+		if ( $attr = Patch::version_id ) {
+			$model = Model::Named('Version');
+			return $model->allObjects();
+		}
+		return null;
+	}
+
+	/** Validation */
+	function validate_name($object = null, $value)
+	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Patch::name,
+				"FIELD_EMPTY"
+			);
+		}
+		// make sure Name is unique
+		$existing = $this->objectForName($value);
+		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Patch::name,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		return null;
+	}
+	function validate_version_id($object = null, $value)
+	{
+		return null;
+	}
 }
 
 ?>

@@ -16,6 +16,7 @@
     	"user" : {
     		"destination" : "Users",
     		"destinationTable" : "users",
+    		"destinationPackage" : "\\model\\users\\",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "user_id" }
     		],
@@ -26,6 +27,7 @@
     	"network" : {
     		"destination" : "Network",
     		"destinationTable" : "network",
+    		"destinationPackage" : "\\model\\network\\",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "network_id" }
     		],

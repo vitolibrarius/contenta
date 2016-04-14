@@ -29,7 +29,7 @@ Migrator::Upgrade( Config::GetLog(), true );
 $options = getopt( "f:");
 if ( isset( $options['f']) == false ) {
 	echo "Import -f <path/to/Contenta.export>" . PHP_EOL;
-	die( "Source directory is required" );
+	die( "Source directory is required" . PHP_EOL );
 }
 
 $import = new db\ImportData( $options['f'] );

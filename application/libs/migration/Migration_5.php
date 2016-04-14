@@ -13,16 +13,11 @@ use model\Publisher as Publisher;
 
 class Migration_5 extends Migrator
 {
+	public function targetVersion() { return "0.3.0"; }
+
 	public function sqlite_preUpgrade()
 	{
-		// backup sqlite database file
-		$db_path = Config::GetPath("Database/path", null);
-		if ( strlen($db_path) == 0 ) {
-			throw new \Exception('No path set in configuration for sqlite database');
-		}
-		$db_file = appendPath($db_path, "contenta.sqlite" );
-		$backupDatabase = appendPath($this->scratch, "contenta.Migration_5." . date('Y-m-d.H-i-s') . ".backup");
-		file_exists($db_file) == false || copy($db_file, $backupDatabase) || die('Failed to backup ' . $db_file);
+		$this->sqlite_backupDatabase();
 	}
 
 	public function sqlite_upgrade()

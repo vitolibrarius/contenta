@@ -6,18 +6,12 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 
-use model\logs\Log_Level as Log_Level;
+use \model\logs\Log_Level as Log_Level;
 
-class Log_LevelDBO extends DataObject
+/* import related objects */
+
+class Log_LevelDBO extends _Log_LevelDBO
 {
-	public $code;
-	public $name;
-
-	public function displayName()
-	{
-		return $this->name;
-	}
-
 
 }
 

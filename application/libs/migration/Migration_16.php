@@ -12,48 +12,79 @@ use \SQL as SQL;
 use utilities\CronEvaluator as CronEvaluator;
 use db\Qualifier as Qualifier;
 
-use model\Series as Series;
-use model\Publisher as Publisher;
-use model\Series_Alias as Series_Alias;
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
-use model\Series_Character as Series_Character;
-use model\Users as Users;
-use model\User_Series as User_Series;
-use model\Story_Arc as Story_Arc;
-use model\Story_Arc_Character as Story_Arc_Character;
-use model\Story_Arc_Series as Story_Arc_Series;
-use model\Story_Arc_Publication as Story_Arc_Publication;
-use model\Publication as Publication;
-use model\Publication_Character as Publication_Character;
-use model\Media_Type as Media_Type;
-use model\Media as Media;
-use model\Endpoint_Type as Endpoint_Type;
-use model\Endpoint as Endpoint;
-use model\Rss as Rss;
-use model\Job as Job;
 use model\Job_Type as Job_Type;
-use model\Job_Running as Job_Running;
-use model\Flux as Flux;
-use model\logs\Log as Log;
+use \model\Job as Job;
+use \model\Endpoint as Endpoint;
 
+use \model\pull_list\Pull_List as Pull_List;
+use \model\pull_list\Pull_List_Item as Pull_List_Item;
+use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
+use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 
 class Migration_16 extends Migrator
 {
+	public function targetVersion() { return "0.5.0"; }
+
 	public function sqlite_preUpgrade()
 	{
-		// backup sqlite database file
-		$db_path = Config::GetPath("Database/path", null);
-		if ( strlen($db_path) == 0 ) {
-			throw new \Exception('No path set in configuration for sqlite database');
-		}
-		$db_file = appendPath($db_path, "contenta.sqlite" );
-		$backupDatabase = appendPath($this->scratch, "contenta.Migration_16." . date('Y-m-d.H-i-s') . ".backup");
-		file_exists($db_file) == false || copy($db_file, $backupDatabase) || die('Failed to backup ' . $db_file);
+		$this->sqlite_backupDatabase();
 	}
 
 	public function sqlite_upgrade()
 	{
+			/** PULL_LIST */
+		$sql = "CREATE TABLE IF NOT EXISTS pull_list ( "
+			. Pull_List::id . " INTEGER PRIMARY KEY, "
+			. Pull_List::name . " TEXT, "
+			. Pull_List::etag . " TEXT, "
+			. Pull_List::created . " INTEGER, "
+			. Pull_List::published . " INTEGER, "
+			. Pull_List::endpoint_id . " INTEGER, "
+			. "FOREIGN KEY (". Pull_List::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
+		. ")";
+		$this->sqlite_execute( "pull_list", $sql, "Create table pull_list" );
+
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS pull_list_etag on pull_list (etag)';
+		$this->sqlite_execute( "pull_list", $sql, "Index on pull_list (etag)" );
+
+		/** PULL_LIST_ITEM */
+		$sql = "CREATE TABLE IF NOT EXISTS pull_list_item ( "
+			. Pull_List_Item::id . " INTEGER PRIMARY KEY, "
+			. Pull_List_Item::group_name . " TEXT, "
+			. Pull_List_Item::data . " TEXT, "
+			. Pull_List_Item::created . " INTEGER, "
+			. Pull_List_Item::name . " TEXT, "
+			. Pull_List_Item::issue . " TEXT, "
+			. Pull_List_Item::year . " INTEGER, "
+			. Pull_List_Item::pull_list_id . " INTEGER, "
+			. "FOREIGN KEY (". Pull_List_Item::pull_list_id .") REFERENCES " . Pull_List::TABLE . "(" . Pull_List::id . ")"
+		. ")";
+		$this->sqlite_execute( "pull_list_item", $sql, "Create table pull_list_item" );
+
+		$sql = 'CREATE  INDEX IF NOT EXISTS pull_list_item_name on pull_list_item (name)';
+		$this->sqlite_execute( "pull_list_item", $sql, "Index on pull_list_item (name)" );
+
+		/** PULL_LIST_EXCL */
+		$sql = "CREATE TABLE IF NOT EXISTS pull_list_excl ( "
+			. Pull_List_Exclusion::id . " INTEGER PRIMARY KEY, "
+			. Pull_List_Exclusion::pattern . " TEXT, "
+			. Pull_List_Exclusion::type . " TEXT, "
+			. Pull_List_Exclusion::created . " INTEGER, "
+			. Pull_List_Exclusion::endpoint_id . " INTEGER, "
+			. "FOREIGN KEY (". Pull_List_Exclusion::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
+		. ")";
+		$this->sqlite_execute( "pull_list_excl", $sql, "Create table pull_list_excl" );
+
+		/** PULL_LIST_EXPANSION */
+		$sql = "CREATE TABLE IF NOT EXISTS pull_list_expansion ( "
+			. Pull_List_Expansion::id . " INTEGER PRIMARY KEY, "
+			. Pull_List_Expansion::pattern . " TEXT, "
+			. Pull_List_Expansion::replace . " TEXT, "
+			. Pull_List_Expansion::created . " INTEGER, "
+			. Pull_List_Expansion::endpoint_id . " INTEGER, "
+			. "FOREIGN KEY (". Pull_List_Expansion::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
+		. ")";
+		$this->sqlite_execute( "pull_list_expansion", $sql, "Create table pull_list_expansion" );
 	}
 
 	public function sqlite_postUpgrade()

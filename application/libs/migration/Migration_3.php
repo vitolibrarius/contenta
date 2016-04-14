@@ -9,24 +9,20 @@ use \Logger as Logger;
 use \Model as Model;
 use \SQL as SQL;
 
-use model\Users as Users;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Endpoint as Endpoint;
-use model\Network as Network;
-use model\User_Network as User_Network;
+
+use \model\user\Users as Users;
+use \model\network\Network as Network;
+use \model\network\User_Network as User_Network;
 
 class Migration_3 extends Migrator
 {
+	public function targetVersion() { return "0.2.1"; }
+
 	public function sqlite_preUpgrade()
 	{
-		// backup sqlite database file
-		$db_path = Config::GetPath("Database/path", null);
-		if ( strlen($db_path) == 0 ) {
-			throw new \Exception('No path set in configuration for sqlite database');
-		}
-		$db_file = appendPath($db_path, "contenta.sqlite" );
-		$backupDatabase = appendPath($this->scratch, "contenta.Migration_3." . date('Y-m-d.H-i-s') . ".backup");
-		file_exists($db_file) == false || copy($db_file, $backupDatabase) || die('Failed to backup ' . $db_file);
+		$this->sqlite_backupDatabase();
 	}
 
 	public function sqlite_upgrade()
@@ -77,30 +73,34 @@ class Migration_3 extends Migrator
 			);
 		}
 
-		$sql = "CREATE TABLE IF NOT EXISTS " . Network::TABLE
-				. " ( "
-				. Network::id . " INTEGER PRIMARY KEY,  "
-				. Network::ipAddress . " TEXT, "
-				. Network::ipHash . " TEXT, "
-				. Network::created . " INTEGER, "
-				. Network::disable . " INTEGER "
-				. ")";
-		$this->sqlite_execute( Network::TABLE, $sql, "Create table " . Network::TABLE );
+		/** NETWORK */
+		$sql = "CREATE TABLE IF NOT EXISTS network ( "
+			. Network::id . " INTEGER PRIMARY KEY, "
+			. Network::ip_address . " TEXT, "
+			. Network::ip_hash . " TEXT, "
+			. Network::created . " INTEGER, "
+			. Network::disable . " INTEGER "
+		. ")";
+		$this->sqlite_execute( "network", $sql, "Create table network" );
 
-		$this->sqlite_execute(
-			Network::TABLE,
-			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Network::TABLE . '_ipaddress on ' . Network::TABLE . '(' . Network::ipAddress . ')',
-			"Unique index on " . Network::TABLE
-		);
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS network_ip_address on network (ip_address)';
+		$this->sqlite_execute( "network", $sql, "Index on network (ip_address)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS network_ip_hash on network (ip_hash)';
+		$this->sqlite_execute( "network", $sql, "Index on network (ip_hash)" );
 
-		$sql = 'CREATE TABLE IF NOT EXISTS ' . User_Network::TABLE . " ( "
-							. User_Network::id . " INTEGER PRIMARY KEY, "
-							. User_Network::user_id . " INTEGER, "
-							. User_Network::network_id . " INTEGER, "
-							. "FOREIGN KEY (". User_Network::user_id .") REFERENCES " . Users::TABLE . "(id), "
-							. "FOREIGN KEY (". User_Network::network_id .") REFERENCES " . Network::TABLE . "(id) "
-							. ")";
-		$this->sqlite_execute( User_Network::TABLE, $sql, "Create table " . User_Network::TABLE );
+
+		/** USER_NETWORK */
+		$sql = "CREATE TABLE IF NOT EXISTS user_network ( "
+			. User_Network::id . " INTEGER PRIMARY KEY, "
+			. User_Network::user_id . " INTEGER, "
+			. User_Network::network_id . " INTEGER, "
+			. "FOREIGN KEY (". User_Network::user_id .") REFERENCES " . Users::TABLE . "(" . Users::id . "),"
+			. "FOREIGN KEY (". User_Network::network_id .") REFERENCES " . Network::TABLE . "(" . Network::id . ")"
+		. ")";
+		$this->sqlite_execute( "user_network", $sql, "Create table user_network" );
+
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS user_network_user_idnetwork_id on user_network (user_id,network_id)';
+		$this->sqlite_execute( "user_network", $sql, "Index on user_network (user_id,network_id)" );
 	}
 
 	public function sqlite_postUpgrade()

@@ -1,14 +1,21 @@
 {
     "attributes": {
         "id": 	{ "column": "id", "type": "INTEGER" },
-        "name": { "column": "name", "type": "TEXT", "collate": "NOCASE", "nullable": false },
-        "email": { "column": "email", "type": "TEXT", "collate": "NOCASE", "nullable": false },
+        "name": {
+        	"column": "name",
+        	"length": 256,
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"nullable": false,
+        	"inputPattern": "[a-zA-Z0-9]{2,64}"
+        },
+        "email": { "column": "email", "length": 256, "type": "TEXT", "collate": "NOCASE", "nullable": false },
         "active": { "column": "active", "type": "BOOLEAN" },
-        "account_type": { "column": "account_type", "type": "TEXT", "default": "'user'" },
-        "rememberme_token": { "column": "rememberme_token", "type": "TEXT" },
-        "api_hash": { "column": "api_hash", "type": "TEXT" },
-        "password_reset_hash": { "column": "password_reset_hash", "type": "TEXT" },
-        "activation_hash": { "column": "activation_hash", "type": "TEXT" },
+        "account_type": { "column": "account_type", "length": 10, "type": "TEXT", "default": "'user'" },
+        "rememberme_token": { "column": "rememberme_token", "length": 256, "type": "TEXT" },
+        "api_hash": { "column": "api_hash", "length": 256, "type": "TEXT" },
+        "password_reset_hash": { "column": "password_reset_hash", "length": 256, "type": "TEXT" },
+        "activation_hash": { "column": "activation_hash", "length": 256, "type": "TEXT" },
         "failed_logins": { "column": "failed_logins", "type": "INTEGER", "default": "0" },
         "creation_timestamp": { "column": "creation_timestamp", "type": "DATE" },
         "last_login_timestamp": { "column": "last_login_timestamp", "type": "DATE", "default": "null" },
@@ -20,6 +27,7 @@
     "package": "user",
     "model": "Users",
     "dbo": "UsersDBO",
+    "userEditable": true,
 	"sort" : [
 		{ "asc": "name" }
 	],
@@ -27,6 +35,7 @@
     	"user_network" : {
     		"destination" : "User_Network",
     		"destinationTable" : "user_network",
+    		"destinationPackage" : "\\model\\network\\",
     		"joins" : [
     			{ "destinationAttribute": "user_id", "sourceAttribute" : "id" }
     		],
@@ -37,6 +46,7 @@
     	"user_series" : {
     		"destination" : "User_Series",
     		"destinationTable" : "user_series",
+    		"destinationPackage" : "\\model\\",
     		"joins" : [
     			{ "destinationAttribute": "user_id", "sourceAttribute" : "id" }
     		],

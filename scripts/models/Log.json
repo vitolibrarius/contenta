@@ -1,13 +1,13 @@
 {
     "attributes": {
         "id": 	{ "column": "id",	"type": "INTEGER" },
-        "trace": { "column": "trace",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
-        "trace_id": { "column": "trace_id",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
-        "context": { "column": "context",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
-        "context_id": { "column": "context_id",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
-        "message": { "column": "message",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
-        "session": { "column": "session",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "default": "session_id()" },
-        "level": { "column": "level",	"type": "TEXT", "default": "'warning'" },
+        "trace": { "column": "trace", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "trace_id": { "column": "trace_id", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "context": { "column": "context", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "context_id": { "column": "context_id", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "message": { "column": "message", "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "nullable": false },
+        "session": { "column": "session", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "default": "session_id()" },
+        "level_code": { "column": "level_code", "length": 10, "type": "TEXT", "default": "'warning'" },
         "created": { "column": "created", "type": "DATE" }
     },
     "primaryKeys": [ "id" ],
@@ -21,9 +21,10 @@
     "relationships" :{
     	"logLevel" : {
     		"destination" : "Log_Level",
+    		"destinationPackage" : "\\model\\logs\\",
     		"destinationTable" : "log_level",
     		"joins" : [
-    			{ "destinationAttribute": "code", "sourceAttribute" : "level" }
+    			{ "destinationAttribute": "code", "sourceAttribute" : "level_code" }
     		],
     		"isMandatory": true,
             "isToMany" : false,
@@ -31,7 +32,9 @@
     	}
     },
     "indexes" : [
-    	{ "columns": ["etag"], "unique": true }
+    	{ "columns": ["level_code"] },
+    	{ "columns": ["trace", "trace_id"] },
+    	{ "columns": ["context", "context_id"] }
     ],
 	"fetches" : {
 		"messagesSince": {
@@ -88,7 +91,7 @@
 				},
 				{
 					"type" : "Equals",
-					"keyAttribute": "level",
+					"keyAttribute": "level_code",
 					"argAttribute": "levelCode",
 					"optional": true
 				}

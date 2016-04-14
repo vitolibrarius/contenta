@@ -9,55 +9,56 @@ use \Logger as Logger;
 use \Model as Model;
 use \SQL as SQL;
 
-use model\Users as Users;
-use model\logs\Log_Level as Log_Level;
-use model\logs\Log as Log;
+use \model\Users as Users;
+use \model\logs\Log_Level as Log_Level;
+use \model\logs\Log as Log;
 
 
 class Migration_2 extends Migrator
 {
+	public function targetVersion() { return "0.2.0"; }
+
 	public function sqlite_preUpgrade()
 	{
-		// backup sqlite database file
-		$db_path = Config::GetPath("Database/path", null);
-		if ( strlen($db_path) == 0 ) {
-			throw new \Exception('No path set in configuration for sqlite database');
-		}
-		$db_file = appendPath($db_path, "contenta.sqlite" );
-		$backupDatabase = appendPath($this->scratch, "contenta.Migration_2." . date('Y-m-d.H-i-s') . ".backup");
-		file_exists($db_file) == false || copy($db_file, $backupDatabase) || die('Failed to backup ' . $db_file);
+		$this->sqlite_backupDatabase();
 	}
 
 	public function sqlite_upgrade()
 	{
-		$sql = "CREATE TABLE IF NOT EXISTS " . Log_Level::TABLE
-				. " ( "
-				. Log_Level::id . " INTEGER, "
-				. Log_Level::code . " TEXT PRIMARY KEY, "
-				. Log_Level::name . " TEXT COLLATE NOCASE "
-				. ")";
-		$this->sqlite_execute( Log_Level::TABLE, $sql, "Create table " . Log_Level::TABLE );
+		/** LOG_LEVEL */
+		$sql = "CREATE TABLE IF NOT EXISTS log_level ( "
+			. Log_Level::id . " INTEGER PRIMARY KEY, "
+			. Log_Level::code . " TEXT, "
+			. Log_Level::name . " TEXT "
+		. ")";
+		$this->sqlite_execute( "log_level", $sql, "Create table log_level" );
 
-		$sql = "CREATE TABLE IF NOT EXISTS " . Log::TABLE
-				. " ( "
-				. Log::id . " INTEGER PRIMARY KEY,  "
-				. Log::trace . " TEXT, "
-				. Log::trace_id . " TEXT, "
-				. Log::context . " TEXT, "
-				. Log::context_id . " TEXT, "
-				. Log::level . " TEXT, "
-				. Log::message . " TEXT, "
-				. Log::created . " INTEGER, "
-				. "FOREIGN KEY (" . Log::level . ") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
-				. ")";
-		$this->sqlite_execute( Log::TABLE, $sql, "Create table " . Log::TABLE );
-		$indexStatements = array(
-			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Log_Level::TABLE . '_idindex on ' . Log_Level::TABLE . '(' . Log_Level::id . ')',
-			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Log_Level::TABLE . '_nameindex on ' . Log_Level::TABLE . '(' . Log_Level::name . ')'
-		);
-		foreach( $indexStatements as $stmt ) {
-			$this->sqlite_execute( Log::TABLE, $stmt, "Index on " . Log::TABLE );
-		}
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_code on log_level (code)';
+		$this->sqlite_execute( "log_level", $sql, "Index on log_level (code)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_name on log_level (name)';
+		$this->sqlite_execute( "log_level", $sql, "Index on log_level (name)" );
+
+		/** LOG */
+		$sql = "CREATE TABLE IF NOT EXISTS log ( "
+			. Log::id . " INTEGER PRIMARY KEY, "
+			. Log::trace . " TEXT, "
+			. Log::trace_id . " TEXT, "
+			. Log::context . " TEXT, "
+			. Log::context_id . " TEXT, "
+			. Log::message . " TEXT, "
+			. Log::session . " TEXT, "
+			. Log::level_code . " TEXT, "
+			. Log::created . " INTEGER, "
+			. "FOREIGN KEY (". Log::level_code .") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
+		. ")";
+		$this->sqlite_execute( "log", $sql, "Create table log" );
+
+		$sql = 'CREATE  INDEX IF NOT EXISTS log_level_code on log (level_code)';
+		$this->sqlite_execute( "log", $sql, "Index on log (level_code)" );
+		$sql = 'CREATE  INDEX IF NOT EXISTS log_tracetrace_id on log (trace,trace_id)';
+		$this->sqlite_execute( "log", $sql, "Index on log (trace,trace_id)" );
+		$sql = 'CREATE  INDEX IF NOT EXISTS log_contextcontext_id on log (context,context_id)';
+		$this->sqlite_execute( "log", $sql, "Index on log (context,context_id)" );
 	}
 
 	public function sqlite_postUpgrade()

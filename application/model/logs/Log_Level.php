@@ -2,108 +2,89 @@
 
 namespace model\logs;
 
-
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \SQL as SQL;
-use \db\Qualifier as Qualifier;
+use \Validation as Validation;
 
-use model\logs\Log_LevelDBO as Log_LevelDBO;
+use \model\logs\Log_LevelDBO as Log_LevelDBO;
 
-/** Sample Creation script */
-		/** LOG_LEVEL
-		$sql = "CREATE TABLE IF NOT EXISTS log_level ( "
-			. model\logs\Log_Level::id . " INTEGER PRIMARY KEY, "
-			. model\logs\Log_Level::code . " TEXT, "
-			. model\logs\Log_Level::name . " TEXT, "
-			. ")";
-		$this->sqlite_execute( "log_level", $sql, "Create table log_level" );
+/* import related objects */
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_code on log_level (code)';
-		$this->sqlite_execute( "log_level", $sql, "Index on log_level (code)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_name on log_level (name)';
-		$this->sqlite_execute( "log_level", $sql, "Index on log_level (name)" );
-*/
-class Log_Level extends Model
+class Log_Level extends _Log_Level
 {
-	const TABLE = 'log_level';
-	const id = 'id';
-	const code = 'code';
-	const name = 'name';
-
-	public function tableName() { return Log_Level::TABLE; }
-	public function tablePK() { return Log_Level::id; }
-	public function sortOrder()
-	{
+	public function attributesFor($object = null, $type = null) {
 		return array(
-			array( 'asc' => Log_Level::name)
+			Log_Level::code => Model::TEXT_TYPE,
+			Log_Level::name => Model::TEXT_TYPE
 		);
 	}
 
-	public function allColumnNames()
+	public function attributesMandatory($object = null)
 	{
-		return array(
-			Log_Level::id,
-			Log_Level::code,
-			Log_Level::name
-		);
-	}
-
-	/** * * * * * * * * *
-		Basic search functions
-	 */
-	public function objectForCode($value)
-	{
-		return $this->singleObjectForKeyValue(Log_Level::code, $value);
-	}
-
-	public function objectForName($value)
-	{
-		return $this->singleObjectForKeyValue(Log_Level::name, $value);
-	}
-
-
-
-	public function joinAttributes( Model $joinModel = null )
-	{
-		if ( is_null($joinModel) == false ) {
-			switch ( $joinModel->tableName() ) {
-				default:
-					break;
-			}
-		}
-		return parent::joinAttributes( $joinModel );
-	}
-
-	public function create( $code, $name)
-	{
-		$obj = false;
-		if ( isset($code) ) {
-			$params = array(
-				Log_Level::code => (isset($code) ? $code : null),
-				Log_Level::name => (isset($name) ? $name : null),
+		if ( is_null($object) ) {
+			return array(
+				Log_Level::code
 			);
-
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
-			}
 		}
-		return $obj;
+		return parent::attributesMandatory($object);
 	}
 
-	public function deleteObject( DataObject $object = null)
+	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
-		if ( $object instanceof Log_Level )
-		{
-			return parent::deleteObject($object);
-		}
-
-		return false;
+		// add customization here
+		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
+	/*
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
+	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
+	*/
+
+	public function attributeEditPattern($object = null, $type = null, $attr)
+	{
+		return null;
+	}
+
+	public function attributeOptions($object = null, $type = null, $attr)
+	{
+		return null;
+	}
+
+	/** Validation */
+	function validate_code($object = null, $value)
+	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log_Level::code,
+				"FIELD_EMPTY"
+			);
+		}
+		// make sure Code is unique
+		$existing = $this->objectForCode($value);
+		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log_Level::code,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_name($object = null, $value)
+	{
+		// make sure Name is unique
+		$existing = $this->objectForName($value);
+		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log_Level::name,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

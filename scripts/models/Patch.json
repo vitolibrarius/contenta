@@ -1,7 +1,14 @@
 {
     "attributes": {
-        "id": 	{ "column": "id",	"type": "INTEGER" },
-        "name": { "column": "name",	"type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "nullable": false},
+        "id": 	{ "column": "id", "type": "INTEGER" },
+        "name": {
+        	"column": "name",
+        	"length": 256,
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"partialSearch" : true,
+        	"nullable": false
+        },
         "created": { "column": "created", "type": "DATE" },
         "version_id": { "column": "version_id", "type": "INTEGER" }
     },
@@ -9,6 +16,7 @@
     	"version" : {
     		"destination" : "Version",
     		"destinationTable" : "version",
+    		"destinationPackage" : "\\model\\version\\",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "version_id" }
     		],

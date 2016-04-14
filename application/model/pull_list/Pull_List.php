@@ -2,149 +2,107 @@
 
 namespace model\pull_list;
 
-
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \SQL as SQL;
-use \db\Qualifier as Qualifier;
+use \Validation as Validation;
 
-use model\pull_list\Pull_ListDBO as Pull_ListDBO;
+use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
 
-/** Sample Creation script */
-		/** PULL_LIST
-		$sql = "CREATE TABLE IF NOT EXISTS pull_list ( "
-			. model\pull_list\Pull_List::id . " INTEGER PRIMARY KEY, "
-			. model\pull_list\Pull_List::name . " TEXT, "
-			. model\pull_list\Pull_List::etag . " TEXT, "
-			. model\pull_list\Pull_List::created . " INTEGER, "
-			. model\pull_list\Pull_List::published . " INTEGER, "
-			. model\pull_list\Pull_List::endpoint_id . " INTEGER, "
-			. "FOREIGN KEY (". model\pull_list\Pull_List::endpoint_id .")"
-				. " REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
-			. ")";
-		$this->sqlite_execute( "pull_list", $sql, "Create table pull_list" );
+/* import related objects */
+use \model\Endpoint as Endpoint;
+use \model\EndpointDBO as EndpointDBO;
+use \model\pull_list\Pull_List_Item as Pull_List_Item;
+use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
+use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
+use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
+use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
+use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS pull_list_etag on pull_list (etag)';
-		$this->sqlite_execute( "pull_list", $sql, "Index on pull_list (etag)" );
-*/
-class Pull_List extends Model
+class Pull_List extends _Pull_List
 {
-	const TABLE = 'pull_list';
-	const id = 'id';
-	const name = 'name';
-	const etag = 'etag';
-	const created = 'created';
-	const published = 'published';
-	const endpoint_id = 'endpoint_id';
-
-	public function tableName() { return Pull_List::TABLE; }
-	public function tablePK() { return Pull_List::id; }
-	public function sortOrder()
-	{
+	public function attributesFor($object = null, $type = null) {
 		return array(
-			array( 'asc' => Pull_List::name)
+			Pull_List::name => Model::TEXT_TYPE,
+			Pull_List::etag => Model::TEXT_TYPE,
+			Pull_List::created => Model::DATE_TYPE,
+			Pull_List::published => Model::DATE_TYPE,
+			Pull_List::endpoint_id => Model::INT_TYPE
 		);
 	}
 
-	public function allColumnNames()
+	public function attributesMandatory($object = null)
 	{
-		return array(
-			Pull_List::id,
-			Pull_List::name,
-			Pull_List::etag,
-			Pull_List::created,
-			Pull_List::published,
-			Pull_List::endpoint_id
-		);
-	}
-
-	/** * * * * * * * * *
-		Basic search functions
-	 */
-	public function allForName($value)
-	{
-		return $this->allObjectsForKeyValue(Pull_List::name, $value);
-	}
-
-	public function allLikeName($value)
-	{
-		return SQL::Select( $this )
-			->where( Qualifier::Like( Pull_List::name, $value, SQL::SQL_LIKE_AFTER ))
-			->orderBy( $this->sortOrder() )
-			->limit( 50 )
-			->fetchAll();
-	}
-	public function objectForEtag($value)
-	{
-		return $this->singleObjectForKeyValue(Pull_List::etag, $value);
-	}
-
-
-	public function allForEndpoint($obj)
-	{
-		return $this->allObjectsForFK(Pull_List::endpoint_id, $obj, $this->sortOrder(), 50);
-	}
-
-	public function joinAttributes( Model $joinModel = null )
-	{
-		if ( is_null($joinModel) == false ) {
-			switch ( $joinModel->tableName() ) {
-				case "endpoint":
-					return array( Pull_List::endpoint_id, "id"  );
-					break;
-				default:
-					break;
-			}
-		}
-		return parent::joinAttributes( $joinModel );
-	}
-
-	public function create( $endpoint, $name, $etag, $published)
-	{
-		$obj = false;
-		if ( isset($endpoint, $name) ) {
-			$params = array(
-				Pull_List::name => (isset($name) ? $name : null),
-				Pull_List::etag => (isset($etag) ? $etag : null),
-				Pull_List::created => time(),
-				Pull_List::published => (isset($published) ? $published : time()),
+		if ( is_null($object) ) {
+			return array(
+				Pull_List::name
 			);
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof Endpoint) {
-					$params[Pull_List::endpoint_id] = $endpoint->id;
-				}
-				else if (  is_integer($endpoint) ) {
-					$params[Pull_List::endpoint_id] = $endpoint;
-				}
-			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
-			}
 		}
-		return $obj;
+		return parent::attributesMandatory($object);
 	}
 
-	public function deleteObject( DataObject $object = null)
+	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
-		if ( $object instanceof Pull_List )
-		{
-			// does not own Endpoint
-			$pull_list_item_model = Model::Named('Pull_List_Item');
-			if ( $pull_list_item_model->deleteAllForKeyValue(Pull_List_Item::pull_list_id, $this->id) == false ) {
-				return false;
-			}
-			// does not own Pull_List_Exclusion
-			// does not own Pull_List_Expansion
-			return parent::deleteObject($object);
-		}
-
-		return false;
+		// add customization here
+		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
+	/*
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
+	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
+	*/
+
+	public function attributeEditPattern($object = null, $type = null, $attr)
+	{
+		return null;
+	}
+
+	public function attributeOptions($object = null, $type = null, $attr)
+	{
+		if ( $attr = Pull_List::endpoint_id ) {
+			$model = Model::Named('Endpoint');
+			return $model->allObjects();
+		}
+		return null;
+	}
+
+	/** Validation */
+	function validate_name($object = null, $value)
+	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List::name,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_etag($object = null, $value)
+	{
+		// make sure Etag is unique
+		$existing = $this->objectForEtag($value);
+		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List::etag,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		return null;
+	}
+	function validate_published($object = null, $value)
+	{
+		return null;
+	}
+	function validate_endpoint_id($object = null, $value)
+	{
+		return null;
+	}
 }
 
 ?>
