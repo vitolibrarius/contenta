@@ -82,10 +82,24 @@ class User_Network extends _User_Network
 	/** Validation */
 	function validate_user_id($object = null, $value)
 	{
+		if (isset($object->user_id) == false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				User_Network::user_id,
+				"FIELD_EMPTY"
+			);
+		}
 		return null;
 	}
 	function validate_network_id($object = null, $value)
 	{
+		if (isset($object->network_id) == false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				User_Network::network_id,
+				"FIELD_EMPTY"
+			);
+		}
 		return null;
 	}
 }

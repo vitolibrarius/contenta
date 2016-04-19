@@ -39,7 +39,7 @@ foreach( $this->attributes as $name => $detailArray ) {
 
 <?php elseif ($detailArray['type'] == 'BOOLEAN') : ?>
 	public function is<?php echo ucwords($name); ?>() {
-		return (isset($this-><?php echo $name; ?>) && $this-><?php echo $name; ?> == 1);
+		return (isset($this-><?php echo $name; ?>) && $this-><?php echo $name; ?> == Model::TERTIARY_TRUE);
 	}
 
 <?php endif; // type ?>

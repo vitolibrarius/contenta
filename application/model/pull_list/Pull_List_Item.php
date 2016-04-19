@@ -137,6 +137,13 @@ class Pull_List_Item extends _Pull_List_Item
 	}
 	function validate_pull_list_id($object = null, $value)
 	{
+		if (isset($object->pull_list_id) == false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Item::pull_list_id,
+				"FIELD_EMPTY"
+			);
+		}
 		return null;
 	}
 }

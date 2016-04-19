@@ -150,6 +150,13 @@ class Rss extends _Rss
 	/** Validation */
 	function validate_endpoint_id($object = null, $value)
 	{
+		if (isset($object->endpoint_id) == false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::endpoint_id,
+				"FIELD_EMPTY"
+			);
+		}
 		return null;
 	}
 	function validate_created($object = null, $value)
@@ -173,6 +180,13 @@ class Rss extends _Rss
 	}
 	function validate_pub_date($object = null, $value)
 	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::pub_date,
+				"FIELD_EMPTY"
+			);
+		}
 		return null;
 	}
 	function validate_guid($object = null, $value)

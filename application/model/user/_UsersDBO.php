@@ -36,7 +36,7 @@ class _UsersDBO extends DataObject
 	}
 
 	public function isActive() {
-		return (isset($this->active) && $this->active == 1);
+		return (isset($this->active) && $this->active == Model::TERTIARY_TRUE);
 	}
 
 	public function formattedDateTime_creation_timestamp() { return $this->formattedDate( Users::creation_timestamp, "M d, Y H:i" ); }

@@ -1,0 +1,66 @@
+{
+    "attributes": {
+        "id": { "column": "id", "type": "INTEGER" },
+        "job_id": { "column": "job_id", "type": "INTEGER" },
+        "job_type_id": { "column": "job_type_id", "type": "INTEGER" },
+        "processor": { "column": "processor", "length": 256, "type": "TEXT", "nullable": false },
+        "guid": { "column": "guid", "length": 256, "type": "TEXT" },
+        "pid": { "column": "pid", "type": "INTEGER", "nullable": false },
+        "desc": { "column": "desc", "length": 4096, "type": "TEXT" },
+        "created": { "column": "created", "type": "DATE" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "job_running",
+    "package": "jobs",
+    "model": "Job_Running",
+    "dbo": "Job_RunningDBO",
+	"sort" : [
+		{ "desc": "created" }
+	],
+    "relationships" :{
+    	"job" : {
+    		"destination" : "Job",
+    		"destinationPackage" : "\\model\\jobs\\",
+    		"destinationTable" : "job",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "job_id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	},
+    	"jobType" : {
+    		"destination" : "Job_Type",
+    		"destinationPackage" : "\\model\\jobs\\",
+    		"destinationTable" : "job_type",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "job_type_id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	}
+    },
+    "indexes" : [
+    ],
+	"fetches" : {
+		"allForProcessorGUID": {
+			"arguments": [ "processorName", "guid" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Equals",
+					"keyAttribute": "processor",
+					"argAttribute": "processorName",
+					"optional": false
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "guid",
+					"argAttribute": "guid",
+					"optional": false
+				}
+			]
+		}
+	}
+}

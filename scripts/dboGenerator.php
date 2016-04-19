@@ -196,6 +196,22 @@ class Template
     	return false;
     }
 
+    public function relationshipForSourceKey( $key = '' ) {
+    	$relations = $this->relationships;
+    	if ( is_array($relations) ) {
+    		foreach( $relations as $name => $details ) {
+    			$joins = $details['joins'];
+    			foreach( $joins as $idx => $join ) {
+    				if ( isset($join['sourceAttribute']) && $join['sourceAttribute'] == $key ) {
+    					return array($name, $details);
+    				}
+    			}
+    		}
+    	}
+    	return false;
+    }
+
+
     public function isUniqueAttribute( $attr = '' ) {
     	$indexes = $this->indexes;
     	if ( is_array($indexes) ) {
@@ -498,7 +514,7 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	$model_file = appendPath( MODELS_PATH, $package, $modelname) . ".php";
 	$dbo_base_file = appendPath( MODELS_PATH, $package, "_" . $dboname) . ".php";
 	$dbo_file = appendPath( MODELS_PATH, $package, $dboname) . ".php";
-
+	$diff_files = array();
 
 	/** create package directory */
 	$packagePath = appendPath( MODELS_PATH, $package );
@@ -511,12 +527,15 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	file_put_contents( $model_base_file, $model_data );
 
 	/** generate model file, only if it does not exist */
-	if ( is_file($model_file) == false ) {
-		$Template = new Template(MODEL_TEMPLATE);
-		$Template->setModel($model_meta);
-		$model_data = $Template->generate();
-		file_put_contents( $model_file, $model_data );
+	if ( is_file($model_file) ) {
+		$tmp_file = appendPath( sys_get_temp_dir(), $modelname) . ".php";
+		$diff_files[$model_file] = $tmp_file;
+		$model_file = $tmp_file;
 	}
+	$Template = new Template(MODEL_TEMPLATE);
+	$Template->setModel($model_meta);
+	$model_data = $Template->generate();
+	file_put_contents( $model_file, $model_data );
 
 	$clazz = "model\\" . $package . "\\" . $modelname;
 	$instance = new $clazz();
@@ -530,16 +549,26 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	file_put_contents( $dbo_base_file, $dbo_data );
 
 	/** generate dbo file, only if it does not exist */
-	if ( is_file($dbo_file) == false ) {
-		$Template = new Template(DBO_TEMPLATE);
-		$Template->setModel($model_meta);
-		$dbo_data = $Template->generate();
-		file_put_contents( $dbo_file, $dbo_data );
+	if ( is_file($dbo_file) ) {
+		$tmp_file = appendPath( sys_get_temp_dir(), $dboname) . ".php";
+		$diff_files[$dbo_file] = $tmp_file;
+		$dbo_file = $tmp_file;
 	}
+	$Template = new Template(DBO_TEMPLATE);
+	$Template->setModel($model_meta);
+	$dbo_data = $Template->generate();
+	file_put_contents( $dbo_file, $dbo_data );
 
 	$clazz = "model\\" . $package . "\\" . $dboname;
 	$instance = new $clazz();
 	echo $clazz . " .. " . $instance->consistencyTest() . PHP_EOL;
+
+	foreach( $diff_files as $prod => $temp ) {
+		$retval = exec( "diff -q $prod $temp", $output, $rt );
+		if ( $rt == 1 ) {
+	 		$retval = shell_exec( "opendiff $prod $temp > /dev/null 2>&1" );
+	 	}
+	}
 }
 
 ?>

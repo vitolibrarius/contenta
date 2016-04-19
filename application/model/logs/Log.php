@@ -132,6 +132,13 @@ class Log extends _Log
 	}
 	function validate_level_code($object = null, $value)
 	{
+		if (isset($object->level_code) == false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log::level_code,
+				"FIELD_EMPTY"
+			);
+		}
 		return null;
 	}
 	function validate_created($object = null, $value)

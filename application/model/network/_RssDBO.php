@@ -39,7 +39,7 @@ class _RssDBO extends DataObject
 	public function formattedDate_pub_date() {return $this->formattedDate( Rss::pub_date, "M d, Y" ); }
 
 	public function isEnclosure_password() {
-		return (isset($this->enclosure_password) && $this->enclosure_password == 1);
+		return (isset($this->enclosure_password) && $this->enclosure_password == Model::TERTIARY_TRUE);
 	}
 
 

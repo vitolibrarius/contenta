@@ -108,6 +108,13 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	}
 	function validate_endpoint_id($object = null, $value)
 	{
+		if (isset($object->endpoint_id) == false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Expansion::endpoint_id,
+				"FIELD_EMPTY"
+			);
+		}
 		return null;
 	}
 }

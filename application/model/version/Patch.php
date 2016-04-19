@@ -110,6 +110,13 @@ class Patch extends _Patch
 	}
 	function validate_version_id($object = null, $value)
 	{
+		if (isset($object->version_id) == false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Patch::version_id,
+				"FIELD_EMPTY"
+			);
+		}
 		return null;
 	}
 }

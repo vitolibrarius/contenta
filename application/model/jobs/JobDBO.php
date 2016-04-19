@@ -1,31 +1,22 @@
 <?php
 
-namespace model;
+namespace model\jobs;
 
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use utilities\CronEvaluator as CronEvaluator;
 
-use model\Job_Type as Job_Type;
+use \model\jobs\Job as Job;
+use \utilities\CronEvaluator as CronEvaluator;
 
-class JobDBO extends DataObject
+/* import related objects */
+use \model\jobs\Job_Type as Job_Type;
+use \model\jobs\Job_TypeDBO as Job_TypeDBO;
+use \model\Endpoint as Endpoint;
+use \model\EndpointDBO as EndpointDBO;
+
+class JobDBO extends _JobDBO
 {
-	public $type_id;
-	public $endpoint_id;
-	public $minute;
-	public $hour;
-	public $dayOfWeek;
-	public $one_shot;
-	public $created;
-	public $next;
-	public $last_run;
-	public $parameter;
-	public $enabled;
-	public $elapsed;
-	public $last_fail;
-	public $fail_count;
-
 	public $uuid;
 
 	public function elapsedFormatted()
@@ -33,7 +24,8 @@ class JobDBO extends DataObject
 		return formattedTimeElapsed($this->elapsed);
 	}
 
-	public function nextDate() {
+	public function nextDate()
+	{
 		if ( isset($this->next) ) {
 			if ( $this->next < time() ) {
 				try {
@@ -54,18 +46,6 @@ class JobDBO extends DataObject
 		return $this->formattedDate( Job::next, "M d, Y H:i" );
 	}
 
-	public function lastDate() {
-		return $this->formattedDate( Job::last_run, "M d, Y H:i" );
-	}
-
-	public function lastFailDate() {
-		return $this->formattedDate( Job::last_fail, "M d, Y H:i" );
-	}
-
-	public function isEnabled() {
-		return ( (empty($this->enabled) == false) && ($this->enabled == Model::TERTIARY_TRUE) );
-	}
-
 	public function displayName() {
 		$type = $this->jobType();
 		return (empty($type) ? 'Unknown' : $type->name);
@@ -74,11 +54,6 @@ class JobDBO extends DataObject
 	public function displayDescription()
 	{
 		return $this->{"jobType/name"}() . " " . $this->{"endpoint/name"}();
-	}
-
-	public function jobType() {
-		$type_model = Model::Named("Job_Type");
-		return (isset($this->type_id) ? $type_model->objectForId($this->type_id) : null);
 	}
 
 	public function jsonParameters() {
@@ -112,12 +87,6 @@ class JobDBO extends DataObject
 		$this->uuid = (isset($jsonData["uuid"]) ? $jsonData["uuid"] : uuid());
 		return $this->uuid;
 	}
-
-	public function endpoint() {
-		if ( isset($this->endpoint_id) ) {
-			$model = Model::Named('Endpoint');
-			return $model->objectForId($this->endpoint_id);
-		}
-		return false;
-	}
 }
+
+?>

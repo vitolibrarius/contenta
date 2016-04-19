@@ -1,21 +1,21 @@
 <?php
 
-namespace model;
+namespace model\jobs;
 
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 
-class Job_RunningDBO extends DataObject
-{
-	public $job_type_id;
-	public $job_id;
-	public $processor;
-	public $guid;
-	public $created;
-	public $pid;
-	public $desc;
+use \model\jobs\Job_Running as Job_Running;
 
+/* import related objects */
+use \model\jobs\Job as Job;
+use \model\jobs\JobDBO as JobDBO;
+use \model\jobs\Job_Type as Job_Type;
+use \model\jobs\Job_TypeDBO as Job_TypeDBO;
+
+class Job_RunningDBO extends _Job_RunningDBO
+{
 	public function elapsedSeconds()
 	{
 		return time() - $this->created;
@@ -39,11 +39,6 @@ class Job_RunningDBO extends DataObject
 		return $this->displayName();
 	}
 
-	public function job() {
-		$type_model = Model::Named("Job");
-		return (isset($this->job_id) ? $type_model->objectForId($this->job_id) : null);
-	}
-
 	public function jobType() {
 		if ( isset($this->job_type_id)) {
 			$type_model = Model::Named("Job_Type");
@@ -64,4 +59,7 @@ class Job_RunningDBO extends DataObject
 		$pids = explode(PHP_EOL, $output);
 		return in_array($this->pid, $pids);
 	}
+
 }
+
+?>

@@ -136,7 +136,15 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 if ( $this->isPrimaryKey($name) == false ) : ?>
 	function validate_<?php echo $name; ?>($object = null, $value)
 	{
-<?php if ( $this->isType_TEXT($name) ) : ?>
+<?php if ( $this->isRelationshipKey($name) ) : ?>
+		if (isset($object-><?php echo $name; ?>) == false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"FIELD_EMPTY"
+			);
+		}
+<?php else : ?>
 <?php if ( $mandatory ) : ?>
 		if (empty($value)) {
 			return Localized::ModelValidation(
@@ -146,6 +154,7 @@ if ( $this->isPrimaryKey($name) == false ) : ?>
 			);
 		}
 <?php endif; // mandatory ?>
+<?php if ( $this->isType_TEXT($name) ) : ?>
 <?php if ( $textLength > 0 ) : ?>
 		if (strlen($value) > <?php echo $textLength; ?> ) {
 			return Localized::ModelValidation(
@@ -182,6 +191,7 @@ if ( $this->isPrimaryKey($name) == false ) : ?>
 			);
 		}
 <?php endif; // unique ?>
+<?php endif; // relationshipkey ?>
 		return null;
 	}
 <?php endif; // not primaryKey ?>

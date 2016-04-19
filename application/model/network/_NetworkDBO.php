@@ -24,7 +24,7 @@ class _NetworkDBO extends DataObject
 	public function formattedDate_created() {return $this->formattedDate( Network::created, "M d, Y" ); }
 
 	public function isDisable() {
-		return (isset($this->disable) && $this->disable == 1);
+		return (isset($this->disable) && $this->disable == Model::TERTIARY_TRUE);
 	}
 
 
