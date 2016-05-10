@@ -26,6 +26,24 @@ SetConfigRoot( $root );
 $metadata = metadataFor("Filenames.json");
 $testdata = $metadata->getMeta( "/" );
 
+$required = array("clean", "extension", "issue", "name", "year", "volume" );
+$hasErrors = false;
+$remapped = array();
+foreach( $testdata as $filename => $expected ) {
+	$expected['source'] = $filename;
+	foreach( $required as $key ) {
+		if ( isset( $expected[$key]) == false ) {
+			$expected[$key] = null;
+		}
+	}
+	ksort ( $expected );
+	$remapped[$filename] = $expected;
+}
+$metadatafile = testFilePath( "Filename.json" );
+$returnValue = file_put_contents( $metadatafile, json_encode($remapped, JSON_PRETTY_PRINT));
+
+die();
+
 $hasErrors = false;
 foreach( $testdata as $filename => $expected ) {
 	echo ".";

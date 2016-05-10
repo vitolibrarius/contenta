@@ -17,9 +17,13 @@ class Autoloader
     {
     	$className = ltrim($className, '\\');
 		$parts = explode('\\', $className);
-		if ( count($parts) == 1 || in_array($parts[0], array('controller', 'model', 'processor')) == false ) {
+		if ( count($parts) == 1 || in_array(strtolower($parts[0]), array('controller', 'model', 'processor')) == false ) {
 			array_unshift($parts, 'libs');
 		}
+		else if ( in_array(strtolower($parts[0]), array('controller', 'model', 'processor')) == true ) {
+			$parts[0] = strtolower($parts[0]);
+		}
+
 		array_unshift($parts, APPLICATION_PATH);
 		$filename = implode(DIRECTORY_SEPARATOR, $parts) . ".php";
         if (file_exists($filename)) {
@@ -29,9 +33,8 @@ class Autoloader
             }
         }
 
-// 		Logger::logError( 'Failed to load ' . $filename);
+// 		Logger::logError( 'Failed to load ' . $filename . "|" . backtraceString() );
 
-        throw new ClassNotFoundException($className);
         return FALSE;
     }
 }
