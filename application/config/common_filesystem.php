@@ -112,18 +112,13 @@ function appendPath()
         $paths = array_merge($paths, (array)$arg);
     }
     $paths = array_filter( $paths, 'strlen' );
+	end($paths);
+	$lastkey = key($paths);
 
-    $path_count = count($paths);
-    for ( $idx = 0; $idx < $path_count; $idx++) {
-		$item = $paths[$idx];
-        if ($idx != 0 && $item[0] == DIRECTORY_SEPARATOR)  {
-        	$item = substr($item, 1);
-        }
-        if ($idx != ($path_count - 1) && substr($item, -1) == DIRECTORY_SEPARATOR) {
-        	$item = substr($item, 0, -1);
-        }
-		$finalPath .= $item;
-        if ($idx != ($path_count - 1)) {
+	foreach( $paths as $idx => $item ) {
+		$item = trim($item, DIRECTORY_SEPARATOR);
+		$finalPath .= DIRECTORY_SEPARATOR . $item;
+        if ($idx != $lastkey) {
         	$finalPath .= DIRECTORY_SEPARATOR;
 		}
 	}

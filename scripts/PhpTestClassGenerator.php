@@ -9,6 +9,7 @@ if (realpath($system_path) !== FALSE)
 
 define('SYSTEM_PATH', str_replace("\\", DIRECTORY_SEPARATOR, $system_path));
 define('APPLICATION_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'application');
+define('TESTS_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'phpunit');
 
 require SYSTEM_PATH .'application/config/bootstrap.php';
 require SYSTEM_PATH .'application/config/autoload.php';
@@ -42,190 +43,39 @@ if ( is_file($filename) == false ) {
 	die( "File '$filename' is not found" . PHP_EOL );
 }
 
-$tokens = token_get_all( file_get_contents($filename));
 
-$stack = new Stack();
-$document = new FileDocument();
-
-$currentToken = null;
-$currentClass = null;
-
-function killme($s, $msg)
-{
-	echo "-=-=-=-=-=- Kill Me -=-=-=-=" . PHP_EOL;
-	if ( $s != null ) {
-		$s->display( "", PHP_EOL, PHP_EOL );
-	}
-	echo "-=-=-=-=-=- Kill Me -=-=-=-=" . PHP_EOL;
-	die( $msg . PHP_EOL . PHP_EOL );
-}
-
-
-foreach ($tokens as $index => $tokenData) {
-	if ( is_string($tokenData)) {
-		if ( $tokenData == ';' ) {
-			if ( $stack->peek()->isOpenContent() == false ) {
-				$stack->pop();
-			}
-		}
-		else if ( $tokenData == "=" ) {
-			$stack->peek()->setHasValue(true);
-		}
-		else if ( $tokenData == "(" ) {
-			if ( $stack->peek()->isOpenContent() == false ) {
-				$stack->peek()->openArguments();
-			}
-		}
-		else if ( $tokenData == ")" ) {
-			if ( $stack->peek()->isOpenArguments() == true ) {
-				$stack->peek()->closeArguments();
-			}
-		}
-		else if ( $tokenData == "," ) {
-			if ( $stack->peek()->isOpenArguments() == true ) {
-				$stack->peek()->nextArgument();
-			}
-		}
-		else if ( $tokenData == "{" ) {
-// 			echo $stack->peek()->stateName()  . ' { ' . $stack->peek()->x() . PHP_EOL;
-			$stack->peek()->openContent();
-		}
-		else if ( $tokenData == "}" ) {
-// 			echo $stack->peek()->stateName() . ' } ' . $stack->peek()->x() . PHP_EOL;
-			$stack->peek()->closeContent();
-			if ( $stack->peek()->isOpenContent() == false ) {
-// 				echo "closing " . $stack->peek() . ' } ' . $stack->peek()->x() . PHP_EOL;
-				$stack->pop();
-			}
-		}
-		else {
-// 			echo $stack->peek() . ' ' . $tokenData . PHP_EOL;
-		}
-    }
-    else if ( $stack->size() > 0
-    	&& $stack->peek() instanceof FunctionToken
-    	&& $stack->peek()->isOpenContent() ) {
-// 		echo $stack->peek() . ' is ignoring ' . token_name($tokenData[0])
-// 			. " at line " . $tokenData[2] . PHP_EOL;
-    }
-	else if ( is_array($tokenData) ) {
-		$type = $tokenData[0];
-		switch ($type) {
-			case T_DOC_COMMENT:
-			case T_HALT_COMPILER:
-			case T_OPEN_TAG:
-			case T_NS_SEPARATOR:
-			case T_WHITESPACE:
-			case T_RETURN:
-			case T_DOUBLE_COLON:
-			case T_ARRAY:
-			case T_DOUBLE_ARROW:
-			case T_IF:
-			case T_IS_EQUAL:
-			case T_SWITCH:
-			case T_CLOSE_TAG:
-			case T_OBJECT_OPERATOR:
-			case T_CASE:
-			case T_BREAK:
-			case T_DEFAULT:
-			case T_LNUMBER:
-			case T_ISSET:
-			case T_INSTANCEOF:
-			case T_COMMENT:
-				break;
-			case T_PRIVATE:
-			case T_PUBLIC:
-			case T_PROTECTED:
-			case T_FINAL:
-			case T_STATIC:
-				$currentToken = new ModifierToken($tokenData[2], $type);
-				$stack->push($currentToken);
-				break;
-			case T_VARIABLE:
-			case T_STRING:
-			case T_CONSTANT_ENCAPSED_STRING:
-				if ( $stack->size() == 0 ) {
-					killme($stack, "Current token is null at line " . $tokenData[2]
-						. " cannot append string " . $tokenData[1]);
-				}
-				$stack->peek()->appendValue( $tokenData[1] );
-				break;
-			case T_NAMESPACE:
-				$currentToken = new NamespaceToken($tokenData[2], $type);
-				$document->setNamespaceToken( $currentToken );
-				$stack->push($currentToken);
-				break;
-			case T_USE:
-				$currentToken = new UseObjectToken($tokenData[2], $type);
-				$document->addUseToken($currentToken);
-				$stack->push($currentToken);
-				break;
-			case T_AS:
-				if ( ($stack->peek() instanceof UseObjectToken) == false ) {
-					killme($stack, "Current token is " . $stack->peek()
-						. " at line " . $tokenData[2]
-						. " must be USE before AS" );
-				}
-				$stack->peek()->setState($type);
-				break;
-			case T_CLASS:
-				$currentToken = new ClassToken($tokenData[2], $type, $type);
-				$document->addClassToken( $currentToken );
-				$stack->push($currentToken);
-				break;
-			case T_EXTENDS:
-				if ( ($stack->peek() instanceof ClassToken) == false ) {
-					killme($stack, "Current token is null at line " . $tokenData[2]
-						. " cannot start T_EXTENDS");
-				}
-				$currentToken->setState($type);
-				break;
-			case T_CONST:
-				if ( ($stack->peek() instanceof ClassToken) == false ) {
-					killme($stack, "Current token is not Class at line " . $tokenData[2]
-						. " cannot start T_CONST");
-				}
-				$currentToken = new VariableToken($tokenData[2], $type);
-				$stack->peek()->appendVariable( $currentToken );
-				$stack->push($currentToken);
-				break;
-			case T_FUNCTION:
-				$currentToken = new FunctionToken($tokenData[2], $type);
-				while ($stack->peek() instanceof  ModifierToken ) {
-					$modifier = $stack->pop();
-					$currentToken->addModifier( $modifier->stateName() );
-				}
-
-				if ( $stack->peek() instanceof ClassToken ) {
-					$stack->peek()->appendFunction( $currentToken );
-				}
-				else {
-					$document->addFunctionToken($currentToken);
-				}
-
-				$stack->push($currentToken);
-				break;
-			default:
-				killme($stack, "Unknown token "  . $type . " (" . token_name($type)
-						. ") at line " . $tokenData[2]);
-				break;
-		}
-	}
-	else {
-		killme($stack, "Unknown token data "  . var_export($tokenData, true) );
-	}
-}
-
-echo "-=-=-=-=-=- Stack -=-=-=-=" . PHP_EOL;
-$stack->display( "", PHP_EOL, PHP_EOL );
+$document = new FileDocument($filename);
 $document->printSignatures();
+
+$testFilename = file_ext_strip(basename($filename)) . "Test.php";
+$testDocumentPath = $document->namespacePath(TESTS_PATH);
+$testClassFile = appendPath( $testDocumentPath, $testFilename );
+
+safe_mkdir( $testDocumentPath );
+	echo "Test path " . $testClassFile . PHP_EOL;
+
+if ( is_file($testClassFile) ) {
+	$testDocument = new FileDocument($testClassFile);
+	$testDocument->printSignatures();
+}
+else {
+
+}
 
 class FileDocument
 {
+	protected $filename = null;
 	protected $namespace = null;
 	protected $useStatements = null;
 	protected $functions = null;
 	protected $classes = null;
+
+    public function __construct($filename) {
+    	$this->filename = $filename;
+    	if ( is_file($this->filename) ) {
+    		$this->parseSourceFile();
+    	}
+    }
 
     public function namespaceToken() {
 		return (is_null($this->namespace) ? null : $this->namespace);
@@ -233,6 +83,20 @@ class FileDocument
     public function setNamespaceToken(NamespaceToken $line = null) {
 		$this->namespace = $line;
     }
+
+	public function namespacePath($root = null) {
+		if ( is_null($root) ) {
+			$root = appendPath(sys_get_temp_dir(), "phpunit");
+		}
+
+		$nsString = (is_null($this->namespaceToken()) ? "" : $this->namespaceToken()->namespaceString());
+		if ( is_string($nsString) && strlen($nsString) > 0 ) {
+			$ns_components = explode('\\', $nsString);
+			$root = appendPath($root, $ns_components );
+		}
+
+		return $root;
+	}
 
 	public function useTokens() {
 		return (is_null($this->useStatements) ? array() : $this->useStatements);
@@ -270,6 +134,201 @@ class FileDocument
 		echo implode(PHP_EOL, $this->functionTokens()) . PHP_EOL;
 		echo PHP_EOL . "-=-=-=-=-=- classes -=-=-=-=" . PHP_EOL;
 		echo implode(PHP_EOL, $this->classTokens()) . PHP_EOL;
+	}
+
+	public function parseSourceFile() {
+		$stack = new Stack();
+		$tokens = token_get_all(file_get_contents($this->filename));
+		foreach ($tokens as $index => $tokenData) {
+			if ( is_string($tokenData)) {
+				if ( $tokenData == ';' ) {
+					if ($stack->size() > 0 && $stack->peek()->isOpenContent() == false ) {
+						$stack->pop();
+					}
+				}
+				else if ( $tokenData == "=" ) {
+					if ($stack->size() > 0) {
+						$stack->peek()->setHasValue(true);
+					}
+				}
+				else if ( $tokenData == "(" ) {
+					if ($stack->size() > 0 && $stack->peek()->isOpenContent() == false ) {
+						$stack->peek()->openArguments();
+					}
+				}
+				else if ( $tokenData == ")" ) {
+					if ($stack->size() > 0 && $stack->peek()->isOpenArguments() == true ) {
+						$stack->peek()->closeArguments();
+					}
+				}
+				else if ( $tokenData == "," ) {
+					if ($stack->size() > 0 && $stack->peek()->isOpenArguments() == true ) {
+						$stack->peek()->nextArgument();
+					}
+				}
+				else if ( $tokenData == "{" ) {
+					if ($stack->size() > 0) {
+						$stack->peek()->openContent();
+					}
+				}
+				else if ( $tokenData == "}" ) {
+					if ($stack->size() > 0) {
+						$stack->peek()->closeContent();
+						if ( $stack->peek()->isOpenContent() == false ) {
+							$stack->pop();
+						}
+					}
+				}
+				else {
+		// 			echo $stack->peek() . ' ' . $tokenData . PHP_EOL;
+				}
+			}
+			else if ( $stack->size() > 0
+				&& $stack->peek() instanceof FunctionToken
+				&& $stack->peek()->isOpenContent() ) {
+			}
+			else if ( is_array($tokenData) ) {
+				$type = $tokenData[0];
+				switch ($type) {
+					case T_DOC_COMMENT:
+					case T_HALT_COMPILER:
+					case T_EXIT:
+					case T_INLINE_HTML:
+					case T_OPEN_TAG:
+					case T_NS_SEPARATOR:
+					case T_WHITESPACE:
+					case T_ENCAPSED_AND_WHITESPACE:
+					case T_RETURN:
+					case T_DOUBLE_COLON:
+					case T_ARRAY:
+					case T_DOUBLE_ARROW:
+					case T_IS_NOT_IDENTICAL:
+					case T_REQUIRE:
+					case T_REQUIRE_ONCE:
+					case T_BOOLEAN_OR:
+					case T_IF:
+					case T_IS_EQUAL:
+					case T_SWITCH:
+					case T_CLOSE_TAG:
+					case T_OBJECT_OPERATOR:
+					case T_CASE:
+					case T_BREAK:
+					case T_DEFAULT:
+					case T_LNUMBER:
+					case T_ISSET:
+					case T_INSTANCEOF:
+					case T_COMMENT:
+					case T_FILE:
+					case T_ECHO:
+					case T_NEW:
+						break;
+					case T_PRIVATE:
+					case T_PUBLIC:
+					case T_PROTECTED:
+					case T_FINAL:
+					case T_STATIC:
+					case T_ABSTRACT:
+						$currentToken = new ModifierToken($tokenData[2], $type);
+						$stack->push($currentToken);
+						break;
+					case T_VARIABLE:
+					case T_STRING:
+					case T_CONSTANT_ENCAPSED_STRING:
+						if ( $stack->size() == 0 ) {
+							echo "unable to parse document, "
+								. $stack->display( "", PHP_EOL, PHP_EOL)
+								. " Current token is null at line " . $tokenData[2]
+								. " cannot append string " . $tokenData[1] . PHP_EOL;
+						}
+						else {
+							$stack->peek()->appendValue( $tokenData[1] );
+						}
+						break;
+					case T_NAMESPACE:
+						$currentToken = new NamespaceToken($tokenData[2], $type);
+						$this->setNamespaceToken( $currentToken );
+						$stack->push($currentToken);
+						break;
+					case T_USE:
+						$currentToken = new UseObjectToken($tokenData[2], $type);
+						$this->addUseToken($currentToken);
+						$stack->push($currentToken);
+						break;
+					case T_AS:
+						if ( ($stack->peek() instanceof UseObjectToken) == false ) {
+							throw new \Exception( "unable to parse document, "
+								. $stack->display( "", PHP_EOL, PHP_EOL)
+								. " Current token is " . $stack->peek()
+								. " at line " . $tokenData[2]
+								. " must be USE before AS" );
+						}
+						$stack->peek()->setState($type);
+						break;
+					case T_CLASS:
+						$currentToken = new ClassToken($tokenData[2], $type, $type);
+						while ($stack->peek() instanceof  ModifierToken ) {
+							$modifier = $stack->pop();
+							$currentToken->addModifier( $modifier->stateName() );
+						}
+
+						$this->addClassToken( $currentToken );
+						$stack->push($currentToken);
+						break;
+					case T_EXTENDS:
+						if ( ($stack->peek() instanceof ClassToken) == false ) {
+							throw new \Exception( "unable to parse document, "
+								. $stack->display( "", PHP_EOL, PHP_EOL)
+								. " Current token is null at line " . $tokenData[2]
+								. " cannot start T_EXTENDS");
+						}
+						$currentToken->setState($type);
+						break;
+					case T_CONST:
+						if ( ($stack->peek() instanceof ClassToken) == false ) {
+							throw new \Exception( "unable to parse document, "
+								. $stack->display( "", PHP_EOL, PHP_EOL)
+								. " Current token is not Class at line " . $tokenData[2]
+								. " cannot start T_CONST");
+						}
+						$currentToken = new VariableToken($tokenData[2], $type);
+						$stack->peek()->appendVariable( $currentToken );
+						$stack->push($currentToken);
+						break;
+					case T_FUNCTION:
+						$currentToken = new FunctionToken($tokenData[2], $type);
+						while ($stack->peek() instanceof  ModifierToken ) {
+							$modifier = $stack->pop();
+							$currentToken->addModifier( $modifier->stateName() );
+						}
+
+						if ( $stack->peek() instanceof ClassToken ) {
+							$stack->peek()->appendFunction( $currentToken );
+						}
+						else {
+							$this->addFunctionToken($currentToken);
+						}
+
+						$stack->push($currentToken);
+						break;
+					default:
+						throw new \Exception( "unable to parse document, "
+							. $stack->display( "", PHP_EOL, PHP_EOL)
+							. " Unknown token "  . $type . " (" . token_name($type)
+							. ") at line " . $tokenData[2]);
+						break;
+				}
+			}
+			else {
+				throw new \Exception( "unable to parse document, "
+					. $stack->display( "", PHP_EOL, PHP_EOL)
+					. ": Unknown token data "  . var_export($tokenData, true) );
+			}
+		}
+
+		if ( $stack->size() > 0 ) {
+			throw new \Exception( "unable to parse complete document, stack = " .
+				$stack->display( "", PHP_EOL, PHP_EOL));
+		}
 	}
 }
 
@@ -367,6 +426,10 @@ class ModifierToken extends Token
 class NamespaceToken extends Token
 {
     protected $namespace = null;
+
+	public function namespaceString() {
+		return $this->namespace;
+	}
 
 	public function appendValue( $value ) {
 		$this->namespace .= "\\" . $value;
@@ -514,6 +577,7 @@ class ClassToken extends Token
     protected $name = null;
     protected $extends = null;
     protected $intefaces = null;
+    protected $modifier = null;
 
 	protected $variables = null;
 	protected $functions = null;
@@ -544,8 +608,17 @@ class ClassToken extends Token
 		return $this;
 	}
 
+    public function modifier() {
+		return $this->modifier;
+    }
+    public function addModifier($type) {
+		$this->modifier[] = $type;
+		return $this;
+    }
+
 	public function __toString() {
-		$str = "T_CLASS " . $this->name . " extends  " . $this->extends . PHP_EOL;
+		$str = (is_null($this->modifier) ? "" : implode(" ", $this->modifier) . " " )
+			. "T_CLASS " . $this->name . " extends  " . $this->extends . PHP_EOL;
 		if ( is_array($this->intefaces) && count($this->intefaces) > 0) {
 			$str .= "	implements " . implode(", ", $this->intefaces) . PHP_EOL;
 		}
@@ -595,9 +668,8 @@ class Stack
     function peek(){
         if ($this->amount){
             return $this->vals[($this->amount - 1)];
-        } else {
-            die("stack empty" . PHP_EOL);
-        };
+        }
+        return null;
     }
 
     function display($before,$after,$ending){
