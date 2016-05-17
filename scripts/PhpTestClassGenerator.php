@@ -10,11 +10,14 @@ if (realpath($system_path) !== FALSE)
 define('SYSTEM_PATH', str_replace("\\", DIRECTORY_SEPARATOR, $system_path));
 define('APPLICATION_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'application');
 define('TESTS_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'phpunit');
+define('TEMPLATES_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'scripts/templates/phpunit');
 
 require SYSTEM_PATH .'application/config/bootstrap.php';
 require SYSTEM_PATH .'application/config/autoload.php';
 require SYSTEM_PATH .'application/config/common.php';
 require SYSTEM_PATH .'application/config/errors.php';
+
+use utilities\TemplateGenerator as TemplateGenerator;
 
 $root = sys_get_temp_dir() . "/" . basename(__FILE__, ".php");
 
@@ -45,22 +48,72 @@ if ( is_file($filename) == false ) {
 
 
 $document = new FileDocument($filename);
-$document->printSignatures();
 
-$testFilename = file_ext_strip(basename($filename)) . "Test.php";
 $testDocumentPath = $document->namespacePath(TESTS_PATH);
-$testClassFile = appendPath( $testDocumentPath, $testFilename );
-
 safe_mkdir( $testDocumentPath );
-	echo "Test path " . $testClassFile . PHP_EOL;
 
-if ( is_file($testClassFile) ) {
-	$testDocument = new FileDocument($testClassFile);
-	$testDocument->printSignatures();
-}
-else {
+$defaultValues = array();
+$defaultValues['source_filename'] = basename($filename);
+$defaultValues['source_fullpath'] = $filename;
+$defaultValues['namespace'] = (($document->hasNamespace() ? "namespace " . $document->namespaceToken()->fullnameString() . ";"  : ""));
 
+// first generate a test Class for non-class functions
+if ($document->hasFunctions()) {
+	$fakeClassName = ucfirst(file_ext_strip(basename($filename)));
+	$document->createFakeClass( $fakeClassName );
 }
+
+$classTokens = $document->classTokens();
+foreach( $classTokens as $sourceClass ) {
+	$testFile = appendPath( $testDocumentPath, $sourceClass->testnameString() . ".php" );
+
+	$testDocument = new FileDocument($testFile);
+	$testClass = $testDocument->classNamed( $sourceClass->testnameString() );
+	if ( is_null($testClass) ) {
+		// new test file, so start with the header and basic markers
+		$outputTemplate = new TemplateGenerator( appendPath(TEMPLATES_PATH, 'Class.tpl'), $defaultValues );
+		$outputTemplate->testClassName( $sourceClass->testnameString() );
+		$testClass = new ClassToken(-1, T_CLASS );
+		$testClass->appendValue($sourceClass->testnameString());
+	}
+	else {
+		$outputTemplate = new TemplateGenerator( $testFile, $defaultValues );
+	}
+
+	$missingFunctions = $testClass->missingFunctionTokens( $sourceClass->functionTokens() );
+	if ( count($missingFunctions) > 0 ) {
+		echo "Test " . $sourceClass->testnameString() . " is missing " . count($missingFunctions) . " methods" . PHP_EOL;
+		$missingUseTokens = $testDocument->missingUseTokens($document->useTokens());
+		if ( count($missingUseTokens) > 0 ) {
+			$useTemplate = new TemplateGenerator( appendPath(TEMPLATES_PATH, 'UseStatements.tpl'), $defaultValues);
+			$useTemplate->use( implode( PHP_EOL, $missingUseTokens ));
+			$useStatement = $useTemplate->generate();
+
+			// now inject into the test file
+			$outputTemplate->useStatements( trim($useStatement));
+		}
+
+		$missingFunctionsStatements = array();
+		$missingFunctionsStatements[] = " Test functions */" . PHP_EOL;
+		foreach( $missingFunctions as $func ) {
+			$functionTemplate = new TemplateGenerator( appendPath(TEMPLATES_PATH, 'Function.tpl'), $defaultValues );
+			$functionTemplate->sourceFunctionName( $func->fullnameString() );
+			$functionTemplate->name( $func->testnameString() );
+			$functionTemplate->functionSignature( $func->__toString() );
+
+			$missingFunctionsStatements[] = $functionTemplate->generate();
+		}
+		$missingFunctionsStatements[] = PHP_EOL . "/* {functions}";
+		$outputTemplate->functions( implode(PHP_EOL, $missingFunctionsStatements));
+
+		$updatedContent = $outputTemplate->generate();
+		file_put_contents($testFile, $updatedContent);
+	}
+}
+
+/*
+	*********************************
+*/
 
 class FileDocument
 {
@@ -69,6 +122,7 @@ class FileDocument
 	protected $useStatements = null;
 	protected $functions = null;
 	protected $classes = null;
+	protected $interfaces = null;
 
     public function __construct($filename) {
     	$this->filename = $filename;
@@ -77,11 +131,33 @@ class FileDocument
     	}
     }
 
+    public function isEmpty() {
+    	return (is_null($this->namespace)
+    		&& is_null($this->useStatements)
+    		&& is_null($this->functions)
+    		&& is_null($this->classes)
+		);
+	}
+
+	public function missingTokens(Array $sourceTokenArray = array(), Array $destinationTokenArray = array()) {
+		$sortedTokens = array_group_by( $sourceTokenArray, function($k, $v) { return $v->fullnameString(); });
+		$missing = array();
+		foreach( $destinationTokenArray as $atoken ) {
+			if ( isset($sortedTokens[$atoken->fullnameString()]) == false ) {
+				$missing[] = $atoken;
+			}
+		}
+		return $missing;
+	}
+
     public function namespaceToken() {
 		return (is_null($this->namespace) ? null : $this->namespace);
     }
     public function setNamespaceToken(NamespaceToken $line = null) {
 		$this->namespace = $line;
+    }
+    public function hasNamespace() {
+		return (is_null($this->namespace) == false);
     }
 
 	public function namespacePath($root = null) {
@@ -89,7 +165,7 @@ class FileDocument
 			$root = appendPath(sys_get_temp_dir(), "phpunit");
 		}
 
-		$nsString = (is_null($this->namespaceToken()) ? "" : $this->namespaceToken()->namespaceString());
+		$nsString = (is_null($this->namespaceToken()) ? "" : $this->namespaceToken()->fullnameString());
 		if ( is_string($nsString) && strlen($nsString) > 0 ) {
 			$ns_components = explode('\\', $nsString);
 			$root = appendPath($root, $ns_components );
@@ -106,6 +182,9 @@ class FileDocument
 			$this->useStatements[] = $token;
 		}
 	}
+	public function missingUseTokens(Array $tokenArray = array()) {
+		return $this->missingTokens( $this->useTokens(), $tokenArray);
+	}
 
 	public function functionTokens() {
 		return (is_null($this->functions) ? array() : $this->functions);
@@ -115,25 +194,58 @@ class FileDocument
 			$this->functions[] = $token;
 		}
 	}
+    public function hasFunctions() {
+		return (count($this->functionTokens()) > 0);
+    }
+	public function missingFunctionTokens(Array $tokenArray = array()) {
+		$sortedTokens = array_group_by( $this->functionTokens(), function($k, $v) { return $v->fullnameString(); });
+		$missing = array();
+		foreach( $tokenArray as $atoken ) {
+			if ( isset($sortedTokens[$atoken->testnameString()]) == false ) {
+				$missing[] = $atoken;
+			}
+		}
+		return $missing;
+	}
 
 	public function classTokens() {
 		return (is_null($this->classes) ? array() : $this->classes);
 	}
 	public function addClassToken(ClassToken $token = null) {
 		if ( is_null($token) == false ) {
-			$this->classes[] = $token;
+			if ( $token->isClass() == true ) {
+				$this->classes[] = $token;
+			}
+			else {
+				$this->interfaces[] = $token;
+			}
 		}
 	}
+	public function classNamed( $name = "" ) {
+		$sortedTokens = array_group_by( $this->classTokens(), function($k, $v) { return $v->fullnameString(); });
+		return ( isset($sortedTokens[$name]) ? $sortedTokens[$name] : null );
+	}
+	public function createFakeClass($name = "") {
+		$classToken = $this->classNamed( $name );
+		if ( is_null($classToken) ) {
+			$classToken = new ClassToken(-1, T_CLASS);
+			$classToken->appendValue( $name );
+			$classToken->appendFunctions( $this->functionTokens() );
+			$this->addClassToken( $classToken );
+			$this->functions = null;
+		}
+		return $classToken;
+	}
 
-	public function printSignatures() {
-		echo PHP_EOL . "-=-=-=-=-=- namespace -=-=-=-=" . PHP_EOL;
-		echo $this->namespaceToken() . PHP_EOL;
-		echo PHP_EOL . "-=-=-=-=-=- use -=-=-=-=" . PHP_EOL;
-		echo implode(PHP_EOL, $this->useTokens()) . PHP_EOL;
-		echo PHP_EOL . "-=-=-=-=-=- functions -=-=-=-=" . PHP_EOL;
-		echo implode(PHP_EOL, $this->functionTokens()) . PHP_EOL;
-		echo PHP_EOL . "-=-=-=-=-=- classes -=-=-=-=" . PHP_EOL;
-		echo implode(PHP_EOL, $this->classTokens()) . PHP_EOL;
+	public function __toString() {
+		return PHP_EOL . "-=-=-=-=-=- namespace -=-=-=-=" . PHP_EOL
+			. $this->namespaceToken() . PHP_EOL
+			. PHP_EOL . "-=-=-=-=-=- use -=-=-=-=" . PHP_EOL
+			. implode(PHP_EOL, $this->useTokens()) . PHP_EOL
+			. PHP_EOL . "-=-=-=-=-=- functions -=-=-=-=" . PHP_EOL
+			. implode(PHP_EOL, $this->functionTokens()) . PHP_EOL
+			. PHP_EOL . "-=-=-=-=-=- classes -=-=-=-=" . PHP_EOL
+			. implode(PHP_EOL, $this->classTokens()) . PHP_EOL;
 	}
 
 	public function parseSourceFile() {
@@ -235,7 +347,7 @@ class FileDocument
 					case T_STRING:
 					case T_CONSTANT_ENCAPSED_STRING:
 						if ( $stack->size() == 0 ) {
-							echo "unable to parse document, "
+							echo "Error parsing document " . $this->filename . ", "
 								. $stack->display( "", PHP_EOL, PHP_EOL)
 								. " Current token is null at line " . $tokenData[2]
 								. " cannot append string " . $tokenData[1] . PHP_EOL;
@@ -265,7 +377,8 @@ class FileDocument
 						$stack->peek()->setState($type);
 						break;
 					case T_CLASS:
-						$currentToken = new ClassToken($tokenData[2], $type, $type);
+					case T_INTERFACE:
+						$currentToken = new ClassToken($tokenData[2], $type);
 						while ($stack->peek() instanceof  ModifierToken ) {
 							$modifier = $stack->pop();
 							$currentToken->addModifier( $modifier->stateName() );
@@ -275,6 +388,7 @@ class FileDocument
 						$stack->push($currentToken);
 						break;
 					case T_EXTENDS:
+					case T_IMPLEMENTS:
 						if ( ($stack->peek() instanceof ClassToken) == false ) {
 							throw new \Exception( "unable to parse document, "
 								. $stack->display( "", PHP_EOL, PHP_EOL)
@@ -284,13 +398,18 @@ class FileDocument
 						$currentToken->setState($type);
 						break;
 					case T_CONST:
+					case T_VAR:
+						$currentToken = new VariableToken($tokenData[2], $type);
+						while ($stack->peek() instanceof  ModifierToken ) {
+							$modifier = $stack->pop();
+							$currentToken->addModifier( $modifier->stateName() );
+						}
 						if ( ($stack->peek() instanceof ClassToken) == false ) {
 							throw new \Exception( "unable to parse document, "
 								. $stack->display( "", PHP_EOL, PHP_EOL)
 								. " Current token is not Class at line " . $tokenData[2]
 								. " cannot start T_CONST");
 						}
-						$currentToken = new VariableToken($tokenData[2], $type);
 						$stack->peek()->appendVariable( $currentToken );
 						$stack->push($currentToken);
 						break;
@@ -413,11 +532,15 @@ abstract class Token
     }
 
 	public abstract function appendValue( $value );
+	public abstract function fullnameString();
 }
 
 class ModifierToken extends Token
 {
 	public function appendValue( $value ) {}
+	public function fullnameString() {
+		return $this->stateName();
+	}
 	public function __toString() {
 		return $this->stateName();
 	}
@@ -427,17 +550,17 @@ class NamespaceToken extends Token
 {
     protected $namespace = null;
 
-	public function namespaceString() {
-		return $this->namespace;
+	public function fullnameString() {
+		return implode("\\", $this->namespace);
 	}
 
 	public function appendValue( $value ) {
-		$this->namespace .= "\\" . $value;
+		$this->namespace[] = $value;
 		return $this;
 	}
 
 	public function __toString() {
-		return "namespace " . $this->namespace . ";";
+		return "namespace " . $this->fullnameString() . ";";
 	}
 }
 
@@ -445,6 +568,10 @@ class UseObjectToken extends Token
 {
     protected $fullname = null;
     protected $shortname = null;
+
+	public function fullnameString() {
+		return $this->fullname;
+	}
 
 	public function appendValue( $value ) {
 		if ( $this->state() == T_AS ) {
@@ -467,11 +594,23 @@ class VariableToken extends ModifierToken
     protected $value = null;
     protected $modifier = null;
 
+	public function fullnameString() {
+		return $this->name;
+	}
+
     public function setState($type) {
 		parent::setState($type);
 		if ( $type == T_CONST ) {
 			$this->modifier .= " const";
 		}
+		return $this;
+    }
+
+    public function modifier() {
+		return $this->modifier;
+    }
+    public function addModifier($type) {
+		$this->modifier[] = $type;
 		return $this;
     }
 
@@ -494,6 +633,10 @@ class ArgumentToken extends Token
 {
     protected $values = null;
     protected $default = null;
+
+	public function fullnameString() {
+		return (is_null($this->values) ? "" : implode(" ", $this->values));
+	}
 
 	public function appendValue( $value ) {
 		if ( $this->hasValue() == true ) {
@@ -523,6 +666,14 @@ class FunctionToken extends Token
     protected $arguments = null;
     protected $modifier = null;
     protected $currentArg = null;
+
+	public function fullnameString() {
+		return $this->name;
+	}
+
+	public function testnameString() {
+		return "test" . ucfirst($this->name);
+	}
 
 	public function appendValue( $value ) {
 		if ( $this->isOpenContent() ) {
@@ -581,24 +732,66 @@ class ClassToken extends Token
 
 	protected $variables = null;
 	protected $functions = null;
+	protected $classType = T_CLASS;
+
+    public function __construct($line = -1, $type = -1) {
+    	parent::__construct($line, $type);
+    	$this->classType = $type;
+    }
+
+	public function isClass() {
+		return ($this->classType == T_CLASS);
+	}
+
+	public function fullnameString() {
+		return $this->name;
+	}
+
+	public function testnameString() {
+		return ucfirst($this->name) . "Test";
+	}
 
 	public function appendVariable( VariableToken $variable ) {
 		$this->variables[] = $variable;
 		return $this;
 	}
 
+	public function functionTokens() {
+		return (is_null($this->functions) ? array() : $this->functions);
+	}
 	public function appendFunction( FunctionToken $funct ) {
 		$this->functions[] = $funct;
 		return $this;
 	}
+	public function appendFunctions( array $funct = array() ) {
+		foreach( $funct as $f ) {
+			$this->appendFunction( $f );
+		}
+		return $this;
+	}
+	public function missingFunctionTokens(Array $tokenArray = array()) {
+		$sortedTokens = array_group_by( $this->functionTokens(), function($k, $v) { return $v->fullnameString(); });
+		$missing = array();
+		foreach( $tokenArray as $atoken ) {
+			if ( isset($sortedTokens[$atoken->testnameString()]) == false ) {
+				$missing[] = $atoken;
+			}
+		}
+		return $missing;
+	}
+
 
 	public function appendValue( $value ) {
 		switch ( $this->state() ) {
 			case T_CLASS:
+			case T_INTERFACE:
 				$this->name .= $value;
 				break;
 			case T_EXTENDS:
 				$this->extends .= $value;
+				break;
+			case T_IMPLEMENTS:
+				$this->intefaces[] = $value;
 				break;
 			default:
 				die( "Unknown state for class "  . $this

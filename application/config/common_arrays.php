@@ -108,6 +108,16 @@
 		return $map;
 	}
 
+	function array_group_by(Array $input = array(), Closure $callback )
+	{
+		$result = array();
+		foreach ($input as $key => $value) {
+			$groupKey = $callback($key, $value);
+			array_setValueForKeypath( $groupKey, $value, $result );
+		}
+		return $result;
+	}
+
 	function array_filterForKeyValue(Array $input = array(), Array $filters = array())
 	{
 		if ( count($filters) > 0 ) {
