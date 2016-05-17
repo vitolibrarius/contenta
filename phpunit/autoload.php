@@ -16,6 +16,7 @@ require SYSTEM_PATH .'application/config/errors.php';
 require SYSTEM_PATH .'application/libs/Config.php';
 require SYSTEM_PATH .'application/libs/Cache.php';
 
+define('TEST_RESOURCE_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'phpunit' . DIRECTORY_SEPARATOR . '_resources_' . DIRECTORY_SEPARATOR);
 define('TEST_ROOT_PATH', "/tmp/ContentaTest" );
 
 function reset_echo($string ="") {
@@ -39,7 +40,7 @@ function SetConfigRoot($path = null, $purgeFirst = true)
 	$config->setValue("Logging/type", "Print") || die("Failed to change the configured Logging");
 	$config->setValue("Logging/path", "logs") || die("Failed to change the configured Logging");
 
-	$config->setValue("Repository/cache", TEST_ROOT_PATH . "/cache" );
+	$config->setValue("Repository/cache", "cache" );
 	$config->setValue("Repository/processing", "processing" );
 
 	reset_echo( "** Configuration" );
@@ -55,38 +56,30 @@ function SetConfigRoot($path = null, $purgeFirst = true)
 	makeRequiredDirectory($path, "Test directory $path");
 }
 
-function test_filePath($name = null, $purge = false)
+function test_resourcePath($name = null)
 {
-	is_null($name) == false || die( "no test file specified");
+	is_null($name) == false || die( "no test resource file specified");
 
-	$path = appendPath( SYSTEM_PATH, "tests", $name );
-
-	if ($purge == true && is_file($path) ) {
-		unlink( $path );
-	}
+	$path = appendPath( TEST_RESOURCE_PATH, $name );
 	return $path;
 }
 
-function test_filePathExists($name = null)
+function test_resourcePathExists($name = null)
 {
-	$path = test_filePath( $name );
+	$path = test_resourcePath( $name );
 	return is_file($path);
 }
 
-function test_metadataFor($name = null, $purge = false)
+function test_jsonResource($name = null)
 {
-	if ( is_null($name) ) {
-		$name = "test.json";
-	}
-	$path = test_filePath( $name, $purge );
+	$path = test_resourcePath( $name );
 	return Metadata::forDirectoryAndFile( dirname($path), basename($path) );
 }
 
-$root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
-SetConfigRoot( $root );
+SetConfigRoot( TEST_ROOT_PATH . "/phpunit" );
 
 // my_echo( );
 // my_echo( "Creating Database" );
 // Migrator::Upgrade( Config::GetLog() );
 
-echo SYSTEM_PATH . PHP_EOL;
+// echo SYSTEM_PATH . PHP_EOL;

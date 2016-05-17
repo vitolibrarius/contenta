@@ -65,6 +65,12 @@ if ($document->hasFunctions()) {
 
 $classTokens = $document->classTokens();
 foreach( $classTokens as $sourceClass ) {
+	// skip abstract classes
+	if ( $sourceClass->isAbstract() ) {
+		echo $sourceClass . PHP_EOL;
+		continue;
+	}
+
 	$testFile = appendPath( $testDocumentPath, $sourceClass->testnameString() . ".php" );
 
 	$testDocument = new FileDocument($testFile);
@@ -197,16 +203,6 @@ class FileDocument
     public function hasFunctions() {
 		return (count($this->functionTokens()) > 0);
     }
-	public function missingFunctionTokens(Array $tokenArray = array()) {
-		$sortedTokens = array_group_by( $this->functionTokens(), function($k, $v) { return $v->fullnameString(); });
-		$missing = array();
-		foreach( $tokenArray as $atoken ) {
-			if ( isset($sortedTokens[$atoken->testnameString()]) == false ) {
-				$missing[] = $atoken;
-			}
-		}
-		return $missing;
-	}
 
 	public function classTokens() {
 		return (is_null($this->classes) ? array() : $this->classes);
@@ -743,6 +739,17 @@ class ClassToken extends Token
 		return ($this->classType == T_CLASS);
 	}
 
+	public function isAbstract() {
+		if ( is_array($this->modifier) ) {
+			foreach( $this->modifier as $modifierToken ) {
+				if ( $modifierToken == 'T_ABSTRACT' ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public function fullnameString() {
 		return $this->name;
 	}
@@ -773,7 +780,7 @@ class ClassToken extends Token
 		$sortedTokens = array_group_by( $this->functionTokens(), function($k, $v) { return $v->fullnameString(); });
 		$missing = array();
 		foreach( $tokenArray as $atoken ) {
-			if ( isset($sortedTokens[$atoken->testnameString()]) == false ) {
+			if ( $atoken->fullnameString() != "__construct" && isset($sortedTokens[$atoken->testnameString()]) == false ) {
 				$missing[] = $atoken;
 			}
 		}
