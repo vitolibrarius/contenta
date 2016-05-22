@@ -12,7 +12,7 @@ use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 use \model\Endpoint as Endpoint;
 use \model\EndpointDBO as EndpointDBO;
 
-class _Pull_List_ExpansionDBO extends DataObject
+abstract class _Pull_List_ExpansionDBO extends DataObject
 {
 	public $pattern;
 	public $replace;

@@ -12,7 +12,7 @@ use \model\version\Version as Version;
 use \model\version\Patch as Patch;
 use \model\version\PatchDBO as PatchDBO;
 
-class _VersionDBO extends DataObject
+abstract class _VersionDBO extends DataObject
 {
 	public $code;
 	public $major;

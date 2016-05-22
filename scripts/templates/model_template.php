@@ -11,7 +11,6 @@ namespace <?php echo $this->packageName();
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \Validation as Validation;
 
 use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassName(); ?>;
 
@@ -95,6 +94,21 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) == false || is_null($object) == true) {
+			switch ($attr) {
+<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
+<?php if (isset($detailArray['default']) ) : ?>
+				case <?php echo $this->modelClassName() . "::" . $name; ?>:
+					return <?php echo $detailArray['default']; ?>;
+<?php endif; ?>
+<?php endforeach; ?>
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
 
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{

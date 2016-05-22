@@ -12,7 +12,7 @@ use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
 use \model\Endpoint as Endpoint;
 use \model\EndpointDBO as EndpointDBO;
 
-class _Pull_List_ExclusionDBO extends DataObject
+abstract class _Pull_List_ExclusionDBO extends DataObject
 {
 	public $pattern;
 	public $type;

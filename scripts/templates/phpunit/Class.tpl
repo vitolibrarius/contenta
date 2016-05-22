@@ -11,6 +11,14 @@ use \PHPUnit_Framework_TestCase as PHPUnit_Framework_TestCase;
 
 class {testClassName} extends PHPUnit_Framework_TestCase
 {
+    public static function setUpBeforeClass()
+    {
+    }
+
+    public static function tearDownAfterClass()
+    {
+    }
+
     protected function setUp()
     {
     }

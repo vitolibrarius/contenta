@@ -5,7 +5,6 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \Validation as Validation;
 
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
@@ -71,6 +70,15 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) == false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
 
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{

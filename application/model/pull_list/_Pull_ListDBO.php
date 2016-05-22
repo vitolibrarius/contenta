@@ -18,7 +18,7 @@ use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
-class _Pull_ListDBO extends DataObject
+abstract class _Pull_ListDBO extends DataObject
 {
 	public $name;
 	public $etag;

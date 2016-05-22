@@ -6,7 +6,7 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Session as Session;
-use model\Users as Users;
+use \model\user\Users as Users;
 
 /**
  * Class Error

@@ -18,7 +18,7 @@ use model\Series_Alias as Series_Alias;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
 use model\Series_Character as Series_Character;
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\User_Series as User_Series;
 use model\Story_Arc as Story_Arc;
 use model\Story_Arc_Character as Story_Arc_Character;
@@ -30,9 +30,9 @@ use model\Media_Type as Media_Type;
 use model\Media as Media;
 use model\Endpoint as Endpoint;
 
-use model\Job_Type as Job_Type;
-use model\Job_Running as Job_Running;
-use model\Job as Job;
+use \model\jobs\Job_Type as Job_Type;
+use \model\jobs\Job_Running as Job_Running;
+use \model\jobs\Job as Job;
 
 //
 class Migration_11 extends Migrator

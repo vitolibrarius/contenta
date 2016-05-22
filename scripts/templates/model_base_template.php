@@ -161,7 +161,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
-<?php foreach( $mandatoryObjectRelations as $name => $detailArray ) : ?>
+<?php foreach( $objectRelationships as $name => $detailArray ) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>
 				case "<?php echo $detailArray["destinationTable"]; ?>":

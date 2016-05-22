@@ -14,7 +14,7 @@ use \model\jobs\Job_RunningDBO as Job_RunningDBO;
 use \model\jobs\Job as Job;
 use \model\jobs\JobDBO as JobDBO;
 
-class _Job_TypeDBO extends DataObject
+abstract class _Job_TypeDBO extends DataObject
 {
 	public $code;
 	public $name;

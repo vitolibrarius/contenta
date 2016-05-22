@@ -13,7 +13,7 @@ use \Localized as Localized;
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Story_Arc as Story_Arc;

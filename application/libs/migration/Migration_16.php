@@ -12,8 +12,9 @@ use \SQL as SQL;
 use utilities\CronEvaluator as CronEvaluator;
 use db\Qualifier as Qualifier;
 
-use model\Job_Type as Job_Type;
-use \model\Job as Job;
+use \model\jobs\Job_Type as Job_Type;
+use \model\jobs\Job_Running as Job_Running;
+use \model\jobs\Job as Job;
 use \model\Endpoint as Endpoint;
 
 use \model\pull_list\Pull_List as Pull_List;

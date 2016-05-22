@@ -12,7 +12,7 @@ use \model\logs\Log as Log;
 use \model\logs\Log_Level as Log_Level;
 use \model\logs\Log_LevelDBO as Log_LevelDBO;
 
-class _LogDBO extends DataObject
+abstract class _LogDBO extends DataObject
 {
 	public $trace;
 	public $trace_id;

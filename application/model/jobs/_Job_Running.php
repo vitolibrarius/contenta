@@ -93,6 +93,12 @@ abstract class _Job_Running extends Model
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
+				case "job":
+					return array( Job_Running::job_id, "id"  );
+					break;
+				case "job_type":
+					return array( Job_Running::job_type_id, "id"  );
+					break;
 				default:
 					break;
 			}

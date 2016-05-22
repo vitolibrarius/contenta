@@ -14,7 +14,7 @@ use \model\network\User_NetworkDBO as User_NetworkDBO;
 use \model\User_Series as User_Series;
 use \model\User_SeriesDBO as User_SeriesDBO;
 
-class _UsersDBO extends DataObject
+abstract class _UsersDBO extends DataObject
 {
 	public $name;
 	public $email;
@@ -22,6 +22,7 @@ class _UsersDBO extends DataObject
 	public $account_type;
 	public $rememberme_token;
 	public $api_hash;
+	public $password_hash;
 	public $password_reset_hash;
 	public $activation_hash;
 	public $failed_logins;

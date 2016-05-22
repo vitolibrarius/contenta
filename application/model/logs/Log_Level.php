@@ -5,7 +5,6 @@ namespace model\logs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \Validation as Validation;
 
 use \model\logs\Log_LevelDBO as Log_LevelDBO;
 

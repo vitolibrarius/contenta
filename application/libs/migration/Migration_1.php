@@ -8,7 +8,7 @@ use \Config as Config;
 use \Logger as Logger;
 use \SQL as SQL;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 
 
 class Migration_1 extends Migrator

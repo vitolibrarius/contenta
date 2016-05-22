@@ -10,7 +10,7 @@ use \Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
 use controller\Admin as Admin;
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Publisher as Publisher;
 
 /**

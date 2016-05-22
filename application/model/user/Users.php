@@ -5,7 +5,6 @@ namespace model\user;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \Validation as Validation;
 
 use \model\user\UsersDBO as UsersDBO;
 
@@ -17,10 +16,13 @@ use \model\User_SeriesDBO as User_SeriesDBO;
 
 class Users extends _Users
 {
+	const AdministratorRole = "admin";
+	const StandardRole = "user";
+
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
+	public function create( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
 	{
 		return $this->base_create(
 			$name,
@@ -29,6 +31,7 @@ class Users extends _Users
 			$account_type,
 			$rememberme_token,
 			$api_hash,
+			$password_hash,
 			$password_reset_hash,
 			$activation_hash,
 			$failed_logins,
@@ -40,7 +43,7 @@ class Users extends _Users
 	}
 
 	public function update( UsersDBO $obj,
-		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
+		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
 	{
 		if ( isset( $obj ) && is_null($obj) == false ) {
 			return $this->base_update(
@@ -51,6 +54,7 @@ class Users extends _Users
 				$account_type,
 				$rememberme_token,
 				$api_hash,
+				$password_hash,
 				$password_reset_hash,
 				$activation_hash,
 				$failed_logins,
@@ -72,6 +76,7 @@ class Users extends _Users
 			Users::account_type => Model::TEXT_TYPE,
 			Users::rememberme_token => Model::TEXT_TYPE,
 			Users::api_hash => Model::TEXT_TYPE,
+			Users::password_hash => Model::TEXT_TYPE,
 			Users::password_reset_hash => Model::TEXT_TYPE,
 			Users::activation_hash => Model::TEXT_TYPE,
 			Users::failed_logins => Model::INT_TYPE,
@@ -87,7 +92,8 @@ class Users extends _Users
 		if ( is_null($object) ) {
 			return array(
 				Users::name,
-				Users::email
+				Users::email,
+				Users::password_hash
 			);
 		}
 		return parent::attributesMandatory($object);
@@ -99,10 +105,43 @@ class Users extends _Users
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)
+	{
+		if ( $attr == Users::name ) {
+			return Localized::ModelRestriction($this->tableName(), $attr );
+		}
+
+		if ( $attr == Users::email ) {
+			return Localized::ModelRestriction($this->tableName(), $attr );
+		}
+
+		if ( $attr == "password" ) {
+			return Localized::ModelRestriction($this->tableName(), $attr );
+		}
+
+		return null;
+	}
 	/*
-	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) == false || is_null($object) == true) {
+			switch ($attr) {
+				case Users::account_type:
+					return 'user';
+				case Users::failed_logins:
+					return 0;
+				case Users::last_login_timestamp:
+					return null;
+				case Users::last_failed_login:
+					return null;
+				case Users::password_reset_timestamp:
+					return null;
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
 
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
@@ -189,6 +228,17 @@ class Users extends _Users
 				$this->tableName(),
 				Users::api_hash,
 				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_password_hash($object = null, $value)
+	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::password_hash,
+				"FIELD_EMPTY"
 			);
 		}
 		return null;

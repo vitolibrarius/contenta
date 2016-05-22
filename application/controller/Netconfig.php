@@ -9,7 +9,7 @@ use \Session as Session;
 use \Auth as Auth;
 use \Localized as Localized;
 use \Logger as Logger;
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Endpoint as Endpoint;
 use model\EndpointDBO as EndpointDBO;
 

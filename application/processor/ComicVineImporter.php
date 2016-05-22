@@ -12,7 +12,7 @@ use \Model as Model;
 use processor\EndpointImporter as EndpointImporter;
 use connectors\ComicVineConnector as ComicVineConnector;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Series as Series;

@@ -15,13 +15,10 @@ require SYSTEM_PATH .'application/config/common.php';
 require SYSTEM_PATH .'application/config/errors.php';
 require SYSTEM_PATH .'application/libs/Config.php';
 require SYSTEM_PATH .'application/libs/Cache.php';
+require SYSTEM_PATH .'application/libs/db/ExportData.php';
 
 define('TEST_RESOURCE_PATH', SYSTEM_PATH . DIRECTORY_SEPARATOR . 'phpunit' . DIRECTORY_SEPARATOR . '_resources_' . DIRECTORY_SEPARATOR);
 define('TEST_ROOT_PATH', "/tmp/ContentaTest" );
-
-function reset_echo($string ="") {
-	echo $string . PHP_EOL;
-}
 
 function SetConfigRoot($path = null, $purgeFirst = true)
 {
@@ -43,12 +40,13 @@ function SetConfigRoot($path = null, $purgeFirst = true)
 	$config->setValue("Repository/cache", "cache" );
 	$config->setValue("Repository/processing", "processing" );
 
-	reset_echo( "** Configuration" );
-	reset_echo( "Repository " . $config->repositoryDirectory() );
-	reset_echo( "media " . $config->mediaDirectory() );
-	reset_echo( "cache " . $config->cacheDirectory() );
-	reset_echo( "processing " . $config->processingDirectory() );
-	reset_echo( "logs " . $config->loggingDirectory() );
+
+	echo "** Configuration" . PHP_EOL;
+	echo "Repository " . $config->repositoryDirectory() . PHP_EOL;
+	echo "media " . $config->mediaDirectory() . PHP_EOL;
+	echo "cache " . $config->cacheDirectory() . PHP_EOL;
+	echo "processing " . $config->processingDirectory() . PHP_EOL;
+	echo "logs " . $config->loggingDirectory() . PHP_EOL;
 
 	if ( $purgeFirst == true ) {
 		destroy_dir( $path ) || die( "Failed to remove last test run $path");
@@ -76,10 +74,33 @@ function test_jsonResource($name = null)
 	return Metadata::forDirectoryAndFile( dirname($path), basename($path) );
 }
 
+function test_initializeDatabase($reset = false)
+{
+	if ( $reset == true ) {
+		SetConfigRoot( TEST_ROOT_PATH . "/phpunit", $reset );
+	}
+	echo "Creating Database"  . PHP_EOL;
+	Migrator::Upgrade( Config::GetLog() );
+}
+
+function test_importTestDataDirectory( )
+{
+	$retval = appendPath( TEST_RESOURCE_PATH, "data");
+	is_dir($retval) ||  die('test_importTestDataDirectory could not find ' . $retval . PHP_EOL);
+	return $retval;
+}
+
+function test_importTestData( array $models = array() )
+{
+	$importer = new \db\ImportData( test_importTestDataDirectory(), $models );
+	$importer->importAll();
+}
+
+function test_exportTestData( array $models = array() )
+{
+	$exporter = new \db\ExportData_sqlite( test_importTestDataDirectory() . "1", \Database::instance() );
+	$exporter->exportAll();
+}
+
+
 SetConfigRoot( TEST_ROOT_PATH . "/phpunit" );
-
-// my_echo( );
-// my_echo( "Creating Database" );
-// Migrator::Upgrade( Config::GetLog() );
-
-// echo SYSTEM_PATH . PHP_EOL;

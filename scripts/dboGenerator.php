@@ -563,12 +563,13 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	$instance = new $clazz();
 	echo $clazz . " .. " . $instance->consistencyTest() . PHP_EOL;
 
-	foreach( $diff_files as $prod => $temp ) {
-		$retval = exec( "diff -q $prod $temp", $output, $rt );
-		if ( $rt == 1 ) {
-	 		$retval = shell_exec( "opendiff $prod $temp > /dev/null 2>&1" );
-	 	}
-	}
+// 	foreach( $diff_files as $prod => $temp ) {
+// 		$retval = exec( "diff -q $prod $temp", $output, $rt );
+// 		if ( $rt == 1 ) {
+// 			echo
+// // 	 		$retval = shell_exec( "opendiff $prod $temp > /dev/null 2>&1" );
+// 	 	}
+// 	}
 }
 
 ?>

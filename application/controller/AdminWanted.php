@@ -20,7 +20,7 @@ use processor\FluxImporter as FluxImporter;
 use controller\Admin as Admin;
 use connectors\NewznabConnector as NewznabConnector;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Endpoint as Endpoint;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Publisher as Publisher;

@@ -12,7 +12,7 @@ use \Localized as Localized;
 use \Config as Config;
 use \Processor as Processor;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Publisher as Publisher;
 
 use migration\Migration_16 as Migration_16;

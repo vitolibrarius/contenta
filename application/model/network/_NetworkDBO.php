@@ -12,7 +12,7 @@ use \model\network\Network as Network;
 use \model\network\User_Network as User_Network;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
 
-class _NetworkDBO extends DataObject
+abstract class _NetworkDBO extends DataObject
 {
 	public $ip_address;
 	public $ip_hash;

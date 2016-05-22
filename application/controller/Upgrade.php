@@ -12,7 +12,7 @@ use \Auth as Auth;
 use \utilities\ShellCommand as ShellCommand;
 use \utilities\Git as Git;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use processor\Migration as Migration;
 
 

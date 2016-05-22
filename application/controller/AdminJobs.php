@@ -11,7 +11,7 @@ use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Job as Job;
 use model\Job_Type as Job_Type;
 use model\Publisher as Publisher;

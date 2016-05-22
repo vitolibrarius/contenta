@@ -28,6 +28,7 @@ use \model\User_SeriesDBO as User_SeriesDBO;
 			. Users::account_type . " TEXT, "
 			. Users::rememberme_token . " TEXT, "
 			. Users::api_hash . " TEXT, "
+			. Users::password_hash . " TEXT, "
 			. Users::password_reset_hash . " TEXT, "
 			. Users::activation_hash . " TEXT, "
 			. Users::failed_logins . " INTEGER, "
@@ -40,6 +41,8 @@ use \model\User_SeriesDBO as User_SeriesDBO;
 
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_rememberme_token on users (rememberme_token)';
 		$this->sqlite_execute( "users", $sql, "Index on users (rememberme_token)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_namepassword_hash on users (name,password_hash)';
+		$this->sqlite_execute( "users", $sql, "Index on users (name,password_hash)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_activation_hash on users (activation_hash)';
 		$this->sqlite_execute( "users", $sql, "Index on users (activation_hash)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_api_hash on users (api_hash)';
@@ -59,6 +62,7 @@ abstract class _Users extends Model
 	const account_type = 'account_type';
 	const rememberme_token = 'rememberme_token';
 	const api_hash = 'api_hash';
+	const password_hash = 'password_hash';
 	const password_reset_hash = 'password_reset_hash';
 	const activation_hash = 'activation_hash';
 	const failed_logins = 'failed_logins';
@@ -87,6 +91,7 @@ abstract class _Users extends Model
 			Users::account_type,
 			Users::rememberme_token,
 			Users::api_hash,
+			Users::password_hash,
 			Users::password_reset_hash,
 			Users::activation_hash,
 			Users::failed_logins,
@@ -125,6 +130,11 @@ abstract class _Users extends Model
 		return $this->singleObjectForKeyValue(Users::api_hash, $value);
 	}
 
+	public function allForPassword_hash($value)
+	{
+		return $this->allObjectsForKeyValue(Users::password_hash, $value);
+	}
+
 	public function allForPassword_reset_hash($value)
 	{
 		return $this->allObjectsForKeyValue(Users::password_reset_hash, $value);
@@ -141,6 +151,12 @@ abstract class _Users extends Model
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
+				case "user_network":
+					return array( Users::id, "user_id"  );
+					break;
+				case "user_series":
+					return array( Users::id, "user_id"  );
+					break;
 				default:
 					break;
 			}
@@ -151,10 +167,10 @@ abstract class _Users extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
+	public function base_create( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
 	{
 		$obj = false;
-		if ( isset($name, $email) ) {
+		if ( isset($name, $email, $password_hash) ) {
 			$params = array(
 				Users::name => (isset($name) ? $name : null),
 				Users::email => (isset($email) ? $email : null),
@@ -162,6 +178,7 @@ abstract class _Users extends Model
 				Users::account_type => (isset($account_type) ? $account_type : 'user'),
 				Users::rememberme_token => (isset($rememberme_token) ? $rememberme_token : null),
 				Users::api_hash => (isset($api_hash) ? $api_hash : null),
+				Users::password_hash => (isset($password_hash) ? $password_hash : null),
 				Users::password_reset_hash => (isset($password_reset_hash) ? $password_reset_hash : null),
 				Users::activation_hash => (isset($activation_hash) ? $activation_hash : null),
 				Users::failed_logins => (isset($failed_logins) ? $failed_logins : 0),
@@ -181,7 +198,7 @@ abstract class _Users extends Model
 	}
 
 	public function base_update( UsersDBO $obj,
-		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
+		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
 	{
 		if ( isset( $obj ) && is_null($obj) == false ) {
 			$updates = array();
@@ -203,6 +220,9 @@ abstract class _Users extends Model
 			}
 			if (isset($api_hash) && (isset($obj->api_hash) == false || $api_hash != $obj->api_hash)) {
 				$updates[Users::api_hash] = $api_hash;
+			}
+			if (isset($password_hash) && (isset($obj->password_hash) == false || $password_hash != $obj->password_hash)) {
+				$updates[Users::password_hash] = $password_hash;
 			}
 			if (isset($password_reset_hash) && (isset($obj->password_reset_hash) == false || $password_reset_hash != $obj->password_reset_hash)) {
 				$updates[Users::password_reset_hash] = $password_reset_hash;

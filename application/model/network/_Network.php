@@ -81,6 +81,9 @@ abstract class _Network extends Model
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
+				case "user_network":
+					return array( Network::id, "network_id"  );
+					break;
 				default:
 					break;
 			}

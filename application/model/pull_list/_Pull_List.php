@@ -104,6 +104,15 @@ abstract class _Pull_List extends Model
 				case "endpoint":
 					return array( Pull_List::endpoint_id, "id"  );
 					break;
+				case "pull_list_item":
+					return array( Pull_List::id, "pull_list_id"  );
+					break;
+				case "pull_list_exclusion":
+					return array( Pull_List::endpoint_id, "endpoint_id"  );
+					break;
+				case "pull_list_expansion":
+					return array( Pull_List::endpoint_id, "endpoint_id"  );
+					break;
 				default:
 					break;
 			}

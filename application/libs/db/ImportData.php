@@ -39,7 +39,7 @@ use model\Story_Arc_Publication as Story_Arc_Publication;
 use model\Story_Arc_Series as Story_Arc_Series;
 use model\User_Network as User_Network;
 use model\User_Series as User_Series;
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Version as Version;
 
 class ImportData
@@ -47,17 +47,25 @@ class ImportData
 	public $importDir;
 	public $modelDirectoryMap;
 	public $primaryKeyMap;
+	public $importOrder;
 
-	public function __construct($importDir)
+	public function __construct($importDir, array $importOrder = null)
 	{
 		isset($importDir) || die('Import directory is required.');
 		is_dir($importDir) || die('Import directory does not exists.');
 
 		$this->importDir = $importDir;
+		if ( is_array($importOrder) && count($importOrder) > 0 ) {
+			$this->importOrder = $importOrder;
+		}
 	}
 
 	public function importOrder()
 	{
+		if ( isset($this->importOrder) ) {
+			return $this->importOrder;
+		}
+
 		return array(
 			"Version",
 			"Patch",
@@ -161,7 +169,7 @@ class ImportData
 
 				foreach (scandir($modelSubDir) as $rowName)
 				{
-					if ($rowName == '.' || $rowName == '..') continue;
+					if ($rowName == '.' || $rowName == '..' || $rowName == '.DS_Store') continue;
 					$success_return = $this->$table_method($model, appendPath($modelSubDir, $rowName) );
 					if ( is_null($success_return) || $success_return == false ) {
 						throw new Exception("import error " . $table_method );

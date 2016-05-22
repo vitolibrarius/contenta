@@ -10,7 +10,7 @@ use \model\logs\Log_Level as Log_Level;
 
 /* import related objects */
 
-class _Log_LevelDBO extends DataObject
+abstract class _Log_LevelDBO extends DataObject
 {
 	public $code;
 	public $name;

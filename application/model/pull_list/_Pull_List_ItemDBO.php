@@ -12,7 +12,7 @@ use \model\pull_list\Pull_List_Item as Pull_List_Item;
 use \model\pull_list\Pull_List as Pull_List;
 use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
 
-class _Pull_List_ItemDBO extends DataObject
+abstract class _Pull_List_ItemDBO extends DataObject
 {
 	public $group_name;
 	public $data;

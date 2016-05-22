@@ -12,7 +12,7 @@ use \Logger as Logger;
 use \Localized as Localized;
 use \Processor as Processor;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 
 use exceptions\ImportMediaException as ImportMediaException;
 use processor\UploadImport as UploadImport;

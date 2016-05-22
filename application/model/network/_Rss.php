@@ -151,6 +151,9 @@ abstract class _Rss extends Model
 				case "endpoint":
 					return array( Rss::endpoint_id, "id"  );
 					break;
+				case "flux":
+					return array( Rss::guid, "src_guid"  );
+					break;
 				default:
 					break;
 			}

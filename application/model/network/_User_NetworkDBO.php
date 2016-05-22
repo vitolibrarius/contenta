@@ -14,7 +14,7 @@ use \model\users\UsersDBO as UsersDBO;
 use \model\network\Network as Network;
 use \model\network\NetworkDBO as NetworkDBO;
 
-class _User_NetworkDBO extends DataObject
+abstract class _User_NetworkDBO extends DataObject
 {
 	public $user_id;
 	public $network_id;

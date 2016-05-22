@@ -15,6 +15,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
+		test_initializeDatabase(false);
     }
 
     protected function tearDown()
@@ -31,7 +32,8 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testInstance()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$db = Database::instance();
+		$this->assertNotNull( $db );
 	}
 
 	/**

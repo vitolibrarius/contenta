@@ -15,7 +15,7 @@ use \Metadata as Metadata;
 
 use utilities\EndpointThrottle as EndpointThrottle;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Endpoint as Endpoint;
 use model\EndpointDBO as EndpointDBO;
 

@@ -17,7 +17,7 @@ use db\Qualifier as Qualifier;
 use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Endpoint as Endpoint;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Publisher as Publisher;

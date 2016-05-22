@@ -1,0 +1,17 @@
+{
+    "id": "1",
+    "name": "vito",
+    "password_hash": "$2y$10$486J2llu2CS.2DnXlTIQgOsk3tzcIVki428mjELHoEr\/evhymDLGO",
+    "email": "vitolibrarius@gmail.com",
+    "active": "1",
+    "account_type": "admin",
+    "rememberme_token": null,
+    "creation_timestamp": "1444841258",
+    "last_login_timestamp": "1459393213",
+    "failed_logins": "0",
+    "last_failed_login": null,
+    "activation_hash": null,
+    "api_hash": "4bd3b2b9075571c95ade00002334e7b2",
+    "password_reset_hash": null,
+    "password_reset_timestamp": null
+}

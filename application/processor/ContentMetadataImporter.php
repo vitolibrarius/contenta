@@ -9,7 +9,7 @@ use \Logger as Logger;
 use \Model as Model;
 use \Exception as Exception;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Series as Series;

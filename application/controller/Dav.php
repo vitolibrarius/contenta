@@ -16,7 +16,7 @@ use \SimpleXMLElement as SimpleXMLElement;
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Endpoint as Endpoint;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Publisher as Publisher;

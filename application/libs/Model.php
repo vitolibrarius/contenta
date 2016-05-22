@@ -572,7 +572,11 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 	public function attributesFor($object = null, $type = null) 				{ return array(); }
 	public function attributesMandatory($object = null)				 			{ return array(); }
 	public function attributeName($object = null, $type = null, $attr)			{ return $this->attributeId($attr); }
-	public function attributeIsEditable($object = null, $type = null, $attr)	{ return true; }
+	public function attributeIsEditable($object = null, $type = null, $attr)
+	{
+		return ( $this->tablePK() != $attr );
+	}
+
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributeEditPattern($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }

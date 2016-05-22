@@ -5,7 +5,6 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \Validation as Validation;
 use \utilities\MediaFilename as MediaFilename;
 
 use \model\network\RssDBO as RssDBO;

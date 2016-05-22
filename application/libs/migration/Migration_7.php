@@ -15,7 +15,7 @@ use model\Series_Alias as Series_Alias;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
 use model\Series_Character as Series_Character;
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\User_Series as User_Series;
 use model\Story_Arc as Story_Arc;
 use model\Story_Arc_Character as Story_Arc_Character;

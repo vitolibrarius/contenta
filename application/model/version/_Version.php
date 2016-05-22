@@ -87,6 +87,9 @@ abstract class _Version extends Model
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
+				case "patch":
+					return array( Version::id, "version_id"  );
+					break;
 				default:
 					break;
 			}

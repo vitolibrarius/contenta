@@ -5,7 +5,7 @@ use \Model as Model;
 use \Localized as Localized;
 use \Config as Config;
 use \Logger as Logger;
-use model\Users as Users;
+use \model\user\Users as Users;
 
 /**
  * Class Auth

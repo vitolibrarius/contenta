@@ -1,0 +1,17 @@
+{
+    "id": "2",
+    "name": "test",
+    "password_hash": "cd9a7f2e9ec2cfd79bfa4b7ae36f3a09",
+    "email": "test@home.com",
+    "active": "1",
+    "account_type": "standard",
+    "rememberme_token": "a88dc1213dd74aa752d8ea5fd0e113f0",
+    "creation_timestamp": "1463956649",
+    "last_login_timestamp": "1463956649",
+    "failed_logins": "1",
+    "last_failed_login": "1463956649",
+    "activation_hash": "ea3022ff3f65e63ea4ff6b3f51357d1c",
+    "api_hash": "4a56ddb9031918c1523417fa606d21d8",
+    "password_reset_hash": "4250111d7ceda56b021fb45b2fe2a06d",
+    "password_reset_timestamp": "1463956649"
+}

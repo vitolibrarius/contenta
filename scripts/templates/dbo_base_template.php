@@ -14,7 +14,7 @@ use <?php echo $this->modelPackageClassName(); ?> as <?php echo $this->modelClas
 	}
 ?>
 
-class <?php echo $this->dboBaseName(); ?> extends DataObject
+abstract class <?php echo $this->dboBaseName(); ?> extends DataObject
 {
 <?php
 foreach( $this->attributes as $name => $detailArray ) {

@@ -9,7 +9,7 @@ use \Logger as Logger;
 use \Model as Model;
 use \SQL as SQL;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Endpoint as Endpoint;
 use model\Network as Network;

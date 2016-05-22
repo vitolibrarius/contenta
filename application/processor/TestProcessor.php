@@ -7,9 +7,9 @@ use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
 
-use model\Job_Type as Job_Type;
-use model\Job_Running as Job_Running;
-use model\Job as Job;
+use \model\jobs\Job_Type as Job_Type;
+use \model\jobs\Job_Running as Job_Running;
+use \model\jobs\Job as Job;
 
 class TestProcessor extends Processor
 {

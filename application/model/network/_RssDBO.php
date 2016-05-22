@@ -14,7 +14,7 @@ use \model\EndpointDBO as EndpointDBO;
 use \model\Flux as Flux;
 use \model\FluxDBO as FluxDBO;
 
-class _RssDBO extends DataObject
+abstract class _RssDBO extends DataObject
 {
 	public $endpoint_id;
 	public $created;

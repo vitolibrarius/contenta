@@ -9,7 +9,7 @@ use \Auth as Auth;
 use \Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Publisher as Publisher;
 
 /**

@@ -20,7 +20,7 @@ use processor\ImportManager as ImportManager;
 
 use controller\Admin as Admin;
 
-use model\Users as Users;
+use \model\user\Users as Users;
 use model\Series as Series;
 use model\SeriesDBO as SeriesDBO;
 use model\Publication as Publication;

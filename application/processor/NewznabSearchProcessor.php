@@ -12,9 +12,9 @@ use \Metadata as Metadata;
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
-use model\Job_Type as Job_Type;
-use model\Job_Running as Job_Running;
-use model\Job as Job;
+use \model\jobs\Job_Type as Job_Type;
+use \model\jobs\Job_Running as Job_Running;
+use \model\jobs\Job as Job;
 use model\Story_Arc as Story_Arc;
 use model\Publication as Publication;
 use model\Series as Series;

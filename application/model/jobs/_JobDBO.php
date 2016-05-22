@@ -14,7 +14,7 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 use \model\Endpoint as Endpoint;
 use \model\EndpointDBO as EndpointDBO;
 
-class _JobDBO extends DataObject
+abstract class _JobDBO extends DataObject
 {
 	public $type_id;
 	public $endpoint_id;

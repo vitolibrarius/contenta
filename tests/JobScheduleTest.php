@@ -40,10 +40,10 @@ use model\Story_Arc_Character as Story_Arc_Character;
 use model\Story_Arc_Series as Story_Arc_Series;
 use model\User_Network as User_Network;
 use model\User_Series as User_Series;
-use model\Users as Users;
-use model\Job_Type as Job_Type;
-use model\Job_Running as Job_Running;
-use model\Job as Job;
+use \model\user\Users as Users;
+use \model\jobs\Job_Type as Job_Type;
+use \model\jobs\Job_Running as Job_Running;
+use \model\jobs\Job as Job;
 
 $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root, false );

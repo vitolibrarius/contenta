@@ -7,7 +7,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Session as Session;
 use \Auth as Auth;
-use model\Users as Users;
+use \model\user\Users as Users;
 
 /**
  * Class Index

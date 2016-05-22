@@ -124,6 +124,9 @@ abstract class _Job extends Model
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
+				case "job_type":
+					return array( Job::job_type_id, "id"  );
+					break;
 				case "endpoint":
 					return array( Job::endpoint_id, "id"  );
 					break;
