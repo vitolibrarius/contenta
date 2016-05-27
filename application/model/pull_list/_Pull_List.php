@@ -6,6 +6,7 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -224,6 +225,60 @@ abstract class _Pull_List extends Model
 	/**
 	 *	Named fetches
 	 */
+
+	/** Validation */
+	function validate_name($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List::name,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_etag($object = null, $value)
+	{
+		$value = trim($value);
+		// make sure Etag is unique
+		$existing = $this->objectForEtag($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List::etag,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
+	function validate_published($object = null, $value)
+	{
+		return null;
+	}
+	function validate_endpoint_id($object = null, $value)
+	{
+		if (isset($object->endpoint_id) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List::endpoint_id,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

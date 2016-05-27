@@ -11,6 +11,7 @@ namespace <?php echo $this->packageName();
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassName(); ?>;
 
@@ -47,7 +48,7 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 		<?php echo implode(', ', array_map(function($item) { return '$' . $item; },
 			array_merge( $createRelationsList, $createAttrList ))); ?>)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				<?php echo implode(",\n\t\t\t\t", array_map(function($item) { return '$' . $item; },
@@ -97,7 +98,7 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) == false || is_null($object) == true) {
+		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['default']) ) : ?>
@@ -143,71 +144,12 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 
 	/** Validation */
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
-<?php
- 	$type = $this->modelTypeForAttribute($name);
-	$mandatory = $this->isMandatoryAttribute($name);
-	$textLength = (isset($details['length']) ? intval($details['length']) : 0);
-if ( $this->isPrimaryKey($name) == false ) : ?>
+<?php if ( $this->isPrimaryKey($name) === false ) : ?>
 	function validate_<?php echo $name; ?>($object = null, $value)
 	{
-<?php if ( $this->isRelationshipKey($name) ) : ?>
-		if (isset($object-><?php echo $name; ?>) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				<?php echo $this->modelClassName() . "::" . $name; ?>,
-				"FIELD_EMPTY"
-			);
-		}
-<?php else : ?>
-<?php if ( $mandatory ) : ?>
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				<?php echo $this->modelClassName() . "::" . $name; ?>,
-				"FIELD_EMPTY"
-			);
-		}
-<?php endif; // mandatory ?>
-<?php if ( $this->isType_TEXT($name) ) : ?>
-<?php if ( $textLength > 0 ) : ?>
-		if (strlen($value) > <?php echo $textLength; ?> ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				<?php echo $this->modelClassName() . "::" . $name; ?>,
-				"FIELD_TOO_LONG"
-			);
-		}
-<?php endif; // textLength ?>
-<?php if ( $this->isType_TEXT_URL($name) ) : ?>
-		if ( filter_var($value, FILTER_VALIDATE_URL) == false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				<?php echo $this->modelClassName() . "::" . $name; ?>,
-				"FILTER_VALIDATE_URL"
-			);
-		}
-<?php endif; // url ?>
-<?php endif; // TEXT ?>
-<?php if ( $this->isType_DATE($name) ) : ?>
-<?php endif; // DATE ?>
-<?php if ( $this->isType_INTEGER($name) ) : ?>
-<?php endif; // INT ?>
-<?php if ( $this->isType_BOOLEAN($name) ) : ?>
-<?php endif; // BOOLEAN ?>
-<?php if ( $this->isUniqueAttribute($name) ) : ?>
-		// make sure <?php echo ucwords($name); ?> is unique
-		$existing = $this->objectFor<?php echo ucwords($name); ?>($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				<?php echo $this->modelClassName() . "::" . $name; ?>,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-<?php endif; // unique ?>
-<?php endif; // relationshipkey ?>
-		return null;
+		return parent::validate_<?php echo $name; ?>($object, $value);
 	}
+
 <?php endif; // not primaryKey ?>
 <?php endforeach; ?>
 }

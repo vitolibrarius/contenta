@@ -5,6 +5,7 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 
@@ -29,7 +30,7 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 	public function update( Pull_List_ExclusionDBO $obj,
 		$endpoint, $pattern, $type)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$endpoint,
@@ -73,7 +74,7 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) == false || is_null($object) == true) {
+		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
 				case Pull_List_Exclusion::type:
 					return 'item';
@@ -99,34 +100,24 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 	/** Validation */
 	function validate_pattern($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List_Exclusion::pattern,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_pattern($object, $value);
 	}
+
 	function validate_type($object = null, $value)
 	{
-		return null;
+		return parent::validate_type($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
+
 	function validate_endpoint_id($object = null, $value)
 	{
-		if (isset($object->endpoint_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List_Exclusion::endpoint_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_endpoint_id($object, $value);
 	}
+
 }
 
 ?>

@@ -15,6 +15,7 @@ namespace <?php echo $this->packageName(); ?>;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -355,4 +356,113 @@ foreach( $objectAttributes as $name => $detailArray ) {
 	}
 
 <?php endforeach; // named fetches ?>
+
+	/** Validation */
+<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
+<?php
+ 	$type = $this->modelTypeForAttribute($name);
+	$mandatory = $this->isMandatoryAttribute($name);
+	$textLength = (isset($details['length']) ? intval($details['length']) : 0);
+if ( $this->isPrimaryKey($name) === false ) : ?>
+	function validate_<?php echo $name; ?>($object = null, $value)
+	{
+<?php if ( $this->isType_TEXT($name) ) : ?>
+		$value = trim($value);
+<?php endif; // isType_TEXT ?>
+<?php if ( $this->isRelationshipKey($name) ) : ?>
+		if (isset($object-><?php echo $name; ?>) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"FIELD_EMPTY"
+			);
+		}
+<?php else : ?>
+<?php if ( $mandatory ) : ?>
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"FIELD_EMPTY"
+			);
+		}
+<?php endif; // mandatory ?>
+<?php if ( $this->isType_TEXT($name) ) : ?>
+<?php if ( $textLength > 0 ) : ?>
+		if (strlen($value) > <?php echo $textLength; ?> ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"FIELD_TOO_LONG"
+			);
+		}
+<?php endif; // textLength ?>
+<?php if ( $this->isType_TEXT_URL($name) ) : ?>
+		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"FILTER_VALIDATE_URL"
+			);
+		}
+<?php endif; // url ?>
+<?php if ( $this->isType_TEXT_EMAIL($name) ) : ?>
+		if ( filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"FILTER_VALIDATE_EMAIL"
+			);
+		}
+<?php endif; // email ?>
+<?php endif; // TEXT ?>
+<?php if ( $this->isType_DATE($name) ) : ?>
+<?php if ( $this->isType_DATE_created($name) ) : ?>
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"IMMUTABLE"
+			);
+		}
+<?php endif; // isType_DATE_created ?>
+<?php endif; // DATE ?>
+<?php if ( $this->isType_INTEGER($name) ) : ?>
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+<?php endif; // INT ?>
+<?php if ( $this->isType_BOOLEAN($name) ) : ?>
+		// Returns TRUE for "1", "true", "on" and "yes"
+		// Returns FALSE for "0", "false", "off" and "no"
+		// Returns NULL otherwise.
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		if (is_null($v)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"FILTER_VALIDATE_BOOLEAN"
+			);
+		}
+<?php endif; // BOOLEAN ?>
+<?php if ( $this->isUniqueAttribute($name) ) : ?>
+		// make sure <?php echo ucwords($name); ?> is unique
+		$existing = $this->objectFor<?php echo ucwords($name); ?>($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				<?php echo $this->modelClassName() . "::" . $name; ?>,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+<?php endif; // unique ?>
+<?php endif; // relationshipkey ?>
+		return null;
+	}
+<?php endif; // not primaryKey ?>
+<?php endforeach; ?>
 }

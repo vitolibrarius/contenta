@@ -6,6 +6,7 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -335,6 +336,153 @@ abstract class _Rss extends Model
 		return $result;
 	}
 
+
+	/** Validation */
+	function validate_endpoint_id($object = null, $value)
+	{
+		if (isset($object->endpoint_id) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::endpoint_id,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
+	function validate_title($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::title,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_desc($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_pub_date($object = null, $value)
+	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::pub_date,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_guid($object = null, $value)
+	{
+		$value = trim($value);
+		if (isset($object->guid) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::guid,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_clean_name($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::clean_name,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_clean_issue($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_clean_year($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::clean_year,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_enclosure_url($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::enclosure_url,
+				"FIELD_EMPTY"
+			);
+		}
+		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::enclosure_url,
+				"FILTER_VALIDATE_URL"
+			);
+		}
+		return null;
+	}
+	function validate_enclosure_length($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::enclosure_length,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_enclosure_mime($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_enclosure_hash($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_enclosure_password($object = null, $value)
+	{
+		// Returns TRUE for "1", "true", "on" and "yes"
+		// Returns FALSE for "0", "false", "off" and "no"
+		// Returns NULL otherwise.
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		if (is_null($v)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::enclosure_password,
+				"FILTER_VALIDATE_BOOLEAN"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

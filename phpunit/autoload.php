@@ -39,7 +39,7 @@ function SetConfigRoot($path = null, $purgeFirst = true)
 
 	$config->setValue("Repository/cache", "cache" );
 	$config->setValue("Repository/processing", "processing" );
-
+	$config->setValue("Debug/localized", true );
 
 	echo "** Configuration" . PHP_EOL;
 	echo "Repository " . $config->repositoryDirectory() . PHP_EOL;
@@ -52,6 +52,19 @@ function SetConfigRoot($path = null, $purgeFirst = true)
 		destroy_dir( $path ) || die( "Failed to remove last test run $path");
 	}
 	makeRequiredDirectory($path, "Test directory $path");
+}
+
+function test_generateRandomString($length = 10, $characters = null)
+{
+	if ( is_null($characters) ) {
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	}
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
 }
 
 function test_resourcePath($name = null)

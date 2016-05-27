@@ -5,6 +5,7 @@ namespace model\version;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\version\PatchDBO as PatchDBO;
 
@@ -28,7 +29,7 @@ class Patch extends _Patch
 	public function update( PatchDBO $obj,
 		$version, $name)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$version,
@@ -70,7 +71,7 @@ class Patch extends _Patch
 
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) == false || is_null($object) == true) {
+		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
 			}
 		}
@@ -94,39 +95,19 @@ class Patch extends _Patch
 	/** Validation */
 	function validate_name($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Patch::name,
-				"FIELD_EMPTY"
-			);
-		}
-		// make sure Name is unique
-		$existing = $this->objectForName($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Patch::name,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_name($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
+
 	function validate_version_id($object = null, $value)
 	{
-		if (isset($object->version_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Patch::version_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_version_id($object, $value);
 	}
+
 }
 
 ?>

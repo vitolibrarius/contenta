@@ -29,6 +29,8 @@ require SYSTEM_PATH .'application/config/errors.php';
 require SYSTEM_PATH .'tests/_ResetConfig.php';
 
 $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
+$tmp_dir = "/tmp/"; // sys_get_temp_dir();
+
 SetConfigRoot( $root );
 
 const TABLE =		'table';
@@ -124,12 +126,20 @@ class Template
 	}
 
 	public function isType_TEXT_URL($name = '') {
-		return ( $this->isType_TEXT() && endsWith($name, '_url') );
+		return ( $this->isType_TEXT($name) && endsWith($name, '_url') );
+	}
+
+	public function isType_TEXT_EMAIL($name = '') {
+		return ( $this->isType_TEXT($name) && endsWith($name, 'email') );
 	}
 
 	public function isType_DATE($name = '') {
 		$type = $this->modelTypeForAttribute($name);
 		return (is_null($type) == false && $type == 'Model::DATE_TYPE');
+	}
+
+	public function isType_DATE_created($name = '') {
+		return ( $this->isType_DATE($name) && endsWith($name, 'created') );
 	}
 
 	public function isType_INTEGER($name = '') {
@@ -481,25 +491,10 @@ class Template
     }
 }
 
-/*
-	const TABLE =		'version';
-	const id =			'id';
-	const code =		'code';
-	const major =		'major';
-	const minor =		'minor';
-	const patch =		'patch';
-	const created =		'created';
-	const hash_code =	'hash_code';
-		$sql = 'CREATE TABLE IF NOT EXISTS ' . Version::TABLE . " ( "
-				. Version::id . " INTEGER PRIMARY KEY, "
-				. Version::code . " TEXT COLLATE NOCASE, "
-				. Version::major . " INTEGER, "
-				. Version::minor . " INTEGER, "
-				. Version::patch . " INTEGER, "
-				. Version::created . " INTEGER, "
-				. Version::hash_code . " TEXT "
-				. ")";
-*/
+
+$options = getopt( "f");
+$force = (isset($options, $options['f']) ? true : false);
+
 $model_files = array();
 foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	echo PHP_EOL . $file .PHP_EOL;
@@ -527,8 +522,8 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	file_put_contents( $model_base_file, $model_data );
 
 	/** generate model file, only if it does not exist */
-	if ( is_file($model_file) ) {
-		$tmp_file = appendPath( sys_get_temp_dir(), $modelname) . ".php";
+	if ($force == false && is_file($model_file) ) {
+		$tmp_file = appendPath( $tmp_dir, $modelname) . ".php";
 		$diff_files[$model_file] = $tmp_file;
 		$model_file = $tmp_file;
 	}
@@ -549,8 +544,8 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 	file_put_contents( $dbo_base_file, $dbo_data );
 
 	/** generate dbo file, only if it does not exist */
-	if ( is_file($dbo_file) ) {
-		$tmp_file = appendPath( sys_get_temp_dir(), $dboname) . ".php";
+	if ( $force == false && is_file($dbo_file) ) {
+		$tmp_file = appendPath( $tmp_dir, $dboname) . ".php";
 		$diff_files[$dbo_file] = $tmp_file;
 		$dbo_file = $tmp_file;
 	}

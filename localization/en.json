@@ -628,6 +628,8 @@
                 "label": "Last Login"
             },
             "name": {
+                "FIELD_EMPTY": "Name field was empty",
+                "UNIQUE_FIELD_VALUE": "Username must be unique",
                 "USERNAME_FIELD_EMPTY": "Username field was empty",
                 "label": "Name",
                 "restriction": "only letters and numbers, 2 to 64 characters"
@@ -658,6 +660,12 @@
         "version": {
             "code": {
                 "label": "Version"
+            },
+            "major": {
+                "FILTER_VALIDATE_INT": "Major must be an integer"
+            },
+            "patch": {
+                "FILTER_VALIDATE_INT": "Patch must be an integer"
             }
         }
     },

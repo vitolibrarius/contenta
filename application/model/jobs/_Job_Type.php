@@ -6,6 +6,7 @@ namespace model\jobs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -210,6 +211,88 @@ abstract class _Job_Type extends Model
 	/**
 	 *	Named fetches
 	 */
+
+	/** Validation */
+	function validate_code($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Type::code,
+				"FIELD_EMPTY"
+			);
+		}
+		// make sure Code is unique
+		$existing = $this->objectForCode($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Type::code,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_name($object = null, $value)
+	{
+		$value = trim($value);
+		// make sure Name is unique
+		$existing = $this->objectForName($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Type::name,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_desc($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_processor($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_parameter($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_scheduled($object = null, $value)
+	{
+		// Returns TRUE for "1", "true", "on" and "yes"
+		// Returns FALSE for "0", "false", "off" and "no"
+		// Returns NULL otherwise.
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		if (is_null($v)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Type::scheduled,
+				"FILTER_VALIDATE_BOOLEAN"
+			);
+		}
+		return null;
+	}
+	function validate_requires_endpoint($object = null, $value)
+	{
+		// Returns TRUE for "1", "true", "on" and "yes"
+		// Returns FALSE for "0", "false", "off" and "no"
+		// Returns NULL otherwise.
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		if (is_null($v)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Type::requires_endpoint,
+				"FILTER_VALIDATE_BOOLEAN"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

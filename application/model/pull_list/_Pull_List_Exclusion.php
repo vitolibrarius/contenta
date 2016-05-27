@@ -6,6 +6,7 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -186,6 +187,47 @@ abstract class _Pull_List_Exclusion extends Model
 	/**
 	 *	Named fetches
 	 */
+
+	/** Validation */
+	function validate_pattern($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Exclusion::pattern,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_type($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Exclusion::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
+	function validate_endpoint_id($object = null, $value)
+	{
+		if (isset($object->endpoint_id) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Exclusion::endpoint_id,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

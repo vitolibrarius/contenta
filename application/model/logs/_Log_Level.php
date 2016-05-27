@@ -6,6 +6,7 @@ namespace model\logs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -142,6 +143,43 @@ abstract class _Log_Level extends Model
 	/**
 	 *	Named fetches
 	 */
+
+	/** Validation */
+	function validate_code($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log_Level::code,
+				"FIELD_EMPTY"
+			);
+		}
+		// make sure Code is unique
+		$existing = $this->objectForCode($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log_Level::code,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_name($object = null, $value)
+	{
+		$value = trim($value);
+		// make sure Name is unique
+		$existing = $this->objectForName($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log_Level::name,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

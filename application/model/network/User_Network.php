@@ -5,6 +5,7 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\network\User_NetworkDBO as User_NetworkDBO;
 
@@ -30,7 +31,7 @@ class User_Network extends _User_Network
 	public function update( User_NetworkDBO $obj,
 		$user, $network)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$user,
@@ -60,6 +61,15 @@ class User_Network extends _User_Network
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
@@ -81,26 +91,14 @@ class User_Network extends _User_Network
 	/** Validation */
 	function validate_user_id($object = null, $value)
 	{
-		if (isset($object->user_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				User_Network::user_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_user_id($object, $value);
 	}
+
 	function validate_network_id($object = null, $value)
 	{
-		if (isset($object->network_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				User_Network::network_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_network_id($object, $value);
 	}
+
 }
 
 ?>

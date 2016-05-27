@@ -5,6 +5,7 @@ namespace model\logs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\logs\Log_LevelDBO as Log_LevelDBO;
 
@@ -26,7 +27,7 @@ class Log_Level extends _Log_Level
 	public function update( Log_LevelDBO $obj,
 		$code, $name)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$code,
@@ -65,6 +66,15 @@ class Log_Level extends _Log_Level
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
@@ -78,37 +88,14 @@ class Log_Level extends _Log_Level
 	/** Validation */
 	function validate_code($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Log_Level::code,
-				"FIELD_EMPTY"
-			);
-		}
-		// make sure Code is unique
-		$existing = $this->objectForCode($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Log_Level::code,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_code($object, $value);
 	}
+
 	function validate_name($object = null, $value)
 	{
-		// make sure Name is unique
-		$existing = $this->objectForName($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Log_Level::name,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_name($object, $value);
 	}
+
 }
 
 ?>

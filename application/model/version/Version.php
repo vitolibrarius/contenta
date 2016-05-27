@@ -5,6 +5,7 @@ namespace model\version;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\version\VersionDBO as VersionDBO;
 
@@ -30,7 +31,7 @@ class Version extends _Version
 	public function update( VersionDBO $obj,
 		$code, $major, $minor, $patch)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$code,
@@ -76,7 +77,7 @@ class Version extends _Version
 
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) == false || is_null($object) == true) {
+		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
 			}
 		}
@@ -96,40 +97,29 @@ class Version extends _Version
 	/** Validation */
 	function validate_code($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Version::code,
-				"FIELD_EMPTY"
-			);
-		}
-		// make sure Code is unique
-		$existing = $this->objectForCode($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Version::code,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_code($object, $value);
 	}
+
 	function validate_major($object = null, $value)
 	{
-		return null;
+		return parent::validate_major($object, $value);
 	}
+
 	function validate_minor($object = null, $value)
 	{
-		return null;
+		return parent::validate_minor($object, $value);
 	}
+
 	function validate_patch($object = null, $value)
 	{
-		return null;
+		return parent::validate_patch($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
+
 }
 
 ?>

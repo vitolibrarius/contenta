@@ -6,6 +6,7 @@ namespace model\jobs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -324,6 +325,153 @@ abstract class _Job extends Model
 		return $result;
 	}
 
+
+	/** Validation */
+	function validate_type_id($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::type_id,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_endpoint_id($object = null, $value)
+	{
+		if (isset($object->endpoint_id) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::endpoint_id,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_enabled($object = null, $value)
+	{
+		// Returns TRUE for "1", "true", "on" and "yes"
+		// Returns FALSE for "0", "false", "off" and "no"
+		// Returns NULL otherwise.
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		if (is_null($v)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::enabled,
+				"FILTER_VALIDATE_BOOLEAN"
+			);
+		}
+		return null;
+	}
+	function validate_one_shot($object = null, $value)
+	{
+		// Returns TRUE for "1", "true", "on" and "yes"
+		// Returns FALSE for "0", "false", "off" and "no"
+		// Returns NULL otherwise.
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		if (is_null($v)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::one_shot,
+				"FILTER_VALIDATE_BOOLEAN"
+			);
+		}
+		return null;
+	}
+	function validate_fail_count($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::fail_count,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_elapsed($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::elapsed,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_minute($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::minute,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_hour($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::hour,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_dayOfWeek($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::dayOfWeek,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_parameter($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_next($object = null, $value)
+	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::next,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_last_run($object = null, $value)
+	{
+		return null;
+	}
+	function validate_last_fail($object = null, $value)
+	{
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

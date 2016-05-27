@@ -6,6 +6,7 @@ namespace model\version;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -191,6 +192,73 @@ abstract class _Version extends Model
 		return (is_array($result) ? $result[0] : false );
 	}
 
+
+	/** Validation */
+	function validate_code($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Version::code,
+				"FIELD_EMPTY"
+			);
+		}
+		// make sure Code is unique
+		$existing = $this->objectForCode($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Version::code,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_major($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Version::major,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_minor($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Version::minor,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_patch($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Version::patch,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Version::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

@@ -6,6 +6,7 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -221,6 +222,75 @@ abstract class _Pull_List_Item extends Model
 	/**
 	 *	Named fetches
 	 */
+
+	/** Validation */
+	function validate_group_name($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_data($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Item::data,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Item::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
+	function validate_name($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Item::name,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_issue($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_year($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Item::year,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_pull_list_id($object = null, $value)
+	{
+		if (isset($object->pull_list_id) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Item::pull_list_id,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

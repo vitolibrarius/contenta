@@ -5,6 +5,7 @@ namespace model\jobs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\jobs\Job_RunningDBO as Job_RunningDBO;
 
@@ -34,7 +35,7 @@ class Job_Running extends _Job_Running
 	public function update( Job_RunningDBO $obj,
 		$job_id, $job_type_id, $processor, $guid, $pid, $desc)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$job_id,
@@ -83,6 +84,15 @@ class Job_Running extends _Job_Running
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
@@ -104,88 +114,39 @@ class Job_Running extends _Job_Running
 	/** Validation */
 	function validate_job_id($object = null, $value)
 	{
-		if (isset($object->job_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job_Running::job_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_job_id($object, $value);
 	}
+
 	function validate_job_type_id($object = null, $value)
 	{
-		if (isset($object->job_type_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job_Running::job_type_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_job_type_id($object, $value);
 	}
+
 	function validate_processor($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job_Running::processor,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_processor($object, $value);
 	}
+
 	function validate_guid($object = null, $value)
 	{
-		return null;
+		return parent::validate_guid($object, $value);
 	}
+
 	function validate_pid($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job_Running::pid,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_pid($object, $value);
 	}
+
 	function validate_desc($object = null, $value)
 	{
-		return null;
+		return parent::validate_desc($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
 
-	public function clearFinishedProcesses()
-	{
-		$allRunning = $this->allObjects();
-		if ( is_array($allRunning) ) {
-			$shell = "ps " . ((PHP_OS === 'Darwin') ? ' ax ' : '') . "| awk '{print $1}'";
-			$output = shell_exec(  $shell );
-			$pids = explode(PHP_EOL, $output);
-
-			foreach ( $allRunning as $jobrunning ) {
-				if ( in_array($jobrunning->pid, $pids) == false ) {
-					// process is done
-					$this->deleteObject($jobrunning);
-				}
-			}
-		}
-		return true;
-	}
-
-	public function updateDesc( $jobrunning = null, $desc = '' )
-	{
-		if ( $jobrunning instanceof Job_RunningDBO && strlen($desc) > 0) {
-			if ( $this->updateObject( $jobrunning, array( Job_Running::desc => $desc )) ) {
-				return $this->refreshObject($jobrunning);
-			}
-		}
-		return false;
-	}
 }
 
 ?>

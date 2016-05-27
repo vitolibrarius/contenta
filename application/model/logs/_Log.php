@@ -6,6 +6,7 @@ namespace model\logs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -345,6 +346,68 @@ abstract class _Log extends Model
 		return $result;
 	}
 
+
+	/** Validation */
+	function validate_trace($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_trace_id($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_context($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_context_id($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_message($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log::message,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_session($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_level_code($object = null, $value)
+	{
+		$value = trim($value);
+		if (isset($object->level_code) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log::level_code,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Log::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

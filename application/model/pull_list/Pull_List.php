@@ -5,6 +5,7 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
 
@@ -36,7 +37,7 @@ class Pull_List extends _Pull_List
 	public function update( Pull_ListDBO $obj,
 		$endpoint, $name, $etag, $published)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$endpoint,
@@ -82,7 +83,7 @@ class Pull_List extends _Pull_List
 
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) == false || is_null($object) == true) {
+		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
 			}
 		}
@@ -106,47 +107,29 @@ class Pull_List extends _Pull_List
 	/** Validation */
 	function validate_name($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List::name,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_name($object, $value);
 	}
+
 	function validate_etag($object = null, $value)
 	{
-		// make sure Etag is unique
-		$existing = $this->objectForEtag($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List::etag,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_etag($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
+
 	function validate_published($object = null, $value)
 	{
-		return null;
+		return parent::validate_published($object, $value);
 	}
+
 	function validate_endpoint_id($object = null, $value)
 	{
-		if (isset($object->endpoint_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List::endpoint_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_endpoint_id($object, $value);
 	}
+
 }
 
 ?>

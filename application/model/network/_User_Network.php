@@ -6,6 +6,7 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -204,6 +205,30 @@ abstract class _User_Network extends Model
 	/**
 	 *	Named fetches
 	 */
+
+	/** Validation */
+	function validate_user_id($object = null, $value)
+	{
+		if (isset($object->user_id) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				User_Network::user_id,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_network_id($object = null, $value)
+	{
+		if (isset($object->network_id) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				User_Network::network_id,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

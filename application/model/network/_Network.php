@@ -6,6 +6,7 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -159,6 +160,69 @@ abstract class _Network extends Model
 	/**
 	 *	Named fetches
 	 */
+
+	/** Validation */
+	function validate_ip_address($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Network::ip_address,
+				"FIELD_EMPTY"
+			);
+		}
+		// make sure Ip_address is unique
+		$existing = $this->objectForIp_address($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Network::ip_address,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_ip_hash($object = null, $value)
+	{
+		$value = trim($value);
+		// make sure Ip_hash is unique
+		$existing = $this->objectForIp_hash($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Network::ip_hash,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Network::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
+	function validate_disable($object = null, $value)
+	{
+		// Returns TRUE for "1", "true", "on" and "yes"
+		// Returns FALSE for "0", "false", "off" and "no"
+		// Returns NULL otherwise.
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		if (is_null($v)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Network::disable,
+				"FILTER_VALIDATE_BOOLEAN"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

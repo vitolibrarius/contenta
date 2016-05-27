@@ -114,7 +114,24 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAttributeEditPattern()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$pattern = $this->model->attributeEditPattern ( null, null, Users::name);
+		$this->assertNotNull( $pattern, "Edit pattern for 'name'" );
+
+		$test1Char = test_generateRandomString( 1 );
+		$match = preg_match( $pattern, $test1Char );
+		$this->assertEquals( 0, $match, "1 Character username '$test1Char'" );
+
+		$test2Char = test_generateRandomString( 2 );
+		$match = preg_match( $pattern, $test2Char );
+		$this->assertEquals( 1, $match, "$match  2 Character username '$test2Char'" );
+
+		$test64Char = test_generateRandomString( 64 );
+		$match = preg_match( $pattern, $test64Char );
+		$this->assertEquals( 1, $match, "$match  64 Character username '$test64Char'" );
+
+		$test65Char = test_generateRandomString( 65 );
+		$match = preg_match( $pattern, $test65Char );
+		$this->assertEquals( 0, $match, "$match 65 Character username '$test65Char'" );
 	}
 
 	/**
@@ -136,7 +153,18 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_name()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$length = array( null, '', '   ', 'vito' );
+		foreach ($length as $l ) {
+			$validation = $this->model->validate_name( null, $l );
+			echo "Validation for '$l' = '" . $validation . "'" . PHP_EOL;
+			$this->assertNotNull( $validation, "'$l' username" );
+		}
+
+		$existing = $this->model->objectForName('vito');
+		$validation = $this->model->validate_name( $existing, 'vito' );
+		echo "Validation for 'vito' = '" . $validation . "'" . PHP_EOL;
+		$this->assertNotNull( $validation, "'$l' username" );
+
 	}
 
 	/**

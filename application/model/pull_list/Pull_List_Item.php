@@ -5,6 +5,7 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 
@@ -32,7 +33,7 @@ class Pull_List_Item extends _Pull_List_Item
 	public function update( Pull_List_ItemDBO $obj,
 		$pull_list, $group_name, $data, $name, $issue, $year)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$pull_list,
@@ -83,7 +84,7 @@ class Pull_List_Item extends _Pull_List_Item
 
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) == false || is_null($object) == true) {
+		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
 			}
 		}
@@ -107,53 +108,39 @@ class Pull_List_Item extends _Pull_List_Item
 	/** Validation */
 	function validate_group_name($object = null, $value)
 	{
-		return null;
+		return parent::validate_group_name($object, $value);
 	}
+
 	function validate_data($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List_Item::data,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_data($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
+
 	function validate_name($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List_Item::name,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_name($object, $value);
 	}
+
 	function validate_issue($object = null, $value)
 	{
-		return null;
+		return parent::validate_issue($object, $value);
 	}
+
 	function validate_year($object = null, $value)
 	{
-		return null;
+		return parent::validate_year($object, $value);
 	}
+
 	function validate_pull_list_id($object = null, $value)
 	{
-		if (isset($object->pull_list_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List_Item::pull_list_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_pull_list_id($object, $value);
 	}
+
 }
 
 ?>

@@ -7,7 +7,7 @@
         	"type": "TEXT",
         	"collate": "NOCASE",
         	"nullable": false,
-        	"inputPattern": "[a-zA-Z0-9]{2,64}"
+        	"inputPattern": "/^[a-zA-Z0-9]{2,64}$/"
         },
         "email": { "column": "email", "length": 256, "type": "TEXT", "collate": "NOCASE", "nullable": false },
         "active": { "column": "active", "type": "BOOLEAN" },

@@ -5,6 +5,7 @@ namespace model\user;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\user\UsersDBO as UsersDBO;
 
@@ -45,7 +46,7 @@ class Users extends _Users
 	public function update( UsersDBO $obj,
 		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$name,
@@ -105,28 +106,14 @@ class Users extends _Users
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
-	public function attributeRestrictionMessage($object = null, $type = null, $attr)
-	{
-		if ( $attr == Users::name ) {
-			return Localized::ModelRestriction($this->tableName(), $attr );
-		}
-
-		if ( $attr == Users::email ) {
-			return Localized::ModelRestriction($this->tableName(), $attr );
-		}
-
-		if ( $attr == "password" ) {
-			return Localized::ModelRestriction($this->tableName(), $attr );
-		}
-
-		return null;
-	}
 	/*
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
+
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) == false || is_null($object) == true) {
+		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
 				case Users::account_type:
 					return 'user';
@@ -146,7 +133,7 @@ class Users extends _Users
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		if ( $attr == Users::name ) {
-			return "[a-zA-Z0-9]{2,64}";
+			return "/^[a-zA-Z0-9]{2,64}$/";
 		}
 
 		return null;
@@ -160,126 +147,74 @@ class Users extends _Users
 	/** Validation */
 	function validate_name($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Users::name,
-				"FIELD_EMPTY"
-			);
-		}
-		// make sure Name is unique
-		$existing = $this->objectForName($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Users::name,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_name($object, $value);
 	}
+
 	function validate_email($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Users::email,
-				"FIELD_EMPTY"
-			);
-		}
-		// make sure Email is unique
-		$existing = $this->objectForEmail($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Users::email,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_email($object, $value);
 	}
+
 	function validate_active($object = null, $value)
 	{
-		return null;
+		return parent::validate_active($object, $value);
 	}
+
 	function validate_account_type($object = null, $value)
 	{
-		return null;
+		return parent::validate_account_type($object, $value);
 	}
+
 	function validate_rememberme_token($object = null, $value)
 	{
-		// make sure Rememberme_token is unique
-		$existing = $this->objectForRememberme_token($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Users::rememberme_token,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_rememberme_token($object, $value);
 	}
+
 	function validate_api_hash($object = null, $value)
 	{
-		// make sure Api_hash is unique
-		$existing = $this->objectForApi_hash($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Users::api_hash,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_api_hash($object, $value);
 	}
+
 	function validate_password_hash($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Users::password_hash,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_password_hash($object, $value);
 	}
+
 	function validate_password_reset_hash($object = null, $value)
 	{
-		return null;
+		return parent::validate_password_reset_hash($object, $value);
 	}
+
 	function validate_activation_hash($object = null, $value)
 	{
-		// make sure Activation_hash is unique
-		$existing = $this->objectForActivation_hash($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Users::activation_hash,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_activation_hash($object, $value);
 	}
+
 	function validate_failed_logins($object = null, $value)
 	{
-		return null;
+		return parent::validate_failed_logins($object, $value);
 	}
+
 	function validate_creation_timestamp($object = null, $value)
 	{
-		return null;
+		return parent::validate_creation_timestamp($object, $value);
 	}
+
 	function validate_last_login_timestamp($object = null, $value)
 	{
-		return null;
+		return parent::validate_last_login_timestamp($object, $value);
 	}
+
 	function validate_last_failed_login($object = null, $value)
 	{
-		return null;
+		return parent::validate_last_failed_login($object, $value);
 	}
+
 	function validate_password_reset_timestamp($object = null, $value)
 	{
-		return null;
+		return parent::validate_password_reset_timestamp($object, $value);
 	}
+
 }
 
 ?>

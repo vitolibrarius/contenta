@@ -5,71 +5,47 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
-use \utilities\MediaFilename as MediaFilename;
+use \Localized as Localized;
 
 use \model\network\RssDBO as RssDBO;
 
 /* import related objects */
 use \model\Endpoint as Endpoint;
 use \model\EndpointDBO as EndpointDBO;
+use \model\Flux as Flux;
+use \model\FluxDBO as FluxDBO;
 
 class Rss extends _Rss
 {
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( EndpointDBO $endpoint = null, $title, $desc, $pub_date, $guid, $encl_url = null, $encl_length = 0, $encl_mime = 'application/x-nzb', $encl_hash = null, $encl_password = false )
+	public function create( $endpoint, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url, $enclosure_length, $enclosure_mime, $enclosure_hash, $enclosure_password)
 	{
-		if ( isset($title, $guid) && is_null($endpoint) == false ) {
-			$mediaFilename = new MediaFilename($title);
-			$meta = $mediaFilename->updateFileMetaData(null);
-
-			return $this->base_create(
-				$endpoint,
-				$title,
-				(isset($desc) ? strip_tags($desc) : null),
-				$pub_date,
-				$guid,
-				$meta['name'], // clean_name
-				(isset($meta['issue']) ? $meta['issue'] : null), // clean_issue
-				(isset($meta['year']) ? $meta['year'] : null),  // clean_year
-				$encl_url,
-				$encl_length,
-				$encl_mime,
-				$encl_hash,
-				($encl_password) ? 1 : 0 // encl_password
-			);
-		}
-		return false;
+		return $this->base_create(
+			$endpoint,
+			$title,
+			$desc,
+			$pub_date,
+			$guid,
+			$clean_name,
+			$clean_issue,
+			$clean_year,
+			$enclosure_url,
+			$enclosure_length,
+			$enclosure_mime,
+			$enclosure_hash,
+			$enclosure_password
+		);
 	}
 
-	public function update( RssDBO $obj = null, $title, $desc, $pub_date, $enclosure_url = null, $enclosure_length = 0, $enclosure_mime = 'application/x-nzb', $enclosure_hash = null, $enclosure_password = false )
+	public function update( RssDBO $obj,
+		$endpoint, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url, $enclosure_length, $enclosure_mime, $enclosure_hash, $enclosure_password)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$clean_name = null;
-			$clean_issue = null;
-			$clean_year = null;
-
-			if (isset($title) && (isset($obj->title) == false || $title != $obj->title)) {
-				$mediaFilename = new MediaFilename($title);
-				$meta = $mediaFilename->updateFileMetaData(null);
-
-				$clean_name = $meta['name'];
-				$clean_issue = (isset($meta['issue']) ? $meta['issue'] : null);
-				$clean_year = (isset($meta['year']) ? $meta['year'] : null);
-			}
-
-			if (isset($desc) && $desc != $obj->desc ) {
-				$desc = strip_tags($desc);
-			}
-
-			if (isset($enclosure_password) && (isset($obj->enclosure_password) == false || boolval($enclosure_password) != boolval($obj->enclosure_password))) {
-				$enclosure_password = boolval($encl_password);
-			}
-
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
-				null, // endpoint
+				$endpoint,
 				$title,
 				$desc,
 				$pub_date,
@@ -84,7 +60,7 @@ class Rss extends _Rss
 				$enclosure_password
 			);
 		}
-		return false;
+		return $obj;
 	}
 
 
@@ -132,6 +108,15 @@ class Rss extends _Rss
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
@@ -143,117 +128,84 @@ class Rss extends _Rss
 			$model = Model::Named('Endpoint');
 			return $model->allObjects();
 		}
+		if ( $attr = Rss::guid ) {
+			$model = Model::Named('Flux');
+			return $model->allObjects();
+		}
 		return null;
 	}
 
 	/** Validation */
 	function validate_endpoint_id($object = null, $value)
 	{
-		if (isset($object->endpoint_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Rss::endpoint_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_endpoint_id($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
+
 	function validate_title($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Rss::title,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_title($object, $value);
 	}
+
 	function validate_desc($object = null, $value)
 	{
-		return null;
+		return parent::validate_desc($object, $value);
 	}
+
 	function validate_pub_date($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Rss::pub_date,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_pub_date($object, $value);
 	}
+
 	function validate_guid($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Rss::guid,
-				"FIELD_EMPTY"
-			);
-		}
-		// make sure Guid is unique
-		$existing = $this->objectForGuid($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Rss::guid,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_guid($object, $value);
 	}
+
 	function validate_clean_name($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Rss::clean_name,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_clean_name($object, $value);
 	}
+
 	function validate_clean_issue($object = null, $value)
 	{
-		return null;
+		return parent::validate_clean_issue($object, $value);
 	}
+
 	function validate_clean_year($object = null, $value)
 	{
-		return null;
+		return parent::validate_clean_year($object, $value);
 	}
+
 	function validate_enclosure_url($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Rss::enclosure_url,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_enclosure_url($object, $value);
 	}
+
 	function validate_enclosure_length($object = null, $value)
 	{
-		return null;
+		return parent::validate_enclosure_length($object, $value);
 	}
+
 	function validate_enclosure_mime($object = null, $value)
 	{
-		return null;
+		return parent::validate_enclosure_mime($object, $value);
 	}
+
 	function validate_enclosure_hash($object = null, $value)
 	{
-		return null;
+		return parent::validate_enclosure_hash($object, $value);
 	}
+
 	function validate_enclosure_password($object = null, $value)
 	{
-		return null;
+		return parent::validate_enclosure_password($object, $value);
 	}
+
 }
 
 ?>

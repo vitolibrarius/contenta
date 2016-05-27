@@ -5,6 +5,7 @@ namespace model\logs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\logs\LogDBO as LogDBO;
 
@@ -33,7 +34,7 @@ class Log extends _Log
 	public function update( LogDBO $obj,
 		$logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$logLevel,
@@ -83,6 +84,19 @@ class Log extends _Log
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+				case Log::session:
+					return session_id();
+				case Log::level_code:
+					return 'warning';
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
@@ -100,50 +114,44 @@ class Log extends _Log
 	/** Validation */
 	function validate_trace($object = null, $value)
 	{
-		return null;
+		return parent::validate_trace($object, $value);
 	}
+
 	function validate_trace_id($object = null, $value)
 	{
-		return null;
+		return parent::validate_trace_id($object, $value);
 	}
+
 	function validate_context($object = null, $value)
 	{
-		return null;
+		return parent::validate_context($object, $value);
 	}
+
 	function validate_context_id($object = null, $value)
 	{
-		return null;
+		return parent::validate_context_id($object, $value);
 	}
+
 	function validate_message($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Log::message,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_message($object, $value);
 	}
+
 	function validate_session($object = null, $value)
 	{
-		return null;
+		return parent::validate_session($object, $value);
 	}
+
 	function validate_level_code($object = null, $value)
 	{
-		if (isset($object->level_code) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Log::level_code,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_level_code($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
+
 }
 
 ?>

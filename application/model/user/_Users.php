@@ -6,6 +6,7 @@ namespace model\user;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -282,6 +283,163 @@ abstract class _Users extends Model
 	/**
 	 *	Named fetches
 	 */
+
+	/** Validation */
+	function validate_name($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::name,
+				"FIELD_EMPTY"
+			);
+		}
+		// make sure Name is unique
+		$existing = $this->objectForName($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::name,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_email($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::email,
+				"FIELD_EMPTY"
+			);
+		}
+		if ( filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::email,
+				"FILTER_VALIDATE_EMAIL"
+			);
+		}
+		// make sure Email is unique
+		$existing = $this->objectForEmail($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::email,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_active($object = null, $value)
+	{
+		// Returns TRUE for "1", "true", "on" and "yes"
+		// Returns FALSE for "0", "false", "off" and "no"
+		// Returns NULL otherwise.
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		if (is_null($v)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::active,
+				"FILTER_VALIDATE_BOOLEAN"
+			);
+		}
+		return null;
+	}
+	function validate_account_type($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_rememberme_token($object = null, $value)
+	{
+		$value = trim($value);
+		// make sure Rememberme_token is unique
+		$existing = $this->objectForRememberme_token($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::rememberme_token,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_api_hash($object = null, $value)
+	{
+		$value = trim($value);
+		// make sure Api_hash is unique
+		$existing = $this->objectForApi_hash($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::api_hash,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_password_hash($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::password_hash,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_password_reset_hash($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_activation_hash($object = null, $value)
+	{
+		$value = trim($value);
+		// make sure Activation_hash is unique
+		$existing = $this->objectForActivation_hash($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::activation_hash,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
+		return null;
+	}
+	function validate_failed_logins($object = null, $value)
+	{
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::failed_logins,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_creation_timestamp($object = null, $value)
+	{
+		return null;
+	}
+	function validate_last_login_timestamp($object = null, $value)
+	{
+		return null;
+	}
+	function validate_last_failed_login($object = null, $value)
+	{
+		return null;
+	}
+	function validate_password_reset_timestamp($object = null, $value)
+	{
+		return null;
+	}
 }
 
 ?>

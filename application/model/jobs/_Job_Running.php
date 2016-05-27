@@ -6,6 +6,7 @@ namespace model\jobs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
@@ -203,6 +204,81 @@ abstract class _Job_Running extends Model
 		return $result;
 	}
 
+
+	/** Validation */
+	function validate_job_id($object = null, $value)
+	{
+		if (isset($object->job_id) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Running::job_id,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_job_type_id($object = null, $value)
+	{
+		if (isset($object->job_type_id) === false && empty($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Running::job_type_id,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_processor($object = null, $value)
+	{
+		$value = trim($value);
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Running::processor,
+				"FIELD_EMPTY"
+			);
+		}
+		return null;
+	}
+	function validate_guid($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_pid($object = null, $value)
+	{
+		if (empty($value)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Running::pid,
+				"FIELD_EMPTY"
+			);
+		}
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Running::pid,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_desc($object = null, $value)
+	{
+		$value = trim($value);
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Running::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
 }
 
 ?>

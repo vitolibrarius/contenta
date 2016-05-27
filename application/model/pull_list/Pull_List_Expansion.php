@@ -5,6 +5,7 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
@@ -29,7 +30,7 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	public function update( Pull_List_ExpansionDBO $obj,
 		$endpoint, $pattern, $replace)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$endpoint,
@@ -73,7 +74,7 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) == false || is_null($object) == true) {
+		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
 			}
 		}
@@ -97,34 +98,24 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	/** Validation */
 	function validate_pattern($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List_Expansion::pattern,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_pattern($object, $value);
 	}
+
 	function validate_replace($object = null, $value)
 	{
-		return null;
+		return parent::validate_replace($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
+
 	function validate_endpoint_id($object = null, $value)
 	{
-		if (isset($object->endpoint_id) == false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List_Expansion::endpoint_id,
-				"FIELD_EMPTY"
-			);
-		}
-		return null;
+		return parent::validate_endpoint_id($object, $value);
 	}
+
 }
 
 ?>

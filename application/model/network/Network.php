@@ -5,6 +5,7 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \Localized as Localized;
 
 use \model\network\NetworkDBO as NetworkDBO;
 
@@ -17,29 +18,19 @@ class Network extends _Network
 	/**
 	 *	Create/Update functions
 	 */
-	function create( $ip_address )
+	public function create( $ip_address, $ip_hash, $disable)
 	{
-		$object = $this->objectForIp_address($ip_address);
-		if ( $object == false) {
-			$ip_hash = ipToHex($ip_address);
-			if ( $ip_hash == false ) {
-				$ip_hash = 'Invalid IP address ' . $ip_address;
-			}
-
-			return $this->base_create(
-				$ip_address,
-				$ip_hash,
-				false
-			);
-		}
-
-		return $object;
+		return $this->base_create(
+			$ip_address,
+			$ip_hash,
+			$disable
+		);
 	}
 
 	public function update( NetworkDBO $obj,
 		$ip_address, $ip_hash, $disable)
 	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
+		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$ip_address,
@@ -81,6 +72,19 @@ class Network extends _Network
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+				case Network::ip_hash:
+					return ipToHex($ip_address);
+				case Network::disable:
+					return Model::TERTIARY_FALSE;
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
@@ -94,45 +98,24 @@ class Network extends _Network
 	/** Validation */
 	function validate_ip_address($object = null, $value)
 	{
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Network::ip_address,
-				"FIELD_EMPTY"
-			);
-		}
-		// make sure Ip_address is unique
-		$existing = $this->objectForIp_address($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Network::ip_address,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_ip_address($object, $value);
 	}
+
 	function validate_ip_hash($object = null, $value)
 	{
-		// make sure Ip_hash is unique
-		$existing = $this->objectForIp_hash($value);
-		if ( is_null($object) == false && $existing != false && $existing->id != $object->id) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Network::ip_hash,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
+		return parent::validate_ip_hash($object, $value);
 	}
+
 	function validate_created($object = null, $value)
 	{
-		return null;
+		return parent::validate_created($object, $value);
 	}
+
 	function validate_disable($object = null, $value)
 	{
-		return null;
+		return parent::validate_disable($object, $value);
 	}
+
 }
 
 ?>
