@@ -8,6 +8,7 @@ use \Logger as Logger;
 use \Localized as Localized;
 
 use \model\network\RssDBO as RssDBO;
+use \utilities\MediaFilename as MediaFilename;
 
 /* import related objects */
 use \model\Endpoint as Endpoint;
@@ -20,7 +21,7 @@ class Rss extends _Rss
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $endpoint, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url, $enclosure_length, $enclosure_mime, $enclosure_hash, $enclosure_password)
+	public function create( EndpointDBO $endpoint = null, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url = null, $enclosure_length = 0, $enclosure_mime = 'application/x-nzb', $enclosure_hash = null, $enclosure_password = false)
 	{
 		return $this->base_create(
 			$endpoint,
@@ -40,7 +41,7 @@ class Rss extends _Rss
 	}
 
 	public function update( RssDBO $obj,
-		$endpoint, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url, $enclosure_length, $enclosure_mime, $enclosure_hash, $enclosure_password)
+		EndpointDBO $endpoint = null, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url = null, $enclosure_length = 0, $enclosure_mime = 'application/x-nzb', $enclosure_hash = null, $enclosure_password = false)
 	{
 		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(

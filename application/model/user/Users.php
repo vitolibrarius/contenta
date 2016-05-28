@@ -106,8 +106,24 @@ class Users extends _Users
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)
+	{
+		if ( $attr == Users::name ) {
+			return Localized::ModelRestriction($this->tableName(), $attr );
+		}
+
+		if ( $attr == Users::email ) {
+			return Localized::ModelRestriction($this->tableName(), $attr );
+		}
+
+		if ( $attr == "password" ) {
+			return Localized::ModelRestriction($this->tableName(), $attr );
+		}
+
+		return null;
+	}
+
 	/*
-	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 

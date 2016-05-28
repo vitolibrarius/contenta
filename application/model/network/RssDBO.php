@@ -16,7 +16,24 @@ use \model\FluxDBO as FluxDBO;
 
 class RssDBO extends _RssDBO
 {
+	public function displayName() {
+		return $this->clean_name
+			. " " . $this->clean_issue
+			. (intval($this->clean_year) > 1900 ? " " . $this->clean_year : '');
+	}
 
+	public function displayDescription() {
+		return $this->shortDescription();
+	}
+
+	public function safe_guid()
+	{
+		return sanitize($this->guid, true, true);
+	}
+
+	public function publishedMonthYear() {
+		return $this->formattedDate( Rss::pub_date, "M Y" );
+	}
 }
 
 ?>

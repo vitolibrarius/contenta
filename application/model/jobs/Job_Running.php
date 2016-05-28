@@ -147,6 +147,33 @@ class Job_Running extends _Job_Running
 		return parent::validate_created($object, $value);
 	}
 
+	public function clearFinishedProcesses()
+	{
+		$allRunning = $this->allObjects();
+		if ( is_array($allRunning) ) {
+			$shell = "ps " . ((PHP_OS === 'Darwin') ? ' ax ' : '') . "| awk '{print $1}'";
+			$output = shell_exec(  $shell );
+			$pids = explode(PHP_EOL, $output);
+
+			foreach ( $allRunning as $jobrunning ) {
+				if ( in_array($jobrunning->pid, $pids) == false ) {
+					// process is done
+					$this->deleteObject($jobrunning);
+				}
+			}
+		}
+		return true;
+	}
+
+	public function updateDesc( $jobrunning = null, $desc = '' )
+	{
+		if ( $jobrunning instanceof Job_RunningDBO && strlen($desc) > 0) {
+			if ( $this->updateObject( $jobrunning, array( Job_Running::desc => $desc )) ) {
+				return $this->refreshObject($jobrunning);
+			}
+		}
+		return false;
+	}
 }
 
 ?>
