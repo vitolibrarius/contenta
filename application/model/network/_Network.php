@@ -210,10 +210,18 @@ abstract class _Network extends Model
 	}
 	function validate_disable($object = null, $value)
 	{
+		if ( is_null($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Network::disable,
+				"FIELD_EMPTY"
+			);
+		}
+
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"
 		// Returns NULL otherwise.
-		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 		if (is_null($v)) {
 			return Localized::ModelValidation(
 				$this->tableName(),

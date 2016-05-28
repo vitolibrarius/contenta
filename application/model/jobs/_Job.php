@@ -351,10 +351,18 @@ abstract class _Job extends Model
 	}
 	function validate_enabled($object = null, $value)
 	{
+		if ( is_null($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::enabled,
+				"FIELD_EMPTY"
+			);
+		}
+
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"
 		// Returns NULL otherwise.
-		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 		if (is_null($v)) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -366,10 +374,18 @@ abstract class _Job extends Model
 	}
 	function validate_one_shot($object = null, $value)
 	{
+		if ( is_null($value) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job::one_shot,
+				"FIELD_EMPTY"
+			);
+		}
+
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"
 		// Returns NULL otherwise.
-		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+		$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 		if (is_null($v)) {
 			return Localized::ModelValidation(
 				$this->tableName(),

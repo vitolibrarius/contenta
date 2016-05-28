@@ -509,11 +509,14 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 					}
 				}
 
-				$update = \SQL::UpdateObject($object, $values)->commitTransaction();
-				if ( $update ) {
-					$this->processNotification( Model::NotifyUpdated, $object );
+				// UpdateObject returns a boolean
+				$success = \SQL::UpdateObject($object, $values)->commitTransaction();
+				if ( $success == true ) {
+					$update = $this->refreshObject( $object );
+					$this->processNotification( Model::NotifyUpdated, $update );
+					return array($update, null);
 				}
-				return array( $update, null );
+				return array( $success, null );
 			}
 
 			// create failed, log validation errors

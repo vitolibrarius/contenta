@@ -136,7 +136,7 @@ abstract class SQL
 	public static function UpdateObject( DataObject $data = null, array $changes = null )
 	{
 		if ( is_null($data) ) {
-			throw new \Exception( "You must specify the data to be deleted" );
+			throw new \Exception( "You must specify the data to be updated" );
 		}
 
 		return new db\UpdateSQL($data->model(), db\Qualifier::PK($data), $changes);

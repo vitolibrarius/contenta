@@ -602,7 +602,12 @@
             "LoginLegend": {
                 "label": "Login"
             },
+            "account_type": {
+                "INVALID": "Invalid account type"
+            },
             "active": {
+                "FIELD_EMPTY": "No value",
+                "FILTER_VALIDATE_BOOLEAN": "Must be boolean",
                 "label": "Active"
             },
             "api_hash": {
@@ -614,9 +619,16 @@
             },
             "email": {
                 "EMAIL_DOES_NOT_FIT_PATTERN": "Please enter a valid email address",
-                "EMAIL_FIELD_EMPTY": "Email field was empty",
+                "EMAIL_FIELD_EMPTY": "Email address is a required field",
+                "FIELD_EMPTY": "Email address is a required field",
+                "FILTER_VALIDATE_EMAIL": "Email address is not in valid format",
+                "UNIQUE_FIELD_VALUE": "Email address is already in use",
                 "label": "Email",
                 "restriction": "please provide a real email address"
+            },
+            "failed_logins": {
+                "FILTER_VALIDATE_INT": "Positive numbers only",
+                "NEGATIVE": "Positive numbers only"
             },
             "id": {
                 "label": "ID"
@@ -629,6 +641,7 @@
             },
             "name": {
                 "FIELD_EMPTY": "Name field was empty",
+                "INVALID_PATTERN": "Username is restricted to letters and numbers",
                 "UNIQUE_FIELD_VALUE": "Username must be unique",
                 "USERNAME_FIELD_EMPTY": "Username field was empty",
                 "label": "Name",

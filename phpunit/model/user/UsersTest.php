@@ -63,7 +63,27 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUpdate()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$userDBO = $this->model->objectForEmail('test@home.com');
+		$newObj = $this->model->update( $userDBO
+			, "NewTestName" // $name
+			, null // $email
+			, null // $active
+			, null // $account_type
+			, null // $rememberme_token
+			, null // $api_hash
+			, null // $password_hash
+			, null // $password_reset_hash
+			, null // $activation_hash
+			, null // $failed_logins
+			, null // $creation_timestamp
+			, null // $last_login_timestamp
+			, null // $last_failed_login
+			, null // $password_reset_timestamp
+		);
+
+		$this->assertTrue( ($newObj != false), var_export($newObj, true) );
+		$this->assertNotEquals( $userDBO->name, $newObj->name, "Names should be differnt" );
+
 	}
 
 	/**
@@ -74,7 +94,12 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAttributesFor()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$attr = $this->model->attributesFor(null, null);
+		$this->assertCount( 14, $attr, var_export($attr, true) );
+
+		$userDBO = $this->model->objectForEmail('test@home.com');
+		$attr = $this->model->attributesFor($userDBO, null);
+		$this->assertCount( 14, $attr, var_export($attr, true) );
 	}
 
 	/**
@@ -117,6 +142,10 @@ class UsersTest extends PHPUnit_Framework_TestCase
 		$pattern = $this->model->attributeEditPattern ( null, null, Users::name);
 		$this->assertNotNull( $pattern, "Edit pattern for 'name'" );
 
+		$strWithSpaces = 'test string with spaces';
+		$match = preg_match( $pattern, $strWithSpaces );
+		$this->assertEquals( 0, $match, "String with spaces '$strWithSpaces'" );
+
 		$test1Char = test_generateRandomString( 1 );
 		$match = preg_match( $pattern, $test1Char );
 		$this->assertEquals( 0, $match, "1 Character username '$test1Char'" );
@@ -153,18 +182,15 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_name()
 	{
-		$length = array( null, '', '   ', 'vito' );
+		$length = array( null, '', '   ', 'vito', 'name with spaces' );
 		foreach ($length as $l ) {
 			$validation = $this->model->validate_name( null, $l );
-			echo "Validation for '$l' = '" . $validation . "'" . PHP_EOL;
 			$this->assertNotNull( $validation, "'$l' username" );
 		}
 
 		$existing = $this->model->objectForName('vito');
 		$validation = $this->model->validate_name( $existing, 'vito' );
-		echo "Validation for 'vito' = '" . $validation . "'" . PHP_EOL;
-		$this->assertNotNull( $validation, "'$l' username" );
-
+		$this->assertNull( $validation, "'$l' username" );
 	}
 
 	/**
@@ -175,7 +201,20 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_email()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$length = array( null, '', '   ', 'vitolibrarius', 'vitolibrarius@notADomain' );
+		foreach ($length as $l ) {
+			$validation = $this->model->validate_email( null, $l );
+// 			echo "Validation for '".$l."' = '" . $validation . "'" . PHP_EOL;
+			$this->assertNotNull( $validation, "'$l' email" );
+		}
+
+		$existing = $this->model->objectForEmail('test@home.com');
+		$validation = $this->model->validate_email( $existing, 'vitolibrarius@gmail.com' );
+		$this->assertNotNull( $validation, "'vitolibrarius@gmail.com email is already in use" );
+
+		$existing = $this->model->objectForEmail('vitolibrarius@gmail.com');
+		$validation = $this->model->validate_email( $existing, 'vitolibrarius@gmail.com' );
+		$this->assertNull( $validation, "'vitolibrarius@gmail.com email should be for the exising object" );
 	}
 
 	/**
@@ -186,7 +225,23 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_active()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$validation = $this->model->validate_active( null, null );
+		$this->assertNotNull( $validation, $validation );
+
+		$validation = $this->model->validate_active( null, 'bad value' );
+		$this->assertNotNull( $validation, $validation );
+
+		$validation = $this->model->validate_active( null, 'yes');
+		$this->assertNull( $validation, $validation );
+
+		$validation = $this->model->validate_active( null, true);
+		$this->assertNull( $validation, $validation );
+
+		$validation = $this->model->validate_active( null, 'no');
+		$this->assertNull( $validation, $validation );
+
+		$validation = $this->model->validate_active( null, false);
+		$this->assertNull( $validation, $validation );
 	}
 
 	/**
@@ -197,7 +252,16 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_account_type()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$existing = $this->model->objectForEmail('test@home.com');
+
+		$validation = $this->model->validate_account_type( $existing, 'bad value' );
+		$this->assertNotNull( $validation, $validation );
+
+		$validation = $this->model->validate_account_type( $existing, Users::StandardRole);
+		$this->assertNull( $validation, $validation );
+
+		$validation = $this->model->validate_account_type( $existing, Users::AdministratorRole);
+		$this->assertNull( $validation, $validation );
 	}
 
 	/**
@@ -208,7 +272,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_rememberme_token()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -219,7 +282,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_api_hash()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -230,7 +292,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_password_reset_hash()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -241,7 +302,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_activation_hash()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -252,7 +312,23 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_failed_logins()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$validation = $this->model->validate_failed_logins( null, null );
+		$this->assertNotNull( $validation, $validation );
+
+		$validation = $this->model->validate_failed_logins( null, 'bad value' );
+		$this->assertNotNull( $validation, $validation );
+
+		$validation = $this->model->validate_failed_logins( null, 'yes');
+		$this->assertNotNull( $validation, $validation );
+
+		$validation = $this->model->validate_failed_logins( null, 123);
+		$this->assertNull( $validation, $validation );
+
+		$validation = $this->model->validate_failed_logins( null, -123);
+		$this->assertNotNull( $validation, $validation );
+
+		$validation = $this->model->validate_failed_logins( null, 0);
+		$this->assertNull( $validation, $validation );
 	}
 
 	/**
@@ -263,7 +339,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_creation_timestamp()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -274,7 +349,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_last_login_timestamp()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -285,7 +359,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_last_failed_login()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -296,7 +369,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_password_reset_timestamp()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 
@@ -310,7 +382,11 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAttributeRestrictionMessage()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$restricted = array(Users::name, Users::email, "password" );
+		foreach( $restricted as $attr ) {
+			$message = $this->model->attributeRestrictionMessage( null, null, $attr);
+			$this->assertNotNull( $message, $message );
+		}
 	}
 
 	/**
@@ -321,7 +397,11 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAttributeDefaultValue()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$restricted = array(Users::account_type => Users::StandardRole, Users::failed_logins => 0);
+		foreach( $restricted as $attr => $expected ) {
+			$def = $this->model->attributeDefaultValue( null, null, $attr);
+			$this->assertEquals( $expected, $def );
+		}
 	}
 
 	/**
@@ -332,7 +412,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_password_hash()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 

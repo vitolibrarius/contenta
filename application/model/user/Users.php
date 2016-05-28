@@ -163,7 +163,19 @@ class Users extends _Users
 	/** Validation */
 	function validate_name($object = null, $value)
 	{
-		return parent::validate_name($object, $value);
+		$validation = parent::validate_name($object, $value);
+		if ( is_null($validation) ) {
+			$pattern = $this->attributeEditPattern ( $object, null, Users::name);
+			$match = preg_match( $pattern, $value );
+			if ($match === 0) {
+				return Localized::ModelValidation(
+					$this->tableName(),
+					Users::name,
+					"INVALID_PATTERN"
+				);
+			}
+		}
+		return $validation;
 	}
 
 	function validate_email($object = null, $value)
@@ -178,7 +190,17 @@ class Users extends _Users
 
 	function validate_account_type($object = null, $value)
 	{
-		return parent::validate_account_type($object, $value);
+		$validation = parent::validate_account_type($object, $value);
+		if ( is_null($validation) ) {
+			if ( in_array( $value, array(Users::StandardRole, Users::AdministratorRole) ) == false ) {
+				return Localized::ModelValidation(
+					$this->tableName(),
+					Users::account_type,
+					"INVALID"
+				);
+			}
+		}
+		return $validation;
 	}
 
 	function validate_rememberme_token($object = null, $value)
@@ -208,7 +230,17 @@ class Users extends _Users
 
 	function validate_failed_logins($object = null, $value)
 	{
-		return parent::validate_failed_logins($object, $value);
+		$validation = parent::validate_failed_logins($object, $value);
+		if ( is_null($validation) ) {
+			if ( intval($value) < 0 ) {
+				return Localized::ModelValidation(
+					$this->tableName(),
+					Users::failed_logins,
+					"NEGATIVE"
+				);
+			}
+		}
+		return $validation;
 	}
 
 	function validate_creation_timestamp($object = null, $value)
@@ -231,6 +263,9 @@ class Users extends _Users
 		return parent::validate_password_reset_timestamp($object, $value);
 	}
 
+	public function userTypes() {
+		return array( Users::StandardRole => "Standard", Users::AdministratorRole => "Administrator");
+	}
 }
 
 ?>
