@@ -159,7 +159,7 @@ class ImportData
 			$model = Model::Named( $modelName );
 			$modelSubDir = $this->directoryFor( $model->tableName() );
 			if ( is_dir($modelSubDir) ) {
-				print PHP_EOL . str_pad($modelName, 15);
+// 				print PHP_EOL . str_pad($modelName, 15);
 				$count = 0;
 
 				$table_method = 'importRow_' . $modelName;
@@ -176,14 +176,14 @@ class ImportData
 					}
 
 					$count++;
-					if ( ($count % 500) == 0 ) {
-						print " " . $count;
-					}
+// 					if ( ($count % 500) == 0 ) {
+// 						print " " . $count;
+// 					}
 				}
-				print " " . $count;
+// 				print " " . $count;
 			}
 		}
-		print PHP_EOL;
+// 		print PHP_EOL;
 	}
 
 	public function importMediaPath( $rowDir, $mediaName, $searchExtensions = true)

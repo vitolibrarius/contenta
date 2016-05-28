@@ -24,7 +24,7 @@ class UsersTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-		test_initializeDatabase(false);
+		test_initializeDatabase(true);
 		test_importTestData( array( "Users" ) );
     }
 

@@ -9,13 +9,25 @@ use utilities\Stopwatch as Stopwatch;
  */
 class Database extends PDO
 {
+    private static $instances = array();
+
+    protected function __clone() {}
+
 	final public static function instance()
 	{
-		static $instance = null;
-		if ( null == $instance ) {
-			$instance = new Database();
-		}
-	   return $instance;
+        $cls = get_called_class();
+        if (isset(self::$instances[$cls]) === false) {
+            self::$instances[$cls] = new static;
+        }
+        return self::$instances[$cls];
+	}
+
+	final public static function ResetConnection()
+	{
+        $cls = get_called_class();
+        if (isset(self::$instances[$cls]) === true) {
+            unset(self::$instances[$cls]);
+        }
 	}
 
 	public function __construct()

@@ -87,13 +87,18 @@ function test_jsonResource($name = null)
 	return Metadata::forDirectoryAndFile( dirname($path), basename($path) );
 }
 
-function test_initializeDatabase($reset = false)
+function test_initializeDatabase($reset = true)
 {
 	if ( $reset == true ) {
-		SetConfigRoot( TEST_ROOT_PATH . "/phpunit", $reset );
+		$db_path = Config::GetPath("Database/path", null);
+		destroy_dir( $db_path ) || die( "Failed to remove last test db $db_path");
+		Database::ResetConnection();
 	}
-	echo "Creating Database"  . PHP_EOL;
+	$config = Config::instance();
+
+	$config->setValue("Logging/type", "File") || die("Failed to change the configured Logging");
 	Migrator::Upgrade( Config::GetLog() );
+	$config->setValue("Logging/type", "Print") || die("Failed to change the configured Logging");
 }
 
 function test_importTestDataDirectory( )

@@ -45,7 +45,7 @@ class Migrator
 					$worker = new $migrationClass($scratchDirectory);
 					$workerTargetVersion = $worker->targetVersion();
 
-					echo "Starting $migrationClass for " . $workerTargetVersion . PHP_EOL;
+					Logger::logInfo("Starting $migrationClass for " . $workerTargetVersion);
 
 					if ( $worker->canMigrateToVersion( $currentVersionNumber ) ) {
 						$success = $worker->performMigration();
@@ -188,7 +188,6 @@ class Migrator
 		$targetPatchVersion = (isset($targetVers[2]) ? intval($targetVers[2]) : 0);
 		$targetVers = ($targetMajorVersion * 10000) + ($targetMinorVersion * 100) +  $targetPatchVersion;
 
-		echo "canMigrateToVersion " . $targetVers . " .. "  . $otherVers .PHP_EOL;
 		return $targetVers <= $otherVers;
 	}
 
