@@ -63,6 +63,149 @@ abstract class _RssDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function endpoint_id()
+	{
+		return parent::changedValue( Rss::endpoint_id, $this->endpoint_id );
+	}
+
+	public function setEndpoint_id( $value = null)
+	{
+		parent::storeChange( Rss::endpoint_id, $value );
+	}
+
+	public function created()
+	{
+		return parent::changedValue( Rss::created, $this->created );
+	}
+
+	public function setCreated( $value = null)
+	{
+		parent::storeChange( Rss::created, $value );
+	}
+
+	public function title()
+	{
+		return parent::changedValue( Rss::title, $this->title );
+	}
+
+	public function setTitle( $value = null)
+	{
+		parent::storeChange( Rss::title, $value );
+	}
+
+	public function desc()
+	{
+		return parent::changedValue( Rss::desc, $this->desc );
+	}
+
+	public function setDesc( $value = null)
+	{
+		parent::storeChange( Rss::desc, $value );
+	}
+
+	public function pub_date()
+	{
+		return parent::changedValue( Rss::pub_date, $this->pub_date );
+	}
+
+	public function setPub_date( $value = null)
+	{
+		parent::storeChange( Rss::pub_date, $value );
+	}
+
+	public function guid()
+	{
+		return parent::changedValue( Rss::guid, $this->guid );
+	}
+
+	public function setGuid( $value = null)
+	{
+		parent::storeChange( Rss::guid, $value );
+	}
+
+	public function clean_name()
+	{
+		return parent::changedValue( Rss::clean_name, $this->clean_name );
+	}
+
+	public function setClean_name( $value = null)
+	{
+		parent::storeChange( Rss::clean_name, $value );
+	}
+
+	public function clean_issue()
+	{
+		return parent::changedValue( Rss::clean_issue, $this->clean_issue );
+	}
+
+	public function setClean_issue( $value = null)
+	{
+		parent::storeChange( Rss::clean_issue, $value );
+	}
+
+	public function clean_year()
+	{
+		return parent::changedValue( Rss::clean_year, $this->clean_year );
+	}
+
+	public function setClean_year( $value = null)
+	{
+		parent::storeChange( Rss::clean_year, $value );
+	}
+
+	public function enclosure_url()
+	{
+		return parent::changedValue( Rss::enclosure_url, $this->enclosure_url );
+	}
+
+	public function setEnclosure_url( $value = null)
+	{
+		parent::storeChange( Rss::enclosure_url, $value );
+	}
+
+	public function enclosure_length()
+	{
+		return parent::changedValue( Rss::enclosure_length, $this->enclosure_length );
+	}
+
+	public function setEnclosure_length( $value = null)
+	{
+		parent::storeChange( Rss::enclosure_length, $value );
+	}
+
+	public function enclosure_mime()
+	{
+		return parent::changedValue( Rss::enclosure_mime, $this->enclosure_mime );
+	}
+
+	public function setEnclosure_mime( $value = null)
+	{
+		parent::storeChange( Rss::enclosure_mime, $value );
+	}
+
+	public function enclosure_hash()
+	{
+		return parent::changedValue( Rss::enclosure_hash, $this->enclosure_hash );
+	}
+
+	public function setEnclosure_hash( $value = null)
+	{
+		parent::storeChange( Rss::enclosure_hash, $value );
+	}
+
+	public function enclosure_password()
+	{
+		return parent::changedValue( Rss::enclosure_password, $this->enclosure_password );
+	}
+
+	public function setEnclosure_password( $value = null)
+	{
+		parent::storeChange( Rss::enclosure_password, $value );
+	}
+
+
 }
 
 ?>

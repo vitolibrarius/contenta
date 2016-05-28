@@ -36,6 +36,59 @@ abstract class _VersionDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function code()
+	{
+		return parent::changedValue( Version::code, $this->code );
+	}
+
+	public function setCode( $value = null)
+	{
+		parent::storeChange( Version::code, $value );
+	}
+
+	public function major()
+	{
+		return parent::changedValue( Version::major, $this->major );
+	}
+
+	public function setMajor( $value = null)
+	{
+		parent::storeChange( Version::major, $value );
+	}
+
+	public function minor()
+	{
+		return parent::changedValue( Version::minor, $this->minor );
+	}
+
+	public function setMinor( $value = null)
+	{
+		parent::storeChange( Version::minor, $value );
+	}
+
+	public function patch()
+	{
+		return parent::changedValue( Version::patch, $this->patch );
+	}
+
+	public function setPatch( $value = null)
+	{
+		parent::storeChange( Version::patch, $value );
+	}
+
+	public function created()
+	{
+		return parent::changedValue( Version::created, $this->created );
+	}
+
+	public function setCreated( $value = null)
+	{
+		parent::storeChange( Version::created, $value );
+	}
+
+
 }
 
 ?>

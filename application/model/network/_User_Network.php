@@ -206,6 +206,28 @@ abstract class _User_Network extends Model
 	 *	Named fetches
 	 */
 
+	/** Set attributes */
+	public function setUser_id( User_NetworkDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(User_Network::user_id => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setNetwork_id( User_NetworkDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(User_Network::network_id => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+
 	/** Validation */
 	function validate_user_id($object = null, $value)
 	{

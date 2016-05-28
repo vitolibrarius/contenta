@@ -41,6 +41,79 @@ abstract class _Pull_List_ItemDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function group_name()
+	{
+		return parent::changedValue( Pull_List_Item::group_name, $this->group_name );
+	}
+
+	public function setGroup_name( $value = null)
+	{
+		parent::storeChange( Pull_List_Item::group_name, $value );
+	}
+
+	public function data()
+	{
+		return parent::changedValue( Pull_List_Item::data, $this->data );
+	}
+
+	public function setData( $value = null)
+	{
+		parent::storeChange( Pull_List_Item::data, $value );
+	}
+
+	public function created()
+	{
+		return parent::changedValue( Pull_List_Item::created, $this->created );
+	}
+
+	public function setCreated( $value = null)
+	{
+		parent::storeChange( Pull_List_Item::created, $value );
+	}
+
+	public function name()
+	{
+		return parent::changedValue( Pull_List_Item::name, $this->name );
+	}
+
+	public function setName( $value = null)
+	{
+		parent::storeChange( Pull_List_Item::name, $value );
+	}
+
+	public function issue()
+	{
+		return parent::changedValue( Pull_List_Item::issue, $this->issue );
+	}
+
+	public function setIssue( $value = null)
+	{
+		parent::storeChange( Pull_List_Item::issue, $value );
+	}
+
+	public function year()
+	{
+		return parent::changedValue( Pull_List_Item::year, $this->year );
+	}
+
+	public function setYear( $value = null)
+	{
+		parent::storeChange( Pull_List_Item::year, $value );
+	}
+
+	public function pull_list_id()
+	{
+		return parent::changedValue( Pull_List_Item::pull_list_id, $this->pull_list_id );
+	}
+
+	public function setPull_list_id( $value = null)
+	{
+		parent::storeChange( Pull_List_Item::pull_list_id, $value );
+	}
+
+
 }
 
 ?>

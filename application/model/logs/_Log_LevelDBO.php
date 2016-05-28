@@ -21,6 +21,29 @@ abstract class _Log_LevelDBO extends DataObject
 	}
 
 
+
+	/** Attributes */
+	public function code()
+	{
+		return parent::changedValue( Log_Level::code, $this->code );
+	}
+
+	public function setCode( $value = null)
+	{
+		parent::storeChange( Log_Level::code, $value );
+	}
+
+	public function name()
+	{
+		return parent::changedValue( Log_Level::name, $this->name );
+	}
+
+	public function setName( $value = null)
+	{
+		parent::storeChange( Log_Level::name, $value );
+	}
+
+
 }
 
 ?>

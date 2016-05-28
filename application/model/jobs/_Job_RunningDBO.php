@@ -49,6 +49,79 @@ abstract class _Job_RunningDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function job_id()
+	{
+		return parent::changedValue( Job_Running::job_id, $this->job_id );
+	}
+
+	public function setJob_id( $value = null)
+	{
+		parent::storeChange( Job_Running::job_id, $value );
+	}
+
+	public function job_type_id()
+	{
+		return parent::changedValue( Job_Running::job_type_id, $this->job_type_id );
+	}
+
+	public function setJob_type_id( $value = null)
+	{
+		parent::storeChange( Job_Running::job_type_id, $value );
+	}
+
+	public function processor()
+	{
+		return parent::changedValue( Job_Running::processor, $this->processor );
+	}
+
+	public function setProcessor( $value = null)
+	{
+		parent::storeChange( Job_Running::processor, $value );
+	}
+
+	public function guid()
+	{
+		return parent::changedValue( Job_Running::guid, $this->guid );
+	}
+
+	public function setGuid( $value = null)
+	{
+		parent::storeChange( Job_Running::guid, $value );
+	}
+
+	public function pid()
+	{
+		return parent::changedValue( Job_Running::pid, $this->pid );
+	}
+
+	public function setPid( $value = null)
+	{
+		parent::storeChange( Job_Running::pid, $value );
+	}
+
+	public function desc()
+	{
+		return parent::changedValue( Job_Running::desc, $this->desc );
+	}
+
+	public function setDesc( $value = null)
+	{
+		parent::storeChange( Job_Running::desc, $value );
+	}
+
+	public function created()
+	{
+		return parent::changedValue( Job_Running::created, $this->created );
+	}
+
+	public function setCreated( $value = null)
+	{
+		parent::storeChange( Job_Running::created, $value );
+	}
+
+
 }
 
 ?>

@@ -1,5 +1,16 @@
 namespace <?php echo $this->packageName(); ?>;
 
+<?php // setup some script variables
+	$mandatoryObjectAttributes = $this->mandatoryObjectAttributes();
+	$lastMandatoryKey = array_last_key($mandatoryObjectAttributes);
+
+	$objectAttributes = (is_array($this->attributes) ? $this->attributes : array());
+	$lastAttributeKey = array_last_key($objectAttributes);
+
+	$objectRelationships = (is_array($this->relationships) ? $this->relationships : array());;
+	$mandatoryObjectRelations = (is_array($this->mandatoryObjectRelations()) ? $this->mandatoryObjectRelations() : array());
+	$lastMandatoryRelation = array_last_key($mandatoryObjectRelations);
+?>
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
@@ -85,4 +96,21 @@ foreach( $this->attributes as $name => $detailArray ) {
 
 <?php endforeach; ?>
 <?php endif; ?>
+
+	/** Attributes */
+<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
+<?php if ( $this->isPrimaryKey($name) === false ) : ?>
+	public function <?php echo $name; ?>()
+	{
+		return parent::changedValue( <?php echo $this->modelClassName() . "::" . $name; ?>, $this-><?php echo $name; ?> );
+	}
+
+	public function set<?php echo ucwords($name); ?>( $value = null)
+	{
+		parent::storeChange( <?php echo $this->modelClassName() . "::" . $name; ?>, $value );
+	}
+
+<?php endif; // not primaryKey ?>
+<?php endforeach; ?>
+
 }

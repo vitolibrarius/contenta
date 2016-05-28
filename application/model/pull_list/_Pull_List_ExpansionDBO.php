@@ -34,6 +34,49 @@ abstract class _Pull_List_ExpansionDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function pattern()
+	{
+		return parent::changedValue( Pull_List_Expansion::pattern, $this->pattern );
+	}
+
+	public function setPattern( $value = null)
+	{
+		parent::storeChange( Pull_List_Expansion::pattern, $value );
+	}
+
+	public function replace()
+	{
+		return parent::changedValue( Pull_List_Expansion::replace, $this->replace );
+	}
+
+	public function setReplace( $value = null)
+	{
+		parent::storeChange( Pull_List_Expansion::replace, $value );
+	}
+
+	public function created()
+	{
+		return parent::changedValue( Pull_List_Expansion::created, $this->created );
+	}
+
+	public function setCreated( $value = null)
+	{
+		parent::storeChange( Pull_List_Expansion::created, $value );
+	}
+
+	public function endpoint_id()
+	{
+		return parent::changedValue( Pull_List_Expansion::endpoint_id, $this->endpoint_id );
+	}
+
+	public function setEndpoint_id( $value = null)
+	{
+		parent::storeChange( Pull_List_Expansion::endpoint_id, $value );
+	}
+
+
 }
 
 ?>

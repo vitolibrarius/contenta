@@ -414,6 +414,22 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	{
 	}
 
+	/**
+	 * @covers	joinAttributes
+	 * 			T_FUNCTION joinAttributes ( $joinModel = null)
+	 * @todo	Implement testJoinAttributes().
+	 */
+	public function testJoinAttributes()
+	{
+		$expected = array( Users::id, "user_id"  );
+		$user_network = Model::Named( "user_network" );
+		$joins = $this->model->joinAttributes( $user_network );
+		$this->assertEmpty(array_merge(array_diff($expected, $joins), array_diff($joins, $expected)));
+
+		$user_series = Model::Named( "user_series" );
+		$joins = $this->model->joinAttributes( $user_series );
+		$this->assertEmpty(array_merge(array_diff($expected, $joins), array_diff($joins, $expected)));
+	}
 
 /* {functions} */
 }

@@ -38,6 +38,89 @@ abstract class _LogDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function trace()
+	{
+		return parent::changedValue( Log::trace, $this->trace );
+	}
+
+	public function setTrace( $value = null)
+	{
+		parent::storeChange( Log::trace, $value );
+	}
+
+	public function trace_id()
+	{
+		return parent::changedValue( Log::trace_id, $this->trace_id );
+	}
+
+	public function setTrace_id( $value = null)
+	{
+		parent::storeChange( Log::trace_id, $value );
+	}
+
+	public function context()
+	{
+		return parent::changedValue( Log::context, $this->context );
+	}
+
+	public function setContext( $value = null)
+	{
+		parent::storeChange( Log::context, $value );
+	}
+
+	public function context_id()
+	{
+		return parent::changedValue( Log::context_id, $this->context_id );
+	}
+
+	public function setContext_id( $value = null)
+	{
+		parent::storeChange( Log::context_id, $value );
+	}
+
+	public function message()
+	{
+		return parent::changedValue( Log::message, $this->message );
+	}
+
+	public function setMessage( $value = null)
+	{
+		parent::storeChange( Log::message, $value );
+	}
+
+	public function session()
+	{
+		return parent::changedValue( Log::session, $this->session );
+	}
+
+	public function setSession( $value = null)
+	{
+		parent::storeChange( Log::session, $value );
+	}
+
+	public function level_code()
+	{
+		return parent::changedValue( Log::level_code, $this->level_code );
+	}
+
+	public function setLevel_code( $value = null)
+	{
+		parent::storeChange( Log::level_code, $value );
+	}
+
+	public function created()
+	{
+		return parent::changedValue( Log::created, $this->created );
+	}
+
+	public function setCreated( $value = null)
+	{
+		parent::storeChange( Log::created, $value );
+	}
+
+
 }
 
 ?>

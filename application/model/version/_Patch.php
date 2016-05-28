@@ -186,6 +186,38 @@ abstract class _Patch extends Model
 	 *	Named fetches
 	 */
 
+	/** Set attributes */
+	public function setName( PatchDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Patch::name => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setCreated( PatchDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Patch::created => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setVersion_id( PatchDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Patch::version_id => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+
 	/** Validation */
 	function validate_name($object = null, $value)
 	{

@@ -212,6 +212,78 @@ abstract class _Job_Type extends Model
 	 *	Named fetches
 	 */
 
+	/** Set attributes */
+	public function setCode( Job_TypeDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Job_Type::code => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setName( Job_TypeDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Job_Type::name => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setDesc( Job_TypeDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Job_Type::desc => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setProcessor( Job_TypeDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Job_Type::processor => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setParameter( Job_TypeDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Job_Type::parameter => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setScheduled( Job_TypeDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Job_Type::scheduled => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setRequires_endpoint( Job_TypeDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Job_Type::requires_endpoint => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+
 	/** Validation */
 	function validate_code($object = null, $value)
 	{

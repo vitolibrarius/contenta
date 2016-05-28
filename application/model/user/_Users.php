@@ -284,6 +284,148 @@ abstract class _Users extends Model
 	 *	Named fetches
 	 */
 
+	/** Set attributes */
+	public function setName( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::name => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setEmail( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::email => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setActive( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::active => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setAccount_type( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::account_type => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setRememberme_token( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::rememberme_token => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setApi_hash( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::api_hash => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setPassword_hash( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::password_hash => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setPassword_reset_hash( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::password_reset_hash => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setActivation_hash( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::activation_hash => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setFailed_logins( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::failed_logins => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setCreation_timestamp( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::creation_timestamp => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setLast_login_timestamp( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::last_login_timestamp => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setLast_failed_login( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::last_failed_login => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setPassword_reset_timestamp( UsersDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Users::password_reset_timestamp => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+
 	/** Validation */
 	function validate_name($object = null, $value)
 	{

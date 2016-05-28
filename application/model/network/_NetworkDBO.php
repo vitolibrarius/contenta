@@ -39,6 +39,49 @@ abstract class _NetworkDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function ip_address()
+	{
+		return parent::changedValue( Network::ip_address, $this->ip_address );
+	}
+
+	public function setIp_address( $value = null)
+	{
+		parent::storeChange( Network::ip_address, $value );
+	}
+
+	public function ip_hash()
+	{
+		return parent::changedValue( Network::ip_hash, $this->ip_hash );
+	}
+
+	public function setIp_hash( $value = null)
+	{
+		parent::storeChange( Network::ip_hash, $value );
+	}
+
+	public function created()
+	{
+		return parent::changedValue( Network::created, $this->created );
+	}
+
+	public function setCreated( $value = null)
+	{
+		parent::storeChange( Network::created, $value );
+	}
+
+	public function disable()
+	{
+		return parent::changedValue( Network::disable, $this->disable );
+	}
+
+	public function setDisable( $value = null)
+	{
+		parent::storeChange( Network::disable, $value );
+	}
+
+
 }
 
 ?>

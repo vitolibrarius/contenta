@@ -81,6 +81,59 @@ abstract class _Pull_ListDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function name()
+	{
+		return parent::changedValue( Pull_List::name, $this->name );
+	}
+
+	public function setName( $value = null)
+	{
+		parent::storeChange( Pull_List::name, $value );
+	}
+
+	public function etag()
+	{
+		return parent::changedValue( Pull_List::etag, $this->etag );
+	}
+
+	public function setEtag( $value = null)
+	{
+		parent::storeChange( Pull_List::etag, $value );
+	}
+
+	public function created()
+	{
+		return parent::changedValue( Pull_List::created, $this->created );
+	}
+
+	public function setCreated( $value = null)
+	{
+		parent::storeChange( Pull_List::created, $value );
+	}
+
+	public function published()
+	{
+		return parent::changedValue( Pull_List::published, $this->published );
+	}
+
+	public function setPublished( $value = null)
+	{
+		parent::storeChange( Pull_List::published, $value );
+	}
+
+	public function endpoint_id()
+	{
+		return parent::changedValue( Pull_List::endpoint_id, $this->endpoint_id );
+	}
+
+	public function setEndpoint_id( $value = null)
+	{
+		parent::storeChange( Pull_List::endpoint_id, $value );
+	}
+
+
 }
 
 ?>

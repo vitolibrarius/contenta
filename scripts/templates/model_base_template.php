@@ -357,6 +357,22 @@ foreach( $objectAttributes as $name => $detailArray ) {
 
 <?php endforeach; // named fetches ?>
 
+	/** Set attributes */
+<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
+<?php if ( $this->isPrimaryKey($name) === false ) : ?>
+	public function set<?php echo ucwords($name); ?>( <?php echo $this->dboClassName(); ?> $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(<?php echo $this->modelClassName() . "::" . $name; ?> => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+<?php endif; // not primaryKey ?>
+<?php endforeach; ?>
+
 	/** Validation */
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
 <?php

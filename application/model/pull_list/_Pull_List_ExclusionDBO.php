@@ -34,6 +34,49 @@ abstract class _Pull_List_ExclusionDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function pattern()
+	{
+		return parent::changedValue( Pull_List_Exclusion::pattern, $this->pattern );
+	}
+
+	public function setPattern( $value = null)
+	{
+		parent::storeChange( Pull_List_Exclusion::pattern, $value );
+	}
+
+	public function type()
+	{
+		return parent::changedValue( Pull_List_Exclusion::type, $this->type );
+	}
+
+	public function setType( $value = null)
+	{
+		parent::storeChange( Pull_List_Exclusion::type, $value );
+	}
+
+	public function created()
+	{
+		return parent::changedValue( Pull_List_Exclusion::created, $this->created );
+	}
+
+	public function setCreated( $value = null)
+	{
+		parent::storeChange( Pull_List_Exclusion::created, $value );
+	}
+
+	public function endpoint_id()
+	{
+		return parent::changedValue( Pull_List_Exclusion::endpoint_id, $this->endpoint_id );
+	}
+
+	public function setEndpoint_id( $value = null)
+	{
+		parent::storeChange( Pull_List_Exclusion::endpoint_id, $value );
+	}
+
+
 }
 
 ?>

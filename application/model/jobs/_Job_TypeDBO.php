@@ -60,6 +60,79 @@ abstract class _Job_TypeDBO extends DataObject
 		return false;
 	}
 
+
+	/** Attributes */
+	public function code()
+	{
+		return parent::changedValue( Job_Type::code, $this->code );
+	}
+
+	public function setCode( $value = null)
+	{
+		parent::storeChange( Job_Type::code, $value );
+	}
+
+	public function name()
+	{
+		return parent::changedValue( Job_Type::name, $this->name );
+	}
+
+	public function setName( $value = null)
+	{
+		parent::storeChange( Job_Type::name, $value );
+	}
+
+	public function desc()
+	{
+		return parent::changedValue( Job_Type::desc, $this->desc );
+	}
+
+	public function setDesc( $value = null)
+	{
+		parent::storeChange( Job_Type::desc, $value );
+	}
+
+	public function processor()
+	{
+		return parent::changedValue( Job_Type::processor, $this->processor );
+	}
+
+	public function setProcessor( $value = null)
+	{
+		parent::storeChange( Job_Type::processor, $value );
+	}
+
+	public function parameter()
+	{
+		return parent::changedValue( Job_Type::parameter, $this->parameter );
+	}
+
+	public function setParameter( $value = null)
+	{
+		parent::storeChange( Job_Type::parameter, $value );
+	}
+
+	public function scheduled()
+	{
+		return parent::changedValue( Job_Type::scheduled, $this->scheduled );
+	}
+
+	public function setScheduled( $value = null)
+	{
+		parent::storeChange( Job_Type::scheduled, $value );
+	}
+
+	public function requires_endpoint()
+	{
+		return parent::changedValue( Job_Type::requires_endpoint, $this->requires_endpoint );
+	}
+
+	public function setRequires_endpoint( $value = null)
+	{
+		parent::storeChange( Job_Type::requires_endpoint, $value );
+	}
+
+
 }
 
 ?>

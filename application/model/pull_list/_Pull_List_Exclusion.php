@@ -188,6 +188,48 @@ abstract class _Pull_List_Exclusion extends Model
 	 *	Named fetches
 	 */
 
+	/** Set attributes */
+	public function setPattern( Pull_List_ExclusionDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Pull_List_Exclusion::pattern => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setType( Pull_List_ExclusionDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Pull_List_Exclusion::type => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setCreated( Pull_List_ExclusionDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Pull_List_Exclusion::created => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setEndpoint_id( Pull_List_ExclusionDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Pull_List_Exclusion::endpoint_id => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+
 	/** Validation */
 	function validate_pattern($object = null, $value)
 	{

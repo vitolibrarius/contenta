@@ -144,6 +144,28 @@ abstract class _Log_Level extends Model
 	 *	Named fetches
 	 */
 
+	/** Set attributes */
+	public function setCode( Log_LevelDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Log_Level::code => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+	public function setName( Log_LevelDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Log_Level::name => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
+
 	/** Validation */
 	function validate_code($object = null, $value)
 	{

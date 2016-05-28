@@ -9,6 +9,7 @@ use \Config as Config;
 class DataObject
 {
 	public $id;
+	public $unsavedUpdates;
 
 	public static function NameForTable( $name = null)
 	{
@@ -190,6 +191,34 @@ class DataObject
 	public function notify( $type = 'none', $object = null )
 	{
 		echo PHP_EOL . PHP_EOL . "------------------".PHP_EOL."$this ->notify( $type,  $object)". PHP_EOL.PHP_EOL;
+	}
+
+	public function changedValue( $attr = null, $existing = null )
+	{
+		if ( is_null($attr) === false && isset($this->unsavedUpdates[$attr])) {
+			return $this->unsavedUpdates[$attr];
+		}
+		return $existing;
+	}
+
+	public function storeChange( $attr = null, $value = null )
+	{
+		if ( is_null($attr) === false ) {
+			$this->unsavedUpdates[$attr] = $value;
+		}
+	}
+
+	public function saveChanges()
+	{
+		if ( is_array($this->unsavedUpdates)) {
+			return $this->model()->updateObject( $this, $this->unsavedUpdates );
+		}
+		return true;
+	}
+
+	public function discardChanges()
+	{
+		unset( $this->unsavedUpdates );
 	}
 
 	/* self test for consistency */
