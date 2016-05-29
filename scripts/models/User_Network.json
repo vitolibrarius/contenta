@@ -16,7 +16,7 @@
     	"user" : {
     		"destination" : "Users",
     		"destinationTable" : "users",
-    		"destinationPackage" : "\\model\\users\\",
+    		"destinationPackage" : "\\model\\user\\",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "user_id" }
     		],

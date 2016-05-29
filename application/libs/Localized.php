@@ -50,11 +50,7 @@ class Localized
 	public static function Get()
 	{
 		$keys = func_get_args();
-		$teeth = array();
-		foreach( $keys as $akey ) {
-			$teeth = array_merge_recursive($teeth, (array)$akey );
-		}
-		$fullkey = join(DIRECTORY_SEPARATOR, $teeth);
+		$fullkey = join(DIRECTORY_SEPARATOR, array_flatten($keys));
 		return self::instance()->getValue($fullkey);
 	}
 
@@ -69,6 +65,12 @@ class Localized
 		return Localized::Get("Model", $table, $attr, "label");
 	}
 
+	/**
+	 * @todo: change this implementation to fall back from specific field message, to general table message to general model message
+	 * so Model/users/name/FIELD_EMPTY, could fall back to Model/users/FIELD_EMPTY, to Model/_general_/FIELD_EMPTY
+	 * or maybe the keys should be stored in a different order
+	 * Model/FIELD_EMPTY/table/attr, or maybe Model/FIELD_EMPTY = "Please provide a value for {attr}"
+	 */
 	public static function ModelValidation( $table, $attr, $validate = 'validation' )
 	{
 		return Localized::Get("Model", $table, $attr, $validate );

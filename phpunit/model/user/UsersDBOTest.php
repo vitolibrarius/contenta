@@ -45,23 +45,26 @@ class UsersDBOTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers	recordLoginFromIp_address
 	 * 			T_FUNCTION T_PUBLIC recordLoginFromIp_address ( $ip = null)
-	 * @todo	Implement testRecordLoginFromIp_address().
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-28 15:53:59.
 	 */
 	public function testRecordLoginFromIp_address()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$userDBO = $this->model->objectForName('test');
+		$result = $userDBO->recordLoginFromIp_address( "192.168.1.99" );
+		$this->assertTrue( $result != false, "Failed to create login" );
 	}
 
 	/**
 	 * @covers	allLoginIP
 	 * 			T_FUNCTION T_PUBLIC allLoginIP ( )
-	 * @todo	Implement testAllLoginIP().
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-28 15:53:59.
+     * @depends testRecordLoginFromIp_address
 	 */
 	public function testAllLoginIP()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$userDBO = $this->model->objectForName('test');
+		$allLogin = $userDBO->allLoginIP();
+		$this->assertCount( 1, $allLogin, var_export($allLogin, true) );
 	}
 
 	/**

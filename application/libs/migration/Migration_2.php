@@ -9,7 +9,7 @@ use \Logger as Logger;
 use \Model as Model;
 use \SQL as SQL;
 
-use \model\Users as Users;
+use \model\user\Users as Users;
 use \model\logs\Log_Level as Log_Level;
 use \model\logs\Log as Log;
 

@@ -37,7 +37,7 @@ class Auth
 		$login_successful = false;
 		if ( is_string($userHash) ) {
 			$user = Model::Named('Users')->userByApiHash($userHash);
-			if ( $user instanceof model\UsersDBO ) {
+			if ( $user instanceof model\user\UsersDBO ) {
 				Session::init();
 				Session::set('user_logged_in', true);
 				Session::set('user_id', $user->id);

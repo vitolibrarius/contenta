@@ -27,7 +27,7 @@
 				<em><?php echo currentVersionHash(); ?></em>
 			</div>
 			<div class="grid_4 right">
-				<?php if (Session::get('user_logged_in') == true && Session::get('user_account_type') === \model\Users::AdministratorRole ) :?>
+				<?php if (Session::get('user_logged_in') == true && Session::get('user_account_type') === \model\user\Users::AdministratorRole ) :?>
 					<?php
 						$git = new utilities\Git(SYSTEM_PATH);
 						$remote = $git->remoteStatus();

@@ -43,7 +43,7 @@ use \model\Story_Arc_Publication as Story_Arc_Publication;
 use \model\Story_Arc_Series as Story_Arc_Series;
 use \model\User_Network as User_Network;
 use \model\User_Series as User_Series;
-use \model\Users as Users;
+use \model\user\Users as Users;
 use \model\Version as Version;
 /* {useStatements} */
 

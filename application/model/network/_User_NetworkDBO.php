@@ -9,8 +9,8 @@ use \Logger as Logger;
 use \model\network\User_Network as User_Network;
 
 /* import related objects */
-use \model\users\Users as Users;
-use \model\users\UsersDBO as UsersDBO;
+use \model\user\Users as Users;
+use \model\user\UsersDBO as UsersDBO;
 use \model\network\Network as Network;
 use \model\network\NetworkDBO as NetworkDBO;
 

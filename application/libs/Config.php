@@ -56,11 +56,7 @@ class Config
 	public static function GetMedia()
 	{
 		$keys = func_get_args();
-		$teeth = array();
-		foreach( $keys as $akey ) {
-			$teeth = array_merge_recursive($teeth, (array)$akey );
-		}
-		$fullkey = join(DIRECTORY_SEPARATOR, $teeth);
+		$fullkey = join(DIRECTORY_SEPARATOR, array_flatten($keys));
 
 		$media = self::instance()->mediaDirectory();
 		if ( is_string($fullkey) && strlen($fullkey) > 0 ) {
@@ -107,11 +103,7 @@ class Config
 	final public static function Web()
 	{
 		$keys = func_get_args();
-		$teeth = array();
-		foreach( $keys as $akey ) {
-			$teeth = array_merge_recursive($teeth, (array)$akey );
-		}
-		$fullkey = join(DIRECTORY_SEPARATOR, $teeth);
+		$fullkey = join(DIRECTORY_SEPARATOR, array_flatten($keys));
 
 		$web = self::instance()->getValue("Internet/web_dir", "contenta");
 		if ( is_string($web) && startsWith( '/', $web ) == false ) {

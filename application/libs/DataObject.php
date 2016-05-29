@@ -97,7 +97,7 @@ class DataObject
 	{
 		$str = null;
 		try {
-			$str = '[' . $this->modelName() . '(' . $this->pkValue() . ')] ' . $this->displayName();
+			$str = '[' . get_called_class() . '(' . $this->pkValue() . ')] ' . $this->displayName();
 		}
 		catch ( \Exception $e ) {
 			$str = get_class($this) . '__toString() : ' . $e;

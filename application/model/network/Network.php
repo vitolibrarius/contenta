@@ -20,11 +20,21 @@ class Network extends _Network
 	 */
 	public function create( $ip_address, $ip_hash, $disable)
 	{
-		return $this->base_create(
-			$ip_address,
-			$ip_hash,
-			$disable
-		);
+		$object = $this->objectForIp_address($ip_address);
+		if ( $object == false) {
+			$ip_hash = ipToHex($ip_address);
+			if ( $ip_hash == false ) {
+				$ip_hash = 'Invalid IP address ' . $ip_address;
+			}
+
+			return $this->base_create(
+				$ip_address,
+				$ip_hash,
+				false
+			);
+		}
+
+		return $object;
 	}
 
 	public function update( NetworkDBO $obj,

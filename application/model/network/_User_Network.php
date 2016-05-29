@@ -13,8 +13,8 @@ use \db\Qualifier as Qualifier;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
 
 /* import related objects */
-use \model\users\Users as Users;
-use \model\users\UsersDBO as UsersDBO;
+use \model\user\Users as Users;
+use \model\user\UsersDBO as UsersDBO;
 use \model\network\Network as Network;
 use \model\network\NetworkDBO as NetworkDBO;
 

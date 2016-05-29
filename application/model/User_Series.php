@@ -44,12 +44,12 @@ class User_Series extends Model
 		return false;
 	}
 
-	public function allForUser(model\UsersDBO $obj)
+	public function allForUser(model\user\UsersDBO $obj)
 	{
 		return $this->allObjectsForFK(User_Series::user_id, $obj);
 	}
 
-	public function allFavoritesForUser(model\UsersDBO $obj)
+	public function allFavoritesForUser(model\user\UsersDBO $obj)
 	{
 		return $this->allObjectsForFKWithValue(User_Series::user_id, $obj, User_Series::favorite, Model::TERTIARY_TRUE);
 	}
