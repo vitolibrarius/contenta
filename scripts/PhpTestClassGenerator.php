@@ -708,6 +708,9 @@ class FunctionToken extends Token
 		$this->modifier[] = $type;
 		return $this;
     }
+    public function hasModifier($type = '') {
+    	return ( is_array($this->modifier) ? in_array($type, $this->modifier) : false);
+    }
 
 	public function __toString() {
 
@@ -780,7 +783,11 @@ class ClassToken extends Token
 		$sortedTokens = array_group_by( $this->functionTokens(), function($k, $v) { return $v->fullnameString(); });
 		$missing = array();
 		foreach( $tokenArray as $atoken ) {
-			if ( $atoken->fullnameString() != "__construct" && isset($sortedTokens[$atoken->testnameString()]) == false ) {
+			if ( $atoken->hasModifier(token_name(T_PRIVATE)) == false
+				&& $atoken->hasModifier(token_name(T_PROTECTED)) == false
+				&& $atoken->fullnameString() != "__construct"
+				&& isset($sortedTokens[$atoken->testnameString()]) == false )
+			{
 				$missing[] = $atoken;
 			}
 		}
