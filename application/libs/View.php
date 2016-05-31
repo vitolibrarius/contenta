@@ -5,7 +5,7 @@ defined('APPLICATION_PATH') || exit("APPLICATION_PATH not found.");
 
 define( 'VIEWS_PATH', APPLICATION_PATH . '/views/' );
 
-use \Session as Session;
+use \http\Session as Session;;
 use \Localized as Localized;
 use \Logger as Logger;
 use \Model as Model;
@@ -94,14 +94,6 @@ class View
 	{
 		// page without header and footer, for whatever reason
 		if ( file_exists(VIEWS_PATH . $filename . '.php')) {
-			$current = htmlentities($_SERVER['REQUEST_URI']);
-			if ( endsWith($current, '/index') ) {
-				Session::clearCurrentPageStack();
-			}
-			else if ( Session::peekCurrentPage() != $current && count($_POST) == 0 ) {
-				Session::pushCurrentPage($current);
-			}
-
 			header('Content-Type: text/html; charset=utf-8');
 
 			// if filename is "/series/index" this will add custom stylesheets for

@@ -7,7 +7,7 @@ use \DataObject as DataObject;
 use \Config as Config;
 use \Model as Model;
 use \Auth as Auth;
-use \Session as Session;
+use \http\Session as Session;;
 use \Logger as Logger;
 use \Localized as Localized;
 use \Processor as Processor;

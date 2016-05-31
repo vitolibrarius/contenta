@@ -5,7 +5,7 @@ namespace controller;
 use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
-use \Session as Session;
+use \http\Session as Session;;
 use \Logger as Logger;
 use \Auth as Auth;
 

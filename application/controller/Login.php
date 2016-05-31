@@ -3,7 +3,7 @@
 namespace controller;
 
 use \Controller as Controller;
-use \Session as Session;
+use \http\Session as Session;;
 use \Auth as Auth;
 use \Config as Config;
 use \Model as Model;

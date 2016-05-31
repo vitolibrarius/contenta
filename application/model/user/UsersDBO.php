@@ -51,7 +51,7 @@ class UsersDBO extends _UsersDBO
 	function increaseFailedLogin()
 	{
 		$count = $this->failed_logins();
-		if ( is_null($count) || is_int($count) == false) {
+		if ( is_null($count) || intval($count) == 0) {
 			$count = 1;
 		}
 		else {

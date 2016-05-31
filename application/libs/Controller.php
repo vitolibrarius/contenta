@@ -1,6 +1,6 @@
 <?php
 
-use \Session as Session;
+use \http\Session as Session;;
 use \View as View;
 use \Config as Config;
 
@@ -16,8 +16,6 @@ class Controller
 {
 	function __construct()
 	{
-		Session::init();
-
 		// create a view object (that does nothing, but provides the view render() method)
 		$this->view = new View(get_short_class($this));
 	}

@@ -7,7 +7,7 @@ use \Migrator as Migrator;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
-use \Session as Session;
+use \http\Session as Session;;
 use \Localized as Localized;
 use \Metadata as Metadata;
 

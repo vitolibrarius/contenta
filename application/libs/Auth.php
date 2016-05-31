@@ -1,11 +1,17 @@
 <?php
 
-use \Session as Session;
 use \Model as Model;
 use \Localized as Localized;
 use \Config as Config;
 use \Logger as Logger;
+
+use \http\Session as Session;
+use \http\Cookies as Cookies;
+use \http\HttpGet as HttpGet;
+use \http\HttpPost as HttpPost;
+
 use \model\user\Users as Users;
+use \model\user\UsersDBO as UsersDBO;
 
 /**
  * Class Auth
@@ -16,13 +22,10 @@ class Auth
 {
 	public static function handleLogin()
 	{
-		// initialize the session
-		Session::init();
-
 		// if user is still not logged in, or the user has remember-me-cookie ? then try to login with cookie ("remember me" feature),
 		// if not then destroy session, handle user as "not logged in" and redirect user to login page
-		if ( isset($_SESSION['user_logged_in']) == false) {
-			if (isset($_COOKIE['rememberme']) == false || (Auth::loginWithCookie() == false)) {
+		if ( Session::get('user_logged_in', false) == false ) {
+			if ( Cookies::get('rememberme', false) == false || (Auth::loginWithCookie() == false)) {
 				Session::destroy();
 				header('location: ' . Config::Web('/login') );
 				return false;
@@ -35,17 +38,16 @@ class Auth
 	public static function handleLoginWithAPI($userHash = '')
 	{
 		$login_successful = false;
-		if ( is_string($userHash) ) {
+		if ( empty($userHash) == false ) {
 			$user = Model::Named('Users')->objectForApi_hash($userHash);
-			if ( $user instanceof model\user\UsersDBO ) {
-				Session::init();
+			if ( $user instanceof UsersDBO ) {
 				Session::set('user_logged_in', true);
 				Session::set('user_id', $user->id);
 				Session::set('user_name', $user->name);
 				Session::set('user_email', $user->email);
 				Session::set('user_account_type', $user->account_type);
 
-				Model::Named('Users')->stampLoginTimestamp($user);
+				$user->stampLogin();
 				$login_successful = true;
 			}
 		}
@@ -64,7 +66,8 @@ class Auth
 			return true;
 		}
 
-		if (Session::get('user_logged_in') == true && Session::get('user_account_type') === $role ) {
+		if (Session::get('user_logged_in') == true
+			&& (Session::get('user_account_type') === Users::AdministratorRole || Session::get('user_account_type') === $role )) {
 			return true;
 		}
 
@@ -75,13 +78,11 @@ class Auth
 
 	public static function login()
 	{
-		$values = splitPOSTValues($_POST);
-		if ( isset($values, $values['users']) == false ) {
+		$userLogin = HttpPost::getModelValue( 'users', null );
+		if ( is_array($userLogin) == false ) {
 			Session::addNegativeFeedback(Localized::Get("Auth", "USERNAME_FIELD_EMPTY"));
 			return false;
 		}
-
-		$userLogin = $values['users'];
 
 		// we do negative-first checks here
 		if (!isset($userLogin['user_name']) OR empty($userLogin['user_name'])) {
@@ -94,7 +95,7 @@ class Auth
 		}
 
 		$user_model = Model::Named("Users");
-		$user = $user_model->userByName($userLogin['user_name']);
+		$user = $user_model->objectForName($userLogin['user_name']);
 		if ( $user == false )
 		{
 			Session::addNegativeFeedback(Localized::Get("Auth", "LOGIN_FAILED"));
@@ -102,7 +103,8 @@ class Auth
 		}
 
 		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
-		if (($user->failed_logins >= 3) AND ($user->last_failed_login > (time()-30))) {
+//  		echo PHP_EOL . "*** " . var_export(($user->last_failed_login > (time()-30)), true) . PHP_EOL;
+		if (($user->failed_logins >= 3) AND ($user->last_failed_login >= (time()-30))) {
 			Session::addNegativeFeedback(Localized::Get("Auth", "PASSWORD_WRONG_3_TIMES"));
 			return false;
 		}
@@ -125,18 +127,14 @@ class Auth
 			}
 
 			// login process, write the user data into session
-			Session::init();
 			Session::set('user_logged_in', true);
 			Session::set('user_id', $user->id);
 			Session::set('user_name', $user->name);
 			Session::set('user_email', $user->email);
 			Session::set('user_account_type', $user->account_type);
 
-			// reset the failed login counter for that user (if necessary)
-			$user_model->clearFailedLogin($user);
-
-			// generate integer-timestamp for saving of last-login date
-			$user_model->stampLoginTimestamp($user);
+			// generate integer-timestamp for saving of last-login date, also clears the failed login stats
+			$user->stampLogin();
 
 			// if user has checked the "remember me" checkbox, then write cookie
 			if (isset($userLogin['user_rememberme'])) {
@@ -150,8 +148,7 @@ class Auth
 				$cookie_string = $cookie_string_first_part . ':' . $cookie_string_hash;
 
 				// set cookie
-				$domain = "." . parse_url(Config::Url(), PHP_URL_HOST);
-				setcookie('rememberme', $cookie_string, time() + COOKIE_RUNTIME, Config::Web('/'), $domain);
+				Cookies::set( 'rememberme', $cookie_string );
 			}
 
 			// return true to make clear the login was successful
@@ -159,7 +156,7 @@ class Auth
 
 		} else {
 			// increment the failed login counter for that user
-			$user_model->increaseFailedLogin($user);
+			$user->increaseFailedLogin();
 
 			// feedback message
 			Session::addNegativeFeedback(Localized::Get("Auth", "PASSWORD_WRONG" ));
@@ -174,8 +171,8 @@ class Auth
 	{
 		$user_model = Model::Named("Users");
 		$login_successful = false;
-		$cookie = isset($_COOKIE['rememberme']) ? $_COOKIE['rememberme'] : '';
-		if ($cookie)
+		$cookie = Cookies::get('rememberme', false);
+		if (empty($cookie) == false)
 		{
 			// check cookie's contents, check if cookie contents belong together
 			list ($user_id, $token, $hash) = explode(':', $cookie);
@@ -184,14 +181,13 @@ class Auth
 				$user = $user_model->userWithRemembermeToken($user_id, $token);
 				if ( $user != false )
 				{
-					Session::init();
 					Session::set('user_logged_in', true);
 					Session::set('user_id', $user->id);
 					Session::set('user_name', $user->name);
 					Session::set('user_email', $user->email);
 					Session::set('user_account_type', $user->account_type);
 
-					$user_model->stampLoginTimestamp($user);
+					$user->stampLogin();
 
 					$login_successful = true;
 				}
@@ -203,18 +199,9 @@ class Auth
 			Logger::logError("Cookie invalid", 'cookie', $cookie);
 
 			// delete the invalid cookie to prevent infinite login loops
-			Auth::deleteCookie();
+			Cookies::deleteCookie('rememberme');
 		}
 		return $login_successful;
-	}
-
-	public static function deleteCookie()
-	{
-		$domain = "." . parse_url(Config::Url(), PHP_URL_HOST);
-		// set the rememberme-cookie to ten years ago (3600sec * 365 days * 10).
-		// that's obviously the best practice to kill a cookie via php
-		// @see http://stackoverflow.com/a/686166/1114320
-		setcookie('rememberme', false, time() - (3600 * 3650), Config::Web('/'), $domain);
 	}
 
 	public static function httpAuthenticate($auth_type = 'Basic', $auth_user, $auth_pw)
@@ -228,18 +215,18 @@ class Auth
 		}
 
 		$user_model = Model::Named("Users");
-		$user = $user_model->userByName($auth_user);
+		$user = $user_model->objectForName($auth_user);
 		if ( $user == false ) {
 			Logger::logError( "Authentication failed for $auth_type, $auth_user, $auth_pw" );
 			return false;
 		}
 
 		// block login attempt if somebody has already failed 3 times and the last login attempt is less than 30sec ago
-		if (($user->failed_logins >= 3) AND ($user->last_failed_login > (time()-30))) {
+		if (($user->failed_logins() >= 3) AND ($user->last_failed_login() > (time()-30))) {
 			return false;
 		}
 
-		if ($user->active != 1) {
+		if ($user->active() != 1) {
 			return false;
 		}
 
@@ -256,7 +243,6 @@ class Auth
 		if ($VERIFIED_PASSWORD == true)
 		{
 			// login process, write the user data into session
-			Session::init();
 			Session::set('user_logged_in', true);
 			Session::set('user_id', $user->id);
 			Session::set('user_name', $user->name);
@@ -268,7 +254,7 @@ class Auth
 
 		} else {
 			// increment the failed login counter for that user
-			$user_model->increaseFailedLogin($user);
+			$user->increaseFailedLogin();
 			Logger::logError( "Authentication failed for $auth_type, $auth_user, $auth_pw" );
 			return false;
 		}

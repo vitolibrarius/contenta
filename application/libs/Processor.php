@@ -5,7 +5,7 @@ use \Database as Database;
 use \Localized as Localized;
 use \Logger as Logger;
 use \Exception as Exception;
-use \Session as Session;
+use \http\Session as Session;;
 use \Metadata as Metadata;
 
 /**

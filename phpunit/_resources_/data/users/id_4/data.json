@@ -1,0 +1,17 @@
+{
+    "id": 4,
+    "name": "login_test",
+    "password_hash": "$2y$10$ERcyCllStberN55w39i9PeN4oWIGb0TB7073eDfj/uU6BwnEc.dfu",
+    "email": "login_test@home.com",
+    "active": 1,
+    "account_type": "user",
+    "rememberme_token": null,
+    "creation_timestamp": 1463956649,
+    "last_login_timestamp": 1463956649,
+    "failed_logins": 3,
+    "last_failed_login": 1463956649,
+    "activation_hash": null,
+    "api_hash": null,
+    "password_reset_hash": null,
+    "password_reset_timestamp": null
+}

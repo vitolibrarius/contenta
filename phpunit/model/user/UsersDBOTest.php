@@ -2,6 +2,7 @@
 /**
  * DO NOT EDIT CUSTOM MARKERS
  * Generated from Class.tpl by PhpTestClassGenerator.php on 2016-05-28 15:53:59.
+ * https://phpunit.de/manual/current/en/appendixes.assertions.html
  */
 
 namespace model\user;

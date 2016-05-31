@@ -1,17 +1,17 @@
 {
-    "id": "2",
+    "id": 2,
     "name": "test",
     "password_hash": "$2y$10$ERcyCllStberN55w39i9PeN4oWIGb0TB7073eDfj/uU6BwnEc.dfu",
     "email": "test@home.com",
-    "active": "1",
-    "account_type": "standard",
+    "active": 1,
+    "account_type": "user",
     "rememberme_token": "ebb12fb0e9e0cbe21a9057a7e1d8900ca783e51e0e3eef7f68961732c4b7951a",
-    "creation_timestamp": "1463956649",
-    "last_login_timestamp": "1463956649",
-    "failed_logins": "1",
-    "last_failed_login": "1463956649",
+    "creation_timestamp": 1463956649,
+    "last_login_timestamp": 1463956649,
+    "failed_logins": 1,
+    "last_failed_login": 1463956649,
     "activation_hash": "bdc1fb90263e367db267a1c5e745af0209c0eb5c35c048b3464cbff156f3f998",
     "api_hash": "4a56ddb9031918c1523417fa606d21d8",
     "password_reset_hash": "77fe894591ccce0e4917ecfdf0aea18ab0b80485b5fa43fba98ae92b88ec9703",
-    "password_reset_timestamp": "1463956649"
+    "password_reset_timestamp": 1463956649
 }

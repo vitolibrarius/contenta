@@ -135,7 +135,10 @@
     "Auth": {
         "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator",
         "LOGIN_FAILED": "Login Failed",
-        "PASSWORD_WRONG": "Username or password mismatch.  Please check and retry."
+        "PASSWORD_FIELD_EMPTY": "Auth\/PASSWORD_FIELD_EMPTY",
+        "PASSWORD_WRONG": "Username or password mismatch.  Please check and retry.",
+        "PASSWORD_WRONG_3_TIMES": "Auth\/PASSWORD_WRONG_3_TIMES",
+        "USERNAME_FIELD_EMPTY": "Auth\/USERNAME_FIELD_EMPTY"
     },
     "DisplaySeries": {
         "title": "Series"

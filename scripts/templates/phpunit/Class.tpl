@@ -2,6 +2,7 @@
 /**
  * DO NOT EDIT CUSTOM MARKERS
  * Generated from {template_filename} by PhpTestClassGenerator.php on {datetime}.
+ * https://phpunit.de/manual/current/en/appendixes.assertions.html
  */
 
 {namespace}
