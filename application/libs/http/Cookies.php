@@ -61,7 +61,7 @@ class Cookies
 
 	public static function debugInfo()
 	{
-		$adapter = Session::adapter();
+		$adapter = Cookies::adapter();
 		return get_called_class() . " [" . get_short_class($adapter) . "] " . var_export($adapter->allValues(), true);
 	}
 }

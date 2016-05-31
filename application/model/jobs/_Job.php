@@ -273,58 +273,6 @@ abstract class _Job extends Model
 	/**
 	 *	Named fetches
 	 */
-	public function messagesSince( $sessionId, $lastCheck )
-	{
-		$select = SQL::Select( $this );
-		$select->orderBy( $this->sortOrder() );
-		$qualifiers = array();
-		if ( isset($sessionId)) {
-			$qualifiers[] = Qualifier::Equals( 'session', $sessionId);
-		}
-		if ( isset($lastCheck)) {
-			$qualifiers[] = Qualifier::GreaterThan( 'created', $lastCheck);
-		}
-
-		if ( count($qualifiers) > 0 ) {
-			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
-		}
-
-		$result = $select->fetchAll();
-		return $result;
-	}
-
-	public function mostRecentLike( $trace, $trace_id, $context, $context_id, $levelCode, $message )
-	{
-		$select = SQL::Select( $this );
-		$select->orderBy( $this->sortOrder() );
-		$qualifiers = array();
-		if ( isset($trace)) {
-			$qualifiers[] = Qualifier::Like( 'trace', $trace, SQL::SQL_LIKE_AFTER);
-		}
-		if ( isset($trace_id)) {
-			$qualifiers[] = Qualifier::Like( 'trace_id', $trace_id, SQL::SQL_LIKE_AFTER);
-		}
-		if ( isset($context)) {
-			$qualifiers[] = Qualifier::Like( 'context', $context, SQL::SQL_LIKE_AFTER);
-		}
-		if ( isset($context_id)) {
-			$qualifiers[] = Qualifier::Like( 'context_id', $context_id, SQL::SQL_LIKE_AFTER);
-		}
-		if ( isset($message)) {
-			$qualifiers[] = Qualifier::Like( 'message', $message, SQL::SQL_LIKE_AFTER);
-		}
-		if ( isset($levelCode)) {
-			$qualifiers[] = Qualifier::Equals( 'level_code', $levelCode);
-		}
-
-		if ( count($qualifiers) > 0 ) {
-			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
-		}
-
-		$result = $select->fetchAll();
-		return $result;
-	}
-
 
 	/** Set attributes */
 	public function setType_id( JobDBO $object = null, $value = null)

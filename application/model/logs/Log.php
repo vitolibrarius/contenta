@@ -58,7 +58,7 @@ class Log extends _Log
 			Log::context_id => Model::TEXT_TYPE,
 			Log::message => Model::TEXT_TYPE,
 			Log::session => Model::TEXT_TYPE,
-			Log::level_code => Model::TEXT_TYPE,
+			Log::level => Model::TEXT_TYPE,
 			Log::created => Model::DATE_TYPE
 		);
 	}
@@ -90,7 +90,7 @@ class Log extends _Log
 			switch ($attr) {
 				case Log::session:
 					return session_id();
-				case Log::level_code:
+				case Log::level:
 					return 'warning';
 			}
 		}
@@ -104,7 +104,7 @@ class Log extends _Log
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Log::level_code ) {
+		if ( $attr = Log::level ) {
 			$model = Model::Named('Log_Level');
 			return $model->allObjects();
 		}
@@ -142,9 +142,9 @@ class Log extends _Log
 		return parent::validate_session($object, $value);
 	}
 
-	function validate_level_code($object = null, $value)
+	function validate_level($object = null, $value)
 	{
-		return parent::validate_level_code($object, $value);
+		return parent::validate_level($object, $value);
 	}
 
 	function validate_created($object = null, $value)

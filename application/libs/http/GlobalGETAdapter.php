@@ -2,7 +2,7 @@
 
 namespace http;
 
-class PhpGETAdapter implements \interfaces\GlobalAdapter
+class GlobalGETAdapter implements \interfaces\GlobalAdapter
 {
 	public function allValues()
 	{

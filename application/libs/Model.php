@@ -365,8 +365,6 @@ abstract class Model
 		$select->orderBy( $order );
 		$select->limit( $limit );
 
-// 		\Session::addNegativeFeedback( $select->sqlStatement() . "; " . var_export($select->sqlParameters(), true));
-
 		return $select->fetchAll();
 	}
 

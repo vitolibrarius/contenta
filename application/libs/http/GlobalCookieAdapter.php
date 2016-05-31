@@ -2,9 +2,7 @@
 
 namespace http;
 
-use \Cookies as Cookies;
-
-class PhpCookieAdapter implements \interfaces\GlobalAdapter
+class GlobalCookieAdapter implements \interfaces\GlobalAdapter
 {
 	public function allValues()
 	{

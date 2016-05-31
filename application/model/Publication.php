@@ -2,7 +2,6 @@
 
 namespace model;
 
-use \http\Session as Session;;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;

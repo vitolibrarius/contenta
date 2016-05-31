@@ -195,7 +195,7 @@ class DataObject
 
 	public function changedValue( $attr = null, $existing = null )
 	{
-		if ( is_null($attr) === false && array_key_exists($attr, $this->unsavedUpdates)) {
+		if ( is_null($attr) === false && is_array($this->unsavedUpdates) && array_key_exists($attr, $this->unsavedUpdates)) {
 			return $this->unsavedUpdates[$attr];
 		}
 		return $existing;

@@ -27,14 +27,14 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 			. Log::context_id . " TEXT, "
 			. Log::message . " TEXT, "
 			. Log::session . " TEXT, "
-			. Log::level_code . " TEXT, "
+			. Log::level . " TEXT, "
 			. Log::created . " INTEGER, "
-			. "FOREIGN KEY (". Log::level_code .") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
+			. "FOREIGN KEY (". Log::level .") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
 		. ")";
 		$this->sqlite_execute( "log", $sql, "Create table log" );
 
-		$sql = 'CREATE  INDEX IF NOT EXISTS log_level_code on log (level_code)';
-		$this->sqlite_execute( "log", $sql, "Index on log (level_code)" );
+		$sql = 'CREATE  INDEX IF NOT EXISTS log_level on log (level)';
+		$this->sqlite_execute( "log", $sql, "Index on log (level)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS log_tracetrace_id on log (trace,trace_id)';
 		$this->sqlite_execute( "log", $sql, "Index on log (trace,trace_id)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS log_contextcontext_id on log (context,context_id)';
@@ -50,7 +50,7 @@ abstract class _Log extends Model
 	const context_id = 'context_id';
 	const message = 'message';
 	const session = 'session';
-	const level_code = 'level_code';
+	const level = 'level';
 	const created = 'created';
 
 	public function tableName() { return Log::TABLE; }
@@ -73,7 +73,7 @@ abstract class _Log extends Model
 			Log::context_id,
 			Log::message,
 			Log::session,
-			Log::level_code,
+			Log::level,
 			Log::created
 		);
 	}
@@ -159,15 +159,15 @@ abstract class _Log extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
-	public function allForLevel_code($value)
+	public function allForLevel($value)
 	{
-		return $this->allObjectsForKeyValue(Log::level_code, $value);
+		return $this->allObjectsForKeyValue(Log::level, $value);
 	}
 
 
 	public function allForLogLevel($obj)
 	{
-		return $this->allObjectsForFK(Log::level_code, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Log::level, $obj, $this->sortOrder(), 50);
 	}
 
 	public function joinAttributes( Model $joinModel = null )
@@ -175,7 +175,7 @@ abstract class _Log extends Model
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
 				case "log_level":
-					return array( Log::level_code, "code"  );
+					return array( Log::level, "code"  );
 					break;
 				default:
 					break;
@@ -203,10 +203,10 @@ abstract class _Log extends Model
 
 			if ( isset($logLevel) ) {
 				if ( $logLevel instanceof Log_LevelDBO) {
-					$params[Log::level_code] = $logLevel->code;
+					$params[Log::level] = $logLevel->code;
 				}
 				else if ( is_string($logLevel) ) {
-					$params[Log::level_code] = $logLevel;
+					$params[Log::level] = $logLevel;
 				}
 			}
 
@@ -245,10 +245,10 @@ abstract class _Log extends Model
 
 			if ( isset($logLevel) ) {
 				if ( $logLevel instanceof Log_LevelDBO) {
-					$updates[Log::level_code] = $logLevel->code;
+					$updates[Log::level] = $logLevel->code;
 				}
 				else if ( is_string($logLevel) ) {
-					$updates[Log::level_code] = $logLevel;
+					$updates[Log::level] = $logLevel;
 				}
 			}
 
@@ -335,7 +335,7 @@ abstract class _Log extends Model
 			$qualifiers[] = Qualifier::Like( 'message', $message, SQL::SQL_LIKE_AFTER);
 		}
 		if ( isset($levelCode)) {
-			$qualifiers[] = Qualifier::Equals( 'level_code', $levelCode);
+			$qualifiers[] = Qualifier::Equals( 'level', $levelCode);
 		}
 
 		if ( count($qualifiers) > 0 ) {
@@ -408,10 +408,10 @@ abstract class _Log extends Model
 		return false;
 	}
 
-	public function setLevel_code( LogDBO $object = null, $value = null)
+	public function setLevel( LogDBO $object = null, $value = null)
 	{
 		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Log::level_code => $value)) ) {
+			if ($this->updateObject( $object, array(Log::level => $value)) ) {
 				return $this->refreshObject($userObj);
 			}
 		}
@@ -467,13 +467,13 @@ abstract class _Log extends Model
 		$value = trim($value);
 		return null;
 	}
-	function validate_level_code($object = null, $value)
+	function validate_level($object = null, $value)
 	{
 		$value = trim($value);
-		if (isset($object->level_code) === false && empty($value) ) {
+		if (isset($object->level) === false && empty($value) ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
-				Log::level_code,
+				Log::level,
 				"FIELD_EMPTY"
 			);
 		}

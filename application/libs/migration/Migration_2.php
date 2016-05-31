@@ -47,14 +47,14 @@ class Migration_2 extends Migrator
 			. Log::context_id . " TEXT, "
 			. Log::message . " TEXT, "
 			. Log::session . " TEXT, "
-			. Log::level_code . " TEXT, "
+			. Log::level . " TEXT, "
 			. Log::created . " INTEGER, "
-			. "FOREIGN KEY (". Log::level_code .") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
+			. "FOREIGN KEY (". Log::level .") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
 		. ")";
 		$this->sqlite_execute( "log", $sql, "Create table log" );
 
-		$sql = 'CREATE  INDEX IF NOT EXISTS log_level_code on log (level_code)';
-		$this->sqlite_execute( "log", $sql, "Index on log (level_code)" );
+		$sql = 'CREATE  INDEX IF NOT EXISTS log_level on log (level)';
+		$this->sqlite_execute( "log", $sql, "Index on log (level)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS log_tracetrace_id on log (trace,trace_id)';
 		$this->sqlite_execute( "log", $sql, "Index on log (trace,trace_id)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS log_contextcontext_id on log (context,context_id)';

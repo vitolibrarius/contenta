@@ -68,7 +68,7 @@ class HttpPost
 
 	public static function debugInfo()
 	{
-		$adapter = Session::adapter();
+		$adapter = HttpPost::adapter();
 		return get_called_class() . " [" . get_short_class($adapter) . "] " . var_export($adapter->allValues(), true);
 	}
 }

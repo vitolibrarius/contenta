@@ -56,7 +56,7 @@ class HttpGet
 
 	public static function debugInfo()
 	{
-		$adapter = Session::adapter();
+		$adapter = HttpGet::adapter();
 		return get_called_class() . " [" . get_short_class($adapter) . "] " . var_export($adapter->allValues(), true);
 	}
 }

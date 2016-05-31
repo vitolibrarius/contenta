@@ -16,7 +16,7 @@
 <section>
 	<div class="row">
 
-<?php if (Session::get('user_logged_in') == true):?>
+<?php if (\http\Session::get('user_logged_in') == true):?>
 
 	<?php
 		$card = new html\Card();

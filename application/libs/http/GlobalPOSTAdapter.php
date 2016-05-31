@@ -2,7 +2,7 @@
 
 namespace http;
 
-class PhpPOSTAdapter implements \interfaces\GlobalAdapter
+class GlobalPOSTAdapter implements \interfaces\GlobalAdapter
 {
 	public function allValues()
 	{

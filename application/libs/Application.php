@@ -4,6 +4,8 @@ use \Logger as Logger;
 use \Exception as Exception;
 use \ClassNotFoundException as ClassNotFoundException;
 
+use \http\Session as Session;
+
 use utilities\Stopwatch as Stopwatch;
 
 /**

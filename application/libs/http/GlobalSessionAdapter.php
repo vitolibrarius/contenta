@@ -2,13 +2,10 @@
 
 namespace http;
 
-use \http\Session as Session;;
-
 class GlobalSessionAdapter implements \interfaces\GlobalAdapter
 {
 	public function __construct()
 	{
-		throw new \Exception( "GlobalSessionAdapter constructed" );
 		// if no session exist, start the session
 		if (session_id() == '') {
 			session_start();

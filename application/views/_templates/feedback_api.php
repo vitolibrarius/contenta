@@ -1,8 +1,8 @@
 <?php
 
 // get the feedback (they are arrays, to make multiple positive/negative messages possible)
-$feedback_positive = Session::positiveFeedback();
-$feedback_negative = Session::negativeFeedback();
+$feedback_positive = \http\Session::positiveFeedback();
+$feedback_negative = \http\Session::negativeFeedback();
 
 // echo out positive messages
 if (isset($feedback_positive)) {
