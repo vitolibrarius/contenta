@@ -43,6 +43,40 @@ class Users extends _Users
 		);
 	}
 
+	public function createObject(array $values = array())
+	{
+		if ( isset($values) ) {
+			if ( isset($values[Users::creation_timestamp]) == false) {
+				$values[Users::creation_timestamp] = time();
+			}
+
+			if ( isset($values[Users::active]) == false) {
+				$values[Users::active] = true;
+			}
+
+			if ( isset($values[Users::account_type]) == false) {
+				$values[Users::account_type] = Users::StandardRole;
+			}
+
+			if ( isset($values['password'], $values['password_check'])
+				&& empty($values['password']) == false && empty($values['password_check']) == false ) {
+				if ( PHP_VERSION_ID > 50500 )
+				{
+					$hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+					$password_hash = password_hash($values['password'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+				}
+				else
+				{
+					$password_hash = hash(HASH_DEFAULT_ALGO, $values['password']);
+				}
+				$values[Users::password_hash] = $password_hash;
+			}
+		}
+
+		return parent::createObject($values);
+	}
+
+
 	public function update( UsersDBO $obj,
 		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
 	{
@@ -68,23 +102,38 @@ class Users extends _Users
 		return $obj;
 	}
 
+	public function updateObject(DataObject $object = null, array $values) {
+		if (isset($object) && $object instanceof model\UsersDBO ) {
+			if ( isset($values['password'], $values['password_check'])
+				&& empty($values['password']) == false && empty($values['password_check']) == false
+				&& $values['password'] === $values['password_check']) {
+				if ( PHP_VERSION_ID > 50500 )
+				{
+					$hash_cost_factor = (defined('HASH_COST_FACTOR') ? HASH_COST_FACTOR : null);
+					$password_hash = password_hash($values['password'], PASSWORD_DEFAULT, array('cost' => $hash_cost_factor));
+				}
+				else
+				{
+					$password_hash = hash(HASH_DEFAULT_ALGO, $values['password']);
+				}
+				$values[Users::password_hash] = $password_hash;
+			}
 
-	public function attributesFor($object = null, $type = null) {
+			if ( isset($values[Users::active]) && is_bool($values[Users::active]) && $values[Users::active] != $object->isActive()) {
+				$values[Users::active] = (boolval($values[Users::active]) ? 1 : 0);
+			}
+		}
+
+		return parent::updateObject($object, $values);
+	}
+
+	public function attributesFor($object = null, $type = null ) {
 		return array(
 			Users::name => Model::TEXT_TYPE,
 			Users::email => Model::TEXT_TYPE,
+			"password" => Model::PASSWORD_TYPE,
+			"password_check" => Model::PASSWORD_TYPE,
 			Users::active => Model::FLAG_TYPE,
-			Users::account_type => Model::TEXT_TYPE,
-			Users::rememberme_token => Model::TEXT_TYPE,
-			Users::api_hash => Model::TEXT_TYPE,
-			Users::password_hash => Model::TEXT_TYPE,
-			Users::password_reset_hash => Model::TEXT_TYPE,
-			Users::activation_hash => Model::TEXT_TYPE,
-			Users::failed_logins => Model::INT_TYPE,
-			Users::creation_timestamp => Model::DATE_TYPE,
-			Users::last_login_timestamp => Model::DATE_TYPE,
-			Users::last_failed_login => Model::DATE_TYPE,
-			Users::password_reset_timestamp => Model::DATE_TYPE
 		);
 	}
 
@@ -94,7 +143,8 @@ class Users extends _Users
 			return array(
 				Users::name,
 				Users::email,
-				Users::password_hash
+				"password",
+				"password_check"
 			);
 		}
 		return parent::attributesMandatory($object);
@@ -161,6 +211,36 @@ class Users extends _Users
 	}
 
 	/** Validation */
+	public function validateForSave($object = null, array &$values = array())
+	{
+		$validationErrors = parent::validateForSave($object, $values);
+
+		// if the object is null, then the password is mandatory
+		if ( is_null($object) || isset($values[Users::password_hash]) ) {
+			$pswd = (isset($values['password']) ? $values['password'] : null);
+			$chk = (isset($values['password_check']) ? $values['password_check'] : null);
+			$error = $this->validatePassword($object, $pswd, $chk);
+			if ( empty($error) == false ) {
+				$validationErrors['password'] = $error;
+			}
+		}
+		return $validationErrors;
+	}
+
+	function validatePassword($object = null, $passwd = null, $passwdrepeat = null)
+	{
+		if (empty($passwd) OR empty($passwdrepeat)) {
+			return Localized::ModelValidation($this->tableName(), "password", "PASSWORD_FIELD_EMPTY");
+		}
+		else if ($passwd !== $passwdrepeat) {
+			return Localized::ModelValidation($this->tableName(), "password", "PASSWORD_REPEAT_WRONG");
+		}
+		else if (strlen($passwd) < 6) {
+			return Localized::ModelValidation($this->tableName(), "password", "PASSWORD_TOO_SHORT");
+		}
+		return null;
+	}
+
 	function validate_name($object = null, $value)
 	{
 		$validation = parent::validate_name($object, $value);

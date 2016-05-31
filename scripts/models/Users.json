@@ -3,7 +3,7 @@
         "id": 	{ "column": "id", "type": "INTEGER" },
         "name": {
         	"column": "name",
-        	"length": 256,
+        	"length": 64,
         	"type": "TEXT",
         	"collate": "NOCASE",
         	"nullable": false,
@@ -56,6 +56,27 @@
             "ownsDestination" : true
     	}
     },
+	"fetches" : {
+		"userWithRemembermeToken": {
+			"arguments": [ "user_id", "token" ],
+			"maxCount" : 1,
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Equals",
+					"keyAttribute": "id",
+					"argAttribute": "user_id",
+					"optional": false
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "rememberme_token",
+					"argAttribute": "token",
+					"optional": false
+				}
+			]
+		}
+	},
 	"indexes" : [
     	{ "columns": ["rememberme_token"], "unique": true },
     	{ "columns": ["name", "password_hash"], "unique": true },

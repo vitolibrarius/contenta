@@ -283,6 +283,32 @@ abstract class _Users extends Model
 	/**
 	 *	Named fetches
 	 */
+	public function userWithRemembermeToken( $user_id, $token )
+	{
+		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
+		$qualifiers = array();
+		$qualifiers[] = Qualifier::Equals( 'id', $user_id);
+		$qualifiers[] = Qualifier::Equals( 'rememberme_token', $token);
+
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
+		}
+
+		$result = $select->fetchAll();
+		if ( is_array($result) ) {
+			$result_size = count($result);
+			if ( $result_size == 1 ) {
+				return $result[0];
+			}
+			else if ($result_size > 1 ) {
+				throw new \Exception( "userWithRemembermeToken expected 1 result, but fetched " . count($result) );
+			}
+		}
+
+		return false;
+	}
+
 
 	/** Set attributes */
 	public function setName( UsersDBO $object = null, $value = null)

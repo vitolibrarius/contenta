@@ -36,7 +36,7 @@ class Auth
 	{
 		$login_successful = false;
 		if ( is_string($userHash) ) {
-			$user = Model::Named('Users')->userByApiHash($userHash);
+			$user = Model::Named('Users')->objectForApi_hash($userHash);
 			if ( $user instanceof model\user\UsersDBO ) {
 				Session::init();
 				Session::set('user_logged_in', true);
@@ -142,7 +142,7 @@ class Auth
 			if (isset($userLogin['user_rememberme'])) {
 
 				// generate 64 char random string and update database
-				$random_token_string = $user_model->generateRememberMeToken($user);
+				$random_token_string = $user->generateRememberme_token();
 
 				// generate cookie string that consists of user id, random string and combined hash of both
 				$cookie_string_first_part = $user->id . ':' . $random_token_string;
@@ -181,7 +181,7 @@ class Auth
 			list ($user_id, $token, $hash) = explode(':', $cookie);
 			if ($hash === hash('sha256', $user_id . ':' . $token) AND (empty($token) == false))
 			{
-				$user = $user_model->userByToken($user_id, $token);
+				$user = $user_model->userWithRemembermeToken($user_id, $token);
 				if ( $user != false )
 				{
 					Session::init();

@@ -345,11 +345,17 @@ foreach( $objectAttributes as $name => $detailArray ) {
 
 		$result = $select->fetchAll();
 <?php if (isset($details["maxCount"]) && $details["maxCount"] == 1) : ?>
-		if ( is_array($result) && count($result) > 1 ) {
-			throw new \Exception( <?php echo $name; ?> . " expected 1 result, but fetched " . count($result) );
+		if ( is_array($result) ) {
+			$result_size = count($result);
+			if ( $result_size == 1 ) {
+				return $result[0];
+			}
+			else if ($result_size > 1 ) {
+				throw new \Exception( "<?php echo $name; ?> expected 1 result, but fetched " . count($result) );
+			}
 		}
 
-		return (is_array($result) ? $result[0] : false );
+		return false;
 <?php else : ?>
 		return $result;
 <?php endif; // maxResults ?>

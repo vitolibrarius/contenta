@@ -106,10 +106,10 @@ class DataObject
 	}
 
 	public function formattedDate( $key, $format = 'M d, Y' ) {
-		if (isset($key, $this->{$key})) {
-			$val = $this->{$key};
+		if (isset($key)) {
+			$val = dbo_valueForKeypath( $key, $this );
 			if ( is_numeric($val) ) {
-				return date($format, $this->{$key});
+				return date($format, $val);
 			}
 
 			return $val;
@@ -195,7 +195,7 @@ class DataObject
 
 	public function changedValue( $attr = null, $existing = null )
 	{
-		if ( is_null($attr) === false && isset($this->unsavedUpdates[$attr])) {
+		if ( is_null($attr) === false && array_key_exists($attr, $this->unsavedUpdates)) {
 			return $this->unsavedUpdates[$attr];
 		}
 		return $existing;

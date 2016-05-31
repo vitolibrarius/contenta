@@ -17,11 +17,11 @@ function dbo_valueForKeypath( $keypath, DataObject $dbo = null, $separator = '/'
 			else if (is_array($result) && isset($result[$item])) {
 				$result = $result[$item];
 			}
-			else if ( property_exists($result, $item)) {
-				$result = $result->{$item};
-			}
 			else if (method_exists($result, $item)) {
 				$result = $result->{$item}();
+			}
+			else if ( property_exists($result, $item)) {
+				$result = $result->{$item};
 			}
 			else {
 				return null;

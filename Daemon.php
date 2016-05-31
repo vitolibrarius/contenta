@@ -106,7 +106,7 @@ if ( $metadata->isMeta( CONFIG_OVERRIDE ) ) {
 }
 
 $user_api = $metadata->getMeta( "user_api" );
-$user = Model::Named("Users")->userByApiHash($user_api);
+$user = Model::Named("Users")->objectForApi_hash($user_api);
 
 $guid = ( ($metadata->isMeta("guid")) ? $metadata->getMeta("guid") : uuid());
 $job_id = ( ($metadata->isMeta("job_id")) ? $metadata->getMeta("job_id") : null);

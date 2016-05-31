@@ -185,11 +185,17 @@ abstract class _Version extends Model
 		}
 
 		$result = $select->fetchAll();
-		if ( is_array($result) && count($result) > 1 ) {
-			throw new \Exception( latestVersion . " expected 1 result, but fetched " . count($result) );
+		if ( is_array($result) ) {
+			$result_size = count($result);
+			if ( $result_size == 1 ) {
+				return $result[0];
+			}
+			else if ($result_size > 1 ) {
+				throw new \Exception( "latestVersion expected 1 result, but fetched " . count($result) );
+			}
 		}
 
-		return (is_array($result) ? $result[0] : false );
+		return false;
 	}
 
 

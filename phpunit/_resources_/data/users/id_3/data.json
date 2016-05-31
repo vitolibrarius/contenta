@@ -1,0 +1,16 @@
+{
+    "id": "3",
+    "name": "johnnyfail",
+    "password_hash": "$2y$10$kT00y33yMtlzqb4yNbQOWu8ASDhn3C3b4HA2MQ9MbCQ8lM0Q45MCu",
+    "email": "johnny@fail.org",
+    "active": "1",
+    "account_type": "standard",
+    "rememberme_token": "29c8a195a205990473745e4f335446e2fdb7a3083a6e52d9d1cc7d466b8dd487",
+    "last_login_timestamp": "1463956649",
+    "failed_logins": "2",
+    "last_failed_login": "1463956649",
+    "activation_hash": "a508c9525aa7f25cbf9e341979f95ea8227d60eda23de7db74440261ca1d5bce",
+    "api_hash": "01fbdc44ef819db6273bc30965a23814",
+    "password_reset_hash": "ca1c08a129981f76816e89e0fa43d82db25ea082522a51a44edbe3333d239410",
+    "password_reset_timestamp": "1463956649"
+}

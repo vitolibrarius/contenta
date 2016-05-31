@@ -448,7 +448,7 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 			Logger::logError( "Failed to create record for empty values", __METHOD__, $this->tableName() );
 		}
 
-		return array( false, array());
+		return array( false, array("No values"));
 	}
 
 	public function deleteAllForKeyValue($key, $value = null)
