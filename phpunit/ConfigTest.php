@@ -29,7 +29,9 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testInstance()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$a = Config::instance();
+		$b = COnfig::instance();
+		$this->assertEquals( $a, $b );
 	}
 
 	/**
@@ -40,7 +42,19 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGet()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$value = Config::Get("NoMatchNoDefault", null);
+		$this->assertNull( $value );
+
+		$value = Config::Get("NoMatchNoDefault", "default_value");
+		$this->assertEquals( "default_value",  $value );
+
+		$expected = array(
+			"path" => "/tmp/ContentaTest/phpunit",
+			"cache" => "cache",
+			"processing" => "processing"
+		);
+		$value = Config::Get("Repository", null);
+		$this->assertEquals( $expected,  $value );
 	}
 
 	/**
@@ -132,7 +146,12 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetInteger()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$minsize = Config::GetInteger( "UploadImport/MinSize", 5);
+		$this->assertEquals( 5, $minsize );
+
+		Config::instance()->setValue( "UploadImport/MinSize", 10 );
+		$minsize = Config::GetInteger( "UploadImport/MinSize", 5);
+		$this->assertEquals( 10, $minsize );
 	}
 
 	/**
@@ -143,7 +162,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAppName()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$AppName = Config::AppName();
+		$this->assertEquals( "Contenta", $AppName );
 	}
 
 	/**
@@ -154,7 +174,17 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testWeb()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$root = Config::Web();
+		$this->assertEquals( "/contenta", $root );
+
+		$root = Config::Web("Admin");
+		$this->assertEquals( "/contenta/Admin", $root );
+
+		$root = Config::Web( "Admin", "editSeries", 1234 );
+		$this->assertEquals( "/contenta/Admin/editSeries/1234", $root );
+
+		$root = Config::Web( array("Admin", "editSeries", 1234) );
+		$this->assertEquals( "/contenta/Admin/editSeries/1234", $root );
 	}
 
 	/**
@@ -165,7 +195,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUrl()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$root = Config::Url();
+        $this->assertRegExp("~https?://(\\w\\w*-?\\w+)\\.([\\w(\\w*-?\\w)+])+/~", $root);
 	}
 
 	/**
@@ -176,7 +207,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testInitialize()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -187,7 +217,14 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testDumpConfig()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$configArray = Config::instance()->dumpConfig();
+		$this->assertTrue( is_array( $configArray), "Not an array?" );
+		$this->assertGreaterThanOrEqual( 5, count($configArray) );
+		$this->assertArrayHasKey("Internet", $configArray);
+		$this->assertArrayHasKey("Repository", $configArray);
+		$this->assertArrayHasKey("Database", $configArray);
+		$this->assertArrayHasKey("Logging", $configArray);
+		$this->assertArrayHasKey("Debug", $configArray);
 	}
 
 	/**
@@ -198,7 +235,19 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetValue()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$value = Config::instance()->getValue("NoMatchNoDefault", null);
+		$this->assertNull( $value );
+
+		$value = Config::instance()->getValue("NoMatchNoDefault", "default_value");
+		$this->assertEquals( "default_value",  $value );
+
+		$expected = array(
+			"path" => "/tmp/ContentaTest/phpunit",
+			"cache" => "cache",
+			"processing" => "processing"
+		);
+		$value = Config::instance()->getValue("Repository", null);
+		$this->assertEquals( $expected,  $value );
 	}
 
 	/**
@@ -209,7 +258,9 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetValue()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		Config::instance()->setValue( "UploadImport/MinSize", 10 );
+		$minsize = Config::GetInteger( "UploadImport/MinSize", 5);
+		$this->assertEquals( 10, $minsize );
 	}
 
 	/**
@@ -220,7 +271,9 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetIntegerValue()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		Config::instance()->setValue( "UploadImport/MinSize", 10 );
+		$minsize = Config::instance()->getIntegerValue( "UploadImport/MinSize", 5);
+		$this->assertEquals( 10, $minsize );
 	}
 
 	/**
@@ -231,7 +284,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAbsolutePathValue()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$path = Config::instance()->absolutePathValue("Repository/processing", null);
+		$this->assertEquals( "/tmp/ContentaTest/phpunit/processing", $path );
 	}
 
 	/**
@@ -242,7 +296,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testRepositoryDirectory()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$path = Config::instance()->repositoryDirectory();
+		$this->assertEquals( "/tmp/ContentaTest/phpunit", $path );
 	}
 
 	/**
@@ -253,7 +308,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testMediaDirectory()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$path = Config::instance()->mediaDirectory();
+		$this->assertEquals( "/tmp/ContentaTest/phpunit/media", $path );
 	}
 
 	/**
@@ -264,7 +320,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCacheDirectory()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$path = Config::instance()->cacheDirectory();
+		$this->assertEquals( "/tmp/ContentaTest/phpunit/cache", $path );
 	}
 
 	/**
@@ -275,7 +332,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testProcessingDirectory()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$path = Config::instance()->processingDirectory();
+		$this->assertEquals( "/tmp/ContentaTest/phpunit/processing", $path );
 	}
 
 	/**
@@ -286,7 +344,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testLoggingDirectory()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$path = Config::instance()->loggingDirectory();
+		$this->assertEquals( "/tmp/ContentaTest/phpunit/logs", $path );
 	}
 
 

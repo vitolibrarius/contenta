@@ -141,7 +141,7 @@ class Config
 
 	public function dumpConfig()
 	{
-		printf( var_export( $this->configuration, true ));
+		return $this->configuration;
 	}
 
 	/**
