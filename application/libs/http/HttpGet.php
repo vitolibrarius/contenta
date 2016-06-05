@@ -8,6 +8,9 @@ namespace http;
  * handles the HttpGet stuff. creates HttpGet when no one exists, sets and
  * gets values, and closes the HttpGet properly (=logout). Those methods
  * are STATIC, which means you can call them with HttpGet::get(XXX);
+ $search_html = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS);
+$search_url = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_ENCODED);
+
  */
 class HttpGet
 {

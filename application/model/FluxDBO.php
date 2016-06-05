@@ -43,7 +43,7 @@ class FluxDBO extends DataObject
 
 	public function isComplete() {
 		return (isset($this->dest_guid, $this->dest_status) &&
-			($this->dest_status == 'Completed' || startsWith($this->dest_status, 'Failed')));
+			($this->dest_status == 'Completed' || startsWith('Failed', $this->dest_status)));
 	}
 
 	public function errorReason() {

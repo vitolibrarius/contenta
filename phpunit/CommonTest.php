@@ -19,6 +19,24 @@ class CommonTest extends PHPUnit_Framework_TestCase
     {
     }
 
+    public function sanitationFilenames()
+    {
+		$metadata = test_jsonResource("SanitationFilenames.json");
+		return $metadata->getMeta( "/" );
+    }
+
+    public function sanitationStrings()
+    {
+		$metadata = test_jsonResource("SanitationStrings.json");
+		return $metadata->getMeta( "/" );
+    }
+
+    public function normalizationStrings()
+    {
+		$metadata = test_jsonResource("NormalizedStrings.json");
+		return $metadata->getMeta( "/" );
+    }
+
 /*	 Test functions */
 
 	/**
@@ -29,7 +47,13 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCallerClassAndMethod()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$caller = callerClassAndMethod();
+		$this->assertEquals( 'CommonTest', $caller['class'] );
+		$this->assertEquals( 'testCallerClassAndMethod', $caller['function'] );
+
+		$caller = callerClassAndMethod('testCallerClassAndMethod');
+		$this->assertEquals( 'ReflectionMethod', $caller['class'] );
+		$this->assertEquals( 'invokeArgs', $caller['function'] );
 	}
 
 	/**
@@ -40,7 +64,15 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSplit_lines()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$lines = split_lines( null );
+		$this->assertCount( 0, $lines );
+
+		$lines = split_lines( "one line no breaks" );
+		$this->assertCount( 1, $lines );
+
+		$text = "one" .  PHP_EOL . "two\rthree\rfour\n\rfive";
+		$lines = split_lines( $text );
+		$this->assertCount( 5, $lines );
 	}
 
 	/**
@@ -51,40 +83,39 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGet_short_class()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers	isset_default
-	 * 			T_FUNCTION isset_default ( $variable, $default = null)
-	 * @todo	Implement testIsset_default().
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 20:30:12.
-	 */
-	public function testIsset_default()
-	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertEquals( 'CommonTest', get_short_class($this) );
 	}
 
 	/**
 	 * @covers	startsWith
-	 * 			T_FUNCTION startsWith ( $haystack, $needle)
+	 * 			T_FUNCTION startsWith ( $needle, $haystack)
 	 * @todo	Implement testStartsWith().
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 20:30:12.
 	 */
 	public function testStartsWith()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertFalse( startsWith(null, "Vitolibrarious"));
+		$this->assertFalse( startsWith("vito", null));
+		$this->assertFalse( startsWith(null, null));
+		$this->assertFalse( startsWith("vito", "Vitolibrarious"));
+
+		$this->assertTrue( startsWith("vito", "vitolibrarious"));
 	}
 
 	/**
 	 * @covers	endsWith
-	 * 			T_FUNCTION endsWith ( $haystack, $needle)
+	 * 			T_FUNCTION endsWith ( $needle, $haystack)
 	 * @todo	Implement testEndsWith().
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 20:30:12.
 	 */
 	public function testEndsWith()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertFalse( endsWith(null, "Vitolibrarious"));
+		$this->assertFalse( endsWith("vito", null));
+		$this->assertFalse( endsWith(null, null));
+		$this->assertFalse( endsWith("librarious", "VitoLibrarious"));
+
+		$this->assertTrue( endsWith("librarious", "vitolibrarious"));
 	}
 
 	/**
@@ -95,7 +126,14 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testContains()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$this->assertFalse( contains(null, "Vitolibrarious"));
+		$this->assertFalse( contains("vito", null));
+		$this->assertFalse( contains(null, null));
+		$this->assertFalse( contains("lib", "VitoLibrarious"));
+
+		$this->assertTrue( contains("lib", "vitolibrarious"));
+		$this->assertTrue( contains("vito", "vitolibrarious"));
+		$this->assertTrue( contains("rious", "vitolibrarious"));
 	}
 
 	/**
@@ -106,7 +144,18 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testZipFileList()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$zipfile = test_mediaSamplesFile( null );
+		$filelist = zipFileList($zipfile);
+		$this->assertFalse( is_array($filelist) );
+
+		$zipfile = test_mediaSamplesFile( 'not a file' );
+		$filelist = zipFileList($zipfile);
+		$this->assertFalse( is_array($filelist) );
+
+		$zipfile = test_mediaSamplesFile( "Space_Wikimedia.cbz" );
+		$filelist = zipFileList($zipfile);
+		$this->assertTrue( is_array($filelist) );
+		$this->assertCount( 4, $filelist );
 	}
 
 	/**
@@ -117,7 +166,20 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testClassNames()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$classes = classNames( null );
+		$this->assertFalse( is_array($classes) );
+
+		$classes = classNames( "/not/a/real/path" );
+		$this->assertFalse( is_array($classes) );
+
+		$zipfile = test_mediaSamplesFile( "Space_Wikimedia.cbz" );
+		$classes = classNames( $zipfile );
+		$this->assertTrue( is_array($classes) );
+		$this->assertCount( 0, $classes );
+
+		$classes = classNames( __FILE__ );
+		$this->assertTrue( is_array($classes) );
+		$this->assertCount( 1, $classes );
 	}
 
 	/**
@@ -128,7 +190,9 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUuid()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$uuid = uuid();
+		$this->assertTrue( is_string($uuid) );
+		$this->assertEquals( 36, strlen($uuid));
 	}
 
 	/**
@@ -139,51 +203,80 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUuidShort()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$uuid = uuidShort();
+		$this->assertTrue( is_string($uuid) );
+		$this->assertEquals( 32, strlen($uuid));
 	}
 
 	/**
 	 * @covers	sanitize_filename
 	 * 			T_FUNCTION sanitize_filename ( $string, $maxLength, $force_lowercase = true, $anal = false)
-	 * @todo	Implement testSanitize_filename().
+     * @dataProvider sanitationFilenames
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 20:30:12.
 	 */
-	public function testSanitize_filename()
+	public function testSanitize_filename( $teststring, $tests )
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		foreach( $tests as $type => $expected ) {
+			list( $name, $length, $lowercase, $anal ) = explode(":", $type);
+
+			// Returns TRUE for "1", "true", "on" and "yes"
+			// Returns FALSE for "0", "false", "off" and "no"
+			// Returns NULL otherwise.
+			$lowercase = filter_var($lowercase, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+			$anal = filter_var($anal, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+			$sane = sanitize_filename( $teststring, intval($length), $lowercase, $anal);
+			$this->assertTrue( strlen($sane) <= $length, "String length" );
+			$this->assertEquals( $expected, $sane, "Using rules $type = " . intval($length)
+				.":". var_export($lowercase, true) .":". var_export($anal, true) );
+		}
 	}
 
 	/**
 	 * @covers	sanitize
 	 * 			T_FUNCTION sanitize ( $string, $force_lowercase = true, $anal = false)
-	 * @todo	Implement testSanitize().
+     * @dataProvider sanitationStrings
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 20:30:12.
 	 */
-	public function testSanitize()
+	public function testSanitize( $teststring, $tests)
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		foreach( $tests as $type => $expected ) {
+			list( $name, $lowercase, $anal ) = explode(":", $type);
+
+			// Returns TRUE for "1", "true", "on" and "yes"
+			// Returns FALSE for "0", "false", "off" and "no"
+			// Returns NULL otherwise.
+			$lowercase = filter_var($lowercase, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+			$anal = filter_var($anal, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+			$sane = sanitize( $teststring, $lowercase, $anal);
+			$this->assertEquals( $expected, $sane, "Using rule $type ("
+				. var_export($lowercase, true) .":". var_export($anal, true) . ")" );
+		}
 	}
 
 	/**
 	 * @covers	normalize
 	 * 			T_FUNCTION normalize ( $string)
-	 * @todo	Implement testNormalize().
+     * @dataProvider normalizationStrings
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 20:30:12.
 	 */
-	public function testNormalize()
+	public function testNormalize($teststring, $normal, $normal_search)
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$new_normal = normalize( $teststring );
+		$this->assertEquals( $new_normal, $normal );
 	}
 
 	/**
 	 * @covers	normalizeSearchString
 	 * 			T_FUNCTION normalizeSearchString ( $string = null)
-	 * @todo	Implement testNormalizeSearchString().
+     * @dataProvider normalizationStrings
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 20:30:12.
 	 */
-	public function testNormalizeSearchString()
+	public function testNormalizeSearchString($teststring, $normal, $normal_search)
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$new_normal = normalizeSearchString( $teststring );
+		$this->assertEquals( $new_normal, $normal_search );
 	}
 
 	/**
@@ -205,7 +298,23 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testLines()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$lines = lines();
+		$this->assertNull( $lines, "null" );
+
+		$lines = lines('');
+		$this->assertNull( $lines, "empty string" );
+
+		$lines = lines("\n\n\n\n");
+		$this->assertNotNull( $lines, "newlines only" );
+		$this->assertCount( 0, $lines, "newlines only, no results" );
+
+		$lines = lines("\n\r\n\r\r\n\n");
+		$this->assertNotNull( $lines, "newlines only" );
+		$this->assertCount( 0, $lines, "newlines only, no results" );
+
+		$lines = lines("the\nquick brown fox junmped\n\n\nover the lazy dog");
+		$this->assertNotNull( $lines, "newlines only" );
+		$this->assertCount( 3, $lines, "newlines only, no results" );
 	}
 
 	/**
@@ -216,18 +325,43 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testConvertToBytes()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$bytes = convertToBytes();
+		$this->assertEquals( 0,  $bytes, "null" );
+
+		$bytes = convertToBytes('');
+		$this->assertEquals( 0, $bytes, "null" );
+
+		$bytes = convertToBytes('123');
+		$this->assertEquals( 123, $bytes, "null" );
+
+		$bytes = convertToBytes('1048576');
+		$this->assertEquals( 1048576, $bytes, "null" );
+
+		$bytes = convertToBytes('10M');
+		$this->assertEquals( 10485760, $bytes, "null" );
 	}
 
 	/**
 	 * @covers	formatSizeUnits
 	 * 			T_FUNCTION formatSizeUnits ( $value)
-	 * @todo	Implement testFormatSizeUnits().
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 20:30:12.
 	 */
 	public function testFormatSizeUnits()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$bytes = formatSizeUnits();
+		$this->assertEquals( "0 bytes",  $bytes, "null" );
+
+		$bytes = formatSizeUnits('');
+		$this->assertEquals( "0 bytes", $bytes, "null" );
+
+		$bytes = formatSizeUnits('123');
+		$this->assertEquals( "123 bytes", $bytes, "null" );
+
+		$bytes = formatSizeUnits('1048576');
+		$this->assertEquals( "1.00 MB", $bytes, "null" );
+
+		$bytes = formatSizeUnits('10M');
+		$this->assertEquals( "10.00 MB", $bytes, "null" );
 	}
 
 	/**
@@ -238,7 +372,20 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testFormattedTimeElapsed()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$bytes = formattedTimeElapsed();
+		$this->assertEquals( "less than one second",  $bytes, "null" );
+
+		$bytes = formattedTimeElapsed('');
+		$this->assertEquals( "less than one second", $bytes, "null" );
+
+		$bytes = formattedTimeElapsed('123');
+		$this->assertEquals( "2 minutes", $bytes, "null" );
+
+		$bytes = formattedTimeElapsed('1048576');
+		$this->assertEquals( "1 week", $bytes, "null" );
+
+		$bytes = formattedTimeElapsed('104857653');
+		$this->assertEquals( "3 years", $bytes, "null" );
 	}
 
 	/**

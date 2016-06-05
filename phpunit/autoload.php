@@ -120,5 +120,25 @@ function test_exportTestData( array $models = array() )
 	$exporter->exportAll();
 }
 
+function test_mediaSamplesDirectory()
+{
+	$retval = appendPath( TEST_RESOURCE_PATH, "media");
+	is_dir($retval) ||  die('test_mediaSamplesDirectory could not find ' . $retval . PHP_EOL);
+	return $retval;
+}
+
+function test_mediaSamplesFile( $filename = '')
+{
+	return appendPath( TEST_RESOURCE_PATH, "media", $filename );
+}
+
+function test_RandomString($characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+{
+	$randstring = '';
+	for ($i = 0; $i < 10; $i++) {
+		$randstring .= $characters[rand(0, strlen($characters) -1)];
+	}
+	return $randstring;
+}
 
 SetConfigRoot( TEST_ROOT_PATH . "/phpunit" );

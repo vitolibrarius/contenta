@@ -31,7 +31,7 @@ class Migration extends Processor
 		$logs = array();
 		foreach (scandir($this->workingDirectory()) as $file)
 		{
-			if (startsWith($file, "log_"))
+			if (startsWith("log_", $file))
 			{
 				$path = appendPath( $this->workingDirectory(), $file);
 				$data = trim(file_get_contents($path));

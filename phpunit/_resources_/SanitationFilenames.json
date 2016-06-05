@@ -1,0 +1,249 @@
+[
+    {
+        "teststring": "For No\u0167M\u00ea - \"Marv\u00eal Pr\u00eavi\u00eaw\u015f 003 (\u014cc\u0167ob\u00ear 2015 for D\u00eac\u00eamb\u00ear 2015) (w\u00eabrip by L\u01d5\u015fiph\u01d5r-DCP).pdf\" (1\/103)",
+        "tests": {
+            "25 Default:25:false:false": "For NotMe -..siphUr-DCP).",
+            "25 Lowercase:25:true:false": "for notme -..siphur-dcp).",
+            "25 Anal:25:false:true": "For NotMe -..UsiphUr-DCP.",
+            "25 LowercaseAnal:25:true:true": "for notme -..usiphur-dcp.",
+            "1000 Default:1000:false:false": "For NotMe - \"Marvel Previews 003 (October 2015 for December 2015) (webrip by LUsiphUr-DCP).",
+            "1000 Lowercase:1000:true:false": "for notme - \"marvel previews 003 (october 2015 for december 2015) (webrip by lusiphur-dcp).",
+            "1000 Anal:1000:false:true": "For NotMe - Marvel Previews 003 October 2015 for December 2015 webrip by LUsiphUr-DCP.",
+            "1000 LowercaseAnal:1000:true:true": "for notme - marvel previews 003 october 2015 for december 2015 webrip by lusiphur-dcp."
+        }
+    },
+    {
+        "teststring": "Jo\u01d5rn\u00eay \u0167o S\u0167ar War\u015f - Th\u00ea Forc\u00ea \u00c5wak\u00ean\u015f - Sha\u0167\u0167\u00ear\u00ead Empir\u00ea 04 (of 04) (2015) (Digi\u0167al) (Kil\u00eako-Empir\u00ea)",
+        "tests": {
+            "25 Default:25:false:false": "JoUrney to ..eko-Empire).",
+            "25 Lowercase:25:true:false": "journey to ..eko-empire).",
+            "25 Anal:25:false:true": "JoUrney to ..leko-Empire.",
+            "25 LowercaseAnal:25:true:true": "journey to ..leko-empire.",
+            "1000 Default:1000:false:false": "JoUrney to Star Wars - The Force Awakens - Shattered Empire 04 (of 04) (2015) (Digital) (Kileko-Empire).",
+            "1000 Lowercase:1000:true:false": "journey to star wars - the force awakens - shattered empire 04 (of 04) (2015) (digital) (kileko-empire).",
+            "1000 Anal:1000:false:true": "JoUrney to Star Wars - The Force Awakens - Shattered Empire 04 of 04 2015 Digital Kileko-Empire.",
+            "1000 LowercaseAnal:1000:true:true": "journey to star wars - the force awakens - shattered empire 04 of 04 2015 digital kileko-empire."
+        }
+    },
+    {
+        "teststring": "Cap\u0167ain \u00c5m\u00earica Comic\u015f (Tim\u00ealy) [75\/80]  - \"Cap\u0167ain \u00c5m\u00earica Comic\u015f 074  (2 \u015f\u0167ori\u00ea\u015f only).cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "Captain A..ies only).cbr\"",
+            "25 Lowercase:25:true:false": "captain a..ies only).cbr\"",
+            "25 Anal:25:false:true": "Captain A..ries only.cbr\"",
+            "25 LowercaseAnal:25:true:true": "captain a..ries only.cbr\"",
+            "1000 Default:1000:false:false": "Captain America Comics (Timely) [75\/80]  - \"Captain America Comics 074  (2 stories only).cbr\"",
+            "1000 Lowercase:1000:true:false": "captain america comics (timely) [75\/80]  - \"captain america comics 074  (2 stories only).cbr\"",
+            "1000 Anal:1000:false:true": "Captain America Comics Timely 7580  - Captain America Comics 074  2 stories only.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "captain america comics timely 7580  - captain america comics 074  2 stories only.cbr\""
+        }
+    },
+    {
+        "teststring": "N\u00eaw \u0158\u00eal\u00eaa\u015f\u00ea\u015f \"Vampir\u00ealla Vol. 2 God Sav\u00ea Th\u00ea Q\u01d5\u00ea\u00ean (TPB)(2016)(Digi\u0167al)(TLK-EMPI\u0158E-HD).cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "New Relea..MPIRE-HD).cbr\"",
+            "25 Lowercase:25:true:false": "new relea..mpire-hd).cbr\"",
+            "25 Anal:25:false:true": "New Relea..EMPIRE-HD.cbr\"",
+            "25 LowercaseAnal:25:true:true": "new relea..empire-hd.cbr\"",
+            "1000 Default:1000:false:false": "New Releases \"Vampirella Vol. 2 God Save The QUeen (TPB)(2016)(Digital)(TLK-EMPIRE-HD).cbr\"",
+            "1000 Lowercase:1000:true:false": "new releases \"vampirella vol. 2 god save the queen (tpb)(2016)(digital)(tlk-empire-hd).cbr\"",
+            "1000 Anal:1000:false:true": "New Releases Vampirella Vol. 2 God Save The QUeen TPB2016DigitalTLK-EMPIRE-HD.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "new releases vampirella vol. 2 god save the queen tpb2016digitaltlk-empire-hd.cbr\""
+        }
+    },
+    {
+        "teststring": "Tom Po\u00ea\u015f on\u0167d\u00eak\u0167 h\u00ea\u0167 g\u00eah\u00eaim d\u00ear bla\u01d5w\u00ea aard\u00ea (bo\u00eakj\u00ea) \"Tom Po\u00ea\u015f on\u0167d\u00eak\u0167 h\u00ea\u0167 g\u00eah\u00eaim d\u00ear bla\u01d5w\u00ea aard\u00ea.cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "Tom Poes ..Uwe aarde.cbr\"",
+            "25 Lowercase:25:true:false": "tom poes ..uwe aarde.cbr\"",
+            "25 Anal:25:false:true": "Tom Poes ..Uwe aarde.cbr\"",
+            "25 LowercaseAnal:25:true:true": "tom poes ..uwe aarde.cbr\"",
+            "1000 Default:1000:false:false": "Tom Poes ontdekt het geheim der blaUwe aarde (boekje) \"Tom Poes ontdekt het geheim der blaUwe aarde.cbr\"",
+            "1000 Lowercase:1000:true:false": "tom poes ontdekt het geheim der blauwe aarde (boekje) \"tom poes ontdekt het geheim der blauwe aarde.cbr\"",
+            "1000 Anal:1000:false:true": "Tom Poes ontdekt het geheim der blaUwe aarde boekje Tom Poes ontdekt het geheim der blaUwe aarde.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "tom poes ontdekt het geheim der blauwe aarde boekje tom poes ontdekt het geheim der blauwe aarde.cbr\""
+        }
+    },
+    {
+        "teststring": "Th\u00ea Dark Tow\u00ear - Th\u00ea Drawing of \u0167h\u00ea Thr\u00ea\u00ea - Th\u00ea Lady of Shadow\u015f 04 (of 05) (2016) (Digi\u0167al) (Zon\u00ea-Empir\u00ea).cbz",
+        "tests": {
+            "25 Default:25:false:false": "The Dark ..e-Empire).cbz",
+            "25 Lowercase:25:true:false": "the dark ..e-empire).cbz",
+            "25 Anal:25:false:true": "The Dark ..ne-Empire.cbz",
+            "25 LowercaseAnal:25:true:true": "the dark ..ne-empire.cbz",
+            "1000 Default:1000:false:false": "The Dark Tower - The Drawing of the Three - The Lady of Shadows 04 (of 05) (2016) (Digital) (Zone-Empire).cbz",
+            "1000 Lowercase:1000:true:false": "the dark tower - the drawing of the three - the lady of shadows 04 (of 05) (2016) (digital) (zone-empire).cbz",
+            "1000 Anal:1000:false:true": "The Dark Tower - The Drawing of the Three - The Lady of Shadows 04 of 05 2016 Digital Zone-Empire.cbz",
+            "1000 LowercaseAnal:1000:true:true": "the dark tower - the drawing of the three - the lady of shadows 04 of 05 2016 digital zone-empire.cbz"
+        }
+    },
+    {
+        "teststring": "S\u0167a\u0167\u00ea of Ba\u0167man 1-50 -- Upgrad\u00ea\u015f, anyon\u00ea? [1 of 3] \"S\u0167a\u0167\u00ea of Ba\u0167man 1-50 (Work\u00ear, F\u00eab 2016).pdf\"",
+        "tests": {
+            "25 Default:25:false:false": "State of ..Feb 2016).pdf\"",
+            "25 Lowercase:25:true:false": "state of ..feb 2016).pdf\"",
+            "25 Anal:25:false:true": "State of .. Feb 2016.pdf\"",
+            "25 LowercaseAnal:25:true:true": "state of .. feb 2016.pdf\"",
+            "1000 Default:1000:false:false": "State of Batman 1-50 -- Upgrades, anyone? [1 of 3] \"State of Batman 1-50 (Worker, Feb 2016).pdf\"",
+            "1000 Lowercase:1000:true:false": "state of batman 1-50 -- upgrades, anyone? [1 of 3] \"state of batman 1-50 (worker, feb 2016).pdf\"",
+            "1000 Anal:1000:false:true": "State of Batman 1-50 -- Upgrades anyone 1 of 3 State of Batman 1-50 Worker Feb 2016.pdf\"",
+            "1000 LowercaseAnal:1000:true:true": "state of batman 1-50 -- upgrades anyone 1 of 3 state of batman 1-50 worker feb 2016.pdf\""
+        }
+    },
+    {
+        "teststring": "Cap\u0167ain \u00c5m\u00earica Comic\u015f (Tim\u00ealy) [71\/80]  - \"Cap\u0167ain \u00c5m\u00earica Comic\u015f 70\u0167h \u00c5nniv\u00ear\u015fary Sp\u00eacial.cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "Captain A..y Special.cbr\"",
+            "25 Lowercase:25:true:false": "captain a..y special.cbr\"",
+            "25 Anal:25:false:true": "Captain A..y Special.cbr\"",
+            "25 LowercaseAnal:25:true:true": "captain a..y special.cbr\"",
+            "1000 Default:1000:false:false": "Captain America Comics (Timely) [71\/80]  - \"Captain America Comics 70th Anniversary Special.cbr\"",
+            "1000 Lowercase:1000:true:false": "captain america comics (timely) [71\/80]  - \"captain america comics 70th anniversary special.cbr\"",
+            "1000 Anal:1000:false:true": "Captain America Comics Timely 7180  - Captain America Comics 70th Anniversary Special.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "captain america comics timely 7180  - captain america comics 70th anniversary special.cbr\""
+        }
+    },
+    {
+        "teststring": "For comicn\u01d5\u0167 \"Inj\u01d5\u015f\u0167ic\u00ea - God\u015f \u00c5mong U\u015f - Y\u00eaar Fo\u01d5r 021 (2015) (digi\u0167al) (Son of Ul\u0167ron-Empir\u00ea).cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "For comic..n-Empire).cbr\"",
+            "25 Lowercase:25:true:false": "for comic..n-empire).cbr\"",
+            "25 Anal:25:false:true": "For comic..on-Empire.cbr\"",
+            "25 LowercaseAnal:25:true:true": "for comic..on-empire.cbr\"",
+            "1000 Default:1000:false:false": "For comicnUt \"InjUstice - Gods Among Us - Year FoUr 021 (2015) (digital) (Son of Ultron-Empire).cbr\"",
+            "1000 Lowercase:1000:true:false": "for comicnut \"injustice - gods among us - year four 021 (2015) (digital) (son of ultron-empire).cbr\"",
+            "1000 Anal:1000:false:true": "For comicnUt InjUstice - Gods Among Us - Year FoUr 021 2015 digital Son of Ultron-Empire.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "for comicnut injustice - gods among us - year four 021 2015 digital son of ultron-empire.cbr\""
+        }
+    },
+    {
+        "teststring": "N\u00eaw \u0158\u00eal\u00eaa\u015f\u00ea\u015f 2015.4.6 \"XIII My\u015f\u0167\u00eary 004 - Colon\u00eal \u00c5mo\u015f (2015) (Cin\u00eabook) (digi\u0167al) (Lynx-Empir\u00ea).cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "New Relea..x-Empire).cbr\"",
+            "25 Lowercase:25:true:false": "new relea..x-empire).cbr\"",
+            "25 Anal:25:false:true": "New Relea..nx-Empire.cbr\"",
+            "25 LowercaseAnal:25:true:true": "new relea..nx-empire.cbr\"",
+            "1000 Default:1000:false:false": "New Releases 2015.4.6 \"XIII Mystery 004 - Colonel Amos (2015) (Cinebook) (digital) (Lynx-Empire).cbr\"",
+            "1000 Lowercase:1000:true:false": "new releases 2015.4.6 \"xiii mystery 004 - colonel amos (2015) (cinebook) (digital) (lynx-empire).cbr\"",
+            "1000 Anal:1000:false:true": "New Releases 2015.4.6 XIII Mystery 004 - Colonel Amos 2015 Cinebook digital Lynx-Empire.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "new releases 2015.4.6 xiii mystery 004 - colonel amos 2015 cinebook digital lynx-empire.cbr\""
+        }
+    },
+    {
+        "teststring": "N\u00eaw \u0158\u00eal\u00eaa\u015f\u00ea\u015f 2015.4.6 \"Wayn\u00ea Sh\u00eal\u0167on 002 - Th\u00ea B\u00ea\u0167rayal (2014) (Cin\u00eabook) (digi\u0167al) (Lynx-Empir\u00ea).cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "New Relea..x-Empire).cbr\"",
+            "25 Lowercase:25:true:false": "new relea..x-empire).cbr\"",
+            "25 Anal:25:false:true": "New Relea..nx-Empire.cbr\"",
+            "25 LowercaseAnal:25:true:true": "new relea..nx-empire.cbr\"",
+            "1000 Default:1000:false:false": "New Releases 2015.4.6 \"Wayne Shelton 002 - The Betrayal (2014) (Cinebook) (digital) (Lynx-Empire).cbr\"",
+            "1000 Lowercase:1000:true:false": "new releases 2015.4.6 \"wayne shelton 002 - the betrayal (2014) (cinebook) (digital) (lynx-empire).cbr\"",
+            "1000 Anal:1000:false:true": "New Releases 2015.4.6 Wayne Shelton 002 - The Betrayal 2014 Cinebook digital Lynx-Empire.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "new releases 2015.4.6 wayne shelton 002 - the betrayal 2014 cinebook digital lynx-empire.cbr\""
+        }
+    },
+    {
+        "teststring": "N\u00eaw \u0158\u00eal\u00eaa\u015f\u00ea\u015f 2015.4.7 \"Th\u00ea Loxl\u00eay\u015f and \u0167h\u00ea War of 1812 (2013) (digi\u0167al) (2nd \u00ead) (d'argh-Empir\u00ea).cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "New Relea..h-Empire).cbr\"",
+            "25 Lowercase:25:true:false": "new relea..h-empire).cbr\"",
+            "25 Anal:25:false:true": "New Relea..gh-Empire.cbr\"",
+            "25 LowercaseAnal:25:true:true": "new relea..gh-empire.cbr\"",
+            "1000 Default:1000:false:false": "New Releases 2015.4.7 \"The Loxleys and the War of 1812 (2013) (digital) (2nd ed) (d'argh-Empire).cbr\"",
+            "1000 Lowercase:1000:true:false": "new releases 2015.4.7 \"the loxleys and the war of 1812 (2013) (digital) (2nd ed) (d'argh-empire).cbr\"",
+            "1000 Anal:1000:false:true": "New Releases 2015.4.7 The Loxleys and the War of 1812 2013 digital 2nd ed dargh-Empire.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "new releases 2015.4.7 the loxleys and the war of 1812 2013 digital 2nd ed dargh-empire.cbr\""
+        }
+    },
+    {
+        "teststring": "\u0158\u00ea: \u0158ichi\u00ea \u0158ich a\u015f r\u00eaq\u01d5\u00ea\u015f\u0167\u00ead - Happy \u0167o h\u00ealp [1 of 8] \"\u0158ichi\u00ea \u0158ich (1960) 198 Harv\u00eay Jan 1981 C2C.cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "Re: Richi.. 1981 C2C.cbr\"",
+            "25 Lowercase:25:true:false": "re: richi.. 1981 c2c.cbr\"",
+            "25 Anal:25:false:true": "Re Richie.. 1981 C2C.cbr\"",
+            "25 LowercaseAnal:25:true:true": "re richie.. 1981 c2c.cbr\"",
+            "1000 Default:1000:false:false": "Re: Richie Rich as reqUested - Happy to help [1 of 8] \"Richie Rich (1960) 198 Harvey Jan 1981 C2C.cbr\"",
+            "1000 Lowercase:1000:true:false": "re: richie rich as requested - happy to help [1 of 8] \"richie rich (1960) 198 harvey jan 1981 c2c.cbr\"",
+            "1000 Anal:1000:false:true": "Re Richie Rich as reqUested - Happy to help 1 of 8 Richie Rich 1960 198 Harvey Jan 1981 C2C.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "re richie rich as requested - happy to help 1 of 8 richie rich 1960 198 harvey jan 1981 c2c.cbr\""
+        }
+    },
+    {
+        "teststring": "For flip\u00eann\u015f\u0167a\u0167\u00ear\/Bl\u01d5\u00eaD\u00eavil - \"Cap\u0167ain \u00c5m\u00earica'\u015f W\u00eaird Tal\u00ea\u015f 074 (Tim\u00ealy.1949) (c2c) (\u015foo\u0167h-Pmack-Nov\u01d5\u015f).cbz\"",
+        "tests": {
+            "25 Default:25:false:false": "For flipe..ck-NovUs).cbz\"",
+            "25 Lowercase:25:true:false": "for flipe..ck-novus).cbz\"",
+            "25 Anal:25:false:true": "For flipe..ack-NovUs.cbz\"",
+            "25 LowercaseAnal:25:true:true": "for flipe..ack-novus.cbz\"",
+            "1000 Default:1000:false:false": "For flipennstater\/BlUeDevil - \"Captain America's Weird Tales 074 (Timely.1949) (c2c) (sooth-Pmack-NovUs).cbz\"",
+            "1000 Lowercase:1000:true:false": "for flipennstater\/bluedevil - \"captain america's weird tales 074 (timely.1949) (c2c) (sooth-pmack-novus).cbz\"",
+            "1000 Anal:1000:false:true": "For flipennstaterBlUeDevil - Captain Americas Weird Tales 074 Timely.1949 c2c sooth-Pmack-NovUs.cbz\"",
+            "1000 LowercaseAnal:1000:true:true": "for flipennstaterbluedevil - captain americas weird tales 074 timely.1949 c2c sooth-pmack-novus.cbz\""
+        }
+    },
+    {
+        "teststring": "Cap\u0167ain \u00c5m\u00earica Comic\u015f (Tim\u00ealy) [80\/80]  - \"Cap\u0167ain \u00c5m\u00earica Comic\u015f \u00c5nn\u01d5al 128 pag\u00ea\u015f (cman-My\u015f\u0167\u00earyMan).cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "Captain A..steryMan).cbr\"",
+            "25 Lowercase:25:true:false": "captain a..steryman).cbr\"",
+            "25 Anal:25:false:true": "Captain A..ysteryMan.cbr\"",
+            "25 LowercaseAnal:25:true:true": "captain a..ysteryman.cbr\"",
+            "1000 Default:1000:false:false": "Captain America Comics (Timely) [80\/80]  - \"Captain America Comics AnnUal 128 pages (cman-MysteryMan).cbr\"",
+            "1000 Lowercase:1000:true:false": "captain america comics (timely) [80\/80]  - \"captain america comics annual 128 pages (cman-mysteryman).cbr\"",
+            "1000 Anal:1000:false:true": "Captain America Comics Timely 8080  - Captain America Comics AnnUal 128 pages cman-MysteryMan.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "captain america comics timely 8080  - captain america comics annual 128 pages cman-mysteryman.cbr\""
+        }
+    },
+    {
+        "teststring": "Cap\u0167ain \u00c5m\u00earica Comic\u015f (Tim\u00ealy) [63\/80]  - \"Cap\u0167ain \u00c5m\u00earica Comic\u015f 063 (Tim\u00ealy.1947) (mi\u015f\u015fing.ifc) (ch\u01d5m\u015f).cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "Captain A..) (chUms).cbr\"",
+            "25 Lowercase:25:true:false": "captain a..) (chums).cbr\"",
+            "25 Anal:25:false:true": "Captain A..ifc chUms.cbr\"",
+            "25 LowercaseAnal:25:true:true": "captain a..ifc chums.cbr\"",
+            "1000 Default:1000:false:false": "Captain America Comics (Timely) [63\/80]  - \"Captain America Comics 063 (Timely.1947) (missing.ifc) (chUms).cbr\"",
+            "1000 Lowercase:1000:true:false": "captain america comics (timely) [63\/80]  - \"captain america comics 063 (timely.1947) (missing.ifc) (chums).cbr\"",
+            "1000 Anal:1000:false:true": "Captain America Comics Timely 6380  - Captain America Comics 063 Timely.1947 missing.ifc chUms.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "captain america comics timely 6380  - captain america comics 063 timely.1947 missing.ifc chums.cbr\""
+        }
+    },
+    {
+        "teststring": "J\u01d5\u015f\u0167 n\u00ea\u00ead\u015f \u0167h\u00ea labor in\u0167\u00ean\u015fiv\u00ea final \u0167o\u01d5ch\u00ea\u015f on \u015fom\u00ea pag\u00ea\u015f :) - \"Can\u0167\u00ea\u00ean Ka\u0167\u00ea 001 (S\u0167. John) (Ma\u0167\u0167 Bak\u00ear) WIP v2.cbz\"",
+        "tests": {
+            "25 Default:25:false:false": "JUst need..r) WIP v2.cbz\"",
+            "25 Lowercase:25:true:false": "just need..r) wip v2.cbz\"",
+            "25 Anal:25:false:true": "JUst need..er WIP v2.cbz\"",
+            "25 LowercaseAnal:25:true:true": "just need..er wip v2.cbz\"",
+            "1000 Default:1000:false:false": "JUst needs the labor intensive final toUches on some pages :) - \"Canteen Kate 001 (St. John) (Matt Baker) WIP v2.cbz\"",
+            "1000 Lowercase:1000:true:false": "just needs the labor intensive final touches on some pages :) - \"canteen kate 001 (st. john) (matt baker) wip v2.cbz\"",
+            "1000 Anal:1000:false:true": "JUst needs the labor intensive final toUches on some pages  - Canteen Kate 001 St. John Matt Baker WIP v2.cbz\"",
+            "1000 LowercaseAnal:1000:true:true": "just needs the labor intensive final touches on some pages  - canteen kate 001 st. john matt baker wip v2.cbz\""
+        }
+    },
+    {
+        "teststring": "S\u0167a\u0167\u00ea of Ba\u0167man 1-50 -- Upgrad\u00ea\u015f, anyon\u00ea? [2 of 3] \"S\u0167a\u0167\u00ea of Ba\u0167man 1-50 -- Upgrad\u00ea\u015f, anyon\u00ea?.par2\"",
+        "tests": {
+            "25 Default:25:false:false": "State of.. anyone?.par2\"",
+            "25 Lowercase:25:true:false": "state of.. anyone?.par2\"",
+            "25 Anal:25:false:true": "State of..s anyone.par2\"",
+            "25 LowercaseAnal:25:true:true": "state of..s anyone.par2\"",
+            "1000 Default:1000:false:false": "State of Batman 1-50 -- Upgrades, anyone? [2 of 3] \"State of Batman 1-50 -- Upgrades, anyone?.par2\"",
+            "1000 Lowercase:1000:true:false": "state of batman 1-50 -- upgrades, anyone? [2 of 3] \"state of batman 1-50 -- upgrades, anyone?.par2\"",
+            "1000 Anal:1000:false:true": "State of Batman 1-50 -- Upgrades anyone 2 of 3 State of Batman 1-50 -- Upgrades anyone.par2\"",
+            "1000 LowercaseAnal:1000:true:true": "state of batman 1-50 -- upgrades anyone 2 of 3 state of batman 1-50 -- upgrades anyone.par2\""
+        }
+    },
+    {
+        "teststring": "For Y\u01d5ggo\u0167h - \"\u00c5lan Moor\u00ea'\u015f Th\u00ea Co\u01d5r\u0167yard (original \u015f\u0167ory from \u00c5lan Moor\u00ea'\u015f Th\u00ea Co\u01d5r\u0167yard Companion) (2004) (loopyjo\u00ea-DCP).cbr\"",
+        "tests": {
+            "25 Default:25:false:false": "For YUggo..yjoe-DCP).cbr\"",
+            "25 Lowercase:25:true:false": "for yuggo..yjoe-dcp).cbr\"",
+            "25 Anal:25:false:true": "For YUggo..pyjoe-DCP.cbr\"",
+            "25 LowercaseAnal:25:true:true": "for yuggo..pyjoe-dcp.cbr\"",
+            "1000 Default:1000:false:false": "For YUggoth - \"Alan Moore's The CoUrtyard (original story from Alan Moore's The CoUrtyard Companion) (2004) (loopyjoe-DCP).cbr\"",
+            "1000 Lowercase:1000:true:false": "for yuggoth - \"alan moore's the courtyard (original story from alan moore's the courtyard companion) (2004) (loopyjoe-dcp).cbr\"",
+            "1000 Anal:1000:false:true": "For YUggoth - Alan Moores The CoUrtyard original story from Alan Moores The CoUrtyard Companion 2004 loopyjoe-DCP.cbr\"",
+            "1000 LowercaseAnal:1000:true:true": "for yuggoth - alan moores the courtyard original story from alan moores the courtyard companion 2004 loopyjoe-dcp.cbr\""
+        }
+    }
+]

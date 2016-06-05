@@ -121,7 +121,7 @@ class PreviewsWorldConnector extends EndpointConnector
 	{
 		if (is_null($item) == false) {
 			foreach( $this->excludeList() as $excl ) {
-				if (contains( $item, $excl )) {
+				if (contains($excl, $item )) {
 					return true;
 				}
 			}
@@ -156,7 +156,7 @@ class PreviewsWorldConnector extends EndpointConnector
 			if ( is_array($line) ) {
 				if ( count($line) == 1 ) {
 					$currentGroupName = $line[0];
-					if ( startsWith($currentGroupName, 'New Releases For ')) {
+					if ( startsWith('New Releases For ', $currentGroupName)) {
 						$this->releaseDate = substr($currentGroupName, strlen('New Releases For '));
 						$this->releaseDate = strtotime($this->releaseDate);
 					}

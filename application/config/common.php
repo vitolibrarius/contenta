@@ -27,21 +27,16 @@ function get_short_class($obj)
 	return (new \ReflectionClass($obj))->getShortName();
 }
 
-function isset_default($variable, $default = null)
-{
-	return (isset($variable) ? $variable : $default);
-}
-
-function startsWith($haystack, $needle)
+function startsWith($needle, $haystack)
 {
 	return $needle === "" || strpos($haystack, $needle) === 0;
 }
-function endsWith($haystack, $needle)
+function endsWith($needle, $haystack)
 {
 	return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
 }
 
-function contains($haystack, $needle)
+function contains($needle, $haystack)
 {
 	return ($needle != '' && strpos($haystack, $needle) !== false);
 }
@@ -49,39 +44,36 @@ function contains($haystack, $needle)
 function zipFileList($path)
 {
 	$list = false;
-	$zip = zip_open($path);
-
-	if (is_resource($zip))
-	{
-		$list = array();
-		while ($zip_entry = zip_read($zip))
-		{
-			$list[] = zip_entry_name($zip_entry);
+	if ( is_file( $path ) ) {
+		$zip = zip_open($path);
+		if (is_resource($zip)) {
+			$list = array();
+			while ($zip_entry = zip_read($zip)) {
+				$list[] = zip_entry_name($zip_entry);
+			}
+			zip_close($zip);
 		}
-
-		zip_close($zip);
-	}
-	else
-	{
-		\Logger::logError('Zip error ' . $zip . ' ' . zipFileErrMsg($zip),  'zipFileList', basename($path));
 	}
 	return $list;
 }
 
 function classNames($file)
 {
-	$classNames = array();
-	$php_file = file_get_contents($file);
-	$tokens = token_get_all($php_file);
-	$class_token = false;
-	foreach ($tokens as $token) {
-		if (is_array($token)) {
-			if ($token[0] == T_CLASS) {
-				$class_token = true;
-			}
-			else if ($class_token && $token[0] == T_STRING) {
-				$classNames[strtolower($token[1])] = $token[1];
-				$class_token = false;
+	$classNames = false;
+	if ( is_file( $file ) ) {
+		$php_file = file_get_contents($file);
+		$tokens = token_get_all($php_file);
+		$class_token = false;
+		$classNames = array();
+		foreach ($tokens as $token) {
+			if (is_array($token)) {
+				if ($token[0] == T_CLASS) {
+					$class_token = true;
+				}
+				else if ($class_token && $token[0] == T_STRING) {
+					$classNames[strtolower($token[1])] = $token[1];
+					$class_token = false;
+				}
 			}
 		}
 	}
@@ -112,48 +104,90 @@ function uuidShort()
 	);
 }
 
-function sanitize_filename($string, $maxLength = 100, $force_lowercase = true, $anal = false)
+function sanitize_filename($string, $maxLength = 256, $force_lowercase = true, $anal = false)
 {
-	$clean = sanitize($string, $force_lowercase, $anal );
-	$max = min(max($maxLength, 10), 255);
+	$ext = "." . file_ext($string);
+	$clean = file_ext_strip($string);
+
+	$clean = sanitize($clean, $force_lowercase, $anal );
+	$max = min(max($maxLength, 10), 256) - strlen($ext) - 2;
 	if (strlen($clean) > $max) {
 		$characters = floor($max / 2);
-		return substr($clean, 0, $characters) . '...' . substr($clean, -1 * $characters);
+		return substr($clean, 0, $characters) . '..' . substr($clean, -1 * $characters) . $ext;
 	}
-	return $clean;
+	return $clean . $ext;
 }
 
-function sanitize($string, $force_lowercase = true, $anal = false) {
-	$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
-				   "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
-				   "", "", ",", "<", ">", "/", "?");
-	$clean = trim(str_replace($strip, "", strip_tags($string)));
-	$clean = preg_replace('/\s+/', "-", $clean);
-	$clean = ($anal) ? preg_replace("/[^a-zA-Z0-9]/", "", $clean) : $clean ;
-	return ($force_lowercase) ?
-		(function_exists('mb_strtolower')) ?
-			mb_strtolower($clean, 'UTF-8') :
-			strtolower($clean) :
-		$clean;
+function sanitize($string, $force_lowercase = true, $anal = false, $default = null)
+{
+	if ( is_string($string) == false ) {
+		$string = "$string";
+	}
+	$clean = str_replace(chr(0xCA), '', $string);
+
+	if (preg_match('/[^a-zA-Z0-9_\-.\s?!,]/', $string) == true) {
+		$clean = normalize($clean);
+
+		if ( $anal === true ) {
+			$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+				"}", "\\", "|", ";", ":", "\"", "'", ",", "<", ">", "/", "?");
+			$clean = str_replace($strip, "", $clean);
+		}
+	}
+
+	if ($force_lowercase != false) {
+		if (function_exists('mb_strtolower')) {
+			$clean = mb_strtolower($clean, 'UTF-8');
+		}
+		else {
+			$clean = strtolower($clean);
+		}
+	}
+
+	$clean = trim($clean);
+
+	return (strlen($clean) > 0 ? $clean : (is_null($default) ? randomString() : $default));
 }
 
 function normalize($string)
 {
-	$string = htmlentities($string, ENT_QUOTES, 'UTF-8');
-	$string = preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', $string);
-	$string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
-	$string = preg_replace(array('~[^0-9a-z]~i', '~[ -]+~'), ' ', $string);
-	return trim($string, ' -');
+	// normalize characters
+	$a = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ');
+	$b = array('A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o');
+	$clean = str_replace($a, $b, $string);
+
+	return $clean;
 }
 
 function normalizeSearchString( $string = null )
 {
-	if ( is_null($string) == false ) {
-		$string = strtolower($string);
-		$string = preg_replace("/[^[:alnum:][:space:]]/ui", ' ', $string);
-		$string = preg_replace('/\s+/', ' ', $string);
+	if ( is_string($string) == false ) {
+		$string = "$string";
 	}
-	return $string;
+	$clean = str_replace(chr(0xCA), '', $string);
+
+	if (preg_match('/[^a-zA-Z0-9_\-.\s]/', $string) == true) {
+		$clean = normalize($clean);
+
+		$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+				"}", "\\", "|", ";", "\"", ",", "<", ">", "/", "?");
+		$clean = str_replace($strip, " ", $clean);
+		$clean = preg_replace("/-(-)+/us", "-", $clean);
+		$clean = preg_replace("/_(_)+/us", "_", $clean);
+		$clean = preg_replace("/\\.(\\.)+/us", ".", $clean);
+		$clean = preg_replace("/\\s(\\s)+/us", " ", $clean);
+	}
+
+	if (function_exists('mb_strtolower')) {
+		$clean = mb_strtolower($clean, 'UTF-8');
+	}
+	else {
+		$clean = strtolower($clean);
+	}
+
+	$clean = trim($clean);
+
+	return (strlen($clean) > 0 ? $clean : "Contenta Search");
 }
 
 function words($string)
@@ -171,13 +205,16 @@ function words($string)
 	return $words;
 }
 
-function lines($string)
+function lines($string = null)
 {
-	preg_match_all('~.*?[?.!]~s', $string, $sentences);
-	return array_map('trim', $sentences[0]);
+	if ( isset($string) && strlen($string) > 0 ) {
+		$sentences = preg_split("/\\r\\n|\\r|\\n/", $string);
+		return (is_array($sentences) ? array_filter($sentences) : $sentences);
+	}
+	return null;
 }
 
-function convertToBytes ($val)
+function convertToBytes ($val = '')
 {
 	if (empty($val))
 		return 0;
@@ -214,7 +251,7 @@ function convertToBytes ($val)
 	return (int) $val;
 }
 
-function formatSizeUnits($value)
+function formatSizeUnits($value = null)
 {
 	$bytes = convertToBytes($value);
 	if ($bytes >= GIGABYTE)
@@ -404,6 +441,16 @@ function currentChangeLog()
 		$change_log = trim(file_get_contents($path));
 	}
 	return $change_log;
+}
+
+function randomString($size = 10, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+{
+	$randstring = '';
+	$size = min(max(intval($size), 1), 512);
+	for ($i = 0; $i < $size; $i++) {
+		$randstring .= $characters[rand(0, strlen($characters) -1)];
+	}
+	return $randstring;
 }
 
 /** load these addition common functions after the base collection are loaded */

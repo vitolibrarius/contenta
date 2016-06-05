@@ -126,11 +126,11 @@ class Template
 	}
 
 	public function isType_TEXT_URL($name = '') {
-		return ( $this->isType_TEXT($name) && endsWith($name, '_url') );
+		return ( $this->isType_TEXT($name) && endsWith('_url', $name) );
 	}
 
 	public function isType_TEXT_EMAIL($name = '') {
-		return ( $this->isType_TEXT($name) && endsWith($name, 'email') );
+		return ( $this->isType_TEXT($name) && endsWith('email', $name) );
 	}
 
 	public function isType_DATE($name = '') {
@@ -139,7 +139,7 @@ class Template
 	}
 
 	public function isType_DATE_created($name = '') {
-		return ( $this->isType_DATE($name) && endsWith($name, 'created') );
+		return ( $this->isType_DATE($name) && endsWith('created', $name) );
 	}
 
 	public function isType_INTEGER($name = '') {
