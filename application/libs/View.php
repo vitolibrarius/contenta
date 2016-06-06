@@ -243,7 +243,7 @@ class View
 		}
 	}
 
-	public function renderFormField( $formType = 'text', $object = null, $type = null, $model, $attr, $value = null, $editable = true)
+	public function renderFormField( $formType = 'text', $object = null, $type = null, $model, $attr, $value = null, $editable = true, $validation = null)
 	{
 		$editPanel = VIEWS_PATH . 'edit/' . $formType . 'Component.php';
 
@@ -257,6 +257,7 @@ class View
 		$this->input_value = is_null($value) ?
 			$model->attributeDefaultValue($object, $type, $attr) :
 			$value;
+		$this->input_validation = $validation;
 
 		require $editPanel;
 	}

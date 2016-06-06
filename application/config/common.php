@@ -17,6 +17,18 @@ function callerClassAndMethod($currentFunction = '')
 	return $caller;
 }
 
+function boolValue( $v, $default = false )
+{
+	// Returns TRUE for "1", "true", "on" and "yes"
+	// Returns FALSE for "0", "false", "off" and "no"
+	// Returns NULL otherwise.
+	$v = filter_var($v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+	if (is_null($v)) {
+		$v = boolval($default);
+	}
+	return $v;
+}
+
 function split_lines($str)
 {
 	return preg_split('/\n|\r/', $str, -1, PREG_SPLIT_NO_EMPTY);

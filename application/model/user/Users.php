@@ -51,6 +51,9 @@ class Users extends _Users
 			}
 
 			if ( isset($values[Users::active]) == false) {
+				$values[Users::active] = boolValue($values[Users::active], true);
+			}
+			else {
 				$values[Users::active] = true;
 			}
 
@@ -75,7 +78,6 @@ class Users extends _Users
 
 		return parent::createObject($values);
 	}
-
 
 	public function update( UsersDBO $obj,
 		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
@@ -103,7 +105,7 @@ class Users extends _Users
 	}
 
 	public function updateObject(DataObject $object = null, array $values) {
-		if (isset($object) && $object instanceof model\UsersDBO ) {
+		if (isset($object) && $object instanceof model\user\UsersDBO ) {
 			if ( isset($values['password'], $values['password_check'])
 				&& empty($values['password']) == false && empty($values['password_check']) == false
 				&& $values['password'] === $values['password_check']) {
@@ -119,9 +121,15 @@ class Users extends _Users
 				$values[Users::password_hash] = $password_hash;
 			}
 
-			if ( isset($values[Users::active]) && is_bool($values[Users::active]) && $values[Users::active] != $object->isActive()) {
-				$values[Users::active] = (boolval($values[Users::active]) ? 1 : 0);
+			if ( isset($values[Users::active]) == true) {
+				Logger::logError( "active set  " . var_export($values, true) );
+				$values[Users::active] = boolValue($values[Users::active], true);
 			}
+
+			Logger::logError( "more update values " . var_export($values, true) );
+		}
+		else {
+			Logger::logError( "Not a user " . var_export($object, true) );
 		}
 
 		return parent::updateObject($object, $values);

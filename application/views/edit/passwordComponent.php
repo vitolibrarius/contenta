@@ -1,9 +1,11 @@
 <label for="<?php echo $this->input_id; ?>">
 <?php echo $this->input_label; ?>
-<?php if ($this->input_restriction != null) {
-	echo '<span class="input_restriction">' . $this->input_restriction .'</span>';
-}
-?>
+	<?php if ($this->input_restriction != null) : ?>
+		<span class="input_restriction"><?php echo $this->input_restriction; ?></span>
+	<?php endif; ?>
+	<?php if ($this->input_validation != null) : ?>
+		<span class="input_validation"><?php echo UTF8_STAR . ' ' . $this->input_validation; ?></span>
+	<?php endif; ?>
 </label>
 <input id="<?php echo $this->input_id; ?>"
 	class="text_input"

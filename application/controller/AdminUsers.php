@@ -19,10 +19,19 @@ use model\Publisher as Publisher;
  */
 class AdminUsers extends Admin
 {
+	function index()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$user_model = Model::Named('Users');
+			$this->view->model = $user_model;
+			$this->view->users = $user_model->allObjects();
+			$this->view->render( '/admin/userlist');
+		}
+	}
+
 	function userlist()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-// 			$this->view->viewTitle = "Users";
 			$user_model = Model::Named('Users');
 			$this->view->model = $user_model;
 			$this->view->users = $user_model->allObjects();
@@ -53,26 +62,18 @@ class AdminUsers extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Users');
-			$values = splitPOSTValues($_POST);
-			if ( isset($values, $values['users']) ) {
-				if ( isset($values['users']['active']) && $values['users']['active'] === "on" ) {
-					$values['users']['active'] = true;
-				}
-				else {
-					$values['users']['active'] = false;
-				}
+			$values = \http\HttpPost::getModelValue( 'users', null );
+			if ( isset($values, $values['active']) ) {
+				$values['active'] = boolValue($values['active'], true);
 			}
 			$success = true;
 
 			if ( $uid > 0 ) {
 				$userObj = $model->objectForId($uid);
 				if ( $userObj != false ) {
-					list($userObj, $errors) = $model->updateObject($userObj, $values['users']);
+					list($userObj, $errors) = $model->updateObject($userObj, $values);
 					if ( is_array($errors) ) {
-						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
-						foreach ($errors as $attr => $errMsg ) {
-							Session::addValidationFeedback($errMsg);
-						}
+						$this->view->validationErrors = $errors;
 						$this->editUser($uid);
 					}
 					else {
@@ -86,12 +87,9 @@ class AdminUsers extends Admin
 				}
 			}
 			else {
-				list($obj, $error) = $model->createObject($values['users']);
+				list($obj, $errors) = $model->createObject($values);
 				if ( is_array($errors) ) {
-					Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
-					foreach ($errors as $attr => $errMsg ) {
-						Session::addValidationFeedback( $errMsg );
-					}
+					$this->view->validationErrors = $errors;
 					$this->editUser();
 				}
 				else {

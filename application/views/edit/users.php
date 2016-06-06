@@ -51,7 +51,16 @@
 							$attValue = $this->{$attr};
 						}
 
-						$this->renderFormField( $form_type, $realObj, $realType, $this->model, $attr, $attValue, $attrEditable );
+						$this->renderFormField(
+							$form_type,
+							$realObj,
+							$realType,
+							$this->model,
+							$attr,
+							$attValue,
+							$attrEditable,
+							(isset($this->validationErrors, $this->validationErrors[$attr]) ? $this->validationErrors[$attr] : null)
+						);
 					}
 				?>
 
@@ -65,6 +74,7 @@
 				</fieldset>
 			</form>
 
+			<pre><?php echo (isset($this->validationErrors) ? var_export($this->validationErrors, true) : ""); ?></pre>
 			</div>
 		<?php if (isset($this->object)) : ?>
 			<div class="grid_3">
