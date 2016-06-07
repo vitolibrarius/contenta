@@ -508,5 +508,31 @@ class UsersTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( $token, $existing->rememberme_token(), "token missmatch" );
 	}
 
+/*  Test functions */
+
+	/**
+	 * @covers	updateObject
+	 * 			T_FUNCTION T_PUBLIC updateObject ( DataObject $object = null, $values)
+	 * @depends testCreateObject
+	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-06 20:55:19.
+	 */
+	public function testUpdateObject()
+	{
+		$userDBO = $this->model->objectForEmail('newuser@home.com');
+		$this->assertTrue( $userDBO instanceof UsersDBO, "Failed to find user record for email 'newuser@home.com'" );
+
+		list( $updated, $errors ) = $this->model->updateObject( $userDBO, array(
+				Users::name => "NewlyUpdated",
+				"password" => "_!890xyz_abc123",
+				"password_check" => "_!890xyz_abc123"
+			)
+		);
+		$this->assertNull( $errors, "errors during update " . var_export($errors, true) );
+		$this->assertTrue( $updated instanceof UsersDBO, "Failed to updated user record for email 'newuser@home.com'" );
+		$this->assertEquals( "NewlyUpdated", $updated->name(), "Failed to update name to 'NewlyUpdated'" );
+		$this->assertNotEquals( $userDBO->password_hash, $updated->password_hash(), "Failed to update password_hash" );
+	}
+
+
 /* {functions} */
 }
