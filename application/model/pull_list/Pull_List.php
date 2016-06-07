@@ -24,31 +24,22 @@ class Pull_List extends _Pull_List
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $endpoint, $name, $etag, $published)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			$endpoint,
-			$name,
-			$etag,
-			$published
-		);
-	}
-
-	public function update( Pull_ListDBO $obj,
-		$endpoint, $name, $etag, $published)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$endpoint,
-				$name,
-				$etag,
-				$published
-			);
+		if ( isset($values) ) {
+			// massage values as necessary
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Pull_List ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(

@@ -110,63 +110,54 @@ abstract class _Job_Running extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $job_id, $job_type_id, $processor, $guid, $pid, $desc)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($processor, $pid) ) {
-			$params = array(
-				Job_Running::job_id => (isset($job_id) ? $job_id : null),
-				Job_Running::job_type_id => (isset($job_type_id) ? $job_type_id : null),
-				Job_Running::processor => (isset($processor) ? $processor : null),
-				Job_Running::guid => (isset($guid) ? $guid : null),
-				Job_Running::pid => (isset($pid) ? $pid : null),
-				Job_Running::desc => (isset($desc) ? $desc : null),
-				Job_Running::created => time(),
-			);
-
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
+		if ( isset($values) ) {
+			if ( isset($values['job']) ) {
+				$local_job = $values['job'];
+				if ( $local_job instanceof JobDBO) {
+					$values[Job_Running::job_id] = $local_job->id;
+				}
+				else if ( is_integer( $local_job) ) {
+					$params[Job_Running::job_id] = $local_job;
+				}
 			}
-		}
-		return $obj;
-	}
-
-	public function base_update( Job_RunningDBO $obj,
-		$job_id, $job_type_id, $processor, $guid, $pid, $desc)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($job_id) && (isset($obj->job_id) == false || $job_id != $obj->job_id)) {
-				$updates[Job_Running::job_id] = $job_id;
-			}
-			if (isset($job_type_id) && (isset($obj->job_type_id) == false || $job_type_id != $obj->job_type_id)) {
-				$updates[Job_Running::job_type_id] = $job_type_id;
-			}
-			if (isset($processor) && (isset($obj->processor) == false || $processor != $obj->processor)) {
-				$updates[Job_Running::processor] = $processor;
-			}
-			if (isset($guid) && (isset($obj->guid) == false || $guid != $obj->guid)) {
-				$updates[Job_Running::guid] = $guid;
-			}
-			if (isset($pid) && (isset($obj->pid) == false || $pid != $obj->pid)) {
-				$updates[Job_Running::pid] = $pid;
-			}
-			if (isset($desc) && (isset($obj->desc) == false || $desc != $obj->desc)) {
-				$updates[Job_Running::desc] = $desc;
-			}
-
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+			if ( isset($values['jobType']) ) {
+				$local_jobType = $values['jobType'];
+				if ( $local_jobType instanceof Job_TypeDBO) {
+					$values[Job_Running::job_type_id] = $local_jobType->id;
+				}
+				else if ( is_integer( $local_jobType) ) {
+					$params[Job_Running::job_type_id] = $local_jobType;
 				}
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
+	}
+
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Job_Running ) {
+			if ( isset($values['job']) ) {
+				$local_job = $values['job'];
+				if ( $local_job instanceof JobDBO) {
+					$values[Job_Running::job_id] = $local_job->id;
+				}
+				else if ( is_integer( $local_job) ) {
+					$params[Job_Running::job_id] = $values['job'];
+				}
+			}
+			if ( isset($values['jobType']) ) {
+				$local_jobType = $values['jobType'];
+				if ( $local_jobType instanceof Job_TypeDBO) {
+					$values[Job_Running::job_type_id] = $local_jobType->id;
+				}
+				else if ( is_integer( $local_jobType) ) {
+					$params[Job_Running::job_type_id] = $values['jobType'];
+				}
+			}
+		}
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

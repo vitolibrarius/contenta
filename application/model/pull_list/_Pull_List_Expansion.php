@@ -96,63 +96,36 @@ abstract class _Pull_List_Expansion extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $endpoint, $pattern, $replace)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($endpoint, $pattern) ) {
-			$params = array(
-				Pull_List_Expansion::pattern => (isset($pattern) ? $pattern : null),
-				Pull_List_Expansion::replace => (isset($replace) ? $replace : null),
-				Pull_List_Expansion::created => time(),
-			);
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$params[Pull_List_Expansion::endpoint_id] = $endpoint->id;
+		if ( isset($values) ) {
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Pull_List_Expansion::endpoint_id] = $local_endpoint->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$params[Pull_List_Expansion::endpoint_id] = $endpoint;
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Pull_List_Expansion::endpoint_id] = $local_endpoint;
 				}
-			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
 	}
 
-	public function base_update( Pull_List_ExpansionDBO $obj,
-		$endpoint, $pattern, $replace)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($pattern) && (isset($obj->pattern) == false || $pattern != $obj->pattern)) {
-				$updates[Pull_List_Expansion::pattern] = $pattern;
-			}
-			if (isset($replace) && (isset($obj->replace) == false || $replace != $obj->replace)) {
-				$updates[Pull_List_Expansion::replace] = $replace;
-			}
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$updates[Pull_List_Expansion::endpoint_id] = $endpoint->id;
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Pull_List_Expansion ) {
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Pull_List_Expansion::endpoint_id] = $local_endpoint->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$updates[Pull_List_Expansion::endpoint_id] = $endpoint;
-				}
-			}
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Pull_List_Expansion::endpoint_id] = $values['endpoint'];
 				}
 			}
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

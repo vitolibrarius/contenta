@@ -84,46 +84,18 @@ abstract class _Log_Level extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $code, $name)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($code) ) {
-			$params = array(
-				Log_Level::code => (isset($code) ? $code : null),
-				Log_Level::name => (isset($name) ? $name : null),
-			);
-
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
-			}
+		if ( isset($values) ) {
 		}
-		return $obj;
+		return parent::createObject($values);
 	}
 
-	public function base_update( Log_LevelDBO $obj,
-		$code, $name)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($code) && (isset($obj->code) == false || $code != $obj->code)) {
-				$updates[Log_Level::code] = $code;
-			}
-			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
-				$updates[Log_Level::name] = $name;
-			}
-
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
-				}
-			}
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Log_Level ) {
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

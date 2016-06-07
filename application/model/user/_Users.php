@@ -168,94 +168,54 @@ abstract class _Users extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($name, $email, $password_hash) ) {
-			$params = array(
-				Users::name => (isset($name) ? $name : null),
-				Users::email => (isset($email) ? $email : null),
-				Users::active => (isset($active) ? $active : Model::TERTIARY_TRUE),
-				Users::account_type => (isset($account_type) ? $account_type : 'user'),
-				Users::rememberme_token => (isset($rememberme_token) ? $rememberme_token : null),
-				Users::api_hash => (isset($api_hash) ? $api_hash : null),
-				Users::password_hash => (isset($password_hash) ? $password_hash : null),
-				Users::password_reset_hash => (isset($password_reset_hash) ? $password_reset_hash : null),
-				Users::activation_hash => (isset($activation_hash) ? $activation_hash : null),
-				Users::failed_logins => (isset($failed_logins) ? $failed_logins : 0),
-				Users::creation_timestamp => (isset($creation_timestamp) ? $creation_timestamp : time()),
-				Users::last_login_timestamp => (isset($last_login_timestamp) ? $last_login_timestamp : null),
-				Users::last_failed_login => (isset($last_failed_login) ? $last_failed_login : null),
-				Users::password_reset_timestamp => (isset($password_reset_timestamp) ? $password_reset_timestamp : null),
-			);
-
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
+		if ( isset($values) ) {
+			if ( isset($values['user_network']) ) {
+				$local_user_network = $values['user_network'];
+				if ( $local_user_network instanceof User_NetworkDBO) {
+					$values[Users::id] = $local_user_network->user_id;
+				}
+				else if ( is_integer( $local_user_network) ) {
+					$params[Users::id] = $local_user_network;
+				}
 			}
-		}
-		return $obj;
-	}
-
-	public function base_update( UsersDBO $obj,
-		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
-				$updates[Users::name] = $name;
-			}
-			if (isset($email) && (isset($obj->email) == false || $email != $obj->email)) {
-				$updates[Users::email] = $email;
-			}
-			if (isset($active) && (isset($obj->active) == false || $active != $obj->active)) {
-				$updates[Users::active] = $active;
-			}
-			if (isset($account_type) && (isset($obj->account_type) == false || $account_type != $obj->account_type)) {
-				$updates[Users::account_type] = $account_type;
-			}
-			if (isset($rememberme_token) && (isset($obj->rememberme_token) == false || $rememberme_token != $obj->rememberme_token)) {
-				$updates[Users::rememberme_token] = $rememberme_token;
-			}
-			if (isset($api_hash) && (isset($obj->api_hash) == false || $api_hash != $obj->api_hash)) {
-				$updates[Users::api_hash] = $api_hash;
-			}
-			if (isset($password_hash) && (isset($obj->password_hash) == false || $password_hash != $obj->password_hash)) {
-				$updates[Users::password_hash] = $password_hash;
-			}
-			if (isset($password_reset_hash) && (isset($obj->password_reset_hash) == false || $password_reset_hash != $obj->password_reset_hash)) {
-				$updates[Users::password_reset_hash] = $password_reset_hash;
-			}
-			if (isset($activation_hash) && (isset($obj->activation_hash) == false || $activation_hash != $obj->activation_hash)) {
-				$updates[Users::activation_hash] = $activation_hash;
-			}
-			if (isset($failed_logins) && (isset($obj->failed_logins) == false || $failed_logins != $obj->failed_logins)) {
-				$updates[Users::failed_logins] = $failed_logins;
-			}
-			if (isset($creation_timestamp) && (isset($obj->creation_timestamp) == false || $creation_timestamp != $obj->creation_timestamp)) {
-				$updates[Users::creation_timestamp] = $creation_timestamp;
-			}
-			if (isset($last_login_timestamp) && (isset($obj->last_login_timestamp) == false || $last_login_timestamp != $obj->last_login_timestamp)) {
-				$updates[Users::last_login_timestamp] = $last_login_timestamp;
-			}
-			if (isset($last_failed_login) && (isset($obj->last_failed_login) == false || $last_failed_login != $obj->last_failed_login)) {
-				$updates[Users::last_failed_login] = $last_failed_login;
-			}
-			if (isset($password_reset_timestamp) && (isset($obj->password_reset_timestamp) == false || $password_reset_timestamp != $obj->password_reset_timestamp)) {
-				$updates[Users::password_reset_timestamp] = $password_reset_timestamp;
-			}
-
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+			if ( isset($values['user_series']) ) {
+				$local_user_series = $values['user_series'];
+				if ( $local_user_series instanceof User_SeriesDBO) {
+					$values[Users::id] = $local_user_series->user_id;
+				}
+				else if ( is_integer( $local_user_series) ) {
+					$params[Users::id] = $local_user_series;
 				}
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
+	}
+
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Users ) {
+			if ( isset($values['user_network']) ) {
+				$local_user_network = $values['user_network'];
+				if ( $local_user_network instanceof User_NetworkDBO) {
+					$values[Users::id] = $local_user_network->user_id;
+				}
+				else if ( is_integer( $local_user_network) ) {
+					$params[Users::id] = $values['user_network'];
+				}
+			}
+			if ( isset($values['user_series']) ) {
+				$local_user_series = $values['user_series'];
+				if ( $local_user_series instanceof User_SeriesDBO) {
+					$values[Users::id] = $local_user_series->user_id;
+				}
+				else if ( is_integer( $local_user_series) ) {
+					$params[Users::id] = $values['user_series'];
+				}
+			}
+		}
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

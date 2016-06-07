@@ -18,29 +18,22 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $endpoint, $pattern, $replace)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			$endpoint,
-			$pattern,
-			$replace
-		);
-	}
-
-	public function update( Pull_List_ExpansionDBO $obj,
-		$endpoint, $pattern, $replace)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$endpoint,
-				$pattern,
-				$replace
-			);
+		if ( isset($values) ) {
+			// massage values as necessary
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Pull_List_Expansion ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(

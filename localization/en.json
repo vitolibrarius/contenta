@@ -393,6 +393,9 @@
             },
             "name": {
                 "label": "Migration"
+            },
+            "version_id": {
+                "FIELD_EMPTY": "Model\/patch\/version_id\/FIELD_EMPTY"
             }
         },
         "publication": {

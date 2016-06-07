@@ -34,31 +34,22 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 	$mandatoryAttrList = array_keys($this->mandatoryObjectAttributes());
 	$createRelationsList = array_keys($this->mandatoryObjectRelations());
 ?>
-	public function create( <?php echo implode(', ', array_map(function($item) { return '$' . $item; },
-		array_merge( $createRelationsList, $createAttrList ))); ?>)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			<?php echo implode(",\n\t\t\t", array_map(function($item) { return '$' . $item; },
-		array_merge( $createRelationsList, $createAttrList ))); ?>
-
-		);
-	}
-
-	public function update( <?php echo $this->dboClassName(); ?> $obj,
-		<?php echo implode(', ', array_map(function($item) { return '$' . $item; },
-			array_merge( $createRelationsList, $createAttrList ))); ?>)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				<?php echo implode(",\n\t\t\t\t", array_map(function($item) { return '$' . $item; },
-					array_merge( $createRelationsList, $createAttrList ))); ?>
-
-			);
+		if ( isset($values) ) {
+			// massage values as necessary
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof <?php echo $this->modelClassName(); ?> ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(

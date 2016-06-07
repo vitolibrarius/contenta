@@ -18,35 +18,22 @@ class Pull_List_Item extends _Pull_List_Item
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $pull_list, $group_name, $data, $name, $issue, $year)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			$pull_list,
-			$group_name,
-			$data,
-			$name,
-			$issue,
-			$year
-		);
-	}
-
-	public function update( Pull_List_ItemDBO $obj,
-		$pull_list, $group_name, $data, $name, $issue, $year)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$pull_list,
-				$group_name,
-				$data,
-				$name,
-				$issue,
-				$year
-			);
+		if ( isset($values) ) {
+			// massage values as necessary
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Pull_List_Item ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(

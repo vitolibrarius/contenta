@@ -96,63 +96,36 @@ abstract class _Pull_List_Exclusion extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $endpoint, $pattern, $type)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($endpoint, $pattern) ) {
-			$params = array(
-				Pull_List_Exclusion::pattern => (isset($pattern) ? $pattern : null),
-				Pull_List_Exclusion::type => (isset($type) ? $type : 'item'),
-				Pull_List_Exclusion::created => time(),
-			);
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$params[Pull_List_Exclusion::endpoint_id] = $endpoint->id;
+		if ( isset($values) ) {
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Pull_List_Exclusion::endpoint_id] = $local_endpoint->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$params[Pull_List_Exclusion::endpoint_id] = $endpoint;
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Pull_List_Exclusion::endpoint_id] = $local_endpoint;
 				}
-			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
 	}
 
-	public function base_update( Pull_List_ExclusionDBO $obj,
-		$endpoint, $pattern, $type)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($pattern) && (isset($obj->pattern) == false || $pattern != $obj->pattern)) {
-				$updates[Pull_List_Exclusion::pattern] = $pattern;
-			}
-			if (isset($type) && (isset($obj->type) == false || $type != $obj->type)) {
-				$updates[Pull_List_Exclusion::type] = $type;
-			}
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$updates[Pull_List_Exclusion::endpoint_id] = $endpoint->id;
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Pull_List_Exclusion ) {
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Pull_List_Exclusion::endpoint_id] = $local_endpoint->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$updates[Pull_List_Exclusion::endpoint_id] = $endpoint;
-				}
-			}
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Pull_List_Exclusion::endpoint_id] = $values['endpoint'];
 				}
 			}
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

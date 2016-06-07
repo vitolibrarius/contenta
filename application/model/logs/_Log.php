@@ -187,79 +187,36 @@ abstract class _Log extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($logLevel, $message) ) {
-			$params = array(
-				Log::trace => (isset($trace) ? $trace : null),
-				Log::trace_id => (isset($trace_id) ? $trace_id : null),
-				Log::context => (isset($context) ? $context : null),
-				Log::context_id => (isset($context_id) ? $context_id : null),
-				Log::message => (isset($message) ? $message : null),
-				Log::session => (isset($session) ? $session : session_id()),
-				Log::created => time(),
-			);
-
-			if ( isset($logLevel) ) {
-				if ( $logLevel instanceof Log_LevelDBO) {
-					$params[Log::level] = $logLevel->code;
+		if ( isset($values) ) {
+			if ( isset($values['logLevel']) ) {
+				$local_logLevel = $values['logLevel'];
+				if ( $local_logLevel instanceof Log_LevelDBO) {
+					$values[Log::level] = $local_logLevel->code;
 				}
-				else if ( is_string($logLevel) ) {
-					$params[Log::level] = $logLevel;
+				else if ( is_string( $local_logLevel) ) {
+					$params[Log::level] = $local_logLevel;
 				}
-			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
 	}
 
-	public function base_update( LogDBO $obj,
-		$logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($trace) && (isset($obj->trace) == false || $trace != $obj->trace)) {
-				$updates[Log::trace] = $trace;
-			}
-			if (isset($trace_id) && (isset($obj->trace_id) == false || $trace_id != $obj->trace_id)) {
-				$updates[Log::trace_id] = $trace_id;
-			}
-			if (isset($context) && (isset($obj->context) == false || $context != $obj->context)) {
-				$updates[Log::context] = $context;
-			}
-			if (isset($context_id) && (isset($obj->context_id) == false || $context_id != $obj->context_id)) {
-				$updates[Log::context_id] = $context_id;
-			}
-			if (isset($message) && (isset($obj->message) == false || $message != $obj->message)) {
-				$updates[Log::message] = $message;
-			}
-			if (isset($session) && (isset($obj->session) == false || $session != $obj->session)) {
-				$updates[Log::session] = $session;
-			}
-
-			if ( isset($logLevel) ) {
-				if ( $logLevel instanceof Log_LevelDBO) {
-					$updates[Log::level] = $logLevel->code;
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Log ) {
+			if ( isset($values['logLevel']) ) {
+				$local_logLevel = $values['logLevel'];
+				if ( $local_logLevel instanceof Log_LevelDBO) {
+					$values[Log::level] = $local_logLevel->code;
 				}
-				else if ( is_string($logLevel) ) {
-					$updates[Log::level] = $logLevel;
-				}
-			}
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+				else if ( is_string( $local_logLevel) ) {
+					$params[Log::level] = $values['logLevel'];
 				}
 			}
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

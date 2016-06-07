@@ -18,37 +18,42 @@ class Network extends _Network
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $ip_address, $ip_hash, $disable)
+	public function createObject(array $values = array())
 	{
-		$object = $this->objectForIp_address($ip_address);
-		if ( $object == false) {
-			$ip_hash = ipToHex($ip_address);
-			if ( $ip_hash == false ) {
-				$ip_hash = 'Invalid IP address ' . $ip_address;
+		if ( isset($values) ) {
+			if ( isset($values[Network::ip_address]) == false) {
+				$ip_address = $values[Network::ip_address];
+				$object = $this->objectForIp_address($ip_address);
+				if ( $object != false) {
+					return $object;
+				}
+
+				$ip_hash = ipToHex($ip_address);
+				if ( $ip_hash == false ) {
+					$ip_hash = 'Invalid IP address ' . $ip_address;
+				}
+				$values[Network::ip_hash] = $ip_hash;
 			}
 
-			return $this->base_create(
-				$ip_address,
-				$ip_hash,
-				false
-			);
+			if ( isset($values[Network::disable]) == true) {
+				$values[Network::disable] = boolValue($values[Network::disable], false);
+			}
+			else {
+				$values[Network::disable] = false;
+			}
 		}
 
-		return $object;
+		return parent::createObject($values);
 	}
 
-	public function update( NetworkDBO $obj,
-		$ip_address, $ip_hash, $disable)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$ip_address,
-				$ip_hash,
-				$disable
-			);
+	public function updateObject(DataObject $object = NULL, array $values = array()) {
+		if (isset($object) && $object instanceof NetworkDBO ) {
+			if ( isset($values[Network::disable]) == true) {
+				$values[Network::disable] = boolValue($values[Network::disable], false);
+			}
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 
@@ -108,11 +113,21 @@ class Network extends _Network
 	/** Validation */
 	function validate_ip_address($object = null, $value)
 	{
+		if ( $object instanceof NetworkDBO ) {
+			if ( $object->ip_address != $value ) {
+				return Localized::ModelValidation($this->tableName(), Network::ip_address, "IMMUTATABLE");
+			}
+		}
 		return parent::validate_ip_address($object, $value);
 	}
 
 	function validate_ip_hash($object = null, $value)
 	{
+		if ( $object instanceof NetworkDBO ) {
+			if ( $object->ip_hash != $value ) {
+				return Localized::ModelValidation($this->tableName(), Network::ip_hash, "IMMUTATABLE");
+			}
+		}
 		return parent::validate_ip_hash($object, $value);
 	}
 

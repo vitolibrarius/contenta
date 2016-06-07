@@ -124,67 +124,90 @@ abstract class _Pull_List extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $endpoint, $name, $etag, $published)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($endpoint, $name) ) {
-			$params = array(
-				Pull_List::name => (isset($name) ? $name : null),
-				Pull_List::etag => (isset($etag) ? $etag : null),
-				Pull_List::created => time(),
-				Pull_List::published => (isset($published) ? $published : time()),
-			);
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$params[Pull_List::endpoint_id] = $endpoint->id;
+		if ( isset($values) ) {
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Pull_List::endpoint_id] = $local_endpoint->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$params[Pull_List::endpoint_id] = $endpoint;
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Pull_List::endpoint_id] = $local_endpoint;
 				}
 			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
+			if ( isset($values['pull_list_items']) ) {
+				$local_pull_list_items = $values['pull_list_items'];
+				if ( $local_pull_list_items instanceof Pull_List_ItemDBO) {
+					$values[Pull_List::id] = $local_pull_list_items->pull_list_id;
+				}
+				else if ( is_integer( $local_pull_list_items) ) {
+					$params[Pull_List::id] = $local_pull_list_items;
+				}
+			}
+			if ( isset($values['exclusions']) ) {
+				$local_exclusions = $values['exclusions'];
+				if ( $local_exclusions instanceof Pull_List_ExclusionDBO) {
+					$values[Pull_List::endpoint_id] = $local_exclusions->endpoint_id;
+				}
+				else if ( is_integer( $local_exclusions) ) {
+					$params[Pull_List::endpoint_id] = $local_exclusions;
+				}
+			}
+			if ( isset($values['expansions']) ) {
+				$local_expansions = $values['expansions'];
+				if ( $local_expansions instanceof Pull_List_ExpansionDBO) {
+					$values[Pull_List::endpoint_id] = $local_expansions->endpoint_id;
+				}
+				else if ( is_integer( $local_expansions) ) {
+					$params[Pull_List::endpoint_id] = $local_expansions;
+				}
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
 	}
 
-	public function base_update( Pull_ListDBO $obj,
-		$endpoint, $name, $etag, $published)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
-				$updates[Pull_List::name] = $name;
-			}
-			if (isset($etag) && (isset($obj->etag) == false || $etag != $obj->etag)) {
-				$updates[Pull_List::etag] = $etag;
-			}
-			if (isset($published) && (isset($obj->published) == false || $published != $obj->published)) {
-				$updates[Pull_List::published] = $published;
-			}
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$updates[Pull_List::endpoint_id] = $endpoint->id;
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Pull_List ) {
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Pull_List::endpoint_id] = $local_endpoint->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$updates[Pull_List::endpoint_id] = $endpoint;
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Pull_List::endpoint_id] = $values['endpoint'];
 				}
 			}
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+			if ( isset($values['pull_list_items']) ) {
+				$local_pull_list_items = $values['pull_list_items'];
+				if ( $local_pull_list_items instanceof Pull_List_ItemDBO) {
+					$values[Pull_List::id] = $local_pull_list_items->pull_list_id;
+				}
+				else if ( is_integer( $local_pull_list_items) ) {
+					$params[Pull_List::id] = $values['pull_list_items'];
+				}
+			}
+			if ( isset($values['exclusions']) ) {
+				$local_exclusions = $values['exclusions'];
+				if ( $local_exclusions instanceof Pull_List_ExclusionDBO) {
+					$values[Pull_List::endpoint_id] = $local_exclusions->endpoint_id;
+				}
+				else if ( is_integer( $local_exclusions) ) {
+					$params[Pull_List::endpoint_id] = $values['exclusions'];
+				}
+			}
+			if ( isset($values['expansions']) ) {
+				$local_expansions = $values['expansions'];
+				if ( $local_expansions instanceof Pull_List_ExpansionDBO) {
+					$values[Pull_List::endpoint_id] = $local_expansions->endpoint_id;
+				}
+				else if ( is_integer( $local_expansions) ) {
+					$params[Pull_List::endpoint_id] = $values['expansions'];
 				}
 			}
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

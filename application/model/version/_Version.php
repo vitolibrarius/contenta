@@ -101,55 +101,36 @@ abstract class _Version extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $code, $major, $minor, $patch)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($code) ) {
-			$params = array(
-				Version::code => (isset($code) ? $code : null),
-				Version::major => (isset($major) ? $major : null),
-				Version::minor => (isset($minor) ? $minor : null),
-				Version::patch => (isset($patch) ? $patch : null),
-				Version::created => time(),
-			);
-
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
-			}
-		}
-		return $obj;
-	}
-
-	public function base_update( VersionDBO $obj,
-		$code, $major, $minor, $patch)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($code) && (isset($obj->code) == false || $code != $obj->code)) {
-				$updates[Version::code] = $code;
-			}
-			if (isset($major) && (isset($obj->major) == false || $major != $obj->major)) {
-				$updates[Version::major] = $major;
-			}
-			if (isset($minor) && (isset($obj->minor) == false || $minor != $obj->minor)) {
-				$updates[Version::minor] = $minor;
-			}
-			if (isset($patch) && (isset($obj->patch) == false || $patch != $obj->patch)) {
-				$updates[Version::patch] = $patch;
-			}
-
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+		if ( isset($values) ) {
+			if ( isset($values['patches']) ) {
+				$local_patches = $values['patches'];
+				if ( $local_patches instanceof PatchDBO) {
+					$values[Version::id] = $local_patches->version_id;
+				}
+				else if ( is_integer( $local_patches) ) {
+					$params[Version::id] = $local_patches;
 				}
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
+	}
+
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Version ) {
+			if ( isset($values['patches']) ) {
+				$local_patches = $values['patches'];
+				if ( $local_patches instanceof PatchDBO) {
+					$values[Version::id] = $local_patches->version_id;
+				}
+				else if ( is_integer( $local_patches) ) {
+					$params[Version::id] = $values['patches'];
+				}
+			}
+		}
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

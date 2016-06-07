@@ -53,7 +53,7 @@ class Migration_2 extends Migrator
 		. ")";
 		$this->sqlite_execute( "log", $sql, "Create table log" );
 
-		$sql = 'CREATE  INDEX IF NOT EXISTS log_level on log (level)';
+		$sql = 'CREATE  INDEX IF NOT EXISTS logging_level on log (level)';
 		$this->sqlite_execute( "log", $sql, "Index on log (level)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS log_tracetrace_id on log (trace,trace_id)';
 		$this->sqlite_execute( "log", $sql, "Index on log (trace,trace_id)" );

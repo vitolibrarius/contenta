@@ -95,51 +95,36 @@ abstract class _Network extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $ip_address, $ip_hash, $disable)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($ip_address) ) {
-			$params = array(
-				Network::ip_address => (isset($ip_address) ? $ip_address : null),
-				Network::ip_hash => (isset($ip_hash) ? $ip_hash : ipToHex($ip_address)),
-				Network::created => time(),
-				Network::disable => (isset($disable) ? $disable : Model::TERTIARY_FALSE),
-			);
-
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
-			}
-		}
-		return $obj;
-	}
-
-	public function base_update( NetworkDBO $obj,
-		$ip_address, $ip_hash, $disable)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($ip_address) && (isset($obj->ip_address) == false || $ip_address != $obj->ip_address)) {
-				$updates[Network::ip_address] = $ip_address;
-			}
-			if (isset($ip_hash) && (isset($obj->ip_hash) == false || $ip_hash != $obj->ip_hash)) {
-				$updates[Network::ip_hash] = $ip_hash;
-			}
-			if (isset($disable) && (isset($obj->disable) == false || $disable != $obj->disable)) {
-				$updates[Network::disable] = $disable;
-			}
-
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+		if ( isset($values) ) {
+			if ( isset($values['user_network']) ) {
+				$local_user_network = $values['user_network'];
+				if ( $local_user_network instanceof User_NetworkDBO) {
+					$values[Network::id] = $local_user_network->network_id;
+				}
+				else if ( is_integer( $local_user_network) ) {
+					$params[Network::id] = $local_user_network;
 				}
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
+	}
+
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Network ) {
+			if ( isset($values['user_network']) ) {
+				$local_user_network = $values['user_network'];
+				if ( $local_user_network instanceof User_NetworkDBO) {
+					$values[Network::id] = $local_user_network->network_id;
+				}
+				else if ( is_integer( $local_user_network) ) {
+					$params[Network::id] = $values['user_network'];
+				}
+			}
+		}
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

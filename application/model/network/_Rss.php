@@ -165,103 +165,54 @@ abstract class _Rss extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $endpoint, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url, $enclosure_length, $enclosure_mime, $enclosure_hash, $enclosure_password)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($endpoint, $title, $pub_date, $guid, $clean_name, $enclosure_url) ) {
-			$params = array(
-				Rss::created => time(),
-				Rss::title => (isset($title) ? $title : null),
-				Rss::desc => (isset($desc) ? $desc : null),
-				Rss::pub_date => (isset($pub_date) ? $pub_date : time()),
-				Rss::guid => (isset($guid) ? $guid : null),
-				Rss::clean_name => (isset($clean_name) ? $clean_name : null),
-				Rss::clean_issue => (isset($clean_issue) ? $clean_issue : null),
-				Rss::clean_year => (isset($clean_year) ? $clean_year : null),
-				Rss::enclosure_url => (isset($enclosure_url) ? $enclosure_url : null),
-				Rss::enclosure_length => (isset($enclosure_length) ? $enclosure_length : null),
-				Rss::enclosure_mime => (isset($enclosure_mime) ? $enclosure_mime : null),
-				Rss::enclosure_hash => (isset($enclosure_hash) ? $enclosure_hash : null),
-				Rss::enclosure_password => (isset($enclosure_password) ? $enclosure_password : Model::TERTIARY_TRUE),
-			);
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$params[Rss::endpoint_id] = $endpoint->id;
+		if ( isset($values) ) {
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Rss::endpoint_id] = $local_endpoint->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$params[Rss::endpoint_id] = $endpoint;
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Rss::endpoint_id] = $local_endpoint;
 				}
 			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
+			if ( isset($values['flux']) ) {
+				$local_flux = $values['flux'];
+				if ( $local_flux instanceof FluxDBO) {
+					$values[Rss::guid] = $local_flux->src_guid;
+				}
+				else if ( is_string( $local_flux) ) {
+					$params[Rss::guid] = $local_flux;
+				}
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
 	}
 
-	public function base_update( RssDBO $obj,
-		$endpoint, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url, $enclosure_length, $enclosure_mime, $enclosure_hash, $enclosure_password)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($title) && (isset($obj->title) == false || $title != $obj->title)) {
-				$updates[Rss::title] = $title;
-			}
-			if (isset($desc) && (isset($obj->desc) == false || $desc != $obj->desc)) {
-				$updates[Rss::desc] = $desc;
-			}
-			if (isset($pub_date) && (isset($obj->pub_date) == false || $pub_date != $obj->pub_date)) {
-				$updates[Rss::pub_date] = $pub_date;
-			}
-			if (isset($guid) && (isset($obj->guid) == false || $guid != $obj->guid)) {
-				$updates[Rss::guid] = $guid;
-			}
-			if (isset($clean_name) && (isset($obj->clean_name) == false || $clean_name != $obj->clean_name)) {
-				$updates[Rss::clean_name] = $clean_name;
-			}
-			if (isset($clean_issue) && (isset($obj->clean_issue) == false || $clean_issue != $obj->clean_issue)) {
-				$updates[Rss::clean_issue] = $clean_issue;
-			}
-			if (isset($clean_year) && (isset($obj->clean_year) == false || $clean_year != $obj->clean_year)) {
-				$updates[Rss::clean_year] = $clean_year;
-			}
-			if (isset($enclosure_url) && (isset($obj->enclosure_url) == false || $enclosure_url != $obj->enclosure_url)) {
-				$updates[Rss::enclosure_url] = $enclosure_url;
-			}
-			if (isset($enclosure_length) && (isset($obj->enclosure_length) == false || $enclosure_length != $obj->enclosure_length)) {
-				$updates[Rss::enclosure_length] = $enclosure_length;
-			}
-			if (isset($enclosure_mime) && (isset($obj->enclosure_mime) == false || $enclosure_mime != $obj->enclosure_mime)) {
-				$updates[Rss::enclosure_mime] = $enclosure_mime;
-			}
-			if (isset($enclosure_hash) && (isset($obj->enclosure_hash) == false || $enclosure_hash != $obj->enclosure_hash)) {
-				$updates[Rss::enclosure_hash] = $enclosure_hash;
-			}
-			if (isset($enclosure_password) && (isset($obj->enclosure_password) == false || $enclosure_password != $obj->enclosure_password)) {
-				$updates[Rss::enclosure_password] = $enclosure_password;
-			}
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$updates[Rss::endpoint_id] = $endpoint->id;
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Rss ) {
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Rss::endpoint_id] = $local_endpoint->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$updates[Rss::endpoint_id] = $endpoint;
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Rss::endpoint_id] = $values['endpoint'];
 				}
 			}
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+			if ( isset($values['flux']) ) {
+				$local_flux = $values['flux'];
+				if ( $local_flux instanceof FluxDBO) {
+					$values[Rss::guid] = $local_flux->src_guid;
+				}
+				else if ( is_string( $local_flux) ) {
+					$params[Rss::guid] = $values['flux'];
 				}
 			}
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

@@ -18,31 +18,32 @@ class Version extends _Version
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $code, $major, $minor, $patch)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			$code,
-			$major,
-			$minor,
-			$patch
-		);
-	}
-
-	public function update( VersionDBO $obj,
-		$code, $major, $minor, $patch)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$code,
-				$major,
-				$minor,
-				$patch
-			);
+		if ( isset($values) ) {
+			if ( isset($values[Version::code]) ) {
+				$vers = explode(".", $code );
+				$values[Version::major] = (isset($vers[0]) ? intval($vers[0]) : 0);
+				$values[Version::minor] = (isset($vers[1]) ? intval($vers[1]) : 0);
+				$values[Version::patch] = (isset($vers[2]) ? intval($vers[2]) : 0);
+			}
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Version ) {
+			if ( isset($values[Version::code]) ) {
+				$vers = explode(".", $code );
+				$values[Version::major] = (isset($vers[0]) ? intval($vers[0]) : 0);
+				$values[Version::minor] = (isset($vers[1]) ? intval($vers[1]) : 0);
+				$values[Version::patch] = (isset($vers[2]) ? intval($vers[2]) : 0);
+			}
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(

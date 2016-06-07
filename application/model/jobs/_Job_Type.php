@@ -124,66 +124,54 @@ abstract class _Job_Type extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $code, $name, $desc, $processor, $parameter, $scheduled, $requires_endpoint)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($code) ) {
-			$params = array(
-				Job_Type::code => (isset($code) ? $code : null),
-				Job_Type::name => (isset($name) ? $name : null),
-				Job_Type::desc => (isset($desc) ? $desc : null),
-				Job_Type::processor => (isset($processor) ? $processor : null),
-				Job_Type::parameter => (isset($parameter) ? $parameter : null),
-				Job_Type::scheduled => (isset($scheduled) ? $scheduled : true),
-				Job_Type::requires_endpoint => (isset($requires_endpoint) ? $requires_endpoint : true),
-			);
-
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
+		if ( isset($values) ) {
+			if ( isset($values['jobsRunning']) ) {
+				$local_jobsRunning = $values['jobsRunning'];
+				if ( $local_jobsRunning instanceof Job_RunningDBO) {
+					$values[Job_Type::id] = $local_jobsRunning->job_type_id;
+				}
+				else if ( is_integer( $local_jobsRunning) ) {
+					$params[Job_Type::id] = $local_jobsRunning;
+				}
 			}
-		}
-		return $obj;
-	}
-
-	public function base_update( Job_TypeDBO $obj,
-		$code, $name, $desc, $processor, $parameter, $scheduled, $requires_endpoint)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($code) && (isset($obj->code) == false || $code != $obj->code)) {
-				$updates[Job_Type::code] = $code;
-			}
-			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
-				$updates[Job_Type::name] = $name;
-			}
-			if (isset($desc) && (isset($obj->desc) == false || $desc != $obj->desc)) {
-				$updates[Job_Type::desc] = $desc;
-			}
-			if (isset($processor) && (isset($obj->processor) == false || $processor != $obj->processor)) {
-				$updates[Job_Type::processor] = $processor;
-			}
-			if (isset($parameter) && (isset($obj->parameter) == false || $parameter != $obj->parameter)) {
-				$updates[Job_Type::parameter] = $parameter;
-			}
-			if (isset($scheduled) && (isset($obj->scheduled) == false || $scheduled != $obj->scheduled)) {
-				$updates[Job_Type::scheduled] = $scheduled;
-			}
-			if (isset($requires_endpoint) && (isset($obj->requires_endpoint) == false || $requires_endpoint != $obj->requires_endpoint)) {
-				$updates[Job_Type::requires_endpoint] = $requires_endpoint;
-			}
-
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+			if ( isset($values['jobs']) ) {
+				$local_jobs = $values['jobs'];
+				if ( $local_jobs instanceof JobDBO) {
+					$values[Job_Type::id] = $local_jobs->job_type_id;
+				}
+				else if ( is_integer( $local_jobs) ) {
+					$params[Job_Type::id] = $local_jobs;
 				}
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
+	}
+
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Job_Type ) {
+			if ( isset($values['jobsRunning']) ) {
+				$local_jobsRunning = $values['jobsRunning'];
+				if ( $local_jobsRunning instanceof Job_RunningDBO) {
+					$values[Job_Type::id] = $local_jobsRunning->job_type_id;
+				}
+				else if ( is_integer( $local_jobsRunning) ) {
+					$params[Job_Type::id] = $values['jobsRunning'];
+				}
+			}
+			if ( isset($values['jobs']) ) {
+				$local_jobs = $values['jobs'];
+				if ( $local_jobs instanceof JobDBO) {
+					$values[Job_Type::id] = $local_jobs->job_type_id;
+				}
+				else if ( is_integer( $local_jobs) ) {
+					$params[Job_Type::id] = $values['jobs'];
+				}
+			}
+		}
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

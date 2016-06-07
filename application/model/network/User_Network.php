@@ -20,35 +20,15 @@ class User_Network extends _User_Network
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $user, $network)
-	{
-		return $this->base_create(
-			$user,
-			$network
-		);
-	}
 
 	public function createForIp_address($user, $ipAddress)
 	{
 		$net_model = Model::Named("Network");
 		$network = $net_model->objectForIp_address($ipAddress);
 		if ( $network == false ) {
-			$network = $net_model->create($ipAddress, null, false);
+			list($network, $errors) = $net_model->createObject( array( "ip_address" => $ipAddress, "disable" => false));
 		}
-		return $this->create($user, $network);
-	}
-
-	public function update( User_NetworkDBO $obj,
-		$user, $network)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$user,
-				$network
-			);
-		}
-		return $obj;
+		return $this->createObject( array( "user" => $user, "network" => $network) );
 	}
 
 

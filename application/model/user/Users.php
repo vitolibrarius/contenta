@@ -23,26 +23,6 @@ class Users extends _Users
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
-	{
-		return $this->base_create(
-			$name,
-			$email,
-			$active,
-			$account_type,
-			$rememberme_token,
-			$api_hash,
-			$password_hash,
-			$password_reset_hash,
-			$activation_hash,
-			$failed_logins,
-			$creation_timestamp,
-			$last_login_timestamp,
-			$last_failed_login,
-			$password_reset_timestamp
-		);
-	}
-
 	public function createObject(array $values = array())
 	{
 		if ( isset($values) ) {
@@ -79,32 +59,7 @@ class Users extends _Users
 		return parent::createObject($values);
 	}
 
-	public function update( UsersDBO $obj,
-		$name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$name,
-				$email,
-				$active,
-				$account_type,
-				$rememberme_token,
-				$api_hash,
-				$password_hash,
-				$password_reset_hash,
-				$activation_hash,
-				$failed_logins,
-				$creation_timestamp,
-				$last_login_timestamp,
-				$last_failed_login,
-				$password_reset_timestamp
-			);
-		}
-		return $obj;
-	}
-
-	public function updateObject(DataObject $object = null, array $values) {
+	public function updateObject(DataObject $object = NULL, array $values = array()) {
 		if (isset($object) && $object instanceof model\user\UsersDBO ) {
 			if ( isset($values['password'], $values['password_check'])
 				&& empty($values['password']) == false && empty($values['password_check']) == false
@@ -122,14 +77,8 @@ class Users extends _Users
 			}
 
 			if ( isset($values[Users::active]) == true) {
-				Logger::logError( "active set  " . var_export($values, true) );
 				$values[Users::active] = boolValue($values[Users::active], true);
 			}
-
-			Logger::logError( "more update values " . var_export($values, true) );
-		}
-		else {
-			Logger::logError( "Not a user " . var_export($object, true) );
 		}
 
 		return parent::updateObject($object, $values);

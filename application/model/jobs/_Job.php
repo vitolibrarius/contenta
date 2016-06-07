@@ -141,103 +141,54 @@ abstract class _Job extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $endpoint, $type_id, $enabled, $one_shot, $fail_count, $elapsed, $minute, $hour, $dayOfWeek, $parameter, $next, $last_run, $last_fail)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($endpoint, $minute, $hour, $dayOfWeek, $next) ) {
-			$params = array(
-				Job::type_id => (isset($type_id) ? $type_id : null),
-				Job::enabled => (isset($enabled) ? $enabled : Model::TERTIARY_TRUE),
-				Job::one_shot => (isset($one_shot) ? $one_shot : Model::TERTIARY_TRUE),
-				Job::fail_count => (isset($fail_count) ? $fail_count : null),
-				Job::elapsed => (isset($elapsed) ? $elapsed : null),
-				Job::minute => (isset($minute) ? $minute : null),
-				Job::hour => (isset($hour) ? $hour : null),
-				Job::dayOfWeek => (isset($dayOfWeek) ? $dayOfWeek : null),
-				Job::parameter => (isset($parameter) ? $parameter : null),
-				Job::next => (isset($next) ? $next : time()),
-				Job::last_run => (isset($last_run) ? $last_run : time()),
-				Job::last_fail => (isset($last_fail) ? $last_fail : time()),
-				Job::created => time(),
-			);
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$params[Job::endpoint_id] = $endpoint->id;
+		if ( isset($values) ) {
+			if ( isset($values['jobType']) ) {
+				$local_jobType = $values['jobType'];
+				if ( $local_jobType instanceof Job_TypeDBO) {
+					$values[Job::job_type_id] = $local_jobType->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$params[Job::endpoint_id] = $endpoint;
+				else if ( is_string( $local_jobType) ) {
+					$params[Job::job_type_id] = $local_jobType;
 				}
 			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Job::endpoint_id] = $local_endpoint->id;
+				}
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Job::endpoint_id] = $local_endpoint;
+				}
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
 	}
 
-	public function base_update( JobDBO $obj,
-		$endpoint, $type_id, $enabled, $one_shot, $fail_count, $elapsed, $minute, $hour, $dayOfWeek, $parameter, $next, $last_run, $last_fail)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($type_id) && (isset($obj->type_id) == false || $type_id != $obj->type_id)) {
-				$updates[Job::type_id] = $type_id;
-			}
-			if (isset($enabled) && (isset($obj->enabled) == false || $enabled != $obj->enabled)) {
-				$updates[Job::enabled] = $enabled;
-			}
-			if (isset($one_shot) && (isset($obj->one_shot) == false || $one_shot != $obj->one_shot)) {
-				$updates[Job::one_shot] = $one_shot;
-			}
-			if (isset($fail_count) && (isset($obj->fail_count) == false || $fail_count != $obj->fail_count)) {
-				$updates[Job::fail_count] = $fail_count;
-			}
-			if (isset($elapsed) && (isset($obj->elapsed) == false || $elapsed != $obj->elapsed)) {
-				$updates[Job::elapsed] = $elapsed;
-			}
-			if (isset($minute) && (isset($obj->minute) == false || $minute != $obj->minute)) {
-				$updates[Job::minute] = $minute;
-			}
-			if (isset($hour) && (isset($obj->hour) == false || $hour != $obj->hour)) {
-				$updates[Job::hour] = $hour;
-			}
-			if (isset($dayOfWeek) && (isset($obj->dayOfWeek) == false || $dayOfWeek != $obj->dayOfWeek)) {
-				$updates[Job::dayOfWeek] = $dayOfWeek;
-			}
-			if (isset($parameter) && (isset($obj->parameter) == false || $parameter != $obj->parameter)) {
-				$updates[Job::parameter] = $parameter;
-			}
-			if (isset($next) && (isset($obj->next) == false || $next != $obj->next)) {
-				$updates[Job::next] = $next;
-			}
-			if (isset($last_run) && (isset($obj->last_run) == false || $last_run != $obj->last_run)) {
-				$updates[Job::last_run] = $last_run;
-			}
-			if (isset($last_fail) && (isset($obj->last_fail) == false || $last_fail != $obj->last_fail)) {
-				$updates[Job::last_fail] = $last_fail;
-			}
-
-			if ( isset($endpoint) ) {
-				if ( $endpoint instanceof EndpointDBO) {
-					$updates[Job::endpoint_id] = $endpoint->id;
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Job ) {
+			if ( isset($values['jobType']) ) {
+				$local_jobType = $values['jobType'];
+				if ( $local_jobType instanceof Job_TypeDBO) {
+					$values[Job::job_type_id] = $local_jobType->id;
 				}
-				else if (  is_integer($endpoint) ) {
-					$updates[Job::endpoint_id] = $endpoint;
+				else if ( is_string( $local_jobType) ) {
+					$params[Job::job_type_id] = $values['jobType'];
 				}
 			}
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+			if ( isset($values['endpoint']) ) {
+				$local_endpoint = $values['endpoint'];
+				if ( $local_endpoint instanceof EndpointDBO) {
+					$values[Job::endpoint_id] = $local_endpoint->id;
+				}
+				else if ( is_integer( $local_endpoint) ) {
+					$params[Job::endpoint_id] = $values['endpoint'];
 				}
 			}
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

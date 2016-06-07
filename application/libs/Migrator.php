@@ -51,7 +51,7 @@ class Migrator
 						$success = $worker->performMigration();
 						if ( $success ) {
 							$version = $worker->targetVersionDBO();
-							$patch = $patch_model->create($version, $migrationClass);
+							list($patch, $errors) = $patch_model->createObject( array( "version" => $version, "name" => $migrationClass));
 							if ( ($patch instanceof PatchDBO ) == false) {
 								throw new MigrationFailedException("Failed to create migration record " . $migrationClass);
 							}
@@ -72,7 +72,7 @@ class Migrator
 			else {
 				// something else?
 				Logger::logException( $e );
-				break;
+				die( "database migration error" );
 			}
 		}
 	}
@@ -160,13 +160,7 @@ class Migrator
 		$version_model = Model::Named("Version");
 		$version = $version_model->objectForCode( $code );
 		if ( $version == false ) {
-			$vers = explode(".", $code );
-			$version = $version_model->create(
-				$code,
-				(isset($vers[0]) ? intval($vers[0]) : 0),
-				(isset($vers[1]) ? intval($vers[1]) : 0),
-				(isset($vers[2]) ? intval($vers[2]) : 0)
-			);
+			list($version, $errors) = $version_model->createObject( array( Version::code => $code ));
 		}
 		return $version;
 	}

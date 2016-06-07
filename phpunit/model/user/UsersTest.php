@@ -49,45 +49,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 /*	 Test functions */
 
 	/**
-	 * @covers	create
-	 * 			T_FUNCTION T_PUBLIC create ( $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-22 12:44:58.
-	 */
-	public function testCreate()
-	{
-	}
-
-	/**
-	 * @covers	update
-	 * 			T_FUNCTION T_PUBLIC update ( UsersDBO $obj, $name, $email, $active, $account_type, $rememberme_token, $api_hash, $password_reset_hash, $activation_hash, $failed_logins, $creation_timestamp, $last_login_timestamp, $last_failed_login, $password_reset_timestamp)
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-22 12:44:58.
-	 */
-	public function testUpdate()
-	{
-		$userDBO = $this->model->objectForEmail('test@home.com');
-		$newObj = $this->model->update( $userDBO
-			, "NewTestName" // $name
-			, null // $email
-			, null // $active
-			, null // $account_type
-			, null // $rememberme_token
-			, null // $api_hash
-			, null // $password_hash
-			, null // $password_reset_hash
-			, null // $activation_hash
-			, null // $failed_logins
-			, null // $creation_timestamp
-			, null // $last_login_timestamp
-			, null // $last_failed_login
-			, null // $password_reset_timestamp
-		);
-
-		$this->assertTrue( ($newObj != false), var_export($newObj, true) );
-		$this->assertNotEquals( $userDBO->name, $newObj->name, "Names should be differnt" );
-
-	}
-
-	/**
 	 * @covers	attributesFor
 	 * 			T_FUNCTION T_PUBLIC attributesFor ( $object = null, $type = null)
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-22 12:44:58.

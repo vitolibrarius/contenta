@@ -92,70 +92,54 @@ abstract class _User_Network extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $user, $network)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($user, $network) ) {
-			$params = array(
-			);
-
-			if ( isset($user) ) {
-				if ( $user instanceof UsersDBO) {
-					$params[User_Network::user_id] = $user->id;
+		if ( isset($values) ) {
+			if ( isset($values['user']) ) {
+				$local_user = $values['user'];
+				if ( $local_user instanceof UsersDBO) {
+					$values[User_Network::user_id] = $local_user->id;
 				}
-				else if (  is_integer($user) ) {
-					$params[User_Network::user_id] = $user;
+				else if ( is_integer( $local_user) ) {
+					$params[User_Network::user_id] = $local_user;
 				}
 			}
-			if ( isset($network) ) {
-				if ( $network instanceof NetworkDBO) {
-					$params[User_Network::network_id] = $network->id;
+			if ( isset($values['network']) ) {
+				$local_network = $values['network'];
+				if ( $local_network instanceof NetworkDBO) {
+					$values[User_Network::network_id] = $local_network->id;
 				}
-				else if (  is_integer($network) ) {
-					$params[User_Network::network_id] = $network;
+				else if ( is_integer( $local_network) ) {
+					$params[User_Network::network_id] = $local_network;
 				}
-			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
 	}
 
-	public function base_update( User_NetworkDBO $obj,
-		$user, $network)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-
-			if ( isset($user) ) {
-				if ( $user instanceof UsersDBO) {
-					$updates[User_Network::user_id] = $user->id;
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof User_Network ) {
+			if ( isset($values['user']) ) {
+				$local_user = $values['user'];
+				if ( $local_user instanceof UsersDBO) {
+					$values[User_Network::user_id] = $local_user->id;
 				}
-				else if (  is_integer($user) ) {
-					$updates[User_Network::user_id] = $user;
+				else if ( is_integer( $local_user) ) {
+					$params[User_Network::user_id] = $values['user'];
 				}
 			}
-			if ( isset($network) ) {
-				if ( $network instanceof NetworkDBO) {
-					$updates[User_Network::network_id] = $network->id;
+			if ( isset($values['network']) ) {
+				$local_network = $values['network'];
+				if ( $local_network instanceof NetworkDBO) {
+					$values[User_Network::network_id] = $local_network->id;
 				}
-				else if (  is_integer($network) ) {
-					$updates[User_Network::network_id] = $network;
-				}
-			}
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+				else if ( is_integer( $local_network) ) {
+					$params[User_Network::network_id] = $values['network'];
 				}
 			}
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**

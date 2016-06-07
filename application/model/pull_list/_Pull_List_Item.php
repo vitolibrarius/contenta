@@ -119,75 +119,36 @@ abstract class _Pull_List_Item extends Model
 	/**
 	 *	Create/Update functions
 	 */
-	public function base_create( $pull_list, $group_name, $data, $name, $issue, $year)
+	public function createObject( array $values = array() )
 	{
-		$obj = false;
-		if ( isset($pull_list, $data, $name) ) {
-			$params = array(
-				Pull_List_Item::group_name => (isset($group_name) ? $group_name : null),
-				Pull_List_Item::data => (isset($data) ? $data : null),
-				Pull_List_Item::created => time(),
-				Pull_List_Item::name => (isset($name) ? $name : null),
-				Pull_List_Item::issue => (isset($issue) ? $issue : null),
-				Pull_List_Item::year => (isset($year) ? $year : null),
-			);
-
-			if ( isset($pull_list) ) {
-				if ( $pull_list instanceof Pull_ListDBO) {
-					$params[Pull_List_Item::pull_list_id] = $pull_list->id;
+		if ( isset($values) ) {
+			if ( isset($values['pull_list']) ) {
+				$local_pull_list = $values['pull_list'];
+				if ( $local_pull_list instanceof Pull_ListDBO) {
+					$values[Pull_List_Item::pull_list_id] = $local_pull_list->id;
 				}
-				else if (  is_integer($pull_list) ) {
-					$params[Pull_List_Item::pull_list_id] = $pull_list;
+				else if ( is_integer( $local_pull_list) ) {
+					$params[Pull_List_Item::pull_list_id] = $local_pull_list;
 				}
-			}
-
-			list( $obj, $errorList ) = $this->createObject($params);
-			if ( is_array($errorList) ) {
-				return $errorList;
 			}
 		}
-		return $obj;
+		return parent::createObject($values);
 	}
 
-	public function base_update( Pull_List_ItemDBO $obj,
-		$pull_list, $group_name, $data, $name, $issue, $year)
-	{
-		if ( isset( $obj ) && is_null($obj) == false ) {
-			$updates = array();
-
-			if (isset($group_name) && (isset($obj->group_name) == false || $group_name != $obj->group_name)) {
-				$updates[Pull_List_Item::group_name] = $group_name;
-			}
-			if (isset($data) && (isset($obj->data) == false || $data != $obj->data)) {
-				$updates[Pull_List_Item::data] = $data;
-			}
-			if (isset($name) && (isset($obj->name) == false || $name != $obj->name)) {
-				$updates[Pull_List_Item::name] = $name;
-			}
-			if (isset($issue) && (isset($obj->issue) == false || $issue != $obj->issue)) {
-				$updates[Pull_List_Item::issue] = $issue;
-			}
-			if (isset($year) && (isset($obj->year) == false || $year != $obj->year)) {
-				$updates[Pull_List_Item::year] = $year;
-			}
-
-			if ( isset($pull_list) ) {
-				if ( $pull_list instanceof Pull_ListDBO) {
-					$updates[Pull_List_Item::pull_list_id] = $pull_list->id;
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Pull_List_Item ) {
+			if ( isset($values['pull_list']) ) {
+				$local_pull_list = $values['pull_list'];
+				if ( $local_pull_list instanceof Pull_ListDBO) {
+					$values[Pull_List_Item::pull_list_id] = $local_pull_list->id;
 				}
-				else if (  is_integer($pull_list) ) {
-					$updates[Pull_List_Item::pull_list_id] = $pull_list;
-				}
-			}
-
-			if ( count($updates) > 0 ) {
-				list($obj, $errorList) = $this->updateObject( $obj, $updates );
-				if ( is_array($errorList) ) {
-					return $errorList;
+				else if ( is_integer( $local_pull_list) ) {
+					$params[Pull_List_Item::pull_list_id] = $values['pull_list'];
 				}
 			}
 		}
-		return $obj;
+
+		return parent::updateObject($object, $values);
 	}
 
 	/**
