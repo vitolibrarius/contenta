@@ -135,10 +135,10 @@
     "Auth": {
         "ACCOUNT_NOT_ACTIVE": "This account is not active.  Please contact the administrator",
         "LOGIN_FAILED": "Login Failed",
-        "PASSWORD_FIELD_EMPTY": "Auth\/PASSWORD_FIELD_EMPTY",
+        "PASSWORD_FIELD_EMPTY": "Please enter the password.",
         "PASSWORD_WRONG": "Username or password mismatch.  Please check and retry.",
-        "PASSWORD_WRONG_3_TIMES": "Auth\/PASSWORD_WRONG_3_TIMES",
-        "USERNAME_FIELD_EMPTY": "Auth\/USERNAME_FIELD_EMPTY"
+        "PASSWORD_WRONG_3_TIMES": "Username or password mismatch.",
+        "USERNAME_FIELD_EMPTY": "Please enter a user name"
     },
     "DisplaySeries": {
         "title": "Series"
@@ -387,6 +387,11 @@
                 "search": "Select Story Arcs"
             }
         },
+        "network": {
+            "ip_address": {
+                "IMMUTATABLE": "Network addresses are not editable"
+            }
+        },
         "patch": {
             "created": {
                 "label": "Date Applied"
@@ -395,7 +400,7 @@
                 "label": "Migration"
             },
             "version_id": {
-                "FIELD_EMPTY": "Model\/patch\/version_id\/FIELD_EMPTY"
+                "FIELD_EMPTY": "Version record is required"
             }
         },
         "publication": {

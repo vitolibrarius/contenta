@@ -21,7 +21,7 @@ class Network extends _Network
 	public function createObject(array $values = array())
 	{
 		if ( isset($values) ) {
-			if ( isset($values[Network::ip_address]) == false) {
+			if ( isset($values[Network::ip_address]) ) {
 				$ip_address = $values[Network::ip_address];
 				$object = $this->objectForIp_address($ip_address);
 				if ( $object != false) {
@@ -35,7 +35,7 @@ class Network extends _Network
 				$values[Network::ip_hash] = $ip_hash;
 			}
 
-			if ( isset($values[Network::disable]) == true) {
+			if ( isset($values[Network::disable]) ) {
 				$values[Network::disable] = boolValue($values[Network::disable], false);
 			}
 			else {
@@ -78,8 +78,10 @@ class Network extends _Network
 
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
-		// add customization here
-		return parent::attributeIsEditable($object, $type, $attr);
+		if ( is_null($object) || $attr == Network::disable) {
+			return true;
+		}
+		return false;
 	}
 
 	/*
@@ -91,8 +93,6 @@ class Network extends _Network
 	{
 		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
-				case Network::ip_hash:
-					return ipToHex($ip_address);
 				case Network::disable:
 					return Model::TERTIARY_FALSE;
 			}

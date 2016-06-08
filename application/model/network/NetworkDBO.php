@@ -14,7 +14,9 @@ use \model\network\User_NetworkDBO as User_NetworkDBO;
 
 class NetworkDBO extends _NetworkDBO
 {
-
+	public function displayName() {
+		return $this->ip_address();
+	}
 }
 
 ?>

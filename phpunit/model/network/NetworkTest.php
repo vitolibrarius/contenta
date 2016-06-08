@@ -51,10 +51,30 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCreateObject()
 	{
-		$this->model->createObject( array( "ip_address" => "127.0.0.1", "disable" => false));
-		$this->model->createObject( array( "ip_address" => "192.168.1.77") );
-		$this->model->createObject( array( "ip_address" => "192.30.252.122", "disable" => true));  // github
-		$this->model->createObject( array( "ip_address" => "17.172.224.47", "disable" => "on"));  // apple
+		list($network, $errors) = $this->model->createObject( array( "ip_address" => "127.0.0.1", "disable" => false));
+		$this->assertNull( $errors, "Failed to create new record" . var_export($errors, true) );
+		$this->assertTrue( $network != false, "Failed to create new record" );
+		$this->assertFalse( $network->isDisable(), "Should not be disabled " . $network );
+
+		list($network, $errors) = $this->model->createObject( array( "ip_address" => "192.168.1.77") );
+		$this->assertNull( $errors, "Failed to create new record" . var_export($errors, true) );
+		$this->assertTrue( $network != false, "Failed to create new record" );
+		$this->assertFalse( $network->isDisable(), "Should not be disabled " . $network );
+
+		list($network, $errors) = $this->model->createObject( array( "ip_address" => "192.30.252.122", "disable" => true));  // github
+		$this->assertNull( $errors, "Failed to create new record" . var_export($errors, true) );
+		$this->assertTrue( $network != false, "Failed to create new record" );
+		$this->assertTrue( $network->isDisable(), "Should be disabled " . $network );
+
+		list($network, $errors) = $this->model->createObject( array( "ip_address" => "17.172.224.47", "disable" => "on"));  // apple
+		$this->assertNull( $errors, "Failed to create new record" . var_export($errors, true) );
+		$this->assertTrue( $network != false, "Failed to create new record" );
+		$this->assertTrue( $network->isDisable(), "Should be disabled " . $network );
+
+		list($network, $errors) = $this->model->createObject( array( "ip_address" => "domain.name.com", "disable" => "on"));  // bad
+		$this->assertNull( $errors, "Failed to create new record" . var_export($errors, true) );
+		$this->assertTrue( $network != false, "Failed to create new record" );
+		$this->assertTrue( $network->isDisable(), "Should be disabled " . $network );
 	}
 
 	/**
@@ -66,7 +86,15 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	public function testUpdateObject()
 	{
 		$github = $this->model->objectForIp_address("192.30.252.122");
+		list( $updated, $errors ) = $this->model->updateObject( $github, array( "ip_address" => "127.0.0.1", "disable" => false));
+		$this->assertNotNull( $errors, "Failed to updated record" . var_export($errors, true) );
+		$this->assertCount( 1, $errors, "Should be validation error" );
 
+		$github = $this->model->objectForIp_address("192.30.252.122");
+		$this->assertTrue( $github->isDisable(), "Should be disabled " . $github );
+		list( $updated, $errors ) = $this->model->updateObject( $github, array( "disable" => false));
+		$this->assertNull( $errors, "Failed to updated record" . var_export($errors, true) );
+		$this->assertFalse( $updated->isDisable(), "Should not be disabled " . $updated );
 	}
 
 	/**
@@ -87,23 +115,27 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers	attributesMandatory
 	 * 			T_FUNCTION T_PUBLIC attributesMandatory ( $object = null)
-	 * @todo	Implement testAttributesMandatory().
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-06 21:11:17.
 	 */
 	public function testAttributesMandatory()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$attr = $this->model->attributesMandatory(null, null);
+		$this->assertCount( 1, $attr, var_export($attr, true) );
 	}
 
 	/**
 	 * @covers	attributeIsEditable
 	 * 			T_FUNCTION T_PUBLIC attributeIsEditable ( $object = null, $type = null, $attr)
-	 * @todo	Implement testAttributeIsEditable().
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-06 21:11:17.
 	 */
 	public function testAttributeIsEditable()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$editable = $this->model->attributeIsEditable(null, null, "ip_address");
+		$this->assertTrue( $editable, "ipaddress should be editable for insert" );
+
+		$github = $this->model->objectForIp_address("192.30.252.122");
+		$editable = $this->model->attributeIsEditable($github, null, "ip_address");
+		$this->assertFalse( $editable, "ipaddress should not be editable for update" );
 	}
 
 	/**
@@ -114,7 +146,6 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAttributeDefaultValue()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -125,7 +156,6 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAttributeEditPattern()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -136,7 +166,6 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAttributeOptions()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -147,7 +176,6 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_ip_address()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -158,7 +186,6 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_ip_hash()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -169,7 +196,6 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_created()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 	/**
@@ -180,7 +206,6 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testValidate_disable()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 
