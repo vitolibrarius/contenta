@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\network\NetworkDBO as NetworkDBO;
 
 /* import related objects */
@@ -98,30 +100,12 @@ abstract class _Network extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
-			if ( isset($values['user_network']) ) {
-				$local_user_network = $values['user_network'];
-				if ( $local_user_network instanceof User_NetworkDBO) {
-					$values[Network::id] = $local_user_network->network_id;
-				}
-				else if ( is_integer( $local_user_network) ) {
-					$params[Network::id] = $local_user_network;
-				}
-			}
 		}
 		return parent::createObject($values);
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
 		if (isset($object) && $object instanceof Network ) {
-			if ( isset($values['user_network']) ) {
-				$local_user_network = $values['user_network'];
-				if ( $local_user_network instanceof User_NetworkDBO) {
-					$values[Network::id] = $local_user_network->network_id;
-				}
-				else if ( is_integer( $local_user_network) ) {
-					$params[Network::id] = $values['user_network'];
-				}
-			}
 		}
 
 		return parent::updateObject($object, $values);
@@ -132,7 +116,7 @@ abstract class _Network extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Network )
+		if ( $object instanceof NetworkDBO )
 		{
 			// does not own User_Network
 			return parent::deleteObject($object);
@@ -191,14 +175,15 @@ abstract class _Network extends Model
 	/** Validation */
 	function validate_ip_address($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Network::ip_address,
 				"FIELD_EMPTY"
 			);
 		}
+
 		// make sure Ip_address is unique
 		$existing = $this->objectForIp_address($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -212,7 +197,11 @@ abstract class _Network extends Model
 	}
 	function validate_ip_hash($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		// make sure Ip_hash is unique
 		$existing = $this->objectForIp_hash($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -226,6 +215,12 @@ abstract class _Network extends Model
 	}
 	function validate_created($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// created date is not changeable
 		if ( isset($object, $object->created) ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -237,13 +232,12 @@ abstract class _Network extends Model
 	}
 	function validate_disable($object = null, $value)
 	{
-		if ( is_null($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Network::disable,
-				"FIELD_EMPTY"
-			);
+		// not mandatory field
+		if (isset($value) == false  ) {
+			return null;
 		}
+
+		// boolean
 
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"

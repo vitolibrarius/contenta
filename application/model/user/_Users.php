@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\user\UsersDBO as UsersDBO;
 
 /* import related objects */
@@ -171,48 +173,12 @@ abstract class _Users extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
-			if ( isset($values['user_network']) ) {
-				$local_user_network = $values['user_network'];
-				if ( $local_user_network instanceof User_NetworkDBO) {
-					$values[Users::id] = $local_user_network->user_id;
-				}
-				else if ( is_integer( $local_user_network) ) {
-					$params[Users::id] = $local_user_network;
-				}
-			}
-			if ( isset($values['user_series']) ) {
-				$local_user_series = $values['user_series'];
-				if ( $local_user_series instanceof User_SeriesDBO) {
-					$values[Users::id] = $local_user_series->user_id;
-				}
-				else if ( is_integer( $local_user_series) ) {
-					$params[Users::id] = $local_user_series;
-				}
-			}
 		}
 		return parent::createObject($values);
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
 		if (isset($object) && $object instanceof Users ) {
-			if ( isset($values['user_network']) ) {
-				$local_user_network = $values['user_network'];
-				if ( $local_user_network instanceof User_NetworkDBO) {
-					$values[Users::id] = $local_user_network->user_id;
-				}
-				else if ( is_integer( $local_user_network) ) {
-					$params[Users::id] = $values['user_network'];
-				}
-			}
-			if ( isset($values['user_series']) ) {
-				$local_user_series = $values['user_series'];
-				if ( $local_user_series instanceof User_SeriesDBO) {
-					$values[Users::id] = $local_user_series->user_id;
-				}
-				else if ( is_integer( $local_user_series) ) {
-					$params[Users::id] = $values['user_series'];
-				}
-			}
 		}
 
 		return parent::updateObject($object, $values);
@@ -223,7 +189,7 @@ abstract class _Users extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Users )
+		if ( $object instanceof UsersDBO )
 		{
 			$user_network_model = Model::Named('User_Network');
 			if ( $user_network_model->deleteAllForKeyValue(User_Network::user_id, $this->id) == false ) {
@@ -415,14 +381,15 @@ abstract class _Users extends Model
 	/** Validation */
 	function validate_name($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Users::name,
 				"FIELD_EMPTY"
 			);
 		}
+
 		// make sure Name is unique
 		$existing = $this->objectForName($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -436,14 +403,16 @@ abstract class _Users extends Model
 	}
 	function validate_email($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Users::email,
 				"FIELD_EMPTY"
 			);
 		}
+
+		// email format
 		if ( filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -464,13 +433,16 @@ abstract class _Users extends Model
 	}
 	function validate_active($object = null, $value)
 	{
-		if ( is_null($value) ) {
+		// check for mandatory field
+		if (isset($value) == false  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Users::active,
 				"FIELD_EMPTY"
 			);
 		}
+
+		// boolean
 
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"
@@ -487,12 +459,24 @@ abstract class _Users extends Model
 	}
 	function validate_account_type($object = null, $value)
 	{
-		$value = trim($value);
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::account_type,
+				"FIELD_EMPTY"
+			);
+		}
+
 		return null;
 	}
 	function validate_rememberme_token($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		// make sure Rememberme_token is unique
 		$existing = $this->objectForRememberme_token($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -506,7 +490,11 @@ abstract class _Users extends Model
 	}
 	function validate_api_hash($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		// make sure Api_hash is unique
 		$existing = $this->objectForApi_hash($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -520,24 +508,33 @@ abstract class _Users extends Model
 	}
 	function validate_password_hash($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Users::password_hash,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_password_reset_hash($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_activation_hash($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		// make sure Activation_hash is unique
 		$existing = $this->objectForActivation_hash($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -551,6 +548,12 @@ abstract class _Users extends Model
 	}
 	function validate_failed_logins($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -562,18 +565,38 @@ abstract class _Users extends Model
 	}
 	function validate_creation_timestamp($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_last_login_timestamp($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_last_failed_login($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_password_reset_timestamp($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 }

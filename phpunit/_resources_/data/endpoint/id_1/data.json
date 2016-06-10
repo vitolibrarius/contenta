@@ -1,0 +1,10 @@
+{
+    "id": "1",
+    "type_id": "3",
+    "name": "ComicVine (Comic book database)",
+    "base_url": "http:\/\/comicvine.gamespot.com\/api",
+    "api_key": "5055b9e19bba19cc9ea1c25cae854493",
+    "username": "",
+    "enabled": "1",
+    "compressed": "0"
+}

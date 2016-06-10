@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\version\PatchDBO as PatchDBO;
 
 /* import related objects */
@@ -135,7 +137,7 @@ abstract class _Patch extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Patch )
+		if ( $object instanceof PatchDBO )
 		{
 			// does not own Version
 			return parent::deleteObject($object);
@@ -149,11 +151,14 @@ abstract class _Patch extends Model
 		$success = true;
 		if ( $obj != false ) {
 			$array = $this->allForVersion($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
 				}
+				$array = $this->allForVersion($obj);
 			}
 		}
 		return $success;
@@ -198,14 +203,15 @@ abstract class _Patch extends Model
 	/** Validation */
 	function validate_name($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Patch::name,
 				"FIELD_EMPTY"
 			);
 		}
+
 		// make sure Name is unique
 		$existing = $this->objectForName($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -219,6 +225,12 @@ abstract class _Patch extends Model
 	}
 	function validate_created($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// created date is not changeable
 		if ( isset($object, $object->created) ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -230,11 +242,17 @@ abstract class _Patch extends Model
 	}
 	function validate_version_id($object = null, $value)
 	{
-		if (isset($object->version_id) === false && empty($value) ) {
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Patch::version_id,
-				"FIELD_EMPTY"
+				"FILTER_VALIDATE_INT"
 			);
 		}
 		return null;

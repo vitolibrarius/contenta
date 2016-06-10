@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 
 /* import related objects */
@@ -127,48 +129,12 @@ abstract class _Job_Type extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
-			if ( isset($values['jobsRunning']) ) {
-				$local_jobsRunning = $values['jobsRunning'];
-				if ( $local_jobsRunning instanceof Job_RunningDBO) {
-					$values[Job_Type::id] = $local_jobsRunning->job_type_id;
-				}
-				else if ( is_integer( $local_jobsRunning) ) {
-					$params[Job_Type::id] = $local_jobsRunning;
-				}
-			}
-			if ( isset($values['jobs']) ) {
-				$local_jobs = $values['jobs'];
-				if ( $local_jobs instanceof JobDBO) {
-					$values[Job_Type::id] = $local_jobs->job_type_id;
-				}
-				else if ( is_integer( $local_jobs) ) {
-					$params[Job_Type::id] = $local_jobs;
-				}
-			}
 		}
 		return parent::createObject($values);
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
 		if (isset($object) && $object instanceof Job_Type ) {
-			if ( isset($values['jobsRunning']) ) {
-				$local_jobsRunning = $values['jobsRunning'];
-				if ( $local_jobsRunning instanceof Job_RunningDBO) {
-					$values[Job_Type::id] = $local_jobsRunning->job_type_id;
-				}
-				else if ( is_integer( $local_jobsRunning) ) {
-					$params[Job_Type::id] = $values['jobsRunning'];
-				}
-			}
-			if ( isset($values['jobs']) ) {
-				$local_jobs = $values['jobs'];
-				if ( $local_jobs instanceof JobDBO) {
-					$values[Job_Type::id] = $local_jobs->job_type_id;
-				}
-				else if ( is_integer( $local_jobs) ) {
-					$params[Job_Type::id] = $values['jobs'];
-				}
-			}
 		}
 
 		return parent::updateObject($object, $values);
@@ -179,7 +145,7 @@ abstract class _Job_Type extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Job_Type )
+		if ( $object instanceof Job_TypeDBO )
 		{
 			$job_running_model = Model::Named('Job_Running');
 			if ( $job_running_model->deleteAllForKeyValue(Job_Running::job_type_id, $this->id) == false ) {
@@ -275,14 +241,15 @@ abstract class _Job_Type extends Model
 	/** Validation */
 	function validate_code($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Job_Type::code,
 				"FIELD_EMPTY"
 			);
 		}
+
 		// make sure Code is unique
 		$existing = $this->objectForCode($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -296,7 +263,11 @@ abstract class _Job_Type extends Model
 	}
 	function validate_name($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		// make sure Name is unique
 		$existing = $this->objectForName($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -310,28 +281,39 @@ abstract class _Job_Type extends Model
 	}
 	function validate_desc($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_processor($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_parameter($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_scheduled($object = null, $value)
 	{
-		if ( is_null($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job_Type::scheduled,
-				"FIELD_EMPTY"
-			);
+		// not mandatory field
+		if (isset($value) == false  ) {
+			return null;
 		}
+
+		// boolean
 
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"
@@ -348,13 +330,12 @@ abstract class _Job_Type extends Model
 	}
 	function validate_requires_endpoint($object = null, $value)
 	{
-		if ( is_null($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job_Type::requires_endpoint,
-				"FIELD_EMPTY"
-			);
+		// not mandatory field
+		if (isset($value) == false  ) {
+			return null;
 		}
+
+		// boolean
 
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"

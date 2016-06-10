@@ -1,0 +1,10 @@
+{
+    "id": "2",
+    "type_id": "5",
+    "name": "PreviewsWorld Upcoming Releases",
+    "base_url": "http:\/\/www.previewsworld.com\/shipping\/newreleases.txt",
+    "api_key": "",
+    "username": "",
+    "enabled": "1",
+    "compressed": null
+}

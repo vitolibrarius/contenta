@@ -97,8 +97,10 @@ function test_initializeDatabase($reset = true)
 	$config = Config::instance();
 
 	$config->setValue("Logging/type", "File") || die("Failed to change the configured Logging");
+	Logger::resetInstance();
 	Migrator::Upgrade( Config::GetLog() );
 	$config->setValue("Logging/type", "Print") || die("Failed to change the configured Logging");
+	Logger::resetInstance();
 }
 
 function test_importTestDataDirectory( )
@@ -114,9 +116,12 @@ function test_importTestData( array $models = array() )
 	$importer->importAll();
 }
 
-function test_exportTestData( array $models = array() )
+function test_exportTestData( $testName, array $models = array() )
 {
-	$exporter = new \db\ExportData_sqlite( test_importTestDataDirectory() . "1", \Database::instance() );
+	$path = appendPath( TEST_ROOT_PATH, (is_string($testName) ? $testName : uuid()) );
+		echo PHP_EOL . $path . PHP_EOL;
+	(is_dir($path) == false) || destroy_dir($path) || die( "Failed to delete $path" );
+	$exporter = new \db\ExportData_sqlite( $path, \Database::instance() );
 	$exporter->exportAll();
 }
 
@@ -132,10 +137,25 @@ function test_mediaSamplesFile( $filename = '')
 	return appendPath( TEST_RESOURCE_PATH, "media", $filename );
 }
 
-function test_RandomString($characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+function test_RandomWords($number_words = 5, $length_min = 5, $length_max = 30)
+{
+	$words = array();
+	for($idx = 0; $idx < $number_words; $idx++ ) {
+		$length = rand($length_min, $length_max);
+		$words[] = test_RandomString( $length );
+	}
+	return implode(" ", $words);
+}
+
+function test_RandomNumber($min = 0, $max = 100)
+{
+	return rand($min, $max);
+}
+
+function test_RandomString( $length = 5, $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
 {
 	$randstring = '';
-	for ($i = 0; $i < 10; $i++) {
+	for ($i = 0; $i < $length; $i++) {
 		$randstring .= $characters[rand(0, strlen($characters) -1)];
 	}
 	return $randstring;

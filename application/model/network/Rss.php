@@ -6,9 +6,9 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
+use utilities\MediaFilename as MediaFilename;
 
 use \model\network\RssDBO as RssDBO;
-use \utilities\MediaFilename as MediaFilename;
 
 /* import related objects */
 use \model\Endpoint as Endpoint;
@@ -21,49 +21,45 @@ class Rss extends _Rss
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( EndpointDBO $endpoint = null, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url = null, $enclosure_length = 0, $enclosure_mime = 'application/x-nzb', $enclosure_hash = null, $enclosure_password = false)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			$endpoint,
-			$title,
-			$desc,
-			$pub_date,
-			$guid,
-			$clean_name,
-			$clean_issue,
-			$clean_year,
-			$enclosure_url,
-			$enclosure_length,
-			$enclosure_mime,
-			$enclosure_hash,
-			$enclosure_password
-		);
-	}
+		if ( isset($values) ) {
+			if ( isset($values[Rss::title]) ) {
+				$mediaFilename = new MediaFilename($values[Rss::title]);
+				$meta = $mediaFilename->updateFileMetaData(null);
+				$values[Rss::clean_name] = $meta['name'];
+				$values[Rss::clean_issue] = (isset($meta['issue']) ? $meta['issue'] : null);
+				$values[Rss::clean_year] = (isset($meta['year']) ? $meta['year'] : null);
+			}
 
-	public function update( RssDBO $obj,
-		EndpointDBO $endpoint = null, $title, $desc, $pub_date, $guid, $clean_name, $clean_issue, $clean_year, $enclosure_url = null, $enclosure_length = 0, $enclosure_mime = 'application/x-nzb', $enclosure_hash = null, $enclosure_password = false)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$endpoint,
-				$title,
-				$desc,
-				$pub_date,
-				$guid,
-				$clean_name,
-				$clean_issue,
-				$clean_year,
-				$enclosure_url,
-				$enclosure_length,
-				$enclosure_mime,
-				$enclosure_hash,
-				$enclosure_password
-			);
+			if ( isset($values[Rss::enclosure_password]) ) {
+				$values[Rss::enclosure_password] = boolValue($values[Rss::enclosure_password], false);
+			}
+			else {
+				$values[Rss::enclosure_password] = false;
+			}
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Rss ) {
+			if ( isset($values[Rss::title]) ) {
+				$mediaFilename = new MediaFilename($values[Rss::title]);
+				$meta = $mediaFilename->updateFileMetaData(null);
+				$values[Rss::clean_name] = $meta['name'];
+				$values[Rss::clean_issue] = (isset($meta['issue']) ? $meta['issue'] : null);
+				$values[Rss::clean_year] = (isset($meta['year']) ? $meta['year'] : null);
+			}
+
+			if ( isset($values[Rss::enclosure_password]) ) {
+				$values[Rss::enclosure_password] = boolValue($values[Rss::enclosure_password], false);
+			}
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(
@@ -206,7 +202,6 @@ class Rss extends _Rss
 	{
 		return parent::validate_enclosure_password($object, $value);
 	}
-
 }
 
 ?>

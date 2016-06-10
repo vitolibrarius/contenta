@@ -1,0 +1,10 @@
+{
+    "id": "4",
+    "type_id": "2",
+    "name": "Usenet",
+    "base_url": "https:\/\/www.usenet-crawler.com\/rss?t=7030&dl=1&i=12345&r=86d56371a16e8ccabb822a1dc3f9a2ac",
+    "api_key": "",
+    "username": "",
+    "enabled": "1",
+    "compressed": "1"
+}

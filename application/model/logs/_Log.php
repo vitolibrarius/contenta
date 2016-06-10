@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\logs\LogDBO as LogDBO;
 
 /* import related objects */
@@ -224,7 +226,7 @@ abstract class _Log extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Log )
+		if ( $object instanceof LogDBO )
 		{
 			// does not own Log_Level
 			return parent::deleteObject($object);
@@ -238,11 +240,14 @@ abstract class _Log extends Model
 		$success = true;
 		if ( $obj != false ) {
 			$array = $this->allForLogLevel($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
 				}
+				$array = $this->allForLogLevel($obj);
 			}
 		}
 		return $success;
@@ -389,55 +394,79 @@ abstract class _Log extends Model
 	/** Validation */
 	function validate_trace($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_trace_id($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_context($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_context_id($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_message($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Log::message,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_session($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_level($object = null, $value)
 	{
-		$value = trim($value);
-		if (isset($object->level) === false && empty($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Log::level,
-				"FIELD_EMPTY"
-			);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
 		}
+
 		return null;
 	}
 	function validate_created($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// created date is not changeable
 		if ( isset($object, $object->created) ) {
 			return Localized::ModelValidation(
 				$this->tableName(),

@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\version\VersionDBO as VersionDBO;
 
 /* import related objects */
@@ -104,30 +106,12 @@ abstract class _Version extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
-			if ( isset($values['patches']) ) {
-				$local_patches = $values['patches'];
-				if ( $local_patches instanceof PatchDBO) {
-					$values[Version::id] = $local_patches->version_id;
-				}
-				else if ( is_integer( $local_patches) ) {
-					$params[Version::id] = $local_patches;
-				}
-			}
 		}
 		return parent::createObject($values);
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
 		if (isset($object) && $object instanceof Version ) {
-			if ( isset($values['patches']) ) {
-				$local_patches = $values['patches'];
-				if ( $local_patches instanceof PatchDBO) {
-					$values[Version::id] = $local_patches->version_id;
-				}
-				else if ( is_integer( $local_patches) ) {
-					$params[Version::id] = $values['patches'];
-				}
-			}
 		}
 
 		return parent::updateObject($object, $values);
@@ -138,7 +122,7 @@ abstract class _Version extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Version )
+		if ( $object instanceof VersionDBO )
 		{
 			$patch_model = Model::Named('Patch');
 			if ( $patch_model->deleteAllForKeyValue(Patch::version_id, $this->id) == false ) {
@@ -235,14 +219,15 @@ abstract class _Version extends Model
 	/** Validation */
 	function validate_code($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Version::code,
 				"FIELD_EMPTY"
 			);
 		}
+
 		// make sure Code is unique
 		$existing = $this->objectForCode($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -256,6 +241,12 @@ abstract class _Version extends Model
 	}
 	function validate_major($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -267,6 +258,12 @@ abstract class _Version extends Model
 	}
 	function validate_minor($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -278,6 +275,12 @@ abstract class _Version extends Model
 	}
 	function validate_patch($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -289,6 +292,12 @@ abstract class _Version extends Model
 	}
 	function validate_created($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// created date is not changeable
 		if ( isset($object, $object->created) ) {
 			return Localized::ModelValidation(
 				$this->tableName(),

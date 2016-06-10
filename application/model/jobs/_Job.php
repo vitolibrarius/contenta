@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\jobs\JobDBO as JobDBO;
 
 /* import related objects */
@@ -196,7 +198,7 @@ abstract class _Job extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Job )
+		if ( $object instanceof JobDBO )
 		{
 			// does not own Job_Type
 			// does not own Endpoint
@@ -211,11 +213,14 @@ abstract class _Job extends Model
 		$success = true;
 		if ( $obj != false ) {
 			$array = $this->allForEndpoint($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
 				}
+				$array = $this->allForEndpoint($obj);
 			}
 		}
 		return $success;
@@ -370,6 +375,12 @@ abstract class _Job extends Model
 	/** Validation */
 	function validate_type_id($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -381,24 +392,29 @@ abstract class _Job extends Model
 	}
 	function validate_endpoint_id($object = null, $value)
 	{
-		if (isset($object->endpoint_id) === false && empty($value) ) {
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Job::endpoint_id,
-				"FIELD_EMPTY"
+				"FILTER_VALIDATE_INT"
 			);
 		}
 		return null;
 	}
 	function validate_enabled($object = null, $value)
 	{
-		if ( is_null($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job::enabled,
-				"FIELD_EMPTY"
-			);
+		// not mandatory field
+		if (isset($value) == false  ) {
+			return null;
 		}
+
+		// boolean
 
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"
@@ -415,13 +431,12 @@ abstract class _Job extends Model
 	}
 	function validate_one_shot($object = null, $value)
 	{
-		if ( is_null($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job::one_shot,
-				"FIELD_EMPTY"
-			);
+		// not mandatory field
+		if (isset($value) == false  ) {
+			return null;
 		}
+
+		// boolean
 
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"
@@ -438,6 +453,12 @@ abstract class _Job extends Model
 	}
 	function validate_fail_count($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -449,6 +470,12 @@ abstract class _Job extends Model
 	}
 	function validate_elapsed($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -460,66 +487,91 @@ abstract class _Job extends Model
 	}
 	function validate_minute($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Job::minute,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_hour($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Job::hour,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_dayOfWeek($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Job::dayOfWeek,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_parameter($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_next($object = null, $value)
 	{
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Job::next,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_last_run($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_last_fail($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_created($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// created date is not changeable
 		if ( isset($object, $object->created) ) {
 			return Localized::ModelValidation(
 				$this->tableName(),

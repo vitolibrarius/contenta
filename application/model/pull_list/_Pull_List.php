@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
 
 /* import related objects */
@@ -136,15 +138,6 @@ abstract class _Pull_List extends Model
 					$params[Pull_List::endpoint_id] = $local_endpoint;
 				}
 			}
-			if ( isset($values['pull_list_items']) ) {
-				$local_pull_list_items = $values['pull_list_items'];
-				if ( $local_pull_list_items instanceof Pull_List_ItemDBO) {
-					$values[Pull_List::id] = $local_pull_list_items->pull_list_id;
-				}
-				else if ( is_integer( $local_pull_list_items) ) {
-					$params[Pull_List::id] = $local_pull_list_items;
-				}
-			}
 			if ( isset($values['exclusions']) ) {
 				$local_exclusions = $values['exclusions'];
 				if ( $local_exclusions instanceof Pull_List_ExclusionDBO) {
@@ -178,15 +171,6 @@ abstract class _Pull_List extends Model
 					$params[Pull_List::endpoint_id] = $values['endpoint'];
 				}
 			}
-			if ( isset($values['pull_list_items']) ) {
-				$local_pull_list_items = $values['pull_list_items'];
-				if ( $local_pull_list_items instanceof Pull_List_ItemDBO) {
-					$values[Pull_List::id] = $local_pull_list_items->pull_list_id;
-				}
-				else if ( is_integer( $local_pull_list_items) ) {
-					$params[Pull_List::id] = $values['pull_list_items'];
-				}
-			}
 			if ( isset($values['exclusions']) ) {
 				$local_exclusions = $values['exclusions'];
 				if ( $local_exclusions instanceof Pull_List_ExclusionDBO) {
@@ -215,7 +199,7 @@ abstract class _Pull_List extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Pull_List )
+		if ( $object instanceof Pull_ListDBO )
 		{
 			// does not own Endpoint
 			$pull_list_item_model = Model::Named('Pull_List_Item');
@@ -235,11 +219,14 @@ abstract class _Pull_List extends Model
 		$success = true;
 		if ( $obj != false ) {
 			$array = $this->allForEndpoint($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
 				}
+				$array = $this->allForEndpoint($obj);
 			}
 		}
 		return $success;
@@ -304,19 +291,24 @@ abstract class _Pull_List extends Model
 	/** Validation */
 	function validate_name($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Pull_List::name,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_etag($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		// make sure Etag is unique
 		$existing = $this->objectForEtag($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -330,6 +322,12 @@ abstract class _Pull_List extends Model
 	}
 	function validate_created($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// created date is not changeable
 		if ( isset($object, $object->created) ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -341,15 +339,26 @@ abstract class _Pull_List extends Model
 	}
 	function validate_published($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_endpoint_id($object = null, $value)
 	{
-		if (isset($object->endpoint_id) === false && empty($value) ) {
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Pull_List::endpoint_id,
-				"FIELD_EMPTY"
+				"FILTER_VALIDATE_INT"
 			);
 		}
 		return null;

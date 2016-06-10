@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\logs\Log_LevelDBO as Log_LevelDBO;
 
 /* import related objects */
@@ -103,7 +105,7 @@ abstract class _Log_Level extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Log_Level )
+		if ( $object instanceof Log_LevelDBO )
 		{
 			return parent::deleteObject($object);
 		}
@@ -141,14 +143,15 @@ abstract class _Log_Level extends Model
 	/** Validation */
 	function validate_code($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Log_Level::code,
 				"FIELD_EMPTY"
 			);
 		}
+
 		// make sure Code is unique
 		$existing = $this->objectForCode($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
@@ -162,7 +165,11 @@ abstract class _Log_Level extends Model
 	}
 	function validate_name($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		// make sure Name is unique
 		$existing = $this->objectForName($value);
 		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {

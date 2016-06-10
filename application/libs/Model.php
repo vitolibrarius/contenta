@@ -288,8 +288,8 @@ abstract class Model
 	/** special functions */
 	public function countForFK($relatedAttribute, DataObject $sourceObject)
 	{
-		$result = SQL::Count( $this, null, db\Qualifier::FK( $relatedAttribute, $sourceObject ) )->fetchAll();
-		return ( isset($result, $result['count']) ? $result['count'] : false );
+		$result = SQL::Count( $this, null, db\Qualifier::FK( $relatedAttribute, $sourceObject ) )->fetch();
+		return ( isset($result, $result->count) ? $result->count : false );
 	}
 
 	public function countForKeyValue($key, $value = null)
@@ -301,8 +301,8 @@ abstract class Model
 		else {
 			$select->where( db\Qualifier::Equals( $key, $value ));
 		}
-		$result = $select->fetchAll();
-		return ( isset($result, $result['count']) ? $result['count'] : false );
+		$result = $select->fetch();
+		return ( isset($result, $result->count) ? $result->count : false );
 	}
 
 	public function randomObjects( $limit = 1)
@@ -437,7 +437,7 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 			// create failed, log validation errors
 			$logMsg = "Validation errors creating " . $this->tableName();
 			foreach ($validation as $attr => $errMsg ) {
-				$logMsg .= "\n\t" . $errMsg;
+				$logMsg .= "\n\t" . $attr . " => " . $errMsg;
 			}
 			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
 			return array( false, $validation);
@@ -520,7 +520,7 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 			// create failed, log validation errors
 			$logMsg = "Validation errors update " . $object;
 			foreach ($validation as $attr => $errMsg ) {
-				$logMsg .= "\n\t" . $errMsg;
+				$logMsg .= "\n\t" . $attr . " => " . $errMsg;
 			}
 			Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
 			return array( false, $validation );

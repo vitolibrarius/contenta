@@ -25,8 +25,8 @@ class RSSImporter extends EndpointImporter
 	{
 		if ( is_null($point) == false ) {
 			$type = $point->type();
-			if ( $type == false || $type->code != Endpoint_Type::RSS ) {
-				throw new Exception("Endpoint " . $point->displayName() . " is is not for " . Endpoint_Type::RSS);
+			if ( $type == false || $type->data_type != "RSS feed of NZB" ) {
+				throw new \Exception("Endpoint " . $point->displayName() . " is is not for " . Endpoint_Type::RSS);
 			}
 			$this->setJobDescription( "Refreshing " . $point->displayName());
 		}
@@ -55,32 +55,48 @@ class RSSImporter extends EndpointImporter
 					$type = (string)$item->enclosure['type'];
 				}
 
+/*
+			Rss::pub_date => time(),
+			Rss::guid => uuid(),
+			Rss::clean_name => (isset($meta["name"]) ? $meta["name"] : null),
+			Rss::clean_issue => (isset($meta["issue"]) ? $meta["issue"] : null),
+			Rss::clean_year => (isset($meta["year"]) ? $meta["year"] : null),
+			Rss::enclosure_url => "http://url/to/file",
+			Rss::enclosure_length => 10000,
+			Rss::enclosure_mime => null,
+			Rss::enclosure_hash => '34e4eacc9168cf97e0625699e9b5cb65',
+			Rss::enclosure_password => false
+*/
 				$rss = $rss_model->objectForGuid($guid);
 				if ( $rss instanceof RssDBO ) {
-					$rss = $rss_model->update( $rss,
-						(string)$item->title,
-						strip_tags((string)$item->description),
-						$publishedDate,
-						$url,
-						$len,
-						$type,
-						null,
-						false
+					list($rss, $errors) = $rss_model->updateObject( $rss, array(
+						"title" => (string)$item->title,
+						"desc" => strip_tags((string)$item->description),
+						"pub_date" => $publishedDate,
+						"enclosure_url" => $url,
+						"enclosure_length" => $len,
+						"enclosure_mime" => $type
+						)
 					);
 				}
 				else {
-					$rss = $rss_model->create( $endpoint,
-						(string)$item->title,
-						strip_tags((string)$item->description),
-						$publishedDate,
-						$guid,
-						$url,
-						$len,
-						$type,
-						null,
-						false
+					list($rss, $errors) = $rss_model->createObject( array(
+						"endpoint" => $endpoint,
+						"title" => (string)$item->title,
+						"desc" => strip_tags((string)$item->description),
+						"pub_date" => $publishedDate,
+						"guid" => $guid,
+						"enclosure_url" => $url,
+						"enclosure_length" => $len,
+						"enclosure_mime" => $type,
+						"enclosure_hash" => null,
+						"enclosure_password" => false
+						)
 					);
 
+					if ( is_array($errors) && count($errors) > 0) {
+						echo PHP_EOL . var_export($errors, true) . PHP_EOL;
+					}
 					if ( $rss != false ) {
 						$count++;
 					}

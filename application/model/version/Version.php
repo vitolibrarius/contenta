@@ -22,7 +22,7 @@ class Version extends _Version
 	{
 		if ( isset($values) ) {
 			if ( isset($values[Version::code]) ) {
-				$vers = explode(".", $code );
+				$vers = explode(".", $values[Version::code] );
 				$values[Version::major] = (isset($vers[0]) ? intval($vers[0]) : 0);
 				$values[Version::minor] = (isset($vers[1]) ? intval($vers[1]) : 0);
 				$values[Version::patch] = (isset($vers[2]) ? intval($vers[2]) : 0);

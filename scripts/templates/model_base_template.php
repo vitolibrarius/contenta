@@ -19,6 +19,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassName(); ?>;
 
 /* import related objects */
@@ -191,7 +193,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 		if ( isset($values) ) {
 <?php foreach( $this->relationships as $name => $detailArray ) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
-<?php $join = $joins[0]; ?>
+<?php $join = $joins[0]; if ( $this->isPrimaryKey($join["sourceAttribute"]) == false) : ?>
 			if ( isset($values['<?php echo $name; ?>']) ) {
 				$local_<?php echo $name; ?> = $values['<?php echo $name; ?>'];
 				if ( $local_<?php echo $name; ?> instanceof <?php echo $detailArray['destination'] ?>DBO) {
@@ -202,6 +204,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 					$params[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $local_<?php echo $name; ?>;
 				}
 			}
+<?php endif; // no primary key joins ?>
 <?php endif; // one join ?>
 <?php endforeach; ?>
 		}
@@ -212,7 +215,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 		if (isset($object) && $object instanceof <?php echo $this->modelClassName(); ?> ) {
 <?php foreach( $this->relationships as $name => $detailArray ) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
-<?php $join = $joins[0]; ?>
+<?php $join = $joins[0]; if ( $this->isPrimaryKey($join["sourceAttribute"]) == false) : ?>
 			if ( isset($values['<?php echo $name; ?>']) ) {
 				$local_<?php echo $name; ?> = $values['<?php echo $name; ?>'];
 				if ( $local_<?php echo $name; ?> instanceof <?php echo $detailArray['destination'] ?>DBO) {
@@ -223,6 +226,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 					$params[<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>] = $values['<?php echo $name; ?>'];
 				}
 			}
+<?php endif; // no primary key joins ?>
 <?php endif; // one join ?>
 <?php endforeach; ?>
 		}
@@ -235,7 +239,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof <?php echo $this->modelClassName(); ?> )
+		if ( $object instanceof <?php echo $this->dboClassName(); ?> )
 		{
 <?php if (is_array($this->relationships)) : ?>
 <?php foreach( $this->relationships as $name => $detailArray ) : ?>
@@ -268,11 +272,14 @@ foreach( $objectAttributes as $name => $detailArray ) {
 		$success = true;
 		if ( $obj != false ) {
 			$array = $this->allFor<?php echo ucwords($name); ?>($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
 				}
+				$array = $this->allFor<?php echo ucwords($name); ?>($obj);
 			}
 		}
 		return $success;
@@ -352,11 +359,9 @@ foreach( $objectAttributes as $name => $detailArray ) {
 if ( $this->isPrimaryKey($name) === false ) : ?>
 	function validate_<?php echo $name; ?>($object = null, $value)
 	{
-<?php if ( $this->isType_TEXT($name) ) : ?>
-		$value = trim($value);
-<?php endif; // isType_TEXT ?>
-<?php if ( $this->isRelationshipKey($name) ) : ?>
-		if (isset($object-><?php echo $name; ?>) === false && empty($value) ) {
+<?php if ( $mandatory ) : ?>
+		// check for mandatory field
+		if (isset($value) == false <?php if ( $this->isType_BOOLEAN($name) == false ) : ?>|| empty($value) <?php endif; // not boolean ?> ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				<?php echo $this->modelClassName() . "::" . $name; ?>,
@@ -364,17 +369,15 @@ if ( $this->isPrimaryKey($name) === false ) : ?>
 			);
 		}
 <?php else : ?>
-<?php if ( $mandatory ) : ?>
-		if (empty($value)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				<?php echo $this->modelClassName() . "::" . $name; ?>,
-				"FIELD_EMPTY"
-			);
+		// not mandatory field
+		if (isset($value) == false <?php if ( $this->isType_BOOLEAN($name) == false ) : ?>|| empty($value) <?php endif; // not boolean ?> ) {
+			return null;
 		}
 <?php endif; // mandatory ?>
+
 <?php if ( $this->isType_TEXT($name) ) : ?>
 <?php if ( $textLength > 0 ) : ?>
+		// string length
 		if (strlen($value) > <?php echo $textLength; ?> ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -384,6 +387,7 @@ if ( $this->isPrimaryKey($name) === false ) : ?>
 		}
 <?php endif; // textLength ?>
 <?php if ( $this->isType_TEXT_URL($name) ) : ?>
+		// url format
 		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -393,6 +397,7 @@ if ( $this->isPrimaryKey($name) === false ) : ?>
 		}
 <?php endif; // url ?>
 <?php if ( $this->isType_TEXT_EMAIL($name) ) : ?>
+		// email format
 		if ( filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -404,6 +409,7 @@ if ( $this->isPrimaryKey($name) === false ) : ?>
 <?php endif; // TEXT ?>
 <?php if ( $this->isType_DATE($name) ) : ?>
 <?php if ( $this->isType_DATE_created($name) ) : ?>
+		// created date is not changeable
 		if ( isset($object, $object->created) ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -414,6 +420,7 @@ if ( $this->isPrimaryKey($name) === false ) : ?>
 <?php endif; // isType_DATE_created ?>
 <?php endif; // DATE ?>
 <?php if ( $this->isType_INTEGER($name) ) : ?>
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -423,13 +430,7 @@ if ( $this->isPrimaryKey($name) === false ) : ?>
 		}
 <?php endif; // INT ?>
 <?php if ( $this->isType_BOOLEAN($name) ) : ?>
-		if ( is_null($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				<?php echo $this->modelClassName() . "::" . $name; ?>,
-				"FIELD_EMPTY"
-			);
-		}
+		// boolean
 
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"
@@ -454,7 +455,6 @@ if ( $this->isPrimaryKey($name) === false ) : ?>
 			);
 		}
 <?php endif; // unique ?>
-<?php endif; // relationshipkey ?>
 		return null;
 	}
 <?php endif; // not primaryKey ?>

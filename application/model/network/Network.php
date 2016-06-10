@@ -25,7 +25,7 @@ class Network extends _Network
 				$ip_address = $values[Network::ip_address];
 				$object = $this->objectForIp_address($ip_address);
 				if ( $object != false) {
-					return $object;
+					return array($object, null);
 				}
 
 				$ip_hash = ipToHex($ip_address);

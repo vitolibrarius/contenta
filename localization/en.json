@@ -264,6 +264,7 @@
             },
             "base_url": {
                 "FIELD_EMPTY": "URL field was empty",
+                "FILTER_VALIDATE_URL": "Model\/endpoint\/base_url\/FILTER_VALIDATE_URL",
                 "label": "URL"
             },
             "compressed": {
@@ -491,6 +492,14 @@
             },
             "xurl": {
                 "label": "External URL"
+            }
+        },
+        "rss": {
+            "clean_name": {
+                "FIELD_EMPTY": "Model\/rss\/clean_name\/FIELD_EMPTY"
+            },
+            "clean_year": {
+                "FILTER_VALIDATE_INT": "Model\/rss\/clean_year\/FILTER_VALIDATE_INT"
             }
         },
         "series": {

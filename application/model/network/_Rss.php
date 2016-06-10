@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\network\RssDBO as RssDBO;
 
 /* import related objects */
@@ -220,7 +222,7 @@ abstract class _Rss extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof Rss )
+		if ( $object instanceof RssDBO )
 		{
 			// does not own Endpoint
 			// does not own Flux
@@ -235,11 +237,14 @@ abstract class _Rss extends Model
 		$success = true;
 		if ( $obj != false ) {
 			$array = $this->allForEndpoint($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
 				}
+				$array = $this->allForEndpoint($obj);
 			}
 		}
 		return $success;
@@ -284,7 +289,17 @@ abstract class _Rss extends Model
 		}
 
 		$result = $select->fetchAll();
-		return $result;
+		if ( is_array($result) ) {
+			$result_size = count($result);
+			if ( $result_size == 1 ) {
+				return $result[0];
+			}
+			else if ($result_size > 1 ) {
+				throw new \Exception( "objectForEndpointGUID expected 1 result, but fetched " . count($result) );
+			}
+		}
+
+		return false;
 	}
 
 
@@ -433,17 +448,33 @@ abstract class _Rss extends Model
 	/** Validation */
 	function validate_endpoint_id($object = null, $value)
 	{
-		if (isset($object->endpoint_id) === false && empty($value) ) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Rss::endpoint_id,
 				"FIELD_EMPTY"
 			);
 		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::endpoint_id,
+				"FILTER_VALIDATE_INT"
+			);
+		}
 		return null;
 	}
 	function validate_created($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// created date is not changeable
 		if ( isset($object, $object->created) ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -455,63 +486,91 @@ abstract class _Rss extends Model
 	}
 	function validate_title($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Rss::title,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_desc($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_pub_date($object = null, $value)
 	{
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Rss::pub_date,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_guid($object = null, $value)
 	{
-		$value = trim($value);
-		if (isset($object->guid) === false && empty($value) ) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Rss::guid,
 				"FIELD_EMPTY"
 			);
 		}
+
+		// make sure Guid is unique
+		$existing = $this->objectForGuid($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Rss::guid,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
 		return null;
 	}
 	function validate_clean_name($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Rss::clean_name,
 				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_clean_issue($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_clean_year($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -523,14 +582,16 @@ abstract class _Rss extends Model
 	}
 	function validate_enclosure_url($object = null, $value)
 	{
-		$value = trim($value);
-		if (empty($value)) {
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Rss::enclosure_url,
 				"FIELD_EMPTY"
 			);
 		}
+
+		// url format
 		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -542,6 +603,12 @@ abstract class _Rss extends Model
 	}
 	function validate_enclosure_length($object = null, $value)
 	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
@@ -553,23 +620,30 @@ abstract class _Rss extends Model
 	}
 	function validate_enclosure_mime($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_enclosure_hash($object = null, $value)
 	{
-		$value = trim($value);
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_enclosure_password($object = null, $value)
 	{
-		if ( is_null($value) ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Rss::enclosure_password,
-				"FIELD_EMPTY"
-			);
+		// not mandatory field
+		if (isset($value) == false  ) {
+			return null;
 		}
+
+		// boolean
 
 		// Returns TRUE for "1", "true", "on" and "yes"
 		// Returns FALSE for "0", "false", "off" and "no"

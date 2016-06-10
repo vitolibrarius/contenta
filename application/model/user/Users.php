@@ -30,7 +30,7 @@ class Users extends _Users
 				$values[Users::creation_timestamp] = time();
 			}
 
-			if ( isset($values[Users::active]) == false) {
+			if ( isset($values[Users::active]) ) {
 				$values[Users::active] = boolValue($values[Users::active], true);
 			}
 			else {

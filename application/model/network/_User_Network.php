@@ -10,6 +10,8 @@ use \Localized as Localized;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
 use \model\network\User_NetworkDBO as User_NetworkDBO;
 
 /* import related objects */
@@ -147,7 +149,7 @@ abstract class _User_Network extends Model
 	 */
 	public function deleteObject( DataObject $object = null)
 	{
-		if ( $object instanceof User_Network )
+		if ( $object instanceof User_NetworkDBO )
 		{
 			// does not own Users
 			// does not own Network
@@ -162,11 +164,14 @@ abstract class _User_Network extends Model
 		$success = true;
 		if ( $obj != false ) {
 			$array = $this->allForUser($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
 				}
+				$array = $this->allForUser($obj);
 			}
 		}
 		return $success;
@@ -176,11 +181,14 @@ abstract class _User_Network extends Model
 		$success = true;
 		if ( $obj != false ) {
 			$array = $this->allForNetwork($obj);
-			foreach ($array as $key => $value) {
-				if ($this->deleteObject($value) == false) {
-					$success = false;
-					break;
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
 				}
+				$array = $this->allForNetwork($obj);
 			}
 		}
 		return $success;
@@ -215,22 +223,34 @@ abstract class _User_Network extends Model
 	/** Validation */
 	function validate_user_id($object = null, $value)
 	{
-		if (isset($object->user_id) === false && empty($value) ) {
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				User_Network::user_id,
-				"FIELD_EMPTY"
+				"FILTER_VALIDATE_INT"
 			);
 		}
 		return null;
 	}
 	function validate_network_id($object = null, $value)
 	{
-		if (isset($object->network_id) === false && empty($value) ) {
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				User_Network::network_id,
-				"FIELD_EMPTY"
+				"FILTER_VALIDATE_INT"
 			);
 		}
 		return null;

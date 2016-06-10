@@ -33,7 +33,7 @@ class UsersTest extends PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-// 		test_exportTestData( array( "Users" ) );
+// 		test_exportTestData( "UsersTest", array( "Users" ) );
     }
 
     protected function setUp()
@@ -260,7 +260,7 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	public function testValidate_failed_logins()
 	{
 		$validation = $this->model->validate_failed_logins( null, null );
-		$this->assertNotNull( $validation, $validation );
+		$this->assertNull( $validation, $validation );
 
 		$validation = $this->model->validate_failed_logins( null, 'bad value' );
 		$this->assertNotNull( $validation, $validation );

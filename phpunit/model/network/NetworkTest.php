@@ -28,7 +28,7 @@ class NetworkTest extends PHPUnit_Framework_TestCase
 
     public static function tearDownAfterClass()
     {
-//  		test_exportTestData( array( "Network", "Users", "User_Network" ) );
+//   		test_exportTestData( "NetworkTest", array( "Network", "Users", "User_Network" ) );
     }
 
     protected function setUp()

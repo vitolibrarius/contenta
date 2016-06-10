@@ -20,7 +20,6 @@ class User_Network extends _User_Network
 	/**
 	 *	Create/Update functions
 	 */
-
 	public function createForIp_address($user, $ipAddress)
 	{
 		$net_model = Model::Named("Network");
@@ -31,6 +30,22 @@ class User_Network extends _User_Network
 		return $this->createObject( array( "user" => $user, "network" => $network) );
 	}
 
+	public function createObject( array $values = array())
+	{
+		if ( isset($values) ) {
+			// massage values as necessary
+		}
+
+		return parent::createObject($values);
+	}
+
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof User_Network ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(
