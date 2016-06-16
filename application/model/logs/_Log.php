@@ -83,6 +83,7 @@ abstract class _Log extends Model
 	/**
 	 *	Simple fetches
 	 */
+
 	public function allForTrace($value)
 	{
 		return $this->allObjectsForKeyValue(Log::trace, $value);
@@ -96,6 +97,7 @@ abstract class _Log extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
+
 	public function allForTrace_id($value)
 	{
 		return $this->allObjectsForKeyValue(Log::trace_id, $value);
@@ -109,6 +111,7 @@ abstract class _Log extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
+
 	public function allForContext($value)
 	{
 		return $this->allObjectsForKeyValue(Log::context, $value);
@@ -122,6 +125,7 @@ abstract class _Log extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
+
 	public function allForContext_id($value)
 	{
 		return $this->allObjectsForKeyValue(Log::context_id, $value);
@@ -135,6 +139,7 @@ abstract class _Log extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
+
 	public function allForMessage($value)
 	{
 		return $this->allObjectsForKeyValue(Log::message, $value);
@@ -148,6 +153,7 @@ abstract class _Log extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
+
 	public function allForSession($value)
 	{
 		return $this->allObjectsForKeyValue(Log::session, $value);
@@ -161,10 +167,13 @@ abstract class _Log extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
+
 	public function allForLevel($value)
 	{
 		return $this->allObjectsForKeyValue(Log::level, $value);
 	}
+
+
 
 
 	public function allForLogLevel($obj)

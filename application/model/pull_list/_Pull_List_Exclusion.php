@@ -15,8 +15,8 @@ use \exceptions\DeleteObjectException as DeleteObjectException;
 use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 
 /* import related objects */
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\Endpoint_Type as Endpoint_Type;
+use \model\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
 /** Sample Creation script */
 		/** PULL_LIST_EXCL */
@@ -26,8 +26,8 @@ use \model\EndpointDBO as EndpointDBO;
 			. Pull_List_Exclusion::pattern . " TEXT, "
 			. Pull_List_Exclusion::type . " TEXT, "
 			. Pull_List_Exclusion::created . " INTEGER, "
-			. Pull_List_Exclusion::endpoint_id . " INTEGER, "
-			. "FOREIGN KEY (". Pull_List_Exclusion::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
+			. Pull_List_Exclusion::endpoint_type_id . " INTEGER, "
+			. "FOREIGN KEY (". Pull_List_Exclusion::endpoint_type_id .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::id . ")"
 		. ")";
 		$this->sqlite_execute( "pull_list_excl", $sql, "Create table pull_list_excl" );
 
@@ -39,7 +39,7 @@ abstract class _Pull_List_Exclusion extends Model
 	const pattern = 'pattern';
 	const type = 'type';
 	const created = 'created';
-	const endpoint_id = 'endpoint_id';
+	const endpoint_type_id = 'endpoint_type_id';
 
 	public function tableName() { return Pull_List_Exclusion::TABLE; }
 	public function tablePK() { return Pull_List_Exclusion::id; }
@@ -58,17 +58,19 @@ abstract class _Pull_List_Exclusion extends Model
 			Pull_List_Exclusion::pattern,
 			Pull_List_Exclusion::type,
 			Pull_List_Exclusion::created,
-			Pull_List_Exclusion::endpoint_id
+			Pull_List_Exclusion::endpoint_type_id
 		);
 	}
 
 	/**
 	 *	Simple fetches
 	 */
+
 	public function allForPattern($value)
 	{
 		return $this->allObjectsForKeyValue(Pull_List_Exclusion::pattern, $value);
 	}
+
 
 	public function allForType($value)
 	{
@@ -76,17 +78,20 @@ abstract class _Pull_List_Exclusion extends Model
 	}
 
 
-	public function allForEndpoint($obj)
+
+
+
+	public function allForEndpoint_type($obj)
 	{
-		return $this->allObjectsForFK(Pull_List_Exclusion::endpoint_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Pull_List_Exclusion::endpoint_type_id, $obj, $this->sortOrder(), 50);
 	}
 
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
-				case "endpoint":
-					return array( Pull_List_Exclusion::endpoint_id, "id"  );
+				case "endpoint_type":
+					return array( Pull_List_Exclusion::endpoint_type_id, "id"  );
 					break;
 				default:
 					break;
@@ -101,13 +106,13 @@ abstract class _Pull_List_Exclusion extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
-			if ( isset($values['endpoint']) ) {
-				$local_endpoint = $values['endpoint'];
-				if ( $local_endpoint instanceof EndpointDBO) {
-					$values[Pull_List_Exclusion::endpoint_id] = $local_endpoint->id;
+			if ( isset($values['endpoint_type']) ) {
+				$local_endpoint_type = $values['endpoint_type'];
+				if ( $local_endpoint_type instanceof Endpoint_TypeDBO) {
+					$values[Pull_List_Exclusion::endpoint_type_id] = $local_endpoint_type->id;
 				}
-				else if ( is_integer( $local_endpoint) ) {
-					$params[Pull_List_Exclusion::endpoint_id] = $local_endpoint;
+				else if ( is_integer( $local_endpoint_type) ) {
+					$params[Pull_List_Exclusion::endpoint_type_id] = $local_endpoint_type;
 				}
 			}
 		}
@@ -116,13 +121,13 @@ abstract class _Pull_List_Exclusion extends Model
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
 		if (isset($object) && $object instanceof Pull_List_Exclusion ) {
-			if ( isset($values['endpoint']) ) {
-				$local_endpoint = $values['endpoint'];
-				if ( $local_endpoint instanceof EndpointDBO) {
-					$values[Pull_List_Exclusion::endpoint_id] = $local_endpoint->id;
+			if ( isset($values['endpoint_type']) ) {
+				$local_endpoint_type = $values['endpoint_type'];
+				if ( $local_endpoint_type instanceof Endpoint_TypeDBO) {
+					$values[Pull_List_Exclusion::endpoint_type_id] = $local_endpoint_type->id;
 				}
-				else if ( is_integer( $local_endpoint) ) {
-					$params[Pull_List_Exclusion::endpoint_id] = $values['endpoint'];
+				else if ( is_integer( $local_endpoint_type) ) {
+					$params[Pull_List_Exclusion::endpoint_type_id] = $values['endpoint_type'];
 				}
 			}
 		}
@@ -137,18 +142,18 @@ abstract class _Pull_List_Exclusion extends Model
 	{
 		if ( $object instanceof Pull_List_ExclusionDBO )
 		{
-			// does not own Endpoint
+			// does not own Endpoint_Type
 			return parent::deleteObject($object);
 		}
 
 		return false;
 	}
 
-	public function deleteAllForEndpoint(EndpointDBO $obj)
+	public function deleteAllForEndpoint_type(Endpoint_TypeDBO $obj)
 	{
 		$success = true;
 		if ( $obj != false ) {
-			$array = $this->allForEndpoint($obj);
+			$array = $this->allForEndpoint_type($obj);
 			while ( is_array($array) && count($array) > 0) {
 				foreach ($array as $key => $value) {
 					if ($this->deleteObject($value) == false) {
@@ -156,7 +161,7 @@ abstract class _Pull_List_Exclusion extends Model
 						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
 					}
 				}
-				$array = $this->allForEndpoint($obj);
+				$array = $this->allForEndpoint_type($obj);
 			}
 		}
 		return $success;
@@ -165,6 +170,39 @@ abstract class _Pull_List_Exclusion extends Model
 	/**
 	 *	Named fetches
 	 */
+	public function objectsForTypeAndEndpointType( $exclType, $endType )
+	{
+		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
+		$qualifiers = array();
+		$qualifiers[] = Qualifier::Equals( 'type', $exclType);
+		$qualifiers[] = Qualifier::Equals( 'endpoint_type_id', $endType);
+
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
+		}
+
+		$result = $select->fetchAll();
+		return $result;
+	}
+
+	public function objectsForPatternTypeAndEndpointType( $pattern, $exclType, $endType )
+	{
+		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
+		$qualifiers = array();
+		$qualifiers[] = Qualifier::Equals( 'pattern', $pattern);
+		$qualifiers[] = Qualifier::Equals( 'type', $exclType);
+		$qualifiers[] = Qualifier::Equals( 'endpoint_type_id', $endType);
+
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
+		}
+
+		$result = $select->fetchAll();
+		return $result;
+	}
+
 
 	/** Set attributes */
 	public function setPattern( Pull_List_ExclusionDBO $object = null, $value = null)
@@ -197,10 +235,10 @@ abstract class _Pull_List_Exclusion extends Model
 		return false;
 	}
 
-	public function setEndpoint_id( Pull_List_ExclusionDBO $object = null, $value = null)
+	public function setEndpoint_type_id( Pull_List_ExclusionDBO $object = null, $value = null)
 	{
 		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Exclusion::endpoint_id => $value)) ) {
+			if ($this->updateObject( $object, array(Pull_List_Exclusion::endpoint_type_id => $value)) ) {
 				return $this->refreshObject($userObj);
 			}
 		}
@@ -248,18 +286,22 @@ abstract class _Pull_List_Exclusion extends Model
 		}
 		return null;
 	}
-	function validate_endpoint_id($object = null, $value)
+	function validate_endpoint_type_id($object = null, $value)
 	{
-		// not mandatory field
+		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return null;
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Exclusion::endpoint_type_id,
+				"FIELD_EMPTY"
+			);
 		}
 
 		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
-				Pull_List_Exclusion::endpoint_id,
+				Pull_List_Exclusion::endpoint_type_id,
 				"FILTER_VALIDATE_INT"
 			);
 		}

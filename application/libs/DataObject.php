@@ -211,7 +211,15 @@ class DataObject
 	public function saveChanges()
 	{
 		if ( is_array($this->unsavedUpdates)) {
-			return $this->model()->updateObject( $this, $this->unsavedUpdates );
+			list($obj, $errors) = $this->model()->updateObject( $this, $this->unsavedUpdates );
+			if( is_array($errors) && count($errors) > 0) {
+				$logMsg = "Validation errors update " . $this;
+				foreach ($errors as $attr => $errMsg ) {
+					$logMsg .= "\n\t" . $attr . " => " . $errMsg;
+				}
+				Logger::LogWarning( $logMsg, __METHOD__, $this->tableName() );
+			}
+			return ( $obj != false );
 		}
 		return true;
 	}

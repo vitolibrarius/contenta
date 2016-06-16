@@ -37,6 +37,11 @@ class InsertSQL extends SQL
 		return $this;
 	}
 
+	public function hasData()
+	{
+		return ( is_null($this->dataArray) == false && count($this->dataArray) > 0 );
+	}
+
 	private function rowValues( $idx = 0, array $row)
 	{
 		$idx = (is_int($idx) ? intval($idx) : 0);

@@ -31,7 +31,7 @@ abstract class EndpointImporter extends Processor
 			throw new Exception("No Endpoint set for Importer " . get_class() );
 		}
 
-		$connectorName = 'connectors\\' . $endpoint->type()->code . 'Connector';
+		$connectorName = 'connectors\\' . $endpoint->type()->data_type . 'Connector';
 		$connection = new $connectorName($endpoint);
 		return $connection;
 	}

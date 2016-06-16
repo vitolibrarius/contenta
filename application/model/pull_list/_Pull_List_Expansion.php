@@ -15,8 +15,8 @@ use \exceptions\DeleteObjectException as DeleteObjectException;
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
 /* import related objects */
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\Endpoint_Type as Endpoint_Type;
+use \model\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
 /** Sample Creation script */
 		/** PULL_LIST_EXPANSION */
@@ -25,9 +25,10 @@ use \model\EndpointDBO as EndpointDBO;
 			. Pull_List_Expansion::id . " INTEGER PRIMARY KEY, "
 			. Pull_List_Expansion::pattern . " TEXT, "
 			. Pull_List_Expansion::replace . " TEXT, "
+			. Pull_List_Expansion::sequence . " INTEGER, "
 			. Pull_List_Expansion::created . " INTEGER, "
-			. Pull_List_Expansion::endpoint_id . " INTEGER, "
-			. "FOREIGN KEY (". Pull_List_Expansion::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
+			. Pull_List_Expansion::endpoint_type_id . " INTEGER, "
+			. "FOREIGN KEY (". Pull_List_Expansion::endpoint_type_id .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::id . ")"
 		. ")";
 		$this->sqlite_execute( "pull_list_expansion", $sql, "Create table pull_list_expansion" );
 
@@ -38,8 +39,9 @@ abstract class _Pull_List_Expansion extends Model
 	const id = 'id';
 	const pattern = 'pattern';
 	const replace = 'replace';
+	const sequence = 'sequence';
 	const created = 'created';
-	const endpoint_id = 'endpoint_id';
+	const endpoint_type_id = 'endpoint_type_id';
 
 	public function tableName() { return Pull_List_Expansion::TABLE; }
 	public function tablePK() { return Pull_List_Expansion::id; }
@@ -47,6 +49,7 @@ abstract class _Pull_List_Expansion extends Model
 	public function sortOrder()
 	{
 		return array(
+			array( 'asc' => Pull_List_Expansion::sequence),
 			array( 'asc' => Pull_List_Expansion::pattern)
 		);
 	}
@@ -57,18 +60,21 @@ abstract class _Pull_List_Expansion extends Model
 			Pull_List_Expansion::id,
 			Pull_List_Expansion::pattern,
 			Pull_List_Expansion::replace,
+			Pull_List_Expansion::sequence,
 			Pull_List_Expansion::created,
-			Pull_List_Expansion::endpoint_id
+			Pull_List_Expansion::endpoint_type_id
 		);
 	}
 
 	/**
 	 *	Simple fetches
 	 */
+
 	public function allForPattern($value)
 	{
 		return $this->allObjectsForKeyValue(Pull_List_Expansion::pattern, $value);
 	}
+
 
 	public function allForReplace($value)
 	{
@@ -76,17 +82,25 @@ abstract class _Pull_List_Expansion extends Model
 	}
 
 
-	public function allForEndpoint($obj)
+	public function allForSequence($value)
 	{
-		return $this->allObjectsForFK(Pull_List_Expansion::endpoint_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForKeyValue(Pull_List_Expansion::sequence, $value);
+	}
+
+
+
+
+	public function allForEndpoint_type($obj)
+	{
+		return $this->allObjectsForFK(Pull_List_Expansion::endpoint_type_id, $obj, $this->sortOrder(), 50);
 	}
 
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
-				case "endpoint":
-					return array( Pull_List_Expansion::endpoint_id, "id"  );
+				case "endpoint_type":
+					return array( Pull_List_Expansion::endpoint_type_id, "id"  );
 					break;
 				default:
 					break;
@@ -101,13 +115,13 @@ abstract class _Pull_List_Expansion extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
-			if ( isset($values['endpoint']) ) {
-				$local_endpoint = $values['endpoint'];
-				if ( $local_endpoint instanceof EndpointDBO) {
-					$values[Pull_List_Expansion::endpoint_id] = $local_endpoint->id;
+			if ( isset($values['endpoint_type']) ) {
+				$local_endpoint_type = $values['endpoint_type'];
+				if ( $local_endpoint_type instanceof Endpoint_TypeDBO) {
+					$values[Pull_List_Expansion::endpoint_type_id] = $local_endpoint_type->id;
 				}
-				else if ( is_integer( $local_endpoint) ) {
-					$params[Pull_List_Expansion::endpoint_id] = $local_endpoint;
+				else if ( is_integer( $local_endpoint_type) ) {
+					$params[Pull_List_Expansion::endpoint_type_id] = $local_endpoint_type;
 				}
 			}
 		}
@@ -116,13 +130,13 @@ abstract class _Pull_List_Expansion extends Model
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
 		if (isset($object) && $object instanceof Pull_List_Expansion ) {
-			if ( isset($values['endpoint']) ) {
-				$local_endpoint = $values['endpoint'];
-				if ( $local_endpoint instanceof EndpointDBO) {
-					$values[Pull_List_Expansion::endpoint_id] = $local_endpoint->id;
+			if ( isset($values['endpoint_type']) ) {
+				$local_endpoint_type = $values['endpoint_type'];
+				if ( $local_endpoint_type instanceof Endpoint_TypeDBO) {
+					$values[Pull_List_Expansion::endpoint_type_id] = $local_endpoint_type->id;
 				}
-				else if ( is_integer( $local_endpoint) ) {
-					$params[Pull_List_Expansion::endpoint_id] = $values['endpoint'];
+				else if ( is_integer( $local_endpoint_type) ) {
+					$params[Pull_List_Expansion::endpoint_type_id] = $values['endpoint_type'];
 				}
 			}
 		}
@@ -137,18 +151,18 @@ abstract class _Pull_List_Expansion extends Model
 	{
 		if ( $object instanceof Pull_List_ExpansionDBO )
 		{
-			// does not own Endpoint
+			// does not own Endpoint_Type
 			return parent::deleteObject($object);
 		}
 
 		return false;
 	}
 
-	public function deleteAllForEndpoint(EndpointDBO $obj)
+	public function deleteAllForEndpoint_type(Endpoint_TypeDBO $obj)
 	{
 		$success = true;
 		if ( $obj != false ) {
-			$array = $this->allForEndpoint($obj);
+			$array = $this->allForEndpoint_type($obj);
 			while ( is_array($array) && count($array) > 0) {
 				foreach ($array as $key => $value) {
 					if ($this->deleteObject($value) == false) {
@@ -156,7 +170,7 @@ abstract class _Pull_List_Expansion extends Model
 						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
 					}
 				}
-				$array = $this->allForEndpoint($obj);
+				$array = $this->allForEndpoint_type($obj);
 			}
 		}
 		return $success;
@@ -187,6 +201,16 @@ abstract class _Pull_List_Expansion extends Model
 		return false;
 	}
 
+	public function setSequence( Pull_List_ExpansionDBO $object = null, $value = null)
+	{
+		if ( is_null($object) === false ) {
+			if ($this->updateObject( $object, array(Pull_List_Expansion::sequence => $value)) ) {
+				return $this->refreshObject($userObj);
+			}
+		}
+		return false;
+	}
+
 	public function setCreated( Pull_List_ExpansionDBO $object = null, $value = null)
 	{
 		if ( is_null($object) === false ) {
@@ -197,10 +221,10 @@ abstract class _Pull_List_Expansion extends Model
 		return false;
 	}
 
-	public function setEndpoint_id( Pull_List_ExpansionDBO $object = null, $value = null)
+	public function setEndpoint_type_id( Pull_List_ExpansionDBO $object = null, $value = null)
 	{
 		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Expansion::endpoint_id => $value)) ) {
+			if ($this->updateObject( $object, array(Pull_List_Expansion::endpoint_type_id => $value)) ) {
 				return $this->refreshObject($userObj);
 			}
 		}
@@ -231,6 +255,23 @@ abstract class _Pull_List_Expansion extends Model
 
 		return null;
 	}
+	function validate_sequence($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Expansion::sequence,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
 	function validate_created($object = null, $value)
 	{
 		// not mandatory field
@@ -248,18 +289,22 @@ abstract class _Pull_List_Expansion extends Model
 		}
 		return null;
 	}
-	function validate_endpoint_id($object = null, $value)
+	function validate_endpoint_type_id($object = null, $value)
 	{
-		// not mandatory field
+		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return null;
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Pull_List_Expansion::endpoint_type_id,
+				"FIELD_EMPTY"
+			);
 		}
 
 		// integers
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
-				Pull_List_Expansion::endpoint_id,
+				Pull_List_Expansion::endpoint_type_id,
 				"FILTER_VALIDATE_INT"
 			);
 		}

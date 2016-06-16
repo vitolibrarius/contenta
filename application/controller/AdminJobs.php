@@ -12,8 +12,9 @@ use \Localized as Localized;
 use \Config as Config;
 
 use \model\user\Users as Users;
-use model\Job as Job;
-use model\Job_Type as Job_Type;
+use \model\jobs\Job as Job;
+use \model\jobs\Job_Type as Job_Type;
+
 use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
@@ -49,7 +50,7 @@ class AdminJobs extends Admin
 					$pid = DaemonizeJob( $obj, $user );
 					sleep(2);
 
-					$job_running = Model::Named("Job_Running")->jobForPID($pid);
+					$job_running = Model::Named("Job_Running")->objectForPid($pid);
 					if ( $job_running ) {
 						Session::addPositiveFeedback( $job_running->displayDescription() );
 					}
@@ -144,11 +145,12 @@ class AdminJobs extends Admin
 			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
-			$values = splitPOSTValues($_POST);
-			if ( isset($values, $values['job'], $values['job']['type_id']) ) {
-				$model = Model::Named('job_Type');
-				$type = $model->objectForId($values['job']['type_id']);
-				if ( is_a($type, "model\\Job_TypeDBO" ) ) {
+			$values = \http\HttpPost::getModelValue( 'job', null );
+			$success = true;
+			if ( isset($values, $values['type_id']) ) {
+				$model = Model::Named('Job_Type');
+				$type = $model->objectForId($values['type_id']);
+				if ( $type instanceof \model\jobs\Job_TypeDBO ) {
 					$this->view->setLocalizedViewTitle("NewRecord");
 					$this->view->saveAction = "AdminJobs/save";
 					$this->view->job_type = $type;
@@ -175,17 +177,21 @@ class AdminJobs extends Admin
 	function save($jobId = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$model = Model::Named('Job');
-			$values = splitPOSTValues($_POST);
-			if ( isset($values[$model->tableName()], $values[$model->tableName()][Job::enabled]) == false ) {
-				$values[$model->tableName()][Job::enabled] = Model::TERTIARY_FALSE;
-			}
 			$success = true;
 
+			$values = \http\HttpPost::getModelValue( 'job', null );
+			if ( isset($values, $values['enabled']) ) {
+				$values['enabled'] = boolValue($values['enabled'], true);
+			}
+			if ( isset($values, $values['one_shot']) ) {
+				$values['one_shot'] = boolValue($values['one_shot'], true);
+			}
+
+			$model = Model::Named('Job');
 			if ( $jobId > 0 ) {
 				$obj = $model->objectForId($jobId);
 				if ( $obj != false ) {
-					list($obj, $errors) = $model->updateObject($obj, $values['job']);
+					list($obj, $errors) = $model->updateObject($obj, $values);
 					if ( is_array($errors) ) {
 						Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
 						foreach ($errors as $attr => $errMsg ) {
@@ -204,7 +210,7 @@ class AdminJobs extends Admin
 				}
 			}
 			else {
-				list($obj, $errors) = $model->createObject($values['job']);
+				list($obj, $errors) = $model->createObject($values);
 				if ( is_array($errors) ) {
 					Session::addNegativeFeedback( Localized::GlobalLabel("Validation Errors") );
 					foreach ($errors as $attr => $errMsg ) {

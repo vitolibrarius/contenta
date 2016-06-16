@@ -13,10 +13,6 @@ use \model\Endpoint as Endpoint;
 use \model\EndpointDBO as EndpointDBO;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
 use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
-use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
-use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
-use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
 abstract class _Pull_ListDBO extends DataObject
 {
@@ -54,28 +50,6 @@ abstract class _Pull_ListDBO extends DataObject
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Pull_List_Item');
 			return $model->allObjectsForKeyValue( Pull_List_Item::pull_list_id, $this->id);
-		}
-
-		return false;
-	}
-
-	// to-many relationship
-	public function exclusions()
-	{
-		if ( isset( $this->endpoint_id ) ) {
-			$model = Model::Named('Pull_List_Exclusion');
-			return $model->allObjectsForKeyValue( Pull_List_Exclusion::endpoint_id, $this->endpoint_id);
-		}
-
-		return false;
-	}
-
-	// to-many relationship
-	public function expansions()
-	{
-		if ( isset( $this->endpoint_id ) ) {
-			$model = Model::Named('Pull_List_Expansion');
-			return $model->allObjectsForKeyValue( Pull_List_Expansion::endpoint_id, $this->endpoint_id);
 		}
 
 		return false;

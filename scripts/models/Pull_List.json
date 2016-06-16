@@ -36,28 +36,6 @@
     		"isMandatory": false,
             "isToMany" : true,
             "ownsDestination" : true
-    	},
-    	"exclusions" : {
-    		"destination" : "Pull_List_Exclusion",
-    		"destinationPackage" : "\\model\\pull_list\\",
-    		"destinationTable" : "pull_list_exclusion",
-    		"joins" : [
-    			{ "destinationAttribute": "endpoint_id", "sourceAttribute" : "endpoint_id" }
-    		],
-    		"isMandatory": false,
-            "isToMany" : true,
-            "ownsDestination" : false
-    	},
-    	"expansions" : {
-    		"destination" : "Pull_List_Expansion",
-    		"destinationPackage" : "\\model\\pull_list\\",
-    		"destinationTable" : "pull_list_expansion",
-    		"joins" : [
-    			{ "destinationAttribute": "endpoint_id", "sourceAttribute" : "endpoint_id" }
-    		],
-    		"isMandatory": false,
-            "isToMany" : true,
-            "ownsDestination" : false
     	}
     },
     "indexes" : [

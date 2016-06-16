@@ -216,22 +216,23 @@ abstract class SQL
 
 	public static function pragma_TableInfo($table)
 	{
-		$sql = "PRAGMA table_info(" . $table . ")";
-		$statement = Database::instance()->prepare($sql);
-		if ($statement && $statement->execute()) {
-			$table_pragma = $statement->fetchAll();
-			if ($table_pragma != false) {
-				$table_fields = array();
-				foreach($table_pragma as $key => $value) {
-					$table_fields[ $value->name ] = $value;
+		try {
+			$sql = "PRAGMA table_info(" . $table . ")";
+			$statement = Database::instance()->prepare($sql);
+			if ($statement && $statement->execute()) {
+				$table_pragma = $statement->fetchAll();
+				if ($table_pragma != false) {
+					$table_fields = array();
+					foreach($table_pragma as $key => $value) {
+						$table_fields[ $value->name ] = $value;
+					}
+					return $table_fields;
 				}
-				return $table_fields;
 			}
 		}
-		$caller = callerClassAndMethod('pragma_TableInfo');
-		$errPoint = ($statement ? $statement : Database::instance());
-		$pdoError = $errPoint->errorInfo()[1] . ':' . $errPoint->errorInfo()[2];
-		$this->reportSQLError($caller['class'], $caller['function'], $errPoint->errorCode(), $pdoError, $sql, null);
+		catch( \Exception $e ) {
+		}
+
 		return false;
 	}
 }

@@ -10,11 +10,14 @@ use \Localized as Localized;
 use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 
 /* import related objects */
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\Endpoint_Type as Endpoint_Type;
+use \model\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
 class Pull_List_Exclusion extends _Pull_List_Exclusion
 {
+	const GROUP_TYPE = "group";
+	const ITEM_TYPE = "item";
+
 	/**
 	 *	Create/Update functions
 	 */
@@ -40,7 +43,7 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 			Pull_List_Exclusion::pattern => Model::TEXT_TYPE,
 			Pull_List_Exclusion::type => Model::TEXT_TYPE,
 			Pull_List_Exclusion::created => Model::DATE_TYPE,
-			Pull_List_Exclusion::endpoint_id => Model::INT_TYPE
+			Pull_List_Exclusion::endpoint_type_id => Model::INT_TYPE
 		);
 	}
 
@@ -83,8 +86,8 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Pull_List_Exclusion::endpoint_id ) {
-			$model = Model::Named('Endpoint');
+		if ( $attr == Pull_List_Exclusion::endpoint_type_id ) {
+			$model = Model::Named('Endpoint_Type');
 			return $model->allObjects();
 		}
 		return null;
@@ -106,9 +109,9 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 		return parent::validate_created($object, $value);
 	}
 
-	function validate_endpoint_id($object = null, $value)
+	function validate_endpoint_type_id($object = null, $value)
 	{
-		return parent::validate_endpoint_id($object, $value);
+		return parent::validate_endpoint_type_id($object, $value);
 	}
 
 }

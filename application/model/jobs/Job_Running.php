@@ -20,11 +20,11 @@ class Job_Running extends _Job_Running
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $job_id, $job_type_id, $processor, $guid, $pid, $desc)
+	public function create( $job_id, $type_id, $processor, $guid, $pid, $desc)
 	{
 		return $this->base_create(
 			$job_id,
-			$job_type_id,
+			$type_id,
 			$processor,
 			$guid,
 			$pid,
@@ -33,13 +33,13 @@ class Job_Running extends _Job_Running
 	}
 
 	public function update( Job_RunningDBO $obj,
-		$job_id, $job_type_id, $processor, $guid, $pid, $desc)
+		$job_id, $type_id, $processor, $guid, $pid, $desc)
 	{
 		if ( isset( $obj ) && is_null($obj) === false ) {
 			return $this->base_update(
 				$obj,
 				$job_id,
-				$job_type_id,
+				$type_id,
 				$processor,
 				$guid,
 				$pid,
@@ -53,7 +53,7 @@ class Job_Running extends _Job_Running
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Job_Running::job_id => Model::INT_TYPE,
-			Job_Running::job_type_id => Model::INT_TYPE,
+			Job_Running::type_id => Model::INT_TYPE,
 			Job_Running::processor => Model::TEXT_TYPE,
 			Job_Running::guid => Model::TEXT_TYPE,
 			Job_Running::pid => Model::INT_TYPE,
@@ -100,11 +100,11 @@ class Job_Running extends _Job_Running
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Job_Running::job_id ) {
+		if ( $attr == Job_Running::job_id ) {
 			$model = Model::Named('Job');
 			return $model->allObjects();
 		}
-		if ( $attr = Job_Running::job_type_id ) {
+		if ( $attr == Job_Running::type_id ) {
 			$model = Model::Named('Job_Type');
 			return $model->allObjects();
 		}
@@ -117,9 +117,9 @@ class Job_Running extends _Job_Running
 		return parent::validate_job_id($object, $value);
 	}
 
-	function validate_job_type_id($object = null, $value)
+	function validate_type_id($object = null, $value)
 	{
-		return parent::validate_job_type_id($object, $value);
+		return parent::validate_type_id($object, $value);
 	}
 
 	function validate_processor($object = null, $value)

@@ -156,11 +156,28 @@ abstract class Qualifier extends SQL
 
 	public static function Equals( $key = null, $value = null, $prefix = '')
 	{
-		if ( is_null($key) || is_null($value) ) {
+		if ( is_null($key) ) {
 			throw new \Exception( "Must specify attribute key = value" );
 		}
 
+		if ( is_null($value) ) {
+			return new IsNullQualifier( $key, true, $prefix );
+		}
+
 		return new BasicQualifier( $key, Qualifier::EQ, $value, $prefix );
+	}
+
+	public static function NotEquals( $key = null, $value = null, $prefix = '')
+	{
+		if ( is_null($key) ) {
+			throw new \Exception( "Must specify attribute key(" . var_export($key, true) . ") = value (" . var_export($value, true) . ")" );
+		}
+
+		if ( is_null($value) ) {
+			return new IsNullQualifier( $key, false, $prefix );
+		}
+
+		return new BasicQualifier( $key, Qualifier::NOT_EQ, $value, $prefix );
 	}
 
 	public static function IsNull( $key = null, $prefix = '')

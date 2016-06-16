@@ -137,7 +137,7 @@ class Migration_13 extends Migrator
 				Endpoint_Type::api_url => "http://www.previewsworld.com/shipping/newreleases.txt",
 				Endpoint_Type::name => "PreviewsWorld Upcoming Releases",
 				Endpoint_Type::favicon_url => "http://www.previewsworld.com/favicon.ico",
-				Endpoint_Type::data_type => "New Releases",
+				Endpoint_Type::data_type => "PreviewsWorld",
 				Endpoint_Type::comments => "Every week, PREVIEWSworld announces which comics, graphic novels, toys and other pop-culture merchandise will arrive at your local comic shop"
 			)
 		);

@@ -60,15 +60,18 @@ abstract class _Log_Level extends Model
 	/**
 	 *	Simple fetches
 	 */
+
 	public function objectForCode($value)
 	{
 		return $this->singleObjectForKeyValue(Log_Level::code, $value);
 	}
 
+
 	public function objectForName($value)
 	{
 		return $this->singleObjectForKeyValue(Log_Level::name, $value);
 	}
+
 
 
 

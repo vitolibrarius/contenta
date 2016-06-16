@@ -1,46 +1,43 @@
 <?php
 
-namespace model\network;
+namespace model\pull_list;
 
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
 
-use \model\network\User_NetworkDBO as User_NetworkDBO;
+use \model\pull_list\Pull_List_GroupDBO as Pull_List_GroupDBO;
 
 /* import related objects */
-use \model\user\Users as Users;
-use \model\user\UsersDBO as UsersDBO;
-use \model\network\Network as Network;
-use \model\network\NetworkDBO as NetworkDBO;
+use \model\pull_list\Pull_List as Pull_List;
+use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
+use \model\pull_list\Pull_List_Item as Pull_List_Item;
+use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 
-class User_Network extends _User_Network
+class Pull_List_Group extends _Pull_List_Group
 {
 	/**
 	 *	Create/Update functions
 	 */
-	public function createForIp_address($user, $ipAddress)
-	{
-		$net_model = Model::Named("Network");
-		$network = $net_model->objectForIp_address($ipAddress);
-		if ( $network == false ) {
-			list($network, $errors) = $net_model->createObject( array( "ip_address" => $ipAddress, "disable" => false));
-		}
-		return $this->createObject( array( "user" => $user, "network" => $network) );
-	}
-
 	public function createObject( array $values = array())
 	{
 		if ( isset($values) ) {
 			// massage values as necessary
+			if ( isset($values[Pull_List_Group::data]) ) {
+				$values[Pull_List_Group::name] = normalize($values[Pull_List_Group::data]);
+				$existing = $this->objectForData($values[Pull_List_Group::data]);
+				if ( $existing != false ) {
+					return array( $existing, null);
+				}
+			}
 		}
 
 		return parent::createObject($values);
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof User_Network ) {
+		if (isset($object) && $object instanceof Pull_List_Group ) {
 			// massage values as necessary
 		}
 
@@ -49,11 +46,21 @@ class User_Network extends _User_Network
 
 	public function attributesFor($object = null, $type = null) {
 		return array(
-			User_Network::user_id => Model::INT_TYPE,
-			User_Network::network_id => Model::INT_TYPE
+			Pull_List_Group::name => Model::TEXT_TYPE,
+			Pull_List_Group::created => Model::DATE_TYPE,
+			Pull_List_Group::pull_list_id => Model::INT_TYPE
 		);
 	}
 
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Pull_List_Group::name
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
@@ -82,26 +89,27 @@ class User_Network extends _User_Network
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr == User_Network::user_id ) {
-			$model = Model::Named('Users');
-			return $model->allObjects();
-		}
-		if ( $attr == User_Network::network_id ) {
-			$model = Model::Named('Network');
+		if ( $attr == Pull_List_Group::pull_list_id ) {
+			$model = Model::Named('Pull_List');
 			return $model->allObjects();
 		}
 		return null;
 	}
 
 	/** Validation */
-	function validate_user_id($object = null, $value)
+	function validate_name($object = null, $value)
 	{
-		return parent::validate_user_id($object, $value);
+		return parent::validate_name($object, $value);
 	}
 
-	function validate_network_id($object = null, $value)
+	function validate_created($object = null, $value)
 	{
-		return parent::validate_network_id($object, $value);
+		return parent::validate_created($object, $value);
+	}
+
+	function validate_pull_list_id($object = null, $value)
+	{
+		return parent::validate_pull_list_id($object, $value);
 	}
 
 }

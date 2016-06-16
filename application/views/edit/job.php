@@ -17,10 +17,12 @@
 
 				<?php
 					$realObj = (isset($this->object)) ? $this->object : null;
-					$realType = ( isset($this->object) ? $this->object->jobType() :
-						(isset($this->job_type) ? $this->job_type : null));
+					$realType = (isset($this->job_type) ? $this->job_type : null);
+					if ( is_null($realObj) == false && is_null($this->object->jobType()) == false ) {
+						$realType = $realObj->jobType();
+					}
 				?>
-					<label>Type</label>
+					<label><?php echo Localized::ModelLabel($this->model->tableName(),"type_id"); ?></label>
 					<input class="type" type="text" name="displayType" disabled
 						value="<?php echo (is_null($realType) ? '' : $realType->displayName()); ?>"
 					/>

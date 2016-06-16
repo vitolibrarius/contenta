@@ -79,25 +79,30 @@ abstract class _Job_Type extends Model
 	/**
 	 *	Simple fetches
 	 */
+
 	public function objectForCode($value)
 	{
 		return $this->singleObjectForKeyValue(Job_Type::code, $value);
 	}
+
 
 	public function objectForName($value)
 	{
 		return $this->singleObjectForKeyValue(Job_Type::name, $value);
 	}
 
+
 	public function allForDesc($value)
 	{
 		return $this->allObjectsForKeyValue(Job_Type::desc, $value);
 	}
 
+
 	public function allForProcessor($value)
 	{
 		return $this->allObjectsForKeyValue(Job_Type::processor, $value);
 	}
+
 
 	public function allForParameter($value)
 	{
@@ -106,15 +111,18 @@ abstract class _Job_Type extends Model
 
 
 
+
+
+
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
 				case "job_running":
-					return array( Job_Type::id, "job_type_id"  );
+					return array( Job_Type::id, "type_id"  );
 					break;
 				case "job":
-					return array( Job_Type::id, "job_type_id"  );
+					return array( Job_Type::id, "type_id"  );
 					break;
 				default:
 					break;
@@ -148,11 +156,11 @@ abstract class _Job_Type extends Model
 		if ( $object instanceof Job_TypeDBO )
 		{
 			$job_running_model = Model::Named('Job_Running');
-			if ( $job_running_model->deleteAllForKeyValue(Job_Running::job_type_id, $this->id) == false ) {
+			if ( $job_running_model->deleteAllForKeyValue(Job_Running::type_id, $this->id) == false ) {
 				return false;
 			}
 			$job_model = Model::Named('Job');
-			if ( $job_model->deleteAllForKeyValue(Job::job_type_id, $this->id) == false ) {
+			if ( $job_model->deleteAllForKeyValue(Job::type_id, $this->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

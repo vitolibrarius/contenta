@@ -59,7 +59,7 @@ class JobDBO extends _JobDBO
 	public function jsonParameters() {
 		$jsonData = array();
 		$jobType = $this->jobType();
-		if ( $jobType instanceof model\Job_TypeDBO ) {
+		if ( $jobType instanceof Job_TypeDBO ) {
 			$jsonData = $jobType->jsonParameters();
 		}
 

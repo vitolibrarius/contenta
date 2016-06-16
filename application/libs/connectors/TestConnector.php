@@ -40,6 +40,7 @@ class TestConnector extends EndpointConnector
 	{
 		$extension = $this->endpoint()->api_key;
 		$filename = $this->testFilename();
+		$errors = null;
 
 		switch( $extension ) {
 			case 'xml':
@@ -55,6 +56,10 @@ class TestConnector extends EndpointConnector
 					$errors['errno'] = json_last_error();
 					$errors['message'] = jsonErrorString(json_last_error());
 				}
+				break;
+			case 'txt':
+			case 'text':
+				$data = file_get_contents($filename);
 				break;
 			default:
 				die( PHP_EOL . $filename .PHP_EOL );

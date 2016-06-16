@@ -24,7 +24,7 @@ function dbo_valueForKeypath( $keypath, DataObject $dbo = null, $separator = '/'
 				$result = $result->{$item};
 			}
 			else {
-				return null;
+				throw new \Exception( "Failed to find keypath for '$item' in keypath '$keypath'");
 			}
 		}
 		return $result;

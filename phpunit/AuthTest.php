@@ -50,7 +50,8 @@ class AuthTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers	handleLogin
 	 * 			T_FUNCTION T_STATIC T_PUBLIC handleLogin ( )
-	 * @todo	Implement testHandleLogin().
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-31 10:53:16.
 	 */
 	public function testHandleLogin()
@@ -73,7 +74,8 @@ class AuthTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers	handleLoginWithAPI
 	 * 			T_FUNCTION T_STATIC T_PUBLIC handleLoginWithAPI ( $userHash = '')
-	 * @todo	Implement testHandleLoginWithAPI().
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-31 10:53:16.
 	 */
 	public function testHandleLoginWithAPI()
@@ -91,20 +93,24 @@ class AuthTest extends PHPUnit_Framework_TestCase
 
 		$userDBO = Model::Named("Users")->objectForEmail('test@home.com');
 		Session::init( new \http\GlobalMemoryAdapter() );
-		$this->assertTrue( Auth::handleLoginWithAPI($userDBO->api_hash()), "handleLoginWithAPI should have failed" );
+		$this->assertTrue( Auth::handleLoginWithAPI($userDBO->api_hash()), "handleLoginWithAPI should have worked" );
+		$userDBO = Model::Named("Users")->refreshObject( $userDBO );
+
 		$this->assertEquals( true, Session::get('user_logged_in'), "Session var not set user_logged_in" );
 		$this->assertEquals( $userDBO->id, Session::get('user_id'), "Session var not set user_id" );
 		$this->assertEquals( $userDBO->name, Session::get('user_name'), "Session var not set user_name" );
 		$this->assertEquals( $userDBO->email, Session::get('user_email'), "Session var not set user_email" );
 		$this->assertEquals( $userDBO->account_type, Session::get('user_account_type'), "Session var not set user_account_type" );
 		$this->assertEquals( 0, $userDBO->failed_logins(), "Incorrect updated failed login count" );
-		$this->assertTrue( $userDBO->last_login_timestamp() > (time()-30), "Incorrect updated last_login_timestamp" );
+		$this->assertTrue( $userDBO->last_login_timestamp() > (time()-30), "Incorrect updated last_login_timestamp "
+			. $userDBO->formattedDateTime_last_login_timestamp() . " | " . time() );
 	}
 
 	/**
 	 * @covers	requireRole
 	 * 			T_FUNCTION T_STATIC T_PUBLIC requireRole ( $role = null)
-	 * @todo	Implement testRequireRole().
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-31 10:53:16.
 	 */
 	public function testRequireRole()
@@ -142,7 +148,8 @@ class AuthTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers	login
 	 * 			T_FUNCTION T_STATIC T_PUBLIC login ( )
-	 * @todo	Implement testLogin().
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-31 10:53:16.
 	 */
 	public function testLogin()
@@ -198,13 +205,14 @@ class AuthTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( $userDBO->email, Session::get('user_email'), "Session var not set user_email" );
 		$this->assertEquals( $userDBO->account_type, Session::get('user_account_type'), "Session var not set user_account_type" );
 		$this->assertEquals( 0, $userDBO->failed_logins(), "Incorrect updated failed login count" );
-		$this->assertTrue( $userDBO->last_login_timestamp() > (time()-30), "Incorrect updated last_login_timestamp" );
+		$this->assertTrue( $userDBO->last_login_timestamp() > (time()-30), "Incorrect updated last_login_timestamp " . $userDBO->last_login_timestamp() . " | " . time() );
 	}
 
 	/**
 	 * @covers	loginWithCookie
 	 * 			T_FUNCTION T_STATIC T_PUBLIC loginWithCookie ( )
-	 * @todo	Implement testLoginWithCookie().
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-31 10:53:16.
 	 */
 	public function testLoginWithCookie()
@@ -222,6 +230,8 @@ class AuthTest extends PHPUnit_Framework_TestCase
 		Cookies::set('rememberme', $cookie_string );
 
 		$this->assertTrue( Auth::loginWithCookie(), "Login should have succeeded" );
+		$userDBO = Model::Named("Users")->refreshObject( $userDBO );
+
 		$this->assertEquals( true, Session::get('user_logged_in'), "Session var not set user_logged_in" );
 		$this->assertEquals( $userDBO->id, Session::get('user_id'), "Session var not set user_id" );
 		$this->assertEquals( $userDBO->name, Session::get('user_name'), "Session var not set user_name" );
@@ -234,13 +244,14 @@ class AuthTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @covers	httpAuthenticate
 	 * 			T_FUNCTION T_STATIC T_PUBLIC httpAuthenticate ( $auth_type = 'Basic', $auth_user, $auth_pw)
-	 * @todo	Implement testHttpAuthenticate().
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-31 10:53:16.
 	 */
 	public function testHttpAuthenticate()
 	{
 		// no values
-		$this->assertFalse( Auth::httpAuthenticate(), "httpAuthenticate should have failed" );
+		$this->assertFalse( Auth::httpAuthenticate( null, null, null), "httpAuthenticate should have failed" );
 
 		// missing password
 		Session::init( new \http\GlobalMemoryAdapter() );

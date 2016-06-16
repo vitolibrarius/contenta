@@ -19,7 +19,7 @@
 
 				<?php if (isset($this->object) == false) : ?>
 					<?php
-						$attr = model\Job::type_id;
+						$attr = \model\jobs\Job::type_id;
 						$attrName = $this->model->attributeName(null, null, $attr);
 
 						$this->renderFormField( \Model::TO_ONE_TYPE, null, null, $this->model, $attr, null, true );

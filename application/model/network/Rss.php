@@ -121,11 +121,11 @@ class Rss extends _Rss
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Rss::endpoint_id ) {
+		if ( $attr == Rss::endpoint_id ) {
 			$model = Model::Named('Endpoint');
 			return $model->allObjects();
 		}
-		if ( $attr = Rss::guid ) {
+		if ( $attr == Rss::guid ) {
 			$model = Model::Named('Flux');
 			return $model->allObjects();
 		}

@@ -108,45 +108,64 @@ abstract class _Users extends Model
 	/**
 	 *	Simple fetches
 	 */
+
 	public function objectForName($value)
 	{
 		return $this->singleObjectForKeyValue(Users::name, $value);
 	}
+
 
 	public function objectForEmail($value)
 	{
 		return $this->singleObjectForKeyValue(Users::email, $value);
 	}
 
+
+
 	public function allForAccount_type($value)
 	{
 		return $this->allObjectsForKeyValue(Users::account_type, $value);
 	}
+
 
 	public function objectForRememberme_token($value)
 	{
 		return $this->singleObjectForKeyValue(Users::rememberme_token, $value);
 	}
 
+
 	public function objectForApi_hash($value)
 	{
 		return $this->singleObjectForKeyValue(Users::api_hash, $value);
 	}
+
 
 	public function allForPassword_hash($value)
 	{
 		return $this->allObjectsForKeyValue(Users::password_hash, $value);
 	}
 
+
 	public function allForPassword_reset_hash($value)
 	{
 		return $this->allObjectsForKeyValue(Users::password_reset_hash, $value);
 	}
 
+
 	public function objectForActivation_hash($value)
 	{
 		return $this->singleObjectForKeyValue(Users::activation_hash, $value);
 	}
+
+
+	public function allForFailed_logins($value)
+	{
+		return $this->allObjectsForKeyValue(Users::failed_logins, $value);
+	}
+
+
+
+
 
 
 

@@ -71,6 +71,7 @@ abstract class _Version extends Model
 	/**
 	 *	Simple fetches
 	 */
+
 	public function objectForCode($value)
 	{
 		return $this->singleObjectForKeyValue(Version::code, $value);
@@ -84,6 +85,23 @@ abstract class _Version extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
+
+	public function allForMajor($value)
+	{
+		return $this->allObjectsForKeyValue(Version::major, $value);
+	}
+
+	public function allForMinor($value)
+	{
+		return $this->allObjectsForKeyValue(Version::minor, $value);
+	}
+
+	public function allForPatch($value)
+	{
+		return $this->allObjectsForKeyValue(Version::patch, $value);
+	}
+
+
 
 
 	public function joinAttributes( Model $joinModel = null )

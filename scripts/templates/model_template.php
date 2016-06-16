@@ -106,7 +106,7 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 	{
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['inputPattern'])) : ?>
-		if ( $attr == <?php echo $this->modelClassName() . "::" . $name; ?> ) {
+		if ( <?php echo $this->modelClassName() . "::" . $name; ?> == $attr ) {
 			return "<?php echo $detailArray['inputPattern']; ?>";
 		}
 
@@ -121,7 +121,7 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 <?php if (isset($detailArray['isToMany']) && $detailArray['isToMany'] == false) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>
-		if ( $attr = <?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?> ) {
+		if ( <?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?> == $attr ) {
 			$model = Model::Named('<?php echo $detailArray["destination"]; ?>');
 			return $model->allObjects();
 		}

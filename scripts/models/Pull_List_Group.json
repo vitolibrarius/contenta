@@ -1,0 +1,46 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id", "type": "INTEGER" },
+        "name": {
+        	"column": "name",
+        	"length": 256,
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"partialSearch" : true,
+        	"nullable": false
+        },
+        "data": {
+        	"column": "data",
+        	"length": 256,
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"nullable": false
+        },
+        "created": { "column": "created", "type": "DATE" }
+    },
+    "relationships" :{
+    	"pull_list_items" : {
+    		"destination" : "Pull_List_Item",
+    		"destinationPackage" : "\\model\\pull_list\\",
+			"destinationTable" : "pull_list_item",
+    		"joins" : [
+    			{ "destinationAttribute": "pull_list_group_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : false
+    	}
+    },
+    "indexes" : [
+    	{ "columns": ["data"], "unique": true },
+    	{ "columns": ["name"], "unique": false }
+    ],
+    "primaryKeys": [ "id" ],
+    "table": "pull_list_group",
+    "package": "pull_list",
+    "model": "Pull_List_Group",
+    "dbo": "Pull_List_GroupDBO",
+	"sort" : [
+		{ "asc": "name" }
+	]
+}

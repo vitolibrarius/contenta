@@ -21,50 +21,9 @@ class Job extends _Job
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $endpoint, $type_id, $enabled, $one_shot, $fail_count, $elapsed, $minute, $hour, $dayOfWeek, $parameter, $next, $last_run, $last_fail)
-	{
-		return $this->base_create(
-			$endpoint,
-			$type_id,
-			$enabled,
-			$one_shot,
-			$fail_count,
-			$elapsed,
-			$minute,
-			$hour,
-			$dayOfWeek,
-			$parameter,
-			$next,
-			$last_run,
-			$last_fail
-		);
-	}
-
-	public function update( JobDBO $obj,
-		$endpoint, $type_id, $enabled, $one_shot, $fail_count, $elapsed, $minute, $hour, $dayOfWeek, $parameter, $next, $last_run, $last_fail)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$endpoint,
-				$type_id,
-				$enabled,
-				$one_shot,
-				$fail_count,
-				$elapsed,
-				$minute,
-				$hour,
-				$dayOfWeek,
-				$parameter,
-				$next,
-				$last_run,
-				$last_fail
-			);
-		}
-		return $obj;
-	}
-
 	public function createObject(array $values = array()) {
+			Logger::logInfo( "createObject " . var_export($values, true) );
+
 		if ( isset( $values[Job::endpoint_id]) && intval($values[Job::endpoint_id]) <= 0 ) {
 			unset($values[Job::endpoint_id]);
 		}
@@ -75,13 +34,14 @@ class Job extends _Job
 			$values[Job::next] = $nextRunDate->getTimestamp();
 		}
 		catch ( \Exception $ve ) {
+			throw $ve;
 		}
 
 		return parent::createObject($values);
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if ( $object instanceof model\JobDBO ) {
+		if ( $object instanceof JobDBO ) {
 			$m = (isset($values[Job::minute]) ? $values[Job::minute] : $object->minute);
 			$h = (isset($values[Job::hour]) ? $values[Job::hour] : $object->hour);
 			$d = (isset($values[Job::dayOfWeek]) ? $values[Job::dayOfWeek] : $object->dayOfWeek);
@@ -138,40 +98,43 @@ class Job extends _Job
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Job::type_id => Model::INT_TYPE,
-			Job::endpoint_id => Model::INT_TYPE,
-			Job::enabled => Model::FLAG_TYPE,
-			Job::one_shot => Model::FLAG_TYPE,
-			Job::fail_count => Model::INT_TYPE,
-			Job::elapsed => Model::INT_TYPE,
-			Job::minute => Model::TEXT_TYPE,
-			Job::hour => Model::TEXT_TYPE,
-			Job::dayOfWeek => Model::TEXT_TYPE,
-			Job::parameter => Model::TEXT_TYPE,
-			Job::next => Model::DATE_TYPE,
-			Job::last_run => Model::DATE_TYPE,
-			Job::last_fail => Model::DATE_TYPE,
-			Job::created => Model::DATE_TYPE
-		);
+		$attr = array();
+
+		if ( is_null($type) || $type->isRequires_endpoint() ) {
+			$attr[Job::endpoint_id] = Model::TO_ONE_TYPE;
+		}
+
+		$attr[Job::parameter] = Model::TEXT_TYPE;
+		$attr[Job::dayOfWeek] = Model::TEXT_TYPE;
+		$attr[Job::minute] = Model::TEXT_TYPE;
+		$attr[Job::hour] = Model::TEXT_TYPE;
+		$attr[Job::enabled] = Model::FLAG_TYPE;
+		$attr[Job::one_shot] = Model::FLAG_TYPE;
+
+		return $attr;
 	}
 
 	public function attributesMandatory($object = null)
 	{
-		if ( is_null($object) ) {
-			return array(
-				Job::minute,
-				Job::hour,
-				Job::dayOfWeek,
-				Job::next
-			);
+		$attr = array(
+			Job::dayOfWeek,
+			Job::hour,
+			Job::minute,
+			Job::next
+		);
+		if ( $object != null && $object->jobType() != null && $object->jobType()->isRequires_endpoint() ) {
+			$attr[] = Job::endpoint_id;
 		}
-		return parent::attributesMandatory($object);
+		return $attr;
 	}
 
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
-		// add customization here
+		if ( $object instanceof JobDBO ) {
+			if ( $attr == Job::type_id ) {
+				return false;
+			}
+		}
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
 
@@ -184,6 +147,10 @@ class Job extends _Job
 	{
 		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
+				case Job::one_shot:
+					return Model::TERTIARY_FALSE;
+				case Job::enabled:
+					return Model::TERTIARY_TRUE;
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
@@ -196,11 +163,11 @@ class Job extends _Job
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Job::job_type_id ) {
+		if ( $attr == Job::type_id ) {
 			$model = Model::Named('Job_Type');
 			return $model->allObjects();
 		}
-		if ( $attr = Job::endpoint_id ) {
+		if ( $attr == Job::endpoint_id ) {
 			$model = Model::Named('Endpoint');
 			return $model->allObjects();
 		}

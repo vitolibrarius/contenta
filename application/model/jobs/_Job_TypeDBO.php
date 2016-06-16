@@ -43,7 +43,7 @@ abstract class _Job_TypeDBO extends DataObject
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Job_Running');
-			return $model->allObjectsForKeyValue( Job_Running::job_type_id, $this->id);
+			return $model->allObjectsForKeyValue( Job_Running::type_id, $this->id);
 		}
 
 		return false;
@@ -54,7 +54,7 @@ abstract class _Job_TypeDBO extends DataObject
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Job');
-			return $model->allObjectsForKeyValue( Job::job_type_id, $this->id);
+			return $model->allObjectsForKeyValue( Job::type_id, $this->id);
 		}
 
 		return false;

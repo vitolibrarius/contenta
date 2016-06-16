@@ -97,20 +97,38 @@ abstract class _Job extends Model
 	/**
 	 *	Simple fetches
 	 */
+
+
+
+
+
+	public function allForFail_count($value)
+	{
+		return $this->allObjectsForKeyValue(Job::fail_count, $value);
+	}
+
+	public function allForElapsed($value)
+	{
+		return $this->allObjectsForKeyValue(Job::elapsed, $value);
+	}
+
 	public function allForMinute($value)
 	{
 		return $this->allObjectsForKeyValue(Job::minute, $value);
 	}
+
 
 	public function allForHour($value)
 	{
 		return $this->allObjectsForKeyValue(Job::hour, $value);
 	}
 
+
 	public function allForDayOfWeek($value)
 	{
 		return $this->allObjectsForKeyValue(Job::dayOfWeek, $value);
 	}
+
 
 	public function allForParameter($value)
 	{
@@ -118,6 +136,15 @@ abstract class _Job extends Model
 	}
 
 
+
+
+
+
+
+	public function allForJobType($obj)
+	{
+		return $this->allObjectsForFK(Job::type_id, $obj, $this->sortOrder(), 50);
+	}
 	public function allForEndpoint($obj)
 	{
 		return $this->allObjectsForFK(Job::endpoint_id, $obj, $this->sortOrder(), 50);
@@ -128,7 +155,7 @@ abstract class _Job extends Model
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
 				case "job_type":
-					return array( Job::job_type_id, "id"  );
+					return array( Job::type_id, "id"  );
 					break;
 				case "endpoint":
 					return array( Job::endpoint_id, "id"  );
@@ -149,10 +176,10 @@ abstract class _Job extends Model
 			if ( isset($values['jobType']) ) {
 				$local_jobType = $values['jobType'];
 				if ( $local_jobType instanceof Job_TypeDBO) {
-					$values[Job::job_type_id] = $local_jobType->id;
+					$values[Job::type_id] = $local_jobType->id;
 				}
-				else if ( is_string( $local_jobType) ) {
-					$params[Job::job_type_id] = $local_jobType;
+				else if ( is_integer( $local_jobType) ) {
+					$params[Job::type_id] = $local_jobType;
 				}
 			}
 			if ( isset($values['endpoint']) ) {
@@ -173,10 +200,10 @@ abstract class _Job extends Model
 			if ( isset($values['jobType']) ) {
 				$local_jobType = $values['jobType'];
 				if ( $local_jobType instanceof Job_TypeDBO) {
-					$values[Job::job_type_id] = $local_jobType->id;
+					$values[Job::type_id] = $local_jobType->id;
 				}
-				else if ( is_string( $local_jobType) ) {
-					$params[Job::job_type_id] = $values['jobType'];
+				else if ( is_integer( $local_jobType) ) {
+					$params[Job::type_id] = $values['jobType'];
 				}
 			}
 			if ( isset($values['endpoint']) ) {

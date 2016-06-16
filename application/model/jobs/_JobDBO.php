@@ -56,9 +56,9 @@ abstract class _JobDBO extends DataObject
 	// to-one relationship
 	public function jobType()
 	{
-		if ( isset( $this->job_type_id ) ) {
+		if ( isset( $this->type_id ) ) {
 			$model = Model::Named('Job_Type');
-			return $model->objectForId($this->job_type_id);
+			return $model->objectForId($this->type_id);
 		}
 		return false;
 	}

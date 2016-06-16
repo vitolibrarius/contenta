@@ -142,13 +142,27 @@ foreach( $objectAttributes as $name => $detailArray ) {
 	}
 <?php endif; //partial search ?>
 <?php endif; // TEXT type ?>
+<?php if ('INTEGER' == $detailArray['type'] && $this->isPrimaryKey($name) == false && $this->isRelationshipKey($name) == false) : ?>
+<?php if ( $this->isUniqueAttribute($name)) : ?>
+	public function objectFor<?php echo ucwords($name); ?>($value)
+	{
+		return $this->singleObjectForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
+	}
+<?php else : ?>
+	public function allFor<?php echo ucwords($name); ?>($value)
+	{
+		return $this->allObjectsForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
+	}
+<?php endif; // unique ?>
+<?php endif; // INTEGER type ?>
+
 <?php else : ?>
 			FixMe: attribute <?php echo $name; ?> does not define 'type'
 <?php endif; // has type ?>
 <?php endforeach; // attribute loop ?>
 
-<?php if (is_array($mandatoryObjectRelations)) : ?>
-<?php foreach( $mandatoryObjectRelations as $name => $detailArray ) : ?>
+<?php if (is_array($objectRelationships)) : ?>
+<?php foreach( $objectRelationships as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['isToMany']) == false || $detailArray['isToMany'] == false) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>

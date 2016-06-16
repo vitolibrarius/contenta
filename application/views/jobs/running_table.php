@@ -1,7 +1,7 @@
 <div class="mediaData">
 	<table>
 		<tr>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "job_type_id" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "type_id" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "job_id" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "processor" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "desc" ); ?></th>

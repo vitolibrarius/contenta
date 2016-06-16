@@ -64,6 +64,7 @@ abstract class _Patch extends Model
 	/**
 	 *	Simple fetches
 	 */
+
 	public function objectForName($value)
 	{
 		return $this->singleObjectForKeyValue(Patch::name, $value);
@@ -77,6 +78,9 @@ abstract class _Patch extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
+
+
+
 
 	public function allForVersion($obj)
 	{

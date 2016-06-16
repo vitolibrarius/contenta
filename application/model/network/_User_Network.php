@@ -65,6 +65,9 @@ abstract class _User_Network extends Model
 	 *	Simple fetches
 	 */
 
+
+
+
 	public function allForUser($obj)
 	{
 		return $this->allObjectsForFK(User_Network::user_id, $obj, $this->sortOrder(), 50);

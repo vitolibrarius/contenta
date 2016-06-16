@@ -143,7 +143,7 @@ try {
 	}
 	else {
 		$jobObj = $job_model->objectForId( $job_id );
-		if ( $jobObj instanceof model\JobDBO ) {
+		if ( $jobObj instanceof \model\jobs\JobDBO ) {
 			Logger::instance()->setTrace($jobObj->displayName(), $job_id);
 			$jobtypeObj = $jobObj->jobType();
 			$jobList = $job_run_model->allForJob($jobObj );
@@ -151,7 +151,14 @@ try {
 	}
 
 	if ( is_array($jobList) == false || count($jobList) == 0) {
-		$jobRunning = $job_run_model->create($jobObj, $jobtypeObj, $processorName, $guid, $pid);
+		list($jobRunning, $errors) = $job_run_model->createObject( array(
+			"job" => $jobObj,
+			"jobType" => $jobtypeObj,
+			"processor" => $processorName,
+			"guid" => $guid,
+			"pid" => $pid
+			)
+		);
 // 		echo "Job running " . var_export($jobRunning, true) .PHP_EOL;
 
 		try {
@@ -171,14 +178,17 @@ try {
 				$processor->initializationParams($jobObj->jsonParameters());
 			}
 
-			$jobRunning->{"desc"}( $processor->jobDescription() );
+			$jobRunning->setDesc( $processor->jobDescription() );
+			$jobRunning->saveChanges();
+
 			$processor->processData();
 
 			if ( null != $jobObj ) {
 				// success, calc next job schedule run
-				$jobObj->{"last_run"}(time());
-				$jobObj->{"fail_count"}(0);
-				$jobObj->{"elapsed"}($jobRunning->elapsedSeconds());
+				$jobObj->setLast_run(time());
+				$jobObj->setFail_count(0);
+				$jobObj->setElapsed($jobRunning->elapsedSeconds());
+				$jobObj->saveChanges();
 			}
 		}
 		catch (Exception $e) {
@@ -187,10 +197,10 @@ try {
 				// disable job???
 				// count failures, disable on 5th fail?
 				// $jobObj->{"enabled"}(Model::TERTIARY_FALSE);
-				$jobObj->updateFailure( $jobObj, time());
+				$job_model->updateFailure( $jobObj, time() );
 			}
 		}
-		if ( $jobRunning instanceof model\Job_RunningDBO ) {
+		if ( $jobRunning instanceof \model\jobs\Job_RunningDBO ) {
 			$job_run_model->deleteObject($jobRunning);
 		}
 	}

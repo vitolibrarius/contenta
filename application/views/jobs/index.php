@@ -58,8 +58,8 @@
 				<?php
 					$runningJobs = \Model::Named("Job_Running")->allForJob($value);
 					$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
-					$endpointRequired = boolval($value->{"jobType/requires_endpoint"}());
-					$endpointEnabled = boolval($value->{"endpoint/enabled"}());
+					$endpointRequired = boolval($value->{"jobType/isRequires_endpoint"}());
+					$endpointEnabled = boolval($value->{"endpoint/isEnabled"}());
 					$endpointNote = ($endpointRequired
 						? $value->{"endpoint/name"}() . ($endpointEnabled ? "" : " (disabled)")
 						: Localized::ModelLabel($this->model->tableName(), "EndpointNotRequired" )
@@ -71,12 +71,12 @@
 					<td><?php echo $value->minute; ?></td>
 					<td><?php echo $value->hour; ?></td>
 					<td><?php echo $value->dayOfWeek; ?></td>
-					<td><?php echo $value->lastDate(); ?></td>
-					<td><?php echo $value->lastFailDate(); ?></td>
-					<td><?php echo $value->nextDate(); ?></td>
+					<td><?php echo $value->formattedDateTime_last_run(); ?></td>
+					<td><?php echo $value->formattedDateTime_last_fail(); ?></td>
+					<td><?php echo $value->formattedDateTime_next(); ?></td>
 					<td><?php echo $value->elapsedFormatted(); ?></td>
-					<td><span class="icon <?php echo ($value->one_shot ? 'true' : 'false') ?>"></span></td>
-					<td><span class="icon <?php echo ($value->enabled ? 'true' : 'false') ?>"></span></td>
+					<td><span class="icon <?php echo ($value->isOne_shot() ? 'true' : 'false') ?>"></span></td>
+					<td><span class="icon <?php echo ($value->isEnabled() ? 'true' : 'false') ?>"></span></td>
 
 					<td><?php if ( $running == false ): ?>
 						<a href="<?php echo Config::Web('/AdminJobs/edit/'. $value->id); ?>"><span class="icon edit" /></a>
@@ -87,7 +87,7 @@
 						<?php endif; ?>
 					</td>
 					<td><?php if ( $running == false ): ?>
-						<a class="confirm" action="<?php echo Config::Web('/AdminJobs/delete/') . $value->id; ?>" href="#">
+						<a class="confirm" action="<?php echo Config::Web('/AdminJobs/delete/', $value->id); ?>" href="#">
 						<span class="icon recycle"></span></a>
 						<?php endif; ?>
 					</td>

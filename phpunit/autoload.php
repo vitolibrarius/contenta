@@ -97,9 +97,12 @@ function test_initializeDatabase($reset = true)
 	$config = Config::instance();
 
 	$config->setValue("Logging/type", "File") || die("Failed to change the configured Logging");
+	$config->setValue("Logging/prefix", "Migration") || die("Failed to change the configured Logging");
 	Logger::resetInstance();
 	Migrator::Upgrade( Config::GetLog() );
-	$config->setValue("Logging/type", "Print") || die("Failed to change the configured Logging");
+
+	$caller = callerClassAndMethod("test_initializeDatabase");
+	$config->setValue("Logging/prefix", sanitize_filename($caller['class'], 256, true, true)) || die("Failed to change the configured Logging");
 	Logger::resetInstance();
 }
 

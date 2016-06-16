@@ -19,10 +19,6 @@ use \model\Endpoint as Endpoint;
 use \model\EndpointDBO as EndpointDBO;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
 use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
-use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
-use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
-use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
 /** Sample Creation script */
 		/** PULL_LIST */
@@ -76,6 +72,7 @@ abstract class _Pull_List extends Model
 	/**
 	 *	Simple fetches
 	 */
+
 	public function allForName($value)
 	{
 		return $this->allObjectsForKeyValue(Pull_List::name, $value);
@@ -89,10 +86,15 @@ abstract class _Pull_List extends Model
 			->limit( 50 )
 			->fetchAll();
 	}
+
 	public function objectForEtag($value)
 	{
 		return $this->singleObjectForKeyValue(Pull_List::etag, $value);
 	}
+
+
+
+
 
 
 	public function allForEndpoint($obj)
@@ -109,12 +111,6 @@ abstract class _Pull_List extends Model
 					break;
 				case "pull_list_item":
 					return array( Pull_List::id, "pull_list_id"  );
-					break;
-				case "pull_list_exclusion":
-					return array( Pull_List::endpoint_id, "endpoint_id"  );
-					break;
-				case "pull_list_expansion":
-					return array( Pull_List::endpoint_id, "endpoint_id"  );
 					break;
 				default:
 					break;
@@ -138,24 +134,6 @@ abstract class _Pull_List extends Model
 					$params[Pull_List::endpoint_id] = $local_endpoint;
 				}
 			}
-			if ( isset($values['exclusions']) ) {
-				$local_exclusions = $values['exclusions'];
-				if ( $local_exclusions instanceof Pull_List_ExclusionDBO) {
-					$values[Pull_List::endpoint_id] = $local_exclusions->endpoint_id;
-				}
-				else if ( is_integer( $local_exclusions) ) {
-					$params[Pull_List::endpoint_id] = $local_exclusions;
-				}
-			}
-			if ( isset($values['expansions']) ) {
-				$local_expansions = $values['expansions'];
-				if ( $local_expansions instanceof Pull_List_ExpansionDBO) {
-					$values[Pull_List::endpoint_id] = $local_expansions->endpoint_id;
-				}
-				else if ( is_integer( $local_expansions) ) {
-					$params[Pull_List::endpoint_id] = $local_expansions;
-				}
-			}
 		}
 		return parent::createObject($values);
 	}
@@ -169,24 +147,6 @@ abstract class _Pull_List extends Model
 				}
 				else if ( is_integer( $local_endpoint) ) {
 					$params[Pull_List::endpoint_id] = $values['endpoint'];
-				}
-			}
-			if ( isset($values['exclusions']) ) {
-				$local_exclusions = $values['exclusions'];
-				if ( $local_exclusions instanceof Pull_List_ExclusionDBO) {
-					$values[Pull_List::endpoint_id] = $local_exclusions->endpoint_id;
-				}
-				else if ( is_integer( $local_exclusions) ) {
-					$params[Pull_List::endpoint_id] = $values['exclusions'];
-				}
-			}
-			if ( isset($values['expansions']) ) {
-				$local_expansions = $values['expansions'];
-				if ( $local_expansions instanceof Pull_List_ExpansionDBO) {
-					$values[Pull_List::endpoint_id] = $local_expansions->endpoint_id;
-				}
-				else if ( is_integer( $local_expansions) ) {
-					$params[Pull_List::endpoint_id] = $values['expansions'];
 				}
 			}
 		}
@@ -206,8 +166,6 @@ abstract class _Pull_List extends Model
 			if ( $pull_list_item_model->deleteAllForKeyValue(Pull_List_Item::pull_list_id, $this->id) == false ) {
 				return false;
 			}
-			// does not own Pull_List_Exclusion
-			// does not own Pull_List_Expansion
 			return parent::deleteObject($object);
 		}
 

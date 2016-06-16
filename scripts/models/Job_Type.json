@@ -23,7 +23,7 @@
     		"destinationPackage" : "\\model\\jobs\\",
     		"destinationTable" : "job_running",
     		"joins" : [
-    			{ "destinationAttribute": "job_type_id", "sourceAttribute" : "id" }
+    			{ "destinationAttribute": "type_id", "sourceAttribute" : "id" }
     		],
     		"isMandatory": false,
             "isToMany" : true,
@@ -34,7 +34,7 @@
     		"destinationPackage" : "\\model\\jobs\\",
     		"destinationTable" : "job",
     		"joins" : [
-    			{ "destinationAttribute": "job_type_id", "sourceAttribute" : "id" }
+    			{ "destinationAttribute": "type_id", "sourceAttribute" : "id" }
     		],
     		"isMandatory": false,
             "isToMany" : true,

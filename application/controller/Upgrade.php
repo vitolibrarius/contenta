@@ -38,7 +38,7 @@ class Upgrade extends Controller
 	function index()
 	{
 		$user_model = Model::Named("Users");
-		$adminUsers = $user_model->allUsers(Users::AdministratorRole);
+		$adminUsers = $user_model->allForAccount_type(Users::AdministratorRole);
 		$latest = Model::Named("Version")->latestVersion();
 
 		if ( is_array($adminUsers) == false || count($adminUsers) == 0) {
@@ -65,7 +65,7 @@ class Upgrade extends Controller
 	function migrate()
 	{
 		$user_model = Model::Named("Users");
-		$adminUsers = $user_model->allUsers(Users::AdministratorRole);
+		$adminUsers = $user_model->allForAccount_type(Users::AdministratorRole);
 
 		if ( is_array($adminUsers) == false || count($adminUsers) == 0) {
 			// no users, just do it
@@ -97,7 +97,7 @@ class Upgrade extends Controller
 	function upgradeEligibility()
 	{
 		$user_model = Model::Named("Users");
-		$adminUsers = $user_model->allUsers(Users::AdministratorRole);
+		$adminUsers = $user_model->allForAccount_type(Users::AdministratorRole);
 
 		if ( is_array($adminUsers) == false || count($adminUsers) == 0) {
 			$this->index();
@@ -122,7 +122,7 @@ class Upgrade extends Controller
 	function gitPull()
 	{
 		$user_model = Model::Named("Users");
-		$adminUsers = $user_model->allUsers(Users::AdministratorRole);
+		$adminUsers = $user_model->allForAccount_type(Users::AdministratorRole);
 
 		if ( is_array($adminUsers) == false || count($adminUsers) == 0) {
 			$this->index();

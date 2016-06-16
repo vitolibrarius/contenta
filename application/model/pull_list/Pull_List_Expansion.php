@@ -10,8 +10,8 @@ use \Localized as Localized;
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
 /* import related objects */
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\Endpoint_Type as Endpoint_Type;
+use \model\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
 class Pull_List_Expansion extends _Pull_List_Expansion
 {
@@ -40,7 +40,7 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 			Pull_List_Expansion::pattern => Model::TEXT_TYPE,
 			Pull_List_Expansion::replace => Model::TEXT_TYPE,
 			Pull_List_Expansion::created => Model::DATE_TYPE,
-			Pull_List_Expansion::endpoint_id => Model::INT_TYPE
+			Pull_List_Expansion::endpoint_type_id => Model::INT_TYPE
 		);
 	}
 
@@ -81,8 +81,8 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Pull_List_Expansion::endpoint_id ) {
-			$model = Model::Named('Endpoint');
+		if ( $attr == Pull_List_Expansion::endpoint_type_id ) {
+			$model = Model::Named('Endpoint_Type');
 			return $model->allObjects();
 		}
 		return null;
@@ -104,9 +104,9 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 		return parent::validate_created($object, $value);
 	}
 
-	function validate_endpoint_id($object = null, $value)
+	function validate_endpoint_type_id($object = null, $value)
 	{
-		return parent::validate_endpoint_id($object, $value);
+		return parent::validate_endpoint_type_id($object, $value);
 	}
 
 }

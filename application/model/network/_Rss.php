@@ -101,29 +101,43 @@ abstract class _Rss extends Model
 	/**
 	 *	Simple fetches
 	 */
+
+
+
 	public function allForTitle($value)
 	{
 		return $this->allObjectsForKeyValue(Rss::title, $value);
 	}
+
 
 	public function allForDesc($value)
 	{
 		return $this->allObjectsForKeyValue(Rss::desc, $value);
 	}
 
+
+
 	public function objectForGuid($value)
 	{
 		return $this->singleObjectForKeyValue(Rss::guid, $value);
 	}
+
 
 	public function allForClean_name($value)
 	{
 		return $this->allObjectsForKeyValue(Rss::clean_name, $value);
 	}
 
+
 	public function allForClean_issue($value)
 	{
 		return $this->allObjectsForKeyValue(Rss::clean_issue, $value);
+	}
+
+
+	public function allForClean_year($value)
+	{
+		return $this->allObjectsForKeyValue(Rss::clean_year, $value);
 	}
 
 	public function allForEnclosure_url($value)
@@ -131,10 +145,17 @@ abstract class _Rss extends Model
 		return $this->allObjectsForKeyValue(Rss::enclosure_url, $value);
 	}
 
+
+	public function allForEnclosure_length($value)
+	{
+		return $this->allObjectsForKeyValue(Rss::enclosure_length, $value);
+	}
+
 	public function allForEnclosure_mime($value)
 	{
 		return $this->allObjectsForKeyValue(Rss::enclosure_mime, $value);
 	}
+
 
 	public function allForEnclosure_hash($value)
 	{
@@ -142,9 +163,15 @@ abstract class _Rss extends Model
 	}
 
 
+
+
 	public function allForEndpoint($obj)
 	{
 		return $this->allObjectsForFK(Rss::endpoint_id, $obj, $this->sortOrder(), 50);
+	}
+	public function allForFlux($obj)
+	{
+		return $this->allObjectsForFK(Rss::guid, $obj, $this->sortOrder(), 50);
 	}
 
 	public function joinAttributes( Model $joinModel = null )

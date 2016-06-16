@@ -7,11 +7,12 @@ class FileLogger extends \Logger
 	public function __construct()
 	{
 		$base_path = \Config::GetPath("Logging/path", null);
+		$prefix = \Config::Get("Logging/prefix", "log_");
 		if ( strlen($base_path) == 0 ) {
 			throw new \LogFileOpenErrorException('No path set in configuration for logging');
 		}
 		makeRequiredDirectory($base_path, 'Logging directory');
-		$this->logfile = appendPath( $base_path, 'log_'.date('Y-m-d').'.txt');
+		$this->logfile = appendPath( $base_path, $prefix.date('Y-m-d').'.txt');
 	}
 
 	public function __destruct()

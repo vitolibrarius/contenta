@@ -292,14 +292,16 @@ abstract class Model
 		return ( isset($result, $result->count) ? $result->count : false );
 	}
 
-	public function countForKeyValue($key, $value = null)
+	public function countForKeyValue($key = null, $value = null)
 	{
 		$select = SQL::Count( $this );
-		if ( is_null($value) ) {
-			$select->where( db\Qualifier::IsNull( $key ));
-		}
-		else {
-			$select->where( db\Qualifier::Equals( $key, $value ));
+		if ( is_null($key) == false) {
+			if ( is_null($value) ) {
+				$select->where( db\Qualifier::IsNull( $key ));
+			}
+			else {
+				$select->where( db\Qualifier::Equals( $key, $value ));
+			}
 		}
 		$result = $select->fetch();
 		return ( isset($result, $result->count) ? $result->count : false );
@@ -560,7 +562,8 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 		foreach( $mandatoryKeys as $key ) {
 			$function = "validate_" . $key;
 			if (method_exists($this, $function)) {
-				$newvalue = (isset($values[$key]) ? $values[$key] : null);
+				$oldvalue = (is_null($object) ? null : $object->{$key});
+				$newvalue = (isset($values[$key]) ? $values[$key] : $oldvalue);
 				$failure = $this->$function($object, $newvalue);
 				if ( is_null($failure) == false ) {
 					$validationErrors[$key] = $failure;
@@ -603,7 +606,7 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 
 	public function attributeType($attr)
 	{
-		$attributeArray = $this->attributesFor(null);
+		$attributeArray = $this->attributesFor(null, null);
 		if ( is_array($attributeArray) && isset($attributeArray[$attr]) ) {
 			return $attributeArray[$attr];
 		}

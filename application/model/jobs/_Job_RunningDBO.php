@@ -17,7 +17,7 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 abstract class _Job_RunningDBO extends DataObject
 {
 	public $job_id;
-	public $job_type_id;
+	public $type_id;
 	public $processor;
 	public $guid;
 	public $pid;
@@ -42,9 +42,9 @@ abstract class _Job_RunningDBO extends DataObject
 	// to-one relationship
 	public function jobType()
 	{
-		if ( isset( $this->job_type_id ) ) {
+		if ( isset( $this->type_id ) ) {
 			$model = Model::Named('Job_Type');
-			return $model->objectForId($this->job_type_id);
+			return $model->objectForId($this->type_id);
 		}
 		return false;
 	}
@@ -61,14 +61,14 @@ abstract class _Job_RunningDBO extends DataObject
 		parent::storeChange( Job_Running::job_id, $value );
 	}
 
-	public function job_type_id()
+	public function type_id()
 	{
-		return parent::changedValue( Job_Running::job_type_id, $this->job_type_id );
+		return parent::changedValue( Job_Running::type_id, $this->type_id );
 	}
 
-	public function setJob_type_id( $value = null)
+	public function setType_id( $value = null)
 	{
-		parent::storeChange( Job_Running::job_type_id, $value );
+		parent::storeChange( Job_Running::type_id, $value );
 	}
 
 	public function processor()

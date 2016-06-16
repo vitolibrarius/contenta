@@ -26,7 +26,7 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 		$sql = "CREATE TABLE IF NOT EXISTS job_running ( "
 			. Job_Running::id . " INTEGER PRIMARY KEY, "
 			. Job_Running::job_id . " INTEGER, "
-			. Job_Running::job_type_id . " INTEGER, "
+			. Job_Running::type_id . " INTEGER, "
 			. Job_Running::processor . " TEXT, "
 			. Job_Running::guid . " TEXT, "
 			. Job_Running::pid . " INTEGER, "
@@ -35,13 +35,15 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 		. ")";
 		$this->sqlite_execute( "job_running", $sql, "Create table job_running" );
 
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS job_running_pid on job_running (pid)';
+		$this->sqlite_execute( "job_running", $sql, "Index on job_running (pid)" );
 */
 abstract class _Job_Running extends Model
 {
 	const TABLE = 'job_running';
 	const id = 'id';
 	const job_id = 'job_id';
-	const job_type_id = 'job_type_id';
+	const type_id = 'type_id';
 	const processor = 'processor';
 	const guid = 'guid';
 	const pid = 'pid';
@@ -63,7 +65,7 @@ abstract class _Job_Running extends Model
 		return array(
 			Job_Running::id,
 			Job_Running::job_id,
-			Job_Running::job_type_id,
+			Job_Running::type_id,
 			Job_Running::processor,
 			Job_Running::guid,
 			Job_Running::pid,
@@ -75,14 +77,24 @@ abstract class _Job_Running extends Model
 	/**
 	 *	Simple fetches
 	 */
+
+
+
 	public function allForProcessor($value)
 	{
 		return $this->allObjectsForKeyValue(Job_Running::processor, $value);
 	}
 
+
 	public function allForGuid($value)
 	{
 		return $this->allObjectsForKeyValue(Job_Running::guid, $value);
+	}
+
+
+	public function objectForPid($value)
+	{
+		return $this->singleObjectForKeyValue(Job_Running::pid, $value);
 	}
 
 	public function allForDesc($value)
@@ -92,6 +104,16 @@ abstract class _Job_Running extends Model
 
 
 
+
+	public function allForJob($obj)
+	{
+		return $this->allObjectsForFK(Job_Running::job_id, $obj, $this->sortOrder(), 50);
+	}
+	public function allForJobType($obj)
+	{
+		return $this->allObjectsForFK(Job_Running::type_id, $obj, $this->sortOrder(), 50);
+	}
+
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
@@ -100,7 +122,7 @@ abstract class _Job_Running extends Model
 					return array( Job_Running::job_id, "id"  );
 					break;
 				case "job_type":
-					return array( Job_Running::job_type_id, "id"  );
+					return array( Job_Running::type_id, "id"  );
 					break;
 				default:
 					break;
@@ -127,10 +149,10 @@ abstract class _Job_Running extends Model
 			if ( isset($values['jobType']) ) {
 				$local_jobType = $values['jobType'];
 				if ( $local_jobType instanceof Job_TypeDBO) {
-					$values[Job_Running::job_type_id] = $local_jobType->id;
+					$values[Job_Running::type_id] = $local_jobType->id;
 				}
 				else if ( is_integer( $local_jobType) ) {
-					$params[Job_Running::job_type_id] = $local_jobType;
+					$params[Job_Running::type_id] = $local_jobType;
 				}
 			}
 		}
@@ -151,10 +173,10 @@ abstract class _Job_Running extends Model
 			if ( isset($values['jobType']) ) {
 				$local_jobType = $values['jobType'];
 				if ( $local_jobType instanceof Job_TypeDBO) {
-					$values[Job_Running::job_type_id] = $local_jobType->id;
+					$values[Job_Running::type_id] = $local_jobType->id;
 				}
 				else if ( is_integer( $local_jobType) ) {
-					$params[Job_Running::job_type_id] = $values['jobType'];
+					$params[Job_Running::type_id] = $values['jobType'];
 				}
 			}
 		}
@@ -209,10 +231,10 @@ abstract class _Job_Running extends Model
 		return false;
 	}
 
-	public function setJob_type_id( Job_RunningDBO $object = null, $value = null)
+	public function setType_id( Job_RunningDBO $object = null, $value = null)
 	{
 		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Job_Running::job_type_id => $value)) ) {
+			if ($this->updateObject( $object, array(Job_Running::type_id => $value)) ) {
 				return $this->refreshObject($userObj);
 			}
 		}
@@ -288,7 +310,7 @@ abstract class _Job_Running extends Model
 		}
 		return null;
 	}
-	function validate_job_type_id($object = null, $value)
+	function validate_type_id($object = null, $value)
 	{
 		// not mandatory field
 		if (isset($value) == false || empty($value)  ) {
@@ -299,7 +321,7 @@ abstract class _Job_Running extends Model
 		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
-				Job_Running::job_type_id,
+				Job_Running::type_id,
 				"FILTER_VALIDATE_INT"
 			);
 		}
@@ -344,6 +366,15 @@ abstract class _Job_Running extends Model
 				$this->tableName(),
 				Job_Running::pid,
 				"FILTER_VALIDATE_INT"
+			);
+		}
+		// make sure Pid is unique
+		$existing = $this->objectForPid($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Job_Running::pid,
+				"UNIQUE_FIELD_VALUE"
 			);
 		}
 		return null;

@@ -42,6 +42,22 @@ class Migration_9 extends Migrator
 
 	public function sqlite_upgrade()
 	{
+		$table_fields = \SQL::pragma_TableInfo(Job_Running::TABLE);
+		if ( isset($table_fields[ Job_Running::type_id ]) == false ) {
+			// easier to just drop these tables and re-create them
+			$dropOrder = array(
+				Job_Running::TABLE
+			);
+			foreach( $dropOrder as $tbl ) {
+				try {
+					$this->sqlite_execute( $tbl, "DROP TABLE " . $tbl, $tbl . " - droppped" );
+				}
+				catch( \Exception $e ) {
+					Logger::logException($e);
+				}
+			}
+		}
+
 		$job_type_model = Model::Named("Job_Type");
 
 		/** JOB_TYPE */
@@ -79,13 +95,13 @@ class Migration_9 extends Migrator
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . Job_Running::TABLE . " ( "
 				. Job_Running::id . " INTEGER PRIMARY KEY, "
 				. Job_Running::job_id . " INTEGER, "
-				. Job_Running::job_type_id . " INTEGER, "
+				. Job_Running::type_id . " INTEGER, "
 				. Job_Running::processor . " TEXT, "
 				. Job_Running::guid . " TEXT, "
 				. Job_Running::created . " INTEGER, "
 				. Job_Running::pid . " INTEGER, "
 				. "FOREIGN KEY (". Job_Running::job_id .") REFERENCES " . Job::TABLE . "(" . Job::id . "),"
-				. "FOREIGN KEY (". Job_Running::job_type_id .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::id . ")"
+				. "FOREIGN KEY (". Job_Running::type_id .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::id . ")"
 			. ")";
 		$this->sqlite_execute( Job_Running::TABLE, $sql, "Create table " . Job_Running::TABLE );
 	}

@@ -4,7 +4,7 @@
         "pattern": { "column": "pattern", "length": 256, "type": "TEXT", "collate": "NOCASE", "nullable": false },
         "type": { "column": "type",	"length": 256, "type": "TEXT", "default": "'item'" },
         "created": { "column": "created", "type": "DATE" },
-        "endpoint_id": { "column": "endpoint_id", "type": "INTEGER" }
+        "endpoint_type_id": { "column": "endpoint_type_id", "type": "INTEGER", "nullable": false  }
     },
     "primaryKeys": [ "id" ],
     "table": "pull_list_excl",
@@ -15,17 +15,61 @@
 		{ "asc": "pattern" }
 	],
     "relationships" :{
-    	"endpoint" : {
-    		"destination" : "Endpoint",
-    		"destinationTable" : "endpoint",
+    	"endpoint_type" : {
+    		"destination" : "Endpoint_Type",
+    		"destinationTable" : "endpoint_type",
     		"destinationPackage" : "\\model\\",
     		"joins" : [
-    			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_id" }
+    			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_type_id" }
     		],
     		"isMandatory": true,
             "isToMany" : false,
             "ownsDestination" : false
     	}
     },
+	"fetches" : {
+		"objectsForTypeAndEndpointType": {
+			"arguments": [ "exclType", "endType" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Equals",
+					"keyAttribute": "type",
+					"argAttribute": "exclType",
+					"optional": false
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "endpoint_type_id",
+					"argAttribute": "endType",
+					"optional": false
+				}
+			]
+		},
+		"objectsForPatternTypeAndEndpointType": {
+			"arguments": [ "pattern", "exclType", "endType" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Equals",
+					"keyAttribute": "pattern",
+					"argAttribute": "pattern",
+					"optional": false
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "type",
+					"argAttribute": "exclType",
+					"optional": false
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "endpoint_type_id",
+					"argAttribute": "endType",
+					"optional": false
+				}
+			]
+		}
+	},
 	"migration" : 16
 }

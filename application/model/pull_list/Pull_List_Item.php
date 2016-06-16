@@ -6,6 +6,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
+use \utilities\MediaFilename as MediaFilename;
 
 use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 
@@ -22,6 +23,24 @@ class Pull_List_Item extends _Pull_List_Item
 	{
 		if ( isset($values) ) {
 			// massage values as necessary
+			if ( isset($values[Pull_List_Item::data]) ) {
+				$mediaFilename = new MediaFilename($values[Pull_List_Item::data]);
+				$meta = $mediaFilename->updateFileMetaData(null);
+				$values[Pull_List_Item::name] = $meta['name'];
+				$values[Pull_List_Item::issue] = (isset($meta['issue']) ? $meta['issue'] : null);
+				$values[Pull_List_Item::year] = (isset($meta['year']) ? $meta['year'] : null);
+
+				$values[Pull_List_Item::search_name] = normalizeSearchString($meta['name']);
+
+				$existing = $this->objectsForNameIssueYear(
+					$values[Pull_List_Item::name],
+					$values[Pull_List_Item::issue],
+					$values[Pull_List_Item::year]
+				);
+				if ( is_array($existing) && count($existing) > 0 ) {
+					return array( $existing[0], null);
+				}
+			}
 		}
 
 		return parent::createObject($values);
@@ -30,6 +49,17 @@ class Pull_List_Item extends _Pull_List_Item
 	public function updateObject(DataObject $object = null, array $values = array()) {
 		if (isset($object) && $object instanceof Pull_List_Item ) {
 			// massage values as necessary
+			if ( isset($values[Pull_List_Item::data]) ) {
+				$mediaFilename = new MediaFilename($values[Pull_List_Item::data]);
+				$meta = $mediaFilename->updateFileMetaData(null);
+				$values[Pull_List_Item::name] = $meta['name'];
+				$values[Pull_List_Item::issue] = (isset($meta['issue']) ? $meta['issue'] : null);
+				$values[Pull_List_Item::year] = (isset($meta['year']) ? $meta['year'] : null);
+			}
+
+			if ( isset($values[Pull_List_Item::name]) ) {
+				$values[Pull_List_Item::search_name] = normalizeSearchString($values[Pull_List_Item::name]);
+			}
 		}
 
 		return parent::updateObject($object, $values);
@@ -85,7 +115,7 @@ class Pull_List_Item extends _Pull_List_Item
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Pull_List_Item::pull_list_id ) {
+		if ( $attr == Pull_List_Item::pull_list_id ) {
 			$model = Model::Named('Pull_List');
 			return $model->allObjects();
 		}

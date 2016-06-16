@@ -104,7 +104,7 @@ class Log extends _Log
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Log::level ) {
+		if ( $attr == Log::level ) {
 			$model = Model::Named('Log_Level');
 			return $model->allObjects();
 		}

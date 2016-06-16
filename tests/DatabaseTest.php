@@ -146,14 +146,14 @@ $job_run_model = Model::Named("Job_Running");
 $job_run_data = array(
 	array(
 		model\Job_Running::job_id => $character_job->id,
-		model\Job_Running::job_type_id => $character_job_type->id,
+		model\Job_Running::type_id => $character_job_type->id,
 		model\Job_Running::processor => 'UploadImport',
 		model\Job_Running::guid => rand(),
 		model\Job_Running::pid => 3456
 	),
 	array(
 		model\Job_Running::job_id => $rss_job->id,
-		model\Job_Running::job_type_id => $rss_job_type->id,
+		model\Job_Running::type_id => $rss_job_type->id,
 		model\Job_Running::processor => 'UploadImport',
 		model\Job_Running::guid => rand(),
 		model\Job_Running::pid => 98765

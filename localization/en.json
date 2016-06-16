@@ -354,7 +354,7 @@
             "job_id": {
                 "label": "Scheduled Job"
             },
-            "job_type_id": {
+            "type_id": {
                 "label": "Job Type"
             },
             "pid": {

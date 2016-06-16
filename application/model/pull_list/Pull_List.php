@@ -88,7 +88,7 @@ class Pull_List extends _Pull_List
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Pull_List::endpoint_id ) {
+		if ( $attr == Pull_List::endpoint_id ) {
 			$model = Model::Named('Endpoint');
 			return $model->allObjects();
 		}

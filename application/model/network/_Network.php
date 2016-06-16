@@ -68,15 +68,20 @@ abstract class _Network extends Model
 	/**
 	 *	Simple fetches
 	 */
+
 	public function objectForIp_address($value)
 	{
 		return $this->singleObjectForKeyValue(Network::ip_address, $value);
 	}
 
+
 	public function objectForIp_hash($value)
 	{
 		return $this->singleObjectForKeyValue(Network::ip_hash, $value);
 	}
+
+
+
 
 
 
