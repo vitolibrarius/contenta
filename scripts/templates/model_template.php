@@ -44,7 +44,7 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof <?php echo $this->modelClassName(); ?> ) {
+		if (isset($object) && $object instanceof <?php echo $this->dboClassName(); ?> ) {
 			// massage values as necessary
 		}
 

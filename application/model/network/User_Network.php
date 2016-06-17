@@ -40,7 +40,7 @@ class User_Network extends _User_Network
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof User_Network ) {
+		if (isset($object) && $object instanceof User_NetworkDBO ) {
 			// massage values as necessary
 		}
 

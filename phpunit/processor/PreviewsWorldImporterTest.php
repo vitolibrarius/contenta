@@ -27,7 +27,7 @@ class PreviewsWorldImporterTest extends PHPUnit_Framework_TestCase
 		$testEndpointType = array(
 		    "name" => "Test Endpoint Type",
 			"code" => "Test",
-			"data_type" => Endpoint_Type::PreviewsWorld,
+			"data_type" => "Test",
 			"site_url" => "http://localhost",
 			"api_url" => "http://localhost",
 			"favicon_url" => "http://localhost/favicon.ico",

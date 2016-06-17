@@ -28,7 +28,7 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof Pull_List_Expansion ) {
+		if (isset($object) && $object instanceof Pull_List_ExpansionDBO ) {
 			// massage values as necessary
 		}
 
@@ -39,6 +39,7 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 		return array(
 			Pull_List_Expansion::pattern => Model::TEXT_TYPE,
 			Pull_List_Expansion::replace => Model::TEXT_TYPE,
+			Pull_List_Expansion::sequence => Model::INT_TYPE,
 			Pull_List_Expansion::created => Model::DATE_TYPE,
 			Pull_List_Expansion::endpoint_type_id => Model::INT_TYPE
 		);
@@ -69,6 +70,8 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	{
 		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
+				case Pull_List_Expansion::sequence:
+					return 0;
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
@@ -97,6 +100,11 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	function validate_replace($object = null, $value)
 	{
 		return parent::validate_replace($object, $value);
+	}
+
+	function validate_sequence($object = null, $value)
+	{
+		return parent::validate_sequence($object, $value);
 	}
 
 	function validate_created($object = null, $value)

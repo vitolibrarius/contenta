@@ -47,7 +47,7 @@ class Pull_List_Item extends _Pull_List_Item
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof Pull_List_Item ) {
+		if (isset($object) && $object instanceof Pull_List_ItemDBO ) {
 			// massage values as necessary
 			if ( isset($values[Pull_List_Item::data]) ) {
 				$mediaFilename = new MediaFilename($values[Pull_List_Item::data]);
@@ -67,13 +67,14 @@ class Pull_List_Item extends _Pull_List_Item
 
 	public function attributesFor($object = null, $type = null) {
 		return array(
-			Pull_List_Item::group_name => Model::TEXT_TYPE,
 			Pull_List_Item::data => Model::TEXT_TYPE,
 			Pull_List_Item::created => Model::DATE_TYPE,
+			Pull_List_Item::search_name => Model::TEXT_TYPE,
 			Pull_List_Item::name => Model::TEXT_TYPE,
 			Pull_List_Item::issue => Model::TEXT_TYPE,
 			Pull_List_Item::year => Model::INT_TYPE,
-			Pull_List_Item::pull_list_id => Model::INT_TYPE
+			Pull_List_Item::pull_list_id => Model::INT_TYPE,
+			Pull_List_Item::pull_list_group_id => Model::INT_TYPE
 		);
 	}
 
@@ -82,6 +83,7 @@ class Pull_List_Item extends _Pull_List_Item
 		if ( is_null($object) ) {
 			return array(
 				Pull_List_Item::data,
+				Pull_List_Item::search_name,
 				Pull_List_Item::name
 			);
 		}
@@ -115,7 +117,11 @@ class Pull_List_Item extends _Pull_List_Item
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr == Pull_List_Item::pull_list_id ) {
+		if ( Pull_List_Item::pull_list_group_id == $attr ) {
+			$model = Model::Named('Pull_List_Group');
+			return $model->allObjects();
+		}
+		if ( Pull_List_Item::pull_list_id == $attr ) {
 			$model = Model::Named('Pull_List');
 			return $model->allObjects();
 		}
@@ -123,11 +129,6 @@ class Pull_List_Item extends _Pull_List_Item
 	}
 
 	/** Validation */
-	function validate_group_name($object = null, $value)
-	{
-		return parent::validate_group_name($object, $value);
-	}
-
 	function validate_data($object = null, $value)
 	{
 		return parent::validate_data($object, $value);
@@ -136,6 +137,11 @@ class Pull_List_Item extends _Pull_List_Item
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
+	}
+
+	function validate_search_name($object = null, $value)
+	{
+		return parent::validate_search_name($object, $value);
 	}
 
 	function validate_name($object = null, $value)
@@ -156,6 +162,11 @@ class Pull_List_Item extends _Pull_List_Item
 	function validate_pull_list_id($object = null, $value)
 	{
 		return parent::validate_pull_list_id($object, $value);
+	}
+
+	function validate_pull_list_group_id($object = null, $value)
+	{
+		return parent::validate_pull_list_group_id($object, $value);
 	}
 
 }

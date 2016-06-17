@@ -31,7 +31,7 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof Pull_List_Exclusion ) {
+		if (isset($object) && $object instanceof Pull_List_ExclusionDBO ) {
 			// massage values as necessary
 		}
 

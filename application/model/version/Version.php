@@ -33,7 +33,7 @@ class Version extends _Version
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof Version ) {
+		if (isset($object) && $object instanceof VersionDBO ) {
 			if ( isset($values[Version::code]) ) {
 				$vers = explode(".", $code );
 				$values[Version::major] = (isset($vers[0]) ? intval($vers[0]) : 0);

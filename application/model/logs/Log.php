@@ -18,37 +18,22 @@ class Log extends _Log
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			$logLevel,
-			$trace,
-			$trace_id,
-			$context,
-			$context_id,
-			$message,
-			$session
-		);
-	}
-
-	public function update( LogDBO $obj,
-		$logLevel, $trace, $trace_id, $context, $context_id, $message, $session)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$logLevel,
-				$trace,
-				$trace_id,
-				$context,
-				$context_id,
-				$message,
-				$session
-			);
+		if ( isset($values) ) {
+			// massage values as necessary
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof LogDBO ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(
@@ -104,7 +89,7 @@ class Log extends _Log
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr == Log::level ) {
+		if ( Log::level == $attr ) {
 			$model = Model::Named('Log_Level');
 			return $model->allObjects();
 		}

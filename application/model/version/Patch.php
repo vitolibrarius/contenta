@@ -28,7 +28,7 @@ class Patch extends _Patch
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof Patch ) {
+		if (isset($object) && $object instanceof PatchDBO ) {
 			// massage values as necessary
 		}
 
@@ -80,7 +80,7 @@ class Patch extends _Patch
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr = Patch::version_id ) {
+		if ( Patch::version_id == $attr) {
 			$model = Model::Named('Version');
 			return $model->allObjects();
 		}

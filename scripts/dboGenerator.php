@@ -523,7 +523,8 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 
 	/** generate model file, only if it does not exist */
 	if ($force == false && is_file($model_file) ) {
-		$tmp_file = appendPath( $tmp_dir, $modelname) . ".php";
+		$tmp_file = appendPath( $tmp_dir, $package, $modelname) . ".php";
+		is_dir(dirname($tmp_file)) ||  mkdir(dirname($tmp_file)) || die( 'Failed to created directory ' . dirname($tmp_file) );
 		$diff_files[$model_file] = $tmp_file;
 		$model_file = $tmp_file;
 	}
@@ -545,7 +546,8 @@ foreach (glob($models_path . DIRECTORY_SEPARATOR . "*.json") as $file) {
 
 	/** generate dbo file, only if it does not exist */
 	if ( $force == false && is_file($dbo_file) ) {
-		$tmp_file = appendPath( $tmp_dir, $dboname) . ".php";
+		$tmp_file = appendPath( $tmp_dir, $package, $dboname) . ".php";
+		is_dir(dirname($tmp_file)) ||  mkdir(dirname($tmp_file)) || die( 'Failed to created directory ' . dirname($tmp_file) );
 		$diff_files[$dbo_file] = $tmp_file;
 		$dbo_file = $tmp_file;
 	}

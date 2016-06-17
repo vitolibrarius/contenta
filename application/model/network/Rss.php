@@ -44,7 +44,7 @@ class Rss extends _Rss
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof Rss ) {
+		if (isset($object) && $object instanceof RssDBO ) {
 			if ( isset($values[Rss::title]) ) {
 				$mediaFilename = new MediaFilename($values[Rss::title]);
 				$meta = $mediaFilename->updateFileMetaData(null);

@@ -60,7 +60,7 @@ class Users extends _Users
 	}
 
 	public function updateObject(DataObject $object = NULL, array $values = array()) {
-		if (isset($object) && $object instanceof model\user\UsersDBO ) {
+		if (isset($object) && $object instanceof UsersDBO ) {
 			if ( isset($values['password'], $values['password_check'])
 				&& empty($values['password']) == false && empty($values['password_check']) == false
 				&& $values['password'] === $values['password_check']) {

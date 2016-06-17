@@ -37,7 +37,7 @@ class Pull_List_Group extends _Pull_List_Group
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof Pull_List_Group ) {
+		if (isset($object) && $object instanceof Pull_List_GroupDBO ) {
 			// massage values as necessary
 		}
 
@@ -47,8 +47,8 @@ class Pull_List_Group extends _Pull_List_Group
 	public function attributesFor($object = null, $type = null) {
 		return array(
 			Pull_List_Group::name => Model::TEXT_TYPE,
-			Pull_List_Group::created => Model::DATE_TYPE,
-			Pull_List_Group::pull_list_id => Model::INT_TYPE
+			Pull_List_Group::data => Model::TEXT_TYPE,
+			Pull_List_Group::created => Model::DATE_TYPE
 		);
 	}
 
@@ -56,7 +56,8 @@ class Pull_List_Group extends _Pull_List_Group
 	{
 		if ( is_null($object) ) {
 			return array(
-				Pull_List_Group::name
+				Pull_List_Group::name,
+				Pull_List_Group::data
 			);
 		}
 		return parent::attributesMandatory($object);
@@ -102,14 +103,14 @@ class Pull_List_Group extends _Pull_List_Group
 		return parent::validate_name($object, $value);
 	}
 
+	function validate_data($object = null, $value)
+	{
+		return parent::validate_data($object, $value);
+	}
+
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
-	}
-
-	function validate_pull_list_id($object = null, $value)
-	{
-		return parent::validate_pull_list_id($object, $value);
 	}
 
 }

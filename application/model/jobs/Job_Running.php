@@ -20,35 +20,22 @@ class Job_Running extends _Job_Running
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $job_id, $type_id, $processor, $guid, $pid, $desc)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			$job_id,
-			$type_id,
-			$processor,
-			$guid,
-			$pid,
-			$desc
-		);
-	}
-
-	public function update( Job_RunningDBO $obj,
-		$job_id, $type_id, $processor, $guid, $pid, $desc)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$job_id,
-				$type_id,
-				$processor,
-				$guid,
-				$pid,
-				$desc
-			);
+		if ( isset($values) ) {
+			// massage values as necessary
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Job_RunningDBO ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(

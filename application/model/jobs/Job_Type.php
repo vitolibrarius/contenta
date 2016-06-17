@@ -20,37 +20,22 @@ class Job_Type extends _Job_Type
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $code, $name, $desc, $processor, $parameter, $scheduled, $requires_endpoint)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			$code,
-			$name,
-			$desc,
-			$processor,
-			$parameter,
-			$scheduled,
-			$requires_endpoint
-		);
-	}
-
-	public function update( Job_TypeDBO $obj,
-		$code, $name, $desc, $processor, $parameter, $scheduled, $requires_endpoint)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$code,
-				$name,
-				$desc,
-				$processor,
-				$parameter,
-				$scheduled,
-				$requires_endpoint
-			);
+		if ( isset($values) ) {
+			// massage values as necessary
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Job_TypeDBO ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(

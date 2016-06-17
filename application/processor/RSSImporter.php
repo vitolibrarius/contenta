@@ -21,19 +21,6 @@ class RSSImporter extends EndpointImporter
 		parent::__construct($guid);
 	}
 
-	public function setEndpoint(EndpointDBO $point = null)
-	{
-		if ( is_null($point) == false ) {
-			$type = $point->type();
-			if ( $type == false || $type->data_type != "RSS feed of NZB" ) {
-				throw new \Exception("Endpoint " . $point->displayName() . " is is not for " . Endpoint_Type::RSS);
-			}
-			$this->setJobDescription( "Refreshing " . $point->displayName());
-		}
-		parent::setEndpoint($point);
-	}
-
-
 	public function processData()
 	{
 		$connection = $this->endpointConnector();

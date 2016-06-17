@@ -29,7 +29,7 @@ class RSSImporterTest extends PHPUnit_Framework_TestCase
 		$testEndpointType = array(
 		    "name" => "Test Endpoint Type",
 			"code" => "Test",
-			"data_type" => "RSS feed of NZB",
+			"data_type" => "Test",
 			"site_url" => "http://localhost",
 			"api_url" => "http://localhost",
 			"favicon_url" => "http://localhost/favicon.ico",

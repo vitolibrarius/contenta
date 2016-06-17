@@ -75,6 +75,7 @@ abstract class EndpointImporter extends Processor
 	public function setEndpoint(EndpointDBO $point = null)
 	{
 		if ( is_null($point) == false ) {
+			$this->setJobDescription( "Refreshing " . $point->displayName());
 			if ($point->isEnabled() ) {
 				$this->endpoint = $point;
 				$this->setMeta(EndpointImporter::META_ENDPOINT_DISPLAY, $point->displayName() );

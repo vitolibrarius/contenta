@@ -28,18 +28,6 @@ class PreviewsWorldImporter extends EndpointImporter
 		parent::__construct($guid);
 	}
 
-	public function setEndpoint(EndpointDBO $point = null)
-	{
-		if ( is_null($point) == false ) {
-			$type = $point->type();
-			if ( $type == false || ($type->code != Endpoint_Type::PreviewsWorld && $type->data_type != Endpoint_Type::PreviewsWorld) ) {
-				throw new \Exception("Endpoint " . $point->displayName() . $type->data_type . " is is not for " . Endpoint_Type::PreviewsWorld);
-			}
-			$this->setJobDescription( "Refreshing " . $point->displayName());
-		}
-		parent::setEndpoint($point);
-	}
-
 	public function isGroupInExclusions( $groupname = "none" )
 	{
 		$type = $this->endpoint()->type();

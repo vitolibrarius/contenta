@@ -16,27 +16,22 @@ class Log_Level extends _Log_Level
 	/**
 	 *	Create/Update functions
 	 */
-	public function create( $code, $name)
+	public function createObject( array $values = array())
 	{
-		return $this->base_create(
-			$code,
-			$name
-		);
-	}
-
-	public function update( Log_LevelDBO $obj,
-		$code, $name)
-	{
-		if ( isset( $obj ) && is_null($obj) === false ) {
-			return $this->base_update(
-				$obj,
-				$code,
-				$name
-			);
+		if ( isset($values) ) {
+			// massage values as necessary
 		}
-		return $obj;
+
+		return parent::createObject($values);
 	}
 
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Log_LevelDBO ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
 
 	public function attributesFor($object = null, $type = null) {
 		return array(

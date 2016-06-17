@@ -34,7 +34,7 @@ class Pull_List extends _Pull_List
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof Pull_List ) {
+		if (isset($object) && $object instanceof Pull_ListDBO ) {
 			// massage values as necessary
 		}
 
