@@ -7,8 +7,8 @@ use \Logger as Logger;
 use \Model as Model;
 use \Cache as Cache;
 
-use model\Endpoint as Endpoint;
-use model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 
 class TestConnectorException extends \Exception {}
 

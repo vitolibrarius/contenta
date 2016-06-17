@@ -16,8 +16,8 @@ use \Metadata as Metadata;
 use utilities\EndpointThrottle as EndpointThrottle;
 
 use \model\user\Users as Users;
-use model\Endpoint as Endpoint;
-use model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 
 class InvalidEndpointConfigurationException extends \Exception {}
 class NetworkErrorException extends \Exception {}
@@ -34,7 +34,7 @@ abstract class EndpointConnector
 	public function __construct($point)
 	{
 		$endpointModel = Model::Named('Endpoint');
-		if ( is_a($point, '\model\EndpointDBO')) {
+		if ( is_a($point, '\model\network\EndpointDBO')) {
 			if ($point->isEnabled() ) {
 				$this->endpoint = $point;
 			}
@@ -124,12 +124,12 @@ abstract class EndpointConnector
 	}
 
 	public function endpointCompressed() {
-		return (isset($this->endpoint) ? $this->endpoint->requiresCompression() : false);
+		return (isset($this->endpoint) ? $this->endpoint->isCompressed() : false);
 	}
 
 	public function endpointType() {
 		if ( isset($this->endpoint) ) {
-			return $this->endpoint->type();
+			return $this->endpoint->endpointType();
 		}
 		return null;
 	}
@@ -151,7 +151,7 @@ abstract class EndpointConnector
 	public function throttleRequestIfRequired() {
 		if ( is_null( $this->throttle ) ) {
 			$type = $this->endpointType();
-			if ( is_a($type, '\model\Endpoint_TypeDBO')) {
+			if ( is_a($type, '\model\network\Endpoint_TypeDBO')) {
 				$this->throttle = new EndpointThrottle($type->code, $type->throttle_hits, $type->throttle_time);
 			}
 		}

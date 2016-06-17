@@ -165,7 +165,7 @@ try {
 			$processor = Processor::Named( $processorName, $guid );
 			if ( null != $jobObj ) {
 				$endpoint = $jobObj->endpoint();
-				if ( $endpoint instanceof model\EndpointDBO ) {
+				if ( $endpoint instanceof \model\network\EndpointDBO ) {
 					if (method_exists($processor, "setEndpoint")) {
 						$processor->setEndpoint( $endpoint );
 					}

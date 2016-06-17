@@ -28,8 +28,8 @@ use model\Publication as Publication;
 use model\Publication_Character as Publication_Character;
 use model\Media_Type as Media_Type;
 use model\Media as Media;
-use model\Endpoint_Type as Endpoint_Type;
-use model\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
 use \model\network\Rss as Rss;
 
 use \model\jobs\Job_Type as Job_Type;

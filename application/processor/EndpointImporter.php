@@ -9,9 +9,9 @@ use \Logger as Logger;
 use \Model as Model;
 use \Exception as Exception;
 
-use model\Endpoint as Endpoint;
-use model\Endpoint_Type as Endpoint_Type;
-use model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
+use \model\network\EndpointDBO as EndpointDBO;
 
 abstract class EndpointImporter extends Processor
 {
@@ -30,10 +30,7 @@ abstract class EndpointImporter extends Processor
 		if ( $endpoint == false ) {
 			throw new Exception("No Endpoint set for Importer " . get_class() );
 		}
-
-		$connectorName = 'connectors\\' . $endpoint->type()->data_type . 'Connector';
-		$connection = new $connectorName($endpoint);
-		return $connection;
+		return $endpoint->endpointConnector();
 	}
 
 	public function endpointTypeCode() {
@@ -45,8 +42,8 @@ abstract class EndpointImporter extends Processor
 		if ( $endpoint == false ) {
 			throw new Exception("No Endpoint set for Importer " . get_class() );
 		}
-		$this->setMeta(EndpointImporter::META_ENDPOINT_TYPE, $endpoint->type()->code );
-		return $endpoint->type()->code;
+		$this->setMeta(EndpointImporter::META_ENDPOINT_TYPE, $endpoint->endpointType()->code );
+		return $endpoint->endpointType()->code;
 	}
 
 	public function endpoint()
@@ -80,7 +77,7 @@ abstract class EndpointImporter extends Processor
 				$this->endpoint = $point;
 				$this->setMeta(EndpointImporter::META_ENDPOINT_DISPLAY, $point->displayName() );
 				$this->setMeta(EndpointImporter::META_ENDPOINT_ID, $point->id);
-				$this->setMeta(EndpointImporter::META_ENDPOINT_TYPE, $point->type()->code );
+				$this->setMeta(EndpointImporter::META_ENDPOINT_TYPE, $point->endpointType()->code );
 			}
 			else {
 				throw new Exception("Endpoint " . $point->displayName() . " is disabled");

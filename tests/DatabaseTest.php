@@ -21,8 +21,8 @@
 
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
-use model\Endpoint as Endpoint;
-use model\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
 use model\logs\Log as Log;
 use model\logs\Log_Level as Log_Level;
 use model\Network as Network;
@@ -62,30 +62,30 @@ $patches = Model::Named('Patch')->allObjects();
 reportData($patches,  array( "displayName", "version/code", "formattedDateTime_created" ));
 
 my_echo( "---------- Endpoint ");
-$cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
+$cv_endpoint_type = Model::Named('Endpoint_Type')->objectForCode(\model\network\Endpoint_Type::ComicVine);
 ($cv_endpoint_type != false && $cv_endpoint_type->code == 'ComicVine') || die("Could not find Endpoint_Type::ComicVine");
 
-$rss_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::RSS);
+$rss_endpoint_type = Model::Named('Endpoint_Type')->objectForCode(\model\network\Endpoint_Type::RSS);
 ($rss_endpoint_type != false && $rss_endpoint_type->code == 'RSS') || die("Could not find Endpoint_Type::RSS");
 
 $endpoint_model = Model::Named("Endpoint");
 $endpoint_data = array(
 	array(
-		model\Endpoint::name => "My ComicVine",
-		model\Endpoint::type_id => $cv_endpoint_type->id,
-		model\Endpoint::base_url => $cv_endpoint_type->api_url,
-		model\Endpoint::api_key => uuid(),
-		model\Endpoint::username => 'vito',
-		model\Endpoint::enabled => Model::TERTIARY_TRUE,
-		model\Endpoint::compressed => Model::TERTIARY_FALSE
+		\model\network\Endpoint::name => "My ComicVine",
+		\model\network\Endpoint::type_id => $cv_endpoint_type->id,
+		\model\network\Endpoint::base_url => $cv_endpoint_type->api_url,
+		\model\network\Endpoint::api_key => uuid(),
+		\model\network\Endpoint::username => 'vito',
+		\model\network\Endpoint::enabled => Model::TERTIARY_TRUE,
+		\model\network\Endpoint::compressed => Model::TERTIARY_FALSE
 	),
 	array(
-		model\Endpoint::name => "Comicbook RSS",
-		model\Endpoint::type_id => $rss_endpoint_type->id,
-		model\Endpoint::base_url => "http://comicbook.source.com/rss?api=12345",
-		model\Endpoint::username => 'vito',
-		model\Endpoint::enabled => Model::TERTIARY_TRUE,
-		model\Endpoint::compressed => Model::TERTIARY_TRUE
+		\model\network\Endpoint::name => "Comicbook RSS",
+		\model\network\Endpoint::type_id => $rss_endpoint_type->id,
+		\model\network\Endpoint::base_url => "http://comicbook.source.com/rss?api=12345",
+		\model\network\Endpoint::username => 'vito',
+		\model\network\Endpoint::enabled => Model::TERTIARY_TRUE,
+		\model\network\Endpoint::compressed => Model::TERTIARY_TRUE
 	)
 
 );

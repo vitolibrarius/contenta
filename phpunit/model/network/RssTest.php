@@ -15,8 +15,8 @@ use \Logger as Logger;
 use \Localized as Localized;
 use \utilities\MediaFilename as MediaFilename;
 use \model\network\RssDBO as RssDBO;
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 use \model\network\Flux as Flux;
 use \model\network\FluxDBO as FluxDBO;
 /* {useStatements} */

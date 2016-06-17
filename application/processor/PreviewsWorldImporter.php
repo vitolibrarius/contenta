@@ -14,9 +14,9 @@ use \model\pull_list\Pull_List_Item as Pull_List_Item;
 use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
 use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 
-use model\Endpoint_Type as Endpoint_Type;
-use model\Endpoint as Endpoint;
-use model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 
 class PreviewsWorldImporter extends EndpointImporter
 {
@@ -30,7 +30,7 @@ class PreviewsWorldImporter extends EndpointImporter
 
 	public function isGroupInExclusions( $groupname = "none" )
 	{
-		$type = $this->endpoint()->type();
+		$type = $this->endpoint()->endpointType();
 		$matches = Model::Named( "Pull_List_Exclusion" )->objectsForPatternTypeAndEndpointType( $groupname, Pull_List_Exclusion::GROUP_TYPE, $type->id );
 		return (is_array($matches) && count($matches) > 0);
 	}
@@ -38,7 +38,7 @@ class PreviewsWorldImporter extends EndpointImporter
 	public function isItemInExclusions( $itemname = "none" )
 	{
 		if ( $this->items_excluded == null ) {
-			$type = $this->endpoint()->type();
+			$type = $this->endpoint()->endpointType();
 			$this->items_excluded = Model::Named( "Pull_List_Exclusion" )->objectsForTypeAndEndpointType( Pull_List_Exclusion::ITEM_TYPE, $type->id );
 		}
 
@@ -56,7 +56,7 @@ class PreviewsWorldImporter extends EndpointImporter
 	public function expandItemName( $itemname = "none" )
 	{
 		if ( $this->expansions == null ) {
-			$type = $this->endpoint()->type();
+			$type = $this->endpoint()->endpointType();
 			$this->expansions = Model::Named( "Pull_List_Expansion" )->allForEndpoint_type( $type );
 		}
 

@@ -14,8 +14,8 @@ use \Model as Model;
 use \Cache as Cache;
 use \Database as Database;
 use \exceptions\EndpointConnectionException as EndpointConnectionException;
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 /* {useStatements} */
 
 class ComicVineConnectorTest extends PHPUnit_Framework_TestCase

@@ -1,0 +1,61 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id", "type": "INTEGER" },
+        "code": { "column": "code", "length": 10, "type": "TEXT", "collate": "NOCASE", "nullable": false },
+        "name": { "column": "name", "length": 256, "type": "TEXT", "nullable": false },
+        "comments": { "column": "comments", "length": 4096, "type": "TEXT" },
+        "data_type": { "column": "data_type", "length": 256, "type": "TEXT" },
+		"site_url": { "column": "site_url", "length": 1024, "type": "TEXT", "nullable": false },
+		"api_url": { "column": "api_url", "length": 1024, "type": "TEXT", "nullable": false },
+		"favicon_url": { "column": "favicon_url", "length": 1024, "type": "TEXT" },
+        "throttle_hits": { "column": "throttle_hits", "type": "INTEGER" },
+        "throttle_time": { "column": "throttle_time", "type": "INTEGER" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "endpoint_type",
+    "package": "network",
+    "model": "Endpoint_Type",
+    "dbo": "Endpoint_TypeDBO",
+	"sort" : [
+		{ "asc": "name" }
+	],
+    "relationships" :{
+    	"endpoints" : {
+    		"destination" : "Endpoint",
+    		"destinationPackage" : "\\model\\network\\",
+    		"destinationTable" : "endpoint",
+    		"joins" : [
+    			{ "destinationAttribute": "type_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"pull_list_exclusions" : {
+    		"destination" : "Pull_List_Exclusion",
+    		"destinationPackage" : "\\model\\pull_list\\",
+    		"destinationTable" : "pull_list_excl",
+    		"joins" : [
+    			{ "destinationAttribute": "endpoint_type_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"pull_list_expansions" : {
+    		"destination" : "Pull_List_Expansion",
+    		"destinationPackage" : "\\model\\pull_list\\",
+    		"destinationTable" : "pull_list_expansion",
+    		"joins" : [
+    			{ "destinationAttribute": "endpoint_type_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	}
+    },
+    "indexes" : [
+    	{ "columns": ["code"], "unique": true },
+    	{ "columns": ["name"], "unique": true }
+    ]
+}

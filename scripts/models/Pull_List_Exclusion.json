@@ -18,7 +18,7 @@
     	"endpoint_type" : {
     		"destination" : "Endpoint_Type",
     		"destinationTable" : "endpoint_type",
-    		"destinationPackage" : "\\model\\",
+    		"destinationPackage" : "\\model\\network\\",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_type_id" }
     		],

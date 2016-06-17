@@ -9,8 +9,8 @@ use \Logger as Logger;
 use \model\pull_list\Pull_List as Pull_List;
 
 /* import related objects */
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
 use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 

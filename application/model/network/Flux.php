@@ -10,8 +10,8 @@ use \Localized as Localized;
 use \model\network\FluxDBO as FluxDBO;
 
 /* import related objects */
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 
 /** Synonym for torrent ..
 	flux

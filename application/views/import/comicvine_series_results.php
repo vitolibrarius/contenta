@@ -12,7 +12,7 @@
 		<div class="span_container_row">
 			<span class="nobreak">
 				<?php if (isset($this->pub_model, $record['publisher'], $record['publisher']['id']) ) {
-					$publisher = $this->pub_model->objectForExternal($record['publisher']['id'], $this->endpoint->type()->code);
+					$publisher = $this->pub_model->objectForExternal($record['publisher']['id'], $this->endpoint->endpointType()->code);
 					if ( $publisher != false ) {
 						if ( $publisher->hasIcons() ) {
 							echo '<img src="' . Config::Web( "Image", "icon", $this->pub_model->tableName(), $publisher->id) . '" />';
@@ -44,7 +44,7 @@
 					echo strip_tags($record['deck']);
 				} ?></span>
 			<span class="nobreak">
-				<?php if ($this->model->objectForExternal($record['id'], model\Endpoint_Type::ComicVine) == false) : ?>
+				<?php if ($this->model->objectForExternal($record['id'], \model\network\Endpoint_Type::ComicVine) == false) : ?>
 				<a class="button" href="<?php echo Config::Web(
 					$this->importAction,
 					$record['id'],

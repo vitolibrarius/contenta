@@ -56,7 +56,7 @@
 				<fieldset>
 				<legend><?php echo Localized::ModelLabel($this->model->tableName(),"AdditionalLegend"); ?></legend>
 
-					<?php $endpointType = $this->object->externalEndpoint()->type(); ?>
+					<?php $endpointType = $this->object->externalEndpoint()->endpointType(); ?>
 					<label>Metadata Source</label>
 					<div>
 						<span class="input_restriction">

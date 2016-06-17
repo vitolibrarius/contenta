@@ -10,9 +10,9 @@ use \Auth as Auth;
 use \Localized as Localized;
 use \Logger as Logger;
 use \model\user\Users as Users;
-use model\Endpoint as Endpoint;
-use model\EndpointDBO as EndpointDBO;
-
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 /**
  * Class Endpoint
  */
@@ -70,7 +70,7 @@ class Netconfig extends Controller
 			if ( isset($values, $values['endpoint'], $values['endpoint']['type_id']) ) {
 				$model = Model::Named('Endpoint_Type');
 				$type = $model->objectForId($values['endpoint']['type_id']);
-				if ( is_a($type, "model\\Endpoint_TypeDBO" ) ) {
+				if ( $type instanceof Endpoint_TypeDBO ) {
 					$this->view->setLocalizedViewTitle("NewRecord");
 					$this->view->saveAction = "netconfig/save";
 					$this->view->testAction = "netconfig/testConnection";

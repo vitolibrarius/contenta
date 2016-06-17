@@ -14,9 +14,9 @@ use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
 use \SimpleXMLElement as SimpleXMLElement;
-use \model\Endpoint_Type as Endpoint_Type;
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 use \model\network\RssDBO as RssDBO;
 /* {useStatements} */
 

@@ -19,7 +19,7 @@
 					echo strip_tags($record['deck']);
 				} ?></span>
 			<span class="nobreak">
-				<?php if ($this->model->objectForExternal($record['id'], model\Endpoint_Type::ComicVine) == false) : ?>
+				<?php if ($this->model->objectForExternal($record['id'], \model\network\Endpoint_Type::ComicVine) == false) : ?>
 				<a class="button" href="<?php echo Config::Web(
 					$this->importAction,
 					$record['id'],

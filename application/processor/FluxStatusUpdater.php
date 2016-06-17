@@ -14,9 +14,9 @@ use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Series as Series;
 use model\Publication as Publication;
-use model\Endpoint as Endpoint;
-use model\Endpoint_Type as Endpoint_Type;
-use model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
+use \model\network\EndpointDBO as EndpointDBO;
 use model\Story_Arc as Story_Arc;
 use model\Story_Arc_Character as Story_Arc_Character;
 use model\Story_Arc_Series as Story_Arc_Series;
@@ -31,18 +31,6 @@ class FluxStatusUpdater extends EndpointImporter
 			$guid = uuid();
 		}
 		parent::__construct($guid);
-	}
-
-	public function setEndpoint(EndpointDBO $point = null)
-	{
-		if ( is_null($point) == false ) {
-			$type = $point->type();
-			if ( $type == false || $type->code != Endpoint_Type::SABnzbd ) {
-				throw new Exception("Endpoint " . $point->displayName() . " is is not for " . Endpoint_Type::SABnzbd);
-			}
-			$this->setJobDescription( "Refreshing " . $point->displayName());
-		}
-		parent::setEndpoint($point);
 	}
 
 	public function processData()

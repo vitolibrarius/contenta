@@ -7,7 +7,7 @@
         "flux_error": { "column": "flux_error", "type": "BOOLEAN" },
         "src_endpoint": { "column": "src_endpoint", "type": "INTEGER" },
         "src_guid": { "column": "src_guid", "length": 256, "type": "TEXT", "nullable": true },
-        "src_url": { "column": "src_guid", "length": 256, "type": "TEXT", "nullable": true },
+        "src_url": { "column": "src_url", "length": 1024, "type": "TEXT", "nullable": true },
         "src_status": { "column": "src_status", "length": 256, "type": "TEXT", "nullable": true },
         "src_pub_date": { "column": "src_pub_date", "type": "DATE" },
         "dest_endpoint": { "column": "dest_endpoint", "type": "INTEGER" },
@@ -27,7 +27,7 @@
     	"source_endpoint" : {
     		"destination" : "Endpoint",
     		"destinationTable" : "endpoint",
-    		"destinationPackage" : "\\model\\",
+    		"destinationPackage" : "\\model\\network\\",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "src_endpoint" }
     		],
@@ -38,7 +38,7 @@
     	"destination_endpoint" : {
     		"destination" : "Endpoint",
     		"destinationTable" : "endpoint",
-    		"destinationPackage" : "\\model\\",
+    		"destinationPackage" : "\\model\\network\\",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "dest_endpoint" }
     		],

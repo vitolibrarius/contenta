@@ -13,8 +13,8 @@ use \Logger as Logger;
 use \Model as Model;
 use \Cache as Cache;
 use \Database as Database;
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 /* {useStatements} */
 
 class RSSConnectorTest extends PHPUnit_Framework_TestCase

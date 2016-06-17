@@ -25,8 +25,8 @@ use connectors\NewznabConnector as NewznabConnector;
 
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
-use model\Endpoint as Endpoint;
-use model\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
 use model\logs\Log as Log;
 use model\logs\Log_Level as Log_Level;
 use model\Network as Network;
@@ -54,22 +54,22 @@ my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
 my_echo( "---------- Endpoint ");
-$Newznab_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::Newznab);
+$Newznab_endpoint_type = Model::Named('Endpoint_Type')->objectForCode(\model\network\Endpoint_Type::Newznab);
 ($Newznab_endpoint_type != false && $Newznab_endpoint_type->code == Endpoint_Type::Newznab) || die("Could not find Endpoint_Type::Newznab");
 
 $ep_model = Model::Named('Endpoint');
 $points = $ep_model->allForTypeCode(Endpoint_Type::Newznab);
 if ( is_array($points) == false || count($points) == 0) {
 	$metadata = metadataFor(Endpoint_Type::Newznab . ".json");
-	if ( $metadata->isMeta( model\Endpoint::api_key ) == false )
+	if ( $metadata->isMeta( \model\network\Endpoint::api_key ) == false )
 	{
-		$metadata->setMeta( model\Endpoint::name, "Newznab Source" );
-		$metadata->setMeta( model\Endpoint::type_id, $Newznab_endpoint_type->id );
-		$metadata->setMeta( model\Endpoint::base_url, "YOUR Newznab site base url here" );
-		$metadata->setMeta( model\Endpoint::api_key, "YOUR API KEY HERE" );
-		$metadata->setMeta( model\Endpoint::username, 'vito' );
-		$metadata->setMeta( model\Endpoint::enabled, Model::TERTIARY_TRUE );
-		$metadata->setMeta( model\Endpoint::compressed, Model::TERTIARY_FALSE );
+		$metadata->setMeta( \model\network\Endpoint::name, "Newznab Source" );
+		$metadata->setMeta( \model\network\Endpoint::type_id, $Newznab_endpoint_type->id );
+		$metadata->setMeta( \model\network\Endpoint::base_url, "YOUR Newznab site base url here" );
+		$metadata->setMeta( \model\network\Endpoint::api_key, "YOUR API KEY HERE" );
+		$metadata->setMeta( \model\network\Endpoint::username, 'vito' );
+		$metadata->setMeta( \model\network\Endpoint::enabled, Model::TERTIARY_TRUE );
+		$metadata->setMeta( \model\network\Endpoint::compressed, Model::TERTIARY_FALSE );
 
 		die( "Please configure the Newznab.json config file with correct test data" . PHP_EOL );
 	}

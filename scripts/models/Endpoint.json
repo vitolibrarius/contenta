@@ -1,0 +1,103 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id", "type": "INTEGER" },
+        "type_id": { "column": "type_id", "type": "INTEGER" },
+        "name": { "column": "name", "length": 256, "type": "TEXT", "nullable": false },
+        "base_url": { "column": "base_url", "length": 1024, "type": "TEXT", "nullable": false },
+        "api_key": { "column": "api_key", "length": 256, "type": "TEXT", "nullable": true },
+        "username": { "column": "username", "length": 256, "type": "TEXT", "nullable": true },
+        "enabled": { "column": "enabled", "type": "BOOLEAN", "default": "Model::TERTIARY_TRUE" },
+        "compressed": { "column": "compressed", "type": "BOOLEAN", "default": "Model::TERTIARY_FALSE" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "endpoint",
+    "package": "network",
+    "model": "Endpoint",
+    "dbo": "EndpointDBO",
+	"sort" : [
+		{ "asc": "name" }
+	],
+    "relationships" :{
+    	"endpointType" : {
+    		"destination" : "Endpoint_Type",
+    		"destinationPackage" : "\\model\\network\\",
+    		"destinationTable" : "endpoint_type",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "type_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	},
+    	"pull_lists" : {
+    		"destination" : "Pull_List",
+    		"destinationTable" : "pull_list",
+    		"destinationPackage" : "\\model\\pull_list\\",
+    		"joins" : [
+    			{ "destinationAttribute": "endpoint_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"rss" : {
+    		"destination" : "Rss",
+    		"destinationTable" : "rss",
+    		"destinationPackage" : "\\model\\network\\",
+    		"joins" : [
+    			{ "destinationAttribute": "endpoint_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"flux_sources" : {
+    		"destination" : "Flux",
+    		"destinationTable" : "flux",
+    		"destinationPackage" : "\\model\\network\\",
+    		"joins" : [
+    			{ "destinationAttribute": "src_endpoint", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"flux_destinations" : {
+    		"destination" : "Flux",
+    		"destinationTable" : "flux",
+    		"destinationPackage" : "\\model\\network\\",
+    		"joins" : [
+    			{ "destinationAttribute": "dest_endpoint", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"jobs" : {
+    		"destination" : "Job",
+    		"destinationTable" : "job",
+    		"destinationPackage" : "\\model\\jobs\\",
+    		"joins" : [
+    			{ "destinationAttribute": "endpoint_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"flux_destinations" : {
+    		"destination" : "Flux",
+    		"destinationTable" : "flux",
+    		"destinationPackage" : "\\model\\network\\",
+    		"joins" : [
+    			{ "destinationAttribute": "dest_endpoint", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	}
+    },
+    "indexes" : [
+    ],
+	"fetches" : {
+	}
+}

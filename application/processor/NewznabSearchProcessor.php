@@ -18,8 +18,8 @@ use \model\jobs\Job as Job;
 use model\Story_Arc as Story_Arc;
 use model\Publication as Publication;
 use model\Series as Series;
-use model\Endpoint_Type as Endpoint_Type;
-use model\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
 
 use connectors\NewznabConnector as NewznabConnector;
 use processor\FluxImporter as FluxImporter;

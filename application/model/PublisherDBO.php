@@ -7,7 +7,7 @@ use \Model as Model;
 use \Config as Config;
 use \Logger as Logger;
 
-use model\Endpoint as Endpoint;
+use \model\network\Endpoint as Endpoint;
 use model\Publisher as Publisher;
 
 class PublisherDBO extends DataObject

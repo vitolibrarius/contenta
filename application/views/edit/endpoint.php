@@ -17,8 +17,10 @@
 
 				<?php
 					$realObj = (isset($this->object)) ? $this->object : null;
-					$realType = ( isset($this->object) ? $this->object->type() :
-						(isset($this->endpoint_type) ? $this->endpoint_type : null));
+					$realType = (isset($this->endpoint_type) ? $this->endpoint_type : null);
+					if ( is_null($realObj) == false && is_null($realObj->endpointType()) == false ) {
+						$realType = $realObj->endpointType();
+					}
 				?>
 					<label>Type</label>
 					<div>

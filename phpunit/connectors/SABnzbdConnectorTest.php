@@ -13,8 +13,8 @@ use \Logger as Logger;
 use \Model as Model;
 use \Cache as Cache;
 use \CurlFile as CurlFile;
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 use \utilities\MediaFilename as MediaFilename;
 use \exceptions\EndpointConnectionException as EndpointConnectionException;
 /* {useStatements} */

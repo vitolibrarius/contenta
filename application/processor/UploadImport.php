@@ -16,7 +16,7 @@ use connectors\ComicVineConnector as ComicVineConnector;
 
 use exceptions\ImportMediaException as ImportMediaException;
 
-use model\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint_Type as Endpoint_Type;
 use model\PublicationDBO as PublicationDBO;
 
 class UploadImport extends Processor

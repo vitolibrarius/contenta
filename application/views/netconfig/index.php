@@ -37,7 +37,7 @@
 		<?php foreach($this->endpoints as $key => $value): ?>
 			   <tr>
 					<td><span class="icon <?php echo ($value->enabled ? 'true' : 'false') ?>"></span></td>
-					<td><?php echo $value->type()->name; ?></td>
+					<td><?php echo $value->endpointType()->name; ?></td>
 					<td><?php echo htmlentities($value->name); ?></td>
 					<td><?php echo $value->base_url; ?></td>
 					<td><?php echo $value->api_key; ?></td>

@@ -4,7 +4,7 @@
 	if ( isset($this->endpoint_id) ) {
 		$endpoint = Model::Named( 'Endpoint' )->objectForId($this->endpoint_id);
 		if ( $endpoint ) {
-			$endpointType = $endpoint->type();
+			$endpointType = $endpoint->endpointType();
 		}
 	}
 ?>

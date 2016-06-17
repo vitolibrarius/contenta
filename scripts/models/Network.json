@@ -2,7 +2,7 @@
     "attributes": {
         "id": { "column": "id", "type": "INTEGER" },
         "ip_address": { "column": "ip_address", "length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": false },
-        "ip_hash": { "column": "ip_hash", "length": 256, "type": "TEXT", "default": "ipToHex($ip_address)" },
+        "ip_hash": { "column": "ip_hash", "length": 256, "type": "TEXT" },
         "created": { "column": "created", "type": "DATE" },
         "disable": { "column": "disable", "type": "BOOLEAN",  "default": "Model::TERTIARY_FALSE" }
     },

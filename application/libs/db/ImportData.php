@@ -14,8 +14,8 @@ use \Exception as Exception;
 
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
-use model\Endpoint as Endpoint;
-use model\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\Flux as Flux;
 use \model\network\Rss as Rss;
 use \model\jobs\Job as Job;

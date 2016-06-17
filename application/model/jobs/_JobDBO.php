@@ -11,8 +11,8 @@ use \model\jobs\Job as Job;
 /* import related objects */
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_TypeDBO as Job_TypeDBO;
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 
 abstract class _JobDBO extends DataObject
 {

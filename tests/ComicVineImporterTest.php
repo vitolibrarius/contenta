@@ -24,8 +24,8 @@ use utilities\Stopwatch as Stopwatch;
 
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
-use model\Endpoint as Endpoint;
-use model\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
 use model\logs\Log as Log;
 use model\logs\Log_Level as Log_Level;
 use model\Network as Network;
@@ -55,22 +55,22 @@ Migrator::Upgrade( Config::GetLog() );
 
 function configureEndpoint() {
 	my_echo( "---------- Endpoint ");
-	$cv_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::ComicVine);
+	$cv_endpoint_type = Model::Named('Endpoint_Type')->objectForCode(\model\network\Endpoint_Type::ComicVine);
 	($cv_endpoint_type != false && $cv_endpoint_type->code == 'ComicVine') || die("Could not find Endpoint_Type::ComicVine");
 
 	$ep_model = Model::Named('Endpoint');
-	$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+	$points = $ep_model->allForEndpointType(Endpoint_Type::ComicVine);
 	if ( is_array($points) == false || count($points) == 0) {
 		$metadata = metadataFor(Endpoint_Type::ComicVine . ".json");
-		if ( $metadata->isMeta( model\Endpoint::api_key ) == false )
+		if ( $metadata->isMeta( \model\network\Endpoint::api_key ) == false )
 		{
-			$metadata->setMeta( model\Endpoint::name, "My ComicVine" );
-			$metadata->setMeta( model\Endpoint::type_id, $cv_endpoint_type->id );
-			$metadata->setMeta( model\Endpoint::base_url, $cv_endpoint_type->api_url );
-			$metadata->setMeta( model\Endpoint::api_key, "YOUR API KEY HERE" );
-			$metadata->setMeta( model\Endpoint::username, 'vito' );
-			$metadata->setMeta( model\Endpoint::enabled, Model::TERTIARY_TRUE );
-			$metadata->setMeta( model\Endpoint::compressed, Model::TERTIARY_FALSE );
+			$metadata->setMeta( \model\network\Endpoint::name, "My ComicVine" );
+			$metadata->setMeta( \model\network\Endpoint::type_id, $cv_endpoint_type->id );
+			$metadata->setMeta( \model\network\Endpoint::base_url, $cv_endpoint_type->api_url );
+			$metadata->setMeta( \model\network\Endpoint::api_key, "YOUR API KEY HERE" );
+			$metadata->setMeta( \model\network\Endpoint::username, 'vito' );
+			$metadata->setMeta( \model\network\Endpoint::enabled, Model::TERTIARY_TRUE );
+			$metadata->setMeta( \model\network\Endpoint::compressed, Model::TERTIARY_FALSE );
 
 			die( "Please configure the ComicVine.json config file with your API key" . PHP_EOL );
 		}
@@ -78,7 +78,7 @@ function configureEndpoint() {
 		loadData( $ep_model, array($metadata->readMetadata()), array( "name", "type", "base_url", "api_key") );
 	}
 
-	$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+	$points = $ep_model->allForEndpointType(Endpoint_Type::ComicVine);
 	($points != false && count($points) > 0) || die('No endpoint defined');
 
 	return $points[0];

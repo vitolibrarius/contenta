@@ -14,8 +14,8 @@ use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
 use \model\network\FluxDBO as FluxDBO;
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 /* {useStatements} */
 
 class FluxTest extends PHPUnit_Framework_TestCase

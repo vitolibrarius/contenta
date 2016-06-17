@@ -23,8 +23,8 @@ use processor\RSSImporter as RSSImporter;
 
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
-use model\Endpoint as Endpoint;
-use model\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
 use model\logs\Log as Log;
 use model\logs\Log_Level as Log_Level;
 use model\Publication as Publication;
@@ -51,7 +51,7 @@ my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
 my_echo( "---------- Endpoint ");
-$rss_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::RSS);
+$rss_endpoint_type = Model::Named('Endpoint_Type')->objectForCode(\model\network\Endpoint_Type::RSS);
 ($rss_endpoint_type != false && $rss_endpoint_type->code == Endpoint_Type::RSS) || die("Could not find Endpoint_Type::RSS");
 
 $ep_model = Model::Named('Endpoint');
@@ -61,13 +61,13 @@ if ( is_array($points) == false || count($points) == 0) {
 	if ( testFilePathExists($sampleName) == false ) {
 		$samples = array(
 			array(
-				model\Endpoint::name => "binsearch (a.b.c.dcp)",
-				model\Endpoint::type_id => $rss_endpoint_type->id,
-				model\Endpoint::base_url => "http://rss.binsearch.net/rss.php?max=50&g=alt.binaries.comics.dcp",
-				model\Endpoint::api_key => "",
-				model\Endpoint::username => '',
-				model\Endpoint::enabled => Model::TERTIARY_TRUE,
-				model\Endpoint::compressed => Model::TERTIARY_TRUE,
+				\model\network\Endpoint::name => "binsearch (a.b.c.dcp)",
+				\model\network\Endpoint::type_id => $rss_endpoint_type->id,
+				\model\network\Endpoint::base_url => "http://rss.binsearch.net/rss.php?max=50&g=alt.binaries.comics.dcp",
+				\model\network\Endpoint::api_key => "",
+				\model\network\Endpoint::username => '',
+				\model\network\Endpoint::enabled => Model::TERTIARY_TRUE,
+				\model\network\Endpoint::compressed => Model::TERTIARY_TRUE,
 			),
 		);
 

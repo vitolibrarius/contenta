@@ -11,7 +11,7 @@ use \SQL as SQL;
 
 use utilities\CronEvaluator as CronEvaluator;
 
-use model\Endpoint as Endpoint;
+use \model\network\Endpoint as Endpoint;
 
 use \model\network\Rss as Rss;
 

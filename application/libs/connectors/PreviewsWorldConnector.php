@@ -10,8 +10,8 @@ use \Database as Database;
 
 use utilities\MediaFilename as MediaFilename;
 
-use model\Endpoint as Endpoint;
-use model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 
 class PreviewsWorldException extends \Exception {}
 

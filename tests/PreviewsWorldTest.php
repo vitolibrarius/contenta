@@ -23,8 +23,8 @@ use processor\PreviewsWorldImporter as PreviewsWorldImporter;
 
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
-use model\Endpoint as Endpoint;
-use model\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
 use model\logs\Log as Log;
 use model\logs\Log_Level as Log_Level;
 use model\Publication as Publication;
@@ -51,7 +51,7 @@ my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
 my_echo( "---------- Endpoint ");
-$pw_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(model\Endpoint_Type::PreviewsWorld);
+$pw_endpoint_type = Model::Named('Endpoint_Type')->objectForCode(\model\network\Endpoint_Type::PreviewsWorld);
 ($pw_endpoint_type != false && $pw_endpoint_type->code == Endpoint_Type::PreviewsWorld) || die("Could not find Endpoint_Type::PreviewsWorld");
 
 $ep_model = Model::Named('Endpoint');

@@ -21,8 +21,8 @@ use controller\Admin as Admin;
 use connectors\NewznabConnector as NewznabConnector;
 
 use \model\user\Users as Users;
-use model\Endpoint as Endpoint;
-use model\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
 use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;

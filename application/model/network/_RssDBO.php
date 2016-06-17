@@ -9,8 +9,8 @@ use \Logger as Logger;
 use \model\network\Rss as Rss;
 
 /* import related objects */
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 
 abstract class _RssDBO extends DataObject
 {

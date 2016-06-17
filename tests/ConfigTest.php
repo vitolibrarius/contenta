@@ -20,9 +20,6 @@
 
 	use connectors\ComicVineConnector as ComicVineConnector;
 
-	use model\Endpoint as Endpoint;
-	use model\Endpoint_Type as Endpoint_Type;
-
 $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root, false );
 

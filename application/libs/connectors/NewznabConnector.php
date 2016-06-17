@@ -9,8 +9,8 @@ use \Cache as Cache;
 use \Database as Database;
 use \SimpleXMLElement as SimpleXMLElement;
 
-use model\Endpoint as Endpoint;
-use model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 
 use utilities\MediaFilename as MediaFilename;
 

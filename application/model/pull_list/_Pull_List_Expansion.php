@@ -15,8 +15,8 @@ use \exceptions\DeleteObjectException as DeleteObjectException;
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
 /* import related objects */
-use \model\Endpoint_Type as Endpoint_Type;
-use \model\Endpoint_TypeDBO as Endpoint_TypeDBO;
+use \model\network\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
 /** Sample Creation script */
 		/** PULL_LIST_EXPANSION */

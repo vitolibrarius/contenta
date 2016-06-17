@@ -15,8 +15,8 @@ use db\Qualifier as Qualifier;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;
 use \model\jobs\Job as Job;
-use \model\Endpoint as Endpoint;
-use \model\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
 
 use \model\pull_list\Pull_List as Pull_List;
 use \model\pull_list\Pull_List_Group as Pull_List_Group;
@@ -218,7 +218,7 @@ class Migration_16 extends Migrator
 		}
 
 		$expansion_model = Model::Named('Pull_List_Expansion');
-		$pw_endpoint_type = Model::Named('Endpoint_Type')->endpointTypeForCode(Endpoint_Type::PreviewsWorld);
+		$pw_endpoint_type = Model::Named('Endpoint_Type')->objectForCode(Endpoint_Type::PreviewsWorld);
 		$pl_expansions = array(
 			0 => array(
 				'(MR)' => '',

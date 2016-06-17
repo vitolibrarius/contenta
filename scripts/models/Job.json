@@ -39,7 +39,7 @@
     	"endpoint" : {
     		"destination" : "Endpoint",
     		"destinationTable" : "endpoint",
-    		"destinationPackage" : "\\model\\",
+    		"destinationPackage" : "\\model\\network\\",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_id" }
     		],

@@ -17,7 +17,7 @@
     "relationships" :{
     	"endpoint" : {
     		"destination" : "Endpoint",
-    		"destinationPackage" : "\\model\\",
+    		"destinationPackage" : "\\model\\network\\",
     		"destinationTable" : "endpoint",
     		"joins" : [
     			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_id" }

@@ -10,8 +10,8 @@ use \Localized as Localized;
 use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 
 /* import related objects */
-use \model\Endpoint_Type as Endpoint_Type;
-use \model\Endpoint_TypeDBO as Endpoint_TypeDBO;
+use \model\network\Endpoint_Type as Endpoint_Type;
+use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
 class Pull_List_Exclusion extends _Pull_List_Exclusion
 {

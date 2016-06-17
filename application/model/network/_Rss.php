@@ -15,8 +15,8 @@ use \exceptions\DeleteObjectException as DeleteObjectException;
 use \model\network\RssDBO as RssDBO;
 
 /* import related objects */
-use \model\Endpoint as Endpoint;
-use \model\EndpointDBO as EndpointDBO;
+use \model\network\Endpoint as Endpoint;
+use \model\network\EndpointDBO as EndpointDBO;
 
 /** Sample Creation script */
 		/** RSS */
