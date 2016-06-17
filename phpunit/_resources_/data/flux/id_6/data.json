@@ -1,0 +1,17 @@
+{
+    "id": "6",
+    "publication_id": null,
+    "created": "1459223581",
+    "name": "Batman 5 (2012)",
+    "flux_hash": "582c234196bae38ac90bc8f46e3e0c8ffbb69f4a2a381e046e93f5635ef5cfe4",
+    "flux_error": "0",
+    "src_endpoint": "5",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/3c4fea69b6c88c5e748e35c247f030f9",
+    "src_status": "Downloaded",
+    "src_pub_date": "1410838429",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/3c4fea69b6c88c5e748e35c247f030f9.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_Mo0QNL",
+    "dest_status": "Active",
+    "dest_submission": "1459223592"
+}

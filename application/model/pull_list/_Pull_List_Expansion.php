@@ -151,7 +151,7 @@ abstract class _Pull_List_Expansion extends Model
 	{
 		if ( $object instanceof Pull_List_ExpansionDBO )
 		{
-			// does not own Endpoint_Type
+			// does not own endpoint_type Endpoint_Type
 			return parent::deleteObject($object);
 		}
 
@@ -179,57 +179,6 @@ abstract class _Pull_List_Expansion extends Model
 	/**
 	 *	Named fetches
 	 */
-
-	/** Set attributes */
-	public function setPattern( Pull_List_ExpansionDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Expansion::pattern => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setReplace( Pull_List_ExpansionDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Expansion::replace => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setSequence( Pull_List_ExpansionDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Expansion::sequence => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setCreated( Pull_List_ExpansionDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Expansion::created => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setEndpoint_type_id( Pull_List_ExpansionDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Expansion::endpoint_type_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
 
 
 	/** Validation */

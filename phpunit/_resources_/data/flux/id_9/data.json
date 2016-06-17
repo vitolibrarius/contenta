@@ -1,0 +1,17 @@
+{
+    "id": "9",
+    "publication_id": null,
+    "created": "1459223614",
+    "name": "Batman 2 (2011)",
+    "flux_hash": "ad927bad96c738c74c7e7602908cd8457026b1af1755b986dd5b9891cdc79a1c",
+    "flux_error": "0",
+    "src_endpoint": "5",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/0bd6f0a77a3904fefb8dcc29e3a60e1d",
+    "src_status": "Downloaded",
+    "src_pub_date": "1410838351",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/0bd6f0a77a3904fefb8dcc29e3a60e1d.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_qJMFAH",
+    "dest_status": "Active",
+    "dest_submission": "1459223625"
+}

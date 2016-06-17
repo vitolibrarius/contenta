@@ -66,16 +66,6 @@ abstract class _Pull_List_ItemDBO extends DataObject
 		parent::storeChange( Pull_List_Item::data, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Pull_List_Item::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Pull_List_Item::created, $value );
-	}
-
 	public function search_name()
 	{
 		return parent::changedValue( Pull_List_Item::search_name, $this->search_name );

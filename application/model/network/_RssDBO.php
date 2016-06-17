@@ -11,8 +11,6 @@ use \model\network\Rss as Rss;
 /* import related objects */
 use \model\Endpoint as Endpoint;
 use \model\EndpointDBO as EndpointDBO;
-use \model\Flux as Flux;
-use \model\FluxDBO as FluxDBO;
 
 abstract class _RssDBO extends DataObject
 {
@@ -53,16 +51,6 @@ abstract class _RssDBO extends DataObject
 		return false;
 	}
 
-	// to-one relationship
-	public function flux()
-	{
-		if ( isset( $this->guid ) ) {
-			$model = Model::Named('Flux');
-			return $model->objectForSrc_guid($this->guid);
-		}
-		return false;
-	}
-
 
 	/** Attributes */
 	public function endpoint_id()
@@ -73,16 +61,6 @@ abstract class _RssDBO extends DataObject
 	public function setEndpoint_id( $value = null)
 	{
 		parent::storeChange( Rss::endpoint_id, $value );
-	}
-
-	public function created()
-	{
-		return parent::changedValue( Rss::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Rss::created, $value );
 	}
 
 	public function title()

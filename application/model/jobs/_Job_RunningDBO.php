@@ -111,16 +111,6 @@ abstract class _Job_RunningDBO extends DataObject
 		parent::storeChange( Job_Running::desc, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Job_Running::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Job_Running::created, $value );
-	}
-
 
 }
 

@@ -17,8 +17,6 @@ use \model\network\RssDBO as RssDBO;
 /* import related objects */
 use \model\Endpoint as Endpoint;
 use \model\EndpointDBO as EndpointDBO;
-use \model\Flux as Flux;
-use \model\FluxDBO as FluxDBO;
 
 /** Sample Creation script */
 		/** RSS */
@@ -169,10 +167,6 @@ abstract class _Rss extends Model
 	{
 		return $this->allObjectsForFK(Rss::endpoint_id, $obj, $this->sortOrder(), 50);
 	}
-	public function allForFlux($obj)
-	{
-		return $this->allObjectsForFK(Rss::guid, $obj, $this->sortOrder(), 50);
-	}
 
 	public function joinAttributes( Model $joinModel = null )
 	{
@@ -180,9 +174,6 @@ abstract class _Rss extends Model
 			switch ( $joinModel->tableName() ) {
 				case "endpoint":
 					return array( Rss::endpoint_id, "id"  );
-					break;
-				case "flux":
-					return array( Rss::guid, "src_guid"  );
 					break;
 				default:
 					break;
@@ -206,15 +197,6 @@ abstract class _Rss extends Model
 					$params[Rss::endpoint_id] = $local_endpoint;
 				}
 			}
-			if ( isset($values['flux']) ) {
-				$local_flux = $values['flux'];
-				if ( $local_flux instanceof FluxDBO) {
-					$values[Rss::guid] = $local_flux->src_guid;
-				}
-				else if ( is_string( $local_flux) ) {
-					$params[Rss::guid] = $local_flux;
-				}
-			}
 		}
 		return parent::createObject($values);
 	}
@@ -230,15 +212,6 @@ abstract class _Rss extends Model
 					$params[Rss::endpoint_id] = $values['endpoint'];
 				}
 			}
-			if ( isset($values['flux']) ) {
-				$local_flux = $values['flux'];
-				if ( $local_flux instanceof FluxDBO) {
-					$values[Rss::guid] = $local_flux->src_guid;
-				}
-				else if ( is_string( $local_flux) ) {
-					$params[Rss::guid] = $values['flux'];
-				}
-			}
 		}
 
 		return parent::updateObject($object, $values);
@@ -251,8 +224,7 @@ abstract class _Rss extends Model
 	{
 		if ( $object instanceof RssDBO )
 		{
-			// does not own Endpoint
-			// does not own Flux
+			// does not own endpoint Endpoint
 			return parent::deleteObject($object);
 		}
 
@@ -329,147 +301,6 @@ abstract class _Rss extends Model
 		return false;
 	}
 
-
-	/** Set attributes */
-	public function setEndpoint_id( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::endpoint_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setCreated( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::created => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setTitle( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::title => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setDesc( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::desc => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setPub_date( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::pub_date => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setGuid( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::guid => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setClean_name( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::clean_name => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setClean_issue( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::clean_issue => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setClean_year( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::clean_year => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setEnclosure_url( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::enclosure_url => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setEnclosure_length( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::enclosure_length => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setEnclosure_mime( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::enclosure_mime => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setEnclosure_hash( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::enclosure_hash => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setEnclosure_password( RssDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Rss::enclosure_password => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
 
 
 	/** Validation */

@@ -1,0 +1,17 @@
+{
+    "id": "3",
+    "publication_id": null,
+    "created": "1459223547",
+    "name": "Monster World 1 (2015)",
+    "flux_hash": "be464d5c92e3262683a7058aab2046c5efd68f3fc3b39f7ec9d3b77a7c363698",
+    "flux_error": "0",
+    "src_endpoint": "5",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/9a23d8e9abd309bbe39a4ef7b23cdb69",
+    "src_status": "Downloaded",
+    "src_pub_date": "1452881880",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/9a23d8e9abd309bbe39a4ef7b23cdb69.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_2e7qjn",
+    "dest_status": "Active",
+    "dest_submission": "1459223558"
+}

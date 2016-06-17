@@ -1,0 +1,17 @@
+{
+    "id": "8",
+    "publication_id": null,
+    "created": "1459223603",
+    "name": "Batman 3 (2012)",
+    "flux_hash": "0f5f4f610f4f9d4f8fc436b6cfb6f82315c99311cfc99ecb9c6ce135ad324387",
+    "flux_error": "0",
+    "src_endpoint": "5",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/4980aa8fa8a72031b9a070ca060654c3",
+    "src_status": "Downloaded",
+    "src_pub_date": "1410838351",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/4980aa8fa8a72031b9a070ca060654c3.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_jnMKG_",
+    "dest_status": "Active",
+    "dest_submission": "1459223614"
+}

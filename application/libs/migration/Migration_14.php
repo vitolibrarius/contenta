@@ -30,9 +30,8 @@ use model\Media_Type as Media_Type;
 use model\Media as Media;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Endpoint as Endpoint;
-use model\Rss as Rss;
-use model\Flux as Flux;
 
+use \model\network\Flux as Flux;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;
 use \model\jobs\Job as Job;
@@ -51,7 +50,6 @@ class Migration_14 extends Migrator
 		/** FLUX */
 		$sql = 'CREATE TABLE IF NOT EXISTS ' . Flux::TABLE . " ( "
 			. Flux::id . " INTEGER PRIMARY KEY, "
-			. Flux::publication_id . " INTEGER, "
 			. Flux::created . " INTEGER, "
 			. Flux::name . " TEXT, "
 			. Flux::flux_hash . " TEXT, "
@@ -65,7 +63,6 @@ class Migration_14 extends Migrator
 			. Flux::dest_guid . " TEXT, "
 			. Flux::dest_status . " TEXT, "
 			. Flux::dest_submission . " INTEGER, "
-			. "FOREIGN KEY (". Flux::publication_id .") REFERENCES " . Publication::TABLE . "(" . Publication::id . "),"
 			. "FOREIGN KEY (". Flux::src_endpoint .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . "),"
 			. "FOREIGN KEY (". Flux::dest_endpoint .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
 			. ")";

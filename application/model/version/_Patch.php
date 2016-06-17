@@ -143,7 +143,7 @@ abstract class _Patch extends Model
 	{
 		if ( $object instanceof PatchDBO )
 		{
-			// does not own Version
+			// does not own version Version
 			return parent::deleteObject($object);
 		}
 
@@ -171,37 +171,6 @@ abstract class _Patch extends Model
 	/**
 	 *	Named fetches
 	 */
-
-	/** Set attributes */
-	public function setName( PatchDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Patch::name => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setCreated( PatchDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Patch::created => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setVersion_id( PatchDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Patch::version_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
 
 
 	/** Validation */

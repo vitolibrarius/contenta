@@ -110,16 +110,6 @@ abstract class _LogDBO extends DataObject
 		parent::storeChange( Log::level, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Log::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Log::created, $value );
-	}
-
 
 }
 

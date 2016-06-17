@@ -161,7 +161,7 @@ abstract class _Pull_List extends Model
 	{
 		if ( $object instanceof Pull_ListDBO )
 		{
-			// does not own Endpoint
+			// does not own endpoint Endpoint
 			$pull_list_item_model = Model::Named('Pull_List_Item');
 			if ( $pull_list_item_model->deleteAllForKeyValue(Pull_List_Item::pull_list_id, $this->id) == false ) {
 				return false;
@@ -193,57 +193,6 @@ abstract class _Pull_List extends Model
 	/**
 	 *	Named fetches
 	 */
-
-	/** Set attributes */
-	public function setName( Pull_ListDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List::name => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setEtag( Pull_ListDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List::etag => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setCreated( Pull_ListDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List::created => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setPublished( Pull_ListDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List::published => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setEndpoint_id( Pull_ListDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List::endpoint_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
 
 
 	/** Validation */

@@ -1,0 +1,17 @@
+{
+    "id": "10",
+    "publication_id": null,
+    "created": "1459223625",
+    "name": "Batman 1 (2011)",
+    "flux_hash": "3514a88341f201c7bfc48e89af4d4c8fa1d8be18a9d017484c5295f1b7383fe4",
+    "flux_error": "0",
+    "src_endpoint": "5",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/bc1f6b234773285e04b5e0b1ddab924a",
+    "src_status": "Downloaded",
+    "src_pub_date": "1410838351",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/bc1f6b234773285e04b5e0b1ddab924a.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_3myrJB",
+    "dest_status": "Active",
+    "dest_submission": "1459223637"
+}

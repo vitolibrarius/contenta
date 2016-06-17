@@ -1,0 +1,17 @@
+{
+    "id": "2",
+    "publication_id": null,
+    "created": "1459223536",
+    "name": "Monster World 2 (2016)",
+    "flux_hash": "dcdcb56bfd0268e963c2617a99ab3fe5415ba7497ba59a6107440030604b3cbf",
+    "flux_error": "0",
+    "src_endpoint": "5",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/ac7111ab7680ef2d210ed2ed950fb7b1",
+    "src_status": "Downloaded",
+    "src_pub_date": "1453332170",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/ac7111ab7680ef2d210ed2ed950fb7b1.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_z2l4mN",
+    "dest_status": "Active",
+    "dest_submission": "1459223547"
+}

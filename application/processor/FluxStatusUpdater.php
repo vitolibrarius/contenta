@@ -20,8 +20,8 @@ use model\EndpointDBO as EndpointDBO;
 use model\Story_Arc as Story_Arc;
 use model\Story_Arc_Character as Story_Arc_Character;
 use model\Story_Arc_Series as Story_Arc_Series;
-use model\Flux as Flux;
-use model\FluxDBO as FluxDBO;
+use \model\network\Flux as Flux;
+use \model\network\FluxDBO as FluxDBO;
 
 class FluxStatusUpdater extends EndpointImporter
 {

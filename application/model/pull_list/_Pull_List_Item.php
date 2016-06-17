@@ -33,6 +33,7 @@ use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
 			. Pull_List_Item::year . " INTEGER, "
 			. Pull_List_Item::pull_list_id . " INTEGER, "
 			. Pull_List_Item::pull_list_group_id . " INTEGER, "
+			. "FOREIGN KEY (". Pull_List_Item::pull_list_group_id .") REFERENCES " . Pull_List_Group::TABLE . "(" . Pull_List_Group::id . "),"
 			. "FOREIGN KEY (". Pull_List_Item::pull_list_id .") REFERENCES " . Pull_List::TABLE . "(" . Pull_List::id . ")"
 		. ")";
 		$this->sqlite_execute( "pull_list_item", $sql, "Create table pull_list_item" );
@@ -204,14 +205,31 @@ abstract class _Pull_List_Item extends Model
 	{
 		if ( $object instanceof Pull_List_ItemDBO )
 		{
-			// does not own Pull_List_Group
-			// does not own Pull_List
+			// does not own pull_list_group Pull_List_Group
+			// does not own pull_list Pull_List
 			return parent::deleteObject($object);
 		}
 
 		return false;
 	}
 
+	public function deleteAllForPull_list_group(Pull_List_GroupDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForPull_list_group($obj);
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
+				}
+				$array = $this->allForPull_list_group($obj);
+			}
+		}
+		return $success;
+	}
 	public function deleteAllForPull_list(Pull_ListDBO $obj)
 	{
 		$success = true;
@@ -256,87 +274,6 @@ abstract class _Pull_List_Item extends Model
 		return $result;
 	}
 
-
-	/** Set attributes */
-	public function setData( Pull_List_ItemDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Item::data => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setCreated( Pull_List_ItemDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Item::created => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setSearch_name( Pull_List_ItemDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Item::search_name => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setName( Pull_List_ItemDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Item::name => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setIssue( Pull_List_ItemDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Item::issue => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setYear( Pull_List_ItemDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Item::year => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setPull_list_id( Pull_List_ItemDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Item::pull_list_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setPull_list_group_id( Pull_List_ItemDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Item::pull_list_group_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
 
 
 	/** Validation */

@@ -154,8 +154,8 @@ abstract class _User_Network extends Model
 	{
 		if ( $object instanceof User_NetworkDBO )
 		{
-			// does not own Users
-			// does not own Network
+			// does not own user Users
+			// does not own network Network
 			return parent::deleteObject($object);
 		}
 
@@ -200,27 +200,6 @@ abstract class _User_Network extends Model
 	/**
 	 *	Named fetches
 	 */
-
-	/** Set attributes */
-	public function setUser_id( User_NetworkDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(User_Network::user_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setNetwork_id( User_NetworkDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(User_Network::network_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
 
 
 	/** Validation */

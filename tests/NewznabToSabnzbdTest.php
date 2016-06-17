@@ -27,8 +27,8 @@
 
 	use model\Endpoint as Endpoint;
 	use model\Endpoint_Type as Endpoint_Type;
-	use model\Flux as Flux;
-	use model\FluxDBO as FluxDBO;
+	use \model\network\Flux as Flux;
+	use \model\network\FluxDBO as FluxDBO;
 
 
 $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");

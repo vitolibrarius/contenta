@@ -78,16 +78,6 @@ abstract class _VersionDBO extends DataObject
 		parent::storeChange( Version::patch, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Version::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Version::created, $value );
-	}
-
 
 }
 

@@ -205,16 +205,6 @@ abstract class _JobDBO extends DataObject
 		parent::storeChange( Job::last_fail, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Job::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Job::created, $value );
-	}
-
 
 }
 

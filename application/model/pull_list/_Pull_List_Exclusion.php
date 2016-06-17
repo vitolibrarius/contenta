@@ -142,7 +142,7 @@ abstract class _Pull_List_Exclusion extends Model
 	{
 		if ( $object instanceof Pull_List_ExclusionDBO )
 		{
-			// does not own Endpoint_Type
+			// does not own endpoint_type Endpoint_Type
 			return parent::deleteObject($object);
 		}
 
@@ -203,47 +203,6 @@ abstract class _Pull_List_Exclusion extends Model
 		return $result;
 	}
 
-
-	/** Set attributes */
-	public function setPattern( Pull_List_ExclusionDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Exclusion::pattern => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setType( Pull_List_ExclusionDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Exclusion::type => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setCreated( Pull_List_ExclusionDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Exclusion::created => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setEndpoint_type_id( Pull_List_ExclusionDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Exclusion::endpoint_type_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
 
 
 	/** Validation */

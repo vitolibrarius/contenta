@@ -127,7 +127,7 @@ abstract class _Pull_List_Group extends Model
 	{
 		if ( $object instanceof Pull_List_GroupDBO )
 		{
-			// does not own Pull_List_Item
+			// does not own pull_list_items Pull_List_Item
 			return parent::deleteObject($object);
 		}
 
@@ -138,37 +138,6 @@ abstract class _Pull_List_Group extends Model
 	/**
 	 *	Named fetches
 	 */
-
-	/** Set attributes */
-	public function setName( Pull_List_GroupDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Group::name => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setData( Pull_List_GroupDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Group::data => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setCreated( Pull_List_GroupDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Pull_List_Group::created => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
 
 
 	/** Validation */

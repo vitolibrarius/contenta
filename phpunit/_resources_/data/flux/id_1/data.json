@@ -1,0 +1,17 @@
+{
+    "id": "1",
+    "publication_id": null,
+    "created": "1459223526",
+    "name": "Monster World 3 2016",
+    "flux_hash": "c2dbae1600d4cc0e04d4c265999483a89ba39f19fb79249a14164fe22bbe1850",
+    "flux_error": "0",
+    "src_endpoint": "4",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/1e131036d8f752c3eb3911bf77f7c69a",
+    "src_status": "Downloaded",
+    "src_pub_date": "1458805286",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/1e131036d8f752c3eb3911bf77f7c69a.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_wzBmBL",
+    "dest_status": "Active",
+    "dest_submission": "1459223536"
+}

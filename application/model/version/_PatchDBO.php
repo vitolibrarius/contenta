@@ -49,16 +49,6 @@ abstract class _PatchDBO extends DataObject
 		parent::storeChange( Patch::name, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Patch::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Patch::created, $value );
-	}
-
 	public function version_id()
 	{
 		return parent::changedValue( Patch::version_id, $this->version_id );

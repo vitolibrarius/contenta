@@ -60,16 +60,6 @@ abstract class _Pull_List_GroupDBO extends DataObject
 		parent::storeChange( Pull_List_Group::data, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Pull_List_Group::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Pull_List_Group::created, $value );
-	}
-
 
 }
 

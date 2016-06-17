@@ -1,0 +1,17 @@
+{
+    "id": "4",
+    "publication_id": null,
+    "created": "1459223558",
+    "name": "Batman 7 (2012)",
+    "flux_hash": "d9ef6b3e1d951722e8121c38fcc5d940bb02e6046527e8be20ce74dc6dcdfe33",
+    "flux_error": "0",
+    "src_endpoint": "5",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/1586ca2273303c124eb488b1c09ab1f2",
+    "src_status": "Downloaded",
+    "src_pub_date": "1410838429",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/1586ca2273303c124eb488b1c09ab1f2.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_e2wSsQ",
+    "dest_status": "Active",
+    "dest_submission": "1459223570"
+}

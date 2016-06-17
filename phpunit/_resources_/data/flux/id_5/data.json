@@ -1,0 +1,17 @@
+{
+    "id": "5",
+    "publication_id": null,
+    "created": "1459223570",
+    "name": "Batman 6 (2012)",
+    "flux_hash": "07f32842d2dd0ca272018e7dfc428d8439b5a86b27f95cf92dfa996bdb103d73",
+    "flux_error": "0",
+    "src_endpoint": "5",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/65a47c5f3c4414d7537e6f7d283ac69c",
+    "src_status": "Downloaded",
+    "src_pub_date": "1410838429",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/65a47c5f3c4414d7537e6f7d283ac69c.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_GX0HKH",
+    "dest_status": "Active",
+    "dest_submission": "1459223581"
+}

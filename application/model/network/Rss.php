@@ -13,8 +13,8 @@ use \model\network\RssDBO as RssDBO;
 /* import related objects */
 use \model\Endpoint as Endpoint;
 use \model\EndpointDBO as EndpointDBO;
-use \model\Flux as Flux;
-use \model\FluxDBO as FluxDBO;
+use \model\network\Flux as Flux;
+use \model\network\FluxDBO as FluxDBO;
 
 class Rss extends _Rss
 {

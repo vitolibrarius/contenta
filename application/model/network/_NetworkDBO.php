@@ -61,16 +61,6 @@ abstract class _NetworkDBO extends DataObject
 		parent::storeChange( Network::ip_hash, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Network::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Network::created, $value );
-	}
-
 	public function disable()
 	{
 		return parent::changedValue( Network::disable, $this->disable );

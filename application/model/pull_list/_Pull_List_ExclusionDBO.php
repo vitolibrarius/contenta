@@ -56,16 +56,6 @@ abstract class _Pull_List_ExclusionDBO extends DataObject
 		parent::storeChange( Pull_List_Exclusion::type, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Pull_List_Exclusion::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Pull_List_Exclusion::created, $value );
-	}
-
 	public function endpoint_type_id()
 	{
 		return parent::changedValue( Pull_List_Exclusion::endpoint_type_id, $this->endpoint_type_id );

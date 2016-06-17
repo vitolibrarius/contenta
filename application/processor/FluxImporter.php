@@ -10,6 +10,10 @@ use \Model as Model;
 use \Exception as Exception;
 
 use \model\user\Users as Users;
+use \model\network\Flux as Flux;
+use \model\network\FluxDBO as FluxDBO;
+use \model\network\RssDBO as RssDBO;
+
 use model\Publisher as Publisher;
 use model\Character as Character;
 use model\Series as Series;
@@ -21,9 +25,6 @@ use model\EndpointDBO as EndpointDBO;
 use model\Story_Arc as Story_Arc;
 use model\Story_Arc_Character as Story_Arc_Character;
 use model\Story_Arc_Series as Story_Arc_Series;
-use model\Flux as Flux;
-use model\FluxDBO as FluxDBO;
-use model\RssDBO as RssDBO;
 
 use connectors\NewznabConnector as NewznabConnector;
 use processor\NewznabSearchProcessor as NewznabSearchProcessor;
@@ -38,17 +39,6 @@ class FluxImporter extends EndpointImporter
 			$guid = uuid();
 		}
 		parent::__construct($guid);
-	}
-
-	public function setEndpoint(EndpointDBO $point = null)
-	{
-		if ( is_null($point) == false ) {
-			$type = $point->type();
-			if ( $type == false || $type->code != Endpoint_Type::SABnzbd ) {
-				throw new Exception("Endpoint " . $point->displayName() . " is is not for " . Endpoint_Type::SABnzbd);
-			}
-		}
-		parent::setEndpoint($point);
 	}
 
 	public function importFluxRSS( RssDBO $rss = null )

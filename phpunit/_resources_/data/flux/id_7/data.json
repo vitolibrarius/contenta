@@ -1,0 +1,17 @@
+{
+    "id": "7",
+    "publication_id": null,
+    "created": "1459223592",
+    "name": "Batman 4 (2012)",
+    "flux_hash": "9b4fd4c954712c6d15ac8d3921421b2cd0ca8b7aded680d0f7e6b9e92b9ae637",
+    "flux_error": "0",
+    "src_endpoint": "5",
+    "src_guid": "https:\/\/www.usenet-crawler.com\/details\/bff41d2a2b6d305e37166fbf8a3b5c32",
+    "src_status": "Downloaded",
+    "src_pub_date": "1410838429",
+    "src_url": "https:\/\/www.usenet-crawler.com\/getnzb\/bff41d2a2b6d305e37166fbf8a3b5c32.nzb&i=254160&r=2ab307f516c7da431deddd1b1d8ee536",
+    "dest_endpoint": "3",
+    "dest_guid": "SABnzbd_nzo_aNmcHN",
+    "dest_status": "Active",
+    "dest_submission": "1459223603"
+}

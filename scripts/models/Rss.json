@@ -14,7 +14,7 @@
         "enclosure_length": { "column": "enclosure_length", "type": "INTEGER" },
         "enclosure_mime": { "column": "enclosure_mime", "length": 256, "type": "TEXT" },
         "enclosure_hash": { "column": "enclosure_hash", "length": 256, "type": "TEXT" },
-        "enclosure_password": { "column": "enclosure_hash", "type": "BOOLEAN" }
+        "enclosure_password": { "column": "enclosure_password", "type": "BOOLEAN" }
     },
     "primaryKeys": [ "id" ],
     "table": "rss",
@@ -33,17 +33,6 @@
     			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_id" }
     		],
     		"isMandatory": true,
-            "isToMany" : false,
-            "ownsDestination" : false
-    	},
-       	"flux" : {
-    		"destination" : "Flux",
-    		"destinationTable" : "flux",
-    		"destinationPackage" : "\\model\\",
-    		"joins" : [
-    			{ "destinationAttribute": "src_guid", "sourceAttribute" : "guid" }
-    		],
-    		"isMandatory": false,
             "isToMany" : false,
             "ownsDestination" : false
     	}

@@ -50,7 +50,7 @@ class RSSImporterTest extends PHPUnit_Framework_TestCase
 			"compressed" => Model::TERTIARY_FALSE
 		);
 		list($endpoint, $errors) = Model::Named( "Endpoint" )->createObject($testEndpoint);
-		$endpoint != null || die( "Could not create 'test' endpoint type for RSSImporterTest " . var_export($errors, true)  );
+		$endpoint != null || die( "Could not create 'test' endpoint for RSSImporterTest " . var_export($errors, true)  );
     }
 
     public static function tearDownAfterClass()

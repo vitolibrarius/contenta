@@ -32,6 +32,8 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 			. Job_Running::pid . " INTEGER, "
 			. Job_Running::desc . " TEXT, "
 			. Job_Running::created . " INTEGER "
+			. "FOREIGN KEY (". Job_Running::job_id .") REFERENCES " . Job::TABLE . "(" . Job::id . "),"
+			. "FOREIGN KEY (". Job_Running::type_id .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::id . "),"
 		. ")";
 		$this->sqlite_execute( "job_running", $sql, "Create table job_running" );
 
@@ -191,14 +193,48 @@ abstract class _Job_Running extends Model
 	{
 		if ( $object instanceof Job_RunningDBO )
 		{
-			// does not own Job
-			// does not own Job_Type
+			// does not own job Job
+			// does not own jobType Job_Type
 			return parent::deleteObject($object);
 		}
 
 		return false;
 	}
 
+	public function deleteAllForJob(JobDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForJob($obj);
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
+				}
+				$array = $this->allForJob($obj);
+			}
+		}
+		return $success;
+	}
+	public function deleteAllForJobType(Job_TypeDBO $obj)
+	{
+		$success = true;
+		if ( $obj != false ) {
+			$array = $this->allForJobType($obj);
+			while ( is_array($array) && count($array) > 0) {
+				foreach ($array as $key => $value) {
+					if ($this->deleteObject($value) == false) {
+						$success = false;
+						throw new DeleteObjectException("Failed to delete " . $value, $value->id );
+					}
+				}
+				$array = $this->allForJobType($obj);
+			}
+		}
+		return $success;
+	}
 
 	/**
 	 *	Named fetches
@@ -219,77 +255,6 @@ abstract class _Job_Running extends Model
 		return $result;
 	}
 
-
-	/** Set attributes */
-	public function setJob_id( Job_RunningDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Job_Running::job_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setType_id( Job_RunningDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Job_Running::type_id => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setProcessor( Job_RunningDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Job_Running::processor => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setGuid( Job_RunningDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Job_Running::guid => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setPid( Job_RunningDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Job_Running::pid => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setDesc( Job_RunningDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Job_Running::desc => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-	public function setCreated( Job_RunningDBO $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(Job_Running::created => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
 
 
 	/** Validation */

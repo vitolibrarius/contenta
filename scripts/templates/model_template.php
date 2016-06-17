@@ -136,10 +136,12 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 	/** Validation */
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
 <?php if ( $this->isPrimaryKey($name) === false ) : ?>
+/*
 	function validate_<?php echo $name; ?>($object = null, $value)
 	{
 		return parent::validate_<?php echo $name; ?>($object, $value);
 	}
+*/
 
 <?php endif; // not primaryKey ?>
 <?php endforeach; ?>

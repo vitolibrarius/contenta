@@ -51,7 +51,7 @@ use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassNam
 		if ($lastAttributeKey != $name || count($mandatoryObjectRelations) > 0 ) { echo ","; }
 		echo " \"" . PHP_EOL;
 } ?>
-<?php foreach( $mandatoryObjectRelations as $name => $detailArray ) : ?>
+<?php foreach( $objectRelationships as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['isToMany'])) : ?>
 <?php $joins = $detailArray['joins']; if ($detailArray['isToMany'] == false) : ?>
 <?php if (count($joins) == 1) : ?><?php $join = $joins[0]; ?>
@@ -265,7 +265,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 				return false;
 			}
 <?php else : // owns destination ?>
-			// does not own <?php echo $detailArray["destination"]; ?>
+			// does not own <?php echo $name . " " . $detailArray["destination"]; ?>
 
 <?php endif; // owns destination ?>
 <?php endif; // one join ?>
@@ -277,7 +277,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 		return false;
 	}
 
-<?php foreach( $mandatoryObjectRelations as $name => $detailArray ) : ?>
+<?php foreach( $objectRelationships as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['isToMany']) == false || $detailArray['isToMany'] == false) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>
@@ -348,21 +348,6 @@ foreach( $objectAttributes as $name => $detailArray ) {
 
 <?php endforeach; // named fetches ?>
 
-	/** Set attributes */
-<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
-<?php if ( $this->isPrimaryKey($name) === false ) : ?>
-	public function set<?php echo ucwords($name); ?>( <?php echo $this->dboClassName(); ?> $object = null, $value = null)
-	{
-		if ( is_null($object) === false ) {
-			if ($this->updateObject( $object, array(<?php echo $this->modelClassName() . "::" . $name; ?> => $value)) ) {
-				return $this->refreshObject($userObj);
-			}
-		}
-		return false;
-	}
-
-<?php endif; // not primaryKey ?>
-<?php endforeach; ?>
 
 	/** Validation */
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>

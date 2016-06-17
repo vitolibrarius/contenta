@@ -67,16 +67,6 @@ abstract class _Pull_List_ExpansionDBO extends DataObject
 		parent::storeChange( Pull_List_Expansion::sequence, $value );
 	}
 
-	public function created()
-	{
-		return parent::changedValue( Pull_List_Expansion::created, $this->created );
-	}
-
-	public function setCreated( $value = null)
-	{
-		parent::storeChange( Pull_List_Expansion::created, $value );
-	}
-
 	public function endpoint_type_id()
 	{
 		return parent::changedValue( Pull_List_Expansion::endpoint_type_id, $this->endpoint_type_id );

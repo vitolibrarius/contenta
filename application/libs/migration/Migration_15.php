@@ -30,10 +30,10 @@ use model\Media_Type as Media_Type;
 use model\Media as Media;
 use model\Endpoint_Type as Endpoint_Type;
 use model\Endpoint as Endpoint;
-use model\Rss as Rss;
-use model\Flux as Flux;
-use model\logs\Log as Log;
+use \model\network\Rss as Rss;
+use \model\logs\Log as Log;
 
+use \model\network\Flux as Flux;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;
 use \model\jobs\Job as Job;
