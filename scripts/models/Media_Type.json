@@ -1,0 +1,21 @@
+{
+    "attributes": {
+        "id": 	{ "column": "id", "type": "INTEGER" },
+        "code": { "column": "code",	"length": 10, "type": "TEXT", "nullable": false },
+        "name": { "column": "name",	"length": 256, "type": "TEXT", "nullable": false }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "media_type",
+    "package": "media",
+    "model": "Media_Type",
+    "dbo": "Media_TypeDBO",
+	"sort" : [
+		{ "asc": "name" }
+	],
+    "relationships" :{
+    },
+    "indexes" : [
+    	{ "columns": ["code"], "unique": true },
+    	{ "columns": ["name"], "unique": true }
+    ]
+}

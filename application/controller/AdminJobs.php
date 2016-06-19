@@ -15,7 +15,7 @@ use \model\user\Users as Users;
 use \model\jobs\Job as Job;
 use \model\jobs\Job_Type as Job_Type;
 
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
 use model\Series as Series;

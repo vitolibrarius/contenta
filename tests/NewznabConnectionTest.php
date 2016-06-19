@@ -32,7 +32,7 @@ use model\logs\Log_Level as Log_Level;
 use model\Network as Network;
 use model\Publication as Publication;
 use model\Publication_Character as Publication_Character;
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 use model\Series as Series;
 use model\Series_Alias as Series_Alias;
 use model\Series_Character as Series_Character;

@@ -57,7 +57,7 @@ class Character extends Model
 	}
 
 
-	public function allForPublisher( model\PublisherDBO $obj)
+	public function allForPublisher( \model\media\PublisherDBO $obj)
 	{
 		return $this->allObjectsForFK(Character::publisher_id, $obj, array(Character::name));
 	}
@@ -144,7 +144,7 @@ class Character extends Model
 				Character::xupdated => (is_null($xid) ? null : time())
 			);
 
-			if ( isset($publishObj)  && is_a($publishObj, '\model\PublisherDBO')) {
+			if ( isset($publishObj)  && is_a($publishObj, '\model\media\PublisherDBO')) {
 				$params[Character::publisher_id] = $publishObj->id;
 			}
 

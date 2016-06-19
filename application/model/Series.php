@@ -160,7 +160,7 @@ class Series extends Model
 				Series::pub_wanted => Model::TERTIARY_FALSE
 			);
 
-			if ( isset($publishObj)  && is_a($publishObj, '\model\PublisherDBO')) {
+			if ( isset($publishObj)  && is_a($publishObj, '\model\media\PublisherDBO')) {
 				$params[Series::publisher_id] = $publishObj->id;
 			}
 

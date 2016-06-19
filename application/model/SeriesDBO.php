@@ -59,7 +59,7 @@ class SeriesDBO extends DataObject
 			. (isset($this->pub_count) ? $this->pub_count : count($this->publications()) );
 	}
 
-	public function setPublisher( model\PublisherDBO $pubObj )
+	public function setPublisher( \model\media\PublisherDBO $pubObj )
 	{
 		if ( isset($pubObj, $pubObj->id) && (isset($this->publisher_id) == false || $pubObj->id != $this->publisher_id) ) {
 			$updates = array();

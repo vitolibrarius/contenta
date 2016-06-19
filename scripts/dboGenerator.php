@@ -126,7 +126,7 @@ class Template
 	}
 
 	public function isType_TEXT_URL($name = '') {
-		return ( $this->isType_TEXT($name) && endsWith('_url', $name) );
+		return ( $this->isType_TEXT($name) && ($name == 'xurl' || endsWith('_url', $name)) );
 	}
 
 	public function isType_TEXT_EMAIL($name = '') {

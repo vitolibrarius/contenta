@@ -1,0 +1,108 @@
+<?php
+
+namespace model\media;
+
+use \DataObject as DataObject;
+use \Model as Model;
+use \Logger as Logger;
+use \Localized as Localized;
+
+use \model\media\Media_TypeDBO as Media_TypeDBO;
+
+/* import related objects */
+
+class Media_Type extends _Media_Type
+{
+	// currently available type codes
+	const CBZ =		"cbz";
+	const CBR =		"cbr";
+	const EPUB =	"epub";
+	const PDF =		"pdf";
+
+	public function cbz() 		{ return $this->objectForCode( Media_Type::CBZ ); }
+
+	/**
+	 *	Create/Update functions
+	 */
+	public function createObject( array $values = array())
+	{
+		if ( isset($values) ) {
+			// massage values as necessary
+		}
+
+		return parent::createObject($values);
+	}
+
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Media_TypeDBO ) {
+			// massage values as necessary
+		}
+
+		return parent::updateObject($object, $values);
+	}
+
+	public function attributesFor($object = null, $type = null) {
+		return array(
+			Media_Type::code => Model::TEXT_TYPE,
+			Media_Type::name => Model::TEXT_TYPE
+		);
+	}
+
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Media_Type::code
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
+
+	public function attributeIsEditable($object = null, $type = null, $attr)
+	{
+		// add customization here
+		return parent::attributeIsEditable($object, $type, $attr);
+	}
+
+	/*
+	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
+	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
+	*/
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	public function attributeEditPattern($object = null, $type = null, $attr)
+	{
+		return null;
+	}
+
+	public function attributeOptions($object = null, $type = null, $attr)
+	{
+		return null;
+	}
+
+	/** Validation */
+/*
+	function validate_code($object = null, $value)
+	{
+		return parent::validate_code($object, $value);
+	}
+*/
+
+/*
+	function validate_name($object = null, $value)
+	{
+		return parent::validate_name($object, $value);
+	}
+*/
+
+}
+
+?>

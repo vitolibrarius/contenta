@@ -19,7 +19,7 @@ use controller\Admin as Admin;
 use \model\user\Users as Users;
 use \model\network\Endpoint as Endpoint;
 use \model\network\Endpoint_Type as Endpoint_Type;
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 
 /**
  * Class Admin

@@ -32,7 +32,7 @@
 	<?php
 		$card = new html\Card();
 		$card->setDetailKeys( array(
-			model\Publisher::xsource => model\Publisher::xsource
+			\model\media\Publisher::xsource => \model\media\Publisher::xsource
 			)
 		);
 		foreach($this->list as $key => $value) {

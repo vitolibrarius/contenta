@@ -10,7 +10,6 @@ use \http\Session as Session;;
 use \Logger as Logger;
 use \Localized as Localized;
 use \model\user\Users as Users;
-use model\Publisher as Publisher;
 
 /**
  * Class Admin

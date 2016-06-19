@@ -8,7 +8,7 @@ use \Config as Config;
 use \Logger as Logger;
 use \SQL as SQL;
 
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 use model\Character as Character;
 use model\Series as Series;
 

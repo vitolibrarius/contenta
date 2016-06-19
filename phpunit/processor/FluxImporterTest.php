@@ -19,7 +19,7 @@ use \model\user\Users as Users;
 use \model\network\Flux as Flux;
 use \model\network\FluxDBO as FluxDBO;
 use \model\network\RssDBO as RssDBO;
-use \model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 use \model\Character as Character;
 use \model\Series as Series;
 use \model\Publication as Publication;

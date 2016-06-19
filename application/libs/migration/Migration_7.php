@@ -10,7 +10,7 @@ use \Model as Model;
 use \SQL as SQL;
 
 use model\Series as Series;
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 use model\Series_Alias as Series_Alias;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;

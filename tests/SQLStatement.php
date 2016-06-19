@@ -64,8 +64,8 @@ my_echo( "- - - - -" . PHP_EOL);
 $select = \SQL::Select( Model::Named("Publisher") );
 $select->where( $name );
 $select->orderBy( array(
-		model\Publisher::name,
-		array( "desc" => model\Publisher::created )
+		\model\media\Publisher::name,
+		array( "desc" => \model\media\Publisher::created )
 	)
 );
 my_echo( "SQL: " . $select->sqlStatement() . PHP_EOL . var_export($select->sqlParameters(), true));

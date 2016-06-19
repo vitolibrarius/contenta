@@ -120,7 +120,7 @@ class Story_Arc extends Model
 				Story_Arc::pub_wanted => Model::TERTIARY_FALSE
 			);
 
-			if ( isset($publisher)  && is_a($publisher, '\model\PublisherDBO')) {
+			if ( isset($publisher)  && is_a($publisher, '\model\media\PublisherDBO')) {
 				$params[Story_Arc::publisher_id] = $publisher->id;
 			}
 

@@ -7,7 +7,8 @@ use \Model as Model;
 use \Config as Config;
 use \Logger as Logger;
 
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
+use \model\media\PublisherDBO as PublisherDBO;
 use model\Character as Character;
 use model\Series as Series;
 
@@ -56,7 +57,7 @@ class Story_ArcDBO extends DataObject
 		return false;
 	}
 
-	public function setPublisher( model\PublisherDBO $pubObj )
+	public function setPublisher( PublisherDBO $pubObj )
 	{
 		if ( isset($pubObj, $pubObj->id) && (isset($this->publisher_id) == false || $pubObj->id != $this->publisher_id) ) {
 			$updates = array();

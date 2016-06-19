@@ -9,8 +9,8 @@ use \Logger as Logger;
 
 use model\Publication as Publication;
 use model\PublicationDBO as PublicationDBO;
-use model\Media_Type as Media_Type;
-use model\Media_TypeDBO as Media_TypeDBO;
+use \model\media\Media_Type as Media_Type;
+use \model\media\Media_TypeDBO as Media_TypeDBO;
 
 use db\Qualifier as Qualifier;
 

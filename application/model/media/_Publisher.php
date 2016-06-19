@@ -1,0 +1,281 @@
+<?php
+
+namespace model\media;
+
+
+use \DataObject as DataObject;
+use \Model as Model;
+use \Logger as Logger;
+use \Localized as Localized;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
+
+use \exceptions\DeleteObjectException as DeleteObjectException;
+
+use \model\media\PublisherDBO as PublisherDBO;
+
+/* import related objects */
+use \model\Series as Series;
+use \model\SeriesDBO as SeriesDBO;
+use \model\Character as Character;
+use \model\CharacterDBO as CharacterDBO;
+use \model\Story_Arc as Story_Arc;
+use \model\Story_ArcDBO as Story_ArcDBO;
+
+/** Sample Creation script */
+		/** PUBLISHER */
+/*
+		$sql = "CREATE TABLE IF NOT EXISTS publisher ( "
+			. Publisher::id . " INTEGER PRIMARY KEY, "
+			. Publisher::name . " TEXT, "
+			. Publisher::created . " INTEGER, "
+			. Publisher::xurl . " TEXT, "
+			. Publisher::xsource . " TEXT, "
+			. Publisher::xid . " TEXT, "
+			. Publisher::xupdated . " INTEGER "
+		. ")";
+		$this->sqlite_execute( "publisher", $sql, "Create table publisher" );
+
+		$sql = 'CREATE  INDEX IF NOT EXISTS publisher_name on publisher (name)';
+		$this->sqlite_execute( "publisher", $sql, "Index on publisher (name)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publisher_xidxsource on publisher (xid,xsource)';
+		$this->sqlite_execute( "publisher", $sql, "Index on publisher (xid,xsource)" );
+*/
+abstract class _Publisher extends Model
+{
+	const TABLE = 'publisher';
+	const id = 'id';
+	const name = 'name';
+	const created = 'created';
+	const xurl = 'xurl';
+	const xsource = 'xsource';
+	const xid = 'xid';
+	const xupdated = 'xupdated';
+
+	public function tableName() { return Publisher::TABLE; }
+	public function tablePK() { return Publisher::id; }
+
+	public function sortOrder()
+	{
+		return array(
+			array( 'asc' => Publisher::name)
+		);
+	}
+
+	public function allColumnNames()
+	{
+		return array(
+			Publisher::id,
+			Publisher::name,
+			Publisher::created,
+			Publisher::xurl,
+			Publisher::xsource,
+			Publisher::xid,
+			Publisher::xupdated
+		);
+	}
+
+	/**
+	 *	Simple fetches
+	 */
+
+	public function allForName($value)
+	{
+		return $this->allObjectsForKeyValue(Publisher::name, $value);
+	}
+
+
+
+	public function allForXurl($value)
+	{
+		return $this->allObjectsForKeyValue(Publisher::xurl, $value);
+	}
+
+
+	public function allForXsource($value)
+	{
+		return $this->allObjectsForKeyValue(Publisher::xsource, $value);
+	}
+
+
+	public function allForXid($value)
+	{
+		return $this->allObjectsForKeyValue(Publisher::xid, $value);
+	}
+
+
+
+
+
+	public function joinAttributes( Model $joinModel = null )
+	{
+		if ( is_null($joinModel) == false ) {
+			switch ( $joinModel->tableName() ) {
+				case "series":
+					return array( Publisher::id, "publisher_id"  );
+					break;
+				case "character":
+					return array( Publisher::id, "publisher_id"  );
+					break;
+				case "story_arc":
+					return array( Publisher::id, "publisher_id"  );
+					break;
+				default:
+					break;
+			}
+		}
+		return parent::joinAttributes( $joinModel );
+	}
+
+	/**
+	 *	Create/Update functions
+	 */
+	public function createObject( array $values = array() )
+	{
+		if ( isset($values) ) {
+		}
+		return parent::createObject($values);
+	}
+
+	public function updateObject(DataObject $object = null, array $values = array()) {
+		if (isset($object) && $object instanceof Publisher ) {
+		}
+
+		return parent::updateObject($object, $values);
+	}
+
+	/**
+	 *	Delete functions
+	 */
+	public function deleteObject( DataObject $object = null)
+	{
+		if ( $object instanceof PublisherDBO )
+		{
+			$series_model = Model::Named('Series');
+			if ( $series_model->deleteAllForKeyValue(Series::publisher_id, $this->id) == false ) {
+				return false;
+			}
+			$character_model = Model::Named('Character');
+			if ( $character_model->deleteAllForKeyValue(Character::publisher_id, $this->id) == false ) {
+				return false;
+			}
+			$story_arc_model = Model::Named('Story_Arc');
+			if ( $story_arc_model->deleteAllForKeyValue(Story_Arc::publisher_id, $this->id) == false ) {
+				return false;
+			}
+			return parent::deleteObject($object);
+		}
+
+		return false;
+	}
+
+
+	/**
+	 *	Named fetches
+	 */
+	public function objectForExternal( $xid, $xsrc )
+	{
+		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
+		$qualifiers = array();
+		$qualifiers[] = Qualifier::Equals( 'xid', $xid);
+		$qualifiers[] = Qualifier::Equals( 'xsource', $xsrc);
+
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
+		}
+
+		$result = $select->fetchAll();
+		if ( is_array($result) ) {
+			$result_size = count($result);
+			if ( $result_size == 1 ) {
+				return $result[0];
+			}
+			else if ($result_size > 1 ) {
+				throw new \Exception( "objectForExternal expected 1 result, but fetched " . count($result) );
+			}
+		}
+
+		return false;
+	}
+
+
+
+	/** Validation */
+	function validate_name($object = null, $value)
+	{
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Publisher::name,
+				"FIELD_EMPTY"
+			);
+		}
+
+		return null;
+	}
+	function validate_created($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// created date is not changeable
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Publisher::created,
+				"IMMUTABLE"
+			);
+		}
+		return null;
+	}
+	function validate_xurl($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// url format
+		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Publisher::xurl,
+				"FILTER_VALIDATE_URL"
+			);
+		}
+		return null;
+	}
+	function validate_xsource($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		return null;
+	}
+	function validate_xid($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		return null;
+	}
+	function validate_xupdated($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		return null;
+	}
+}
+
+?>

@@ -6,7 +6,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 
-use model\Media_Type as Media_Type;
+use \model\media\Media_Type as Media_Type;
 use utilities\FileWrapper as FileWrapper;
 
 class MediaDBO extends DataObject

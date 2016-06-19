@@ -354,14 +354,14 @@
             "job_id": {
                 "label": "Scheduled Job"
             },
-            "type_id": {
-                "label": "Job Type"
-            },
             "pid": {
                 "label": "System Process Id"
             },
             "processor": {
                 "label": "Processor"
+            },
+            "type_id": {
+                "label": "Job Type"
             }
         },
         "media": {
@@ -386,6 +386,14 @@
             },
             "story_arcs": {
                 "search": "Select Story Arcs"
+            }
+        },
+        "media_type": {
+            "code": {
+                "UNIQUE_FIELD_VALUE": "Model\/media_type\/code\/UNIQUE_FIELD_VALUE"
+            },
+            "name": {
+                "FIELD_EMPTY": "Model\/media_type\/name\/FIELD_EMPTY"
             }
         },
         "network": {

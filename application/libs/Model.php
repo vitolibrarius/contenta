@@ -550,20 +550,19 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 	{
 		$validationErrors = array();
 
-		$mandatoryKeys = $this->attributesMandatory($object);
-		if ( is_array($mandatoryKeys) == false ) {
-			$mandatoryKeys = array_keys($values);
+		$validateKeys = array_keys($values);
+		if ( is_null($object) ) {
+			$mandatoryKeys = $this->attributesMandatory($object);
+			if ( is_array($mandatoryKeys) ) {
+				$validateKeys = array_merge_recursive($mandatoryKeys, $validateKeys );
+			}
+			$validateKeys = array_unique($validateKeys);
 		}
-		else {
-			$mandatoryKeys = array_merge_recursive($mandatoryKeys, array_keys($values) );
-		}
-		$mandatoryKeys = array_unique($mandatoryKeys);
 
-		foreach( $mandatoryKeys as $key ) {
+		foreach( $validateKeys as $key ) {
 			$function = "validate_" . $key;
 			if (method_exists($this, $function)) {
-				$oldvalue = (is_null($object) ? null : $object->{$key});
-				$newvalue = (isset($values[$key]) ? $values[$key] : $oldvalue);
+				$newvalue = (isset($values[$key]) ? $values[$key] : null);
 				$failure = $this->$function($object, $newvalue);
 				if ( is_null($failure) == false ) {
 					$validationErrors[$key] = $failure;

@@ -1,0 +1,77 @@
+{
+    "attributes": {
+        "id": { "column": "id", "type": "INTEGER" },
+        "name": { "column": "name", "length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": false },
+        "created": { "column": "created", "type": "DATE" },
+        "xurl": { "column": "xurl", "length": 1024, "type": "TEXT" },
+        "xsource": { "column": "xsource", "length": 256, "type": "TEXT" },
+        "xid": { "column": "xid", "length": 256, "type": "TEXT" },
+        "xupdated": { "column": "xupdated", "type": "DATE" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "publisher",
+    "package": "media",
+    "model": "Publisher",
+    "dbo": "PublisherDBO",
+	"sort" : [
+		{ "asc": "name" }
+	],
+    "indexes" : [
+    	{ "columns": ["name"] },
+    	{ "columns": ["xid", "xsource"], "unique": true }
+    ],
+	"fetches" : {
+		"objectForExternal": {
+			"arguments": [ "xid", "xsrc" ],
+			"maxCount" : 1,
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Equals",
+					"keyAttribute": "xid",
+					"argAttribute": "xid"
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "xsource",
+					"argAttribute": "xsrc"
+				}
+			]
+		}
+	},
+    "relationships" :{
+    	"series" : {
+    		"destination" : "Series",
+    		"destinationPackage" : "\\model\\",
+    		"destinationTable" : "series",
+    		"joins" : [
+    			{ "destinationAttribute": "publisher_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"character" : {
+    		"destination" : "Character",
+    		"destinationPackage" : "\\model\\",
+    		"destinationTable" : "character",
+    		"joins" : [
+    			{ "destinationAttribute": "publisher_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"story_arc" : {
+    		"destination" : "Story_Arc",
+    		"destinationPackage" : "\\model\\",
+    		"destinationTable" : "story_arc",
+    		"joins" : [
+    			{ "destinationAttribute": "publisher_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	}
+    }
+}

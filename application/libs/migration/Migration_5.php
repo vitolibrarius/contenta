@@ -9,7 +9,7 @@ use \Logger as Logger;
 use \Model as Model;
 use \SQL as SQL;
 
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 
 class Migration_5 extends Migrator
 {
@@ -22,26 +22,21 @@ class Migration_5 extends Migrator
 
 	public function sqlite_upgrade()
 	{
-		$model = Model::Named("Publisher");
+		$sql = "CREATE TABLE IF NOT EXISTS publisher ( "
+			. Publisher::id . " INTEGER PRIMARY KEY, "
+			. Publisher::name . " TEXT, "
+			. Publisher::created . " INTEGER, "
+			. Publisher::xurl . " TEXT, "
+			. Publisher::xsource . " TEXT, "
+			. Publisher::xid . " TEXT, "
+			. Publisher::xupdated . " INTEGER "
+		. ")";
+		$this->sqlite_execute( "publisher", $sql, "Create table publisher" );
 
-		$sql = "CREATE TABLE IF NOT EXISTS " . Publisher::TABLE
-				. " ( "
-				. Publisher::id . " INTEGER PRIMARY KEY, "
-				. Publisher::name . " TEXT COLLATE NOCASE,  "
-				. Publisher::xurl . " TEXT,  "
-				. Publisher::xsource . " TEXT,  "
-				. Publisher::xid . " TEXT, "
-				. Publisher::created . " INTEGER, "
-				. Publisher::updated . " INTEGER, "
-				. Publisher::xupdated . " INTEGER "
-				. ")";
-		$this->sqlite_execute( Publisher::TABLE, $sql, "Create table " . Publisher::TABLE );
-
-		$this->sqlite_execute(
-			Publisher::TABLE,
-			'CREATE INDEX IF NOT EXISTS ' . Publisher::TABLE . '_nameindex on ' . Publisher::TABLE . '(' . Publisher::name . ')',
-			"Index on " . Publisher::TABLE
-		);
+		$sql = 'CREATE  INDEX IF NOT EXISTS publisher_name on publisher (name)';
+		$this->sqlite_execute( "publisher", $sql, "Index on publisher (name)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publisher_xidxsource on publisher (xid,xsource)';
+		$this->sqlite_execute( "publisher", $sql, "Index on publisher (xid,xsource)" );
 	}
 
 	public function sqlite_postUpgrade()

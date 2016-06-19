@@ -40,7 +40,7 @@ $realObj = (isset($this->object)) ? $this->object : null;
 				<legend><?php echo Localized::ModelLabel($this->model->tableName(),"SearchLegend"); ?></legend>
 
 				<?php
-					$attr = model\Publisher::name;
+					$attr = \model\media\Publisher::name;
 					$attrName = $this->model->attributeName($realObj, null, $attr);
 					$this->renderFormField( \Model::TEXT_TYPE, $realObj, null, $this->model, $attr, null, true );
 				?>

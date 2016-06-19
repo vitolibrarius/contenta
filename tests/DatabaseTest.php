@@ -29,7 +29,7 @@ use model\Network as Network;
 use model\version\Patch as Patch;
 use model\Publication as Publication;
 use model\Publication_Character as Publication_Character;
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 use model\Series as Series;
 use model\Series_Alias as Series_Alias;
 use model\Series_Character as Series_Character;
@@ -165,17 +165,17 @@ my_echo( "---------- Publisher ");
 $publisher_model = Model::Named("Publisher");
 $publisher_data = array(
 	array(
-		model\Publisher::name => "DC Comics",
+		\model\media\Publisher::name => "DC Comics",
 		'xurl' => "http:\/\/comicvine.gamespot.com\/",
 		'xsource' => Endpoint_Type::ComicVine,
 		'xid' => 433786,
 		'xupdated' => time()
 	),
 	array(
-		model\Publisher::name => "Archie Comics"
+		\model\media\Publisher::name => "Archie Comics"
 	),
 	array(
-		model\Publisher::name => "Marvel"
+		\model\media\Publisher::name => "Marvel"
 	)
 );
 $publishers = loadData( $publisher_model, $publisher_data );
@@ -380,7 +380,7 @@ my_echo( "---------- Media ");
 				Media::checksum => $checksum,
 				Media::size =>$size
 */
-$cbz_type = Model::Named('Media_Type')->mediaTypeForCode(model\Media_Type::CBZ);
+$cbz_type = Model::Named('Media_Type')->objectForCode(\model\media\Media_Type::CBZ);
 ($cbz_type != false && $cbz_type->code == 'cbz') || die("Could not find Media_Type::CBZ");
 
 $Media_model = Model::Named("Media");

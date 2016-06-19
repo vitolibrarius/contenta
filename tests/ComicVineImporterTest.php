@@ -31,7 +31,7 @@ use model\logs\Log_Level as Log_Level;
 use model\Network as Network;
 use model\Publication as Publication;
 use model\Publication_Character as Publication_Character;
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 use model\Series as Series;
 use model\Series_Alias as Series_Alias;
 use model\Series_Character as Series_Character;
@@ -111,7 +111,7 @@ function Publisher($endpoint, $metadata) {
 	$publisher_model = Model::Named("Publisher");
 	foreach( $publishers as $pub ) {
 		$object = $publisher_model->objectForExternal( $pub["xid"], Endpoint_Type::ComicVine);
-		if ( isset($object) == false || is_a($object, '\model\PublisherDBO') == false || $object->name != $pub["name"]) {
+		if ( isset($object) == false || is_a($object, '\model\media\PublisherDBO') == false || $object->name != $pub["name"]) {
 			my_echo( "Error with " . $pub["xid"] . " - " . $pub["name"] . " found " . var_export( $object, true ));
 		}
 	}

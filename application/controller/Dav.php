@@ -18,7 +18,7 @@ use db\Qualifier as Qualifier;
 use \model\user\Users as Users;
 use \model\network\Endpoint as Endpoint;
 use \model\network\Endpoint_Type as Endpoint_Type;
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 use model\Character as Character;
 use model\Character_Alias as Character_Alias;
 use model\Series as Series;

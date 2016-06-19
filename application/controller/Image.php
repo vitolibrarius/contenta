@@ -9,7 +9,7 @@ use \Auth as Auth;
 use \Logger as Logger;
 use \Localized as Localized;
 use \model\user\Users as Users;
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 
 /**
  * Class Admin

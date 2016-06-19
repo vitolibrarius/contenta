@@ -12,7 +12,7 @@ use \Config as Config;
 use \Processor as Processor;
 
 use \model\user\Users as Users;
-use model\Publisher as Publisher;
+use \model\media\Publisher as Publisher;
 
 
 /**
