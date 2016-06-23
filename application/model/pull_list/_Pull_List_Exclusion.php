@@ -86,6 +86,14 @@ abstract class _Pull_List_Exclusion extends Model
 		return $this->allObjectsForFK(Pull_List_Exclusion::endpoint_type_id, $obj, $this->sortOrder(), 50);
 	}
 
+	public function countForEndpoint_type($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Pull_List_Exclusion::endpoint_type_id, $obj );
+		}
+		return false;
+	}
+
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
@@ -106,6 +114,28 @@ abstract class _Pull_List_Exclusion extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['pattern']) == false ) {
+				$default_pattern = $this->attributeDefaultValue( null, null, Pull_List_Exclusion::pattern);
+				if ( is_null( $default_pattern ) == false ) {
+					$values['pattern'] = $default_pattern;
+				}
+			}
+			if ( isset($values['type']) == false ) {
+				$default_type = $this->attributeDefaultValue( null, null, Pull_List_Exclusion::type);
+				if ( is_null( $default_type ) == false ) {
+					$values['type'] = $default_type;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Pull_List_Exclusion::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['endpoint_type']) ) {
 				$local_endpoint_type = $values['endpoint_type'];
 				if ( $local_endpoint_type instanceof Endpoint_TypeDBO) {
@@ -168,7 +198,7 @@ abstract class _Pull_List_Exclusion extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 	public function objectsForTypeAndEndpointType( $exclType, $endType )
 	{
@@ -204,8 +234,42 @@ abstract class _Pull_List_Exclusion extends Model
 	}
 
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Pull_List_Exclusion::pattern
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Pull_List_Exclusion::pattern => Model::TEXT_TYPE,
+			Pull_List_Exclusion::type => Model::TEXT_TYPE,
+			Pull_List_Exclusion::created => Model::DATE_TYPE,
+			Pull_List_Exclusion::endpoint_type_id => Model::TO_ONE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+				case Pull_List_Exclusion::type:
+					return 'item';
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_pattern($object = null, $value)
 	{
 		// check for mandatory field
@@ -256,14 +320,6 @@ abstract class _Pull_List_Exclusion extends Model
 			);
 		}
 
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List_Exclusion::endpoint_type_id,
-				"FILTER_VALIDATE_INT"
-			);
-		}
 		return null;
 	}
 }

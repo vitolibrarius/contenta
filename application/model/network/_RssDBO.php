@@ -53,16 +53,6 @@ abstract class _RssDBO extends DataObject
 
 
 	/** Attributes */
-	public function endpoint_id()
-	{
-		return parent::changedValue( Rss::endpoint_id, $this->endpoint_id );
-	}
-
-	public function setEndpoint_id( $value = null)
-	{
-		parent::storeChange( Rss::endpoint_id, $value );
-	}
-
 	public function title()
 	{
 		return parent::changedValue( Rss::title, $this->title );

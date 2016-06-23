@@ -1,0 +1,48 @@
+{
+    "attributes": {
+        "id": { "column": "id", "type": "INTEGER" },
+        "publication_id": { "column": "publication_id", "type": "INTEGER", "nullable": false },
+        "type_id": { "column": "type_id", "type": "INTEGER", "nullable": false },
+        "filename": { "column": "filename", "length": 4096, "type": "TEXT", "nullable": false },
+        "original_filename": { "column": "original_filename", "length": 4096, "type": "TEXT", "nullable": true },
+        "checksum": { "column": "checksum", "length": 256, "type": "TEXT" },
+        "created": { "column": "created", "type": "DATE" },
+        "size": { "column": "size", "type": "INTEGER" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "media",
+    "package": "media",
+    "model": "Media",
+    "dbo": "MediaDBO",
+	"sort" : [
+		{ "asc": "filename" }
+	],
+    "indexes" : [
+    	{ "columns": ["filename"], "unique": false },
+    	{ "columns": ["checksum"], "unique": true }
+    ],
+    "relationships" :{
+    	"mediaType" : {
+    		"destination" : "Media_Type",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "media_type",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "type_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	},
+    	"publication" : {
+    		"destination" : "Publication",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "publication",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "publication_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	}
+    }
+}

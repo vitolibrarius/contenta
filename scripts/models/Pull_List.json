@@ -12,7 +12,7 @@
         "etag": { "column": "etag", "length": 256, "type": "TEXT" },
         "created": { "column": "created", "type": "DATE" },
         "published": { "column": "published", "type": "DATE" },
-        "endpoint_id": { "column": "endpoint_id", "type": "INTEGER" }
+        "endpoint_id": { "column": "endpoint_id", "type": "INTEGER", "nullable": false }
     },
     "relationships" :{
     	"endpoint" : {

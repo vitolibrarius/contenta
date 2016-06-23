@@ -253,6 +253,14 @@
             },
             "xupdated": {
                 "label": "Updated from endpoint"
+            },
+            "xurl": {
+                "FILTER_VALIDATE_URL": "Model\/character\/xurl\/FILTER_VALIDATE_URL"
+            }
+        },
+        "character_alias": {
+            "character_id": {
+                "FIELD_EMPTY": "Model\/character_alias\/character_id\/FIELD_EMPTY"
             }
         },
         "endpoint": {
@@ -499,6 +507,7 @@
                 "label": "Last Update from Endpoint"
             },
             "xurl": {
+                "FILTER_VALIDATE_URL": "Model\/publisher\/xurl\/FILTER_VALIDATE_URL",
                 "label": "External URL"
             }
         },
@@ -561,6 +570,7 @@
                 "label": "Wanted for collection"
             },
             "publisher_id": {
+                "FILTER_VALIDATE_INT": "Model\/series\/publisher_id\/FILTER_VALIDATE_INT",
                 "label": "Publisher",
                 "search": "Select Publisher"
             },
@@ -631,6 +641,7 @@
                 "label": "Login"
             },
             "account_type": {
+                "FIELD_EMPTY": "Model\/users\/account_type\/FIELD_EMPTY",
                 "INVALID": "Invalid account type"
             },
             "active": {
@@ -684,6 +695,9 @@
             },
             "password_check": {
                 "label": "Check Password"
+            },
+            "password_hash": {
+                "FIELD_EMPTY": "Model\/users\/password_hash\/FIELD_EMPTY"
             },
             "type": {
                 "label": "Access Role"

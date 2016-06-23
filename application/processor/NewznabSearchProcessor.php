@@ -15,9 +15,9 @@ use db\Qualifier as Qualifier;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;
 use \model\jobs\Job as Job;
-use model\Story_Arc as Story_Arc;
-use model\Publication as Publication;
-use model\Series as Series;
+use \model\media\Story_Arc as Story_Arc;
+use \model\media\Publication as Publication;
+use \model\media\Series as Series;
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\Endpoint as Endpoint;
 

@@ -572,6 +572,7 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 		return $validationErrors;
 	}
 
+	public function attributesMap() 											{ return array(); }
 	public function attributesFor($object = null, $type = null) 				{ return array(); }
 	public function attributesMandatory($object = null)				 			{ return array(); }
 	public function attributeName($object = null, $type = null, $attr)			{ return $this->attributeId($attr); }
@@ -605,7 +606,7 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 
 	public function attributeType($attr)
 	{
-		$attributeArray = $this->attributesFor(null, null);
+		$attributeArray = $this->attributesMap();
 		if ( is_array($attributeArray) && isset($attributeArray[$attr]) ) {
 			return $attributeArray[$attr];
 		}

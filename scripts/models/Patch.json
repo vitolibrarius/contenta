@@ -10,7 +10,7 @@
         	"nullable": false
         },
         "created": { "column": "created", "type": "DATE" },
-        "version_id": { "column": "version_id", "type": "INTEGER" }
+        "version_id": { "column": "version_id", "type": "INTEGER", "nullable": false }
     },
     "relationships" :{
     	"version" : {

@@ -14,8 +14,8 @@
 			$card = new html\Card();
 			$card->setDisplayDescriptionKey( "shortDescription" );
 			$card->setDetailKeys( array(
-				model\Character::realname => model\Character::realname,
-				model\Character::gender => model\Character::gender,
+				\model\media\Character::realname => \model\media\Character::realname,
+				\model\media\Character::gender => \model\media\Character::gender,
 				)
 			);
 			foreach($this->listArray as $key => $value) {

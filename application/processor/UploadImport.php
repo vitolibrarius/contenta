@@ -17,7 +17,7 @@ use connectors\ComicVineConnector as ComicVineConnector;
 use exceptions\ImportMediaException as ImportMediaException;
 
 use \model\network\Endpoint_Type as Endpoint_Type;
-use model\PublicationDBO as PublicationDBO;
+use \model\media\PublicationDBO as PublicationDBO;
 
 class UploadImport extends Processor
 {
@@ -412,7 +412,7 @@ class UploadImport extends Processor
 			$size = $this->getMeta(UploadImport::META_MEDIA_SIZE);
 
 			$media = Model::Named( "Media" )->create( $publication, $cbzType, $filename, $hash, $size );
-			if ( $media instanceof model\MediaDBO ) {
+			if ( $media instanceof \model\media\MediaDBO ) {
 				if ( rename( $this->importFilePath(), $media->contentaPath()) ) {
 					$this->setPurgeOnExit(true);
 				}

@@ -87,16 +87,6 @@ abstract class _Pull_ListDBO extends DataObject
 		parent::storeChange( Pull_List::published, $value );
 	}
 
-	public function endpoint_id()
-	{
-		return parent::changedValue( Pull_List::endpoint_id, $this->endpoint_id );
-	}
-
-	public function setEndpoint_id( $value = null)
-	{
-		parent::storeChange( Pull_List::endpoint_id, $value );
-	}
-
 
 }
 

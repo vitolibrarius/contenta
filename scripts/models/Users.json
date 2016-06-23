@@ -47,7 +47,7 @@
     	"user_series" : {
     		"destination" : "User_Series",
     		"destinationTable" : "user_series",
-    		"destinationPackage" : "\\model\\",
+    		"destinationPackage" : "\\model\\media\\",
     		"joins" : [
     			{ "destinationAttribute": "user_id", "sourceAttribute" : "id" }
     		],

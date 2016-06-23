@@ -87,6 +87,14 @@ abstract class _Patch extends Model
 		return $this->allObjectsForFK(Patch::version_id, $obj, $this->sortOrder(), 50);
 	}
 
+	public function countForVersion($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Patch::version_id, $obj );
+		}
+		return false;
+	}
+
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
@@ -107,6 +115,22 @@ abstract class _Patch extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Patch::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Patch::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['version']) ) {
 				$local_version = $values['version'];
 				if ( $local_version instanceof VersionDBO) {
@@ -169,11 +193,42 @@ abstract class _Patch extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Patch::name
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Patch::name => Model::TEXT_TYPE,
+			Patch::created => Model::DATE_TYPE,
+			Patch::version_id => Model::TO_ONE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_name($object = null, $value)
 	{
 		// check for mandatory field
@@ -215,19 +270,15 @@ abstract class _Patch extends Model
 	}
 	function validate_version_id($object = null, $value)
 	{
-		// not mandatory field
+		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return null;
-		}
-
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Patch::version_id,
-				"FILTER_VALIDATE_INT"
+				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 }

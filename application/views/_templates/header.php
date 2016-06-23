@@ -68,7 +68,7 @@
 
 				if (\http\Session::get('user_logged_in') == true)
 				{
-					if (\http\Session::get('user_account_type') === model\user\Users::AdministratorRole )
+					if (\http\Session::get('user_account_type') === \model\user\Users::AdministratorRole )
 					{
 						$menu->addCallback( "Daemons", function() {
 								return "<div id='daemons' data-href='" . Config::Web("/AdminJobs/json_running")

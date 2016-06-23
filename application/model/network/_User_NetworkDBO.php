@@ -43,26 +43,6 @@ abstract class _User_NetworkDBO extends DataObject
 
 
 	/** Attributes */
-	public function user_id()
-	{
-		return parent::changedValue( User_Network::user_id, $this->user_id );
-	}
-
-	public function setUser_id( $value = null)
-	{
-		parent::storeChange( User_Network::user_id, $value );
-	}
-
-	public function network_id()
-	{
-		return parent::changedValue( User_Network::network_id, $this->network_id );
-	}
-
-	public function setNetwork_id( $value = null)
-	{
-		parent::storeChange( User_Network::network_id, $value );
-	}
-
 
 }
 

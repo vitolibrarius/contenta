@@ -21,15 +21,15 @@ use processor\ImportManager as ImportManager;
 use controller\Admin as Admin;
 
 use \model\user\Users as Users;
-use model\Series as Series;
-use model\SeriesDBO as SeriesDBO;
-use model\Publication as Publication;
-use model\PublicationDBO as PublicationDBO;
+use \model\media\Series as Series;
+use \model\media\SeriesDBO as SeriesDBO;
+use \model\media\Publication as Publication;
+use \model\media\PublicationDBO as PublicationDBO;
 use \model\network\Endpoint as Endpoint;
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\media\Publisher as Publisher;
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
+use \model\media\Character as Character;
+use \model\media\Character_Alias as Character_Alias;
 
 /**
  * Class Admin

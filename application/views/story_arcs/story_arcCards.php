@@ -9,7 +9,7 @@
 		$card = new html\Card();
 		$card->setDisplayDescriptionKey( "shortDescription" );
 		$card->setDetailKeys( array(
-			model\Story_Arc::pub_count => "availableSummary",
+			\model\media\Story_Arc::pub_count => "availableSummary",
 			)
 		);
 		foreach($this->listArray as $key => $value) {

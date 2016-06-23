@@ -168,6 +168,14 @@ abstract class _Rss extends Model
 		return $this->allObjectsForFK(Rss::endpoint_id, $obj, $this->sortOrder(), 50);
 	}
 
+	public function countForEndpoint($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Rss::endpoint_id, $obj );
+		}
+		return false;
+	}
+
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
@@ -188,6 +196,88 @@ abstract class _Rss extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Rss::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+			if ( isset($values['title']) == false ) {
+				$default_title = $this->attributeDefaultValue( null, null, Rss::title);
+				if ( is_null( $default_title ) == false ) {
+					$values['title'] = $default_title;
+				}
+			}
+			if ( isset($values['desc']) == false ) {
+				$default_desc = $this->attributeDefaultValue( null, null, Rss::desc);
+				if ( is_null( $default_desc ) == false ) {
+					$values['desc'] = $default_desc;
+				}
+			}
+			if ( isset($values['pub_date']) == false ) {
+				$default_pub_date = $this->attributeDefaultValue( null, null, Rss::pub_date);
+				if ( is_null( $default_pub_date ) == false ) {
+					$values['pub_date'] = $default_pub_date;
+				}
+			}
+			if ( isset($values['guid']) == false ) {
+				$default_guid = $this->attributeDefaultValue( null, null, Rss::guid);
+				if ( is_null( $default_guid ) == false ) {
+					$values['guid'] = $default_guid;
+				}
+			}
+			if ( isset($values['clean_name']) == false ) {
+				$default_clean_name = $this->attributeDefaultValue( null, null, Rss::clean_name);
+				if ( is_null( $default_clean_name ) == false ) {
+					$values['clean_name'] = $default_clean_name;
+				}
+			}
+			if ( isset($values['clean_issue']) == false ) {
+				$default_clean_issue = $this->attributeDefaultValue( null, null, Rss::clean_issue);
+				if ( is_null( $default_clean_issue ) == false ) {
+					$values['clean_issue'] = $default_clean_issue;
+				}
+			}
+			if ( isset($values['clean_year']) == false ) {
+				$default_clean_year = $this->attributeDefaultValue( null, null, Rss::clean_year);
+				if ( is_null( $default_clean_year ) == false ) {
+					$values['clean_year'] = $default_clean_year;
+				}
+			}
+			if ( isset($values['enclosure_url']) == false ) {
+				$default_enclosure_url = $this->attributeDefaultValue( null, null, Rss::enclosure_url);
+				if ( is_null( $default_enclosure_url ) == false ) {
+					$values['enclosure_url'] = $default_enclosure_url;
+				}
+			}
+			if ( isset($values['enclosure_length']) == false ) {
+				$default_enclosure_length = $this->attributeDefaultValue( null, null, Rss::enclosure_length);
+				if ( is_null( $default_enclosure_length ) == false ) {
+					$values['enclosure_length'] = $default_enclosure_length;
+				}
+			}
+			if ( isset($values['enclosure_mime']) == false ) {
+				$default_enclosure_mime = $this->attributeDefaultValue( null, null, Rss::enclosure_mime);
+				if ( is_null( $default_enclosure_mime ) == false ) {
+					$values['enclosure_mime'] = $default_enclosure_mime;
+				}
+			}
+			if ( isset($values['enclosure_hash']) == false ) {
+				$default_enclosure_hash = $this->attributeDefaultValue( null, null, Rss::enclosure_hash);
+				if ( is_null( $default_enclosure_hash ) == false ) {
+					$values['enclosure_hash'] = $default_enclosure_hash;
+				}
+			}
+			if ( isset($values['enclosure_password']) == false ) {
+				$default_enclosure_password = $this->attributeDefaultValue( null, null, Rss::enclosure_password);
+				if ( is_null( $default_enclosure_password ) == false ) {
+					$values['enclosure_password'] = $default_enclosure_password;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['endpoint']) ) {
 				$local_endpoint = $values['endpoint'];
 				if ( $local_endpoint instanceof EndpointDBO) {
@@ -250,7 +340,7 @@ abstract class _Rss extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 	public function objectsForNameIssueYear( $name, $issue, $year )
 	{
@@ -302,8 +392,54 @@ abstract class _Rss extends Model
 	}
 
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Rss::title,
+				Rss::pub_date,
+				Rss::guid,
+				Rss::clean_name,
+				Rss::enclosure_url
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Rss::endpoint_id => Model::TO_ONE_TYPE,
+			Rss::created => Model::DATE_TYPE,
+			Rss::title => Model::TEXT_TYPE,
+			Rss::desc => Model::TEXT_TYPE,
+			Rss::pub_date => Model::DATE_TYPE,
+			Rss::guid => Model::TEXT_TYPE,
+			Rss::clean_name => Model::TEXT_TYPE,
+			Rss::clean_issue => Model::TEXT_TYPE,
+			Rss::clean_year => Model::INT_TYPE,
+			Rss::enclosure_url => Model::TEXT_TYPE,
+			Rss::enclosure_length => Model::INT_TYPE,
+			Rss::enclosure_mime => Model::TEXT_TYPE,
+			Rss::enclosure_hash => Model::TEXT_TYPE,
+			Rss::enclosure_password => Model::FLAG_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_endpoint_id($object = null, $value)
 	{
 		// check for mandatory field
@@ -315,14 +451,6 @@ abstract class _Rss extends Model
 			);
 		}
 
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Rss::endpoint_id,
-				"FILTER_VALIDATE_INT"
-			);
-		}
 		return null;
 	}
 	function validate_created($object = null, $value)

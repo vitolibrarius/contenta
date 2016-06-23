@@ -7,8 +7,8 @@
 		"name": { "column": "name",	"length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": false  },
         "issue": { "column": "issue", "length": 256, "type": "TEXT" },
         "year": { "column": "year", "type": "INTEGER" },
-        "pull_list_id": { "column": "pull_list_id", "type": "INTEGER" },
-        "pull_list_group_id": { "column": "pull_list_group_id", "type": "INTEGER" }
+        "pull_list_id": { "column": "pull_list_id", "type": "INTEGER", "nullable": false },
+        "pull_list_group_id": { "column": "pull_list_group_id", "type": "INTEGER", "nullable": false }
     },
     "primaryKeys": [ "id" ],
     "package": "pull_list",

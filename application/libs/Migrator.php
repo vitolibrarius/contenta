@@ -3,10 +3,10 @@
 class MigrationFailedException extends \Exception {}
 
 use \SQL as SQL;
-use model\version\Version as Version;
-use model\version\VersionDBO as VersionDBO;
-use model\version\Patch as Patch;
-use model\version\PatchDBO as PatchDBO;
+use \model\version\Version as Version;
+use \model\version\VersionDBO as VersionDBO;
+use \model\version\Patch as Patch;
+use \model\version\PatchDBO as PatchDBO;
 
 class Migrator
 {

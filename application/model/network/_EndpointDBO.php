@@ -111,16 +111,6 @@ abstract class _EndpointDBO extends DataObject
 
 
 	/** Attributes */
-	public function type_id()
-	{
-		return parent::changedValue( Endpoint::type_id, $this->type_id );
-	}
-
-	public function setType_id( $value = null)
-	{
-		parent::storeChange( Endpoint::type_id, $value );
-	}
-
 	public function name()
 	{
 		return parent::changedValue( Endpoint::name, $this->name );

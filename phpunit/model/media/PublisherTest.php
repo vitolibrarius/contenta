@@ -14,12 +14,13 @@ use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
 use \model\media\PublisherDBO as PublisherDBO;
-use \model\Series as Series;
-use \model\SeriesDBO as SeriesDBO;
-use \model\Character as Character;
-use \model\CharacterDBO as CharacterDBO;
-use \model\Story_Arc as Story_Arc;
-use \model\Story_ArcDBO as Story_ArcDBO;
+use \model\media\Series as Series;
+use \model\media\SeriesDBO as SeriesDBO;
+use \model\media\Character as Character;
+use \model\media\CharacterDBO as CharacterDBO;
+/* * Generated from UseStatements.tpl by PhpTestClassGenerator.php on 2016-06-22 10:33:00. */
+use \model\media\Story_Arc as Story_Arc;
+use \model\media\Story_ArcDBO as Story_ArcDBO;
 /* {useStatements} */
 
 class PublisherTest extends PHPUnit_Framework_TestCase
@@ -89,6 +90,47 @@ class PublisherTest extends PHPUnit_Framework_TestCase
 		$this->assertNull( $errors, "Failed to updated record" . var_export($errors, true) );
 		$this->assertEquals( "9876", $updated->xid(), "Should be new xid" );
 	}
+
+/*  Test functions */
+
+	/**
+	 * @covers	attributesFor
+	 * 			T_FUNCTION T_PUBLIC attributesFor ( $object = null, $type = null)
+	 * @todo	Implement testAttributesFor().
+	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-22 20:44:25.
+	 */
+	public function testAttributesFor()
+	{
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+	/**
+	 * @covers	attributeOptions
+	 * 			T_FUNCTION T_PUBLIC attributeOptions ( $object = null, $type = null, $attr)
+	 * @todo	Implement testAttributeOptions().
+	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-22 20:44:25.
+	 */
+	public function testAttributeOptions()
+	{
+		$this->markTestIncomplete('This test has not been implemented yet.');
+	}
+
+	/**
+	 * @covers	findExternalOrCreate
+	 * 			T_FUNCTION T_PUBLIC findExternalOrCreate ( $name, $xid, $xsrc, $xurl = null)
+	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-22 20:44:25.
+	 */
+	public function testFindExternalOrCreate()
+	{
+		$newobj = $this->model->findExternalOrCreate (
+			"test external",
+			"GHI-123",
+			"ComicVine",
+			"http://localhost/publisher/GHI-123"
+		);
+		$this->assertTrue( $newobj instanceof PublisherDBO, "Failed to create publisher " . var_export($newobj, true) );
+	}
+
 
 /* {functions} */
 }

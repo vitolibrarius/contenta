@@ -38,60 +38,52 @@ class Job_Running extends _Job_Running
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Job_Running::job_id => Model::INT_TYPE,
-			Job_Running::type_id => Model::INT_TYPE,
-			Job_Running::processor => Model::TEXT_TYPE,
-			Job_Running::guid => Model::TEXT_TYPE,
-			Job_Running::pid => Model::INT_TYPE,
-			Job_Running::desc => Model::TEXT_TYPE,
-			Job_Running::created => Model::DATE_TYPE
+		$attrFor = array(
+			Job_Running::job_id,
+			Job_Running::type_id,
+			Job_Running::processor,
+			Job_Running::guid,
+			Job_Running::pid,
+			Job_Running::desc,
+			Job_Running::created
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Job_Running::processor,
-				Job_Running::pid
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr == Job_Running::job_id ) {
+		if ( Job_Running::job_id == $attr ) {
 			$model = Model::Named('Job');
 			return $model->allObjects();
 		}
-		if ( $attr == Job_Running::type_id ) {
+		if ( Job_Running::type_id == $attr ) {
 			$model = Model::Named('Job_Type');
 			return $model->allObjects();
 		}
@@ -99,40 +91,54 @@ class Job_Running extends _Job_Running
 	}
 
 	/** Validation */
+/*
 	function validate_job_id($object = null, $value)
 	{
 		return parent::validate_job_id($object, $value);
 	}
+*/
 
+/*
 	function validate_type_id($object = null, $value)
 	{
 		return parent::validate_type_id($object, $value);
 	}
+*/
 
+/*
 	function validate_processor($object = null, $value)
 	{
 		return parent::validate_processor($object, $value);
 	}
+*/
 
+/*
 	function validate_guid($object = null, $value)
 	{
 		return parent::validate_guid($object, $value);
 	}
+*/
 
+/*
 	function validate_pid($object = null, $value)
 	{
 		return parent::validate_pid($object, $value);
 	}
+*/
 
+/*
 	function validate_desc($object = null, $value)
 	{
 		return parent::validate_desc($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
 	public function clearFinishedProcesses()
 	{

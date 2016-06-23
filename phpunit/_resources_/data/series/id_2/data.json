@@ -1,0 +1,20 @@
+{
+    "id": "2",
+    "parent_id": null,
+    "publisher_id": "3",
+    "name": "Spiderman",
+    "desc": "Wall crawler comic series",
+    "start_year": "2010",
+    "issue_count": "0",
+    "xurl": null,
+    "xsource": null,
+    "xid": null,
+    "created": "1466653332",
+    "xupdated": null,
+    "search_name": "spiderman",
+    "pub_active": "1",
+    "pub_cycle": "0",
+    "pub_count": "0",
+    "pub_available": "0",
+    "pub_wanted": "1"
+}

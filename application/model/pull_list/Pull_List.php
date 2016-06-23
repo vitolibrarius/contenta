@@ -42,53 +42,46 @@ class Pull_List extends _Pull_List
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Pull_List::name => Model::TEXT_TYPE,
-			Pull_List::etag => Model::TEXT_TYPE,
-			Pull_List::created => Model::DATE_TYPE,
-			Pull_List::published => Model::DATE_TYPE,
-			Pull_List::endpoint_id => Model::INT_TYPE
+		$attrFor = array(
+			Pull_List::name,
+			Pull_List::etag,
+			Pull_List::created,
+			Pull_List::published,
+			Pull_List::endpoint_id
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Pull_List::name
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr == Pull_List::endpoint_id ) {
+		if ( Pull_List::endpoint_id == $attr ) {
 			$model = Model::Named('Endpoint');
 			return $model->allObjects();
 		}
@@ -96,31 +89,40 @@ class Pull_List extends _Pull_List
 	}
 
 	/** Validation */
+/*
 	function validate_name($object = null, $value)
 	{
 		return parent::validate_name($object, $value);
 	}
+*/
 
+/*
 	function validate_etag($object = null, $value)
 	{
 		return parent::validate_etag($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
+/*
 	function validate_published($object = null, $value)
 	{
 		return parent::validate_published($object, $value);
 	}
+*/
 
+/*
 	function validate_endpoint_id($object = null, $value)
 	{
 		return parent::validate_endpoint_id($object, $value);
 	}
-
+*/
 }
 
 ?>

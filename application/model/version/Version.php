@@ -46,49 +46,42 @@ class Version extends _Version
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Version::code => Model::TEXT_TYPE,
-			Version::major => Model::INT_TYPE,
-			Version::minor => Model::INT_TYPE,
-			Version::patch => Model::INT_TYPE,
-			Version::created => Model::DATE_TYPE
+		$attrFor = array(
+			Version::code,
+			Version::major,
+			Version::minor,
+			Version::patch,
+			Version::created
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Version::code
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
@@ -96,30 +89,40 @@ class Version extends _Version
 	}
 
 	/** Validation */
+/*
 	function validate_code($object = null, $value)
 	{
 		return parent::validate_code($object, $value);
 	}
+*/
 
+/*
 	function validate_major($object = null, $value)
 	{
 		return parent::validate_major($object, $value);
 	}
+*/
 
+/*
 	function validate_minor($object = null, $value)
 	{
 		return parent::validate_minor($object, $value);
 	}
+*/
 
+/*
 	function validate_patch($object = null, $value)
 	{
 		return parent::validate_patch($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
 }
 

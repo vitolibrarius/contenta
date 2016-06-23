@@ -39,54 +39,45 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Pull_List_Exclusion::pattern => Model::TEXT_TYPE,
-			Pull_List_Exclusion::type => Model::TEXT_TYPE,
-			Pull_List_Exclusion::created => Model::DATE_TYPE,
-			Pull_List_Exclusion::endpoint_type_id => Model::INT_TYPE
+		$attrFor = array(
+			Pull_List_Exclusion::pattern,
+			Pull_List_Exclusion::type,
+			Pull_List_Exclusion::created,
+			Pull_List_Exclusion::endpoint_type_id
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Pull_List_Exclusion::pattern
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-				case Pull_List_Exclusion::type:
-					return 'item';
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr == Pull_List_Exclusion::endpoint_type_id ) {
+		if ( Pull_List_Exclusion::endpoint_type_id == $attr ) {
 			$model = Model::Named('Endpoint_Type');
 			return $model->allObjects();
 		}
@@ -94,25 +85,33 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 	}
 
 	/** Validation */
+/*
 	function validate_pattern($object = null, $value)
 	{
 		return parent::validate_pattern($object, $value);
 	}
+*/
 
+/*
 	function validate_type($object = null, $value)
 	{
 		return parent::validate_type($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
+/*
 	function validate_endpoint_type_id($object = null, $value)
 	{
 		return parent::validate_endpoint_type_id($object, $value);
 	}
+*/
 
 }
 

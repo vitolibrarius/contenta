@@ -22,12 +22,12 @@ use \model\user\Users as Users;
 use \model\network\Endpoint as Endpoint;
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\media\Publisher as Publisher;
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
-use model\Series as Series;
-use model\Series_Alias as Series_Alias;
-use model\Series_Character as Series_Character;
-use model\User_Series as User_Series;
+use \model\media\Character as Character;
+use \model\media\Character_Alias as Character_Alias;
+use \model\media\Series as Series;
+use \model\media\Series_Alias as Series_Alias;
+use \model\media\Series_Character as Series_Character;
+use \model\media\User_Series as User_Series;
 
 /**
  * Class Admin

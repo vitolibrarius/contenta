@@ -152,13 +152,13 @@ class Upload extends Controller
 				$contentHash = hash_file(HASH_DEFAULT_ALGO, $_FILES['mediaFile']['tmp_name']);
 				$root = Config::GetProcessing();
 				$workingDir = appendPath($root, "UploadImport", $contentHash );
-				$existing = Model::Named('Media')->mediaForChecksum($contentHash);
+				$existing = Model::Named('Media')->objectForChecksum($contentHash);
 
 				if ( is_dir($workingDir) == true ) {
 					Session::addNegativeFeedback( Localized::Get("Upload", 'Hash Exists') .' "'. $_FILES['mediaFile']['name'] . '"' );
 					http_response_code(415); // Unsupported Media Type
 				}
-				else if ( $existing instanceof model\MediaDBO ) {
+				else if ( $existing instanceof \model\media\MediaDBO ) {
 					Session::addNegativeFeedback(Localized::Get("Upload", 'Already imported') .' "'. $existing->publication()->searchString() .'"');
 					http_response_code(415); // Unsupported Media Type
 				}

@@ -22,24 +22,24 @@
 use processor\ComicVineImporter as ComicVineImporter;
 use utilities\Stopwatch as Stopwatch;
 
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
+use \model\media\Character as Character;
+use \model\media\Character_Alias as Character_Alias;
 use \model\network\Endpoint as Endpoint;
 use \model\network\Endpoint_Type as Endpoint_Type;
-use model\logs\Log as Log;
-use model\logs\Log_Level as Log_Level;
-use model\Network as Network;
-use model\Publication as Publication;
-use model\Publication_Character as Publication_Character;
+use \model\media\logs\Log as Log;
+use \model\media\logs\Log_Level as Log_Level;
+use \model\media\Network as Network;
+use \model\media\Publication as Publication;
+use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publisher as Publisher;
-use model\Series as Series;
-use model\Series_Alias as Series_Alias;
-use model\Series_Character as Series_Character;
-use model\Story_Arc as Story_Arc;
-use model\Story_Arc_Character as Story_Arc_Character;
-use model\Story_Arc_Series as Story_Arc_Series;
-use model\User_Network as User_Network;
-use model\User_Series as User_Series;
+use \model\media\Series as Series;
+use \model\media\Series_Alias as Series_Alias;
+use \model\media\Series_Character as Series_Character;
+use \model\media\Story_Arc as Story_Arc;
+use \model\media\Story_Arc_Character as Story_Arc_Character;
+use \model\media\Story_Arc_Series as Story_Arc_Series;
+use \model\media\User_Network as User_Network;
+use \model\media\User_Series as User_Series;
 use \model\user\Users as Users;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;
@@ -148,7 +148,7 @@ function Series($endpoint, $metadata) {
 	$series_model = Model::Named("Series");
 	foreach( $series as $sample ) {
 		$object = $series_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
-		if ( isset($object) == false || is_a($object, '\model\SeriesDBO') == false || $object->name != $sample["name"]) {
+		if ( isset($object) == false || is_a($object, '\model\media\SeriesDBO') == false || $object->name != $sample["name"]) {
 			my_echo( "Error with " . $sample["xid"] . " - " . $sample["name"] . " found " . var_export( $object, true ));
 		}
 	}
@@ -194,7 +194,7 @@ function Publication($endpoint, $metadata) {
 	$pubs_model = Model::Named("Publication");
 	foreach( $pubs as $sample ) {
 		$object = $pubs_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
-		if ( isset($object) == false || is_a($object, '\model\PublicationDBO') == false) {
+		if ( isset($object) == false || is_a($object, '\model\media\PublicationDBO') == false) {
 			my_echo( "Error with " . $sample["xid"] . " - record not found .. not imported");
 		}
 		else {
@@ -216,7 +216,7 @@ function Publication($endpoint, $metadata) {
 				}
 
 				$seriesObj = $series_model->objectForExternal( $sample["series_xid"], Endpoint_Type::ComicVine);
-				if ( $seriesObj == false || ($seriesObj instanceof model\SeriesDBO) == false ) {
+				if ( $seriesObj == false || ($seriesObj instanceof \model\media\SeriesDBO) == false ) {
 					my_echo( "Error with " . $sample["xid"] . " - expected series not found " .  $sample["series_xid"]
 						. " got " . var_export($seriesObj, true));
 				}
@@ -252,7 +252,7 @@ function Media($endpoint, $metadata) {
 	$pubs = publicationsMetadata($metadata);
 	foreach( $pubs as $idx => $sample ) {
 		$publication = $pubs_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
-		if ( $publication instanceof model\PublicationDBO ) {
+		if ( $publication instanceof \model\media\PublicationDBO ) {
 			$filename = "NoSampleFound";
 			$hash = uuid();
 			$size = rand();
@@ -266,7 +266,7 @@ function Media($endpoint, $metadata) {
 
 			my_echo( "$idx => $filename for $publication" );
 			$media = $media_model->create( $publication, $cbzType, $filename, $hash, $size );
-			if ( $media instanceof model\MediaDBO ) {
+			if ( $media instanceof \model\media\MediaDBO ) {
 				$newfile = $media->contentaPath();
 				if ( is_null($fullpath) ) {
 					touch($newfile);

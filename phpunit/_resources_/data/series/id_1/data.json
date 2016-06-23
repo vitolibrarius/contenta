@@ -1,0 +1,20 @@
+{
+    "id": "1",
+    "parent_id": null,
+    "publisher_id": "1",
+    "name": "BatVito",
+    "desc": "The dark knight comic series",
+    "start_year": "2012",
+    "issue_count": "0",
+    "xurl": "http:\/\/comicvine.gamespot.com\/",
+    "xsource": "ComicVine",
+    "xid": "433786",
+    "created": "1466653332",
+    "xupdated": "1466653332",
+    "search_name": "batvito",
+    "pub_active": "1",
+    "pub_cycle": "0",
+    "pub_count": "0",
+    "pub_available": "0",
+    "pub_wanted": "1"
+}

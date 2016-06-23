@@ -52,56 +52,35 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-<?php foreach( $objectAttributes as $name => $detailArray ) {
-	if ($name != "id") {
-		echo "\t\t\t" . $this->modelClassName() . "::" . $name . " => "
-			. $this->modelTypeForAttribute($name) . ($lastAttributeKey === $name ? "" : ",") . PHP_EOL;
-	}
-}?>
+		$attrFor = array(<?php $lastKey = array_last_key($objectAttributes); foreach( $objectAttributes as $name => $detailArray ) {
+			if ( $this->isPrimaryKey($name) === false )	echo "\n\t\t\t" . $this->modelClassName() . "::" . $name . ( $name != $lastKey ? "," : "");
+		} ?>
+
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-<?php if (is_array($mandatoryObjectAttributes) && count($mandatoryObjectAttributes) > 0  ) : ?>
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-<?php foreach( $mandatoryObjectAttributes as $name => $detailArray ) {
-		echo "\t\t\t\t" . $this->modelClassName() . "::" . $name . ($lastMandatoryKey === $name ? "" : ",") . PHP_EOL;
-}?>
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-<?php endif; ?>
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
-<?php if (isset($detailArray['default']) ) : ?>
-				case <?php echo $this->modelClassName() . "::" . $name; ?>:
-					return <?php echo $detailArray['default']; ?>;
-<?php endif; ?>
-<?php endforeach; ?>
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
@@ -114,6 +93,7 @@ class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBase
 <?php endforeach; ?>
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{

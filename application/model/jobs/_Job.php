@@ -146,9 +146,25 @@ abstract class _Job extends Model
 	{
 		return $this->allObjectsForFK(Job::type_id, $obj, $this->sortOrder(), 50);
 	}
+
+	public function countForJobType($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Job::type_id, $obj );
+		}
+		return false;
+	}
 	public function allForEndpoint($obj)
 	{
 		return $this->allObjectsForFK(Job::endpoint_id, $obj, $this->sortOrder(), 50);
+	}
+
+	public function countForEndpoint($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Job::endpoint_id, $obj );
+		}
+		return false;
 	}
 
 	public function joinAttributes( Model $joinModel = null )
@@ -174,6 +190,82 @@ abstract class _Job extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['enabled']) == false ) {
+				$default_enabled = $this->attributeDefaultValue( null, null, Job::enabled);
+				if ( is_null( $default_enabled ) == false ) {
+					$values['enabled'] = $default_enabled;
+				}
+			}
+			if ( isset($values['one_shot']) == false ) {
+				$default_one_shot = $this->attributeDefaultValue( null, null, Job::one_shot);
+				if ( is_null( $default_one_shot ) == false ) {
+					$values['one_shot'] = $default_one_shot;
+				}
+			}
+			if ( isset($values['fail_count']) == false ) {
+				$default_fail_count = $this->attributeDefaultValue( null, null, Job::fail_count);
+				if ( is_null( $default_fail_count ) == false ) {
+					$values['fail_count'] = $default_fail_count;
+				}
+			}
+			if ( isset($values['elapsed']) == false ) {
+				$default_elapsed = $this->attributeDefaultValue( null, null, Job::elapsed);
+				if ( is_null( $default_elapsed ) == false ) {
+					$values['elapsed'] = $default_elapsed;
+				}
+			}
+			if ( isset($values['minute']) == false ) {
+				$default_minute = $this->attributeDefaultValue( null, null, Job::minute);
+				if ( is_null( $default_minute ) == false ) {
+					$values['minute'] = $default_minute;
+				}
+			}
+			if ( isset($values['hour']) == false ) {
+				$default_hour = $this->attributeDefaultValue( null, null, Job::hour);
+				if ( is_null( $default_hour ) == false ) {
+					$values['hour'] = $default_hour;
+				}
+			}
+			if ( isset($values['dayOfWeek']) == false ) {
+				$default_dayOfWeek = $this->attributeDefaultValue( null, null, Job::dayOfWeek);
+				if ( is_null( $default_dayOfWeek ) == false ) {
+					$values['dayOfWeek'] = $default_dayOfWeek;
+				}
+			}
+			if ( isset($values['parameter']) == false ) {
+				$default_parameter = $this->attributeDefaultValue( null, null, Job::parameter);
+				if ( is_null( $default_parameter ) == false ) {
+					$values['parameter'] = $default_parameter;
+				}
+			}
+			if ( isset($values['next']) == false ) {
+				$default_next = $this->attributeDefaultValue( null, null, Job::next);
+				if ( is_null( $default_next ) == false ) {
+					$values['next'] = $default_next;
+				}
+			}
+			if ( isset($values['last_run']) == false ) {
+				$default_last_run = $this->attributeDefaultValue( null, null, Job::last_run);
+				if ( is_null( $default_last_run ) == false ) {
+					$values['last_run'] = $default_last_run;
+				}
+			}
+			if ( isset($values['last_fail']) == false ) {
+				$default_last_fail = $this->attributeDefaultValue( null, null, Job::last_fail);
+				if ( is_null( $default_last_fail ) == false ) {
+					$values['last_fail'] = $default_last_fail;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Job::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['jobType']) ) {
 				$local_jobType = $values['jobType'];
 				if ( $local_jobType instanceof Job_TypeDBO) {
@@ -272,26 +364,68 @@ abstract class _Job extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Job::type_id,
+				Job::minute,
+				Job::hour,
+				Job::dayOfWeek,
+				Job::next
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Job::type_id => Model::TO_ONE_TYPE,
+			Job::endpoint_id => Model::TO_ONE_TYPE,
+			Job::enabled => Model::FLAG_TYPE,
+			Job::one_shot => Model::FLAG_TYPE,
+			Job::fail_count => Model::INT_TYPE,
+			Job::elapsed => Model::INT_TYPE,
+			Job::minute => Model::TEXT_TYPE,
+			Job::hour => Model::TEXT_TYPE,
+			Job::dayOfWeek => Model::TEXT_TYPE,
+			Job::parameter => Model::TEXT_TYPE,
+			Job::next => Model::DATE_TYPE,
+			Job::last_run => Model::DATE_TYPE,
+			Job::last_fail => Model::DATE_TYPE,
+			Job::created => Model::DATE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_type_id($object = null, $value)
 	{
-		// not mandatory field
+		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return null;
-		}
-
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Job::type_id,
-				"FILTER_VALIDATE_INT"
+				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_endpoint_id($object = null, $value)
@@ -301,14 +435,6 @@ abstract class _Job extends Model
 			return null;
 		}
 
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job::endpoint_id,
-				"FILTER_VALIDATE_INT"
-			);
-		}
 		return null;
 	}
 	function validate_enabled($object = null, $value)

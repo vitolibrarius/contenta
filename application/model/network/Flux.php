@@ -40,56 +40,50 @@ class Flux extends _Flux
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Flux::created => Model::DATE_TYPE,
-			Flux::name => Model::TEXT_TYPE,
-			Flux::flux_hash => Model::TEXT_TYPE,
-			Flux::flux_error => Model::TEXT_TYPE,
-			Flux::src_endpoint => Model::INT_TYPE,
-			Flux::src_guid => Model::TEXT_TYPE,
-			Flux::src_status => Model::TEXT_TYPE,
-			Flux::src_pub_date => Model::DATE_TYPE,
-			Flux::dest_endpoint => Model::INT_TYPE,
-			Flux::dest_guid => Model::TEXT_TYPE,
-			Flux::dest_status => Model::TEXT_TYPE,
-			Flux::dest_submission => Model::DATE_TYPE
+		$attrFor = array(
+			Flux::created,
+			Flux::name,
+			Flux::flux_hash,
+			Flux::flux_error,
+			Flux::src_endpoint,
+			Flux::src_guid,
+			Flux::src_url,
+			Flux::src_status,
+			Flux::src_pub_date,
+			Flux::dest_endpoint,
+			Flux::dest_guid,
+			Flux::dest_status,
+			Flux::dest_submission
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Flux::name
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
@@ -141,6 +135,13 @@ class Flux extends _Flux
 		return parent::validate_src_guid($object, $value);
 	}
 */
+/*
+	function validate_src_url($object = null, $value)
+	{
+		return parent::validate_src_url($object, $value);
+	}
+*/
+
 /*
 	function validate_src_status($object = null, $value)
 	{

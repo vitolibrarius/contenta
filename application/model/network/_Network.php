@@ -105,6 +105,34 @@ abstract class _Network extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['ip_address']) == false ) {
+				$default_ip_address = $this->attributeDefaultValue( null, null, Network::ip_address);
+				if ( is_null( $default_ip_address ) == false ) {
+					$values['ip_address'] = $default_ip_address;
+				}
+			}
+			if ( isset($values['ip_hash']) == false ) {
+				$default_ip_hash = $this->attributeDefaultValue( null, null, Network::ip_hash);
+				if ( is_null( $default_ip_hash ) == false ) {
+					$values['ip_hash'] = $default_ip_hash;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Network::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+			if ( isset($values['disable']) == false ) {
+				$default_disable = $this->attributeDefaultValue( null, null, Network::disable);
+				if ( is_null( $default_disable ) == false ) {
+					$values['disable'] = $default_disable;
+				}
+			}
+
+			// default conversion for relationships
 		}
 		return parent::createObject($values);
 	}
@@ -132,11 +160,45 @@ abstract class _Network extends Model
 
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Network::ip_address
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Network::ip_address => Model::TEXT_TYPE,
+			Network::ip_hash => Model::TEXT_TYPE,
+			Network::created => Model::DATE_TYPE,
+			Network::disable => Model::FLAG_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+				case Network::disable:
+					return Model::TERTIARY_FALSE;
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_ip_address($object = null, $value)
 	{
 		// check for mandatory field

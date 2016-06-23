@@ -36,55 +36,47 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Pull_List_Expansion::pattern => Model::TEXT_TYPE,
-			Pull_List_Expansion::replace => Model::TEXT_TYPE,
-			Pull_List_Expansion::sequence => Model::INT_TYPE,
-			Pull_List_Expansion::created => Model::DATE_TYPE,
-			Pull_List_Expansion::endpoint_type_id => Model::INT_TYPE
+		$attrFor = array(
+			Pull_List_Expansion::pattern,
+			Pull_List_Expansion::replace,
+			Pull_List_Expansion::sequence,
+			Pull_List_Expansion::created,
+			Pull_List_Expansion::endpoint_type_id
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Pull_List_Expansion::pattern
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-				case Pull_List_Expansion::sequence:
-					return 0;
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
+
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr == Pull_List_Expansion::endpoint_type_id ) {
+		if ( Pull_List_Expansion::endpoint_type_id == $attr ) {
 			$model = Model::Named('Endpoint_Type');
 			return $model->allObjects();
 		}
@@ -92,30 +84,40 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 	}
 
 	/** Validation */
+/*
 	function validate_pattern($object = null, $value)
 	{
 		return parent::validate_pattern($object, $value);
 	}
+*/
 
+/*
 	function validate_replace($object = null, $value)
 	{
 		return parent::validate_replace($object, $value);
 	}
+*/
 
+/*
 	function validate_sequence($object = null, $value)
 	{
 		return parent::validate_sequence($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
+/*
 	function validate_endpoint_type_id($object = null, $value)
 	{
 		return parent::validate_endpoint_type_id($object, $value);
 	}
+*/
 
 }
 

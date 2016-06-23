@@ -1,0 +1,86 @@
+{
+    "attributes": {
+        "id": { "column": "id", "type": "INTEGER" },
+        "publisher_id": { "column": "publisher_id", "type": "INTEGER", "nullable": false },
+        "created": { "column": "created", "type": "DATE" },
+
+        "name": { "column": "name", "length": 256, "type": "TEXT", "collate": "NOCASE", "nullable": false },
+        "realname": { "column": "realname", "length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": true },
+        "desc": { "column": "desc", "length": 4096, "type": "TEXT",	"nullable": true },
+        "popularity": { "column": "popularity", "type": "INTEGER", "default": 0 },
+        "gender": { "column": "gender", "length": 25, "type": "TEXT", "default": "'unknown'" },
+
+        "xurl": { "column": "xurl", "length": 1024, "type": "TEXT" },
+        "xsource": { "column": "xsource", "length": 256, "type": "TEXT" },
+        "xid": { "column": "xid", "length": 256, "type": "TEXT" },
+        "xupdated": { "column": "xupdated", "type": "DATE" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "character",
+    "package": "media",
+    "model": "Character",
+    "dbo": "CharacterDBO",
+	"sort" : [
+		{ "asc": "name" },
+		{ "desc": "popularity" }
+	],
+    "indexes" : [
+    	{ "columns": ["name"] },
+    	{ "columns": ["realname"] },
+    	{ "columns": ["xid", "xsource"], "unique": true }
+    ],
+    "relationships" :{
+    	"aliases" : {
+    		"destination" : "Character_Alias",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "character_alias",
+    		"joins" : [
+    			{ "destinationAttribute": "character_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"publisher" : {
+    		"destination" : "Publisher",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "publisher",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "publisher_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	},
+    	"publication_characters" : {
+    		"destination" : "Publication_Characters",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "publication_characters",
+    		"joins" : [
+    			{ "destinationAttribute": "character_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	}
+    },
+	"fetches" : {
+		"objectForExternal": {
+			"arguments": [ "xid", "xsrc" ],
+			"maxCount" : 1,
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Equals",
+					"keyAttribute": "xid",
+					"argAttribute": "xid"
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "xsource",
+					"argAttribute": "xsrc"
+				}
+			]
+		}
+	}
+}

@@ -15,16 +15,16 @@ use \model\network\FluxDBO as FluxDBO;
 use \model\network\RssDBO as RssDBO;
 
 use \model\media\Publisher as Publisher;
-use model\Character as Character;
-use model\Series as Series;
-use model\Publication as Publication;
-use model\PublicationDBO as PublicationDBO;
+use \model\media\Character as Character;
+use \model\media\Series as Series;
+use \model\media\Publication as Publication;
+use \model\media\PublicationDBO as PublicationDBO;
 use \model\network\Endpoint as Endpoint;
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\EndpointDBO as EndpointDBO;
-use model\Story_Arc as Story_Arc;
-use model\Story_Arc_Character as Story_Arc_Character;
-use model\Story_Arc_Series as Story_Arc_Series;
+use \model\media\Story_Arc as Story_Arc;
+use \model\media\Story_Arc_Character as Story_Arc_Character;
+use \model\media\Story_Arc_Series as Story_Arc_Series;
 
 use connectors\NewznabConnector as NewznabConnector;
 use processor\NewznabSearchProcessor as NewznabSearchProcessor;

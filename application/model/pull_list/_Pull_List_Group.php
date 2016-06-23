@@ -109,6 +109,28 @@ abstract class _Pull_List_Group extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Pull_List_Group::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['data']) == false ) {
+				$default_data = $this->attributeDefaultValue( null, null, Pull_List_Group::data);
+				if ( is_null( $default_data ) == false ) {
+					$values['data'] = $default_data;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Pull_List_Group::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+
+			// default conversion for relationships
 		}
 		return parent::createObject($values);
 	}
@@ -136,11 +158,43 @@ abstract class _Pull_List_Group extends Model
 
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Pull_List_Group::name,
+				Pull_List_Group::data
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Pull_List_Group::name => Model::TEXT_TYPE,
+			Pull_List_Group::data => Model::TEXT_TYPE,
+			Pull_List_Group::created => Model::DATE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_name($object = null, $value)
 	{
 		// check for mandatory field

@@ -92,6 +92,22 @@ abstract class _Log_Level extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['code']) == false ) {
+				$default_code = $this->attributeDefaultValue( null, null, Log_Level::code);
+				if ( is_null( $default_code ) == false ) {
+					$values['code'] = $default_code;
+				}
+			}
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Log_Level::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+
+			// default conversion for relationships
 		}
 		return parent::createObject($values);
 	}
@@ -118,11 +134,41 @@ abstract class _Log_Level extends Model
 
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Log_Level::code
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Log_Level::code => Model::TEXT_TYPE,
+			Log_Level::name => Model::TEXT_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_code($object = null, $value)
 	{
 		// check for mandatory field

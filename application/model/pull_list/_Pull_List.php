@@ -102,6 +102,14 @@ abstract class _Pull_List extends Model
 		return $this->allObjectsForFK(Pull_List::endpoint_id, $obj, $this->sortOrder(), 50);
 	}
 
+	public function countForEndpoint($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Pull_List::endpoint_id, $obj );
+		}
+		return false;
+	}
+
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
@@ -125,6 +133,34 @@ abstract class _Pull_List extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Pull_List::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['etag']) == false ) {
+				$default_etag = $this->attributeDefaultValue( null, null, Pull_List::etag);
+				if ( is_null( $default_etag ) == false ) {
+					$values['etag'] = $default_etag;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Pull_List::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+			if ( isset($values['published']) == false ) {
+				$default_published = $this->attributeDefaultValue( null, null, Pull_List::published);
+				if ( is_null( $default_published ) == false ) {
+					$values['published'] = $default_published;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['endpoint']) ) {
 				$local_endpoint = $values['endpoint'];
 				if ( $local_endpoint instanceof EndpointDBO) {
@@ -191,11 +227,44 @@ abstract class _Pull_List extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Pull_List::name
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Pull_List::name => Model::TEXT_TYPE,
+			Pull_List::etag => Model::TEXT_TYPE,
+			Pull_List::created => Model::DATE_TYPE,
+			Pull_List::published => Model::DATE_TYPE,
+			Pull_List::endpoint_id => Model::TO_ONE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_name($object = null, $value)
 	{
 		// check for mandatory field
@@ -255,19 +324,15 @@ abstract class _Pull_List extends Model
 	}
 	function validate_endpoint_id($object = null, $value)
 	{
-		// not mandatory field
+		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return null;
-		}
-
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Pull_List::endpoint_id,
-				"FILTER_VALIDATE_INT"
+				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 }

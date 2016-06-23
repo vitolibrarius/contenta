@@ -56,24 +56,14 @@ class Network extends _Network
 		return parent::updateObject($object, $values);
 	}
 
-
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Network::ip_address => Model::TEXT_TYPE,
-			Network::ip_hash => Model::TEXT_TYPE,
-			Network::created => Model::DATE_TYPE,
-			Network::disable => Model::FLAG_TYPE
+		$attrFor = array(
+			Network::ip_address,
+			Network::ip_hash,
+			Network::created,
+			Network::disable
 		);
-	}
-
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Network::ip_address
-			);
-		}
-		return parent::attributesMandatory($object);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
 	public function attributeIsEditable($object = null, $type = null, $attr)
@@ -89,21 +79,19 @@ class Network extends _Network
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-				case Network::disable:
-					return Model::TERTIARY_FALSE;
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
@@ -130,17 +118,19 @@ class Network extends _Network
 		}
 		return parent::validate_ip_hash($object, $value);
 	}
-
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
+/*
 	function validate_disable($object = null, $value)
 	{
 		return parent::validate_disable($object, $value);
 	}
-
+*/
 }
 
 ?>

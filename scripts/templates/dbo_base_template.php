@@ -99,7 +99,7 @@ foreach( $this->attributes as $name => $detailArray ) {
 
 	/** Attributes */
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
-<?php if ( $this->isPrimaryKey($name) === false && "created" != $name ) : ?>
+<?php if ( "created" != $name && $this->isPrimaryKey($name) == false && $this->isRelationshipKey($name) == false) : ?>
 	public function <?php echo $name; ?>()
 	{
 		return parent::changedValue( <?php echo $this->modelClassName() . "::" . $name; ?>, $this-><?php echo $name; ?> );

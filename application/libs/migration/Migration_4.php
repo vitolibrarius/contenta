@@ -12,8 +12,8 @@ use \SQL as SQL;
 use \model\user\Users as Users;
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\Endpoint as Endpoint;
-use model\Network as Network;
-use model\User_Network as User_Network;
+use \model\media\Network as Network;
+use \model\media\User_Network as User_Network;
 
 class Migration_4 extends Migrator
 {

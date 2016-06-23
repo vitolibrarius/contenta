@@ -12,22 +12,22 @@ use db\Qualifier as Qualifier;
 
 use utilities\CronEvaluator as CronEvaluator;
 
-use model\Series as Series;
+use \model\media\Series as Series;
 use \model\media\Publisher as Publisher;
-use model\Series_Alias as Series_Alias;
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
-use model\Series_Character as Series_Character;
+use \model\media\Series_Alias as Series_Alias;
+use \model\media\Character as Character;
+use \model\media\Character_Alias as Character_Alias;
+use \model\media\Series_Character as Series_Character;
 use \model\user\Users as Users;
-use model\User_Series as User_Series;
-use model\Story_Arc as Story_Arc;
-use model\Story_Arc_Character as Story_Arc_Character;
-use model\Story_Arc_Series as Story_Arc_Series;
-use model\Story_Arc_Publication as Story_Arc_Publication;
-use model\Publication as Publication;
-use model\Publication_Character as Publication_Character;
+use \model\media\User_Series as User_Series;
+use \model\media\Story_Arc as Story_Arc;
+use \model\media\Story_Arc_Character as Story_Arc_Character;
+use \model\media\Story_Arc_Series as Story_Arc_Series;
+use \model\media\Story_Arc_Publication as Story_Arc_Publication;
+use \model\media\Publication as Publication;
+use \model\media\Publication_Character as Publication_Character;
 use \model\media\Media_Type as Media_Type;
-use model\Media as Media;
+use \model\media\Media as Media;
 use \model\network\Endpoint as Endpoint;
 
 use \model\jobs\Job_Type as Job_Type;

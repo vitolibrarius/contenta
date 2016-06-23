@@ -36,47 +36,39 @@ class Patch extends _Patch
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Patch::name => Model::TEXT_TYPE,
-			Patch::created => Model::DATE_TYPE,
-			Patch::version_id => Model::INT_TYPE
+		$attrFor = array(
+			Patch::name,
+			Patch::version_id
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Patch::name
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
@@ -88,20 +80,26 @@ class Patch extends _Patch
 	}
 
 	/** Validation */
+/*
 	function validate_name($object = null, $value)
 	{
 		return parent::validate_name($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
+/*
 	function validate_version_id($object = null, $value)
 	{
 		return parent::validate_version_id($object, $value);
 	}
+*/
 
 }
 

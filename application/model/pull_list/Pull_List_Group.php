@@ -45,48 +45,40 @@ class Pull_List_Group extends _Pull_List_Group
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Pull_List_Group::name => Model::TEXT_TYPE,
-			Pull_List_Group::data => Model::TEXT_TYPE,
-			Pull_List_Group::created => Model::DATE_TYPE
+		$attrFor = array(
+			Pull_List_Group::name,
+			Pull_List_Group::data,
+			Pull_List_Group::created
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Pull_List_Group::name,
-				Pull_List_Group::data
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
@@ -98,20 +90,26 @@ class Pull_List_Group extends _Pull_List_Group
 	}
 
 	/** Validation */
+/*
 	function validate_name($object = null, $value)
 	{
 		return parent::validate_name($object, $value);
 	}
+*/
 
+/*
 	function validate_data($object = null, $value)
 	{
 		return parent::validate_data($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
 }
 

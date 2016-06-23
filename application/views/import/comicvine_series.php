@@ -40,13 +40,13 @@ $realObj = (isset($this->object)) ? $this->object : null;
 				<legend><?php echo Localized::ModelLabel($this->model->tableName(),"SearchLegend"); ?></legend>
 
 				<?php
-					$attr = model\Series::name;
+					$attr = \model\media\Series::name;
 					$attrName = $this->model->attributeName($realObj, null, $attr);
 					$this->renderFormField( \Model::TEXT_TYPE, $realObj, null, $this->model, $attr, null, true );
 				?>
 
 				<?php
-					$attr = model\Series::start_year;
+					$attr = \model\media\Series::start_year;
 					$attrName = $this->model->attributeName($realObj, null, $attr);
 					$this->renderFormField( \Model::INT_TYPE, $realObj, null, $this->model, $attr, null, true );
 				?>

@@ -153,6 +153,10 @@ class Template
 	}
 
     public function modelTypeForAttribute($name = '') {
+    	if ( $this->isRelationshipKey($name) ) {
+    		return "Model::TO_ONE_TYPE";
+    	}
+
     	$details = $this->detailsForAttribute($name);
     	$type = null;
     	if ( is_array($details) ) {

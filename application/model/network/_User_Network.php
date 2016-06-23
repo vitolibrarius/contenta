@@ -72,9 +72,25 @@ abstract class _User_Network extends Model
 	{
 		return $this->allObjectsForFK(User_Network::user_id, $obj, $this->sortOrder(), 50);
 	}
+
+	public function countForUser($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( User_Network::user_id, $obj );
+		}
+		return false;
+	}
 	public function allForNetwork($obj)
 	{
 		return $this->allObjectsForFK(User_Network::network_id, $obj, $this->sortOrder(), 50);
+	}
+
+	public function countForNetwork($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( User_Network::network_id, $obj );
+		}
+		return false;
 	}
 
 	public function joinAttributes( Model $joinModel = null )
@@ -100,6 +116,10 @@ abstract class _User_Network extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+
+			// default conversion for relationships
 			if ( isset($values['user']) ) {
 				$local_user = $values['user'];
 				if ( $local_user instanceof UsersDBO) {
@@ -198,43 +218,82 @@ abstract class _User_Network extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
-
-
-	/** Validation */
-	function validate_user_id($object = null, $value)
+	public function objectForUserAndNetwork( $user, $network )
 	{
-		// not mandatory field
-		if (isset($value) == false || empty($value)  ) {
-			return null;
+		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
+		$qualifiers = array();
+		$qualifiers[] = Qualifier::FK( 'user_id', $user);
+		$qualifiers[] = Qualifier::FK( 'network_id', $network);
+
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
 		}
 
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+		$result = $select->fetchAll();
+		if ( is_array($result) ) {
+			$result_size = count($result);
+			if ( $result_size == 1 ) {
+				return $result[0];
+			}
+			else if ($result_size > 1 ) {
+				throw new \Exception( "objectForUserAndNetwork expected 1 result, but fetched " . count($result) );
+			}
+		}
+
+		return false;
+	}
+
+
+	/**
+	 * Attribute editing
+	 */
+
+	public function attributesMap() {
+		return array(
+			User_Network::user_id => Model::TO_ONE_TYPE,
+			User_Network::network_id => Model::TO_ONE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
+	function validate_user_id($object = null, $value)
+	{
+		// check for mandatory field
+		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				User_Network::user_id,
-				"FILTER_VALIDATE_INT"
+				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_network_id($object = null, $value)
 	{
-		// not mandatory field
+		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return null;
-		}
-
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				User_Network::network_id,
-				"FILTER_VALIDATE_INT"
+				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 }

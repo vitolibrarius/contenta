@@ -2,40 +2,40 @@
     {
         "teststring": "For No\u0167M\u00ea - \"Marv\u00eal Pr\u00eavi\u00eaw\u015f 003 (\u014cc\u0167ob\u00ear 2015 for D\u00eac\u00eamb\u00ear 2015) (w\u00eabrip by L\u01d5\u015fiph\u01d5r-DCP).pdf\" (1\/103)",
         "tests": {
-            "25 Default:25:false:false": "For NotMe -..siphUr-DCP).",
-            "25 Lowercase:25:true:false": "for notme -..siphur-dcp).",
-            "25 Anal:25:false:true": "For NotMe -..UsiphUr-DCP.",
-            "25 LowercaseAnal:25:true:true": "for notme -..usiphur-dcp.",
-            "1000 Default:1000:false:false": "For NotMe - \"Marvel Previews 003 (October 2015 for December 2015) (webrip by LUsiphUr-DCP).",
-            "1000 Lowercase:1000:true:false": "for notme - \"marvel previews 003 (october 2015 for december 2015) (webrip by lusiphur-dcp).",
-            "1000 Anal:1000:false:true": "For NotMe - Marvel Previews 003 October 2015 for December 2015 webrip by LUsiphUr-DCP.",
-            "1000 LowercaseAnal:1000:true:true": "for notme - marvel previews 003 october 2015 for december 2015 webrip by lusiphur-dcp."
+            "25 Default:25:false:false": "For NotMe -..df\" (1/103)",
+            "25 Lowercase:25:true:false": "for notme -..df\" (1/103)",
+            "25 Anal:25:false:true": "For NotMe -..CP.pdf 1103",
+            "25 LowercaseAnal:25:true:true": "for notme -..cp.pdf 1103",
+            "1000 Default:1000:false:false": "For NotMe - \"Marvel Previews 003 (October 2015 for December 2015) (webrip by LUsiphUr-DCP).pdf\" (1/103)",
+            "1000 Lowercase:1000:true:false": "for notme - \"marvel previews 003 (october 2015 for december 2015) (webrip by lusiphur-dcp).pdf\" (1/103)",
+            "1000 Anal:1000:false:true": "For NotMe - Marvel Previews 003 October 2015 for December 2015 webrip by LUsiphUr-DCP.pdf 1103",
+            "1000 LowercaseAnal:1000:true:true": "for notme - marvel previews 003 october 2015 for december 2015 webrip by lusiphur-dcp.pdf 1103"
         }
     },
     {
         "teststring": "Jo\u01d5rn\u00eay \u0167o S\u0167ar War\u015f - Th\u00ea Forc\u00ea \u00c5wak\u00ean\u015f - Sha\u0167\u0167\u00ear\u00ead Empir\u00ea 04 (of 04) (2015) (Digi\u0167al) (Kil\u00eako-Empir\u00ea)",
         "tests": {
-            "25 Default:25:false:false": "JoUrney to ..eko-Empire).",
-            "25 Lowercase:25:true:false": "journey to ..eko-empire).",
-            "25 Anal:25:false:true": "JoUrney to ..leko-Empire.",
-            "25 LowercaseAnal:25:true:true": "journey to ..leko-empire.",
-            "1000 Default:1000:false:false": "JoUrney to Star Wars - The Force Awakens - Shattered Empire 04 (of 04) (2015) (Digital) (Kileko-Empire).",
-            "1000 Lowercase:1000:true:false": "journey to star wars - the force awakens - shattered empire 04 (of 04) (2015) (digital) (kileko-empire).",
-            "1000 Anal:1000:false:true": "JoUrney to Star Wars - The Force Awakens - Shattered Empire 04 of 04 2015 Digital Kileko-Empire.",
-            "1000 LowercaseAnal:1000:true:true": "journey to star wars - the force awakens - shattered empire 04 of 04 2015 digital kileko-empire."
+            "25 Default:25:false:false": "JoUrney to ..eko-Empire)",
+            "25 Lowercase:25:true:false": "journey to ..eko-empire)",
+            "25 Anal:25:false:true": "JoUrney to ..leko-Empire",
+            "25 LowercaseAnal:25:true:true": "journey to ..leko-empire",
+            "1000 Default:1000:false:false": "JoUrney to Star Wars - The Force Awakens - Shattered Empire 04 (of 04) (2015) (Digital) (Kileko-Empire)",
+            "1000 Lowercase:1000:true:false": "journey to star wars - the force awakens - shattered empire 04 (of 04) (2015) (digital) (kileko-empire)",
+            "1000 Anal:1000:false:true": "JoUrney to Star Wars - The Force Awakens - Shattered Empire 04 of 04 2015 Digital Kileko-Empire",
+            "1000 LowercaseAnal:1000:true:true": "journey to star wars - the force awakens - shattered empire 04 of 04 2015 digital kileko-empire"
         }
     },
     {
-        "teststring": "Cap\u0167ain \u00c5m\u00earica Comic\u015f (Tim\u00ealy) [75\/80]  - \"Cap\u0167ain \u00c5m\u00earica Comic\u015f 074  (2 \u015f\u0167ori\u00ea\u015f only).cbr\"",
+        "teststring": "Cap\u0167ain \u00c5m\u00earica Comic\u015f 074  (2 \u015f\u0167ori\u00ea\u015f only).cbr",
         "tests": {
-            "25 Default:25:false:false": "Captain A..ies only).cbr\"",
-            "25 Lowercase:25:true:false": "captain a..ies only).cbr\"",
-            "25 Anal:25:false:true": "Captain A..ries only.cbr\"",
-            "25 LowercaseAnal:25:true:true": "captain a..ries only.cbr\"",
-            "1000 Default:1000:false:false": "Captain America Comics (Timely) [75\/80]  - \"Captain America Comics 074  (2 stories only).cbr\"",
-            "1000 Lowercase:1000:true:false": "captain america comics (timely) [75\/80]  - \"captain america comics 074  (2 stories only).cbr\"",
-            "1000 Anal:1000:false:true": "Captain America Comics Timely 7580  - Captain America Comics 074  2 stories only.cbr\"",
-            "1000 LowercaseAnal:1000:true:true": "captain america comics timely 7580  - captain america comics 074  2 stories only.cbr\""
+            "25 Default:25:false:false": "Captain A..ies only).cbr",
+            "25 Lowercase:25:true:false": "captain a..ies only).cbr",
+            "25 Anal:25:false:true": "Captain A..ries only.cbr",
+            "25 LowercaseAnal:25:true:true": "captain a..ries only.cbr",
+            "1000 Default:1000:false:false": "Captain America Comics 074  (2 stories only).cbr",
+            "1000 Lowercase:1000:true:false": "captain america comics 074  (2 stories only).cbr",
+            "1000 Anal:1000:false:true": "Captain America Comics 074  2 stories only.cbr",
+            "1000 LowercaseAnal:1000:true:true": "captain america comics 074  2 stories only.cbr"
         }
     },
     {

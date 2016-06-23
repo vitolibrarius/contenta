@@ -95,7 +95,9 @@ function loadData( Model $model = null, array $data = array(), array $columns = 
 	foreach($data as $record) {
 		list($obj, $errorList) = $model->createObject($record);
 		( is_a($obj, DataObject::NameForModel($model)) ) ||
-			die('Insert should be "' . DataObject::NameForModel($model) . '", wrong class from insert ' . var_export( $record, true ) . PHP_EOL
+			die('Insert should be "' . DataObject::NameForModel($model) . '", wrong class from insert '
+				. var_export( $record, true ) . PHP_EOL
+				. var_export( $errorList, true ) . PHP_EOL
 				. var_export( $obj, true ) . PHP_EOL);
 		$loaded[] = $obj;
 	}

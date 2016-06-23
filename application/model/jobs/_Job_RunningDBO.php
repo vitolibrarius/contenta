@@ -51,26 +51,6 @@ abstract class _Job_RunningDBO extends DataObject
 
 
 	/** Attributes */
-	public function job_id()
-	{
-		return parent::changedValue( Job_Running::job_id, $this->job_id );
-	}
-
-	public function setJob_id( $value = null)
-	{
-		parent::storeChange( Job_Running::job_id, $value );
-	}
-
-	public function type_id()
-	{
-		return parent::changedValue( Job_Running::type_id, $this->type_id );
-	}
-
-	public function setType_id( $value = null)
-	{
-		parent::storeChange( Job_Running::type_id, $value );
-	}
-
 	public function processor()
 	{
 		return parent::changedValue( Job_Running::processor, $this->processor );

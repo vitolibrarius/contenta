@@ -6,6 +6,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
+use \db\Qualifier as Qualifier;
 
 use \model\jobs\JobDBO as JobDBO;
 use \utilities\CronEvaluator as CronEvaluator;
@@ -62,70 +63,20 @@ class Job extends _Job
 		return parent::updateObject($object, $values);
 	}
 
-	public function updateFailure( $job = null, $last = null )
-	{
-		if ( $job instanceof JobDBO) {
-			$updates = array( Job::last_fail => $last );
-			$count = 0;
-			if ( null != $last ) {
-				$count = 1;
-				if (isset($job->fail_count) && is_int($job->fail_count)) {
-				 	$count += $job->fail_count;
-				 }
-			}
-			$updates[Job::fail_count] = $count;
-
-			if ( $count > 5 ) {
-				$updates[Job::enabled] = Model::TERTIARY_FALSE;
-			}
-
-			if ( $this->updateObject( $job, $updates) ) {
-				return $this->refreshObject($job);
-			}
-		}
-		return false;
-	}
-
-	public function jobsToRun()
-	{
-		$needsRun = Qualifier::OrQualifier(
-			Qualifier::IsNull( Job::next ),
-			Qualifier::LessThan( Job::next, time() )
-		);
-		$enabled = Qualifier::Equals( Job::enabled, Model::TERTIARY_TRUE );
-
-		return $this->allObjectsForQualifier(Qualifier::AndQualifier( $needsRun, $enabled ));
-	}
-
 	public function attributesFor($object = null, $type = null) {
-		$attr = array();
-
-		if ( is_null($type) || $type->isRequires_endpoint() ) {
-			$attr[Job::endpoint_id] = Model::TO_ONE_TYPE;
-		}
-
-		$attr[Job::parameter] = Model::TEXT_TYPE;
-		$attr[Job::dayOfWeek] = Model::TEXT_TYPE;
-		$attr[Job::minute] = Model::TEXT_TYPE;
-		$attr[Job::hour] = Model::TEXT_TYPE;
-		$attr[Job::enabled] = Model::FLAG_TYPE;
-		$attr[Job::one_shot] = Model::FLAG_TYPE;
-
-		return $attr;
-	}
-
-	public function attributesMandatory($object = null)
-	{
-		$attr = array(
-			Job::dayOfWeek,
-			Job::hour,
+		$attrFor = array(
+			Job::type_id,
+			Job::enabled,
+			Job::one_shot,
 			Job::minute,
-			Job::next
+			Job::hour,
+			Job::dayOfWeek,
+			Job::parameter
 		);
-		if ( $object != null && $object->jobType() != null && $object->jobType()->isRequires_endpoint() ) {
-			$attr[] = Job::endpoint_id;
+		if ( is_null($type) || $type->isRequires_endpoint() ) {
+			$attrFor[] = Job::endpoint_id;
 		}
-		return $attr;
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
 	public function attributeIsEditable($object = null, $type = null, $attr)
@@ -143,23 +94,19 @@ class Job extends _Job
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-				case Job::one_shot:
-					return Model::TERTIARY_FALSE;
-				case Job::enabled:
-					return Model::TERTIARY_TRUE;
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
@@ -175,35 +122,47 @@ class Job extends _Job
 	}
 
 	/** Validation */
+/*
 	function validate_type_id($object = null, $value)
 	{
 		return parent::validate_type_id($object, $value);
 	}
+*/
 
+/*
 	function validate_endpoint_id($object = null, $value)
 	{
 		return parent::validate_endpoint_id($object, $value);
 	}
+*/
 
+/*
 	function validate_enabled($object = null, $value)
 	{
 		return parent::validate_enabled($object, $value);
 	}
+*/
 
+/*
 	function validate_one_shot($object = null, $value)
 	{
 		return parent::validate_one_shot($object, $value);
 	}
+*/
 
+/*
 	function validate_fail_count($object = null, $value)
 	{
 		return parent::validate_fail_count($object, $value);
 	}
+*/
 
+/*
 	function validate_elapsed($object = null, $value)
 	{
 		return parent::validate_elapsed($object, $value);
 	}
+*/
 
 	function validate_minute($object = null, $value)
 	{
@@ -247,31 +206,75 @@ class Job extends _Job
 		return parent::validate_dayOfWeek($object, $value);
 	}
 
+/*
 	function validate_parameter($object = null, $value)
 	{
 		return parent::validate_parameter($object, $value);
 	}
+*/
 
+/*
 	function validate_next($object = null, $value)
 	{
 		return parent::validate_next($object, $value);
 	}
+*/
 
+/*
 	function validate_last_run($object = null, $value)
 	{
 		return parent::validate_last_run($object, $value);
 	}
+*/
 
+/*
 	function validate_last_fail($object = null, $value)
 	{
 		return parent::validate_last_fail($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
+	public function updateFailure( $job = null, $last = null )
+	{
+		if ( $job instanceof JobDBO) {
+			$updates = array( Job::last_fail => $last );
+			$count = 0;
+			if ( null != $last ) {
+				$count = 1;
+				if (isset($job->fail_count) && is_int($job->fail_count)) {
+				 	$count += $job->fail_count;
+				 }
+			}
+			$updates[Job::fail_count] = $count;
+
+			if ( $count > 5 ) {
+				$updates[Job::enabled] = Model::TERTIARY_FALSE;
+			}
+
+			if ( $this->updateObject( $job, $updates) ) {
+				return $this->refreshObject($job);
+			}
+		}
+		return false;
+	}
+
+	public function jobsToRun()
+	{
+		$needsRun = Qualifier::OrQualifier(
+			Qualifier::IsNull( Job::next ),
+			Qualifier::LessThan( Job::next, time() )
+		);
+		$enabled = Qualifier::Equals( Job::enabled, Model::TERTIARY_TRUE );
+
+		return $this->allObjectsForQualifier(Qualifier::AndQualifier( $needsRun, $enabled ));
+	}
 }
 
 ?>

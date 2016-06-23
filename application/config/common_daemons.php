@@ -1,3 +1,4 @@
+
 <?php
 
 
@@ -32,7 +33,7 @@ function Daemonize( $processorName, $user_api = null, $guid = null, $job_id = nu
 	return shell_exec( $shell . $daemonCMD );
 }
 
-function DaemonizeJob( \model\jobs\JobDBO $job = null, model\user\UsersDBO $user = null, array $other = array() )
+function DaemonizeJob( \model\jobs\JobDBO $job = null, \model\user\UsersDBO $user = null, array $other = array() )
 {
 	$api_hash = '';
 	if ( is_null($user) ) {

@@ -99,16 +99,6 @@ abstract class _FluxDBO extends DataObject
 		parent::storeChange( Flux::flux_error, $value );
 	}
 
-	public function src_endpoint()
-	{
-		return parent::changedValue( Flux::src_endpoint, $this->src_endpoint );
-	}
-
-	public function setSrc_endpoint( $value = null)
-	{
-		parent::storeChange( Flux::src_endpoint, $value );
-	}
-
 	public function src_guid()
 	{
 		return parent::changedValue( Flux::src_guid, $this->src_guid );
@@ -147,16 +137,6 @@ abstract class _FluxDBO extends DataObject
 	public function setSrc_pub_date( $value = null)
 	{
 		parent::storeChange( Flux::src_pub_date, $value );
-	}
-
-	public function dest_endpoint()
-	{
-		return parent::changedValue( Flux::dest_endpoint, $this->dest_endpoint );
-	}
-
-	public function setDest_endpoint( $value = null)
-	{
-		parent::storeChange( Flux::dest_endpoint, $value );
 	}
 
 	public function dest_guid()

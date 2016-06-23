@@ -106,26 +106,6 @@ abstract class _Pull_List_ItemDBO extends DataObject
 		parent::storeChange( Pull_List_Item::year, $value );
 	}
 
-	public function pull_list_id()
-	{
-		return parent::changedValue( Pull_List_Item::pull_list_id, $this->pull_list_id );
-	}
-
-	public function setPull_list_id( $value = null)
-	{
-		parent::storeChange( Pull_List_Item::pull_list_id, $value );
-	}
-
-	public function pull_list_group_id()
-	{
-		return parent::changedValue( Pull_List_Item::pull_list_group_id, $this->pull_list_group_id );
-	}
-
-	public function setPull_list_group_id( $value = null)
-	{
-		parent::storeChange( Pull_List_Item::pull_list_group_id, $value );
-	}
-
 
 }
 

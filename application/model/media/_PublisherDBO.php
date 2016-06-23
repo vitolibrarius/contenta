@@ -9,12 +9,12 @@ use \Logger as Logger;
 use \model\media\Publisher as Publisher;
 
 /* import related objects */
-use \model\Series as Series;
-use \model\SeriesDBO as SeriesDBO;
-use \model\Character as Character;
-use \model\CharacterDBO as CharacterDBO;
-use \model\Story_Arc as Story_Arc;
-use \model\Story_ArcDBO as Story_ArcDBO;
+use \model\media\Series as Series;
+use \model\media\SeriesDBO as SeriesDBO;
+use \model\media\Character as Character;
+use \model\media\CharacterDBO as CharacterDBO;
+use \model\media\Story_Arc as Story_Arc;
+use \model\media\Story_ArcDBO as Story_ArcDBO;
 
 abstract class _PublisherDBO extends DataObject
 {

@@ -75,26 +75,6 @@ abstract class _JobDBO extends DataObject
 
 
 	/** Attributes */
-	public function type_id()
-	{
-		return parent::changedValue( Job::type_id, $this->type_id );
-	}
-
-	public function setType_id( $value = null)
-	{
-		parent::storeChange( Job::type_id, $value );
-	}
-
-	public function endpoint_id()
-	{
-		return parent::changedValue( Job::endpoint_id, $this->endpoint_id );
-	}
-
-	public function setEndpoint_id( $value = null)
-	{
-		parent::storeChange( Job::endpoint_id, $value );
-	}
-
 	public function enabled()
 	{
 		return parent::changedValue( Job::enabled, $this->enabled );

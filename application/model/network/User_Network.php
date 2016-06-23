@@ -48,61 +48,60 @@ class User_Network extends _User_Network
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			User_Network::user_id => Model::INT_TYPE,
-			User_Network::network_id => Model::INT_TYPE
+		$attrFor = array(
+			User_Network::user_id,
+			User_Network::network_id
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
 
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr == User_Network::user_id ) {
-			$model = Model::Named('Users');
-			return $model->allObjects();
-		}
-		if ( $attr == User_Network::network_id ) {
-			$model = Model::Named('Network');
-			return $model->allObjects();
-		}
 		return null;
 	}
 
 	/** Validation */
+/*
 	function validate_user_id($object = null, $value)
 	{
 		return parent::validate_user_id($object, $value);
 	}
+*/
 
+/*
 	function validate_network_id($object = null, $value)
 	{
 		return parent::validate_network_id($object, $value);
 	}
+*/
 
 }
 

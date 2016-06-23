@@ -9,14 +9,14 @@ use \Logger as Logger;
 use \Model as Model;
 use \SQL as SQL;
 
-use model\Series as Series;
+use \model\media\Series as Series;
 use \model\media\Publisher as Publisher;
-use model\Series_Alias as Series_Alias;
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
-use model\Series_Character as Series_Character;
+use \model\media\Series_Alias as Series_Alias;
+use \model\media\Character as Character;
+use \model\media\Character_Alias as Character_Alias;
+use \model\media\Series_Character as Series_Character;
 use \model\user\Users as Users;
-use model\User_Series as User_Series;
+use \model\media\User_Series as User_Series;
 
 class Migration_6 extends Migrator
 {

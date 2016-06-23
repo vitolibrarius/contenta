@@ -170,6 +170,14 @@ foreach( $objectAttributes as $name => $detailArray ) {
 	{
 		return $this->allObjectsForFK(<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>, $obj, $this->sortOrder(), 50);
 	}
+
+	public function countFor<?php echo ucwords($name); ?>($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( <?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>, $obj );
+		}
+		return false;
+	}
 <?php endif; // multiple joins ?>
 <?php endif; //  toOne ?>
 <?php endforeach; // looprelationships ?>
@@ -205,9 +213,23 @@ foreach( $objectAttributes as $name => $detailArray ) {
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
+<?php if ( $this->isPrimaryKey($name) === false && $this->isRelationshipKey($name) == false ) : ?>
+			if ( isset($values['<?php echo $name; ?>']) == false ) {
+				$default_<?php echo $name; ?> = $this->attributeDefaultValue( null, null, <?php echo $this->modelClassName() . "::" . $name; ?>);
+				if ( is_null( $default_<?php echo $name; ?> ) == false ) {
+					$values['<?php echo $name; ?>'] = $default_<?php echo $name; ?>;
+				}
+			}
+<?php endif;  // primary key ?>
+<?php endforeach; ?>
+
+			// default conversion for relationships
 <?php foreach( $this->relationships as $name => $detailArray ) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
-<?php $join = $joins[0]; if ( $this->isPrimaryKey($join["sourceAttribute"]) == false) : ?>
+<?php $join = $joins[0]; if ( $this->isPrimaryKey($join["sourceAttribute"]) == false ) : ?>
 			if ( isset($values['<?php echo $name; ?>']) ) {
 				$local_<?php echo $name; ?> = $values['<?php echo $name; ?>'];
 				if ( $local_<?php echo $name; ?> instanceof <?php echo $detailArray['destination'] ?>DBO) {
@@ -303,7 +325,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 <?php endforeach; // looprelationships ?>
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 <?php foreach( $this->namedFetches() as $name => $details ) : ?>
 	public function <?php echo $name; ?>( <?php echo (isset($details["arguments"]) ?
@@ -348,8 +370,52 @@ foreach( $objectAttributes as $name => $detailArray ) {
 
 <?php endforeach; // named fetches ?>
 
+	/**
+	 * Attribute editing
+	 */
+<?php if (is_array($mandatoryObjectAttributes) && count($mandatoryObjectAttributes) > 0  ) : ?>
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+<?php foreach( $mandatoryObjectAttributes as $name => $detailArray ) {
+		echo "\t\t\t\t" . $this->modelClassName() . "::" . $name . ($lastMandatoryKey === $name ? "" : ",") . PHP_EOL;
+}?>
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
+<?php endif; ?>
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
+<?php if ( $this->isPrimaryKey($name) === false ) : ?>
+			<?php echo $this->modelClassName() . "::" . $name . " => " . $this->modelTypeForAttribute($name) . ($lastAttributeKey === $name ? "" : ","); ?>
+
+<?php endif;  // primary key ?>
+<?php endforeach; ?>
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
+<?php if (isset($detailArray['default']) ) : ?>
+				case <?php echo $this->modelClassName() . "::" . $name; ?>:
+					return <?php echo $detailArray['default']; ?>;
+<?php endif; ?>
+<?php endforeach; ?>
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
 <?php
  	$type = $this->modelTypeForAttribute($name);

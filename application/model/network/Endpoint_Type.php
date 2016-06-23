@@ -12,6 +12,10 @@ use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 /* import related objects */
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
+use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
+use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
+use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
+use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
 class Endpoint_Type extends _Endpoint_Type
 {
@@ -42,56 +46,46 @@ class Endpoint_Type extends _Endpoint_Type
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Endpoint_Type::code => Model::TEXT_TYPE,
-			Endpoint_Type::name => Model::TEXT_TYPE,
-			Endpoint_Type::comments => Model::TEXT_TYPE,
-			Endpoint_Type::data_type => Model::TEXT_TYPE,
-			Endpoint_Type::site_url => Model::TEXT_TYPE,
-			Endpoint_Type::api_url => Model::TEXT_TYPE,
-			Endpoint_Type::favicon_url => Model::TEXT_TYPE,
-			Endpoint_Type::throttle_hits => Model::INT_TYPE,
-			Endpoint_Type::throttle_time => Model::INT_TYPE
+		$attrFor = array(
+			Endpoint_Type::code,
+			Endpoint_Type::name,
+			Endpoint_Type::comments,
+			Endpoint_Type::data_type,
+			Endpoint_Type::site_url,
+			Endpoint_Type::api_url,
+			Endpoint_Type::favicon_url,
+			Endpoint_Type::throttle_hits,
+			Endpoint_Type::throttle_time
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Endpoint_Type::code,
-				Endpoint_Type::name,
-				Endpoint_Type::site_url,
-				Endpoint_Type::api_url
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{

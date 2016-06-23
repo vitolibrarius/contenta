@@ -12,8 +12,8 @@ use \model\user\UsersDBO as UsersDBO;
 /* import related objects */
 use \model\network\User_Network as User_Network;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
-use \model\User_Series as User_Series;
-use \model\User_SeriesDBO as User_SeriesDBO;
+use \model\media\User_Series as User_Series;
+use \model\media\User_SeriesDBO as User_SeriesDBO;
 
 class Users extends _Users
 {
@@ -85,33 +85,24 @@ class Users extends _Users
 	}
 
 	public function attributesFor($object = null, $type = null ) {
-		return array(
-			Users::name => Model::TEXT_TYPE,
-			Users::email => Model::TEXT_TYPE,
-			"password" => Model::PASSWORD_TYPE,
-			"password_check" => Model::PASSWORD_TYPE,
-			Users::active => Model::FLAG_TYPE,
+		$attrFor = array(
+			Users::name,
+			Users::email,
+			Users::active
 		);
+		$results = array_intersect_key($this->attributesMap(),array_flip($attrFor));
+		$results["password"] = Model::PASSWORD_TYPE;
+		$results["password_check"] = Model::PASSWORD_TYPE;
+		return $results;
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Users::name,
-				Users::email,
-				"password",
-				"password_check"
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)
 	{
@@ -134,24 +125,12 @@ class Users extends _Users
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-				case Users::account_type:
-					return 'user';
-				case Users::failed_logins:
-					return 0;
-				case Users::last_login_timestamp:
-					return null;
-				case Users::last_failed_login:
-					return null;
-				case Users::password_reset_timestamp:
-					return null;
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
@@ -215,15 +194,19 @@ class Users extends _Users
 		return $validation;
 	}
 
+/*
 	function validate_email($object = null, $value)
 	{
 		return parent::validate_email($object, $value);
 	}
+*/
 
+/*
 	function validate_active($object = null, $value)
 	{
 		return parent::validate_active($object, $value);
 	}
+*/
 
 	function validate_account_type($object = null, $value)
 	{
@@ -240,30 +223,40 @@ class Users extends _Users
 		return $validation;
 	}
 
+/*
 	function validate_rememberme_token($object = null, $value)
 	{
 		return parent::validate_rememberme_token($object, $value);
 	}
+*/
 
+/*
 	function validate_api_hash($object = null, $value)
 	{
 		return parent::validate_api_hash($object, $value);
 	}
+*/
 
+/*
 	function validate_password_hash($object = null, $value)
 	{
 		return parent::validate_password_hash($object, $value);
 	}
+*/
 
+/*
 	function validate_password_reset_hash($object = null, $value)
 	{
 		return parent::validate_password_reset_hash($object, $value);
 	}
+*/
 
+/*
 	function validate_activation_hash($object = null, $value)
 	{
 		return parent::validate_activation_hash($object, $value);
 	}
+*/
 
 	function validate_failed_logins($object = null, $value)
 	{
@@ -280,25 +273,33 @@ class Users extends _Users
 		return $validation;
 	}
 
+/*
 	function validate_creation_timestamp($object = null, $value)
 	{
 		return parent::validate_creation_timestamp($object, $value);
 	}
+*/
 
+/*
 	function validate_last_login_timestamp($object = null, $value)
 	{
 		return parent::validate_last_login_timestamp($object, $value);
 	}
+*/
 
+/*
 	function validate_last_failed_login($object = null, $value)
 	{
 		return parent::validate_last_failed_login($object, $value);
 	}
+*/
 
+/*
 	function validate_password_reset_timestamp($object = null, $value)
 	{
 		return parent::validate_password_reset_timestamp($object, $value);
 	}
+*/
 
 	public function userTypes() {
 		return array( Users::StandardRole => "Standard", Users::AdministratorRole => "Administrator");

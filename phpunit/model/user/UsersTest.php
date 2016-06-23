@@ -71,8 +71,8 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	public function testAttributesMandatory()
 	{
 		$attr = $this->model->attributesMandatory(null);
-		$this->assertCount( 4, $attr, var_export($attr, true) );
-		$this->assertEquals(array( Users::name, Users::email, "password", "password_check"), $attr);
+		$this->assertCount( 5, $attr, var_export($attr, true) );
+		$this->assertEquals(array( Users::name, Users::email, Users::active, Users::account_type, "password_hash"), $attr);
 	}
 
 	/**

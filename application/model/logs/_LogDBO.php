@@ -100,16 +100,6 @@ abstract class _LogDBO extends DataObject
 		parent::storeChange( Log::session, $value );
 	}
 
-	public function level()
-	{
-		return parent::changedValue( Log::level, $this->level );
-	}
-
-	public function setLevel( $value = null)
-	{
-		parent::storeChange( Log::level, $value );
-	}
-
 
 }
 

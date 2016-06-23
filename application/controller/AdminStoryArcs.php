@@ -20,11 +20,11 @@ use \model\user\Users as Users;
 use \model\network\Endpoint as Endpoint;
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\media\Publisher as Publisher;
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
-use model\Story_Arc as Story_Arc;
-use model\Story_Arc_Character as Story_Arc_Character;
-use model\Series as Series;
+use \model\media\Character as Character;
+use \model\media\Character_Alias as Character_Alias;
+use \model\media\Story_Arc as Story_Arc;
+use \model\media\Story_Arc_Character as Story_Arc_Character;
+use \model\media\Series as Series;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;

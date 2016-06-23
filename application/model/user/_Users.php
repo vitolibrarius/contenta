@@ -17,8 +17,8 @@ use \model\user\UsersDBO as UsersDBO;
 /* import related objects */
 use \model\network\User_Network as User_Network;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
-use \model\User_Series as User_Series;
-use \model\User_SeriesDBO as User_SeriesDBO;
+use \model\media\User_Series as User_Series;
+use \model\media\User_SeriesDBO as User_SeriesDBO;
 
 /** Sample Creation script */
 		/** USERS */
@@ -192,6 +192,94 @@ abstract class _Users extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Users::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['email']) == false ) {
+				$default_email = $this->attributeDefaultValue( null, null, Users::email);
+				if ( is_null( $default_email ) == false ) {
+					$values['email'] = $default_email;
+				}
+			}
+			if ( isset($values['active']) == false ) {
+				$default_active = $this->attributeDefaultValue( null, null, Users::active);
+				if ( is_null( $default_active ) == false ) {
+					$values['active'] = $default_active;
+				}
+			}
+			if ( isset($values['account_type']) == false ) {
+				$default_account_type = $this->attributeDefaultValue( null, null, Users::account_type);
+				if ( is_null( $default_account_type ) == false ) {
+					$values['account_type'] = $default_account_type;
+				}
+			}
+			if ( isset($values['rememberme_token']) == false ) {
+				$default_rememberme_token = $this->attributeDefaultValue( null, null, Users::rememberme_token);
+				if ( is_null( $default_rememberme_token ) == false ) {
+					$values['rememberme_token'] = $default_rememberme_token;
+				}
+			}
+			if ( isset($values['api_hash']) == false ) {
+				$default_api_hash = $this->attributeDefaultValue( null, null, Users::api_hash);
+				if ( is_null( $default_api_hash ) == false ) {
+					$values['api_hash'] = $default_api_hash;
+				}
+			}
+			if ( isset($values['password_hash']) == false ) {
+				$default_password_hash = $this->attributeDefaultValue( null, null, Users::password_hash);
+				if ( is_null( $default_password_hash ) == false ) {
+					$values['password_hash'] = $default_password_hash;
+				}
+			}
+			if ( isset($values['password_reset_hash']) == false ) {
+				$default_password_reset_hash = $this->attributeDefaultValue( null, null, Users::password_reset_hash);
+				if ( is_null( $default_password_reset_hash ) == false ) {
+					$values['password_reset_hash'] = $default_password_reset_hash;
+				}
+			}
+			if ( isset($values['activation_hash']) == false ) {
+				$default_activation_hash = $this->attributeDefaultValue( null, null, Users::activation_hash);
+				if ( is_null( $default_activation_hash ) == false ) {
+					$values['activation_hash'] = $default_activation_hash;
+				}
+			}
+			if ( isset($values['failed_logins']) == false ) {
+				$default_failed_logins = $this->attributeDefaultValue( null, null, Users::failed_logins);
+				if ( is_null( $default_failed_logins ) == false ) {
+					$values['failed_logins'] = $default_failed_logins;
+				}
+			}
+			if ( isset($values['creation_timestamp']) == false ) {
+				$default_creation_timestamp = $this->attributeDefaultValue( null, null, Users::creation_timestamp);
+				if ( is_null( $default_creation_timestamp ) == false ) {
+					$values['creation_timestamp'] = $default_creation_timestamp;
+				}
+			}
+			if ( isset($values['last_login_timestamp']) == false ) {
+				$default_last_login_timestamp = $this->attributeDefaultValue( null, null, Users::last_login_timestamp);
+				if ( is_null( $default_last_login_timestamp ) == false ) {
+					$values['last_login_timestamp'] = $default_last_login_timestamp;
+				}
+			}
+			if ( isset($values['last_failed_login']) == false ) {
+				$default_last_failed_login = $this->attributeDefaultValue( null, null, Users::last_failed_login);
+				if ( is_null( $default_last_failed_login ) == false ) {
+					$values['last_failed_login'] = $default_last_failed_login;
+				}
+			}
+			if ( isset($values['password_reset_timestamp']) == false ) {
+				$default_password_reset_timestamp = $this->attributeDefaultValue( null, null, Users::password_reset_timestamp);
+				if ( is_null( $default_password_reset_timestamp ) == false ) {
+					$values['password_reset_timestamp'] = $default_password_reset_timestamp;
+				}
+			}
+
+			// default conversion for relationships
 		}
 		return parent::createObject($values);
 	}
@@ -226,7 +314,7 @@ abstract class _Users extends Model
 
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 	public function userWithRemembermeToken( $user_id, $token )
 	{
@@ -255,8 +343,64 @@ abstract class _Users extends Model
 	}
 
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Users::name,
+				Users::email,
+				Users::active,
+				Users::account_type,
+				Users::password_hash
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Users::name => Model::TEXT_TYPE,
+			Users::email => Model::TEXT_TYPE,
+			Users::active => Model::FLAG_TYPE,
+			Users::account_type => Model::TEXT_TYPE,
+			Users::rememberme_token => Model::TEXT_TYPE,
+			Users::api_hash => Model::TEXT_TYPE,
+			Users::password_hash => Model::TEXT_TYPE,
+			Users::password_reset_hash => Model::TEXT_TYPE,
+			Users::activation_hash => Model::TEXT_TYPE,
+			Users::failed_logins => Model::INT_TYPE,
+			Users::creation_timestamp => Model::DATE_TYPE,
+			Users::last_login_timestamp => Model::DATE_TYPE,
+			Users::last_failed_login => Model::DATE_TYPE,
+			Users::password_reset_timestamp => Model::DATE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+				case Users::account_type:
+					return 'user';
+				case Users::failed_logins:
+					return 0;
+				case Users::last_login_timestamp:
+					return null;
+				case Users::last_failed_login:
+					return null;
+				case Users::password_reset_timestamp:
+					return null;
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_name($object = null, $value)
 	{
 		// check for mandatory field

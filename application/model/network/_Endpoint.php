@@ -116,6 +116,14 @@ abstract class _Endpoint extends Model
 		return $this->allObjectsForFK(Endpoint::type_id, $obj, $this->sortOrder(), 50);
 	}
 
+	public function countForEndpointType($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Endpoint::type_id, $obj );
+		}
+		return false;
+	}
+
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
@@ -151,6 +159,46 @@ abstract class _Endpoint extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Endpoint::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['base_url']) == false ) {
+				$default_base_url = $this->attributeDefaultValue( null, null, Endpoint::base_url);
+				if ( is_null( $default_base_url ) == false ) {
+					$values['base_url'] = $default_base_url;
+				}
+			}
+			if ( isset($values['api_key']) == false ) {
+				$default_api_key = $this->attributeDefaultValue( null, null, Endpoint::api_key);
+				if ( is_null( $default_api_key ) == false ) {
+					$values['api_key'] = $default_api_key;
+				}
+			}
+			if ( isset($values['username']) == false ) {
+				$default_username = $this->attributeDefaultValue( null, null, Endpoint::username);
+				if ( is_null( $default_username ) == false ) {
+					$values['username'] = $default_username;
+				}
+			}
+			if ( isset($values['enabled']) == false ) {
+				$default_enabled = $this->attributeDefaultValue( null, null, Endpoint::enabled);
+				if ( is_null( $default_enabled ) == false ) {
+					$values['enabled'] = $default_enabled;
+				}
+			}
+			if ( isset($values['compressed']) == false ) {
+				$default_compressed = $this->attributeDefaultValue( null, null, Endpoint::compressed);
+				if ( is_null( $default_compressed ) == false ) {
+					$values['compressed'] = $default_compressed;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['endpointType']) ) {
 				$local_endpointType = $values['endpointType'];
 				if ( $local_endpointType instanceof Endpoint_TypeDBO) {
@@ -233,26 +281,62 @@ abstract class _Endpoint extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Endpoint::name,
+				Endpoint::base_url
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Endpoint::type_id => Model::TO_ONE_TYPE,
+			Endpoint::name => Model::TEXT_TYPE,
+			Endpoint::base_url => Model::TEXT_TYPE,
+			Endpoint::api_key => Model::TEXT_TYPE,
+			Endpoint::username => Model::TEXT_TYPE,
+			Endpoint::enabled => Model::FLAG_TYPE,
+			Endpoint::compressed => Model::FLAG_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+				case Endpoint::enabled:
+					return Model::TERTIARY_TRUE;
+				case Endpoint::compressed:
+					return Model::TERTIARY_FALSE;
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_type_id($object = null, $value)
 	{
-		// not mandatory field
+		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return null;
-		}
-
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Endpoint::type_id,
-				"FILTER_VALIDATE_INT"
+				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_name($object = null, $value)

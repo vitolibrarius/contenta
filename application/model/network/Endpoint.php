@@ -68,14 +68,16 @@ class Endpoint extends _Endpoint
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Endpoint::name => Model::TEXT_TYPE,
-			Endpoint::base_url => Model::TEXT_TYPE,
-			Endpoint::api_key => Model::TEXT_TYPE,
-			Endpoint::username => Model::TEXT_TYPE,
-			Endpoint::enabled => Model::FLAG_TYPE,
-			Endpoint::compressed => Model::FLAG_TYPE
+		$attrFor = array(
+			Endpoint::type_id,
+			Endpoint::name,
+			Endpoint::base_url,
+			Endpoint::api_key,
+			Endpoint::username,
+			Endpoint::enabled,
+			Endpoint::compressed
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
 	public function attributesMandatory($object = null)
@@ -89,11 +91,13 @@ class Endpoint extends _Endpoint
 		return parent::attributesMandatory($object);
 	}
 
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)
 	{
@@ -117,19 +121,17 @@ class Endpoint extends _Endpoint
 					return (isset($type) ? $type->api_url : null);
 				case Endpoint::name:
 					return (isset($type) ? $type->name : null);
-				case Endpoint::enabled:
-					return Model::TERTIARY_TRUE;
-				case Endpoint::compressed:
-					return Model::TERTIARY_FALSE;
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{

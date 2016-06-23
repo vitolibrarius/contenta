@@ -181,6 +181,14 @@ abstract class _Log extends Model
 		return $this->allObjectsForFK(Log::level, $obj, $this->sortOrder(), 50);
 	}
 
+	public function countForLogLevel($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Log::level, $obj );
+		}
+		return false;
+	}
+
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
@@ -201,6 +209,52 @@ abstract class _Log extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['trace']) == false ) {
+				$default_trace = $this->attributeDefaultValue( null, null, Log::trace);
+				if ( is_null( $default_trace ) == false ) {
+					$values['trace'] = $default_trace;
+				}
+			}
+			if ( isset($values['trace_id']) == false ) {
+				$default_trace_id = $this->attributeDefaultValue( null, null, Log::trace_id);
+				if ( is_null( $default_trace_id ) == false ) {
+					$values['trace_id'] = $default_trace_id;
+				}
+			}
+			if ( isset($values['context']) == false ) {
+				$default_context = $this->attributeDefaultValue( null, null, Log::context);
+				if ( is_null( $default_context ) == false ) {
+					$values['context'] = $default_context;
+				}
+			}
+			if ( isset($values['context_id']) == false ) {
+				$default_context_id = $this->attributeDefaultValue( null, null, Log::context_id);
+				if ( is_null( $default_context_id ) == false ) {
+					$values['context_id'] = $default_context_id;
+				}
+			}
+			if ( isset($values['message']) == false ) {
+				$default_message = $this->attributeDefaultValue( null, null, Log::message);
+				if ( is_null( $default_message ) == false ) {
+					$values['message'] = $default_message;
+				}
+			}
+			if ( isset($values['session']) == false ) {
+				$default_session = $this->attributeDefaultValue( null, null, Log::session);
+				if ( is_null( $default_session ) == false ) {
+					$values['session'] = $default_session;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Log::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['logLevel']) ) {
 				$local_logLevel = $values['logLevel'];
 				if ( $local_logLevel instanceof Log_LevelDBO) {
@@ -263,7 +317,7 @@ abstract class _Log extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 	public function messagesSince( $sessionId, $lastCheck )
 	{
@@ -318,8 +372,48 @@ abstract class _Log extends Model
 	}
 
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Log::message
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Log::trace => Model::TEXT_TYPE,
+			Log::trace_id => Model::TEXT_TYPE,
+			Log::context => Model::TEXT_TYPE,
+			Log::context_id => Model::TEXT_TYPE,
+			Log::message => Model::TEXT_TYPE,
+			Log::session => Model::TEXT_TYPE,
+			Log::level => Model::TO_ONE_TYPE,
+			Log::created => Model::DATE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+				case Log::session:
+					return session_id();
+				case Log::level:
+					return 'warning';
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_trace($object = null, $value)
 	{
 		// not mandatory field

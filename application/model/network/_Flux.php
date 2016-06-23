@@ -153,9 +153,25 @@ abstract class _Flux extends Model
 	{
 		return $this->allObjectsForFK(Flux::src_endpoint, $obj, $this->sortOrder(), 50);
 	}
+
+	public function countForSource_endpoint($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Flux::src_endpoint, $obj );
+		}
+		return false;
+	}
 	public function allForDestination_endpoint($obj)
 	{
 		return $this->allObjectsForFK(Flux::dest_endpoint, $obj, $this->sortOrder(), 50);
+	}
+
+	public function countForDestination_endpoint($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Flux::dest_endpoint, $obj );
+		}
+		return false;
 	}
 
 	public function joinAttributes( Model $joinModel = null )
@@ -181,6 +197,76 @@ abstract class _Flux extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Flux::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Flux::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['flux_hash']) == false ) {
+				$default_flux_hash = $this->attributeDefaultValue( null, null, Flux::flux_hash);
+				if ( is_null( $default_flux_hash ) == false ) {
+					$values['flux_hash'] = $default_flux_hash;
+				}
+			}
+			if ( isset($values['flux_error']) == false ) {
+				$default_flux_error = $this->attributeDefaultValue( null, null, Flux::flux_error);
+				if ( is_null( $default_flux_error ) == false ) {
+					$values['flux_error'] = $default_flux_error;
+				}
+			}
+			if ( isset($values['src_guid']) == false ) {
+				$default_src_guid = $this->attributeDefaultValue( null, null, Flux::src_guid);
+				if ( is_null( $default_src_guid ) == false ) {
+					$values['src_guid'] = $default_src_guid;
+				}
+			}
+			if ( isset($values['src_url']) == false ) {
+				$default_src_url = $this->attributeDefaultValue( null, null, Flux::src_url);
+				if ( is_null( $default_src_url ) == false ) {
+					$values['src_url'] = $default_src_url;
+				}
+			}
+			if ( isset($values['src_status']) == false ) {
+				$default_src_status = $this->attributeDefaultValue( null, null, Flux::src_status);
+				if ( is_null( $default_src_status ) == false ) {
+					$values['src_status'] = $default_src_status;
+				}
+			}
+			if ( isset($values['src_pub_date']) == false ) {
+				$default_src_pub_date = $this->attributeDefaultValue( null, null, Flux::src_pub_date);
+				if ( is_null( $default_src_pub_date ) == false ) {
+					$values['src_pub_date'] = $default_src_pub_date;
+				}
+			}
+			if ( isset($values['dest_guid']) == false ) {
+				$default_dest_guid = $this->attributeDefaultValue( null, null, Flux::dest_guid);
+				if ( is_null( $default_dest_guid ) == false ) {
+					$values['dest_guid'] = $default_dest_guid;
+				}
+			}
+			if ( isset($values['dest_status']) == false ) {
+				$default_dest_status = $this->attributeDefaultValue( null, null, Flux::dest_status);
+				if ( is_null( $default_dest_status ) == false ) {
+					$values['dest_status'] = $default_dest_status;
+				}
+			}
+			if ( isset($values['dest_submission']) == false ) {
+				$default_dest_submission = $this->attributeDefaultValue( null, null, Flux::dest_submission);
+				if ( is_null( $default_dest_submission ) == false ) {
+					$values['dest_submission'] = $default_dest_submission;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['source_endpoint']) ) {
 				$local_source_endpoint = $values['source_endpoint'];
 				if ( $local_source_endpoint instanceof EndpointDBO) {
@@ -279,7 +365,7 @@ abstract class _Flux extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 	public function objectForSourceEndpointGUID( $src_endpoint, $src_guid )
 	{
@@ -334,8 +420,49 @@ abstract class _Flux extends Model
 	}
 
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Flux::name
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Flux::created => Model::DATE_TYPE,
+			Flux::name => Model::TEXT_TYPE,
+			Flux::flux_hash => Model::TEXT_TYPE,
+			Flux::flux_error => Model::FLAG_TYPE,
+			Flux::src_endpoint => Model::TO_ONE_TYPE,
+			Flux::src_guid => Model::TEXT_TYPE,
+			Flux::src_url => Model::TEXT_TYPE,
+			Flux::src_status => Model::TEXT_TYPE,
+			Flux::src_pub_date => Model::DATE_TYPE,
+			Flux::dest_endpoint => Model::TO_ONE_TYPE,
+			Flux::dest_guid => Model::TEXT_TYPE,
+			Flux::dest_status => Model::TEXT_TYPE,
+			Flux::dest_submission => Model::DATE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_created($object = null, $value)
 	{
 		// not mandatory field
@@ -404,14 +531,6 @@ abstract class _Flux extends Model
 			return null;
 		}
 
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Flux::src_endpoint,
-				"FILTER_VALIDATE_INT"
-			);
-		}
 		return null;
 	}
 	function validate_src_guid($object = null, $value)
@@ -465,14 +584,6 @@ abstract class _Flux extends Model
 			return null;
 		}
 
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Flux::dest_endpoint,
-				"FILTER_VALIDATE_INT"
-			);
-		}
 		return null;
 	}
 	function validate_dest_guid($object = null, $value)

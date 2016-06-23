@@ -5,14 +5,17 @@ namespace model\user;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \db\Qualifier as Qualifier;
 
 use \model\user\Users as Users;
 
 /* import related objects */
 use \model\network\User_Network as User_Network;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
-use \model\User_Series as User_Series;
-use \model\User_SeriesDBO as User_SeriesDBO;
+use \model\media\Series as Series;
+use \model\media\SeriesDBO as SeriesDBO;
+use \model\media\User_Series as User_Series;
+use \model\media\User_SeriesDBO as User_SeriesDBO;
 
 class UsersDBO extends _UsersDBO
 {
@@ -42,7 +45,7 @@ class UsersDBO extends _UsersDBO
 	public function addSeries($series = null) {
 		if ( isset($series) ) {
 			$model = Model::Named('User_Series');
-			return $model->create($this, $series);
+			return $model->createJoin($this, $series);
 		}
 		return false;
 	}

@@ -38,55 +38,44 @@ class Job_Type extends _Job_Type
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Job_Type::code => Model::TEXT_TYPE,
-			Job_Type::name => Model::TEXT_TYPE,
-			Job_Type::desc => Model::TEXT_TYPE,
-			Job_Type::processor => Model::TEXT_TYPE,
-			Job_Type::parameter => Model::TEXT_TYPE,
-			Job_Type::scheduled => Model::FLAG_TYPE,
-			Job_Type::requires_endpoint => Model::FLAG_TYPE
+		$attrFor = array(
+			Job_Type::code,
+			Job_Type::name,
+			Job_Type::desc,
+			Job_Type::processor,
+			Job_Type::parameter,
+			Job_Type::scheduled,
+			Job_Type::requires_endpoint
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Job_Type::code
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-				case Job_Type::scheduled:
-					return true;
-				case Job_Type::requires_endpoint:
-					return true;
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
@@ -94,40 +83,54 @@ class Job_Type extends _Job_Type
 	}
 
 	/** Validation */
+/*
 	function validate_code($object = null, $value)
 	{
 		return parent::validate_code($object, $value);
 	}
+*/
 
+/*
 	function validate_name($object = null, $value)
 	{
 		return parent::validate_name($object, $value);
 	}
+*/
 
+/*
 	function validate_desc($object = null, $value)
 	{
 		return parent::validate_desc($object, $value);
 	}
+*/
 
+/*
 	function validate_processor($object = null, $value)
 	{
 		return parent::validate_processor($object, $value);
 	}
+*/
 
+/*
 	function validate_parameter($object = null, $value)
 	{
 		return parent::validate_parameter($object, $value);
 	}
+*/
 
+/*
 	function validate_scheduled($object = null, $value)
 	{
 		return parent::validate_scheduled($object, $value);
 	}
+*/
 
+/*
 	function validate_requires_endpoint($object = null, $value)
 	{
 		return parent::validate_requires_endpoint($object, $value);
 	}
+*/
 
 }
 

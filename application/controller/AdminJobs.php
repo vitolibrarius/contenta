@@ -16,9 +16,9 @@ use \model\jobs\Job as Job;
 use \model\jobs\Job_Type as Job_Type;
 
 use \model\media\Publisher as Publisher;
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
-use model\Series as Series;
+use \model\media\Character as Character;
+use \model\media\Character_Alias as Character_Alias;
+use \model\media\Series as Series;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;

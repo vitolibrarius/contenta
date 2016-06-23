@@ -123,9 +123,25 @@ abstract class _Pull_List_Item extends Model
 	{
 		return $this->allObjectsForFK(Pull_List_Item::pull_list_group_id, $obj, $this->sortOrder(), 50);
 	}
+
+	public function countForPull_list_group($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Pull_List_Item::pull_list_group_id, $obj );
+		}
+		return false;
+	}
 	public function allForPull_list($obj)
 	{
 		return $this->allObjectsForFK(Pull_List_Item::pull_list_id, $obj, $this->sortOrder(), 50);
+	}
+
+	public function countForPull_list($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Pull_List_Item::pull_list_id, $obj );
+		}
+		return false;
 	}
 
 	public function joinAttributes( Model $joinModel = null )
@@ -151,6 +167,46 @@ abstract class _Pull_List_Item extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['data']) == false ) {
+				$default_data = $this->attributeDefaultValue( null, null, Pull_List_Item::data);
+				if ( is_null( $default_data ) == false ) {
+					$values['data'] = $default_data;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Pull_List_Item::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+			if ( isset($values['search_name']) == false ) {
+				$default_search_name = $this->attributeDefaultValue( null, null, Pull_List_Item::search_name);
+				if ( is_null( $default_search_name ) == false ) {
+					$values['search_name'] = $default_search_name;
+				}
+			}
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Pull_List_Item::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['issue']) == false ) {
+				$default_issue = $this->attributeDefaultValue( null, null, Pull_List_Item::issue);
+				if ( is_null( $default_issue ) == false ) {
+					$values['issue'] = $default_issue;
+				}
+			}
+			if ( isset($values['year']) == false ) {
+				$default_year = $this->attributeDefaultValue( null, null, Pull_List_Item::year);
+				if ( is_null( $default_year ) == false ) {
+					$values['year'] = $default_year;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['pull_list_group']) ) {
 				$local_pull_list_group = $values['pull_list_group'];
 				if ( $local_pull_list_group instanceof Pull_List_GroupDBO) {
@@ -249,7 +305,7 @@ abstract class _Pull_List_Item extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 	public function objectsForNameIssueYear( $name, $issue, $year )
 	{
@@ -275,8 +331,47 @@ abstract class _Pull_List_Item extends Model
 	}
 
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Pull_List_Item::data,
+				Pull_List_Item::search_name,
+				Pull_List_Item::name,
+				Pull_List_Item::pull_list_group_id
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Pull_List_Item::data => Model::TEXT_TYPE,
+			Pull_List_Item::created => Model::DATE_TYPE,
+			Pull_List_Item::search_name => Model::TEXT_TYPE,
+			Pull_List_Item::name => Model::TEXT_TYPE,
+			Pull_List_Item::issue => Model::TEXT_TYPE,
+			Pull_List_Item::year => Model::INT_TYPE,
+			Pull_List_Item::pull_list_id => Model::TO_ONE_TYPE,
+			Pull_List_Item::pull_list_group_id => Model::TO_ONE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_data($object = null, $value)
 	{
 		// check for mandatory field
@@ -361,36 +456,28 @@ abstract class _Pull_List_Item extends Model
 	}
 	function validate_pull_list_id($object = null, $value)
 	{
-		// not mandatory field
+		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return null;
-		}
-
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Pull_List_Item::pull_list_id,
-				"FILTER_VALIDATE_INT"
+				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 	function validate_pull_list_group_id($object = null, $value)
 	{
-		// not mandatory field
+		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return null;
-		}
-
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Pull_List_Item::pull_list_group_id,
-				"FILTER_VALIDATE_INT"
+				"FIELD_EMPTY"
 			);
 		}
+
 		return null;
 	}
 }

@@ -124,6 +124,40 @@ abstract class _Version extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['code']) == false ) {
+				$default_code = $this->attributeDefaultValue( null, null, Version::code);
+				if ( is_null( $default_code ) == false ) {
+					$values['code'] = $default_code;
+				}
+			}
+			if ( isset($values['major']) == false ) {
+				$default_major = $this->attributeDefaultValue( null, null, Version::major);
+				if ( is_null( $default_major ) == false ) {
+					$values['major'] = $default_major;
+				}
+			}
+			if ( isset($values['minor']) == false ) {
+				$default_minor = $this->attributeDefaultValue( null, null, Version::minor);
+				if ( is_null( $default_minor ) == false ) {
+					$values['minor'] = $default_minor;
+				}
+			}
+			if ( isset($values['patch']) == false ) {
+				$default_patch = $this->attributeDefaultValue( null, null, Version::patch);
+				if ( is_null( $default_patch ) == false ) {
+					$values['patch'] = $default_patch;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Version::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+
+			// default conversion for relationships
 		}
 		return parent::createObject($values);
 	}
@@ -154,7 +188,7 @@ abstract class _Version extends Model
 
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 	public function latestVersion(  )
 	{
@@ -182,8 +216,41 @@ abstract class _Version extends Model
 	}
 
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Version::code
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Version::code => Model::TEXT_TYPE,
+			Version::major => Model::INT_TYPE,
+			Version::minor => Model::INT_TYPE,
+			Version::patch => Model::INT_TYPE,
+			Version::created => Model::DATE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_code($object = null, $value)
 	{
 		// check for mandatory field

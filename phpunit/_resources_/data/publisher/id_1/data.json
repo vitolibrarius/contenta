@@ -1,10 +1,9 @@
 {
     "id": "1",
     "name": "DC Comics",
-    "xurl": "http:\/\/comicvine.gamespot.com\/dc-comics\/4010-10\/",
+    "created": "1466653332",
+    "xurl": "http:\/\/comicvine.gamespot.com\/",
     "xsource": "ComicVine",
-    "xid": "10",
-    "created": "1444970243",
-    "updated": "1456792685",
-    "xupdated": "1451950817"
+    "xid": "433786",
+    "xupdated": "1466653332"
 }

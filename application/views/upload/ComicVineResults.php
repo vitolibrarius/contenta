@@ -8,7 +8,7 @@
 		$series_xid = array_valueForKeypath( "volume/id", $item );
 		$seriesObj = $this->series_model->objectForExternal( $series_xid, \model\network\Endpoint_Type::ComicVine);
 
-		if ( $seriesObj instanceof model\SeriesDBO ) {
+		if ( $seriesObj instanceof \model\media\SeriesDBO ) {
 			$map[$series_xid] = $seriesObj;
 			$existingGroups[$series_xid][] = $item;
 		}
@@ -43,7 +43,7 @@
 				<?php
 					$issue_xid = array_valueForKeypath( "id", $item );
 					$issue = $seriesObj->publicationForExternal( $issue_xid, \model\network\Endpoint_Type::ComicVine);
-					if ( $issue instanceof model\PublicationDBO ) {
+					if ( $issue instanceof \model\media\PublicationDBO ) {
 						echo '<h4 class="publication name">' . $issue->name . '</h4>';
 						$mediaList = $issue->media();
 						if ( is_array($mediaList) && count($mediaList)  ) {

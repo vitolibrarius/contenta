@@ -15,12 +15,12 @@ use \exceptions\DeleteObjectException as DeleteObjectException;
 use \model\media\PublisherDBO as PublisherDBO;
 
 /* import related objects */
-use \model\Series as Series;
-use \model\SeriesDBO as SeriesDBO;
-use \model\Character as Character;
-use \model\CharacterDBO as CharacterDBO;
-use \model\Story_Arc as Story_Arc;
-use \model\Story_ArcDBO as Story_ArcDBO;
+use \model\media\Series as Series;
+use \model\media\SeriesDBO as SeriesDBO;
+use \model\media\Character as Character;
+use \model\media\CharacterDBO as CharacterDBO;
+use \model\media\Story_Arc as Story_Arc;
+use \model\media\Story_ArcDBO as Story_ArcDBO;
 
 /** Sample Creation script */
 		/** PUBLISHER */
@@ -133,6 +133,46 @@ abstract class _Publisher extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Publisher::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Publisher::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+			if ( isset($values['xurl']) == false ) {
+				$default_xurl = $this->attributeDefaultValue( null, null, Publisher::xurl);
+				if ( is_null( $default_xurl ) == false ) {
+					$values['xurl'] = $default_xurl;
+				}
+			}
+			if ( isset($values['xsource']) == false ) {
+				$default_xsource = $this->attributeDefaultValue( null, null, Publisher::xsource);
+				if ( is_null( $default_xsource ) == false ) {
+					$values['xsource'] = $default_xsource;
+				}
+			}
+			if ( isset($values['xid']) == false ) {
+				$default_xid = $this->attributeDefaultValue( null, null, Publisher::xid);
+				if ( is_null( $default_xid ) == false ) {
+					$values['xid'] = $default_xid;
+				}
+			}
+			if ( isset($values['xupdated']) == false ) {
+				$default_xupdated = $this->attributeDefaultValue( null, null, Publisher::xupdated);
+				if ( is_null( $default_xupdated ) == false ) {
+					$values['xupdated'] = $default_xupdated;
+				}
+			}
+
+			// default conversion for relationships
 		}
 		return parent::createObject($values);
 	}
@@ -171,7 +211,7 @@ abstract class _Publisher extends Model
 
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 	public function objectForExternal( $xid, $xsrc )
 	{
@@ -200,8 +240,42 @@ abstract class _Publisher extends Model
 	}
 
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Publisher::name
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Publisher::name => Model::TEXT_TYPE,
+			Publisher::created => Model::DATE_TYPE,
+			Publisher::xurl => Model::TEXT_TYPE,
+			Publisher::xsource => Model::TEXT_TYPE,
+			Publisher::xid => Model::TEXT_TYPE,
+			Publisher::xupdated => Model::DATE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_name($object = null, $value)
 	{
 		// check for mandatory field

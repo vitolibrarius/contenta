@@ -15,8 +15,8 @@ use db\Qualifier as Qualifier;
 
 use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
-use model\Character as Character;
-use model\Story_Arc as Story_Arc;
+use \model\media\Character as Character;
+use \model\media\Story_Arc as Story_Arc;
 
 /**
  * Class Admin

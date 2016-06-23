@@ -66,54 +66,45 @@ class Pull_List_Item extends _Pull_List_Item
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Pull_List_Item::data => Model::TEXT_TYPE,
-			Pull_List_Item::created => Model::DATE_TYPE,
-			Pull_List_Item::search_name => Model::TEXT_TYPE,
-			Pull_List_Item::name => Model::TEXT_TYPE,
-			Pull_List_Item::issue => Model::TEXT_TYPE,
-			Pull_List_Item::year => Model::INT_TYPE,
-			Pull_List_Item::pull_list_id => Model::INT_TYPE,
-			Pull_List_Item::pull_list_group_id => Model::INT_TYPE
+		$attrFor = array(
+			Pull_List_Item::data,
+			Pull_List_Item::created,
+			Pull_List_Item::search_name,
+			Pull_List_Item::name,
+			Pull_List_Item::issue,
+			Pull_List_Item::year,
+			Pull_List_Item::pull_list_id,
+			Pull_List_Item::pull_list_group_id
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Pull_List_Item::data,
-				Pull_List_Item::search_name,
-				Pull_List_Item::name
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
 	public function attributePlaceholder($object = null, $type = null, $attr)	{ return null; }
 	*/
 
+	/*
 	public function attributeDefaultValue($object = null, $type = null, $attr)
 	{
-		if ( isset($object) === false || is_null($object) == true) {
-			switch ($attr) {
-			}
-		}
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
+	*/
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
@@ -129,45 +120,61 @@ class Pull_List_Item extends _Pull_List_Item
 	}
 
 	/** Validation */
+/*
 	function validate_data($object = null, $value)
 	{
 		return parent::validate_data($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
+/*
 	function validate_search_name($object = null, $value)
 	{
 		return parent::validate_search_name($object, $value);
 	}
+*/
 
+/*
 	function validate_name($object = null, $value)
 	{
 		return parent::validate_name($object, $value);
 	}
+*/
 
+/*
 	function validate_issue($object = null, $value)
 	{
 		return parent::validate_issue($object, $value);
 	}
+*/
 
+/*
 	function validate_year($object = null, $value)
 	{
 		return parent::validate_year($object, $value);
 	}
+*/
 
+/*
 	function validate_pull_list_id($object = null, $value)
 	{
 		return parent::validate_pull_list_id($object, $value);
 	}
+*/
 
+/*
 	function validate_pull_list_group_id($object = null, $value)
 	{
 		return parent::validate_pull_list_group_id($object, $value);
 	}
+*/
 
 }
 

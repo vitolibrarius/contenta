@@ -120,14 +120,15 @@ function sanitize_filename($string, $maxLength = 256, $force_lowercase = true, $
 {
 	$ext = "." . file_ext($string);
 	$clean = file_ext_strip($string);
-
 	$clean = sanitize($clean, $force_lowercase, $anal );
 	$max = min(max($maxLength, 10), 256) - strlen($ext) - 2;
 	if (strlen($clean) > $max) {
 		$characters = floor($max / 2);
-		return substr($clean, 0, $characters) . '..' . substr($clean, -1 * $characters) . $ext;
+		return substr($clean, 0, $characters) . '..'
+			. substr($clean, -1 * $characters)
+			. ((strlen($ext) > 1) ? $ext : "");
 	}
-	return $clean . $ext;
+	return $clean . ((strlen($ext) > 1) ? $ext : "");
 }
 
 function sanitize($string, $force_lowercase = true, $anal = false, $default = null)

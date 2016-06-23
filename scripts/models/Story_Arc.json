@@ -1,0 +1,111 @@
+{
+    "attributes": {
+        "id": { "column": "id", "type": "INTEGER" },
+        "publisher_id": { "column": "publisher_id", "type": "INTEGER", "nullable": false },
+        "created": { "column": "created", "type": "DATE" },
+
+        "name": { "column": "name", "length": 256, "type": "TEXT", "collate": "NOCASE", "nullable": false },
+        "desc": { "column": "desc", "length": 4096, "type": "TEXT",	"nullable": true },
+
+        "pub_active": { "column": "pub_active", "type": "BOOLEAN", "default": "Model::TERTIARY_TRUE" },
+        "pub_wanted": { "column": "pub_wanted", "type": "BOOLEAN", "default": "Model::TERTIARY_TRUE" },
+        "pub_cycle": { "column": "pub_cycle", "type": "INTEGER", "default": 0  },
+        "pub_available": { "column": "pub_available", "type": "INTEGER", "default": 0  },
+        "pub_count": { "column": "pub_count", "type": "INTEGER", "default": 0  },
+
+        "xurl": { "column": "xurl", "length": 1024, "type": "TEXT" },
+        "xsource": { "column": "xsource", "length": 256, "type": "TEXT" },
+        "xid": { "column": "xid", "length": 256, "type": "TEXT" },
+        "xupdated": { "column": "xupdated", "type": "DATE" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "story_arc",
+    "package": "media",
+    "model": "Story_Arc",
+    "dbo": "Story_ArcDBO",
+	"sort" : [
+		{ "asc": "name" }
+	],
+    "indexes" : [
+    	{ "columns": ["name"] },
+    	{ "columns": ["xid", "xsource"], "unique": true }
+    ],
+    "relationships" :{
+    	"publisher" : {
+    		"destination" : "Publisher",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "publisher",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "publisher_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	},
+    	"story_arc_characters" : {
+    		"destination" : "Story_Arc_Character",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "story_arc_character",
+    		"joins" : [
+    			{ "destinationAttribute": "story_arc_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"story_arc_publication" : {
+    		"destination" : "Story_Arc_Publication",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "story_arc_publication",
+    		"joins" : [
+    			{ "destinationAttribute": "story_arc_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"story_arc_Series" : {
+    		"destination" : "Story_Arc_Series",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "story_arc_series",
+    		"joins" : [
+    			{ "destinationAttribute": "story_arc_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	}
+    },
+    "fetches" : {
+		"storyArcLike": {
+			"arguments": [ "name" ],
+			"semantic": "OR",
+			"qualifiers": [
+				{
+					"type" : "Like",
+					"wildcard": "both",
+					"keyAttribute": "name",
+					"argAttribute": "name",
+					"optional": false
+				}
+			]
+		},
+		"objectForExternal": {
+			"arguments": [ "xid", "xsrc" ],
+			"maxCount" : 1,
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Equals",
+					"keyAttribute": "xid",
+					"argAttribute": "xid"
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "xsource",
+					"argAttribute": "xsrc"
+				}
+			]
+		}
+	}
+}

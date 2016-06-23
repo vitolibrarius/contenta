@@ -36,33 +36,26 @@ class Log extends _Log
 	}
 
 	public function attributesFor($object = null, $type = null) {
-		return array(
-			Log::trace => Model::TEXT_TYPE,
-			Log::trace_id => Model::TEXT_TYPE,
-			Log::context => Model::TEXT_TYPE,
-			Log::context_id => Model::TEXT_TYPE,
-			Log::message => Model::TEXT_TYPE,
-			Log::session => Model::TEXT_TYPE,
-			Log::level => Model::TEXT_TYPE,
-			Log::created => Model::DATE_TYPE
+		$attrFor = array(
+			Log::trace,
+			Log::trace_id,
+			Log::context,
+			Log::context_id,
+			Log::message,
+			Log::session,
+			Log::level,
+			Log::created
 		);
+		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Log::message
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
-
+	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
+	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }
@@ -82,10 +75,12 @@ class Log extends _Log
 		return parent::attributeDefaultValue($object, $type, $attr);
 	}
 
+	/*
 	public function attributeEditPattern($object = null, $type = null, $attr)
 	{
 		return null;
 	}
+	*/
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
@@ -97,45 +92,61 @@ class Log extends _Log
 	}
 
 	/** Validation */
+/*
 	function validate_trace($object = null, $value)
 	{
 		return parent::validate_trace($object, $value);
 	}
+*/
 
+/*
 	function validate_trace_id($object = null, $value)
 	{
 		return parent::validate_trace_id($object, $value);
 	}
+*/
 
+/*
 	function validate_context($object = null, $value)
 	{
 		return parent::validate_context($object, $value);
 	}
+*/
 
+/*
 	function validate_context_id($object = null, $value)
 	{
 		return parent::validate_context_id($object, $value);
 	}
+*/
 
+/*
 	function validate_message($object = null, $value)
 	{
 		return parent::validate_message($object, $value);
 	}
+*/
 
+/*
 	function validate_session($object = null, $value)
 	{
 		return parent::validate_session($object, $value);
 	}
+*/
 
+/*
 	function validate_level($object = null, $value)
 	{
 		return parent::validate_level($object, $value);
 	}
+*/
 
+/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);
 	}
+*/
 
 }
 

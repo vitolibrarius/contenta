@@ -23,8 +23,8 @@
 		$card->setThumbnailTable( "publication" );
 		$card->setThumbnailPrimaryKeypath( "publication_id" );
 		$card->setDetailKeys( array(
-				model\Publication::issue_num => "publication/issue_num",
-				model\Publication::pub_date => "publication/publishedMonthYear"
+				\model\media\Publication::issue_num => "publication/issue_num",
+				\model\media\Publication::pub_date => "publication/publishedMonthYear"
 			)
 		);
 		$card->setDisplayNameKey( "publication/series/name" );

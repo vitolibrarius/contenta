@@ -5,7 +5,11 @@ define('DIR_PERMS', 0750);
 
 function file_ext_strip($filename)
 {
-	return preg_replace('/\.[^.]*$/', '', $filename);
+	$ext = strlen(file_ext($filename));
+	if ( $ext == 0 ) {
+		return $filename;
+	}
+	return substr($filename, 0, strlen($filename) - ($ext + 1));
 }
 
 function file_ext($filename)

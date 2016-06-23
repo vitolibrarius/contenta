@@ -136,9 +136,9 @@
 				$card = new html\Card();
 				$card->setDisplayDescriptionKey( "shortDescription" );
 				$card->setDetailKeys( array(
-					model\Publication::series_id => "series/name",
-					model\Publication::issue_num => "issue_num",
-					model\Publication::pub_date => "publishedMonthYear",
+					\model\media\Publication::series_id => "series/name",
+					\model\media\Publication::issue_num => "issue_num",
+					\model\media\Publication::pub_date => "publishedMonthYear",
 					)
 				);
 

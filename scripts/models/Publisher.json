@@ -42,7 +42,7 @@
     "relationships" :{
     	"series" : {
     		"destination" : "Series",
-    		"destinationPackage" : "\\model\\",
+    		"destinationPackage" : "\\model\\media\\",
     		"destinationTable" : "series",
     		"joins" : [
     			{ "destinationAttribute": "publisher_id", "sourceAttribute" : "id" }
@@ -53,7 +53,7 @@
     	},
     	"character" : {
     		"destination" : "Character",
-    		"destinationPackage" : "\\model\\",
+    		"destinationPackage" : "\\model\\media\\",
     		"destinationTable" : "character",
     		"joins" : [
     			{ "destinationAttribute": "publisher_id", "sourceAttribute" : "id" }
@@ -64,7 +64,7 @@
     	},
     	"story_arc" : {
     		"destination" : "Story_Arc",
-    		"destinationPackage" : "\\model\\",
+    		"destinationPackage" : "\\model\\media\\",
     		"destinationTable" : "story_arc",
     		"joins" : [
     			{ "destinationAttribute": "publisher_id", "sourceAttribute" : "id" }

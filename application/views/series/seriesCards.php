@@ -9,8 +9,8 @@
 		$card = new html\Card();
 		$card->setDisplayDescriptionKey( "shortDescription" );
 		$card->setDetailKeys( array(
-			model\Series::start_year => model\Series::start_year,
-			model\Series::pub_count => "availableSummary",
+			\model\media\Series::start_year => \model\media\Series::start_year,
+			\model\media\Series::pub_count => "availableSummary",
 			"needsUpdate" => "needsEndpointUpdateString"
 			)
 		);

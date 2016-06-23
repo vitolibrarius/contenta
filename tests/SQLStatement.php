@@ -24,8 +24,8 @@ use \Logger as Logger;
 use \Processor as Processor;
 use \Metadata as Metadata;
 
-use model\Character as Character;
-use model\Series_Character as Series_Character;
+use \model\media\Character as Character;
+use \model\media\Series_Character as Series_Character;
 
 $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root, false);

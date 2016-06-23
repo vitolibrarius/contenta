@@ -168,6 +168,64 @@ abstract class _Endpoint_Type extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['code']) == false ) {
+				$default_code = $this->attributeDefaultValue( null, null, Endpoint_Type::code);
+				if ( is_null( $default_code ) == false ) {
+					$values['code'] = $default_code;
+				}
+			}
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Endpoint_Type::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['comments']) == false ) {
+				$default_comments = $this->attributeDefaultValue( null, null, Endpoint_Type::comments);
+				if ( is_null( $default_comments ) == false ) {
+					$values['comments'] = $default_comments;
+				}
+			}
+			if ( isset($values['data_type']) == false ) {
+				$default_data_type = $this->attributeDefaultValue( null, null, Endpoint_Type::data_type);
+				if ( is_null( $default_data_type ) == false ) {
+					$values['data_type'] = $default_data_type;
+				}
+			}
+			if ( isset($values['site_url']) == false ) {
+				$default_site_url = $this->attributeDefaultValue( null, null, Endpoint_Type::site_url);
+				if ( is_null( $default_site_url ) == false ) {
+					$values['site_url'] = $default_site_url;
+				}
+			}
+			if ( isset($values['api_url']) == false ) {
+				$default_api_url = $this->attributeDefaultValue( null, null, Endpoint_Type::api_url);
+				if ( is_null( $default_api_url ) == false ) {
+					$values['api_url'] = $default_api_url;
+				}
+			}
+			if ( isset($values['favicon_url']) == false ) {
+				$default_favicon_url = $this->attributeDefaultValue( null, null, Endpoint_Type::favicon_url);
+				if ( is_null( $default_favicon_url ) == false ) {
+					$values['favicon_url'] = $default_favicon_url;
+				}
+			}
+			if ( isset($values['throttle_hits']) == false ) {
+				$default_throttle_hits = $this->attributeDefaultValue( null, null, Endpoint_Type::throttle_hits);
+				if ( is_null( $default_throttle_hits ) == false ) {
+					$values['throttle_hits'] = $default_throttle_hits;
+				}
+			}
+			if ( isset($values['throttle_time']) == false ) {
+				$default_throttle_time = $this->attributeDefaultValue( null, null, Endpoint_Type::throttle_time);
+				if ( is_null( $default_throttle_time ) == false ) {
+					$values['throttle_time'] = $default_throttle_time;
+				}
+			}
+
+			// default conversion for relationships
 		}
 		return parent::createObject($values);
 	}
@@ -206,11 +264,51 @@ abstract class _Endpoint_Type extends Model
 
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Endpoint_Type::code,
+				Endpoint_Type::name,
+				Endpoint_Type::site_url,
+				Endpoint_Type::api_url
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Endpoint_Type::code => Model::TEXT_TYPE,
+			Endpoint_Type::name => Model::TEXT_TYPE,
+			Endpoint_Type::comments => Model::TEXT_TYPE,
+			Endpoint_Type::data_type => Model::TEXT_TYPE,
+			Endpoint_Type::site_url => Model::TEXT_TYPE,
+			Endpoint_Type::api_url => Model::TEXT_TYPE,
+			Endpoint_Type::favicon_url => Model::TEXT_TYPE,
+			Endpoint_Type::throttle_hits => Model::INT_TYPE,
+			Endpoint_Type::throttle_time => Model::INT_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_code($object = null, $value)
 	{
 		// check for mandatory field

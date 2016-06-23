@@ -19,27 +19,28 @@
 	require SYSTEM_PATH .'tests/_ResetConfig.php';
 	require SYSTEM_PATH .'tests/_Data.php';
 
-use model\Character as Character;
-use model\Character_Alias as Character_Alias;
+use \model\media\Character as Character;
+use \model\media\Character_Alias as Character_Alias;
+use \model\media\Character_AliasDBO as Character_AliasDBO;
 use \model\network\Endpoint as Endpoint;
 use \model\network\Endpoint_Type as Endpoint_Type;
-use model\logs\Log as Log;
-use model\logs\Log_Level as Log_Level;
-use model\Network as Network;
-use model\version\Patch as Patch;
-use model\Publication as Publication;
-use model\Publication_Character as Publication_Character;
+use \model\media\logs\Log as Log;
+use \model\media\logs\Log_Level as Log_Level;
+use \model\media\Network as Network;
+use \model\version\Patch as Patch;
+use \model\media\Publication as Publication;
+use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publisher as Publisher;
-use model\Series as Series;
-use model\Series_Alias as Series_Alias;
-use model\Series_Character as Series_Character;
-use model\Story_Arc as Story_Arc;
-use model\Story_Arc_Character as Story_Arc_Character;
-use model\Story_Arc_Series as Story_Arc_Series;
-use model\User_Network as User_Network;
-use model\User_Series as User_Series;
+use \model\media\Series as Series;
+use \model\media\Series_Alias as Series_Alias;
+use \model\media\Series_Character as Series_Character;
+use \model\media\Story_Arc as Story_Arc;
+use \model\media\Story_Arc_Character as Story_Arc_Character;
+use \model\media\Story_Arc_Series as Story_Arc_Series;
+use \model\media\User_Network as User_Network;
+use \model\media\User_Series as User_Series;
 use \model\user\Users as Users;
-use model\version\Version as Version;
+use \model\version\Version as Version;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;
 use \model\jobs\Job as Job;
@@ -47,17 +48,20 @@ use \model\jobs\Job as Job;
 $root = TEST_ROOT_PATH . "/" . basename(__FILE__, ".php");
 SetConfigRoot( $root );
 
+	require SYSTEM_PATH .'application/libs/db/ExportData.php';
+
+use \db\ExportData_sqlite as ExportData_sqlite;
+
 my_echo( );
 my_echo( "Creating Database" );
 Migrator::Upgrade( Config::GetLog() );
 
 // load the default user
-$user = Model::Named("Users")->userByName('vito');
+$user = Model::Named("Users")->objectForName('vito');
 ($user != false && $user->name == 'vito') || die("Could not find 'vito' user");
 
 my_echo( "---------- Version ");
-$versions = Model::Named('Version')->allObjects();
-reportData($versions,  array( "code", "hash_code" ));
+// $versions = Model::Named('Version')->allObjects();
 $patches = Model::Named('Patch')->allObjects();
 reportData($patches,  array( "displayName", "version/code", "formattedDateTime_created" ));
 
@@ -97,45 +101,45 @@ my_echo( "---------- Jobs ");
 $job_types = Model::Named('Job_Type')->allObjects();
 reportData($job_types,  Model::Named('Job_Type')->allColumnNames());
 
-$character_job_type = Model::Named('Job_Type')->jobTypeForCode('character');
+$character_job_type = Model::Named('Job_Type')->objectForCode('character');
 ($character_job_type != false && $character_job_type->code == 'character') || die("Could not find 'character' job_type");
 
-$rss_job_type = Model::Named('Job_Type')->jobTypeForCode('rss');
+$rss_job_type = Model::Named('Job_Type')->objectForCode('rss');
 ($rss_job_type != false && $rss_job_type->code == 'rss') || die("Could not find 'rss' job_type");
 
 $job_model = Model::Named("Job");
 $job_data = array(
 	array(
-		model\Job::type_id => $character_job_type->id,
-		model\Job::minute => 1,
-		model\Job::hour => 1,
-		model\Job::dayOfWeek => 1,
-		model\Job::parameter => '27add4363e9b138cd375b258db481b8f',
-		model\Job::next => null,
-		model\Job::one_shot => Model::TERTIARY_TRUE,
-		model\Job::enabled => Model::TERTIARY_TRUE
+		\model\jobs\Job::type_id => $character_job_type->id,
+		\model\jobs\Job::minute => 1,
+		\model\jobs\Job::hour => 1,
+		\model\jobs\Job::dayOfWeek => 1,
+		\model\jobs\Job::parameter => '27add4363e9b138cd375b258db481b8f',
+		\model\jobs\Job::next => null,
+		\model\jobs\Job::one_shot => Model::TERTIARY_TRUE,
+		\model\jobs\Job::enabled => Model::TERTIARY_TRUE
 	),
 	array(
-		model\Job::type_id => $rss_job_type->id,
-		model\Job::minute => "10",
-		model\Job::hour => "2,4,6,8",
-		model\Job::dayOfWeek => "*",
-		model\Job::parameter => '',
-		model\Job::endpoint_id => $rss_endpoint->id,
-		model\Job::next => null,
-		model\Job::one_shot => Model::TERTIARY_FALSE,
-		model\Job::enabled => Model::TERTIARY_TRUE
+		\model\jobs\Job::type_id => $rss_job_type->id,
+		\model\jobs\Job::minute => "10",
+		\model\jobs\Job::hour => "2,4,6,8",
+		\model\jobs\Job::dayOfWeek => "*",
+		\model\jobs\Job::parameter => '',
+		\model\jobs\Job::endpoint_id => $rss_endpoint->id,
+		\model\jobs\Job::next => null,
+		\model\jobs\Job::one_shot => Model::TERTIARY_FALSE,
+		\model\jobs\Job::enabled => Model::TERTIARY_TRUE
 	),
 	array(
-		model\Job::type_id => $rss_job_type->id,
-		model\Job::minute => "10",
-		model\Job::hour => "2,4,6,8",
-		model\Job::dayOfWeek => "*",
-		model\Job::parameter => '',
-		model\Job::endpoint_id => $rss_endpoint->id,
-		model\Job::next => null,
-		model\Job::one_shot => Model::TERTIARY_FALSE,
-		model\Job::enabled => Model::TERTIARY_FALSE
+		\model\jobs\Job::type_id => $rss_job_type->id,
+		\model\jobs\Job::minute => "10",
+		\model\jobs\Job::hour => "2,4,6,8",
+		\model\jobs\Job::dayOfWeek => "*",
+		\model\jobs\Job::parameter => '',
+		\model\jobs\Job::endpoint_id => $rss_endpoint->id,
+		\model\jobs\Job::next => null,
+		\model\jobs\Job::one_shot => Model::TERTIARY_FALSE,
+		\model\jobs\Job::enabled => Model::TERTIARY_FALSE
 	)
 );
 $jobs = loadData( $job_model, $job_data, array("jobType", "endpoint", "minute", "hour", "dayOfWeek", "parameter", "next", "one_shot", "enabled") );
@@ -145,28 +149,28 @@ $rss_job = $jobs[2];
 $job_run_model = Model::Named("Job_Running");
 $job_run_data = array(
 	array(
-		model\Job_Running::job_id => $character_job->id,
-		model\Job_Running::type_id => $character_job_type->id,
-		model\Job_Running::processor => 'UploadImport',
-		model\Job_Running::guid => rand(),
-		model\Job_Running::pid => 3456
+		\model\jobs\Job_Running::job_id => $character_job->id,
+		\model\jobs\Job_Running::type_id => $character_job_type->id,
+		\model\jobs\Job_Running::processor => 'UploadImport',
+		\model\jobs\Job_Running::guid => rand(),
+		\model\jobs\Job_Running::pid => 3456
 	),
 	array(
-		model\Job_Running::job_id => $rss_job->id,
-		model\Job_Running::type_id => $rss_job_type->id,
-		model\Job_Running::processor => 'UploadImport',
-		model\Job_Running::guid => rand(),
-		model\Job_Running::pid => 98765
+		\model\jobs\Job_Running::job_id => $rss_job->id,
+		\model\jobs\Job_Running::type_id => $rss_job_type->id,
+		\model\jobs\Job_Running::processor => 'UploadImport',
+		\model\jobs\Job_Running::guid => rand(),
+		\model\jobs\Job_Running::pid => 98765
 	)
 );
-$jobs_running = loadData( $job_run_model, $job_run_data, array("job", "jobType", "trace", "trace_id", "context", "context_id", "pid") );
+$jobs_running = loadData( $job_run_model, $job_run_data, array("job", "jobType/name", "pid") );
 
 my_echo( "---------- Publisher ");
 $publisher_model = Model::Named("Publisher");
 $publisher_data = array(
 	array(
 		\model\media\Publisher::name => "DC Comics",
-		'xurl' => "http:\/\/comicvine.gamespot.com\/",
+		'xurl' => "http://comicvine.gamespot.com/",
 		'xsource' => Endpoint_Type::ComicVine,
 		'xid' => 433786,
 		'xupdated' => time()
@@ -184,64 +188,71 @@ my_echo( "---------- Character ");
 $Character_model = Model::Named("Character");
 $Character_data = array(
 	array(
-		model\Character::name => "Batman",
-		model\Character::realname => "Batman",
-		model\Character::desc => "The dark knight",
-		model\Character::gender => "Male",
-		model\Character::publisher_id => $publishers[0]->id,
-		'xurl' => "http:\/\/comicvine.gamespot.com\/",
+		\model\media\Character::name => "Batman",
+		\model\media\Character::realname => "Batman",
+		\model\media\Character::desc => "The dark knight",
+		\model\media\Character::gender => "Male",
+		\model\media\Character::publisher_id => $publishers[0]->id,
+		'xurl' => "http://comicvine.gamespot.com/",
 		'xsource' => Endpoint_Type::ComicVine,
 		'xid' => 433786,
 		'xupdated' => time()
 	),
 	array(
-		model\Character::name => "Robin",
-		model\Character::realname => "Robin",
-		model\Character::desc => "the boy blunder",
-		model\Character::gender => "Male",
-		model\Character::publisher_id => $publishers[0]->id
+		\model\media\Character::name => "Robin",
+		\model\media\Character::realname => "Robin",
+		\model\media\Character::desc => "the boy blunder",
+		\model\media\Character::gender => "Male",
+		\model\media\Character::publisher_id => $publishers[0]->id
 	),
 	array(
-		model\Character::name => "Spiderman",
-		model\Character::realname => "Spider-man",
-		model\Character::desc => "Wall crawler",
-		model\Character::gender => "Male",
-		model\Character::publisher_id => $publishers[2]->id
+		\model\media\Character::name => "Spiderman",
+		\model\media\Character::realname => "Spider-man",
+		\model\media\Character::desc => "Wall crawler",
+		\model\media\Character::gender => "Male",
+		\model\media\Character::publisher_id => $publishers[2]->id
 	)
 );
 $Characters = loadData( $Character_model, $Character_data, array("name", "realname", "desc", "gender", "publisher", "series") );
 
 $batman_character = $Characters[0];
 $robin_character = $Characters[1];
-$batman_character->addAlias("Bruce Wayne");
-$batman_character->addAlias("Bruce");
-$batman_character->addAlias("Bat-Man");
+
+$alias = $batman_character->addAlias("Bruce Wayne");
+$alias instanceof Character_AliasDBO || die( "failed to create alias " . var_export($alias, true) );
+
+$alias = $batman_character->addAlias("Bruce");
+$alias instanceof Character_AliasDBO || die( "failed to create alias " . var_export($alias, true) );
+
+$alias = $batman_character->addAlias("Bat-Man");
+$alias instanceof Character_AliasDBO || die( "failed to create alias " . var_export($alias, true) );
+
 reportData($batman_character->aliases(),  array( "name", "character" ));
 
 my_echo( "---------- Series ");
 $Series_model = Model::Named("Series");
 $Series_data = array(
 	array(
-		model\Series::name => "Batman",
-		model\Series::start_year => 2012,
-		model\Series::desc => "The dark knight comic series",
-		model\Series::publisher_id => $publishers[0]->id,
-		'xurl' => "http:\/\/comicvine.gamespot.com\/",
+		\model\media\Series::name => "Batman",
+		\model\media\Series::start_year => 2012,
+		\model\media\Series::desc => "The dark knight comic series",
+		\model\media\Series::publisher_id => $publishers[0]->id,
+		'xurl' => "http://comicvine.gamespot.com/",
 		'xsource' => Endpoint_Type::ComicVine,
 		'xid' => 433786,
 		'xupdated' => time()
 	),
 	array(
-		model\Series::name => "Spiderman",
-		model\Series::start_year => 2010,
-		model\Series::desc => "Wall crawler comic series",
-		model\Series::publisher_id => $publishers[2]->id
+		\model\media\Series::name => "Spiderman",
+		\model\media\Series::start_year => 2010,
+		\model\media\Series::desc => "Wall crawler comic series",
+		\model\media\Series::publisher_id => $publishers[2]->id
 	),
 	array(
-		model\Series::name => "Nightwing",
-		model\Series::start_year => 2011,
-		model\Series::desc => "The sidekick comic series",
-		model\Series::publisher_id => $publishers[0]->id
+		\model\media\Series::name => "Nightwing",
+		\model\media\Series::start_year => 2011,
+		\model\media\Series::desc => "The sidekick comic series",
+		\model\media\Series::publisher_id => $publishers[0]->id
 	)
 );
 $Series = loadData( $Series_model, $Series_data, array("name", "start_year", "desc", "publisher") );
@@ -269,23 +280,23 @@ my_echo( "---------- Story Arcs ");
 $Story_Arc_model = Model::Named("Story_Arc");
 $Story_Arc_data = array(
 	array(
-		model\Story_Arc::name => "Crisis",
-		model\Story_Arc::desc => "It's a Crisis Story_Arc",
-		model\Story_Arc::publisher_id => $publishers[0]->id,
-		'xurl' => "http:\/\/comicvine.gamespot.com\/",
+		\model\media\Story_Arc::name => "Crisis",
+		\model\media\Story_Arc::desc => "It's a Crisis Story_Arc",
+		\model\media\Story_Arc::publisher_id => $publishers[0]->id,
+		'xurl' => "http://comicvine.gamespot.com/",
 		'xsource' => Endpoint_Type::ComicVine,
 		'xid' => 433786,
 		'xupdated' => time()
 	),
 	array(
-		model\Story_Arc::name => "Of Gods and Men",
-		model\Story_Arc::desc => "It's a god Story_Arc",
-		model\Story_Arc::publisher_id => $publishers[2]->id
+		\model\media\Story_Arc::name => "Of Gods and Men",
+		\model\media\Story_Arc::desc => "It's a god Story_Arc",
+		\model\media\Story_Arc::publisher_id => $publishers[2]->id
 	),
 	array(
-		model\Story_Arc::name => "Storm Warning",
-		model\Story_Arc::desc => "It's a Storm Warning Story_Arc",
-		model\Story_Arc::publisher_id => $publishers[0]->id
+		\model\media\Story_Arc::name => "Storm Warning",
+		\model\media\Story_Arc::desc => "It's a Storm Warning Story_Arc",
+		\model\media\Story_Arc::publisher_id => $publishers[0]->id
 	)
 );
 $Story_Arcs = loadData( $Story_Arc_model, $Story_Arc_data, array("name", "desc", "publisher") );
@@ -326,29 +337,29 @@ $Publication_model = Model::Named("Publication");
 */
 $Publication_data = array(
 	array(
-		model\Publication::name => "The Big Burn: Sparks",
-		model\Publication::desc => "<p style=\"\"><em>As Two-Face continues his rampage through Gotham City, more light is shed on his past. Who is Carrie Kelley and how can her mysterious connection to Harvey Dent help Batman?<\/em><\/p>",
-		model\Publication::issue_num => 25,
-		model\Publication::pub_date => strtotime('2014-01-01'),
-		model\Publication::series_id => $tdk_series->id,
-		'xurl' => "http:\/\/comicvine.gamespot.com\/",
+		\model\media\Publication::name => "The Big Burn: Sparks",
+		\model\media\Publication::desc => "<p style=\"\"><em>As Two-Face continues his rampage through Gotham City, more light is shed on his past. Who is Carrie Kelley and how can her mysterious connection to Harvey Dent help Batman?<\/em><\/p>",
+		\model\media\Publication::issue_num => 25,
+		\model\media\Publication::pub_date => strtotime('2014-01-01'),
+		\model\media\Publication::series_id => $tdk_series->id,
+		'xurl' => "http://comicvine.gamespot.com/",
 		'xsource' => Endpoint_Type::ComicVine,
 		'xid' => 433786,
 		'xupdated' => time()
 	),
 	array(
-		model\Publication::name => "Bad Blood",
-		model\Publication::desc => "Long description",
-		model\Publication::issue_num => 2,
-		model\Publication::pub_date => strtotime('2014-01-01'),
-		model\Publication::series_id => $nightwing_series->id
+		\model\media\Publication::name => "Bad Blood",
+		\model\media\Publication::desc => "Long description",
+		\model\media\Publication::issue_num => 2,
+		\model\media\Publication::pub_date => strtotime('2014-01-01'),
+		\model\media\Publication::series_id => $nightwing_series->id
 	),
 	array(
-		model\Publication::name => "Knightmoves",
-		model\Publication::desc => "<p style=\"\"><em>As Knightmoves-Knightmoves Dent help Batman?<\/em><\/p>",
-		model\Publication::issue_num => 22,
-		model\Publication::pub_date => strtotime('2014-01-01'),
-		model\Publication::series_id => $tdk_series->id
+		\model\media\Publication::name => "Knightmoves",
+		\model\media\Publication::desc => "<p style=\"\"><em>As Knightmoves-Knightmoves Dent help Batman?<\/em><\/p>",
+		\model\media\Publication::issue_num => 22,
+		\model\media\Publication::pub_date => strtotime('2014-01-01'),
+		\model\media\Publication::series_id => $tdk_series->id
 	)
 );
 $Publications = loadData( $Publication_model, $Publication_data, array("name", "desc", "issue_num", "series") );
@@ -386,25 +397,25 @@ $cbz_type = Model::Named('Media_Type')->objectForCode(\model\media\Media_Type::C
 $Media_model = Model::Named("Media");
 $Media_data = array(
 	array(
-		model\Media::type_id => $cbz_type->id,
-		model\Media::publication_id => $kmoves_publication->id,
-		model\Media::original_filename => 'vito',
-		model\Media::checksum => uuid(),
-		model\Media::size => 112233
+		\model\media\Media::type_id => $cbz_type->id,
+		\model\media\Media::publication_id => $kmoves_publication->id,
+		\model\media\Media::original_filename => 'vito',
+		\model\media\Media::checksum => uuid(),
+		\model\media\Media::size => 112233
 	),
 	array(
-		model\Media::type_id => $cbz_type->id,
-		model\Media::publication_id => $kmoves_publication->id,
-		model\Media::original_filename => 'Batman Beyond 001 (2012) v12.cbz',
-		model\Media::checksum => uuid(),
-		model\Media::size => 54321
+		\model\media\Media::type_id => $cbz_type->id,
+		\model\media\Media::publication_id => $kmoves_publication->id,
+		\model\media\Media::original_filename => 'Batman Beyond 001 (2012) v12.cbz',
+		\model\media\Media::checksum => uuid(),
+		\model\media\Media::size => 54321
 	),
 	array(
-		model\Media::type_id => $cbz_type->id,
-		model\Media::publication_id => $burn_publication->id,
-		model\Media::original_filename => 'Blackhawks 006 (2012) [Digital] (ZOOM-Empire).cbz',
-		model\Media::checksum => uuid(),
-		model\Media::size => 91919
+		\model\media\Media::type_id => $cbz_type->id,
+		\model\media\Media::publication_id => $burn_publication->id,
+		\model\media\Media::original_filename => 'Blackhawks 006 (2012) [Digital] (ZOOM-Empire).cbz',
+		\model\media\Media::checksum => uuid(),
+		\model\media\Media::size => 91919
 	)
 );
 $media = loadData( $Media_model, $Media_data );
@@ -465,6 +476,12 @@ reportData($media,  array(
 // 	from story_arc_publication join publication on story_arc_publication.publication_id = publication.id
 // 	where story_arc_publication.story_arc_id = story_arc.id)" );
 
+
+	$path = appendPath( "/tmp/", "DatabaseTest" );
+		echo PHP_EOL . "exporting to " . $path . PHP_EOL;
+	(is_dir($path) == false) || destroy_dir($path) || die( "Failed to delete $path" );
+	$exporter = new ExportData_sqlite( $path, \Database::instance() );
+	$exporter->exportAll();
 
 my_echo( );
 my_echo( );

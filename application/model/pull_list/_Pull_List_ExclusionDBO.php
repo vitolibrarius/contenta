@@ -56,16 +56,6 @@ abstract class _Pull_List_ExclusionDBO extends DataObject
 		parent::storeChange( Pull_List_Exclusion::type, $value );
 	}
 
-	public function endpoint_type_id()
-	{
-		return parent::changedValue( Pull_List_Exclusion::endpoint_type_id, $this->endpoint_type_id );
-	}
-
-	public function setEndpoint_type_id( $value = null)
-	{
-		parent::storeChange( Pull_List_Exclusion::endpoint_type_id, $value );
-	}
-
 
 }
 

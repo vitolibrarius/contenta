@@ -95,6 +95,14 @@ abstract class _Pull_List_Expansion extends Model
 		return $this->allObjectsForFK(Pull_List_Expansion::endpoint_type_id, $obj, $this->sortOrder(), 50);
 	}
 
+	public function countForEndpoint_type($obj)
+	{
+		if ( is_null($obj) == false ) {
+			return $this->countForFK( Pull_List_Expansion::endpoint_type_id, $obj );
+		}
+		return false;
+	}
+
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
@@ -115,6 +123,34 @@ abstract class _Pull_List_Expansion extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['pattern']) == false ) {
+				$default_pattern = $this->attributeDefaultValue( null, null, Pull_List_Expansion::pattern);
+				if ( is_null( $default_pattern ) == false ) {
+					$values['pattern'] = $default_pattern;
+				}
+			}
+			if ( isset($values['replace']) == false ) {
+				$default_replace = $this->attributeDefaultValue( null, null, Pull_List_Expansion::replace);
+				if ( is_null( $default_replace ) == false ) {
+					$values['replace'] = $default_replace;
+				}
+			}
+			if ( isset($values['sequence']) == false ) {
+				$default_sequence = $this->attributeDefaultValue( null, null, Pull_List_Expansion::sequence);
+				if ( is_null( $default_sequence ) == false ) {
+					$values['sequence'] = $default_sequence;
+				}
+			}
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Pull_List_Expansion::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
+				}
+			}
+
+			// default conversion for relationships
 			if ( isset($values['endpoint_type']) ) {
 				$local_endpoint_type = $values['endpoint_type'];
 				if ( $local_endpoint_type instanceof Endpoint_TypeDBO) {
@@ -177,11 +213,46 @@ abstract class _Pull_List_Expansion extends Model
 	}
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Pull_List_Expansion::pattern
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Pull_List_Expansion::pattern => Model::TEXT_TYPE,
+			Pull_List_Expansion::replace => Model::TEXT_TYPE,
+			Pull_List_Expansion::sequence => Model::INT_TYPE,
+			Pull_List_Expansion::created => Model::DATE_TYPE,
+			Pull_List_Expansion::endpoint_type_id => Model::TO_ONE_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+				case Pull_List_Expansion::sequence:
+					return 0;
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_pattern($object = null, $value)
 	{
 		// check for mandatory field
@@ -249,14 +320,6 @@ abstract class _Pull_List_Expansion extends Model
 			);
 		}
 
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Pull_List_Expansion::endpoint_type_id,
-				"FILTER_VALIDATE_INT"
-			);
-		}
 		return null;
 	}
 }

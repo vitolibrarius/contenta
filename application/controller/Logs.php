@@ -9,8 +9,8 @@ use \Auth as Auth;
 use \Config as Config;
 
 use \model\user\Users as Users;
-use model\logs\Log as Log;
-use model\logs\Log_Level as Log_Level;
+use \model\media\logs\Log as Log;
+use \model\media\logs\Log_Level as Log_Level;
 
 /**
  * Class Error

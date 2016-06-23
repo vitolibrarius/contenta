@@ -137,6 +137,52 @@ abstract class _Job_Type extends Model
 	public function createObject( array $values = array() )
 	{
 		if ( isset($values) ) {
+
+			// default values for attributes
+			if ( isset($values['code']) == false ) {
+				$default_code = $this->attributeDefaultValue( null, null, Job_Type::code);
+				if ( is_null( $default_code ) == false ) {
+					$values['code'] = $default_code;
+				}
+			}
+			if ( isset($values['name']) == false ) {
+				$default_name = $this->attributeDefaultValue( null, null, Job_Type::name);
+				if ( is_null( $default_name ) == false ) {
+					$values['name'] = $default_name;
+				}
+			}
+			if ( isset($values['desc']) == false ) {
+				$default_desc = $this->attributeDefaultValue( null, null, Job_Type::desc);
+				if ( is_null( $default_desc ) == false ) {
+					$values['desc'] = $default_desc;
+				}
+			}
+			if ( isset($values['processor']) == false ) {
+				$default_processor = $this->attributeDefaultValue( null, null, Job_Type::processor);
+				if ( is_null( $default_processor ) == false ) {
+					$values['processor'] = $default_processor;
+				}
+			}
+			if ( isset($values['parameter']) == false ) {
+				$default_parameter = $this->attributeDefaultValue( null, null, Job_Type::parameter);
+				if ( is_null( $default_parameter ) == false ) {
+					$values['parameter'] = $default_parameter;
+				}
+			}
+			if ( isset($values['scheduled']) == false ) {
+				$default_scheduled = $this->attributeDefaultValue( null, null, Job_Type::scheduled);
+				if ( is_null( $default_scheduled ) == false ) {
+					$values['scheduled'] = $default_scheduled;
+				}
+			}
+			if ( isset($values['requires_endpoint']) == false ) {
+				$default_requires_endpoint = $this->attributeDefaultValue( null, null, Job_Type::requires_endpoint);
+				if ( is_null( $default_requires_endpoint ) == false ) {
+					$values['requires_endpoint'] = $default_requires_endpoint;
+				}
+			}
+
+			// default conversion for relationships
 		}
 		return parent::createObject($values);
 	}
@@ -171,11 +217,50 @@ abstract class _Job_Type extends Model
 
 
 	/**
-	 *	Named fetches
+	 * Named fetches
 	 */
 
+	/**
+	 * Attribute editing
+	 */
+	public function attributesMandatory($object = null)
+	{
+		if ( is_null($object) ) {
+			return array(
+				Job_Type::code
+			);
+		}
+		return parent::attributesMandatory($object);
+	}
 
-	/** Validation */
+	public function attributesMap() {
+		return array(
+			Job_Type::code => Model::TEXT_TYPE,
+			Job_Type::name => Model::TEXT_TYPE,
+			Job_Type::desc => Model::TEXT_TYPE,
+			Job_Type::processor => Model::TEXT_TYPE,
+			Job_Type::parameter => Model::TEXT_TYPE,
+			Job_Type::scheduled => Model::FLAG_TYPE,
+			Job_Type::requires_endpoint => Model::FLAG_TYPE
+		);
+	}
+
+	public function attributeDefaultValue($object = null, $type = null, $attr)
+	{
+		if ( isset($object) === false || is_null($object) == true) {
+			switch ($attr) {
+				case Job_Type::scheduled:
+					return true;
+				case Job_Type::requires_endpoint:
+					return true;
+			}
+		}
+		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/**
+	 * Validation
+	 */
 	function validate_code($object = null, $value)
 	{
 		// check for mandatory field
