@@ -43,7 +43,7 @@ class Migration_9 extends Migrator
 	public function sqlite_upgrade()
 	{
 		$table_fields = \SQL::pragma_TableInfo(Job_Running::TABLE);
-		if ( isset($table_fields[ Job_Running::type_id ]) == false ) {
+		if ( is_array($table_fields) && isset($table_fields[ Job_Running::type_id ]) == false ) {
 			// easier to just drop these tables and re-create them
 			$dropOrder = array(
 				Job_Running::TABLE

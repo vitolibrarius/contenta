@@ -64,7 +64,7 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 				}
 
 				if ( $this->isDebuggingResponses() ) {
-					$this->debugData(json_encode($json, JSON_PRETTY_PRINT), $this->cleanURLForLog($url) . ".txt" );
+					$this->debugData(json_encode($json, JSON_PRETTY_PRINT), $this->cleanURLForLog($url) . ".json" );
 				}
 				return array($json, $headers);
 			}

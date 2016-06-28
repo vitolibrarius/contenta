@@ -22,6 +22,9 @@ class CbzFileWrapperTest extends PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
+// 		$filename = 'First_Love_Wikimedia.cbz';
+// 		$zipFile = test_mediaSamplesFile($filename);
+
     }
 
 /*	 Test functions */
@@ -34,7 +37,6 @@ class CbzFileWrapperTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCreateWrapper()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
 	}
 
 

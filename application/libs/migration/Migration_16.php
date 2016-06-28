@@ -36,7 +36,7 @@ class Migration_16 extends Migrator
 	public function sqlite_upgrade()
 	{
 		$table_fields = \SQL::pragma_TableInfo(Pull_List_Item::TABLE);
-		if ( isset($table_fields[ Pull_List_Item::search_name ]) == false ) {
+		if ( is_array($table_fields) && isset($table_fields[ Pull_List_Item::search_name ]) == false ) {
 			// easier to just drop these tables and re-create them
 			$dropOrder = array(
 				Pull_List_Expansion::TABLE,

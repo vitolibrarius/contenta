@@ -140,6 +140,20 @@ function test_mediaSamplesFile( $filename = '')
 	return appendPath( TEST_RESOURCE_PATH, "media", $filename );
 }
 
+function test_copyMediaSamplesFile( $filename = '')
+{
+	$source = appendPath( TEST_RESOURCE_PATH, "media", $filename );
+	if ( file_exists($source) ) {
+		$destFilename = uuid() . "-" . $filename;
+		$destination = appendPath(Config::GetRepository(), $destFilename);
+		if ( copy($source, $destination) == false ) {
+			return false;
+		}
+		return $destination;
+	}
+	return false;
+}
+
 function test_RandomWords($number_words = 5, $length_min = 5, $length_max = 30)
 {
 	$words = array();

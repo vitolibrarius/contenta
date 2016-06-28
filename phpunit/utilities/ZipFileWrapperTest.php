@@ -11,6 +11,7 @@ use \PHPUnit_Framework_TestCase as PHPUnit_Framework_TestCase;
 use \ZipArchive as ZipArchive;
 use \Logger as Logger;
 use \Cache as Cache;
+use \Config as Config;
 use \ClassNotFoundException as ClassNotFoundException;
 /* {useStatements} */
 
@@ -34,29 +35,52 @@ class ZipFileWrapperTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCreateWrapper()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
+		$src = appendPath( Config::GetRepository(), "testCreateWrapper" );
+		$dest = appendPath( Config::GetRepository(), "testCreateWrapper.zip" );
 
-	/**
-	 * @covers	errorMessage
-	 * 			T_FUNCTION T_PUBLIC errorMessage ( $errorCode)
-	 * @todo	Implement testErrorMessage().
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 21:44:53.
-	 */
-	public function testErrorMessage()
-	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		is_file($src) == false || destroy_dir($src) || die( "unable to delete $src" );
+		safe_mkdir( $src ) || die( "Unable to create $temp" );
+		for ( $i = 0; $i < 5; $i++ ) {
+			$content = test_RandomWords( 50 );
+			$f = appendPath( $src, "TestFile_" . $i . ".txt" );
+			file_put_contents($f, $content) || die( "Failed to write file $f" );
+		}
+
+		$wrapper = FileWrapper::createWrapperForSource($src,$dest);
+		$this->assertTrue( $wrapper != false, "Failed to create wrapper" );
+		$this->assertTrue( file_exists($dest), "Destination not created $dest" );
+		unlink( $dest ) || die( "unable to delete old $dest" );
+		destroy_dir($src) || die( "unable to delete old $src" );
 	}
 
 	/**
 	 * @covers	testWrapper
 	 * 			T_FUNCTION T_PUBLIC testWrapper ( $errorCode)
-	 * @todo	Implement testTestWrapper().
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 21:44:53.
 	 */
 	public function testTestWrapper()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$filename = 'First_Love_Wikimedia.cbz';
+		$zipFile = test_mediaSamplesFile($filename);
+		$wrapper = FileWrapper::force( $zipFile, 'zip' );
+		$test = $wrapper->testWrapper( $errorcode );
+		$this->assertNull( $test, "Wrapper failed test " . var_export($test, true) );
+		$this->assertEquals( 0, $errorcode, "Error code set to error value" );
+	}
+
+	/**
+	 * @covers	testWrapper
+	 * 			T_FUNCTION T_PUBLIC testWrapper ( $errorCode)
+	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 21:44:53.
+	 */
+	public function testTestWrapper_corrupt()
+	{
+		$filename = 'corrupt.cbz';
+		$zipFile = test_mediaSamplesFile($filename);
+		$wrapper = FileWrapper::force( $zipFile, 'zip' );
+		$test = $wrapper->testWrapper( $errorcode );
+		$this->assertNotNull( $test, "Wrapper failed test " . var_export($test, true) );
+		$this->assertEquals( 19, $errorcode, "Error code set to wrong error value" );
 	}
 
 	/**
@@ -67,7 +91,12 @@ class ZipFileWrapperTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testWrapperContents()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$filename = 'First_Love_Wikimedia.cbz';
+		$zipFile = test_mediaSamplesFile($filename);
+		$wrapper = FileWrapper::force( $zipFile, 'zip' );
+		$contentList = $wrapper->wrapperContents( );
+		$this->assertNotNull( $contentList, "Wrapper content list " . var_export($contentList, true) );
+		$this->assertCount( 5, $contentList, "Content has wrong number of items" );
 	}
 
 	/**
@@ -78,7 +107,16 @@ class ZipFileWrapperTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testWrappedDataForName()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$filename = 'First_Love_Wikimedia.cbz';
+		$zipFile = test_mediaSamplesFile($filename);
+		$wrapper = FileWrapper::force( $zipFile, 'zip' );
+		$contentList = $wrapper->wrapperContents( );
+		$this->assertNotNull( $contentList, "Wrapper content list " . var_export($contentList, true) );
+		$this->assertCount( 5, $contentList, "Content has wrong number of items" );
+
+		$item = $contentList[3];
+		$data = $wrapper->wrappedDataForName( $item );
+		$this->assertNotNull( $data, "Wrapper data for " . var_export($item, true) );
 	}
 
 	/**
@@ -89,7 +127,21 @@ class ZipFileWrapperTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testWrappedThumbnailForName()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$filename = 'First_Love_Wikimedia.cbz';
+		$zipFile = test_mediaSamplesFile($filename);
+		$wrapper = FileWrapper::force( $zipFile, 'zip' );
+		$contentList = $wrapper->wrapperContents( );
+		$this->assertNotNull( $contentList, "Wrapper content list " . var_export($contentList, true) );
+		$this->assertCount( 5, $contentList, "Content has wrong number of items" );
+
+		$item = $contentList[3];
+		$dest = appendPath( Config::GetRepository(), basename($item) );
+		file_exists($dest) == false || unlink($dest) || die( "Failed to delete old $dest");
+
+		$data = $wrapper->wrappedThumbnailForName( $item );
+		$this->assertNotNull( $data, "Wrapper data for " . var_export($item, true) );
+		$this->assertTrue( file_put_contents($dest, $data) > 0, "failed to write thumbnail to $dest" );
+		unlink( $dest ) || die( "unable to delete old $dest" );
 	}
 
 	/**
@@ -100,7 +152,20 @@ class ZipFileWrapperTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testUnwrapToDirectory()
 	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
+		$filename = 'First_Love_Wikimedia.cbz';
+		$zipFile = test_mediaSamplesFile($filename);
+		$wrapper = FileWrapper::force( $zipFile, 'zip' );
+		$contentList = $wrapper->wrapperContents( );
+		$this->assertNotNull( $contentList, "Wrapper content list " . var_export($contentList, true) );
+		$this->assertCount( 5, $contentList, "Content has wrong number of items" );
+
+		$dest = appendPath( Config::GetRepository(), "unwrapToDirectory" );
+		is_file($dest) == false || destroy_dir($dest) || die( "unable to delete old $dest" );
+		safe_mkdir( $dest ) || die( "Unable to create $dest" );
+
+		$success = $wrapper->unwrapToDirectory( $dest );
+		$this->assertTrue( $success, "unwrap failed to $dest" );
+		destroy_dir($dest) || die( "unable to delete old $dest" );
 	}
 
 
