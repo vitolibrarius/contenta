@@ -7,7 +7,7 @@
         "name": { "column": "name", "length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": false },
         "desc": { "column": "desc", "length": 4096, "type": "TEXT",	"nullable": true },
         "pub_date": { "column": "pub_date", "type": "DATE" },
-        "issue_num": { "column": "issue_num",	"type": "INTEGER", "default": 0  },
+        "issue_num": { "column": "issue_num", "length": 256, "type": "TEXT", "default": "0"  },
         "media_count": { "column": "media_count",	"type": "INTEGER", "default": 0  },
 
         "xurl": { "column": "xurl", "length": 1024, "type": "TEXT" },

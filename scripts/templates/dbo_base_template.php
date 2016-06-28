@@ -89,6 +89,18 @@ foreach( $this->attributes as $name => $detailArray ) {
 <?php endif; ?>
 		return false;
 	}
+
+	public function set<?php echo ucwords($name); ?>(<?php echo $detailArray['destination'] ?>DBO $obj = null)
+	{
+<?php if (count($joins) == 1) : ?><?php $join = $joins[0]; ?>
+		if ( isset($obj, $obj-><?php echo $join["destinationAttribute"]; ?>) && (isset($this-><?php echo $join["sourceAttribute"]; ?>) == false || $obj-><?php echo $join["destinationAttribute"]; ?> != $this-><?php echo $join["sourceAttribute"]; ?>) ) {
+			parent::storeChange( <?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>, $obj-><?php echo $join["destinationAttribute"]; ?> );
+			$this->saveChanges();
+		}
+<?php else : ?>
+			FixMe: relationship <?php echo $name; ?> has multiple joins
+<?php endif; ?>
+	}
 <?php endif; ?>
 <?php else : ?>
 	Error: relationship <?php echo $name; ?> does not define 'isToMany'

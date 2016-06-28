@@ -57,6 +57,14 @@ abstract class _PublicationDBO extends DataObject
 		return false;
 	}
 
+	public function setSeries(SeriesDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->series_id) == false || $obj->id != $this->series_id) ) {
+			parent::storeChange( Publication::series_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-many relationship
 	public function media()
 	{

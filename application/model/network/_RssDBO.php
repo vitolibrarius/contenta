@@ -51,6 +51,14 @@ abstract class _RssDBO extends DataObject
 		return false;
 	}
 
+	public function setEndpoint(EndpointDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->endpoint_id) == false || $obj->id != $this->endpoint_id) ) {
+			parent::storeChange( Rss::endpoint_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 
 	/** Attributes */
 	public function title()

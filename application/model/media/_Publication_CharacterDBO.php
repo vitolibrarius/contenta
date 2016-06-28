@@ -31,6 +31,14 @@ abstract class _Publication_CharacterDBO extends DataObject
 		return false;
 	}
 
+	public function setPublication(PublicationDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->publication_id) == false || $obj->id != $this->publication_id) ) {
+			parent::storeChange( Publication_Character::publication_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function character()
 	{
@@ -39,6 +47,14 @@ abstract class _Publication_CharacterDBO extends DataObject
 			return $model->objectForId($this->character_id);
 		}
 		return false;
+	}
+
+	public function setCharacter(CharacterDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->character_id) == false || $obj->id != $this->character_id) ) {
+			parent::storeChange( Publication_Character::character_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

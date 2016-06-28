@@ -67,15 +67,6 @@ class PublicationDBO extends _PublicationDBO
 		return '';
 	}
 
-	public function setSeries( SeriesDBO $series )
-	{
-		if ( isset($series, $series->id) && (isset($this->series_id) == false || $series->id != $this->series_id) ) {
-			$updates = array();
-			$updates[Publication::series_id] = $series->id;
-			$this->model()->updateObject($this, $updates );
-		}
-	}
-
 	public function characters($limit = null)
 	{
 		$select = \SQL::SelectJoin( Model::Named("Character") );

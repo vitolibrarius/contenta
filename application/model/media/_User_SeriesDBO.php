@@ -46,6 +46,14 @@ abstract class _User_SeriesDBO extends DataObject
 		return false;
 	}
 
+	public function setUser(UsersDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->user_id) == false || $obj->id != $this->user_id) ) {
+			parent::storeChange( User_Series::user_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function series()
 	{
@@ -54,6 +62,14 @@ abstract class _User_SeriesDBO extends DataObject
 			return $model->objectForId($this->series_id);
 		}
 		return false;
+	}
+
+	public function setSeries(SeriesDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->series_id) == false || $obj->id != $this->series_id) ) {
+			parent::storeChange( User_Series::series_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

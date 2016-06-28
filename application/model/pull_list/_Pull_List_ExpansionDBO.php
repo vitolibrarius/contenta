@@ -35,6 +35,14 @@ abstract class _Pull_List_ExpansionDBO extends DataObject
 		return false;
 	}
 
+	public function setEndpoint_type(Endpoint_TypeDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->endpoint_type_id) == false || $obj->id != $this->endpoint_type_id) ) {
+			parent::storeChange( Pull_List_Expansion::endpoint_type_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 
 	/** Attributes */
 	public function pattern()

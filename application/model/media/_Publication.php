@@ -34,7 +34,7 @@ use \model\media\Publication_CharactersDBO as Publication_CharactersDBO;
 			. Publication::name . " TEXT, "
 			. Publication::desc . " TEXT, "
 			. Publication::pub_date . " INTEGER, "
-			. Publication::issue_num . " INTEGER, "
+			. Publication::issue_num . " TEXT, "
 			. Publication::media_count . " INTEGER, "
 			. Publication::xurl . " TEXT, "
 			. Publication::xsource . " TEXT, "
@@ -117,6 +117,7 @@ abstract class _Publication extends Model
 	{
 		return $this->allObjectsForKeyValue(Publication::issue_num, $value);
 	}
+
 
 	public function allForMedia_count($value)
 	{
@@ -372,7 +373,7 @@ abstract class _Publication extends Model
 			Publication::name => Model::TEXT_TYPE,
 			Publication::desc => Model::TEXT_TYPE,
 			Publication::pub_date => Model::DATE_TYPE,
-			Publication::issue_num => Model::INT_TYPE,
+			Publication::issue_num => Model::TEXT_TYPE,
 			Publication::media_count => Model::INT_TYPE,
 			Publication::xurl => Model::TEXT_TYPE,
 			Publication::xsource => Model::TEXT_TYPE,
@@ -465,14 +466,6 @@ abstract class _Publication extends Model
 			return null;
 		}
 
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Publication::issue_num,
-				"FILTER_VALIDATE_INT"
-			);
-		}
 		return null;
 	}
 	function validate_media_count($object = null, $value)

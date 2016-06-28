@@ -59,7 +59,7 @@ function configureEndpoint() {
 	($cv_endpoint_type != false && $cv_endpoint_type->code == 'ComicVine') || die("Could not find Endpoint_Type::ComicVine");
 
 	$ep_model = Model::Named('Endpoint');
-	$points = $ep_model->allForEndpointType(Endpoint_Type::ComicVine);
+	$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 	if ( is_array($points) == false || count($points) == 0) {
 		$metadata = metadataFor(Endpoint_Type::ComicVine . ".json");
 		if ( $metadata->isMeta( \model\network\Endpoint::api_key ) == false )
@@ -75,10 +75,10 @@ function configureEndpoint() {
 			die( "Please configure the ComicVine.json config file with your API key" . PHP_EOL );
 		}
 
-		loadData( $ep_model, array($metadata->readMetadata()), array( "name", "type", "base_url", "api_key") );
+		loadData( $ep_model, array($metadata->readMetadata()), array( "displayName") );
 	}
 
-	$points = $ep_model->allForEndpointType(Endpoint_Type::ComicVine);
+	$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 	($points != false && count($points) > 0) || die('No endpoint defined');
 
 	return $points[0];
@@ -174,6 +174,44 @@ function publicationsMetadata($metadata) {
 		$pubs = $metadata->getMeta( Publication::TABLE );
 	}
 	return $pubs;
+}
+
+function Story_Arc($endpoint, $metadata) {
+	/***********************************************************************************************/
+	my_echo( );
+	my_echo( "---------- Story_Arc ");
+	$importer = new ComicVineImporter( Story_Arc::TABLE );
+	$importer->setEndpoint($endpoint);
+
+	$storyarc = $metadata->getMeta( Story_Arc::TABLE );
+	if ( is_array($storyarc) == false || count($storyarc) == 0 ) {
+		$sample = array(
+			array( "xid" => 57571, "name" => "Escape From Riverdale" ),
+			array( "xid" => 57429, "name" => "Inhumanity" ),
+			array( "xid" => 55707, "name" => "Dark Reign" )
+		);
+		$metadata->setMeta( Story_Arc::TABLE, $sample );
+		$storyarc = $metadata->getMeta( Story_Arc::TABLE );
+	}
+
+	$importer->enqueue_publisher( array( "xid" => 10, "name" => "DC Comics" ), true, true);
+	$importer->enqueue_character( array( "xid" => 1686, "name" => "Superboy" ), true, true);
+	$importer->enqueue_character( array( "xid" => 1807, "name" => "Superman" ), true, true);
+	foreach( $storyarc as $sample ) {
+		$importer->enqueue_story_arc( $sample, true, true );
+	}
+
+	$importer->processData();
+
+	$storyarc_model = Model::Named("Story_Arc");
+	foreach( $storyarc as $sample ) {
+		$object = $storyarc_model->objectForExternal( $sample["xid"], Endpoint_Type::ComicVine);
+		if ( isset($object) == false || is_a($object, '\model\media\Story_ArcDBO') == false || $object->name != $sample["name"]) {
+			my_echo( "Error with " . $sample["xid"] . " - " . $sample["name"] . " found " . var_export( $object, true ));
+		}
+	}
+
+	my_echo( );
 }
 
 function Publication($endpoint, $metadata) {
@@ -282,7 +320,7 @@ function Media($endpoint, $metadata) {
 	reportData($allMedia,  array("filename", "original_filename", "publication", "checksum") );
 }
 
-$tests = array('Publisher', 'Series', 'Publication', 'Media');
+$tests = array('Publisher', 'Series', 'Story_Arc', 'Publication', 'Media');
 $options = getopt( "t:");
 if ( isset( $options['t'] ) && in_array($options['t'], $tests) == false ) {
 	my_echo("Unknown test requested '" .$options['t']. "'");

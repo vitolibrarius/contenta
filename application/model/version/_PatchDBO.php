@@ -37,6 +37,14 @@ abstract class _PatchDBO extends DataObject
 		return false;
 	}
 
+	public function setVersion(VersionDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->version_id) == false || $obj->id != $this->version_id) ) {
+			parent::storeChange( Patch::version_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 
 	/** Attributes */
 	public function name()

@@ -31,6 +31,14 @@ abstract class _Story_Arc_PublicationDBO extends DataObject
 		return false;
 	}
 
+	public function setStory_arc(Story_ArcDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->story_arc_id) == false || $obj->id != $this->story_arc_id) ) {
+			parent::storeChange( Story_Arc_Publication::story_arc_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function publication()
 	{
@@ -39,6 +47,14 @@ abstract class _Story_Arc_PublicationDBO extends DataObject
 			return $model->objectForId($this->publication_id);
 		}
 		return false;
+	}
+
+	public function setPublication(PublicationDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->publication_id) == false || $obj->id != $this->publication_id) ) {
+			parent::storeChange( Story_Arc_Publication::publication_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

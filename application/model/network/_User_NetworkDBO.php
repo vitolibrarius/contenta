@@ -31,6 +31,14 @@ abstract class _User_NetworkDBO extends DataObject
 		return false;
 	}
 
+	public function setUser(UsersDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->user_id) == false || $obj->id != $this->user_id) ) {
+			parent::storeChange( User_Network::user_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function network()
 	{
@@ -39,6 +47,14 @@ abstract class _User_NetworkDBO extends DataObject
 			return $model->objectForId($this->network_id);
 		}
 		return false;
+	}
+
+	public function setNetwork(NetworkDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->network_id) == false || $obj->id != $this->network_id) ) {
+			parent::storeChange( User_Network::network_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

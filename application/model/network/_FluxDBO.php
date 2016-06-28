@@ -57,6 +57,14 @@ abstract class _FluxDBO extends DataObject
 		return false;
 	}
 
+	public function setSource_endpoint(EndpointDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->src_endpoint) == false || $obj->id != $this->src_endpoint) ) {
+			parent::storeChange( Flux::src_endpoint, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function destination_endpoint()
 	{
@@ -65,6 +73,14 @@ abstract class _FluxDBO extends DataObject
 			return $model->objectForId($this->dest_endpoint);
 		}
 		return false;
+	}
+
+	public function setDestination_endpoint(EndpointDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->dest_endpoint) == false || $obj->id != $this->dest_endpoint) ) {
+			parent::storeChange( Flux::dest_endpoint, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

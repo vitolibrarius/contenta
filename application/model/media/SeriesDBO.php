@@ -25,15 +25,6 @@ class SeriesDBO extends _SeriesDBO
 			. (isset($this->pub_count) ? $this->pub_count : count($this->publications()) );
 	}
 
-	public function setPublisher( \model\media\PublisherDBO $pubObj )
-	{
-		if ( isset($pubObj, $pubObj->id) && (isset($this->publisher_id) == false || $pubObj->id != $this->publisher_id) ) {
-			$updates = array();
-			$updates[Series::publisher_id] = $pubObj->id;
-			$this->model()->updateObject($this, $updates );
-		}
-	}
-
 	public function seriesStartYearString()
 	{
 		$yearStr = '0000';

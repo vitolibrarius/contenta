@@ -63,6 +63,14 @@ abstract class _JobDBO extends DataObject
 		return false;
 	}
 
+	public function setJobType(Job_TypeDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->type_id) == false || $obj->id != $this->type_id) ) {
+			parent::storeChange( Job::type_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function endpoint()
 	{
@@ -71,6 +79,14 @@ abstract class _JobDBO extends DataObject
 			return $model->objectForId($this->endpoint_id);
 		}
 		return false;
+	}
+
+	public function setEndpoint(EndpointDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->endpoint_id) == false || $obj->id != $this->endpoint_id) ) {
+			parent::storeChange( Job::endpoint_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

@@ -39,6 +39,14 @@ abstract class _Job_RunningDBO extends DataObject
 		return false;
 	}
 
+	public function setJob(JobDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->job_id) == false || $obj->id != $this->job_id) ) {
+			parent::storeChange( Job_Running::job_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function jobType()
 	{
@@ -47,6 +55,14 @@ abstract class _Job_RunningDBO extends DataObject
 			return $model->objectForId($this->type_id);
 		}
 		return false;
+	}
+
+	public function setJobType(Job_TypeDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->type_id) == false || $obj->id != $this->type_id) ) {
+			parent::storeChange( Job_Running::type_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

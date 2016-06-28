@@ -63,6 +63,14 @@ abstract class _CharacterDBO extends DataObject
 		return false;
 	}
 
+	public function setPublisher(PublisherDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->publisher_id) == false || $obj->id != $this->publisher_id) ) {
+			parent::storeChange( Character::publisher_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-many relationship
 	public function publication_characters()
 	{

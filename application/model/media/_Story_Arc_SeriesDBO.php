@@ -31,6 +31,14 @@ abstract class _Story_Arc_SeriesDBO extends DataObject
 		return false;
 	}
 
+	public function setStory_arc(Story_ArcDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->story_arc_id) == false || $obj->id != $this->story_arc_id) ) {
+			parent::storeChange( Story_Arc_Series::story_arc_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function series()
 	{
@@ -39,6 +47,14 @@ abstract class _Story_Arc_SeriesDBO extends DataObject
 			return $model->objectForId($this->series_id);
 		}
 		return false;
+	}
+
+	public function setSeries(SeriesDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->series_id) == false || $obj->id != $this->series_id) ) {
+			parent::storeChange( Story_Arc_Series::series_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

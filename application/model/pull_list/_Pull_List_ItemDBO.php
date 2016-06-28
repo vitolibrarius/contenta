@@ -44,6 +44,14 @@ abstract class _Pull_List_ItemDBO extends DataObject
 		return false;
 	}
 
+	public function setPull_list_group(Pull_List_GroupDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->pull_list_group_id) == false || $obj->id != $this->pull_list_group_id) ) {
+			parent::storeChange( Pull_List_Item::pull_list_group_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function pull_list()
 	{
@@ -52,6 +60,14 @@ abstract class _Pull_List_ItemDBO extends DataObject
 			return $model->objectForId($this->pull_list_id);
 		}
 		return false;
+	}
+
+	public function setPull_list(Pull_ListDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->pull_list_id) == false || $obj->id != $this->pull_list_id) ) {
+			parent::storeChange( Pull_List_Item::pull_list_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

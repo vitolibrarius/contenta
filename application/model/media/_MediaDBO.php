@@ -39,6 +39,14 @@ abstract class _MediaDBO extends DataObject
 		return false;
 	}
 
+	public function setMediaType(Media_TypeDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->type_id) == false || $obj->id != $this->type_id) ) {
+			parent::storeChange( Media::type_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function publication()
 	{
@@ -47,6 +55,14 @@ abstract class _MediaDBO extends DataObject
 			return $model->objectForId($this->publication_id);
 		}
 		return false;
+	}
+
+	public function setPublication(PublicationDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->publication_id) == false || $obj->id != $this->publication_id) ) {
+			parent::storeChange( Media::publication_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

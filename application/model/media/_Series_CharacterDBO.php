@@ -31,6 +31,14 @@ abstract class _Series_CharacterDBO extends DataObject
 		return false;
 	}
 
+	public function setSeries(SeriesDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->series_id) == false || $obj->id != $this->series_id) ) {
+			parent::storeChange( Series_Character::series_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function character()
 	{
@@ -39,6 +47,14 @@ abstract class _Series_CharacterDBO extends DataObject
 			return $model->objectForId($this->character_id);
 		}
 		return false;
+	}
+
+	public function setCharacter(CharacterDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->character_id) == false || $obj->id != $this->character_id) ) {
+			parent::storeChange( Series_Character::character_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

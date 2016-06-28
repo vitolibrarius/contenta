@@ -54,6 +54,14 @@ abstract class _EndpointDBO extends DataObject
 		return false;
 	}
 
+	public function setEndpointType(Endpoint_TypeDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->type_id) == false || $obj->id != $this->type_id) ) {
+			parent::storeChange( Endpoint::type_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-many relationship
 	public function pull_lists()
 	{

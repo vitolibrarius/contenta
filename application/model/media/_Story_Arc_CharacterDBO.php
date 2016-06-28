@@ -31,6 +31,14 @@ abstract class _Story_Arc_CharacterDBO extends DataObject
 		return false;
 	}
 
+	public function setStory_arc(Story_ArcDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->story_arc_id) == false || $obj->id != $this->story_arc_id) ) {
+			parent::storeChange( Story_Arc_Character::story_arc_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-one relationship
 	public function character()
 	{
@@ -39,6 +47,14 @@ abstract class _Story_Arc_CharacterDBO extends DataObject
 			return $model->objectForId($this->character_id);
 		}
 		return false;
+	}
+
+	public function setCharacter(CharacterDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->character_id) == false || $obj->id != $this->character_id) ) {
+			parent::storeChange( Story_Arc_Character::character_id, $obj->id );
+			$this->saveChanges();
+		}
 	}
 
 

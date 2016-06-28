@@ -36,15 +36,6 @@ class Story_ArcDBO extends _Story_ArcDBO
 			. (isset($this->pub_count) ? $this->pub_count : count($this->publications()) );
 	}
 
-	public function setPublisher( PublisherDBO $pubObj )
-	{
-		if ( isset($pubObj, $pubObj->id) && (isset($this->publisher_id) == false || $pubObj->id != $this->publisher_id) ) {
-			$updates = array();
-			$updates[Character::publisher_id] = $pubObj->id;
-			$this->model()->updateObject($this, $updates );
-		}
-	}
-
 	public function characters($limit = null) {
 		$select = \SQL::SelectJoin( Model::Named("Character") );
 		$select->joinOn( Model::Named("Character"), Model::Named("Story_Arc_Character"), null,

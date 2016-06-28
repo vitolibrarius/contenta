@@ -44,6 +44,14 @@ abstract class _Pull_ListDBO extends DataObject
 		return false;
 	}
 
+	public function setEndpoint(EndpointDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->endpoint_id) == false || $obj->id != $this->endpoint_id) ) {
+			parent::storeChange( Pull_List::endpoint_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 	// to-many relationship
 	public function pull_list_items()
 	{

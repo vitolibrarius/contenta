@@ -33,6 +33,14 @@ abstract class _Character_AliasDBO extends DataObject
 		return false;
 	}
 
+	public function setCharacter(CharacterDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->character_id) == false || $obj->id != $this->character_id) ) {
+			parent::storeChange( Character_Alias::character_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 
 	/** Attributes */
 	public function name()

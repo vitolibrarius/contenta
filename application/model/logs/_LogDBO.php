@@ -38,6 +38,14 @@ abstract class _LogDBO extends DataObject
 		return false;
 	}
 
+	public function setLogLevel(Log_LevelDBO $obj = null)
+	{
+		if ( isset($obj, $obj->code) && (isset($this->level) == false || $obj->code != $this->level) ) {
+			parent::storeChange( Log::level, $obj->code );
+			$this->saveChanges();
+		}
+	}
+
 
 	/** Attributes */
 	public function trace()

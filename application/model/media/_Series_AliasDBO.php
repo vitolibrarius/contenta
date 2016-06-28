@@ -33,6 +33,14 @@ abstract class _Series_AliasDBO extends DataObject
 		return false;
 	}
 
+	public function setSeries(SeriesDBO $obj = null)
+	{
+		if ( isset($obj, $obj->id) && (isset($this->series_id) == false || $obj->id != $this->series_id) ) {
+			parent::storeChange( Series_Alias::series_id, $obj->id );
+			$this->saveChanges();
+		}
+	}
+
 
 	/** Attributes */
 	public function name()
