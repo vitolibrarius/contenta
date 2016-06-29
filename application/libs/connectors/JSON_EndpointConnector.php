@@ -18,11 +18,6 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 		parent::__construct($endpoint);
 	}
 
-	public function isDebuggingResponses()
-	{
-		return false;
-	}
-
 	public function performPOST( $url, array $postfields = null, array $headers = null)
 	{
 		if (empty($url) == false) {

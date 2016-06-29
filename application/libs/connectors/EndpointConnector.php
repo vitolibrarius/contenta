@@ -28,6 +28,7 @@ class ResponseErrorException extends \Exception {}
  */
 abstract class EndpointConnector
 {
+	private $debug = false;
 	private $endpoint = null;
 	private $throttle = null;
 
@@ -78,8 +79,14 @@ abstract class EndpointConnector
 		return false;
 	}
 
-	public function isDebuggingResponses() {
-		return false;
+	public function isDebuggingResponses()
+	{
+		return $this->debug;
+	}
+
+	public function setDebuggingResponses( $yesNo = false )
+	{
+		$this->debug = boolValue( $yesNo, false );
 	}
 
 	public function endpoint()
