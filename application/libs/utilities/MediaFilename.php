@@ -128,12 +128,17 @@ class MediaFilename
 		$metadata = array();
 
 		$clean = $this->sourcename;
+		// yEnc format from RSS feeds, especially binsearch
+		if (preg_match("/.*\"(.*)\" yEnc .*/uUs", $this->sourcename, $matches)) {
+			$clean = $matches[1];
+		}
+
 		if ( is_bool($this->skipExtension) && $this->skipExtension == false) {
-			$ext = file_ext($this->sourcename);
+			$ext = file_ext($clean);
 			if ( isset($ext) && strlen($ext) > 0) {
 				$metadata['extension'] = strtolower($ext);
 			}
-			$clean = file_ext_strip($this->sourcename);
+			$clean = file_ext_strip($clean);
 		}
 
 		if (substr_count($clean, "_28") > 1 && substr_count($filename, "_29") > 1)
