@@ -257,7 +257,7 @@ abstract class _Publisher extends Model
 		return array(
 			Publisher::name => Model::TEXT_TYPE,
 			Publisher::created => Model::DATE_TYPE,
-			Publisher::xurl => Model::TEXT_TYPE,
+			Publisher::xurl => Model::TEXTAREA_TYPE,
 			Publisher::xsource => Model::TEXT_TYPE,
 			Publisher::xid => Model::TEXT_TYPE,
 			Publisher::xupdated => Model::DATE_TYPE
@@ -313,14 +313,6 @@ abstract class _Publisher extends Model
 			return null;
 		}
 
-		// url format
-		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Publisher::xurl,
-				"FILTER_VALIDATE_URL"
-			);
-		}
 		return null;
 	}
 	function validate_xsource($object = null, $value)

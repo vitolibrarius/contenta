@@ -28,11 +28,26 @@ class RssDBO extends _RssDBO
 
 	public function safe_guid()
 	{
-		return sanitize($this->guid, true, true);
+		$clean = $this->guid;
+		if (preg_match('/[^a-zA-Z0-9_\-\s?!,]/', $clean) == true) {
+			$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+				"}", "\\", "|", ";", ":", "\"", "'", ",", "<", ">", "/", "?", ".");
+			$clean = str_replace($strip, "_", $clean);
+		}
+
+		return $clean;
 	}
 
 	public function publishedMonthYear() {
 		return $this->formattedDate( Rss::pub_date, "M Y" );
+	}
+
+	public function flux() {
+		if ( isset($this->guid) ) {
+			$model = Model::Named('Flux');
+			return $model->allForSrc_guid($this->guid);
+		}
+		return false;
 	}
 }
 

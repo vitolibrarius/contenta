@@ -408,13 +408,13 @@ abstract class _Story_Arc extends Model
 			Story_Arc::publisher_id => Model::TO_ONE_TYPE,
 			Story_Arc::created => Model::DATE_TYPE,
 			Story_Arc::name => Model::TEXT_TYPE,
-			Story_Arc::desc => Model::TEXT_TYPE,
+			Story_Arc::desc => Model::TEXTAREA_TYPE,
 			Story_Arc::pub_active => Model::FLAG_TYPE,
 			Story_Arc::pub_wanted => Model::FLAG_TYPE,
 			Story_Arc::pub_cycle => Model::INT_TYPE,
 			Story_Arc::pub_available => Model::INT_TYPE,
 			Story_Arc::pub_count => Model::INT_TYPE,
-			Story_Arc::xurl => Model::TEXT_TYPE,
+			Story_Arc::xurl => Model::TEXTAREA_TYPE,
 			Story_Arc::xsource => Model::TEXT_TYPE,
 			Story_Arc::xid => Model::TEXT_TYPE,
 			Story_Arc::xupdated => Model::DATE_TYPE
@@ -597,14 +597,6 @@ abstract class _Story_Arc extends Model
 			return null;
 		}
 
-		// url format
-		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Story_Arc::xurl,
-				"FILTER_VALIDATE_URL"
-			);
-		}
 		return null;
 	}
 	function validate_xsource($object = null, $value)

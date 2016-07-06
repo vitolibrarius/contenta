@@ -1,39 +1,6 @@
-	<section>
-		<div class="row">
-			<div class="grid_3">
-
-		<div class="admin_card">
-			<div class="admin_card_top">
-				<img src="<?php echo Config::Web('/public/img/admin-uploads.png'); ?>">
-			</div>
-			<a href="<?php echo Config::Web('/Upload/index'); ?>">
-				<div class="admin_card_item">
-					<h3><?php echo $this->label( "UploadLink", "name" ); ?></h3>
-					<p><?php echo $this->label( "UploadLink", "desc" ); ?></p>
-				</div>
-			</a>
-			<a href="<?php echo Config::Web('/AdminUploadRepair/index'); ?>">
-				<div class="admin_card_item">
-					<h3><?php echo $this->label( "RepairLink", "name" ); ?></h3>
-					<p><?php echo $this->label( "RepairLink", "desc" ); ?></p>
-				</div>
-			</a>
-			<a href="<?php echo Config::Web('/AdminWanted/index'); ?>">
-				<div class="admin_card_item">
-					<h3>Wanted Publications</h3>
-					<p>Wanted</p>
-				</div>
-			</a>
-			<a href="<?php echo Config::Web('/AdminWanted/newznab'); ?>">
-				<div class="admin_card_item">
-					<h3>Manual Search (NZB)</h3>
-					<p>Search any configured Newznab sites for specific content</p>
-				</div>
-			</a>
-		</div>
-
-			</div>
-			<div class="grid_3">
+<section>
+<div class="row">
+<div class="grid_3">
 
 		<div class="admin_card">
 			<div class="admin_card_top">
@@ -77,8 +44,84 @@
 			</a>
 		</div>
 
+</div>
+
+<div class="grid_3">
+
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="<?php echo Config::Web('/public/img/admin-uploads.png'); ?>">
 			</div>
-			<div class="grid_3">
+			<a href="<?php echo Config::Web('/Upload/index'); ?>">
+				<div class="admin_card_item">
+					<h3><?php echo $this->label( "UploadLink", "name" ); ?></h3>
+					<p><?php echo $this->label( "UploadLink", "desc" ); ?></p>
+				</div>
+			</a>
+			<a href="<?php echo Config::Web('/AdminUploadRepair/index'); ?>">
+				<div class="admin_card_item">
+					<h3><?php echo $this->label( "RepairLink", "name" ); ?></h3>
+					<p><?php echo $this->label( "RepairLink", "desc" ); ?></p>
+				</div>
+			</a>
+		</div>
+
+</div>
+<div class="grid_3">
+
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="<?php echo Config::Web('/public/img/admin-search.png'); ?>">
+			</div>
+			<a href="<?php echo Config::Web('/AdminWanted/index'); ?>">
+				<div class="admin_card_item">
+					<h3>Wanted Publications</h3>
+					<p>Shows wanted publications grouped by date published</p>
+				</div>
+			</a>
+			<a href="<?php echo Config::Web('/AdminWanted/index_series'); ?>">
+				<div class="admin_card_item">
+					<h3>Wanted Series</h3>
+					<p>Shows wanted publications grouped by Series</p>
+				</div>
+			</a>
+			<a href="<?php echo Config::Web('/AdminWanted/index_story_arc'); ?>">
+				<div class="admin_card_item">
+					<h3>Wanted Story Arcs</h3>
+					<p>Shows wanted publications grouped by Story Arcs</p>
+				</div>
+			</a>
+			<a href="<?php echo Config::Web('/AdminWanted/newznab'); ?>">
+				<div class="admin_card_item">
+					<h3>Manual Search (NZB)</h3>
+					<p>Search any configured Newznab sites for specific content</p>
+				</div>
+			</a>
+		</div>
+
+</div>
+<div class="grid_3">
+
+		<div class="admin_card">
+			<div class="admin_card_top">
+				<img src="<?php echo Config::Web('/public/img/admin-rss.png'); ?>">
+			</div>
+			<a href="<?php echo Config::Web('/AdminPullList/rssindex'); ?>">
+				<div class="admin_card_item">
+					<h3>RSS</h3>
+					<p>Review rss items</p>
+				</div>
+			</a>
+			<a href="<?php echo Config::Web('/AdminPullList/index'); ?>">
+				<div class="admin_card_item">
+					<h3>Pull Lists</h3>
+					<p>Review lists of newly published comics</p>
+				</div>
+			</a>
+		</div>
+
+</div>
+<div class="grid_3">
 
 		<div class="admin_card">
 			<div class="admin_card_top">
@@ -98,8 +141,8 @@
 			</a>
 		</div>
 
-			</div>
-			<div class="grid_3">
+</div>
+<div class="grid_3">
 
 		<div class="admin_card">
 			<div class="admin_card_top">
@@ -125,8 +168,8 @@
 			</a>
 		</div>
 
-			</div>
-			<div class="grid_3">
+</div>
+<div class="grid_3">
 
 		<div class="admin_card">
 			<div class="admin_card_top">
@@ -146,8 +189,8 @@
 			</a>
 		</div>
 
-			</div>
-			<div class="grid_3">
+</div>
+<div class="grid_3">
 
 		<div class="admin_card">
 			<div class="admin_card_top">
@@ -168,7 +211,7 @@
 		</div>
 
 
-			</div>
-		</div>
-	</section>
+</div>
+</div>
+</section>
 

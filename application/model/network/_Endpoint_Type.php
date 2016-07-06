@@ -287,11 +287,11 @@ abstract class _Endpoint_Type extends Model
 		return array(
 			Endpoint_Type::code => Model::TEXT_TYPE,
 			Endpoint_Type::name => Model::TEXT_TYPE,
-			Endpoint_Type::comments => Model::TEXT_TYPE,
+			Endpoint_Type::comments => Model::TEXTAREA_TYPE,
 			Endpoint_Type::data_type => Model::TEXT_TYPE,
-			Endpoint_Type::site_url => Model::TEXT_TYPE,
-			Endpoint_Type::api_url => Model::TEXT_TYPE,
-			Endpoint_Type::favicon_url => Model::TEXT_TYPE,
+			Endpoint_Type::site_url => Model::TEXTAREA_TYPE,
+			Endpoint_Type::api_url => Model::TEXTAREA_TYPE,
+			Endpoint_Type::favicon_url => Model::TEXTAREA_TYPE,
 			Endpoint_Type::throttle_hits => Model::INT_TYPE,
 			Endpoint_Type::throttle_time => Model::INT_TYPE
 		);
@@ -382,14 +382,6 @@ abstract class _Endpoint_Type extends Model
 			);
 		}
 
-		// url format
-		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Endpoint_Type::site_url,
-				"FILTER_VALIDATE_URL"
-			);
-		}
 		return null;
 	}
 	function validate_api_url($object = null, $value)
@@ -403,14 +395,6 @@ abstract class _Endpoint_Type extends Model
 			);
 		}
 
-		// url format
-		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Endpoint_Type::api_url,
-				"FILTER_VALIDATE_URL"
-			);
-		}
 		return null;
 	}
 	function validate_favicon_url($object = null, $value)
@@ -420,14 +404,6 @@ abstract class _Endpoint_Type extends Model
 			return null;
 		}
 
-		// url format
-		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Endpoint_Type::favicon_url,
-				"FILTER_VALIDATE_URL"
-			);
-		}
 		return null;
 	}
 	function validate_throttle_hits($object = null, $value)

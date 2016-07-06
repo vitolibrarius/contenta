@@ -414,7 +414,7 @@ abstract class _Rss extends Model
 			Rss::endpoint_id => Model::TO_ONE_TYPE,
 			Rss::created => Model::DATE_TYPE,
 			Rss::title => Model::TEXT_TYPE,
-			Rss::desc => Model::TEXT_TYPE,
+			Rss::desc => Model::TEXTAREA_TYPE,
 			Rss::pub_date => Model::DATE_TYPE,
 			Rss::guid => Model::TEXT_TYPE,
 			Rss::clean_name => Model::TEXT_TYPE,

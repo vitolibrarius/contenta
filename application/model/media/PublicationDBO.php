@@ -81,7 +81,7 @@ class PublicationDBO extends _PublicationDBO
 	public function joinToCharacter($object)
 	{
 		$model = Model::Named('Publication_Character');
-		return $model->createObject( array( "publication" => $this, "character" => $object));
+		return $model->createJoin( $this, $object );
 	}
 
 	public function story_arcs($limit = null)
@@ -98,7 +98,7 @@ class PublicationDBO extends _PublicationDBO
 	public function joinToStory_Arc($object)
 	{
 		$model = Model::Named('Story_Arc_Publication');
-		return $model->createObject( array( "publication" => $this, "story_arc" => $object));
+		return $model->createJoin( $object, $this );
 	}
 
 	public function rssMatches()

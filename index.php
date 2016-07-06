@@ -16,6 +16,7 @@
 
 	session_cache_limiter('none');
 	try {
+
  		$config = Config::instance();
  		if ( $config->absolutePathValue( "Logging/path", null) != null ) {
  			$ini_error_log = ini_get("error_log");
@@ -26,6 +27,7 @@
  				}
  			}
  		}
+
 
 		$database = Database::instance();
 		if ( $database->verifyDatabase() == true ) {

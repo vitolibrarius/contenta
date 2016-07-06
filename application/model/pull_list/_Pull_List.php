@@ -53,6 +53,7 @@ abstract class _Pull_List extends Model
 	public function sortOrder()
 	{
 		return array(
+			array( 'desc' => Pull_List::published),
 			array( 'asc' => Pull_List::name)
 		);
 	}

@@ -37,7 +37,7 @@ abstract class XML_EndpointConnector extends EndpointConnector
 
 					if (is_array($xmlErrors) && count($xmlErrors) > 0) {
 						if (count($xmlErrors) == 1) {
-							throw new ResponseErrorException($xmlErrors[0]->message);
+							throw new ResponseErrorException("XML Parsing error: " . $xmlErrors[0]->message . PHP_EOL . $data);
 						}
 						else {
 							throw new ResponseErrorException("Parsing encountered " . count($xmlErrors) . " unparsable errors");

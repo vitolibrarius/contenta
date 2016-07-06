@@ -47,6 +47,7 @@
     "model": "Pull_List",
     "dbo": "Pull_ListDBO",
 	"sort" : [
+		{ "desc": "published" },
 		{ "asc": "name" }
 	]
 }

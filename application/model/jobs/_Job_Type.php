@@ -237,9 +237,9 @@ abstract class _Job_Type extends Model
 		return array(
 			Job_Type::code => Model::TEXT_TYPE,
 			Job_Type::name => Model::TEXT_TYPE,
-			Job_Type::desc => Model::TEXT_TYPE,
+			Job_Type::desc => Model::TEXTAREA_TYPE,
 			Job_Type::processor => Model::TEXT_TYPE,
-			Job_Type::parameter => Model::TEXT_TYPE,
+			Job_Type::parameter => Model::TEXTAREA_TYPE,
 			Job_Type::scheduled => Model::FLAG_TYPE,
 			Job_Type::requires_endpoint => Model::FLAG_TYPE
 		);

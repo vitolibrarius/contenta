@@ -313,7 +313,6 @@ abstract class _Job_Running extends Model
 	{
 		if ( is_null($object) ) {
 			return array(
-				Job_Running::type_id,
 				Job_Running::processor,
 				Job_Running::pid
 			);
@@ -328,7 +327,7 @@ abstract class _Job_Running extends Model
 			Job_Running::processor => Model::TEXT_TYPE,
 			Job_Running::guid => Model::TEXT_TYPE,
 			Job_Running::pid => Model::INT_TYPE,
-			Job_Running::desc => Model::TEXT_TYPE,
+			Job_Running::desc => Model::TEXTAREA_TYPE,
 			Job_Running::created => Model::DATE_TYPE
 		);
 	}
@@ -356,13 +355,9 @@ abstract class _Job_Running extends Model
 	}
 	function validate_type_id($object = null, $value)
 	{
-		// check for mandatory field
+		// not mandatory field
 		if (isset($value) == false || empty($value)  ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job_Running::type_id,
-				"FIELD_EMPTY"
-			);
+			return null;
 		}
 
 		return null;

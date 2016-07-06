@@ -95,6 +95,10 @@
         },
         "title": "Publisher Administration"
     },
+    "AdminPullList": {
+        "RSS": "Admin RSS Lists",
+        "title": "Admin Pull Lists"
+    },
     "AdminSeries": {
         "index": {
             "DeleteConfirmation": "Are you sure you want to continue?",
@@ -253,14 +257,11 @@
             },
             "xupdated": {
                 "label": "Updated from endpoint"
-            },
-            "xurl": {
-                "FILTER_VALIDATE_URL": "Model\/character\/xurl\/FILTER_VALIDATE_URL"
             }
         },
         "character_alias": {
             "character_id": {
-                "FIELD_EMPTY": "Model\/character_alias\/character_id\/FIELD_EMPTY"
+                "FIELD_EMPTY": "Aliases need a character reference"
             }
         },
         "endpoint": {
@@ -272,7 +273,7 @@
             },
             "base_url": {
                 "FIELD_EMPTY": "URL field was empty",
-                "FILTER_VALIDATE_URL": "Model\/endpoint\/base_url\/FILTER_VALIDATE_URL",
+                "FILTER_VALIDATE_URL": "Not a valid URL",
                 "label": "URL"
             },
             "compressed": {
@@ -398,10 +399,10 @@
         },
         "media_type": {
             "code": {
-                "UNIQUE_FIELD_VALUE": "Model\/media_type\/code\/UNIQUE_FIELD_VALUE"
+                "UNIQUE_FIELD_VALUE": "Media_Type codes must be unique"
             },
             "name": {
-                "FIELD_EMPTY": "Model\/media_type\/name\/FIELD_EMPTY"
+                "FIELD_EMPTY": "Media_Type names are mandatory"
             }
         },
         "network": {
@@ -454,6 +455,7 @@
                 "search": "Issue Name"
             },
             "pub_date": {
+                "label": "Published Date",
                 "search": "Year"
             },
             "publisher_id": {
@@ -507,16 +509,51 @@
                 "label": "Last Update from Endpoint"
             },
             "xurl": {
-                "FILTER_VALIDATE_URL": "Model\/publisher\/xurl\/FILTER_VALIDATE_URL",
+                "FILTER_VALIDATE_URL": "Not a valid URL",
                 "label": "External URL"
             }
         },
+        "pull_list_item": {
+            "issue": {
+                "label": "Issue Number"
+            },
+            "name": {
+                "label": "Name"
+            },
+            "pull_list_id": {
+                "search": "Pull List"
+            },
+            "year": {
+                "label": "Issue Year"
+            }
+        },
         "rss": {
+            "clean_issue": {
+                "label": "Issue Number",
+                "search": "Issue"
+            },
             "clean_name": {
-                "FIELD_EMPTY": "Model\/rss\/clean_name\/FIELD_EMPTY"
+                "FIELD_EMPTY": "RSS item names are required",
+                "label": "Name",
+                "search": "Name"
             },
             "clean_year": {
-                "FILTER_VALIDATE_INT": "Model\/rss\/clean_year\/FILTER_VALIDATE_INT"
+                "FILTER_VALIDATE_INT": "Must be an integer",
+                "label": "Issue Year",
+                "search": "Year"
+            },
+            "enclosure_length": {
+                "label": "Size"
+            },
+            "endpoint_id": {
+                "label": "Endpoint"
+            },
+            "issue_num": {
+                "search": "Issue"
+            },
+            "pub_date": {
+                "label": "RSS Pub Date",
+                "search": "Published Date"
             }
         },
         "series": {
@@ -570,7 +607,7 @@
                 "label": "Wanted for collection"
             },
             "publisher_id": {
-                "FILTER_VALIDATE_INT": "Model\/series\/publisher_id\/FILTER_VALIDATE_INT",
+                "FILTER_VALIDATE_INT": "Must be an integer reference to a publisher",
                 "label": "Publisher",
                 "search": "Select Publisher"
             },
@@ -641,7 +678,7 @@
                 "label": "Login"
             },
             "account_type": {
-                "FIELD_EMPTY": "Model\/users\/account_type\/FIELD_EMPTY",
+                "FIELD_EMPTY": "User account type is required",
                 "INVALID": "Invalid account type"
             },
             "active": {
@@ -697,7 +734,7 @@
                 "label": "Check Password"
             },
             "password_hash": {
-                "FIELD_EMPTY": "Model\/users\/password_hash\/FIELD_EMPTY"
+                "FIELD_EMPTY": "Password hash is missing"
             },
             "type": {
                 "label": "Access Role"

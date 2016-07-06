@@ -35,8 +35,8 @@
 					<td>' . htmlentities($value->name) . '</td>
 					<td>' . $value->email .'</td>
 					<td>' . $value->account_type .'</td>
-					<td>' . $value->lastLoginDate() .'</td>
-					<td>' . $value->lastFailedLoginDate() .'</td>
+					<td>' . $value->formattedDateTime_last_login_timestamp() .'</td>
+					<td>' . $value->formattedDateTime_last_failed_login() .'</td>
 					<td>' . $value->api_hash .'</td>
 					<td><a href="'. Config::Web('/AdminUsers/editUser', $value->id) . '"><span class="icon edit"></span></a></td>
 					<td><a class="confirm" action="'. Config::Web('/AdminUsers/deleteUser/', $value->id) . '" href="#"><span class="icon recycle"></span></a></td>

@@ -1,0 +1,50 @@
+div.rss {
+	position:relative;
+	min-height:300px;
+	width: 100%;
+	margin: 10px 0px;
+	padding: 4px;
+	vertical-align: top;
+	background-color: #eee;
+	box-shadow: 2px 2px 4px #aaa;
+	border:1px solid #ccc;
+}
+div.rss:hover {
+	background-color: #ddf;
+}
+
+div.rss h4 {
+	background-color: #ffffee;
+	padding: .5em;
+	margin: 0;
+}
+
+div.rss .issue_year {
+     display: flex;
+     justify-content: space-between;
+     padding: 1em;
+}
+
+div.rss .issue_year span {
+	padding-right: .5em;
+}
+
+div.rss .large {
+	font-size: 1.6em;
+}
+
+div.rss .status.flux {
+	position: absolute;
+    bottom: 0;
+}
+
+div.rss .details {
+	padding: .2em;
+	margin: 0;
+	font-size: .8em;
+}
+
+div.rss .details span {
+	font-weight:bold;
+	float:right;
+}

@@ -298,6 +298,11 @@ abstract class EndpointConnector
 						Cache::Store( $cacheHeaders, $headers );
 						Cache::Store( $cacheData, $data );
 					}
+					else if ( $http_code == 302 ) {
+						throw new ResponseErrorException('Return code (' . $http_code . '): '
+							. var_export($headers, true)
+						);
+					}
 					else {
 // 						Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
 // 								get_class($this), $this->endpointDisplayName());

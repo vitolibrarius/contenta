@@ -69,7 +69,6 @@ class Endpoint extends _Endpoint
 
 	public function attributesFor($object = null, $type = null) {
 		$attrFor = array(
-			Endpoint::type_id,
 			Endpoint::name,
 			Endpoint::base_url,
 			Endpoint::api_key,

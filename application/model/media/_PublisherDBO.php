@@ -49,7 +49,7 @@ abstract class _PublisherDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function character()
+	public function characters()
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Character');
@@ -60,7 +60,7 @@ abstract class _PublisherDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function story_arc()
+	public function story_arcs()
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc');

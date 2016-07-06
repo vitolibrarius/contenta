@@ -19,7 +19,7 @@
 					<td><?php echo $value->lastXupdated(); ?></td>
 					<td><?php echo $lastPub->publishedMonthYear(); ?></td>
 					<td><?php echo $lastPub->issue_num; ?></td>
-					<td><span class="icon <?php echo ($value->isActive() ? 'true' : 'false'); ?>"></span></td>
+					<td><span class="icon <?php echo ($value->isPub_active() ? 'true' : 'false'); ?>"></span></td>
 				</tr>
 			<?php endforeach; ?>
 		</table>

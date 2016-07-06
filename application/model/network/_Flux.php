@@ -441,7 +441,7 @@ abstract class _Flux extends Model
 			Flux::flux_error => Model::FLAG_TYPE,
 			Flux::src_endpoint => Model::TO_ONE_TYPE,
 			Flux::src_guid => Model::TEXT_TYPE,
-			Flux::src_url => Model::TEXT_TYPE,
+			Flux::src_url => Model::TEXTAREA_TYPE,
 			Flux::src_status => Model::TEXT_TYPE,
 			Flux::src_pub_date => Model::DATE_TYPE,
 			Flux::dest_endpoint => Model::TO_ONE_TYPE,
@@ -549,14 +549,6 @@ abstract class _Flux extends Model
 			return null;
 		}
 
-		// url format
-		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Flux::src_url,
-				"FILTER_VALIDATE_URL"
-			);
-		}
 		return null;
 	}
 	function validate_src_status($object = null, $value)

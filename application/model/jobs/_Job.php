@@ -395,7 +395,7 @@ abstract class _Job extends Model
 			Job::minute => Model::TEXT_TYPE,
 			Job::hour => Model::TEXT_TYPE,
 			Job::dayOfWeek => Model::TEXT_TYPE,
-			Job::parameter => Model::TEXT_TYPE,
+			Job::parameter => Model::TEXTAREA_TYPE,
 			Job::next => Model::DATE_TYPE,
 			Job::last_run => Model::DATE_TYPE,
 			Job::last_fail => Model::DATE_TYPE,

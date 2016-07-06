@@ -88,7 +88,7 @@
 	<?php if (isset($this->object)) : ?>
 		<div class="grid_3">
 			<div class="badges">
-				<?php $list = $this->object->series(20);
+				<?php $list = $this->object->series();
 					if ( is_array($list) && count($list) > 0 ): ?>
 					<h6>Series</h6>
 					<ul class="badge series">
@@ -103,7 +103,7 @@
 					<?php endforeach; ?>
 					</ul>
 				<?php endif; ?>
-				<?php $list = $this->object->characters(10);
+				<?php $list = $this->object->characters();
 					if ( is_array($list) && count($list) > 0 ): ?>
 					<h6>Characters</h6>
 					<ul class="badge characters">

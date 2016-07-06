@@ -309,8 +309,8 @@ abstract class _Media extends Model
 		return array(
 			Media::publication_id => Model::TO_ONE_TYPE,
 			Media::type_id => Model::TO_ONE_TYPE,
-			Media::filename => Model::TEXT_TYPE,
-			Media::original_filename => Model::TEXT_TYPE,
+			Media::filename => Model::TEXTAREA_TYPE,
+			Media::original_filename => Model::TEXTAREA_TYPE,
 			Media::checksum => Model::TEXT_TYPE,
 			Media::created => Model::DATE_TYPE,
 			Media::size => Model::INT_TYPE

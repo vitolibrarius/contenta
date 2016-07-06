@@ -1,4 +1,3 @@
-
 <?php
 
 
@@ -27,8 +26,7 @@ function Daemonize( $processorName, $user_api = null, $guid = null, $job_id = nu
 
 	$shell = ((PHP_OS === 'Darwin') ? '' : 'nohup ') . 'php ';
 	$daemon = appendPath(SYSTEM_PATH, 'Daemon.php');
-	$daemonCMD = $daemon
-		. ' -d "' . $workingDir . '" >> "' . $workingDir . '"/daemon.log 2>&1  & echo $!';
+	$daemonCMD = $daemon . ' -d "' . $workingDir . '" >> "' . $workingDir . '"/daemon.log 2>&1  & echo $!';
 
 	return shell_exec( $shell . $daemonCMD );
 }

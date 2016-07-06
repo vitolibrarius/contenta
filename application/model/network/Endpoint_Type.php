@@ -25,6 +25,12 @@ class Endpoint_Type extends _Endpoint_Type
 	const SABnzbd =		"SABnzbd";
 	const PreviewsWorld = "PreviewsWorld";
 
+	public function Newznab() { return $this->objectForCode( Endpoint_Type::Newznab ); }
+	public function RSS() { return $this->objectForCode( Endpoint_Type::RSS ); }
+	public function ComicVine() { return $this->objectForCode( Endpoint_Type::ComicVine ); }
+	public function SABnzbd() { return $this->objectForCode( Endpoint_Type::SABnzbd ); }
+	public function PreviewsWorld() { return $this->objectForCode( Endpoint_Type::PreviewsWorld ); }
+
 	/**
 	 *	Create/Update functions
 	 */

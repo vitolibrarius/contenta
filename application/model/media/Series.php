@@ -64,7 +64,8 @@ class Series extends _Series
 			Series::search_name,
 			Series::desc,
 			Series::start_year,
-			Series::issue_count
+			Series::pub_active,
+			Series::pub_wanted
 		);
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}

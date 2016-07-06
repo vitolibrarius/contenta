@@ -190,7 +190,7 @@ class DataObject
 	 */
 	public function notify( $type = 'none', $object = null )
 	{
-		echo PHP_EOL . PHP_EOL . "------------------".PHP_EOL."$this ->notify( $type,  $object)". PHP_EOL.PHP_EOL;
+		//echo PHP_EOL . PHP_EOL . "------------------".PHP_EOL."$this ->notify( $type,  $object)". PHP_EOL.PHP_EOL;
 	}
 
 	public function changedValue( $attr = null, $existing = null )

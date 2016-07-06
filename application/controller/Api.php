@@ -17,9 +17,10 @@ use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
 use \model\media\Character as Character;
 use \model\media\Story_Arc as Story_Arc;
+use \model\pull_list\Pull_List as Pull_List;
 
 /**
- * Class Admin
+ * Class API
  * The index controller
  */
 class Api extends Controller
@@ -180,6 +181,24 @@ class Api extends Controller
 				"logs" => (is_array($logs) ? $logs : array())
 				)
 			);
+		}
+	}
+
+	function pull_lists( $userHash = null)
+	{
+		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
+			$qualifiers = array();
+			if ( isset($_GET['q']) && strlen($_GET['q']) > 0) {
+				$qualifiers[] = Qualifier::Like( Pull_List::name, $_GET['q'] );
+			}
+
+			$select = SQL::Select( Model::Named("Pull_List"), array( Pull_List::id, Pull_List::name ));
+			if ( count($qualifiers) > 0 ) {
+				$select->where( Qualifier::AndQualifier( $qualifiers ));
+			}
+			$objects = $select->limit(-1)->fetchAll();
+
+			$this->view->renderJson( $objects );
 		}
 	}
 }

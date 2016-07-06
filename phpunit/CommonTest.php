@@ -349,9 +349,12 @@ class CommonTest extends PHPUnit_Framework_TestCase
 	public function testFormatSizeUnits()
 	{
 		$bytes = formatSizeUnits();
-		$this->assertEquals( "0 bytes",  $bytes, "null" );
+		$this->assertEquals( "unknown",  $bytes, "null" );
 
 		$bytes = formatSizeUnits('');
+		$this->assertEquals( "unknown", $bytes, "null" );
+
+		$bytes = formatSizeUnits('0');
 		$this->assertEquals( "0 bytes", $bytes, "null" );
 
 		$bytes = formatSizeUnits('123');

@@ -51,7 +51,7 @@
             "isToMany" : true,
             "ownsDestination" : true
     	},
-    	"character" : {
+    	"characters" : {
     		"destination" : "Character",
     		"destinationPackage" : "\\model\\media\\",
     		"destinationTable" : "character",
@@ -62,7 +62,7 @@
             "isToMany" : true,
             "ownsDestination" : true
     	},
-    	"story_arc" : {
+    	"story_arcs" : {
     		"destination" : "Story_Arc",
     		"destinationPackage" : "\\model\\media\\",
     		"destinationTable" : "story_arc",

@@ -323,7 +323,7 @@ class AdminWanted extends Admin
 				$publication = Model::Named('Publication')->objectForId( $pubId );
 				if ( $publication != false ) {
 					$endpoint = $points[0];
-					try {
+// 					try {
 						$connection = new NewznabConnector( $endpoint );
 						$this->view->endpoint_id = $endpoint->id;
 						$this->view->fluxModel = Model::Named('Flux');
@@ -333,10 +333,10 @@ class AdminWanted extends Admin
 						}
 						$this->view->results = $results;
 						$this->view->render( '/wanted/newznab_quick', true);
-					}
-					catch ( \Exception $e ) {
-						echo '<section class="feedback error">' . $e->getMessage(). '</section>';
-					}
+// 					}
+// 					catch ( \Exception $e ) {
+// 						echo '<section class="feedback error">Exception: ' . $e->getMessage(). '</section>';
+// 					}
 				}
 				else {
 					echo '<section class="feedback error">No publication found</section>';

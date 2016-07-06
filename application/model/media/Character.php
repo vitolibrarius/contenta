@@ -44,16 +44,10 @@ class Character extends _Character
 	public function attributesFor($object = null, $type = null) {
 		$attrFor = array(
 			Character::publisher_id,
-			Character::created,
 			Character::name,
 			Character::realname,
 			Character::desc,
-			Character::popularity,
-			Character::gender,
-			Character::xurl,
-			Character::xsource,
-			Character::xid,
-			Character::xupdated
+			Character::gender
 		);
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}

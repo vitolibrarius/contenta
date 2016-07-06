@@ -18,6 +18,7 @@ use exceptions\ImportMediaException as ImportMediaException;
 
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\media\PublicationDBO as PublicationDBO;
+use \model\media\Media as Media;
 
 class UploadImport extends Processor
 {
@@ -411,7 +412,14 @@ class UploadImport extends Processor
 			$hash = $this->getMeta(UploadImport::META_MEDIA_HASH);
 			$size = $this->getMeta(UploadImport::META_MEDIA_SIZE);
 
-			$media = Model::Named( "Media" )->create( $publication, $cbzType, $filename, $hash, $size );
+			list($media, $errors) = Model::Named( "Media" )->createObject( array(
+				"publication" => $publication,
+				"mediaType" => $cbzType,
+				Media::filename => $filename,
+				Media::checksum => $hash,
+				Media::size => $size
+				)
+			);
 			if ( $media instanceof \model\media\MediaDBO ) {
 				if ( rename( $this->importFilePath(), $media->contentaPath()) ) {
 					$this->setPurgeOnExit(true);
@@ -423,7 +431,7 @@ class UploadImport extends Processor
 				}
 			}
 			else {
-				throw new ImportMediaException( "Create Media error " . (is_bool($media) ? '' : var_export($media, true)));
+				throw new ImportMediaException( "Create Media error " . var_export($errors, true));
 			}
 		}
 		catch ( ImportMediaException $me ) {

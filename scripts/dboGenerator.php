@@ -163,6 +163,11 @@ class Template
 			$type = 'Model::TEXT_TYPE';
 			if (isset($details['type']) ) {
 				switch ($details['type']) {
+					case 'TEXT':
+						if ( isset($details['length']) && intval($details['length']) > 256) {
+							$type = "Model::TEXTAREA_TYPE";
+						}
+						break;
 					case 'DATE':
 						$type = "Model::DATE_TYPE";
 						break;

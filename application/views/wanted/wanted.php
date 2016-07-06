@@ -51,7 +51,7 @@
 								<?php echo ($rss->enclosure_password == true ? "<em>**** password protected</em>" : ""); ?>
 							</td>
 							<td>
-					<?php $flux = $rss->flux(); if ($flux == false ) : ?>
+					<?php $fluxArray = $rss->flux(); if ($fluxArray == false ) : ?>
 						<div id="dnld_<?php echo $rss->safe_guid(); ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"
 							data-name="<?php echo $rss->clean_name; ?>"
@@ -63,16 +63,18 @@
 							>Download</a>
 						</div>
 					<?php else: ?>
+					<?php foreach( $fluxArray as $fidx => $flux ) : ?>
 						<div>
 							<div style="white-space: nowrap;">
 								<span class="icon <?php echo ($flux->isSourceComplete()?'true':'false'); ?>"></span>
 								<span class="break-word"><?php echo $flux->src_status ; ?></span>
 							</div>
 							<div style="white-space: nowrap;">
-								<span class="icon <?php echo ($flux->isError()?'false':'true'); ?>"></span>
+								<span class="icon <?php echo ($flux->isFlux_error()?'false':'true'); ?>"></span>
 								<span class="break-word"><?php echo $flux->dest_status ; ?></span>
 							</div>
 						</div>
+					<?php endforeach; ?>
 					<?php endif; ?>
 							</td>
 						</tr>

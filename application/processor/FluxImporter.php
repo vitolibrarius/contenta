@@ -158,20 +158,21 @@ class FluxImporter extends EndpointImporter
 			else if (isset($fluxImport['endpoint_id'], $fluxImport['name'],
 				$fluxImport['guid'], $fluxImport['publishedDate'], $fluxImport['url']) ) {
 				$srcEndpoint = Model::Named('Endpoint')->objectForId($fluxImport['endpoint_id']);
-				$flux = $FluxModel->objectForSourceGUID($fluxImport['guid']);
+				$flux = $FluxModel->objectForSourceEndpointGUID($srcEndpoint, $fluxImport['guid']);
 				if ( $flux == false ) {
-					$flux = $FluxModel->create( null,
-						$fluxImport['name'],
-						$srcEndpoint,
-						$fluxImport['guid'],
-						$fluxImport['publishedDate'],
-						$fluxImport['url']
+					list($flux, $errors) = $FluxModel->createObject( array(
+						Flux::name => $fluxImport['name'],
+						"source_endpoint" => $srcEndpoint,
+						Flux::src_guid => $fluxImport['guid'],
+						Flux::src_pub_date => $fluxImport['publishedDate'],
+						Flux::src_url => $fluxImport['url']
+						)
 					);
 				}
 			}
 
 			if ( $flux instanceof FluxDBO ) {
-				if ( $flux->isError() ) {
+				if ( $flux->isFlux_error() ) {
 					throw new \Exception( $flux->__toString() . ' cannot import, is in error state ' . $flux->errorReason() );
 				}
 
@@ -192,7 +193,7 @@ class FluxImporter extends EndpointImporter
 						else {
 							$FluxModel->updateObject( $flux,
 								array(
-									Flux::dest_endpoint => $sabnzbd_point,
+									Flux::dest_endpoint => $this->endpoint()->id,
 									Flux::dest_status => 'Failed ' . var_export($upload, true)
 								)
 							);

@@ -5,6 +5,7 @@ namespace model\media;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \utilities\FileWrapper as FileWrapper;
 
 use \model\media\Media as Media;
 

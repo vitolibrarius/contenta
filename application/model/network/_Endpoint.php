@@ -302,7 +302,7 @@ abstract class _Endpoint extends Model
 		return array(
 			Endpoint::type_id => Model::TO_ONE_TYPE,
 			Endpoint::name => Model::TEXT_TYPE,
-			Endpoint::base_url => Model::TEXT_TYPE,
+			Endpoint::base_url => Model::TEXTAREA_TYPE,
 			Endpoint::api_key => Model::TEXT_TYPE,
 			Endpoint::username => Model::TEXT_TYPE,
 			Endpoint::enabled => Model::FLAG_TYPE,
@@ -363,14 +363,6 @@ abstract class _Endpoint extends Model
 			);
 		}
 
-		// url format
-		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Endpoint::base_url,
-				"FILTER_VALIDATE_URL"
-			);
-		}
 		return null;
 	}
 	function validate_api_key($object = null, $value)

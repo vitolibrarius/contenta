@@ -32,7 +32,7 @@
 			</div>
 			<div class="grid_1">
 				<span>
-					<span class="icon <?php echo ($value->isActive() ? 'true' : 'false'); ?>"></span>
+					<span class="icon <?php echo ($value->isPub_active() ? 'true' : 'false'); ?>"></span>
 				</span>
 			</div>
 			<div class="grid_2">
@@ -107,7 +107,7 @@ $(document).ready(function(){
 		$(this).fadeOut(100).hide();
 		$.ajax({
 			type: "GET",
-			url: "<?php echo Config::Web('/AdminWanted/newznabQuicksearch/');?>"+pub_id,
+			url: "<?php echo Config::Web('/AdminWanted/newznabQuicksearch/');?>"+'/'+pub_id,
 			dataType: "text",
 			success: function(msg){
 				var ajaxDisplay = $("#ajaxDiv_"+pub_id);

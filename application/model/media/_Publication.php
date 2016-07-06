@@ -371,11 +371,11 @@ abstract class _Publication extends Model
 			Publication::series_id => Model::TO_ONE_TYPE,
 			Publication::created => Model::DATE_TYPE,
 			Publication::name => Model::TEXT_TYPE,
-			Publication::desc => Model::TEXT_TYPE,
+			Publication::desc => Model::TEXTAREA_TYPE,
 			Publication::pub_date => Model::DATE_TYPE,
 			Publication::issue_num => Model::TEXT_TYPE,
 			Publication::media_count => Model::INT_TYPE,
-			Publication::xurl => Model::TEXT_TYPE,
+			Publication::xurl => Model::TEXTAREA_TYPE,
 			Publication::xsource => Model::TEXT_TYPE,
 			Publication::xid => Model::TEXT_TYPE,
 			Publication::xupdated => Model::DATE_TYPE
@@ -492,14 +492,6 @@ abstract class _Publication extends Model
 			return null;
 		}
 
-		// url format
-		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Publication::xurl,
-				"FILTER_VALIDATE_URL"
-			);
-		}
 		return null;
 	}
 	function validate_xsource($object = null, $value)

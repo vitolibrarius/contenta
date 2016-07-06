@@ -129,7 +129,7 @@ class MediaFilename
 
 		$clean = $this->sourcename;
 		// yEnc format from RSS feeds, especially binsearch
-		if (preg_match("/.*\"(.*)\" yEnc .*/uUs", $this->sourcename, $matches)) {
+		if (preg_match("/.*\"(.*)\" .*yEnc.*/uUs", $this->sourcename, $matches)) {
 			$clean = $matches[1];
 		}
 

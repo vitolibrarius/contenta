@@ -313,6 +313,15 @@ class Publication extends _Publication
 	{
 		return $this->allObjectsForFKAndQualifier(Publication::series_id, $obj, Qualifier::GreaterThan(Publication::media_count, 0));
 	}
+
+	public function publicationForSeriesExternal(SeriesDBO $series = null, $issue_xid = null, $xsource = null)
+	{
+		$matches = $this->allObjectsForFKAndQualifier(Publication::series_id, $series, Qualifier::XID($issue_xid, $xsource));
+		if ( is_array($matches) && count($matches) > 0 ) {
+			return $matches[0];
+		}
+		return false;
+	}
 }
 
 ?>

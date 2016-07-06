@@ -370,10 +370,10 @@ abstract class _Character extends Model
 			Character::created => Model::DATE_TYPE,
 			Character::name => Model::TEXT_TYPE,
 			Character::realname => Model::TEXT_TYPE,
-			Character::desc => Model::TEXT_TYPE,
+			Character::desc => Model::TEXTAREA_TYPE,
 			Character::popularity => Model::INT_TYPE,
 			Character::gender => Model::TEXT_TYPE,
-			Character::xurl => Model::TEXT_TYPE,
+			Character::xurl => Model::TEXTAREA_TYPE,
 			Character::xsource => Model::TEXT_TYPE,
 			Character::xid => Model::TEXT_TYPE,
 			Character::xupdated => Model::DATE_TYPE
@@ -490,14 +490,6 @@ abstract class _Character extends Model
 			return null;
 		}
 
-		// url format
-		if ( filter_var($value, FILTER_VALIDATE_URL) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Character::xurl,
-				"FILTER_VALIDATE_URL"
-			);
-		}
 		return null;
 	}
 	function validate_xsource($object = null, $value)

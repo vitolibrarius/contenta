@@ -30,6 +30,16 @@ class MediaFilenameTest extends PHPUnit_Framework_TestCase
 		return $metadata->getMeta( "/" );
     }
 
+	public function testMe()
+	{
+		$n  = "Fills - \"The Shadow's Treasure.cbr\" (1/60) 55.4 MBytes yEnc";
+		$mediaFilename = new MediaFilename($n);
+		$meta = $mediaFilename->updateFileMetaData(null);
+
+		$this->assertEquals( "The Shadow's Treasure", $meta["name"] );
+		$this->assertEquals( "cbr", $meta["extension"] );
+	}
+
     /**
      * @dataProvider additionProvider
      */

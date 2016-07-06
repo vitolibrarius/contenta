@@ -102,6 +102,10 @@ class View
 			$this->addStylesheet( $filename . '.css' );
 			$this->addScript( dirname($filename) . '.js' );
 			$this->addScript( $filename . '.js' );
+			if ( isset($this->model) ) {
+				$this->addStylesheet( "contenta-".$this->model->tableName() . '.css' );
+				$this->addScript( "contenta-".$this->model->tableName() . '.js' );
+			}
 
 			if ($render_without_header_and_footer == false) {
 				require VIEWS_PATH . '_templates/header.php';

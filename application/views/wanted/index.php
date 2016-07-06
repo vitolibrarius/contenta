@@ -111,7 +111,7 @@ $(document).ready(function(){
 		$(this).fadeOut(100).hide();
 		$.ajax({
 			type: "GET",
-			url: "<?php echo Config::Web('/AdminWanted/newznabQuicksearch/');?>"+pub_id,
+			url: "<?php echo Config::Web('/AdminWanted/newznabQuicksearch/');?>"+'/'+pub_id,
 			dataType: "text",
 			success: function(msg){
 				var ajaxDisplay = $("#ajaxDiv_"+pub_id);

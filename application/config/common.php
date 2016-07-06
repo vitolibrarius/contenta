@@ -266,6 +266,10 @@ function convertToBytes ($val = '')
 
 function formatSizeUnits($value = null)
 {
+	if ( is_null($value) || (is_string($value) && strlen($value) == 0)) {
+		return "unknown";
+	}
+
 	$bytes = convertToBytes($value);
 	if ($bytes >= GIGABYTE)
 	{

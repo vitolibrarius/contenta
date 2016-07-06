@@ -43,8 +43,7 @@
 			</select>
 		</div>
 		<div class="grid_1">
-			<input type="number" name="searchIssue" id="searchIssue"
-				min="0"
+			<input type="text" name="searchIssue" id="searchIssue"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "issue_num" ); ?>"
 				value="">
