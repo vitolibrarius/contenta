@@ -34,7 +34,6 @@ use \model\media\User_SeriesDBO as User_SeriesDBO;
 		$sql = "CREATE TABLE IF NOT EXISTS series ( "
 			. Series::id . " INTEGER PRIMARY KEY, "
 			. Series::publisher_id . " INTEGER, "
-			. Series::parent_id . " INTEGER, "
 			. Series::created . " INTEGER, "
 			. Series::name . " TEXT, "
 			. Series::search_name . " TEXT, "
@@ -66,7 +65,6 @@ abstract class _Series extends Model
 	const TABLE = 'series';
 	const id = 'id';
 	const publisher_id = 'publisher_id';
-	const parent_id = 'parent_id';
 	const created = 'created';
 	const name = 'name';
 	const search_name = 'search_name';
@@ -99,7 +97,6 @@ abstract class _Series extends Model
 		return array(
 			Series::id,
 			Series::publisher_id,
-			Series::parent_id,
 			Series::created,
 			Series::name,
 			Series::search_name,
@@ -122,11 +119,6 @@ abstract class _Series extends Model
 	 *	Simple fetches
 	 */
 
-
-	public function allForParent_id($value)
-	{
-		return $this->allObjectsForKeyValue(Series::parent_id, $value);
-	}
 
 
 	public function allForName($value)
@@ -244,12 +236,6 @@ abstract class _Series extends Model
 		if ( isset($values) ) {
 
 			// default values for attributes
-			if ( isset($values['parent_id']) == false ) {
-				$default_parent_id = $this->attributeDefaultValue( null, null, Series::parent_id);
-				if ( is_null( $default_parent_id ) == false ) {
-					$values['parent_id'] = $default_parent_id;
-				}
-			}
 			if ( isset($values['created']) == false ) {
 				$default_created = $this->attributeDefaultValue( null, null, Series::created);
 				if ( is_null( $default_created ) == false ) {
@@ -485,7 +471,6 @@ abstract class _Series extends Model
 	public function attributesMap() {
 		return array(
 			Series::publisher_id => Model::TO_ONE_TYPE,
-			Series::parent_id => Model::INT_TYPE,
 			Series::created => Model::DATE_TYPE,
 			Series::name => Model::TEXT_TYPE,
 			Series::search_name => Model::TEXT_TYPE,
@@ -541,23 +526,6 @@ abstract class _Series extends Model
 			);
 		}
 
-		return null;
-	}
-	function validate_parent_id($object = null, $value)
-	{
-		// not mandatory field
-		if (isset($value) == false || empty($value)  ) {
-			return null;
-		}
-
-		// integers
-		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Series::parent_id,
-				"FILTER_VALIDATE_INT"
-			);
-		}
 		return null;
 	}
 	function validate_created($object = null, $value)

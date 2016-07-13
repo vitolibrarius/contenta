@@ -13,7 +13,7 @@ use \model\user\Users as Users;
 
 class Migration_1 extends Migrator
 {
-	public function targetVersion() { return "0.1.1"; }
+	public function targetVersion() { return "0.1.0"; }
 
 	public function sqlite_preUpgrade()
 	{
@@ -22,54 +22,40 @@ class Migration_1 extends Migrator
 
 	public function sqlite_upgrade()
 	{
-		$sql = "CREATE TABLE IF NOT EXISTS " . Users::TABLE
-			. " ( "
+		$sql = "CREATE TABLE IF NOT EXISTS users ( "
 			. Users::id . " INTEGER PRIMARY KEY, "
 			. Users::name . " TEXT, "
-			. Users::password_hash . " TEXT, "
 			. Users::email . " TEXT, "
 			. Users::active . " INTEGER, "
 			. Users::account_type . " TEXT, "
 			. Users::rememberme_token . " TEXT, "
-			. Users::creation_timestamp . " TEXT, "
-			. Users::last_login_timestamp . " TEXT, "
-			. Users::failed_logins . " INTEGER, "
-			. Users::last_failed_login . " TEXT, "
-			. Users::activation_hash . " TEXT, "
 			. Users::api_hash . " TEXT, "
+			. Users::password_hash . " TEXT, "
 			. Users::password_reset_hash . " TEXT, "
-			. Users::password_reset_timestamp . " TEXT "
-			. ")";
-		$this->sqlite_execute( Users::TABLE, $sql, "Create table " . Users::TABLE );
+			. Users::activation_hash . " TEXT, "
+			. Users::failed_logins . " INTEGER, "
+			. Users::created . " INTEGER, "
+			. Users::last_login_timestamp . " INTEGER, "
+			. Users::last_failed_login . " INTEGER, "
+			. Users::password_reset_timestamp . " INTEGER "
+		. ")";
+		$this->sqlite_execute( "users", $sql, "Create table users" );
 
-		$indexStatements = array(
-			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_tokenindex on ' . Users::TABLE . '(' . Users::rememberme_token . ')',
-			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_activationindex on ' . Users::TABLE . '(' . Users::activation_hash . ')',
-			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_apiindex on ' . Users::TABLE . '(' . Users::api_hash . ')',
-			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_emailindex on ' . Users::TABLE . '(' . Users::email . ')',
-			'CREATE UNIQUE INDEX IF NOT EXISTS ' . Users::TABLE . '_nameindex on ' . Users::TABLE . '(' . Users::name . ')'
-		);
-		foreach( $indexStatements as $stmt ) {
-			$this->sqlite_execute( Users::TABLE, $stmt, "Index on " . Users::TABLE );
-		}
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_rememberme_token on users (rememberme_token)';
+		$this->sqlite_execute( "users", $sql, "Index on users (rememberme_token)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_namepassword_hash on users (name,password_hash)';
+		$this->sqlite_execute( "users", $sql, "Index on users (name,password_hash)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_activation_hash on users (activation_hash)';
+		$this->sqlite_execute( "users", $sql, "Index on users (activation_hash)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_api_hash on users (api_hash)';
+		$this->sqlite_execute( "users", $sql, "Index on users (api_hash)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_email on users (email)';
+		$this->sqlite_execute( "users", $sql, "Index on users (email)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_name on users (name)';
+		$this->sqlite_execute( "users", $sql, "Index on users (name)" );
 	}
 
 	public function sqlite_postUpgrade()
 	{
-		$values = array(
-			"name" => "vito",
-			"password_hash" => "$2y$10$486J2llu2CS.2DnXlTIQgOsk3tzcIVki428mjELHoEr/evhymDLGO",
-			"email" => "vitolibrarius@gmail.com",
-			"active" => 1,
-			"account_type" => Users::AdministratorRole,
-			"creation_timestamp" => time(),
-			"failed_logins" => 0,
-			"api_hash" => "4bd3b2b9075571c95ade00002334e7b2"
-		);
-
-		$users_model = new Users();
-		$insert = SQL::Insert( $users_model );
-		$insert->addRecord( $values );
-		$success = $insert->commitTransaction();
 	}
 }

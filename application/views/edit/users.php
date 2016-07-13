@@ -16,9 +16,9 @@
 				<legend><?php echo Localized::ModelLabel($this->model->tableName(),"FormLegend"); ?></legend>
 
 				<?php if (isset($this->object)) : ?>
-					<label><?php echo Localized::ModelLabel($this->model->tableName(), "creation_timestamp"); ?></label>
+					<label><?php echo Localized::ModelLabel($this->model->tableName(), "created"); ?></label>
 					<input class="date_input" type="text" name="created" disabled
-						value="<?php if (isset($this->object)) { echo $this->object->formattedDate("creation_timestamp"); } ?>"
+						value="<?php if (isset($this->object)) { echo $this->object->formattedDate("created"); } ?>"
 					/>
 				<?php endif; ?>
 

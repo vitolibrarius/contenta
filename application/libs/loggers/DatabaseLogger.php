@@ -30,7 +30,7 @@ class DatabaseLogger extends Logger
 
 		try {
 			list($obj, $errors) = $this->model->createObject( array(
-				Log::level => $level,
+				Log::level_code => $level,
 				Log::trace => $trace,
 				Log::trace_id => $traceId,
 				Log::context => $context,

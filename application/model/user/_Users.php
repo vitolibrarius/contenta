@@ -35,7 +35,7 @@ use \model\media\User_SeriesDBO as User_SeriesDBO;
 			. Users::password_reset_hash . " TEXT, "
 			. Users::activation_hash . " TEXT, "
 			. Users::failed_logins . " INTEGER, "
-			. Users::creation_timestamp . " INTEGER, "
+			. Users::created . " INTEGER, "
 			. Users::last_login_timestamp . " INTEGER, "
 			. Users::last_failed_login . " INTEGER, "
 			. Users::password_reset_timestamp . " INTEGER "
@@ -69,7 +69,7 @@ abstract class _Users extends Model
 	const password_reset_hash = 'password_reset_hash';
 	const activation_hash = 'activation_hash';
 	const failed_logins = 'failed_logins';
-	const creation_timestamp = 'creation_timestamp';
+	const created = 'created';
 	const last_login_timestamp = 'last_login_timestamp';
 	const last_failed_login = 'last_failed_login';
 	const password_reset_timestamp = 'password_reset_timestamp';
@@ -98,7 +98,7 @@ abstract class _Users extends Model
 			Users::password_reset_hash,
 			Users::activation_hash,
 			Users::failed_logins,
-			Users::creation_timestamp,
+			Users::created,
 			Users::last_login_timestamp,
 			Users::last_failed_login,
 			Users::password_reset_timestamp
@@ -254,10 +254,10 @@ abstract class _Users extends Model
 					$values['failed_logins'] = $default_failed_logins;
 				}
 			}
-			if ( isset($values['creation_timestamp']) == false ) {
-				$default_creation_timestamp = $this->attributeDefaultValue( null, null, Users::creation_timestamp);
-				if ( is_null( $default_creation_timestamp ) == false ) {
-					$values['creation_timestamp'] = $default_creation_timestamp;
+			if ( isset($values['created']) == false ) {
+				$default_created = $this->attributeDefaultValue( null, null, Users::created);
+				if ( is_null( $default_created ) == false ) {
+					$values['created'] = $default_created;
 				}
 			}
 			if ( isset($values['last_login_timestamp']) == false ) {
@@ -372,7 +372,7 @@ abstract class _Users extends Model
 			Users::password_reset_hash => Model::TEXT_TYPE,
 			Users::activation_hash => Model::TEXT_TYPE,
 			Users::failed_logins => Model::INT_TYPE,
-			Users::creation_timestamp => Model::DATE_TYPE,
+			Users::created => Model::DATE_TYPE,
 			Users::last_login_timestamp => Model::DATE_TYPE,
 			Users::last_failed_login => Model::DATE_TYPE,
 			Users::password_reset_timestamp => Model::DATE_TYPE
@@ -585,13 +585,21 @@ abstract class _Users extends Model
 		}
 		return null;
 	}
-	function validate_creation_timestamp($object = null, $value)
+	function validate_created($object = null, $value)
 	{
 		// not mandatory field
 		if (isset($value) == false || empty($value)  ) {
 			return null;
 		}
 
+		// created date is not changeable
+		if ( isset($object, $object->created) ) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Users::created,
+				"IMMUTABLE"
+			);
+		}
 		return null;
 	}
 	function validate_last_login_timestamp($object = null, $value)

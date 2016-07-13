@@ -13,7 +13,7 @@
 		{ "asc": "name" }
 	],
     "indexes" : [
-    	{ "columns": ["character_id", "name"], "unique": true }
+    	{ "columns": ["series_id", "name"], "unique": true }
     ],
     "relationships" :{
     	"series" : {

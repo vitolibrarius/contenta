@@ -25,7 +25,6 @@ use \model\media\User_SeriesDBO as User_SeriesDBO;
 abstract class _SeriesDBO extends DataObject
 {
 	public $publisher_id;
-	public $parent_id;
 	public $created;
 	public $name;
 	public $search_name;
@@ -137,16 +136,6 @@ abstract class _SeriesDBO extends DataObject
 
 
 	/** Attributes */
-	public function parent_id()
-	{
-		return parent::changedValue( Series::parent_id, $this->parent_id );
-	}
-
-	public function setParent_id( $value = null)
-	{
-		parent::storeChange( Series::parent_id, $value );
-	}
-
 	public function name()
 	{
 		return parent::changedValue( Series::name, $this->name );

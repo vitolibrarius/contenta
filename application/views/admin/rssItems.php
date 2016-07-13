@@ -65,6 +65,6 @@
 </div>
 <?php endif; // has list ?>
 
-<?php if ($open) : ?>
+<?php if (isset($open) && $open == true) : ?>
 	</div>
 <?php endif; // open ?>

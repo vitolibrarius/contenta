@@ -26,7 +26,7 @@ abstract class _UsersDBO extends DataObject
 	public $password_reset_hash;
 	public $activation_hash;
 	public $failed_logins;
-	public $creation_timestamp;
+	public $created;
 	public $last_login_timestamp;
 	public $last_failed_login;
 	public $password_reset_timestamp;
@@ -40,8 +40,8 @@ abstract class _UsersDBO extends DataObject
 		return (isset($this->active) && $this->active == Model::TERTIARY_TRUE);
 	}
 
-	public function formattedDateTime_creation_timestamp() { return $this->formattedDate( Users::creation_timestamp, "M d, Y H:i" ); }
-	public function formattedDate_creation_timestamp() {return $this->formattedDate( Users::creation_timestamp, "M d, Y" ); }
+	public function formattedDateTime_created() { return $this->formattedDate( Users::created, "M d, Y H:i" ); }
+	public function formattedDate_created() {return $this->formattedDate( Users::created, "M d, Y" ); }
 
 	public function formattedDateTime_last_login_timestamp() { return $this->formattedDate( Users::last_login_timestamp, "M d, Y H:i" ); }
 	public function formattedDate_last_login_timestamp() {return $this->formattedDate( Users::last_login_timestamp, "M d, Y" ); }
@@ -175,16 +175,6 @@ abstract class _UsersDBO extends DataObject
 	public function setFailed_logins( $value = null)
 	{
 		parent::storeChange( Users::failed_logins, $value );
-	}
-
-	public function creation_timestamp()
-	{
-		return parent::changedValue( Users::creation_timestamp, $this->creation_timestamp );
-	}
-
-	public function setCreation_timestamp( $value = null)
-	{
-		parent::storeChange( Users::creation_timestamp, $value );
 	}
 
 	public function last_login_timestamp()

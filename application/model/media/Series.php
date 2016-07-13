@@ -115,13 +115,6 @@ class Series extends _Series
 */
 
 /*
-	function validate_parent_id($object = null, $value)
-	{
-		return parent::validate_parent_id($object, $value);
-	}
-*/
-
-/*
 	function validate_created($object = null, $value)
 	{
 		return parent::validate_created($object, $value);

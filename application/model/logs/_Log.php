@@ -29,14 +29,14 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 			. Log::context_id . " TEXT, "
 			. Log::message . " TEXT, "
 			. Log::session . " TEXT, "
-			. Log::level . " TEXT, "
+			. Log::level_code . " TEXT, "
 			. Log::created . " INTEGER, "
-			. "FOREIGN KEY (". Log::level .") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
+			. "FOREIGN KEY (". Log::level_code .") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
 		. ")";
 		$this->sqlite_execute( "log", $sql, "Create table log" );
 
-		$sql = 'CREATE  INDEX IF NOT EXISTS log_level on log (level)';
-		$this->sqlite_execute( "log", $sql, "Index on log (level)" );
+		$sql = 'CREATE  INDEX IF NOT EXISTS log_level_code on log (level_code)';
+		$this->sqlite_execute( "log", $sql, "Index on log (level_code)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS log_tracetrace_id on log (trace,trace_id)';
 		$this->sqlite_execute( "log", $sql, "Index on log (trace,trace_id)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS log_contextcontext_id on log (context,context_id)';
@@ -52,7 +52,7 @@ abstract class _Log extends Model
 	const context_id = 'context_id';
 	const message = 'message';
 	const session = 'session';
-	const level = 'level';
+	const level_code = 'level_code';
 	const created = 'created';
 
 	public function tableName() { return Log::TABLE; }
@@ -75,7 +75,7 @@ abstract class _Log extends Model
 			Log::context_id,
 			Log::message,
 			Log::session,
-			Log::level,
+			Log::level_code,
 			Log::created
 		);
 	}
@@ -168,9 +168,9 @@ abstract class _Log extends Model
 			->fetchAll();
 	}
 
-	public function allForLevel($value)
+	public function allForLevel_code($value)
 	{
-		return $this->allObjectsForKeyValue(Log::level, $value);
+		return $this->allObjectsForKeyValue(Log::level_code, $value);
 	}
 
 
@@ -178,13 +178,13 @@ abstract class _Log extends Model
 
 	public function allForLogLevel($obj)
 	{
-		return $this->allObjectsForFK(Log::level, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Log::level_code, $obj, $this->sortOrder(), 50);
 	}
 
 	public function countForLogLevel($obj)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForFK( Log::level, $obj );
+			return $this->countForFK( Log::level_code, $obj );
 		}
 		return false;
 	}
@@ -194,7 +194,7 @@ abstract class _Log extends Model
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
 				case "log_level":
-					return array( Log::level, "code"  );
+					return array( Log::level_code, "code"  );
 					break;
 				default:
 					break;
@@ -258,10 +258,10 @@ abstract class _Log extends Model
 			if ( isset($values['logLevel']) ) {
 				$local_logLevel = $values['logLevel'];
 				if ( $local_logLevel instanceof Log_LevelDBO) {
-					$values[Log::level] = $local_logLevel->code;
+					$values[Log::level_code] = $local_logLevel->code;
 				}
 				else if ( is_string( $local_logLevel) ) {
-					$params[Log::level] = $local_logLevel;
+					$params[Log::level_code] = $local_logLevel;
 				}
 			}
 		}
@@ -273,10 +273,10 @@ abstract class _Log extends Model
 			if ( isset($values['logLevel']) ) {
 				$local_logLevel = $values['logLevel'];
 				if ( $local_logLevel instanceof Log_LevelDBO) {
-					$values[Log::level] = $local_logLevel->code;
+					$values[Log::level_code] = $local_logLevel->code;
 				}
 				else if ( is_string( $local_logLevel) ) {
-					$params[Log::level] = $values['logLevel'];
+					$params[Log::level_code] = $values['logLevel'];
 				}
 			}
 		}
@@ -360,7 +360,7 @@ abstract class _Log extends Model
 			$qualifiers[] = Qualifier::Like( 'message', $message, SQL::SQL_LIKE_AFTER);
 		}
 		if ( isset($levelCode)) {
-			$qualifiers[] = Qualifier::Equals( 'level', $levelCode);
+			$qualifiers[] = Qualifier::Equals( 'level_code', $levelCode);
 		}
 
 		if ( count($qualifiers) > 0 ) {
@@ -393,7 +393,7 @@ abstract class _Log extends Model
 			Log::context_id => Model::TEXT_TYPE,
 			Log::message => Model::TEXT_TYPE,
 			Log::session => Model::TEXT_TYPE,
-			Log::level => Model::TO_ONE_TYPE,
+			Log::level_code => Model::TO_ONE_TYPE,
 			Log::created => Model::DATE_TYPE
 		);
 	}
@@ -404,7 +404,7 @@ abstract class _Log extends Model
 			switch ($attr) {
 				case Log::session:
 					return session_id();
-				case Log::level:
+				case Log::level_code:
 					return 'warning';
 			}
 		}
@@ -472,7 +472,7 @@ abstract class _Log extends Model
 
 		return null;
 	}
-	function validate_level($object = null, $value)
+	function validate_level_code($object = null, $value)
 	{
 		// not mandatory field
 		if (isset($value) == false || empty($value)  ) {

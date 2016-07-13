@@ -28,9 +28,7 @@
  			}
  		}
 
-
-		$database = Database::instance();
-		if ( $database->verifyDatabase() == true ) {
+		if ( Database::VerifyDatabase() == true ) {
 			$app = new Application();
 		}
 		else {

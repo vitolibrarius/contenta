@@ -18,7 +18,7 @@
         "password_reset_hash": { "column": "password_reset_hash", "length": 256, "type": "TEXT" },
         "activation_hash": { "column": "activation_hash", "length": 256, "type": "TEXT" },
         "failed_logins": { "column": "failed_logins", "type": "INTEGER", "default": "0" },
-        "creation_timestamp": { "column": "creation_timestamp", "type": "DATE" },
+        "created": { "column": "created", "type": "DATE" },
         "last_login_timestamp": { "column": "last_login_timestamp", "type": "DATE", "default": "null" },
         "last_failed_login": { "column": "last_failed_login", "type": "DATE", "default": "null" },
         "password_reset_timestamp": { "column": "password_reset_timestamp", "type": "DATE", "default": "null" }

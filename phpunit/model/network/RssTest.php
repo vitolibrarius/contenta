@@ -147,29 +147,5 @@ class RssTest extends PHPUnit_Framework_TestCase
 		$this->assertCount( 4, $found, "Should have found 3 rss from 2016" );
 	}
 
-	/**
-	 * @covers	objectForEndpointGUID
-	 * 			T_FUNCTION T_PUBLIC objectForEndpointGUID ( $endpoint, $guid)
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-08 22:34:45.
-	 */
-	public function testObjectForEndpointGUID()
-	{
-		try {
-			$found = $this->model->objectForEndpointGUID(null, null);
-			$this->assertTrue( false, "Should have thrown exception" );
-		}
-		catch( \Exception $e ) {
-		}
-
-		$endpoint = Model::Named('Endpoint')->objectForId( 4 );
-		$this->assertTrue( $endpoint != false, "Failed to find endpoint (4)" );
-		$guid = "https://www.usenet-crawler.com/details/85c7be5fc67bbb5ac5bcd9090b4a9e31";
-
-		$found = $this->model->objectForEndpointGUID($endpoint, $guid);
-		$this->assertTrue( $found != false, "Failed to find rss" );
-		$this->assertEquals( $guid, $found->guid, "Found wrong guid" );
-	}
-
-
 /* {functions} */
 }

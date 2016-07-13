@@ -29,8 +29,8 @@ use \model\media\SeriesDBO as SeriesDBO;
 		. ")";
 		$this->sqlite_execute( "series_alias", $sql, "Create table series_alias" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS series_alias_character_idname on series_alias (character_id,name)';
-		$this->sqlite_execute( "series_alias", $sql, "Index on series_alias (character_id,name)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS series_alias_series_idname on series_alias (series_id,name)';
+		$this->sqlite_execute( "series_alias", $sql, "Index on series_alias (series_id,name)" );
 */
 abstract class _Series_Alias extends Model
 {

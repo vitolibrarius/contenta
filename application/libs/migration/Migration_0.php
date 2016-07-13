@@ -14,7 +14,7 @@ use \model\version\Patch as Patch;
 
 class Migration_0 extends Migrator
 {
-	public function targetVersion() { return "0.1.0"; }
+	public function targetVersion() { return "0.0.1"; }
 
 	public function sqlite_preUpgrade()
 	{

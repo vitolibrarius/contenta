@@ -279,11 +279,11 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers	validate_creation_timestamp
-	 * 			T_FUNCTION validate_creation_timestamp ( $object = null, $value)
+	 * @covers	validate_created
+	 * 			T_FUNCTION validate_created ( $object = null, $value)
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-22 12:44:58.
 	 */
-	public function testValidate_creation_timestamp()
+	public function testValidate_created()
 	{
 	}
 

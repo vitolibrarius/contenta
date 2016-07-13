@@ -690,7 +690,7 @@
                 "GenerateError": "An error occurred while generating a new API Key",
                 "label": "API Key"
             },
-            "creation_timestamp": {
+            "created": {
                 "label": "Created"
             },
             "email": {

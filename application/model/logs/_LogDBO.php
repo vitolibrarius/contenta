@@ -20,7 +20,7 @@ abstract class _LogDBO extends DataObject
 	public $context_id;
 	public $message;
 	public $session;
-	public $level;
+	public $level_code;
 	public $created;
 
 
@@ -31,17 +31,17 @@ abstract class _LogDBO extends DataObject
 	// to-one relationship
 	public function logLevel()
 	{
-		if ( isset( $this->level ) ) {
+		if ( isset( $this->level_code ) ) {
 			$model = Model::Named('Log_Level');
-			return $model->objectForCode($this->level);
+			return $model->objectForCode($this->level_code);
 		}
 		return false;
 	}
 
 	public function setLogLevel(Log_LevelDBO $obj = null)
 	{
-		if ( isset($obj, $obj->code) && (isset($this->level) == false || $obj->code != $this->level) ) {
-			parent::storeChange( Log::level, $obj->code );
+		if ( isset($obj, $obj->code) && (isset($this->level_code) == false || $obj->code != $this->level_code) ) {
+			parent::storeChange( Log::level_code, $obj->code );
 			$this->saveChanges();
 		}
 	}

@@ -2,7 +2,6 @@
     "attributes": {
         "id": { "column": "id", "type": "INTEGER" },
         "publisher_id": { "column": "publisher_id", "type": "INTEGER", "nullable": false },
-        "parent_id": { "column": "parent_id", "type": "INTEGER" },
         "created": { "column": "created", "type": "DATE" },
 
         "name": { "column": "name", "length": 256, "type": "TEXT", "collate": "NOCASE", "nullable": false },

@@ -365,32 +365,6 @@ abstract class _Rss extends Model
 		return $result;
 	}
 
-	public function objectForEndpointGUID( $endpoint, $guid )
-	{
-		$select = SQL::Select( $this );
-		$select->orderBy( $this->sortOrder() );
-		$qualifiers = array();
-		$qualifiers[] = Qualifier::FK( 'endpoint_id', $endpoint);
-		$qualifiers[] = Qualifier::Equals( 'guid', $guid);
-
-		if ( count($qualifiers) > 0 ) {
-			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
-		}
-
-		$result = $select->fetchAll();
-		if ( is_array($result) ) {
-			$result_size = count($result);
-			if ( $result_size == 1 ) {
-				return $result[0];
-			}
-			else if ($result_size > 1 ) {
-				throw new \Exception( "objectForEndpointGUID expected 1 result, but fetched " . count($result) );
-			}
-		}
-
-		return false;
-	}
-
 
 	/**
 	 * Attribute editing

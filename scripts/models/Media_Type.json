@@ -16,6 +16,6 @@
     },
     "indexes" : [
     	{ "columns": ["code"], "unique": true },
-    	{ "columns": ["name"], "unique": true }
+    	{ "columns": ["name"] }
     ]
 }

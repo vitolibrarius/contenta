@@ -26,10 +26,6 @@ class Users extends _Users
 	public function createObject(array $values = array())
 	{
 		if ( isset($values) ) {
-			if ( isset($values[Users::creation_timestamp]) == false) {
-				$values[Users::creation_timestamp] = time();
-			}
-
 			if ( isset($values[Users::active]) ) {
 				$values[Users::active] = boolValue($values[Users::active], true);
 			}
@@ -274,9 +270,9 @@ class Users extends _Users
 	}
 
 /*
-	function validate_creation_timestamp($object = null, $value)
+	function validate_created($object = null, $value)
 	{
-		return parent::validate_creation_timestamp($object, $value);
+		return parent::validate_created($object, $value);
 	}
 */
 

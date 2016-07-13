@@ -66,23 +66,6 @@
 					"optional": true
 				}
 			]
-		},
-		"objectForEndpointGUID": {
-			"arguments": [ "endpoint", "guid" ],
-			"maxCount" : 1,
-			"semantic": "AND",
-			"qualifiers": [
-				{
-					"type" : "Related",
-					"relationship": "endpoint",
-					"argAttribute": "endpoint"
-				},
-				{
-					"type" : "Equals",
-					"keyAttribute": "guid",
-					"argAttribute": "guid"
-				}
-			]
 		}
 	}
 }

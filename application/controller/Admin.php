@@ -28,17 +28,6 @@ class Admin extends Controller
 	function index()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-// 			$migration = new \migration\Migration_9(Config::GetProcessing());
-// 			$migration->sqlite_upgrade();
-// // 			$migration->sqlite_postUpgrade();
-// 			$migration = new \migration\Migration_10(Config::GetProcessing());
-// 			$migration->sqlite_upgrade();
-// 			$migration = new \migration\Migration_15(Config::GetProcessing());
-// 			$migration->sqlite_upgrade();
-			$migration = new \migration\Migration_16(Config::GetProcessing());
-// 			$migration->sqlite_upgrade();
-			$migration->sqlite_postUpgrade();
-
 			$this->view->render( '/admin/index' );
 		}
 	}

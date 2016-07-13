@@ -6,7 +6,7 @@
     "active": 1,
     "account_type": "admin",
     "rememberme_token": null,
-    "creation_timestamp": 1444841258,
+    "created": 1444841258,
     "last_login_timestamp": 1459393213,
     "failed_logins": 0,
     "last_failed_login": null,

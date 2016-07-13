@@ -28,7 +28,7 @@ use \model\media\Media_TypeDBO as Media_TypeDBO;
 
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS media_type_code on media_type (code)';
 		$this->sqlite_execute( "media_type", $sql, "Index on media_type (code)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS media_type_name on media_type (name)';
+		$sql = 'CREATE  INDEX IF NOT EXISTS media_type_name on media_type (name)';
 		$this->sqlite_execute( "media_type", $sql, "Index on media_type (name)" );
 */
 abstract class _Media_Type extends Model
@@ -67,9 +67,9 @@ abstract class _Media_Type extends Model
 	}
 
 
-	public function objectForName($value)
+	public function allForName($value)
 	{
-		return $this->singleObjectForKeyValue(Media_Type::name, $value);
+		return $this->allObjectsForKeyValue(Media_Type::name, $value);
 	}
 
 
@@ -203,15 +203,6 @@ abstract class _Media_Type extends Model
 			);
 		}
 
-		// make sure Name is unique
-		$existing = $this->objectForName($value);
-		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Media_Type::name,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
 		return null;
 	}
 }

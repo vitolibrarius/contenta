@@ -18,15 +18,15 @@
 		</tr>
 	<?php
 		foreach ($this->logArray as $key => $log) {
-			echo '<tr class="' . $log->level . '">'
+			echo '<tr class="' . $log->level_code . '">'
 					. '<td rowspan="2"><nobr>' . $log->formattedDate("created", 'M d, Y') . '</nobr><br/><nobr>'
 							. $log->formattedDate("created", "H:i") . '</nobr></td>'
-					. '<td rowspan="2">' . $log->level . '</td>'
+					. '<td rowspan="2">' . $log->level_code . '</td>'
 					. '<td>' . $log->trace . '</td>'
 					. '<td>' . $log->context . '</td>'
 					. '<td rowspan="2" class="log_msg" valign="top"><pre>' . $log->message . '</pre></td>'
 					. '</tr>';
-			echo '<tr class="' . $log->level . '">'
+			echo '<tr class="' . $log->level_code . '">'
 					. '<td>' . $log->trace_id . '</td>'
 					. '<td>' . $log->context_id . '</td>'
 					. '</tr>';

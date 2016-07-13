@@ -43,7 +43,7 @@ class Log extends _Log
 			Log::context_id,
 			Log::message,
 			Log::session,
-			Log::level,
+			Log::level_code,
 			Log::created
 		);
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
@@ -68,7 +68,7 @@ class Log extends _Log
 			switch ($attr) {
 				case Log::session:
 					return session_id();
-				case Log::level:
+				case Log::level_code:
 					return 'warning';
 			}
 		}
@@ -84,7 +84,7 @@ class Log extends _Log
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( Log::level == $attr ) {
+		if ( Log::level_code == $attr ) {
 			$model = Model::Named('Log_Level');
 			return $model->allObjects();
 		}

@@ -7,7 +7,7 @@
         "context_id": { "column": "context_id", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
         "message": { "column": "message", "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "nullable": false },
         "session": { "column": "session", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "default": "session_id()" },
-        "level": { "column": "level", "length": 10, "type": "TEXT", "default": "'warning'" },
+        "level_code": { "column": "level_code", "length": 10, "type": "TEXT", "default": "'warning'" },
         "created": { "column": "created", "type": "DATE" }
     },
     "primaryKeys": [ "id" ],
@@ -24,7 +24,7 @@
     		"destinationPackage" : "\\model\\logs\\",
     		"destinationTable" : "log_level",
     		"joins" : [
-    			{ "destinationAttribute": "code", "sourceAttribute" : "level" }
+    			{ "destinationAttribute": "code", "sourceAttribute" : "level_code" }
     		],
     		"isMandatory": true,
             "isToMany" : false,
@@ -32,7 +32,7 @@
     	}
     },
     "indexes" : [
-    	{ "columns": ["level"] },
+    	{ "columns": ["level_code"] },
     	{ "columns": ["trace", "trace_id"] },
     	{ "columns": ["context", "context_id"] }
     ],
@@ -91,7 +91,7 @@
 				},
 				{
 					"type" : "Equals",
-					"keyAttribute": "level",
+					"keyAttribute": "level_code",
 					"argAttribute": "levelCode",
 					"optional": true
 				}

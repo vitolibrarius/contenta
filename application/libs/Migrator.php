@@ -16,11 +16,184 @@ class Migrator
 
 	public static function Upgrade($scratchDirectory)
 	{
+		// bump our execution time
+		ini_set('max_execution_time', 300);
+
+		// evaluate the database version first
+		$dbversion = Database::DBVersion();
+		$dbpatch = Database::DBPatchLevel();
 		$currentVersionNumber = currentVersionNumber();
-		$patch_model = Model::Named("Patch");
 
+		if ( $dbversion == 0 ) {
+			$dbConnection = new Database();
+			$specialMap = array(
+				"log" => array(
+					"level" => "level_code"
+				),
+				"users" => array(
+					"creation_timestamp" => "created"
+				)
+			);
+			// move - rename existing data tables
+			$oldTableNames = $dbConnection->dbTableNames();
+			$oldTableMap = array();
+			foreach( $oldTableNames as $oldTable ) {
+				if ( endsWith( '_old', $oldTable ) == false ) {
+					$oldTableMap[$oldTable] = $dbConnection->dbPKForTable($oldTable);
+					$dbConnection->dbTableRename( $oldTable, $oldTable . '_old' );
+
+					Migrator::FixOldDataIssues( $dbConnection,  $oldTable . '_old' );
+				}
+			}
+			unset($dbConnection);
+
+			// re-create data tables
+			Migrator::ApplyNeededMigrations($scratchDirectory);
+
+			// reload old data
+			$skipTables = array( "version", "patch", "log_level", "endpoint_type", "job_type", "media_type", "pull_list_excl", "pull_list_expansion");
+			foreach( $oldTableMap as $tblName => $pkArray ) {
+				if ( in_array( $tblName, $skipTables ) == false ) {
+					Migrator::LoadDataFromTo(
+						$tblName . "_old",
+						$tblName,
+						(isset($specialMap[$tblName]) ? $specialMap[$tblName] : null)
+					);
+				}
+			}
+
+			// drop old data
+			$dbConnection = new Database();
+			$oldTableNames = $dbConnection->dbTableNames();
+			foreach( $oldTableNames as $oldTable ) {
+				if ( endsWith( '_old', $oldTable ) == true ) {
+					Logger::logInfo( "drop table " . $oldTable, "Migrator", "Upgrade" );
+					$dbConnection->execute_sql( "drop table " . $oldTable );
+				}
+			}
+			$dbConnection->dbOptimize();
+			unset($dbConnection);
+
+
+			// update database version
+			$dbversion = Database::DBVersion(Database::CONTENTA_DB_VERSION);
+		}
+		else if ($dbversion == Database::CONTENTA_DB_VERSION ) {
+			Migrator::ApplyNeededMigrations($scratchDirectory);
+		}
+		else {
+			throw new MigrationFailedException("Unknown database version '$dbversion'");
+		}
+
+		// ensure application patch version is up to date
+		$version_model = Model::Named("Version");
+		$version = $version_model->objectForCode( $currentVersionNumber );
+		if ( $version == false ) {
+			list($version, $errors) = $version_model->createObject( array( Version::code => $currentVersionNumber ));
+		}
+		Logger::logInfo( "Migration complete for version $currentVersionNumber", "Migrator", "Upgrade" );
+	}
+
+	private static function FixOldDataIssues( $dbConnection, $oldTable )
+	{
+		switch ( $oldTable ) {
+			case 'rss_old':
+				$dbConnection->execute_sql("update series_old set search_name = lower(name) where search_name is null or length(search_name) < 2");
+				break;
+			case 'series_old':
+				$dbConnection->execute_sql("delete from rss_old where guid in "
+					. "(select guid from rss_old group by guid having count(*) > 1)"
+				);
+				break;
+			case 'series_character_old':
+				$count_sql = "select count(*) as COUNT from series_character_old as s "
+					. " inner join (select d.series_id, d.character_id from series_character_old d group by d.series_id, d.character_id having count(*) > 1) "
+					. " as dup on s.series_id = dup.series_id and s.character_id = dup.character_id";
+				$count = $dbConnection->dbFetchRawCountForSQL($count_sql);
+				while ( is_int($count) && intval($count) > 0 ) {
+					$dbConnection->execute_sql("delete from series_character_old where id in "
+						. "(select MIN(id) from series_character_old group by series_id, character_id having count(*) > 1)"
+					);
+					$count = $dbConnection->dbFetchRawCountForSQL($count_sql);
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
+	private static function LoadDataFromTo( $srcTable, $destTable, $specialMappings = array())
+	{
+		$dbConnection = new Database();
+		$srcCount = $dbConnection->dbFetchRawCount( $srcTable );
+		if ( $srcCount == 0 ) {
+			return true;
+		}
+
+		$srcColumns = $dbConnection->dbTableInfo( $srcTable );
+		$destColumns = $dbConnection->dbTableInfo( $destTable );
+		if ( $srcColumns == false ) {
+			Logger::logWarning( "Source $srcTable does not exist", "Migrator", "LoadDataFromTo" );
+			return false;
+		}
+		else if ( $destColumns == false ) {
+			Logger::logWarning( "Destination $destTable does not exist", "Migrator", "LoadDataFromTo" );
+			return false;
+		}
+
+		$copySrcToDestColumn = array();
+		foreach( $srcColumns as $sCol => $sDetails ) {
+			$dCol = $sCol;
+			if ( isset( $specialMappings[$sCol] ) ) {
+				$dCol = $specialMappings[$sCol];
+			}
+
+			if ( isset($destColumns[$dCol]) ) {
+				$copySrcToDestColumn[$sCol] = $dCol;
+			}
+			else {
+				Logger::logWarning( "$srcTable column '$sCol' will be dropped from $destTable", "Migrator", "LoadDataFromTo" );
+			}
+		}
+
+		/* this could be faster using a select .. into but this way makes it easier to identify specific data issues */
+		$batch = 0;
+		$count = 0;
+		while ( true ) {
+			$data = $dbConnection->dbFetchRawBatch( $srcTable, $batch );
+			if ( $data == false )  {
+				break;
+			}
+
+			foreach( $data as $row ) {
+				$insertKeys = array();
+				$insertParams = array();
+				$insertValues = array();
+				foreach( $row as $column => $value ) {
+					if ( isset($copySrcToDestColumn[$column]) ) {
+						$insertKeys[] = $copySrcToDestColumn[$column];
+						$insertParams[] = ":".$column;
+						$insertValues[":".$column] = $value;
+					}
+				}
+				$sql = "INSERT INTO " . $destTable . " (" . implode(",", $insertKeys) . ") values (" . implode(",", $insertParams) . ")";
+				$dbConnection->execute_sql($sql, $insertValues);
+			}
+			$batch ++;
+			$count += count($data);
+		}
+
+		$destCount = $dbConnection->dbFetchRawCount( $destTable );
+		if ( $destCount != $srcCount ) {
+			throw new \Exception( "Counts mismatch $srcTable $srcCount != $destCount" );
+		}
+	}
+
+	private static function ApplyNeededMigrations($scratchDirectory)
+	{
+		$currentVersionNumber = currentVersionNumber();
 		Logger::logInfo( "Migrating application to version " . $currentVersionNumber,	"Migrator", "Upgrade" );
-
+		$patch_model = Model::Named("Patch");
 		$patches = array();
 		try {
 			$fetch = \SQL::Select( $patch_model, array("name"))->fetchAll();
@@ -33,7 +206,7 @@ class Migrator
 		catch ( \PDOException $pdox ) {
 			if ( $pdox->getCode() != 'HY000' ) {
 				Logger::logException( $pdox );
-				die( "database migration error" );
+				die( "database migration error selecting patches" );
 			}
 		}
 
@@ -53,7 +226,7 @@ class Migrator
 							$version = $worker->targetVersionDBO();
 							list($patch, $errors) = $patch_model->createObject( array( "version" => $version, "name" => $migrationClass));
 							if ( ($patch instanceof PatchDBO ) == false) {
-								throw new MigrationFailedException("Failed to create migration record " . $migrationClass);
+								throw new MigrationFailedException("Failed to create migration 'patch' record " . $migrationClass);
 							}
 						}
 						else {
@@ -72,8 +245,11 @@ class Migrator
 			else {
 				// something else?
 				Logger::logException( $e );
-				die( "database migration error" );
+				die( "database migration error " . $e );
 			}
+		}
+		finally {
+			Database::ResetConnection();
 		}
 	}
 

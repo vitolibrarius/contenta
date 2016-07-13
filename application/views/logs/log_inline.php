@@ -1,9 +1,9 @@
 <div class="log_container">
 <?php if (is_array($this->logArray) && count($this->logArray) > 0): ?>
 	<?php foreach ($this->logArray as $key => $log): ?>
-		<div class="log_row <?php echo $log->level; ?>">
+		<div class="log_row <?php echo $log->level_code; ?>">
 			<span class="log_date"><?php echo date('M d, Y  H:i', $log->created); ?></span>
-			<span class="log_level"><?php echo $log->level; ?></span>
+			<span class="log_level"><?php echo $log->level_code; ?></span>
 			<span class="log_msg"><?php echo $log->message; ?></span>
 		</div>
 	<?php endforeach; ?>

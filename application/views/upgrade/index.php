@@ -16,9 +16,9 @@
 	});
 </script>
 
-<?php if (isset($this->latestVersion, $this->latestVersion->code) == false
-		|| strlen($this->latestVersion->code) == 0
-		|| $this->latestVersion->code != currentVersionNumber()) : ?>
+<?php if (isset($this->dbpatch) == false
+		|| strlen($this->dbpatch) == 0
+		|| $this->dbpatch != currentVersionNumber()) : ?>
 <div class="paging">
 	<ul>
 		<li><a class="confirm" href="#"><?php echo $this->label("Upgrade to") . ' ' . currentVersionNumber(); ?></a></li>
@@ -35,9 +35,9 @@
 			<td>
 				<?php
 					$status = "";
-					if (isset($this->latestVersion, $this->latestVersion->code) == false
-						|| strlen($this->latestVersion->code) == 0
-						|| $this->latestVersion->code != currentVersionNumber())
+					if (isset($this->latestVersion, $this->dbpatch) == false
+						|| strlen($this->dbpatch) == 0
+						|| $this->dbpatch != currentVersionNumber())
 					{
 						$status = "problem";
 					}
@@ -47,12 +47,13 @@
 				?>
 			</td>
 			<td><span>
-				<?php if (isset($this->latestVersion, $this->latestVersion->code) == false
-					|| strlen($this->latestVersion->code) == 0) : ?>
-					<p>You database does not appear to be initialized.  Please review your configuration and run the migration processor.</p>
-				<?php elseif ($this->latestVersion->code != currentVersionNumber()) : ?>
+				<?php if (isset($this->dbpatch) == false
+					|| strlen($this->dbpatch) == 0) : ?>
+					<p>You database does not appear to be initialized.  Please review your configuration and run the migration processor.
+					<b> <?php echo $this->dbpatch; ?></b></p>
+				<?php elseif ($this->dbpatch != currentVersionNumber()) : ?>
 					<p>Your database is not up to date, please review your configuration and run the migration processor.</p>
-					<p>Current upgrade level is: <?php echo $this->latestVersion->code; ?>.</p>
+					<p>Current upgrade level is: <?php echo $this->dbpatch; ?>.</p>
 				<?php else : ?>
 					<p>Your database is up to date</p>
 				<?php endif; ?>

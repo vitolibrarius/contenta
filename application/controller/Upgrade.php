@@ -4,6 +4,7 @@ namespace controller;
 
 use \Controller as Controller;
 use \DataObject as DataObject;
+use \Database as Database;
 use \Model as Model;
 use \http\Session as Session;;
 use \Logger as Logger;
@@ -37,13 +38,21 @@ class Upgrade extends Controller
 
 	function index()
 	{
-		$user_model = Model::Named("Users");
-		$adminUsers = $user_model->allForAccount_type(Users::AdministratorRole);
-		$latest = Model::Named("Version")->latestVersion();
+		try {
+			$dbversion = Database::DBVersion();
+			$dbpatch = Database::DBPatchLevel();
+
+			$user_model = Model::Named("Users");
+			$adminUsers = $user_model->allForAccount_type(Users::AdministratorRole);
+		}
+		catch ( \PDOException $pdoe ) {
+			$adminUsers = array();
+		}
 
 		if ( is_array($adminUsers) == false || count($adminUsers) == 0) {
 			// no users, show the options
-			$this->view->latestVersion = $latest;
+			$this->view->dbversion = $dbversion;
+			$this->view->dbpatch = $dbpatch;
 			$this->view->render('/upgrade/index');
 		}
 		else if (Session::get('user_logged_in') == false) {
@@ -57,15 +66,21 @@ class Upgrade extends Controller
 			$this->view->render('/error/index');
 		}
 		else {
-			$this->view->latestVersion = $latest;
+			$this->view->dbversion = $dbversion;
+			$this->view->dbpatch = $dbpatch;
 			$this->view->render('/upgrade/index');
 		}
 	}
 
 	function migrate()
 	{
-		$user_model = Model::Named("Users");
-		$adminUsers = $user_model->allForAccount_type(Users::AdministratorRole);
+		try {
+			$user_model = Model::Named("Users");
+			$adminUsers = $user_model->allForAccount_type(Users::AdministratorRole);
+		}
+		catch ( \PDOException $pdoe ) {
+			$adminUsers = array();
+		}
 
 		if ( is_array($adminUsers) == false || count($adminUsers) == 0) {
 			// no users, just do it

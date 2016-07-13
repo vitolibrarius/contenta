@@ -139,7 +139,7 @@
 					<span class="break"><em>
 							<pre><?php echo htmlentities($value->name) ?></pre>
 					</em></span>
-					<span class="break"><?php echo $value->createdDate(); ?></span>
+					<span class="break"><?php echo $value->formattedDateTime_created(); ?></span>
 				</div>
 		<?php endforeach; ?>
 		</div>
