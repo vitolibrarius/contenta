@@ -73,12 +73,6 @@ class Media_TypeTest extends PHPUnit_Framework_TestCase
 	{
 		$type = $this->model->objectForCode( "pdf" );
 		$this->assertTrue( $type != false, "Failed to find 'pdf'" );
-		list( $updated, $errors ) = $this->model->updateObject( $type, array( "code" => "cbz"));
-		$this->assertNotNull( $errors, "Failed to updated record" . var_export($errors, true) );
-		$this->assertCount( 1, $errors, "Should be validation error" );
-
-		$type = $this->model->objectForCode( "pdf" );
-		$this->assertTrue( $type != false, "Failed to find 'pdf'" );
 		list( $updated, $errors ) = $this->model->updateObject( $type, array( "name" => null));
 		$this->assertNotNull( $errors, "Failed to updated record" . var_export($errors, true) );
 		$this->assertCount( 1, $errors, "Should be validation error" );

@@ -40,7 +40,7 @@ class Media extends _Media
 	public function attributesFor($object = null, $type = null) {
 		$attrFor = array(
 			Media::publication_id,
-			Media::type_id,
+			Media::type_code,
 			Media::filename,
 			Media::original_filename,
 			Media::checksum,
@@ -79,7 +79,7 @@ class Media extends _Media
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( Media::type_id == $attr ) {
+		if ( Media::type_code == $attr ) {
 			$model = Model::Named('Media_Type');
 			return $model->allObjects();
 		}
@@ -94,7 +94,7 @@ class Media extends _Media
 	public function validateForSave($object = null, array &$values = array())
 	{
 		if ( is_null($object) && isset($values, $values[Media::filename]) == false) {
-			$typeId = (isset($values[Media::type_id]) ? $values[Media::type_id] : null);
+			$typeId = (isset($values[Media::type_code]) ? $values[Media::type_code] : null);
 			$type = Model::Named('Media_Type')->objectForId($typeId);
 
 			$pubId = (isset($values[Media::publication_id]) ? $values[Media::publication_id] : null);
@@ -114,9 +114,9 @@ class Media extends _Media
 */
 
 /*
-	function validate_type_id($object = null, $value)
+	function validate_type_code($object = null, $value)
 	{
-		return parent::validate_type_id($object, $value);
+		return parent::validate_type_code($object, $value);
 	}
 */
 

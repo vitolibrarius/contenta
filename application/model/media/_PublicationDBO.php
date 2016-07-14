@@ -37,6 +37,11 @@ abstract class _PublicationDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Publication::id};
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Publication::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Publication::created, "M d, Y" ); }
 

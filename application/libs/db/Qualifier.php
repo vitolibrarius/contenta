@@ -71,6 +71,9 @@ abstract class Qualifier extends SQL
 		if ( is_null($data) ) {
 			throw new \Exception( "You must specify the data to be qualified" );
 		}
+		if ( empty($data->pkValue()) ) {
+			throw new \Exception( "No PK value for " . $data->pkValue(). PHP_EOL . var_export( $data, true ) );
+		}
 		return new BasicQualifier( $key, Qualifier::EQ, $data->pkValue(), $prefix );
 	}
 

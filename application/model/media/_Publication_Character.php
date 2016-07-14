@@ -68,6 +68,9 @@ abstract class _Publication_Character extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForPublication($obj)
 	{
 		return $this->allObjectsForFK(Publication_Character::publication_id, $obj, $this->sortOrder(), 50);

@@ -64,7 +64,7 @@ if ( is_array($points) == false || count($points) == 0) {
 	if ( $metadata->isMeta( \model\network\Endpoint::api_key ) == false )
 	{
 		$metadata->setMeta( \model\network\Endpoint::name, "Newznab Source" );
-		$metadata->setMeta( \model\network\Endpoint::type_id, $Newznab_endpoint_type->id );
+		$metadata->setMeta( \model\network\Endpoint::type_code, $Newznab_endpoint_type->code );
 		$metadata->setMeta( \model\network\Endpoint::base_url, "YOUR Newznab site base url here" );
 		$metadata->setMeta( \model\network\Endpoint::api_key, "YOUR API KEY HERE" );
 		$metadata->setMeta( \model\network\Endpoint::username, 'vito' );

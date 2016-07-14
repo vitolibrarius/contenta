@@ -20,19 +20,14 @@ abstract class _Media_TypeDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Media_Type::code};
+	}
+
 
 
 	/** Attributes */
-	public function code()
-	{
-		return parent::changedValue( Media_Type::code, $this->code );
-	}
-
-	public function setCode( $value = null)
-	{
-		parent::storeChange( Media_Type::code, $value );
-	}
-
 	public function name()
 	{
 		return parent::changedValue( Media_Type::name, $this->name );

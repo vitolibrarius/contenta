@@ -1,6 +1,6 @@
 {
     "id": "2",
-    "type_id": "5",
+    "type_code": "PreviewsWorld",
     "name": "PreviewsWorld Upcoming Releases",
     "base_url": "http:\/\/www.previewsworld.com\/shipping\/newreleases.txt",
     "api_key": "",

@@ -5,7 +5,7 @@
         "replace": { "column": "replace", "length": 256, "type": "TEXT", "collate": "NOCASE" },
         "sequence": { "column": "sequence", "type": "INTEGER", "default": 0},
         "created": { "column": "created", "type": "DATE" },
-        "endpoint_type_id": { "column": "endpoint_type_id", "type": "INTEGER", "nullable": false  }
+        "endpoint_type_code": { "column": "endpoint_type_code", "type": "TEXT", "length": 10, "nullable": false  }
     },
     "primaryKeys": [ "id" ],
     "table": "pull_list_expansion",
@@ -22,7 +22,7 @@
     		"destinationTable" : "endpoint_type",
     		"destinationPackage" : "\\model\\network\\",
     		"joins" : [
-    			{ "destinationAttribute": "id", "sourceAttribute" : "endpoint_type_id" }
+    			{ "destinationAttribute": "code", "sourceAttribute" : "endpoint_type_code" }
     		],
     		"isMandatory": true,
             "isToMany" : false,

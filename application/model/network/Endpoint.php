@@ -51,20 +51,22 @@ class Endpoint extends _Endpoint
 			if ( $type != false ) {
 				return $this->allForType($type, $enabledOnly);
 			}
+			die("no TYPE OBJ");
 		}
+		die("no code");
 		return false;
 	}
 
-	public function allForType($obj, $enabledOnly = true)
+	public function allForType(Endpoint_TypeDBO $obj, $enabledOnly = true)
 	{
 		if ( $enabledOnly == true ) {
 			return $this->allObjectsForFKWithValue(
-				Endpoint::type_id, $obj,
+				Endpoint::type_code, $obj,
 				Endpoint::enabled, Model::TERTIARY_TRUE,
-				array(Endpoint::name), 0
+				$this->sortOrder(), -1
 			);
 		}
-		return $this->allObjectsForFK(Endpoint::type_id, $obj, array(Endpoint::name));
+		return $this->allObjectsForFK(Endpoint::type_code, $obj, $this->sortOrder(), -1);
 	}
 
 	public function attributesFor($object = null, $type = null) {
@@ -100,7 +102,7 @@ class Endpoint extends _Endpoint
 
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)
 	{
-		if ( $attr == Endpoint::type_id ) {
+		if ( $attr == Endpoint::type_code ) {
 			if ( isset($type, $type->comments) ) {
 				return $type->comments;
 			}
@@ -134,7 +136,7 @@ class Endpoint extends _Endpoint
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( Endpoint::type_id == $attr ) {
+		if ( Endpoint::type_code == $attr ) {
 			$model = Model::Named('Endpoint_Type');
 			return $model->allObjects();
 		}
@@ -143,9 +145,9 @@ class Endpoint extends _Endpoint
 
 	/** Validation */
 /*
-	function validate_type_id($object = null, $value)
+	function validate_type_code($object = null, $value)
 	{
-		return parent::validate_type_id($object, $value);
+		return parent::validate_type_code($object, $value);
 	}
 */
 

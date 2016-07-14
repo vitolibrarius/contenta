@@ -1,7 +1,7 @@
 {
     "attributes": {
         "id": 	{ "column": "id", "type": "INTEGER" },
-        "type_id": { "column": "type_id", "type": "INTEGER", "nullable": false },
+        "type_code": { "column": "type_code", "type": "TEXT", "length": 10, "nullable": false },
         "name": { "column": "name", "length": 256, "type": "TEXT", "nullable": false },
         "base_url": { "column": "base_url", "length": 1024, "type": "TEXT", "nullable": false },
         "api_key": { "column": "api_key", "length": 256, "type": "TEXT", "nullable": true },
@@ -23,7 +23,7 @@
     		"destinationPackage" : "\\model\\network\\",
     		"destinationTable" : "endpoint_type",
     		"joins" : [
-    			{ "destinationAttribute": "id", "sourceAttribute" : "type_id" }
+    			{ "destinationAttribute": "code", "sourceAttribute" : "type_code" }
     		],
     		"isMandatory": true,
             "isToMany" : false,

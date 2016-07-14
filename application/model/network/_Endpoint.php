@@ -31,14 +31,14 @@ use \model\jobs\JobDBO as JobDBO;
 /*
 		$sql = "CREATE TABLE IF NOT EXISTS endpoint ( "
 			. Endpoint::id . " INTEGER PRIMARY KEY, "
-			. Endpoint::type_id . " INTEGER, "
+			. Endpoint::type_code . " TEXT, "
 			. Endpoint::name . " TEXT, "
 			. Endpoint::base_url . " TEXT, "
 			. Endpoint::api_key . " TEXT, "
 			. Endpoint::username . " TEXT, "
 			. Endpoint::enabled . " INTEGER, "
 			. Endpoint::compressed . " INTEGER, "
-			. "FOREIGN KEY (". Endpoint::type_id .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::id . ")"
+			. "FOREIGN KEY (". Endpoint::type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
 		. ")";
 		$this->sqlite_execute( "endpoint", $sql, "Create table endpoint" );
 
@@ -47,7 +47,7 @@ abstract class _Endpoint extends Model
 {
 	const TABLE = 'endpoint';
 	const id = 'id';
-	const type_id = 'type_id';
+	const type_code = 'type_code';
 	const name = 'name';
 	const base_url = 'base_url';
 	const api_key = 'api_key';
@@ -69,7 +69,7 @@ abstract class _Endpoint extends Model
 	{
 		return array(
 			Endpoint::id,
-			Endpoint::type_id,
+			Endpoint::type_code,
 			Endpoint::name,
 			Endpoint::base_url,
 			Endpoint::api_key,
@@ -82,6 +82,11 @@ abstract class _Endpoint extends Model
 	/**
 	 *	Simple fetches
 	 */
+
+	public function allForType_code($value)
+	{
+		return $this->allObjectsForKeyValue(Endpoint::type_code, $value);
+	}
 
 
 	public function allForName($value)
@@ -111,15 +116,18 @@ abstract class _Endpoint extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForEndpointType($obj)
 	{
-		return $this->allObjectsForFK(Endpoint::type_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Endpoint::type_code, $obj, $this->sortOrder(), 50);
 	}
 
 	public function countForEndpointType($obj)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForFK( Endpoint::type_id, $obj );
+			return $this->countForFK( Endpoint::type_code, $obj );
 		}
 		return false;
 	}
@@ -129,7 +137,7 @@ abstract class _Endpoint extends Model
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
 				case "endpoint_type":
-					return array( Endpoint::type_id, "id"  );
+					return array( Endpoint::type_code, "code"  );
 					break;
 				case "pull_list":
 					return array( Endpoint::id, "endpoint_id"  );
@@ -202,10 +210,10 @@ abstract class _Endpoint extends Model
 			if ( isset($values['endpointType']) ) {
 				$local_endpointType = $values['endpointType'];
 				if ( $local_endpointType instanceof Endpoint_TypeDBO) {
-					$values[Endpoint::type_id] = $local_endpointType->id;
+					$values[Endpoint::type_code] = $local_endpointType->code;
 				}
-				else if ( is_integer( $local_endpointType) ) {
-					$params[Endpoint::type_id] = $local_endpointType;
+				else if ( is_string( $local_endpointType) ) {
+					$params[Endpoint::type_code] = $local_endpointType;
 				}
 			}
 		}
@@ -217,10 +225,10 @@ abstract class _Endpoint extends Model
 			if ( isset($values['endpointType']) ) {
 				$local_endpointType = $values['endpointType'];
 				if ( $local_endpointType instanceof Endpoint_TypeDBO) {
-					$values[Endpoint::type_id] = $local_endpointType->id;
+					$values[Endpoint::type_code] = $local_endpointType->code;
 				}
-				else if ( is_integer( $local_endpointType) ) {
-					$params[Endpoint::type_id] = $values['endpointType'];
+				else if ( is_string( $local_endpointType) ) {
+					$params[Endpoint::type_code] = $values['endpointType'];
 				}
 			}
 		}
@@ -300,7 +308,7 @@ abstract class _Endpoint extends Model
 
 	public function attributesMap() {
 		return array(
-			Endpoint::type_id => Model::TO_ONE_TYPE,
+			Endpoint::type_code => Model::TO_ONE_TYPE,
 			Endpoint::name => Model::TEXT_TYPE,
 			Endpoint::base_url => Model::TEXTAREA_TYPE,
 			Endpoint::api_key => Model::TEXT_TYPE,
@@ -326,13 +334,13 @@ abstract class _Endpoint extends Model
 	/**
 	 * Validation
 	 */
-	function validate_type_id($object = null, $value)
+	function validate_type_code($object = null, $value)
 	{
 		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
-				Endpoint::type_id,
+				Endpoint::type_code,
 				"FIELD_EMPTY"
 			);
 		}

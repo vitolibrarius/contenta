@@ -17,8 +17,13 @@ abstract class _Pull_List_ExclusionDBO extends DataObject
 	public $pattern;
 	public $type;
 	public $created;
-	public $endpoint_type_id;
+	public $endpoint_type_code;
 
+
+	public function pkValue()
+	{
+		return $this->{Pull_List_Exclusion::id};
+	}
 
 	public function formattedDateTime_created() { return $this->formattedDate( Pull_List_Exclusion::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Pull_List_Exclusion::created, "M d, Y" ); }
@@ -27,17 +32,17 @@ abstract class _Pull_List_ExclusionDBO extends DataObject
 	// to-one relationship
 	public function endpoint_type()
 	{
-		if ( isset( $this->endpoint_type_id ) ) {
+		if ( isset( $this->endpoint_type_code ) ) {
 			$model = Model::Named('Endpoint_Type');
-			return $model->objectForId($this->endpoint_type_id);
+			return $model->objectForCode($this->endpoint_type_code);
 		}
 		return false;
 	}
 
 	public function setEndpoint_type(Endpoint_TypeDBO $obj = null)
 	{
-		if ( isset($obj, $obj->id) && (isset($this->endpoint_type_id) == false || $obj->id != $this->endpoint_type_id) ) {
-			parent::storeChange( Pull_List_Exclusion::endpoint_type_id, $obj->id );
+		if ( isset($obj, $obj->code) && (isset($this->endpoint_type_code) == false || $obj->code != $this->endpoint_type_code) ) {
+			parent::storeChange( Pull_List_Exclusion::endpoint_type_code, $obj->code );
 			$this->saveChanges();
 		}
 	}

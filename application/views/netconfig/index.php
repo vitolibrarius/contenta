@@ -25,7 +25,7 @@
 	<table>
 		<tr>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "enabled" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "type_id" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "type_code" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "name" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "base_url" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "api_key" ); ?></th>

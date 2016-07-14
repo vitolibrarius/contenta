@@ -65,7 +65,6 @@ class Job extends _Job
 
 	public function attributesFor($object = null, $type = null) {
 		$attrFor = array(
-			Job::type_id,
 			Job::enabled,
 			Job::one_shot,
 			Job::minute,
@@ -82,7 +81,7 @@ class Job extends _Job
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
 		if ( $object instanceof JobDBO ) {
-			if ( $attr == Job::type_id ) {
+			if ( $attr == Job::type_code ) {
 				return false;
 			}
 		}
@@ -110,7 +109,7 @@ class Job extends _Job
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( $attr == Job::type_id ) {
+		if ( $attr == Job::type_code ) {
 			$model = Model::Named('Job_Type');
 			return $model->allObjects();
 		}
@@ -123,9 +122,9 @@ class Job extends _Job
 
 	/** Validation */
 /*
-	function validate_type_id($object = null, $value)
+	function validate_type_code($object = null, $value)
 	{
-		return parent::validate_type_id($object, $value);
+		return parent::validate_type_code($object, $value);
 	}
 */
 

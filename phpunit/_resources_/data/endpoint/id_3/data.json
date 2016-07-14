@@ -1,6 +1,6 @@
 {
     "id": "3",
-    "type_id": "4",
+    "type_code": "SABnzbd",
     "name": "SABnzbd (Open Source Binary Newsreader)",
     "base_url": "http:\/\/192.168.1.5:8080\/api",
     "api_key": "577ca22e50615e06cd68fafa8a66c635",

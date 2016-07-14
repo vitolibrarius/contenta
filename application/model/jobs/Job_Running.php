@@ -40,7 +40,7 @@ class Job_Running extends _Job_Running
 	public function attributesFor($object = null, $type = null) {
 		$attrFor = array(
 			Job_Running::job_id,
-			Job_Running::type_id,
+			Job_Running::type_code,
 			Job_Running::processor,
 			Job_Running::guid,
 			Job_Running::pid,
@@ -83,7 +83,7 @@ class Job_Running extends _Job_Running
 			$model = Model::Named('Job');
 			return $model->allObjects();
 		}
-		if ( Job_Running::type_id == $attr ) {
+		if ( Job_Running::type_code == $attr ) {
 			$model = Model::Named('Job_Type');
 			return $model->allObjects();
 		}
@@ -99,9 +99,9 @@ class Job_Running extends _Job_Running
 */
 
 /*
-	function validate_type_id($object = null, $value)
+	function validate_type_code($object = null, $value)
 	{
-		return parent::validate_type_id($object, $value);
+		return parent::validate_type_code($object, $value);
 	}
 */
 

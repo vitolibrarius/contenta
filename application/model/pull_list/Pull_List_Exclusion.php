@@ -43,7 +43,7 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 			Pull_List_Exclusion::pattern,
 			Pull_List_Exclusion::type,
 			Pull_List_Exclusion::created,
-			Pull_List_Exclusion::endpoint_type_id
+			Pull_List_Exclusion::endpoint_type_code
 		);
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
@@ -77,7 +77,7 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( Pull_List_Exclusion::endpoint_type_id == $attr ) {
+		if ( Pull_List_Exclusion::endpoint_type_code == $attr ) {
 			$model = Model::Named('Endpoint_Type');
 			return $model->allObjects();
 		}
@@ -107,9 +107,9 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 */
 
 /*
-	function validate_endpoint_type_id($object = null, $value)
+	function validate_endpoint_type_code($object = null, $value)
 	{
-		return parent::validate_endpoint_type_id($object, $value);
+		return parent::validate_endpoint_type_code($object, $value);
 	}
 */
 

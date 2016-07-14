@@ -20,6 +20,11 @@ abstract class _User_NetworkDBO extends DataObject
 	public $network_id;
 
 
+	public function pkValue()
+	{
+		return $this->{User_Network::id};
+	}
+
 
 	// to-one relationship
 	public function user()

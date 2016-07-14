@@ -23,6 +23,11 @@ abstract class _PatchDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Patch::id};
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Patch::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Patch::created, "M d, Y" ); }
 

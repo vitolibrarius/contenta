@@ -20,26 +20,22 @@ use \model\media\Media_TypeDBO as Media_TypeDBO;
 		/** MEDIA_TYPE */
 /*
 		$sql = "CREATE TABLE IF NOT EXISTS media_type ( "
-			. Media_Type::id . " INTEGER PRIMARY KEY, "
-			. Media_Type::code . " TEXT, "
+			. Media_Type::code . " TEXT PRIMARY KEY, "
 			. Media_Type::name . " TEXT "
 		. ")";
 		$this->sqlite_execute( "media_type", $sql, "Create table media_type" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS media_type_code on media_type (code)';
-		$this->sqlite_execute( "media_type", $sql, "Index on media_type (code)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS media_type_name on media_type (name)';
 		$this->sqlite_execute( "media_type", $sql, "Index on media_type (name)" );
 */
 abstract class _Media_Type extends Model
 {
 	const TABLE = 'media_type';
-	const id = 'id';
 	const code = 'code';
 	const name = 'name';
 
 	public function tableName() { return Media_Type::TABLE; }
-	public function tablePK() { return Media_Type::id; }
+	public function tablePK() { return Media_Type::code; }
 
 	public function sortOrder()
 	{
@@ -51,7 +47,6 @@ abstract class _Media_Type extends Model
 	public function allColumnNames()
 	{
 		return array(
-			Media_Type::id,
 			Media_Type::code,
 			Media_Type::name
 		);
@@ -60,7 +55,6 @@ abstract class _Media_Type extends Model
 	/**
 	 *	Simple fetches
 	 */
-
 	public function objectForCode($value)
 	{
 		return $this->singleObjectForKeyValue(Media_Type::code, $value);
@@ -74,6 +68,9 @@ abstract class _Media_Type extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 
 	public function joinAttributes( Model $joinModel = null )
 	{
@@ -94,12 +91,6 @@ abstract class _Media_Type extends Model
 		if ( isset($values) ) {
 
 			// default values for attributes
-			if ( isset($values['code']) == false ) {
-				$default_code = $this->attributeDefaultValue( null, null, Media_Type::code);
-				if ( is_null( $default_code ) == false ) {
-					$values['code'] = $default_code;
-				}
-			}
 			if ( isset($values['name']) == false ) {
 				$default_name = $this->attributeDefaultValue( null, null, Media_Type::name);
 				if ( is_null( $default_name ) == false ) {
@@ -144,7 +135,6 @@ abstract class _Media_Type extends Model
 	{
 		if ( is_null($object) ) {
 			return array(
-				Media_Type::code,
 				Media_Type::name
 			);
 		}
@@ -153,7 +143,6 @@ abstract class _Media_Type extends Model
 
 	public function attributesMap() {
 		return array(
-			Media_Type::code => Model::TEXT_TYPE,
 			Media_Type::name => Model::TEXT_TYPE
 		);
 	}
@@ -170,28 +159,6 @@ abstract class _Media_Type extends Model
 	/**
 	 * Validation
 	 */
-	function validate_code($object = null, $value)
-	{
-		// check for mandatory field
-		if (isset($value) == false || empty($value)  ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Media_Type::code,
-				"FIELD_EMPTY"
-			);
-		}
-
-		// make sure Code is unique
-		$existing = $this->objectForCode($value);
-		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Media_Type::code,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
-	}
 	function validate_name($object = null, $value)
 	{
 		// check for mandatory field

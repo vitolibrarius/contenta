@@ -22,6 +22,11 @@ abstract class _Character_AliasDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Character_Alias::id};
+	}
+
 
 	// to-one relationship
 	public function character()

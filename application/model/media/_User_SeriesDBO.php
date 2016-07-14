@@ -23,6 +23,11 @@ abstract class _User_SeriesDBO extends DataObject
 	public $mislabeled;
 
 
+	public function pkValue()
+	{
+		return $this->{User_Series::id};
+	}
+
 	public function isFavorite() {
 		return (isset($this->favorite) && $this->favorite == Model::TERTIARY_TRUE);
 	}

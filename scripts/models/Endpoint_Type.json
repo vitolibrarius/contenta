@@ -1,6 +1,5 @@
 {
     "attributes": {
-        "id": 	{ "column": "id", "type": "INTEGER" },
         "code": { "column": "code", "length": 10, "type": "TEXT", "collate": "NOCASE", "nullable": false },
         "name": { "column": "name", "length": 256, "type": "TEXT", "nullable": false },
         "comments": { "column": "comments", "length": 4096, "type": "TEXT" },
@@ -11,7 +10,7 @@
         "throttle_hits": { "column": "throttle_hits", "type": "INTEGER" },
         "throttle_time": { "column": "throttle_time", "type": "INTEGER" }
     },
-    "primaryKeys": [ "id" ],
+    "primaryKeys": [ "code" ],
     "table": "endpoint_type",
     "package": "network",
     "model": "Endpoint_Type",
@@ -25,7 +24,7 @@
     		"destinationPackage" : "\\model\\network\\",
     		"destinationTable" : "endpoint",
     		"joins" : [
-    			{ "destinationAttribute": "type_id", "sourceAttribute" : "id" }
+    			{ "destinationAttribute": "type_code", "sourceAttribute" : "code" }
     		],
     		"isMandatory": false,
             "isToMany" : true,
@@ -36,7 +35,7 @@
     		"destinationPackage" : "\\model\\pull_list\\",
     		"destinationTable" : "pull_list_excl",
     		"joins" : [
-    			{ "destinationAttribute": "endpoint_type_id", "sourceAttribute" : "id" }
+    			{ "destinationAttribute": "endpoint_type_code", "sourceAttribute" : "code" }
     		],
     		"isMandatory": false,
             "isToMany" : true,
@@ -47,7 +46,7 @@
     		"destinationPackage" : "\\model\\pull_list\\",
     		"destinationTable" : "pull_list_expansion",
     		"joins" : [
-    			{ "destinationAttribute": "endpoint_type_id", "sourceAttribute" : "id" }
+    			{ "destinationAttribute": "endpoint_type_code", "sourceAttribute" : "code" }
     		],
     		"isMandatory": false,
             "isToMany" : true,
@@ -55,7 +54,6 @@
     	}
     },
     "indexes" : [
-    	{ "columns": ["code"], "unique": true },
     	{ "columns": ["name"], "unique": true }
     ]
 }

@@ -34,8 +34,8 @@ class Migration_5 extends Migrator
 			. Pull_List_Exclusion::pattern . " TEXT, "
 			. Pull_List_Exclusion::type . " TEXT, "
 			. Pull_List_Exclusion::created . " INTEGER, "
-			. Pull_List_Exclusion::endpoint_type_id . " INTEGER, "
-			. "FOREIGN KEY (". Pull_List_Exclusion::endpoint_type_id .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::id . ")"
+			. Pull_List_Exclusion::endpoint_type_code . " TEXT, "
+			. "FOREIGN KEY (". Pull_List_Exclusion::endpoint_type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
 		. ")";
 		$this->sqlite_execute( "pull_list_excl", $sql, "Create table pull_list_excl" );
 
@@ -46,8 +46,8 @@ class Migration_5 extends Migrator
 			. Pull_List_Expansion::replace . " TEXT, "
 			. Pull_List_Expansion::sequence . " INTEGER, "
 			. Pull_List_Expansion::created . " INTEGER, "
-			. Pull_List_Expansion::endpoint_type_id . " INTEGER, "
-			. "FOREIGN KEY (". Pull_List_Expansion::endpoint_type_id .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::id . ")"
+			. Pull_List_Expansion::endpoint_type_code . " TEXT, "
+			. "FOREIGN KEY (". Pull_List_Expansion::endpoint_type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
 		. ")";
 		$this->sqlite_execute( "pull_list_expansion", $sql, "Create table pull_list_expansion" );
 
@@ -129,20 +129,20 @@ class Migration_5 extends Migrator
 			"pattern",
 			"replace",
 			"created",
-			"endpoint_type_id"
+			"endpoint_type_code"
 			)
 		);
 		foreach ($pl_expansions as $sequence => $list) {
 			foreach ($list as $pattern => $replacement) {
-				$existing = \SQL::raw( "select id FROM " . Pull_List_Expansion::TABLE . " where endpoint_type_id = :type_id and pattern = :pattern" ,
-					array(":type_id" => $pw_endpoint_type->id, ":pattern" => $pattern));
+				$existing = \SQL::raw( "select id FROM " . Pull_List_Expansion::TABLE . " where endpoint_type_code = :type_code and pattern = :pattern" ,
+					array(":type_code" => $pw_endpoint_type->code, ":pattern" => $pattern));
 				if ( is_array($existing) == false || count($existing) == 0) {
 					$inserts->addRecord( array(
 						"sequence" => $sequence,
 						"pattern" => $pattern,
 						"replace" => $replacement,
 						"created" => time(),
-						"endpoint_type_id" => $pw_endpoint_type->id
+						"endpoint_type_code" => $pw_endpoint_type->code
 						)
 					);
 				}
@@ -156,7 +156,7 @@ class Migration_5 extends Migrator
 			"pattern",
 			"type",
 			"created",
-			"endpoint_type_id"
+			"endpoint_type_code"
 			)
 		);
 		$pl_exclusions = array(
@@ -207,14 +207,14 @@ class Migration_5 extends Migrator
 		);
 		foreach ($pl_exclusions as $type => $list) {
 			foreach( $list as $value ) {
-				$existing = \SQL::raw( "select id FROM " . Pull_List_Exclusion::TABLE . " where endpoint_type_id = :type_id and pattern = :pattern" ,
-					array(":type_id" => $pw_endpoint_type->id, ":pattern" => $pattern));
+				$existing = \SQL::raw( "select id FROM " . Pull_List_Exclusion::TABLE . " where endpoint_type_code = :type_code and pattern = :pattern" ,
+					array(":type_code" => $pw_endpoint_type->code, ":pattern" => $pattern));
 				if ( is_array($existing) == false || count($existing) == 0) {
 					$inserts->addRecord( array(
 						"pattern" => $value,
 						"type" => $type,
 						"created" => time(),
-						"endpoint_type_id" => $pw_endpoint_type->id
+						"endpoint_type_code" => $pw_endpoint_type->code
 						)
 					);
 				}

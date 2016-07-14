@@ -17,13 +17,18 @@ use \model\media\PublicationDBO as PublicationDBO;
 abstract class _MediaDBO extends DataObject
 {
 	public $publication_id;
-	public $type_id;
+	public $type_code;
 	public $filename;
 	public $original_filename;
 	public $checksum;
 	public $created;
 	public $size;
 
+
+	public function pkValue()
+	{
+		return $this->{Media::id};
+	}
 
 	public function formattedDateTime_created() { return $this->formattedDate( Media::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Media::created, "M d, Y" ); }
@@ -32,17 +37,17 @@ abstract class _MediaDBO extends DataObject
 	// to-one relationship
 	public function mediaType()
 	{
-		if ( isset( $this->type_id ) ) {
+		if ( isset( $this->type_code ) ) {
 			$model = Model::Named('Media_Type');
-			return $model->objectForId($this->type_id);
+			return $model->objectForCode($this->type_code);
 		}
 		return false;
 	}
 
 	public function setMediaType(Media_TypeDBO $obj = null)
 	{
-		if ( isset($obj, $obj->id) && (isset($this->type_id) == false || $obj->id != $this->type_id) ) {
-			parent::storeChange( Media::type_id, $obj->id );
+		if ( isset($obj, $obj->code) && (isset($this->type_code) == false || $obj->code != $this->type_code) ) {
+			parent::storeChange( Media::type_code, $obj->code );
 			$this->saveChanges();
 		}
 	}

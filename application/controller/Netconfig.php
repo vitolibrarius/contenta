@@ -67,9 +67,9 @@ class Netconfig extends Controller
 			$this->view->addScript("select2.min.js");
 
 			$values = splitPOSTValues($_POST);
-			if ( isset($values, $values['endpoint'], $values['endpoint']['type_id']) ) {
+			if ( isset($values, $values['endpoint'], $values['endpoint']['type_code']) ) {
 				$model = Model::Named('Endpoint_Type');
-				$type = $model->objectForId($values['endpoint']['type_id']);
+				$type = $model->objectForId($values['endpoint']['type_code']);
 				if ( $type instanceof Endpoint_TypeDBO ) {
 					$this->view->setLocalizedViewTitle("NewRecord");
 					$this->view->saveAction = "netconfig/save";

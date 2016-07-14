@@ -35,6 +35,11 @@ abstract class _CharacterDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Character::id};
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Character::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Character::created, "M d, Y" ); }
 

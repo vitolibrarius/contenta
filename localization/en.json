@@ -292,7 +292,7 @@
             "newznab": {
                 "search": "Search"
             },
-            "type_id": {
+            "type_code": {
                 "label": "Connection Type"
             },
             "username": {
@@ -346,7 +346,7 @@
             "parameter": {
                 "label": "Parameters"
             },
-            "type_id": {
+            "type_code": {
                 "label": "Job Type"
             }
         },
@@ -369,7 +369,7 @@
             "processor": {
                 "label": "Processor"
             },
-            "type_id": {
+            "type_code": {
                 "label": "Job Type"
             }
         },

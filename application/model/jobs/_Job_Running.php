@@ -26,14 +26,14 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 		$sql = "CREATE TABLE IF NOT EXISTS job_running ( "
 			. Job_Running::id . " INTEGER PRIMARY KEY, "
 			. Job_Running::job_id . " INTEGER, "
-			. Job_Running::type_id . " INTEGER, "
+			. Job_Running::type_code . " TEXT, "
 			. Job_Running::processor . " TEXT, "
 			. Job_Running::guid . " TEXT, "
 			. Job_Running::pid . " INTEGER, "
 			. Job_Running::desc . " TEXT, "
 			. Job_Running::created . " INTEGER "
 			. "FOREIGN KEY (". Job_Running::job_id .") REFERENCES " . Job::TABLE . "(" . Job::id . "),"
-			. "FOREIGN KEY (". Job_Running::type_id .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::id . "),"
+			. "FOREIGN KEY (". Job_Running::type_code .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::code . "),"
 		. ")";
 		$this->sqlite_execute( "job_running", $sql, "Create table job_running" );
 
@@ -45,7 +45,7 @@ abstract class _Job_Running extends Model
 	const TABLE = 'job_running';
 	const id = 'id';
 	const job_id = 'job_id';
-	const type_id = 'type_id';
+	const type_code = 'type_code';
 	const processor = 'processor';
 	const guid = 'guid';
 	const pid = 'pid';
@@ -67,7 +67,7 @@ abstract class _Job_Running extends Model
 		return array(
 			Job_Running::id,
 			Job_Running::job_id,
-			Job_Running::type_id,
+			Job_Running::type_code,
 			Job_Running::processor,
 			Job_Running::guid,
 			Job_Running::pid,
@@ -80,6 +80,11 @@ abstract class _Job_Running extends Model
 	 *	Simple fetches
 	 */
 
+
+	public function allForType_code($value)
+	{
+		return $this->allObjectsForKeyValue(Job_Running::type_code, $value);
+	}
 
 
 	public function allForProcessor($value)
@@ -107,6 +112,9 @@ abstract class _Job_Running extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForJob($obj)
 	{
 		return $this->allObjectsForFK(Job_Running::job_id, $obj, $this->sortOrder(), 50);
@@ -121,13 +129,13 @@ abstract class _Job_Running extends Model
 	}
 	public function allForJobType($obj)
 	{
-		return $this->allObjectsForFK(Job_Running::type_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Job_Running::type_code, $obj, $this->sortOrder(), 50);
 	}
 
 	public function countForJobType($obj)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForFK( Job_Running::type_id, $obj );
+			return $this->countForFK( Job_Running::type_code, $obj );
 		}
 		return false;
 	}
@@ -140,7 +148,7 @@ abstract class _Job_Running extends Model
 					return array( Job_Running::job_id, "id"  );
 					break;
 				case "job_type":
-					return array( Job_Running::type_id, "id"  );
+					return array( Job_Running::type_code, "code"  );
 					break;
 				default:
 					break;
@@ -201,10 +209,10 @@ abstract class _Job_Running extends Model
 			if ( isset($values['jobType']) ) {
 				$local_jobType = $values['jobType'];
 				if ( $local_jobType instanceof Job_TypeDBO) {
-					$values[Job_Running::type_id] = $local_jobType->id;
+					$values[Job_Running::type_code] = $local_jobType->code;
 				}
-				else if ( is_integer( $local_jobType) ) {
-					$params[Job_Running::type_id] = $local_jobType;
+				else if ( is_string( $local_jobType) ) {
+					$params[Job_Running::type_code] = $local_jobType;
 				}
 			}
 		}
@@ -225,10 +233,10 @@ abstract class _Job_Running extends Model
 			if ( isset($values['jobType']) ) {
 				$local_jobType = $values['jobType'];
 				if ( $local_jobType instanceof Job_TypeDBO) {
-					$values[Job_Running::type_id] = $local_jobType->id;
+					$values[Job_Running::type_code] = $local_jobType->code;
 				}
-				else if ( is_integer( $local_jobType) ) {
-					$params[Job_Running::type_id] = $values['jobType'];
+				else if ( is_string( $local_jobType) ) {
+					$params[Job_Running::type_code] = $values['jobType'];
 				}
 			}
 		}
@@ -323,7 +331,7 @@ abstract class _Job_Running extends Model
 	public function attributesMap() {
 		return array(
 			Job_Running::job_id => Model::TO_ONE_TYPE,
-			Job_Running::type_id => Model::TO_ONE_TYPE,
+			Job_Running::type_code => Model::TO_ONE_TYPE,
 			Job_Running::processor => Model::TEXT_TYPE,
 			Job_Running::guid => Model::TEXT_TYPE,
 			Job_Running::pid => Model::INT_TYPE,
@@ -353,7 +361,7 @@ abstract class _Job_Running extends Model
 
 		return null;
 	}
-	function validate_type_id($object = null, $value)
+	function validate_type_code($object = null, $value)
 	{
 		// not mandatory field
 		if (isset($value) == false || empty($value)  ) {

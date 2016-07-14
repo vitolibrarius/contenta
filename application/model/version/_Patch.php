@@ -82,6 +82,9 @@ abstract class _Patch extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForVersion($obj)
 	{
 		return $this->allObjectsForFK(Patch::version_id, $obj, $this->sortOrder(), 50);

@@ -31,7 +31,7 @@ class PreviewsWorldImporter extends EndpointImporter
 	public function isGroupInExclusions( $groupname = "none" )
 	{
 		$type = $this->endpoint()->endpointType();
-		$matches = Model::Named( "Pull_List_Exclusion" )->objectsForPatternTypeAndEndpointType( $groupname, Pull_List_Exclusion::GROUP_TYPE, $type->id );
+		$matches = Model::Named( "Pull_List_Exclusion" )->objectsForPatternTypeAndEndpointType( $groupname, Pull_List_Exclusion::GROUP_TYPE, $type->code );
 		return (is_array($matches) && count($matches) > 0);
 	}
 
@@ -39,7 +39,7 @@ class PreviewsWorldImporter extends EndpointImporter
 	{
 		if ( $this->items_excluded == null ) {
 			$type = $this->endpoint()->endpointType();
-			$this->items_excluded = Model::Named( "Pull_List_Exclusion" )->objectsForTypeAndEndpointType( Pull_List_Exclusion::ITEM_TYPE, $type->id );
+			$this->items_excluded = Model::Named( "Pull_List_Exclusion" )->objectsForTypeAndEndpointType( Pull_List_Exclusion::ITEM_TYPE, $type->code );
 		}
 
 		if (is_null($itemname) == false) {

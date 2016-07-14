@@ -41,7 +41,7 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 			Pull_List_Expansion::replace,
 			Pull_List_Expansion::sequence,
 			Pull_List_Expansion::created,
-			Pull_List_Expansion::endpoint_type_id
+			Pull_List_Expansion::endpoint_type_code
 		);
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
@@ -76,7 +76,7 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( Pull_List_Expansion::endpoint_type_id == $attr ) {
+		if ( Pull_List_Expansion::endpoint_type_code == $attr ) {
 			$model = Model::Named('Endpoint_Type');
 			return $model->allObjects();
 		}
@@ -113,9 +113,9 @@ class Pull_List_Expansion extends _Pull_List_Expansion
 */
 
 /*
-	function validate_endpoint_type_id($object = null, $value)
+	function validate_endpoint_type_code($object = null, $value)
 	{
-		return parent::validate_endpoint_type_id($object, $value);
+		return parent::validate_endpoint_type_code($object, $value);
 	}
 */
 

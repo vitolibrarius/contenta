@@ -40,7 +40,7 @@ my_echo("-=-=-=-=-=-=-=-");
 my_echo();
 
 $metadata_sql->setMeta( "model/Endpoint/name", "Newznab Source" );
-$metadata_sql->setMeta( "model/Endpoint/type_id", 12345.678 );
+$metadata_sql->setMeta( "model/Endpoint/type_code", 12345.678 );
 $metadata_sql->setMeta( "model/Endpoint/base_url", "YOUR Newznab site base url here" );
 $metadata_sql->setMeta( "model/Endpoint/api_key", "YOUR API KEY HERE" );
 $metadata_sql->setMeta( "model/Endpoint/username", 'vito' );

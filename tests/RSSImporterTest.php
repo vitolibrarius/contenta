@@ -62,7 +62,7 @@ if ( is_array($points) == false || count($points) == 0) {
 		$samples = array(
 			array(
 				\model\network\Endpoint::name => "binsearch (a.b.c.dcp)",
-				\model\network\Endpoint::type_id => $rss_endpoint_type->id,
+				\model\network\Endpoint::type_code => $rss_endpoint_type->code,
 				\model\network\Endpoint::base_url => "http://rss.binsearch.net/rss.php?max=50&g=alt.binaries.comics.dcp",
 				\model\network\Endpoint::api_key => "",
 				\model\network\Endpoint::username => '',

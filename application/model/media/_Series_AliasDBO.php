@@ -22,6 +22,11 @@ abstract class _Series_AliasDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Series_Alias::id};
+	}
+
 
 	// to-one relationship
 	public function series()

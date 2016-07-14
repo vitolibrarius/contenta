@@ -46,6 +46,7 @@ class Migrator
 				}
 			}
 			unset($dbConnection);
+			Database::ResetConnection();
 
 			// re-create data tables
 			Migrator::ApplyNeededMigrations($scratchDirectory);
@@ -61,18 +62,19 @@ class Migrator
 					);
 				}
 			}
+			Database::ResetConnection();
 
 			// drop old data
-			$dbConnection = new Database();
-			$oldTableNames = $dbConnection->dbTableNames();
-			foreach( $oldTableNames as $oldTable ) {
-				if ( endsWith( '_old', $oldTable ) == true ) {
-					Logger::logInfo( "drop table " . $oldTable, "Migrator", "Upgrade" );
-					$dbConnection->execute_sql( "drop table " . $oldTable );
-				}
-			}
-			$dbConnection->dbOptimize();
-			unset($dbConnection);
+// 			$dbConnection = new Database();
+// 			$oldTableNames = $dbConnection->dbTableNames();
+// 			foreach( $oldTableNames as $oldTable ) {
+// 				if ( endsWith( '_old', $oldTable ) == true ) {
+// 					Logger::logInfo( "drop table " . $oldTable, "Migrator", "Upgrade" );
+// 					$dbConnection->execute_sql( "drop table " . $oldTable );
+// 				}
+// 			}
+// 			$dbConnection->dbOptimize();
+// 			unset($dbConnection);
 
 
 			// update database version
@@ -96,29 +98,53 @@ class Migrator
 
 	private static function FixOldDataIssues( $dbConnection, $oldTable )
 	{
-		switch ( $oldTable ) {
-			case 'rss_old':
-				$dbConnection->execute_sql("update series_old set search_name = lower(name) where search_name is null or length(search_name) < 2");
-				break;
-			case 'series_old':
-				$dbConnection->execute_sql("delete from rss_old where guid in "
-					. "(select guid from rss_old group by guid having count(*) > 1)"
-				);
-				break;
-			case 'series_character_old':
-				$count_sql = "select count(*) as COUNT from series_character_old as s "
-					. " inner join (select d.series_id, d.character_id from series_character_old d group by d.series_id, d.character_id having count(*) > 1) "
-					. " as dup on s.series_id = dup.series_id and s.character_id = dup.character_id";
-				$count = $dbConnection->dbFetchRawCountForSQL($count_sql);
-				while ( is_int($count) && intval($count) > 0 ) {
-					$dbConnection->execute_sql("delete from series_character_old where id in "
-						. "(select MIN(id) from series_character_old group by series_id, character_id having count(*) > 1)"
+		$allColumns = $dbConnection->dbTableInfo( $oldTable );
+		if ( is_array( $allColumns ) ) {
+			switch ( $oldTable ) {
+				case 'job_running_old':
+					$dbConnection->execute_sql("alter table ".$oldTable." add column type_code TEXT");
+					$dbConnection->execute_sql("update ".$oldTable." set type_code = (select code from job_type_old where job_type_old.id = ".$oldTable.".job_type_id)");
+					break;
+				case 'job_old':
+					$dbConnection->execute_sql("alter table ".$oldTable." add column type_code TEXT");
+					$dbConnection->execute_sql("update ".$oldTable." set type_code = (select code from job_type_old where job_type_old.id = ".$oldTable.".type_id)");
+					break;
+				case 'endpoint_old':
+					$dbConnection->execute_sql("alter table ".$oldTable." add column type_code TEXT");
+					$dbConnection->execute_sql("update ".$oldTable." set type_code = (select code from endpoint_type_old where endpoint_type_old.id = ".$oldTable.".type_id)");
+					break;
+				case 'pull_list_excl_old':
+				case 'pull_list_expansion_old':
+					$dbConnection->execute_sql("alter table ".$oldTable." add column endpoint_type_code TEXT");
+					$dbConnection->execute_sql("update ".$oldTable." set endpoint_type_code = (select code from endpoint_type_old where endpoint_type_old.id = ".$oldTable.".endpoint_type_id)");
+					break;
+				case 'media_old':
+					$dbConnection->execute_sql("alter table ".$oldTable." add column type_code TEXT");
+					$dbConnection->execute_sql("update ".$oldTable." set type_code = (select code from media_type_old where media_type_old.id = ".$oldTable.".type_id)");
+					break;
+				case 'series_old':
+					$dbConnection->execute_sql("update series_old set search_name = lower(name) where search_name is null or length(search_name) < 2");
+					break;
+				case 'rss_old':
+					$dbConnection->execute_sql("delete from rss_old where guid in "
+						. "(select guid from rss_old group by guid having count(*) > 1)"
 					);
+					break;
+				case 'series_character_old':
+					$count_sql = "select count(*) as COUNT from series_character_old as s "
+						. " inner join (select d.series_id, d.character_id from series_character_old d group by d.series_id, d.character_id having count(*) > 1) "
+						. " as dup on s.series_id = dup.series_id and s.character_id = dup.character_id";
 					$count = $dbConnection->dbFetchRawCountForSQL($count_sql);
-				}
-				break;
-			default:
-				break;
+					while ( is_int($count) && intval($count) > 0 ) {
+						$dbConnection->execute_sql("delete from series_character_old where id in "
+							. "(select MIN(id) from series_character_old group by series_id, character_id having count(*) > 1)"
+						);
+						$count = $dbConnection->dbFetchRawCountForSQL($count_sql);
+					}
+					break;
+				default:
+					break;
+			}
 		}
 	}
 

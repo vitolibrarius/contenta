@@ -176,6 +176,9 @@ abstract class _Log extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForLogLevel($obj)
 	{
 		return $this->allObjectsForFK(Log::level_code, $obj, $this->sortOrder(), 50);

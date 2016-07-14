@@ -6,7 +6,7 @@ use \Logger as Logger;
 use \Model as Model;
 use \Config as Config;
 
-class DataObject
+abstract class DataObject
 {
 	public $id;
 	public $unsavedUpdates;
@@ -52,12 +52,10 @@ class DataObject
 		return dbo_valueForKeypath( $method, $this );
 	}
 
-	public function pkValue() {
-		return $this->id;
-	}
+	public abstract function pkValue();
 
 	public function displayName() {
-		return $this->modelName() . ' (' . $this->id . ')';
+		return $this->modelName() . ' (' . $this->pkValue() . ')';
 	}
 
 	public function displayDescription() {
@@ -140,7 +138,7 @@ class DataObject
 	public function imagePath($filename = null)
 	{
 		if ( $this->hasAdditionalMedia() == true ) {
-			return hashedImagePath($this->tableName(), $this->id, $filename);
+			return hashedImagePath($this->tableName(), $this->pkValue(), $filename);
 		}
 		return null;
 	}
@@ -148,7 +146,7 @@ class DataObject
 	public function mediaPath($filename = null)
 	{
 		if ( $this->hasAdditionalMedia() == true ) {
-			return hashedPath($this->tableName(), $this->id, $filename);
+			return hashedPath($this->tableName(), $this->pkValue(), $filename);
 		}
 		return null;
 	}
@@ -163,7 +161,7 @@ class DataObject
 	{
 		if ( isset( $this->xsource) ) {
 			$ep_model = Model::Named('Endpoint');
-			$points = $ep_model->allForTypeCode($this->xsource);
+			$points = $ep_model->allForType_code($this->xsource);
 			if ( is_array($points) && count($points) > 0) {
 				return $points[0];
 			}

@@ -283,7 +283,7 @@ class AdminWanted extends Admin
 			}
 
 			$model = Model::Named('Endpoint');
-			$this->view->endpoints = $model->allForTypeCode(Endpoint_Type::Newznab);
+			$this->view->endpoints = $model->allForType_code(Endpoint_Type::Newznab);
 			$this->view->setLocalizedViewTitle("Search Newznab");
 			$this->view->controllerAction = "newznab";
 			$this->view->model = $model;
@@ -315,7 +315,7 @@ class AdminWanted extends Admin
 	function newznabQuicksearch($pubId = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$points = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::Newznab);
+			$points = Model::Named('Endpoint')->allForType_code(Endpoint_Type::Newznab);
 			if ( $points == false || count($points) == 0) {
 				echo '<section class="feedback error">' . Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) . Endpoint_Type::Newznab. '</section>';
 			}
@@ -358,7 +358,7 @@ class AdminWanted extends Admin
 				$url = $_GET['nzburl'];
 				$postedDate = $_GET['postedDate'];
 
-				$points = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::SABnzbd);
+				$points = Model::Named('Endpoint')->allForType_code(Endpoint_Type::SABnzbd);
 				if ( $points == false || count($points) == 0) {
 					Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) . Endpoint_Type::SABnzbd);
 					header('location: ' . Config::Web('/netconfig/index'));

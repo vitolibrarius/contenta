@@ -48,44 +48,10 @@
     	}
     },
     "indexes" : [
-    	{ "columns": ["src_endpoint", "src_guid"], "unique": true },
-    	{ "columns": ["dest_endpoint", "dest_guid"], "unique": true },
+    	{ "columns": ["src_guid"], "unique": true },
+    	{ "columns": ["dest_guid"], "unique": true },
     	{ "columns": ["flux_hash"] }
 	],
 	"fetches" : {
-		"objectForSourceEndpointGUID": {
-			"arguments": [ "src_endpoint", "src_guid" ],
-			"maxCount" : 1,
-			"semantic": "AND",
-			"qualifiers": [
-				{
-					"type" : "Related",
-					"relationship": "source_endpoint",
-					"argAttribute": "src_endpoint"
-				},
-				{
-					"type" : "Equals",
-					"keyAttribute": "src_guid",
-					"argAttribute": "src_guid"
-				}
-			]
-		},
-		"objectForDestinationEndpointGUID": {
-			"arguments": [ "dest_endpoint", "dest_guid" ],
-			"maxCount" : 1,
-			"semantic": "AND",
-			"qualifiers": [
-				{
-					"type" : "Related",
-					"relationship": "destination_endpoint",
-					"argAttribute": "dest_endpoint"
-				},
-				{
-					"type" : "Equals",
-					"keyAttribute": "dest_guid",
-					"argAttribute": "dest_guid"
-				}
-			]
-		}
     }
 }

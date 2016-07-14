@@ -122,7 +122,7 @@ class Database extends PDO
 		$this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 		$this->setAttribute(PDO::ATTR_TIMEOUT, 10000);
 		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//         $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('TraceStatement', array($this)));
+        $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('TraceStatement', array($this)));
 	}
 
 	public function execute_sql( $sql = null, $params = array() )

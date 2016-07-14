@@ -26,8 +26,7 @@ use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 		/** ENDPOINT_TYPE */
 /*
 		$sql = "CREATE TABLE IF NOT EXISTS endpoint_type ( "
-			. Endpoint_Type::id . " INTEGER PRIMARY KEY, "
-			. Endpoint_Type::code . " TEXT, "
+			. Endpoint_Type::code . " TEXT PRIMARY KEY, "
 			. Endpoint_Type::name . " TEXT, "
 			. Endpoint_Type::comments . " TEXT, "
 			. Endpoint_Type::data_type . " TEXT, "
@@ -39,15 +38,12 @@ use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 		. ")";
 		$this->sqlite_execute( "endpoint_type", $sql, "Create table endpoint_type" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS endpoint_type_code on endpoint_type (code)';
-		$this->sqlite_execute( "endpoint_type", $sql, "Index on endpoint_type (code)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS endpoint_type_name on endpoint_type (name)';
 		$this->sqlite_execute( "endpoint_type", $sql, "Index on endpoint_type (name)" );
 */
 abstract class _Endpoint_Type extends Model
 {
 	const TABLE = 'endpoint_type';
-	const id = 'id';
 	const code = 'code';
 	const name = 'name';
 	const comments = 'comments';
@@ -59,7 +55,7 @@ abstract class _Endpoint_Type extends Model
 	const throttle_time = 'throttle_time';
 
 	public function tableName() { return Endpoint_Type::TABLE; }
-	public function tablePK() { return Endpoint_Type::id; }
+	public function tablePK() { return Endpoint_Type::code; }
 
 	public function sortOrder()
 	{
@@ -71,7 +67,6 @@ abstract class _Endpoint_Type extends Model
 	public function allColumnNames()
 	{
 		return array(
-			Endpoint_Type::id,
 			Endpoint_Type::code,
 			Endpoint_Type::name,
 			Endpoint_Type::comments,
@@ -87,7 +82,6 @@ abstract class _Endpoint_Type extends Model
 	/**
 	 *	Simple fetches
 	 */
-
 	public function objectForCode($value)
 	{
 		return $this->singleObjectForKeyValue(Endpoint_Type::code, $value);
@@ -141,19 +135,22 @@ abstract class _Endpoint_Type extends Model
 	}
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
 				case "endpoint":
-					return array( Endpoint_Type::id, "type_id"  );
+					return array( Endpoint_Type::code, "type_code"  );
 					break;
 				case "pull_list_excl":
-					return array( Endpoint_Type::id, "endpoint_type_id"  );
+					return array( Endpoint_Type::code, "endpoint_type_code"  );
 					break;
 				case "pull_list_expansion":
-					return array( Endpoint_Type::id, "endpoint_type_id"  );
+					return array( Endpoint_Type::code, "endpoint_type_code"  );
 					break;
 				default:
 					break;
@@ -170,12 +167,6 @@ abstract class _Endpoint_Type extends Model
 		if ( isset($values) ) {
 
 			// default values for attributes
-			if ( isset($values['code']) == false ) {
-				$default_code = $this->attributeDefaultValue( null, null, Endpoint_Type::code);
-				if ( is_null( $default_code ) == false ) {
-					$values['code'] = $default_code;
-				}
-			}
 			if ( isset($values['name']) == false ) {
 				$default_name = $this->attributeDefaultValue( null, null, Endpoint_Type::name);
 				if ( is_null( $default_name ) == false ) {
@@ -245,15 +236,15 @@ abstract class _Endpoint_Type extends Model
 		if ( $object instanceof Endpoint_TypeDBO )
 		{
 			$endpoint_model = Model::Named('Endpoint');
-			if ( $endpoint_model->deleteAllForKeyValue(Endpoint::type_id, $this->id) == false ) {
+			if ( $endpoint_model->deleteAllForKeyValue(Endpoint::type_code, $this->code) == false ) {
 				return false;
 			}
 			$pull_list_excl_model = Model::Named('Pull_List_Exclusion');
-			if ( $pull_list_excl_model->deleteAllForKeyValue(Pull_List_Exclusion::endpoint_type_id, $this->id) == false ) {
+			if ( $pull_list_excl_model->deleteAllForKeyValue(Pull_List_Exclusion::endpoint_type_code, $this->code) == false ) {
 				return false;
 			}
 			$pull_list_expansion_model = Model::Named('Pull_List_Expansion');
-			if ( $pull_list_expansion_model->deleteAllForKeyValue(Pull_List_Expansion::endpoint_type_id, $this->id) == false ) {
+			if ( $pull_list_expansion_model->deleteAllForKeyValue(Pull_List_Expansion::endpoint_type_code, $this->code) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);
@@ -274,7 +265,6 @@ abstract class _Endpoint_Type extends Model
 	{
 		if ( is_null($object) ) {
 			return array(
-				Endpoint_Type::code,
 				Endpoint_Type::name,
 				Endpoint_Type::site_url,
 				Endpoint_Type::api_url
@@ -285,7 +275,6 @@ abstract class _Endpoint_Type extends Model
 
 	public function attributesMap() {
 		return array(
-			Endpoint_Type::code => Model::TEXT_TYPE,
 			Endpoint_Type::name => Model::TEXT_TYPE,
 			Endpoint_Type::comments => Model::TEXTAREA_TYPE,
 			Endpoint_Type::data_type => Model::TEXT_TYPE,
@@ -309,28 +298,6 @@ abstract class _Endpoint_Type extends Model
 	/**
 	 * Validation
 	 */
-	function validate_code($object = null, $value)
-	{
-		// check for mandatory field
-		if (isset($value) == false || empty($value)  ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Endpoint_Type::code,
-				"FIELD_EMPTY"
-			);
-		}
-
-		// make sure Code is unique
-		$existing = $this->objectForCode($value);
-		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Endpoint_Type::code,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
-	}
 	function validate_name($object = null, $value)
 	{
 		// check for mandatory field

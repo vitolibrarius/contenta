@@ -68,6 +68,9 @@ abstract class _Series_Character extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForSeries($obj)
 	{
 		return $this->allObjectsForFK(Series_Character::series_id, $obj, $this->sortOrder(), 50);

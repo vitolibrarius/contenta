@@ -42,6 +42,11 @@ foreach( $this->attributes as $name => $detailArray ) {
 	}
 <?php endif; ?>
 
+	public function pkValue()
+	{
+		return $this->{<?php echo $this->modelClassName() . "::" . $this->primaryKeys[0]; ?>};
+	}
+
 <?php foreach( $this->attributes as $name => $detailArray ) : ?>
 <?php if ($name != "id" && isset($detailArray['type'])) : ?>
 <?php if ($detailArray['type'] == 'DATE') : ?>

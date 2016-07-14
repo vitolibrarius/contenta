@@ -81,7 +81,7 @@ class FluxImporter extends EndpointImporter
 				foreach ($xml as $key => $item) {
 					$guid = $item['guid'];
 					// first check if this is a new item and not password protected
-					$flux = $FluxModel->objectForSourceIdEndpointGUID( $searchEndpoint->id, $guid );
+					$flux = $FluxModel->objectForSrc_guid( $guid );
 					if ( $flux == false && (isset($item['password']) == false || $item['password'] == false)) {
 						$seriesName = $item['metadata']['name'];
 						$issue = (isset($item['metadata']['issue']) ? $item['metadata']['issue'] : '');

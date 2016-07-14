@@ -7,6 +7,7 @@ use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
+use \Database as Database;
 use \SQL as SQL;
 
 use \model\user\Users as Users;
@@ -40,14 +41,11 @@ class Migration_6 extends Migrator
 	{
 		/** MEDIA_TYPE */
 		$sql = "CREATE TABLE IF NOT EXISTS media_type ( "
-			. Media_Type::id . " INTEGER PRIMARY KEY, "
-			. Media_Type::code . " TEXT, "
+			. Media_Type::code . " TEXT PRIMARY KEY, "
 			. Media_Type::name . " TEXT "
 		. ")";
 		$this->sqlite_execute( "media_type", $sql, "Create table media_type" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS media_type_code on media_type (code)';
-		$this->sqlite_execute( "media_type", $sql, "Index on media_type (code)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS media_type_name on media_type (name)';
 		$this->sqlite_execute( "media_type", $sql, "Index on media_type (name)" );
 
@@ -175,13 +173,13 @@ class Migration_6 extends Migrator
 		$sql = "CREATE TABLE IF NOT EXISTS media ( "
 			. Media::id . " INTEGER PRIMARY KEY, "
 			. Media::publication_id . " INTEGER, "
-			. Media::type_id . " INTEGER, "
+			. Media::type_code . " INTEGER, "
 			. Media::filename . " TEXT, "
 			. Media::original_filename . " TEXT, "
 			. Media::checksum . " TEXT, "
 			. Media::created . " INTEGER, "
 			. Media::size . " INTEGER, "
-			. "FOREIGN KEY (". Media::type_id .") REFERENCES " . Media_Type::TABLE . "(" . Media_Type::id . "),"
+			. "FOREIGN KEY (". Media::type_code .") REFERENCES " . Media_Type::TABLE . "(" . Media_Type::code . "),"
 			. "FOREIGN KEY (". Media::publication_id .") REFERENCES " . Publication::TABLE . "(" . Publication::id . ")"
 		. ")";
 		$this->sqlite_execute( "media", $sql, "Create table media" );
@@ -310,17 +308,9 @@ class Migration_6 extends Migrator
 		foreach ($types as $code => $name) {
 			if ($media_type_model->objectForCode($code) == false)
 			{
-				$newObjId = \SQL::Insert($media_type_model)->addRecord(array(
-					Media_Type::code => $code,
-					Media_Type::name => $name
-					)
-				)->commitTransaction();
+				$sql = "INSERT INTO " . $media_type_model->tableName() . " ( code, name ) values ( :C, :N )";
+				Database::instance()->execute_sql($sql, array( ":C" => $code, ":N" => $name ) );
 			}
 		}
-
-
-
-
-
 	}
 }

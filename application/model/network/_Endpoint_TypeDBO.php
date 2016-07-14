@@ -33,13 +33,18 @@ abstract class _Endpoint_TypeDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Endpoint_Type::code};
+	}
+
 
 	// to-many relationship
 	public function endpoints()
 	{
-		if ( isset( $this->id ) ) {
+		if ( isset( $this->code ) ) {
 			$model = Model::Named('Endpoint');
-			return $model->allObjectsForKeyValue( Endpoint::type_id, $this->id);
+			return $model->allObjectsForKeyValue( Endpoint::type_code, $this->code);
 		}
 
 		return false;
@@ -48,9 +53,9 @@ abstract class _Endpoint_TypeDBO extends DataObject
 	// to-many relationship
 	public function pull_list_exclusions()
 	{
-		if ( isset( $this->id ) ) {
+		if ( isset( $this->code ) ) {
 			$model = Model::Named('Pull_List_Exclusion');
-			return $model->allObjectsForKeyValue( Pull_List_Exclusion::endpoint_type_id, $this->id);
+			return $model->allObjectsForKeyValue( Pull_List_Exclusion::endpoint_type_code, $this->code);
 		}
 
 		return false;
@@ -59,9 +64,9 @@ abstract class _Endpoint_TypeDBO extends DataObject
 	// to-many relationship
 	public function pull_list_expansions()
 	{
-		if ( isset( $this->id ) ) {
+		if ( isset( $this->code ) ) {
 			$model = Model::Named('Pull_List_Expansion');
-			return $model->allObjectsForKeyValue( Pull_List_Expansion::endpoint_type_id, $this->id);
+			return $model->allObjectsForKeyValue( Pull_List_Expansion::endpoint_type_code, $this->code);
 		}
 
 		return false;
@@ -69,16 +74,6 @@ abstract class _Endpoint_TypeDBO extends DataObject
 
 
 	/** Attributes */
-	public function code()
-	{
-		return parent::changedValue( Endpoint_Type::code, $this->code );
-	}
-
-	public function setCode( $value = null)
-	{
-		parent::storeChange( Endpoint_Type::code, $value );
-	}
-
 	public function name()
 	{
 		return parent::changedValue( Endpoint_Type::name, $this->name );

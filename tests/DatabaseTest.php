@@ -76,7 +76,7 @@ $endpoint_model = Model::Named("Endpoint");
 $endpoint_data = array(
 	array(
 		\model\network\Endpoint::name => "My ComicVine",
-		\model\network\Endpoint::type_id => $cv_endpoint_type->id,
+		\model\network\Endpoint::type_code => $cv_endpoint_type->code,
 		\model\network\Endpoint::base_url => $cv_endpoint_type->api_url,
 		\model\network\Endpoint::api_key => uuid(),
 		\model\network\Endpoint::username => 'vito',
@@ -85,7 +85,7 @@ $endpoint_data = array(
 	),
 	array(
 		\model\network\Endpoint::name => "Comicbook RSS",
-		\model\network\Endpoint::type_id => $rss_endpoint_type->id,
+		\model\network\Endpoint::type_code => $rss_endpoint_type->code,
 		\model\network\Endpoint::base_url => "http://comicbook.source.com/rss?api=12345",
 		\model\network\Endpoint::username => 'vito',
 		\model\network\Endpoint::enabled => Model::TERTIARY_TRUE,
@@ -110,7 +110,7 @@ $rss_job_type = Model::Named('Job_Type')->objectForCode('rss');
 $job_model = Model::Named("Job");
 $job_data = array(
 	array(
-		\model\jobs\Job::type_id => $character_job_type->id,
+		\model\jobs\Job::type_code => $character_job_type->code,
 		\model\jobs\Job::minute => 1,
 		\model\jobs\Job::hour => 1,
 		\model\jobs\Job::dayOfWeek => 1,
@@ -120,7 +120,7 @@ $job_data = array(
 		\model\jobs\Job::enabled => Model::TERTIARY_TRUE
 	),
 	array(
-		\model\jobs\Job::type_id => $rss_job_type->id,
+		\model\jobs\Job::type_code => $rss_job_type->code,
 		\model\jobs\Job::minute => "10",
 		\model\jobs\Job::hour => "2,4,6,8",
 		\model\jobs\Job::dayOfWeek => "*",
@@ -131,7 +131,7 @@ $job_data = array(
 		\model\jobs\Job::enabled => Model::TERTIARY_TRUE
 	),
 	array(
-		\model\jobs\Job::type_id => $rss_job_type->id,
+		\model\jobs\Job::type_code => $rss_job_type->code,
 		\model\jobs\Job::minute => "10",
 		\model\jobs\Job::hour => "2,4,6,8",
 		\model\jobs\Job::dayOfWeek => "*",
@@ -150,14 +150,14 @@ $job_run_model = Model::Named("Job_Running");
 $job_run_data = array(
 	array(
 		\model\jobs\Job_Running::job_id => $character_job->id,
-		\model\jobs\Job_Running::type_id => $character_job_type->id,
+		\model\jobs\Job_Running::type_code => $character_job_type->code,
 		\model\jobs\Job_Running::processor => 'UploadImport',
 		\model\jobs\Job_Running::guid => rand(),
 		\model\jobs\Job_Running::pid => 3456
 	),
 	array(
 		\model\jobs\Job_Running::job_id => $rss_job->id,
-		\model\jobs\Job_Running::type_id => $rss_job_type->id,
+		\model\jobs\Job_Running::type_code => $rss_job_type->code,
 		\model\jobs\Job_Running::processor => 'UploadImport',
 		\model\jobs\Job_Running::guid => rand(),
 		\model\jobs\Job_Running::pid => 98765
@@ -385,7 +385,7 @@ my_echo( "---------- Media ");
 /**
 				Media::created => time(),
 				Media::publication_id => $publication->id,
-				Media::type_id => $type->id,
+				Media::type_code => $type->code,
 				Media::filename => $filename,
 				Media::original_filename => $original_file,
 				Media::checksum => $checksum,
@@ -397,21 +397,21 @@ $cbz_type = Model::Named('Media_Type')->objectForCode(\model\media\Media_Type::C
 $Media_model = Model::Named("Media");
 $Media_data = array(
 	array(
-		\model\media\Media::type_id => $cbz_type->id,
+		\model\media\Media::type_code => $cbz_type->code,
 		\model\media\Media::publication_id => $kmoves_publication->id,
 		\model\media\Media::original_filename => 'vito',
 		\model\media\Media::checksum => uuid(),
 		\model\media\Media::size => 112233
 	),
 	array(
-		\model\media\Media::type_id => $cbz_type->id,
+		\model\media\Media::type_code => $cbz_type->code,
 		\model\media\Media::publication_id => $kmoves_publication->id,
 		\model\media\Media::original_filename => 'Batman Beyond 001 (2012) v12.cbz',
 		\model\media\Media::checksum => uuid(),
 		\model\media\Media::size => 54321
 	),
 	array(
-		\model\media\Media::type_id => $cbz_type->id,
+		\model\media\Media::type_code => $cbz_type->code,
 		\model\media\Media::publication_id => $burn_publication->id,
 		\model\media\Media::original_filename => 'Blackhawks 006 (2012) [Digital] (ZOOM-Empire).cbz',
 		\model\media\Media::checksum => uuid(),

@@ -21,6 +21,11 @@ abstract class _VersionDBO extends DataObject
 	public $created;
 
 
+	public function pkValue()
+	{
+		return $this->{Version::id};
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Version::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Version::created, "M d, Y" ); }
 

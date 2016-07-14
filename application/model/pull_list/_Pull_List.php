@@ -98,6 +98,9 @@ abstract class _Pull_List extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForEndpoint($obj)
 	{
 		return $this->allObjectsForFK(Pull_List::endpoint_id, $obj, $this->sortOrder(), 50);

@@ -20,26 +20,22 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 		/** LOG_LEVEL */
 /*
 		$sql = "CREATE TABLE IF NOT EXISTS log_level ( "
-			. Log_Level::id . " INTEGER PRIMARY KEY, "
-			. Log_Level::code . " TEXT, "
+			. Log_Level::code . " TEXT PRIMARY KEY, "
 			. Log_Level::name . " TEXT "
 		. ")";
 		$this->sqlite_execute( "log_level", $sql, "Create table log_level" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_code on log_level (code)';
-		$this->sqlite_execute( "log_level", $sql, "Index on log_level (code)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_name on log_level (name)';
 		$this->sqlite_execute( "log_level", $sql, "Index on log_level (name)" );
 */
 abstract class _Log_Level extends Model
 {
 	const TABLE = 'log_level';
-	const id = 'id';
 	const code = 'code';
 	const name = 'name';
 
 	public function tableName() { return Log_Level::TABLE; }
-	public function tablePK() { return Log_Level::id; }
+	public function tablePK() { return Log_Level::code; }
 
 	public function sortOrder()
 	{
@@ -51,7 +47,6 @@ abstract class _Log_Level extends Model
 	public function allColumnNames()
 	{
 		return array(
-			Log_Level::id,
 			Log_Level::code,
 			Log_Level::name
 		);
@@ -60,7 +55,6 @@ abstract class _Log_Level extends Model
 	/**
 	 *	Simple fetches
 	 */
-
 	public function objectForCode($value)
 	{
 		return $this->singleObjectForKeyValue(Log_Level::code, $value);
@@ -74,6 +68,9 @@ abstract class _Log_Level extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 
 	public function joinAttributes( Model $joinModel = null )
 	{
@@ -94,12 +91,6 @@ abstract class _Log_Level extends Model
 		if ( isset($values) ) {
 
 			// default values for attributes
-			if ( isset($values['code']) == false ) {
-				$default_code = $this->attributeDefaultValue( null, null, Log_Level::code);
-				if ( is_null( $default_code ) == false ) {
-					$values['code'] = $default_code;
-				}
-			}
 			if ( isset($values['name']) == false ) {
 				$default_name = $this->attributeDefaultValue( null, null, Log_Level::name);
 				if ( is_null( $default_name ) == false ) {
@@ -144,7 +135,7 @@ abstract class _Log_Level extends Model
 	{
 		if ( is_null($object) ) {
 			return array(
-				Log_Level::code
+				Log_Level::name
 			);
 		}
 		return parent::attributesMandatory($object);
@@ -152,7 +143,6 @@ abstract class _Log_Level extends Model
 
 	public function attributesMap() {
 		return array(
-			Log_Level::code => Model::TEXT_TYPE,
 			Log_Level::name => Model::TEXT_TYPE
 		);
 	}
@@ -169,33 +159,15 @@ abstract class _Log_Level extends Model
 	/**
 	 * Validation
 	 */
-	function validate_code($object = null, $value)
+	function validate_name($object = null, $value)
 	{
 		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
-				Log_Level::code,
+				Log_Level::name,
 				"FIELD_EMPTY"
 			);
-		}
-
-		// make sure Code is unique
-		$existing = $this->objectForCode($value);
-		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Log_Level::code,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
-	}
-	function validate_name($object = null, $value)
-	{
-		// not mandatory field
-		if (isset($value) == false || empty($value)  ) {
-			return null;
 		}
 
 		// make sure Name is unique

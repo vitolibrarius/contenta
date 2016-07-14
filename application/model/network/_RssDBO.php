@@ -30,6 +30,11 @@ abstract class _RssDBO extends DataObject
 	public $enclosure_password;
 
 
+	public function pkValue()
+	{
+		return $this->{Rss::id};
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Rss::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Rss::created, "M d, Y" ); }
 

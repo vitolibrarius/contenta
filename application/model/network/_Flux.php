@@ -41,10 +41,10 @@ use \model\network\EndpointDBO as EndpointDBO;
 		. ")";
 		$this->sqlite_execute( "flux", $sql, "Create table flux" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_src_endpointsrc_guid on flux (src_endpoint,src_guid)';
-		$this->sqlite_execute( "flux", $sql, "Index on flux (src_endpoint,src_guid)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_dest_endpointdest_guid on flux (dest_endpoint,dest_guid)';
-		$this->sqlite_execute( "flux", $sql, "Index on flux (dest_endpoint,dest_guid)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_src_guid on flux (src_guid)';
+		$this->sqlite_execute( "flux", $sql, "Index on flux (src_guid)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_dest_guid on flux (dest_guid)';
+		$this->sqlite_execute( "flux", $sql, "Index on flux (dest_guid)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS flux_flux_hash on flux (flux_hash)';
 		$this->sqlite_execute( "flux", $sql, "Index on flux (flux_hash)" );
 */
@@ -115,9 +115,9 @@ abstract class _Flux extends Model
 
 
 
-	public function allForSrc_guid($value)
+	public function objectForSrc_guid($value)
 	{
-		return $this->allObjectsForKeyValue(Flux::src_guid, $value);
+		return $this->singleObjectForKeyValue(Flux::src_guid, $value);
 	}
 
 
@@ -135,9 +135,9 @@ abstract class _Flux extends Model
 
 
 
-	public function allForDest_guid($value)
+	public function objectForDest_guid($value)
 	{
-		return $this->allObjectsForKeyValue(Flux::dest_guid, $value);
+		return $this->singleObjectForKeyValue(Flux::dest_guid, $value);
 	}
 
 
@@ -149,6 +149,9 @@ abstract class _Flux extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForSource_endpoint($obj)
 	{
 		return $this->allObjectsForFK(Flux::src_endpoint, $obj, $this->sortOrder(), 50);
@@ -367,58 +370,6 @@ abstract class _Flux extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForSourceEndpointGUID( $src_endpoint, $src_guid )
-	{
-		$select = SQL::Select( $this );
-		$select->orderBy( $this->sortOrder() );
-		$qualifiers = array();
-		$qualifiers[] = Qualifier::FK( 'src_endpoint', $src_endpoint);
-		$qualifiers[] = Qualifier::Equals( 'src_guid', $src_guid);
-
-		if ( count($qualifiers) > 0 ) {
-			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
-		}
-
-		$result = $select->fetchAll();
-		if ( is_array($result) ) {
-			$result_size = count($result);
-			if ( $result_size == 1 ) {
-				return $result[0];
-			}
-			else if ($result_size > 1 ) {
-				throw new \Exception( "objectForSourceEndpointGUID expected 1 result, but fetched " . count($result) );
-			}
-		}
-
-		return false;
-	}
-
-	public function objectForDestinationEndpointGUID( $dest_endpoint, $dest_guid )
-	{
-		$select = SQL::Select( $this );
-		$select->orderBy( $this->sortOrder() );
-		$qualifiers = array();
-		$qualifiers[] = Qualifier::FK( 'dest_endpoint', $dest_endpoint);
-		$qualifiers[] = Qualifier::Equals( 'dest_guid', $dest_guid);
-
-		if ( count($qualifiers) > 0 ) {
-			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
-		}
-
-		$result = $select->fetchAll();
-		if ( is_array($result) ) {
-			$result_size = count($result);
-			if ( $result_size == 1 ) {
-				return $result[0];
-			}
-			else if ($result_size > 1 ) {
-				throw new \Exception( "objectForDestinationEndpointGUID expected 1 result, but fetched " . count($result) );
-			}
-		}
-
-		return false;
-	}
-
 
 	/**
 	 * Attribute editing
@@ -540,6 +491,15 @@ abstract class _Flux extends Model
 			return null;
 		}
 
+		// make sure Src_guid is unique
+		$existing = $this->objectForSrc_guid($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Flux::src_guid,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
 		return null;
 	}
 	function validate_src_url($object = null, $value)
@@ -585,6 +545,15 @@ abstract class _Flux extends Model
 			return null;
 		}
 
+		// make sure Dest_guid is unique
+		$existing = $this->objectForDest_guid($value);
+		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Flux::dest_guid,
+				"UNIQUE_FIELD_VALUE"
+			);
+		}
 		return null;
 	}
 	function validate_dest_status($object = null, $value)

@@ -35,8 +35,8 @@
 					<input class="type" type="text" name="displayType" disabled
 						value="<?php echo $realType->displayName(); ?>"
 					/>
-					<input class="type" type="hidden" name="endpoint-type_id"
-						value="<?php echo $realType->id; ?>"
+					<input class="type" type="hidden" name="endpoint-type_code"
+						value="<?php echo $realType->code; ?>"
 					/>
 
 				<?php foreach ($this->model->attributesFor($realObj, $realType) as $attr => $form_type) {

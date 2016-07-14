@@ -24,8 +24,7 @@ use \model\jobs\JobDBO as JobDBO;
 		/** JOB_TYPE */
 /*
 		$sql = "CREATE TABLE IF NOT EXISTS job_type ( "
-			. Job_Type::id . " INTEGER PRIMARY KEY, "
-			. Job_Type::code . " TEXT, "
+			. Job_Type::code . " TEXT PRIMARY KEY, "
 			. Job_Type::name . " TEXT, "
 			. Job_Type::desc . " TEXT, "
 			. Job_Type::processor . " TEXT, "
@@ -35,15 +34,12 @@ use \model\jobs\JobDBO as JobDBO;
 		. ")";
 		$this->sqlite_execute( "job_type", $sql, "Create table job_type" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS job_type_code on job_type (code)';
-		$this->sqlite_execute( "job_type", $sql, "Index on job_type (code)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS job_type_name on job_type (name)';
 		$this->sqlite_execute( "job_type", $sql, "Index on job_type (name)" );
 */
 abstract class _Job_Type extends Model
 {
 	const TABLE = 'job_type';
-	const id = 'id';
 	const code = 'code';
 	const name = 'name';
 	const desc = 'desc';
@@ -53,7 +49,7 @@ abstract class _Job_Type extends Model
 	const requires_endpoint = 'requires_endpoint';
 
 	public function tableName() { return Job_Type::TABLE; }
-	public function tablePK() { return Job_Type::id; }
+	public function tablePK() { return Job_Type::code; }
 
 	public function sortOrder()
 	{
@@ -65,7 +61,6 @@ abstract class _Job_Type extends Model
 	public function allColumnNames()
 	{
 		return array(
-			Job_Type::id,
 			Job_Type::code,
 			Job_Type::name,
 			Job_Type::desc,
@@ -79,7 +74,6 @@ abstract class _Job_Type extends Model
 	/**
 	 *	Simple fetches
 	 */
-
 	public function objectForCode($value)
 	{
 		return $this->singleObjectForKeyValue(Job_Type::code, $value);
@@ -113,16 +107,19 @@ abstract class _Job_Type extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 
 	public function joinAttributes( Model $joinModel = null )
 	{
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
 				case "job_running":
-					return array( Job_Type::id, "type_id"  );
+					return array( Job_Type::code, "type_code"  );
 					break;
 				case "job":
-					return array( Job_Type::id, "type_id"  );
+					return array( Job_Type::code, "type_code"  );
 					break;
 				default:
 					break;
@@ -139,12 +136,6 @@ abstract class _Job_Type extends Model
 		if ( isset($values) ) {
 
 			// default values for attributes
-			if ( isset($values['code']) == false ) {
-				$default_code = $this->attributeDefaultValue( null, null, Job_Type::code);
-				if ( is_null( $default_code ) == false ) {
-					$values['code'] = $default_code;
-				}
-			}
 			if ( isset($values['name']) == false ) {
 				$default_name = $this->attributeDefaultValue( null, null, Job_Type::name);
 				if ( is_null( $default_name ) == false ) {
@@ -202,11 +193,11 @@ abstract class _Job_Type extends Model
 		if ( $object instanceof Job_TypeDBO )
 		{
 			$job_running_model = Model::Named('Job_Running');
-			if ( $job_running_model->deleteAllForKeyValue(Job_Running::type_id, $this->id) == false ) {
+			if ( $job_running_model->deleteAllForKeyValue(Job_Running::type_code, $this->code) == false ) {
 				return false;
 			}
 			$job_model = Model::Named('Job');
-			if ( $job_model->deleteAllForKeyValue(Job::type_id, $this->id) == false ) {
+			if ( $job_model->deleteAllForKeyValue(Job::type_code, $this->code) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);
@@ -223,19 +214,9 @@ abstract class _Job_Type extends Model
 	/**
 	 * Attribute editing
 	 */
-	public function attributesMandatory($object = null)
-	{
-		if ( is_null($object) ) {
-			return array(
-				Job_Type::code
-			);
-		}
-		return parent::attributesMandatory($object);
-	}
 
 	public function attributesMap() {
 		return array(
-			Job_Type::code => Model::TEXT_TYPE,
 			Job_Type::name => Model::TEXT_TYPE,
 			Job_Type::desc => Model::TEXTAREA_TYPE,
 			Job_Type::processor => Model::TEXT_TYPE,
@@ -261,28 +242,6 @@ abstract class _Job_Type extends Model
 	/**
 	 * Validation
 	 */
-	function validate_code($object = null, $value)
-	{
-		// check for mandatory field
-		if (isset($value) == false || empty($value)  ) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job_Type::code,
-				"FIELD_EMPTY"
-			);
-		}
-
-		// make sure Code is unique
-		$existing = $this->objectForCode($value);
-		if ( $existing != false && ( is_null($object) || $existing->id != $object->id)) {
-			return Localized::ModelValidation(
-				$this->tableName(),
-				Job_Type::code,
-				"UNIQUE_FIELD_VALUE"
-			);
-		}
-		return null;
-	}
 	function validate_name($object = null, $value)
 	{
 		// not mandatory field

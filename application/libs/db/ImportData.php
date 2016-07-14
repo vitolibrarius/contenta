@@ -115,7 +115,7 @@ class ImportData
 	{
 		isset($model) || die('mapPrimaryKey requires a model.');
 		isset($id) || die('mapPrimaryKey requires a source pk.');
-		isset($newId) || die('mapPrimaryKey requires a destination pk.');
+		if (isset($newId) == false) throw new \Exception('mapPrimaryKey requires a destination pk.');
 
 		$oldKey = $model->tableName() . "-" . $id;
 		$this->primaryKeyMap[ $oldKey ] = $newId;
@@ -342,17 +342,20 @@ class ImportData
 	public function importRow_users( Model $model, $rowDir )
 	{
 		$data = $this->dataForRow($rowDir);
-		if ( $data['name'] == 'vito' ) {
-			$success = \SQL::Update( $model, Qualifier::Equals( "name", $data['name']), $data)->commitTransaction();
-			if ( $success == false ) {
-				throw new Exception("import error updating " . $rowDir );
-			}
-
-			$existing = $model->singleObjectForKeyValue( "name", $data['name'] );
-			$pkColumn = $model->tablePK();
-			$this->mapPrimaryKey( $model, basename($rowDir), $existing->{$pkColumn} );
-			return $existing;
-		}
+// 		if ( $data['name'] == 'vito' ) {
+// 			$success = \SQL::Update( $model, Qualifier::Equals( "name", $data['name']), $data)->commitTransaction();
+// 			if ( $success == false ) {
+// 				throw new Exception("import error updating " . $rowDir );
+// 			}
+//
+// 			$existing = $model->singleObjectForKeyValue( "name", $data['name'] );
+// 			if ( $existing == false ) {
+// 				throw new Exception("failed to find row for 'name' =" . $data['name'] );
+// 			}
+// 			$pkColumn = $model->tablePK();
+// 			$this->mapPrimaryKey( $model, basename($rowDir), $existing->{$pkColumn} );
+// 			return $existing;
+// 		}
 
 		return $this->importRow( $model, $rowDir );
 	}

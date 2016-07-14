@@ -1,6 +1,5 @@
 {
     "attributes": {
-        "id": 	{ "column": "id", "type": "INTEGER" },
         "code": { "column": "code", "length": 10, "type": "TEXT", "collate": "NOCASE", "nullable": false },
         "name": { "column": "name", "length": 256, "type": "TEXT" },
         "desc": { "column": "desc", "length": 4096, "type": "TEXT" },
@@ -9,7 +8,7 @@
         "scheduled": { "column": "scheduled", "type": "BOOLEAN", "default": "true" },
         "requires_endpoint": { "column": "requires_endpoint", "type": "BOOLEAN", "default": "true" }
     },
-    "primaryKeys": [ "id" ],
+    "primaryKeys": [ "code" ],
     "table": "job_type",
     "package": "jobs",
     "model": "Job_Type",
@@ -23,7 +22,7 @@
     		"destinationPackage" : "\\model\\jobs\\",
     		"destinationTable" : "job_running",
     		"joins" : [
-    			{ "destinationAttribute": "type_id", "sourceAttribute" : "id" }
+    			{ "destinationAttribute": "type_code", "sourceAttribute" : "code" }
     		],
     		"isMandatory": false,
             "isToMany" : true,
@@ -34,7 +33,7 @@
     		"destinationPackage" : "\\model\\jobs\\",
     		"destinationTable" : "job",
     		"joins" : [
-    			{ "destinationAttribute": "type_id", "sourceAttribute" : "id" }
+    			{ "destinationAttribute": "type_code", "sourceAttribute" : "code" }
     		],
     		"isMandatory": false,
             "isToMany" : true,
@@ -42,7 +41,6 @@
     	}
     },
     "indexes" : [
-    	{ "columns": ["code"], "unique": true },
     	{ "columns": ["name"], "unique": true }
     ]
 }

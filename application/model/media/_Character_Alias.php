@@ -70,6 +70,9 @@ abstract class _Character_Alias extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForCharacter($obj)
 	{
 		return $this->allObjectsForFK(Character_Alias::character_id, $obj, $this->sortOrder(), 50);

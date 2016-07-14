@@ -186,6 +186,9 @@ abstract class _Series extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForPublisher($obj)
 	{
 		return $this->allObjectsForFK(Series::publisher_id, $obj, $this->sortOrder(), 50);

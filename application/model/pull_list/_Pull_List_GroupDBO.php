@@ -23,6 +23,11 @@ abstract class _Pull_List_GroupDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Pull_List_Group::id};
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Pull_List_Group::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Pull_List_Group::created, "M d, Y" ); }
 

@@ -119,6 +119,9 @@ abstract class _Pull_List_Item extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForPull_list_group($obj)
 	{
 		return $this->allObjectsForFK(Pull_List_Item::pull_list_group_id, $obj, $this->sortOrder(), 50);

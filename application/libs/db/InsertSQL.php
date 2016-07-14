@@ -116,7 +116,14 @@ class InsertSQL extends SQL
 			$affectedRows = $statement->execute($params);
 			if ( $affectedRows > 0 ) {
 				if ( $successOnly == false && count( $this->dataArray ) == 1 ) {
-					$rowId = $db->lastInsertId();
+					$tablePk = $this->model->tablePK();
+					if (in_array($tablePk, $this->columns)) {
+						$rowId = $this->dataArray[0]{$tablePk};
+					}
+					else {
+						$rowId = $db->lastInsertId();
+					}
+
 					if ( isset($this->model) ) {
 						$select = new SelectSQL($this->model);
 						$select->where( Qualifier::Equals($this->model->tablePK(), $rowId) );

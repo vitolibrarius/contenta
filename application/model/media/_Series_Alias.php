@@ -70,6 +70,9 @@ abstract class _Series_Alias extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForSeries($obj)
 	{
 		return $this->allObjectsForFK(Series_Alias::series_id, $obj, $this->sortOrder(), 50);

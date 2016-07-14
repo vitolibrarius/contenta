@@ -40,9 +40,9 @@ class Job_RunningDBO extends _Job_RunningDBO
 	}
 
 	public function jobType() {
-		if ( isset($this->type_id)) {
+		if ( isset($this->type_code)) {
 			$type_model = Model::Named("Job_Type");
-			return $type_model->objectForId($this->type_id);
+			return $type_model->objectForId($this->type_code);
 		}
 		else if ( isset($this->job_id) ) {
 			$job = $this->job();

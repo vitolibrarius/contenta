@@ -154,6 +154,9 @@ abstract class _Story_Arc extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForPublisher($obj)
 	{
 		return $this->allObjectsForFK(Story_Arc::publisher_id, $obj, $this->sortOrder(), 50);

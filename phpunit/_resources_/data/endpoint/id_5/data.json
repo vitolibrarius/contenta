@@ -1,6 +1,6 @@
 {
     "id": "5",
-    "type_id": "1",
+    "type_code": "Newznab",
     "name": "Usenet",
     "base_url": "https:\/\/www.usenet-crawler.com\/api",
     "api_key": "fcb298b2e84f27e32cb11ed9eeff65df",

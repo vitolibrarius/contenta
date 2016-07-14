@@ -20,6 +20,11 @@ abstract class _Story_Arc_CharacterDBO extends DataObject
 	public $character_id;
 
 
+	public function pkValue()
+	{
+		return $this->{Story_Arc_Character::id};
+	}
+
 
 	// to-one relationship
 	public function story_arc()

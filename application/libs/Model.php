@@ -427,8 +427,9 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 						unset($values[$key]);
 					}
 				}
+				$allkeys = array_keys($values);
 
-				$insert = \SQL::Insert($this)->addRecord($values);
+				$insert = \SQL::Insert($this, $allkeys)->addRecord($values);
 				$obj = $insert->commitTransaction();
 
 				$this->processNotification( Model::NotifyInserted, $obj );

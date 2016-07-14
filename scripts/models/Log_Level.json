@@ -1,10 +1,9 @@
 {
     "attributes": {
-        "id": 	{ "column": "id", "type": "INTEGER" },
-        "code": { "column": "code",	"length": 10, "type": "TEXT", "nullable": false },
-        "name": { "column": "name",	"length": 256, "type": "TEXT" }
+        "code": { "column": "code",	"length": 10, "type": "TEXT" },
+        "name": { "column": "name",	"length": 256, "type": "TEXT", "nullable": false }
     },
-    "primaryKeys": [ "id" ],
+    "primaryKeys": [ "code" ],
     "table": "log_level",
     "package": "logs",
     "model": "Log_Level",
@@ -15,7 +14,6 @@
     "relationships" :{
     },
     "indexes" : [
-    	{ "columns": ["code"], "unique": true },
     	{ "columns": ["name"], "unique": true }
     ]
 }

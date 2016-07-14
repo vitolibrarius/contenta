@@ -26,13 +26,13 @@ use \model\media\PublicationDBO as PublicationDBO;
 		$sql = "CREATE TABLE IF NOT EXISTS media ( "
 			. Media::id . " INTEGER PRIMARY KEY, "
 			. Media::publication_id . " INTEGER, "
-			. Media::type_id . " INTEGER, "
+			. Media::type_code . " INTEGER, "
 			. Media::filename . " TEXT, "
 			. Media::original_filename . " TEXT, "
 			. Media::checksum . " TEXT, "
 			. Media::created . " INTEGER, "
 			. Media::size . " INTEGER, "
-			. "FOREIGN KEY (". Media::type_id .") REFERENCES " . Media_Type::TABLE . "(" . Media_Type::id . "),"
+			. "FOREIGN KEY (". Media::type_code .") REFERENCES " . Media_Type::TABLE . "(" . Media_Type::code . "),"
 			. "FOREIGN KEY (". Media::publication_id .") REFERENCES " . Publication::TABLE . "(" . Publication::id . ")"
 		. ")";
 		$this->sqlite_execute( "media", $sql, "Create table media" );
@@ -47,7 +47,7 @@ abstract class _Media extends Model
 	const TABLE = 'media';
 	const id = 'id';
 	const publication_id = 'publication_id';
-	const type_id = 'type_id';
+	const type_code = 'type_code';
 	const filename = 'filename';
 	const original_filename = 'original_filename';
 	const checksum = 'checksum';
@@ -69,7 +69,7 @@ abstract class _Media extends Model
 		return array(
 			Media::id,
 			Media::publication_id,
-			Media::type_id,
+			Media::type_code,
 			Media::filename,
 			Media::original_filename,
 			Media::checksum,
@@ -109,15 +109,18 @@ abstract class _Media extends Model
 	}
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForMediaType($obj)
 	{
-		return $this->allObjectsForFK(Media::type_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Media::type_code, $obj, $this->sortOrder(), 50);
 	}
 
 	public function countForMediaType($obj)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForFK( Media::type_id, $obj );
+			return $this->countForFK( Media::type_code, $obj );
 		}
 		return false;
 	}
@@ -139,7 +142,7 @@ abstract class _Media extends Model
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
 				case "media_type":
-					return array( Media::type_id, "id"  );
+					return array( Media::type_code, "code"  );
 					break;
 				case "publication":
 					return array( Media::publication_id, "id"  );
@@ -194,10 +197,10 @@ abstract class _Media extends Model
 			if ( isset($values['mediaType']) ) {
 				$local_mediaType = $values['mediaType'];
 				if ( $local_mediaType instanceof Media_TypeDBO) {
-					$values[Media::type_id] = $local_mediaType->id;
+					$values[Media::type_code] = $local_mediaType->code;
 				}
 				else if ( is_integer( $local_mediaType) ) {
-					$params[Media::type_id] = $local_mediaType;
+					$params[Media::type_code] = $local_mediaType;
 				}
 			}
 			if ( isset($values['publication']) ) {
@@ -218,10 +221,10 @@ abstract class _Media extends Model
 			if ( isset($values['mediaType']) ) {
 				$local_mediaType = $values['mediaType'];
 				if ( $local_mediaType instanceof Media_TypeDBO) {
-					$values[Media::type_id] = $local_mediaType->id;
+					$values[Media::type_code] = $local_mediaType->code;
 				}
 				else if ( is_integer( $local_mediaType) ) {
-					$params[Media::type_id] = $values['mediaType'];
+					$params[Media::type_code] = $values['mediaType'];
 				}
 			}
 			if ( isset($values['publication']) ) {
@@ -308,7 +311,7 @@ abstract class _Media extends Model
 	public function attributesMap() {
 		return array(
 			Media::publication_id => Model::TO_ONE_TYPE,
-			Media::type_id => Model::TO_ONE_TYPE,
+			Media::type_code => Model::TO_ONE_TYPE,
 			Media::filename => Model::TEXTAREA_TYPE,
 			Media::original_filename => Model::TEXTAREA_TYPE,
 			Media::checksum => Model::TEXT_TYPE,
@@ -342,13 +345,13 @@ abstract class _Media extends Model
 
 		return null;
 	}
-	function validate_type_id($object = null, $value)
+	function validate_type_code($object = null, $value)
 	{
 		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
-				Media::type_id,
+				Media::type_code,
 				"FIELD_EMPTY"
 			);
 		}

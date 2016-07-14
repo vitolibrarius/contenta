@@ -80,6 +80,9 @@ abstract class _User_Series extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForUser($obj)
 	{
 		return $this->allObjectsForFK(User_Series::user_id, $obj, $this->sortOrder(), 50);

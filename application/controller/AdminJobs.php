@@ -147,9 +147,9 @@ class AdminJobs extends Admin
 
 			$values = \http\HttpPost::getModelValue( 'job', null );
 			$success = true;
-			if ( isset($values, $values['type_id']) ) {
+			if ( isset($values, $values['type_code']) ) {
 				$model = Model::Named('Job_Type');
-				$type = $model->objectForId($values['type_id']);
+				$type = $model->objectForId($values['type_code']);
 				if ( $type instanceof \model\jobs\Job_TypeDBO ) {
 					$this->view->setLocalizedViewTitle("NewRecord");
 					$this->view->saveAction = "AdminJobs/save";

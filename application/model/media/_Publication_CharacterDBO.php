@@ -20,6 +20,11 @@ abstract class _Publication_CharacterDBO extends DataObject
 	public $character_id;
 
 
+	public function pkValue()
+	{
+		return $this->{Publication_Character::id};
+	}
+
 
 	// to-one relationship
 	public function publication()

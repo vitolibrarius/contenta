@@ -16,7 +16,7 @@ use \model\network\EndpointDBO as EndpointDBO;
 
 abstract class _JobDBO extends DataObject
 {
-	public $type_id;
+	public $type_code;
 	public $endpoint_id;
 	public $enabled;
 	public $one_shot;
@@ -31,6 +31,11 @@ abstract class _JobDBO extends DataObject
 	public $last_fail;
 	public $created;
 
+
+	public function pkValue()
+	{
+		return $this->{Job::id};
+	}
 
 	public function isEnabled() {
 		return (isset($this->enabled) && $this->enabled == Model::TERTIARY_TRUE);
@@ -56,17 +61,17 @@ abstract class _JobDBO extends DataObject
 	// to-one relationship
 	public function jobType()
 	{
-		if ( isset( $this->type_id ) ) {
+		if ( isset( $this->type_code ) ) {
 			$model = Model::Named('Job_Type');
-			return $model->objectForId($this->type_id);
+			return $model->objectForCode($this->type_code);
 		}
 		return false;
 	}
 
 	public function setJobType(Job_TypeDBO $obj = null)
 	{
-		if ( isset($obj, $obj->id) && (isset($this->type_id) == false || $obj->id != $this->type_id) ) {
-			parent::storeChange( Job::type_id, $obj->id );
+		if ( isset($obj, $obj->code) && (isset($this->type_code) == false || $obj->code != $this->type_code) ) {
+			parent::storeChange( Job::type_code, $obj->code );
 			$this->saveChanges();
 		}
 	}

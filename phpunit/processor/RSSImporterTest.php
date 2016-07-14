@@ -42,7 +42,7 @@ class RSSImporterTest extends PHPUnit_Framework_TestCase
 
 		$testEndpoint = array(
 			"name" => "RSSImporterTest",
-			"type_id" => $type->id,
+			"endpointType" => $type,
 			"base_url" => "http://localhost/" . TEST_RESOURCE_PATH,
 			"api_key" => "xml",
 			"username" => '',

@@ -40,7 +40,7 @@ class PreviewsWorldImporterTest extends PHPUnit_Framework_TestCase
 
 		$testEndpoint = array(
 			"name" => "PreviewsWorldImporterTest",
-			"type_id" => $type->id,
+			"endpointType" => $type,
 			"base_url" => "http://localhost/" . TEST_RESOURCE_PATH,
 			"api_key" => "txt",
 			"username" => '',
@@ -50,8 +50,8 @@ class PreviewsWorldImporterTest extends PHPUnit_Framework_TestCase
 		list($endpoint, $errors) = Model::Named( "Endpoint" )->createObject($testEndpoint);
 		$endpoint != null || die( "Could not create 'test' endpoint type for PreviewsWorldImporterTest " . var_export($errors, true)  );
 
-		$dict = array("endpoint_type_id" => $type->id);
-		$notQual = \db\Qualifier::NotEquals( "endpoint_type_id", $type->id);
+		$dict = array("endpoint_type_code" => $type->code);
+		$notQual = \db\Qualifier::NotEquals( "endpoint_type_code", $type->code);
 		$update = \SQL::Update(Model::Named("Pull_List_Expansion"), $notQual, $dict);
 		$update->commitTransaction();
 		$update = \SQL::Update(Model::Named("Pull_List_Exclusion"), $notQual, $dict);

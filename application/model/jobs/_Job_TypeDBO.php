@@ -29,6 +29,11 @@ abstract class _Job_TypeDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Job_Type::code};
+	}
+
 	public function isScheduled() {
 		return (isset($this->scheduled) && $this->scheduled == Model::TERTIARY_TRUE);
 	}
@@ -41,9 +46,9 @@ abstract class _Job_TypeDBO extends DataObject
 	// to-many relationship
 	public function jobsRunning()
 	{
-		if ( isset( $this->id ) ) {
+		if ( isset( $this->code ) ) {
 			$model = Model::Named('Job_Running');
-			return $model->allObjectsForKeyValue( Job_Running::type_id, $this->id);
+			return $model->allObjectsForKeyValue( Job_Running::type_code, $this->code);
 		}
 
 		return false;
@@ -52,9 +57,9 @@ abstract class _Job_TypeDBO extends DataObject
 	// to-many relationship
 	public function jobs()
 	{
-		if ( isset( $this->id ) ) {
+		if ( isset( $this->code ) ) {
 			$model = Model::Named('Job');
-			return $model->allObjectsForKeyValue( Job::type_id, $this->id);
+			return $model->allObjectsForKeyValue( Job::type_code, $this->code);
 		}
 
 		return false;
@@ -62,16 +67,6 @@ abstract class _Job_TypeDBO extends DataObject
 
 
 	/** Attributes */
-	public function code()
-	{
-		return parent::changedValue( Job_Type::code, $this->code );
-	}
-
-	public function setCode( $value = null)
-	{
-		parent::storeChange( Job_Type::code, $value );
-	}
-
 	public function name()
 	{
 		return parent::changedValue( Job_Type::name, $this->name );

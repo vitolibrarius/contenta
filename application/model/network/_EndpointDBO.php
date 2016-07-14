@@ -22,7 +22,7 @@ use \model\jobs\JobDBO as JobDBO;
 
 abstract class _EndpointDBO extends DataObject
 {
-	public $type_id;
+	public $type_code;
 	public $name;
 	public $base_url;
 	public $api_key;
@@ -33,6 +33,11 @@ abstract class _EndpointDBO extends DataObject
 	public function displayName()
 	{
 		return $this->name;
+	}
+
+	public function pkValue()
+	{
+		return $this->{Endpoint::id};
 	}
 
 	public function isEnabled() {
@@ -47,17 +52,17 @@ abstract class _EndpointDBO extends DataObject
 	// to-one relationship
 	public function endpointType()
 	{
-		if ( isset( $this->type_id ) ) {
+		if ( isset( $this->type_code ) ) {
 			$model = Model::Named('Endpoint_Type');
-			return $model->objectForId($this->type_id);
+			return $model->objectForCode($this->type_code);
 		}
 		return false;
 	}
 
 	public function setEndpointType(Endpoint_TypeDBO $obj = null)
 	{
-		if ( isset($obj, $obj->id) && (isset($this->type_id) == false || $obj->id != $this->type_id) ) {
-			parent::storeChange( Endpoint::type_id, $obj->id );
+		if ( isset($obj, $obj->code) && (isset($this->type_code) == false || $obj->code != $this->type_code) ) {
+			parent::storeChange( Endpoint::type_code, $obj->code );
 			$this->saveChanges();
 		}
 	}

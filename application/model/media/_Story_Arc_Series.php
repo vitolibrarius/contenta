@@ -68,6 +68,9 @@ abstract class _Story_Arc_Series extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForStory_arc($obj)
 	{
 		return $this->allObjectsForFK(Story_Arc_Series::story_arc_id, $obj, $this->sortOrder(), 50);

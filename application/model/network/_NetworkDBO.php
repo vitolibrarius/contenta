@@ -20,6 +20,11 @@ abstract class _NetworkDBO extends DataObject
 	public $disable;
 
 
+	public function pkValue()
+	{
+		return $this->{Network::id};
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Network::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Network::created, "M d, Y" ); }
 

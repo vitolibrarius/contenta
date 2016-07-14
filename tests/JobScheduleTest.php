@@ -83,7 +83,7 @@ if ( is_array($points) == false || count($points) == 0) {
 	if ( $metadata->isMeta( \model\network\Endpoint::api_key ) == false )
 	{
 		$metadata->setMeta( \model\network\Endpoint::name, "My ComicVine" );
-		$metadata->setMeta( \model\network\Endpoint::type_id, $cv_endpoint_type->id );
+		$metadata->setMeta( \model\network\Endpoint::type_code, $cv_endpoint_type->code );
 		$metadata->setMeta( \model\network\Endpoint::base_url, $cv_endpoint_type->api_url );
 		$metadata->setMeta( \model\network\Endpoint::api_key, "YOUR API KEY HERE" );
 		$metadata->setMeta( \model\network\Endpoint::username, 'vito' );
@@ -143,7 +143,7 @@ clearAllData( $job_model );
 
 $job_data = array(
 	array(
-		model\Job::type_id => $test_job_type->id,
+		model\Job::type_code => $test_job_type->code,
 		model\Job::minute => "*/1",
 		model\Job::hour => "*",
 		model\Job::dayOfWeek => "*",
@@ -153,7 +153,7 @@ $job_data = array(
 		model\Job::enabled => Model::TERTIARY_TRUE
 	),
 	array(
-		model\Job::type_id => $test_job_type->id,
+		model\Job::type_code => $test_job_type->code,
 		model\Job::minute => "*/2",
 		model\Job::hour => "*",
 		model\Job::dayOfWeek => "*",
@@ -163,7 +163,7 @@ $job_data = array(
 		model\Job::enabled => Model::TERTIARY_TRUE
 	),
 	array(
-		model\Job::type_id => $test_job_type->id,
+		model\Job::type_code => $test_job_type->code,
 		model\Job::minute => "*/3",
 		model\Job::hour => "*",
 		model\Job::dayOfWeek => "*",
@@ -173,7 +173,7 @@ $job_data = array(
 		model\Job::enabled => Model::TERTIARY_TRUE
 	),
 	array(
-		model\Job::type_id => $character_job_type->id,
+		model\Job::type_code => $character_job_type->code,
 		model\Job::minute => "*",
 		model\Job::hour => "*",
 		model\Job::dayOfWeek => "*",

@@ -28,8 +28,7 @@ class Migration_4 extends Migrator
 	{
 		/** JOB_TYPE */
 		$sql = "CREATE TABLE IF NOT EXISTS job_type ( "
-			. Job_Type::id . " INTEGER PRIMARY KEY, "
-			. Job_Type::code . " TEXT, "
+			. Job_Type::code . " TEXT PRIMARY KEY, "
 			. Job_Type::name . " TEXT, "
 			. Job_Type::desc . " TEXT, "
 			. Job_Type::processor . " TEXT, "
@@ -39,15 +38,13 @@ class Migration_4 extends Migrator
 		. ")";
 		$this->sqlite_execute( "job_type", $sql, "Create table job_type" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS job_type_code on job_type (code)';
-		$this->sqlite_execute( "job_type", $sql, "Index on job_type (code)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS job_type_name on job_type (name)';
 		$this->sqlite_execute( "job_type", $sql, "Index on job_type (name)" );
 
 		/** JOB */
 		$sql = "CREATE TABLE IF NOT EXISTS job ( "
 			. Job::id . " INTEGER PRIMARY KEY, "
-			. Job::type_id . " INTEGER, "
+			. Job::type_code . " TEXT, "
 			. Job::endpoint_id . " INTEGER, "
 			. Job::enabled . " INTEGER, "
 			. Job::one_shot . " INTEGER, "
@@ -61,7 +58,7 @@ class Migration_4 extends Migrator
 			. Job::last_run . " INTEGER, "
 			. Job::last_fail . " INTEGER, "
 			. Job::created . " INTEGER, "
-			. "FOREIGN KEY (". Job::type_id .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::id . "),"
+			. "FOREIGN KEY (". Job::type_code .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::code . "),"
 			. "FOREIGN KEY (". Job::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
 		. ")";
 		$this->sqlite_execute( "job", $sql, "Create table job" );
@@ -70,14 +67,14 @@ class Migration_4 extends Migrator
 		$sql = "CREATE TABLE IF NOT EXISTS job_running ( "
 			. Job_Running::id . " INTEGER PRIMARY KEY, "
 			. Job_Running::job_id . " INTEGER, "
-			. Job_Running::type_id . " INTEGER, "
+			. Job_Running::type_code . " TEXT, "
 			. Job_Running::processor . " TEXT, "
 			. Job_Running::guid . " TEXT, "
 			. Job_Running::pid . " INTEGER, "
 			. Job_Running::desc . " TEXT, "
 			. Job_Running::created . " INTEGER, "
 			. "FOREIGN KEY (". Job_Running::job_id .") REFERENCES " . Job::TABLE . "(" . Job::id . "),"
-			. "FOREIGN KEY (". Job_Running::type_id .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::id . ")"
+			. "FOREIGN KEY (". Job_Running::type_code .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::code . ")"
 		. ")";
 		$this->sqlite_execute( "job_running", $sql, "Create table job_running" );
 
@@ -181,7 +178,7 @@ class Migration_4 extends Migrator
 		);
 
 		foreach ($types as $dict) {
-			$existing = \SQL::raw( "select id FROM " . Job_Type::TABLE . " where code = :code", array( ":code" => $dict[Job_Type::code]));
+			$existing = \SQL::raw( "select code FROM " . Job_Type::TABLE . " where code = :code", array( ":code" => $dict[Job_Type::code]));
 			if ( is_array($existing) && count($existing) > 0) {
 				$update = \SQL::Update($job_type_model, Qualifier::Equals( "code", $dict[Job_Type::code]), $dict);
 				$update->commitTransaction();

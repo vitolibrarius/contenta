@@ -88,6 +88,9 @@ abstract class _Pull_List_Group extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 
 	public function joinAttributes( Model $joinModel = null )
 	{

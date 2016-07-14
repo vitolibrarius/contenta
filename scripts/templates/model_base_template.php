@@ -87,7 +87,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 ?>
 
 	public function tableName() { return <?php echo $this->modelClassName(); ?>::TABLE; }
-	public function tablePK() { return <?php echo $this->modelClassName(); ?>::id; }
+	public function tablePK() { return <?php echo $this->modelClassName() . "::" . $this->primaryKeys[0]; ?>; }
 
 	public function sortOrder()
 	{
@@ -119,7 +119,7 @@ foreach( $objectAttributes as $name => $detailArray ) {
 <?php foreach( $objectAttributes as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['type'])) : ?>
 <?php if ('TEXT' == $detailArray['type']) : ?>
-<?php if ( $this->isUniqueAttribute($name)) : ?>
+<?php if ( $this->isUniqueAttribute($name) || $this->isPrimaryKey($name)) : ?>
 	public function objectFor<?php echo ucwords($name); ?>($value)
 	{
 		return $this->singleObjectForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
@@ -161,6 +161,9 @@ foreach( $objectAttributes as $name => $detailArray ) {
 <?php endif; // has type ?>
 <?php endforeach; // attribute loop ?>
 
+	/**
+	 * Simple relationship fetches
+	 */
 <?php if (is_array($objectRelationships)) : ?>
 <?php foreach( $objectRelationships as $name => $detailArray ) : ?>
 <?php if (isset($detailArray['isToMany']) == false || $detailArray['isToMany'] == false) : ?>

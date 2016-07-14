@@ -270,7 +270,7 @@ class AdminPublication extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$ep_model = Model::Named('Endpoint');
-			$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+			$points = $ep_model->allForType_code(Endpoint_Type::ComicVine);
 			if ( $points == false || count($points) == 0) {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) );
 				header('location: ' . Config::Web('/netconfig/index'));
@@ -296,7 +296,7 @@ class AdminPublication extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$ep_model = Model::Named('Endpoint');
-			$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+			$points = $ep_model->allForType_code(Endpoint_Type::ComicVine);
 			if ( $points == false || count($points) == 0) {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) );
 			}
@@ -341,7 +341,7 @@ class AdminPublication extends Admin
 				$importer = new ComicVineImporter( Publication::TABLE . "_" .$xid );
 				if ( $importer->endpoint() == false ) {
 					$ep_model = Model::Named('Endpoint');
-					$points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
+					$points = $ep_model->allForType_code(Endpoint_Type::ComicVine);
 					if ( $points == false || count($points) == 0) {
 						Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) );
 					}

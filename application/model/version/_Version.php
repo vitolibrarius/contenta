@@ -103,6 +103,9 @@ abstract class _Version extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 
 	public function joinAttributes( Model $joinModel = null )
 	{

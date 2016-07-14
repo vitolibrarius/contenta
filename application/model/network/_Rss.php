@@ -163,6 +163,9 @@ abstract class _Rss extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForEndpoint($obj)
 	{
 		return $this->allObjectsForFK(Rss::endpoint_id, $obj, $this->sortOrder(), 50);

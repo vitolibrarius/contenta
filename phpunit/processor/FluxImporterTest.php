@@ -51,11 +51,11 @@ class FluxImporterTest extends PHPUnit_Framework_TestCase
 			"throttle_time" => "2"
 		);
 		list($type, $errors) = Model::Named( "Endpoint_Type" )->createObject($sab_EndpointType);
-		$type != null || die( "Could not create 'sab' endpoint type for FluxImporterTest " . var_export($errors, true) );
+		$type != false || die( "Could not create 'sab' endpoint type for FluxImporterTest " . var_export($type, true) );
 
 		$sab_Endpoint = array(
 			"name" => "FluxImporterTest-Sabnzbd",
-			"type_id" => $type->id,
+			"endpointType" => $type,
 			"base_url" => "http://localhost/" . TEST_RESOURCE_PATH,
 			"api_key" => "xml",
 			"username" => '',
@@ -90,7 +90,7 @@ class FluxImporterTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testSetEndpoint()
 	{
-		$endpointArray = Model::Named('Endpoint')->allForTypeCode( "SabnzbdTest" );
+		$endpointArray = Model::Named('Endpoint')->allForType_code( "SabnzbdTest" );
 		$this->assertCount( 1, $endpointArray );
 		$this->importer->setEndpoint($endpointArray[0]);
 		$this->assertNotNull( $this->importer->endpoint(), "Could not find 'RssImporter' endpoint" );

@@ -65,7 +65,7 @@ function configureEndpoint() {
 		if ( $metadata->isMeta( \model\network\Endpoint::api_key ) == false )
 		{
 			$metadata->setMeta( \model\network\Endpoint::name, "My ComicVine" );
-			$metadata->setMeta( \model\network\Endpoint::type_id, $cv_endpoint_type->id );
+			$metadata->setMeta( \model\network\Endpoint::type_code, $cv_endpoint_type->code );
 			$metadata->setMeta( \model\network\Endpoint::base_url, $cv_endpoint_type->api_url );
 			$metadata->setMeta( \model\network\Endpoint::api_key, "YOUR API KEY HERE" );
 			$metadata->setMeta( \model\network\Endpoint::username, 'vito' );

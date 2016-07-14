@@ -6,6 +6,7 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
+use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
 use \model\media\PublicationDBO as PublicationDBO;

@@ -7,6 +7,7 @@ use \MigrationFailedException as MigrationFailedException;
 use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
+use \Database as Database;
 use \SQL as SQL;
 
 use \model\user\Users as Users;
@@ -27,14 +28,11 @@ class Migration_2 extends Migrator
 	{
 		/** LOG_LEVEL */
 		$sql = "CREATE TABLE IF NOT EXISTS log_level ( "
-			. Log_Level::id . " INTEGER PRIMARY KEY, "
-			. Log_Level::code . " TEXT, "
+			. Log_Level::code . " TEXT PRIMARY KEY, "
 			. Log_Level::name . " TEXT "
 		. ")";
 		$this->sqlite_execute( "log_level", $sql, "Create table log_level" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_code on log_level (code)';
-		$this->sqlite_execute( "log_level", $sql, "Index on log_level (code)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_name on log_level (name)';
 		$this->sqlite_execute( "log_level", $sql, "Index on log_level (name)" );
 
@@ -73,14 +71,8 @@ class Migration_2 extends Migrator
 		foreach ($log_levels as $code => $name) {
 			if ($log_level_model->objectForCode($code) == false)
 			{
-				$insert = SQL::Insert( $log_level_model );
-				$insert->addRecord( array(
-					Log_Level::id => array_search($code, array_keys($log_levels)),
-					Log_Level::code => $code,
-					Log_Level::name => $name
-					)
-				 );
-				$success = $insert->commitTransaction();
+				$sql = "INSERT INTO " . $log_level_model->tableName() . " ( code, name ) values ( :C, :N )";
+				Database::instance()->execute_sql($sql, array( ":C" => $code, ":N" => $name ) );
 			}
 		}
 	}

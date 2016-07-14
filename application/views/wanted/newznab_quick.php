@@ -31,7 +31,7 @@
 				<?php echo ($item['password'] == true ? "<em>**** password protected</em>" : ""); ?>
 			</td>
 			<td>
-				<?php $fluxArray = $this->fluxModel->objectForSourceIdEndpointGUID( $this->endpoint_id, $item['guid'] );
+				<?php $fluxArray = $this->fluxModel->objectForSrc_guid( $item['guid'] );
 					if ($fluxArray == false ) : ?>
 						<div id="dnld_<?php echo $item['safe_guid']; ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"

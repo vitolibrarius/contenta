@@ -17,13 +17,18 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 abstract class _Job_RunningDBO extends DataObject
 {
 	public $job_id;
-	public $type_id;
+	public $type_code;
 	public $processor;
 	public $guid;
 	public $pid;
 	public $desc;
 	public $created;
 
+
+	public function pkValue()
+	{
+		return $this->{Job_Running::id};
+	}
 
 	public function formattedDateTime_created() { return $this->formattedDate( Job_Running::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Job_Running::created, "M d, Y" ); }
@@ -50,17 +55,17 @@ abstract class _Job_RunningDBO extends DataObject
 	// to-one relationship
 	public function jobType()
 	{
-		if ( isset( $this->type_id ) ) {
+		if ( isset( $this->type_code ) ) {
 			$model = Model::Named('Job_Type');
-			return $model->objectForId($this->type_id);
+			return $model->objectForCode($this->type_code);
 		}
 		return false;
 	}
 
 	public function setJobType(Job_TypeDBO $obj = null)
 	{
-		if ( isset($obj, $obj->id) && (isset($this->type_id) == false || $obj->id != $this->type_id) ) {
-			parent::storeChange( Job_Running::type_id, $obj->id );
+		if ( isset($obj, $obj->code) && (isset($this->type_code) == false || $obj->code != $this->type_code) ) {
+			parent::storeChange( Job_Running::type_code, $obj->code );
 			$this->saveChanges();
 		}
 	}

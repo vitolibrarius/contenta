@@ -2,7 +2,7 @@
     "attributes": {
         "id": { "column": "id", "type": "INTEGER" },
         "job_id": { "column": "job_id", "type": "INTEGER" },
-        "type_id": { "column": "type_id", "type": "INTEGER" },
+        "type_code": { "column": "type_code", "type": "TEXT", "length": 10 },
         "processor": { "column": "processor", "length": 256, "type": "TEXT", "nullable": false },
         "guid": { "column": "guid", "length": 256, "type": "TEXT" },
         "pid": { "column": "pid", "type": "INTEGER", "nullable": false },
@@ -34,7 +34,7 @@
     		"destinationPackage" : "\\model\\jobs\\",
     		"destinationTable" : "job_type",
     		"joins" : [
-    			{ "destinationAttribute": "id", "sourceAttribute" : "type_id" }
+    			{ "destinationAttribute": "code", "sourceAttribute" : "type_code" }
     		],
     		"isMandatory": false,
             "isToMany" : false,

@@ -25,7 +25,7 @@
 </div>
 
 <!-- 	const id =			'id';
-	const type_id =		'type_id';
+	const type_code =		'type_code';
 	const endpoint_id =	'endpoint_id';
 	const minute =		'minute';
 	const hour =		'hour';
@@ -40,7 +40,7 @@
 <div class="mediaData">
 	<table>
 		<tr>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "type_id" ); ?></th>
+			<th><?php echo Localized::ModelLabel($this->model->tableName(), "type_code" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "endpoint_id" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "minute" ); ?></th>
 			<th><?php echo Localized::ModelLabel($this->model->tableName(), "hour" ); ?></th>

@@ -46,6 +46,11 @@ abstract class _SeriesDBO extends DataObject
 		return $this->name;
 	}
 
+	public function pkValue()
+	{
+		return $this->{Series::id};
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Series::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Series::created, "M d, Y" ); }
 

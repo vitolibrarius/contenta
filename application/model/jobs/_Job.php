@@ -25,7 +25,7 @@ use \model\network\EndpointDBO as EndpointDBO;
 /*
 		$sql = "CREATE TABLE IF NOT EXISTS job ( "
 			. Job::id . " INTEGER PRIMARY KEY, "
-			. Job::type_id . " INTEGER, "
+			. Job::type_code . " TEXT, "
 			. Job::endpoint_id . " INTEGER, "
 			. Job::enabled . " INTEGER, "
 			. Job::one_shot . " INTEGER, "
@@ -39,7 +39,7 @@ use \model\network\EndpointDBO as EndpointDBO;
 			. Job::last_run . " INTEGER, "
 			. Job::last_fail . " INTEGER, "
 			. Job::created . " INTEGER, "
-			. "FOREIGN KEY (". Job::type_id .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::id . "),"
+			. "FOREIGN KEY (". Job::type_code .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::code . "),"
 			. "FOREIGN KEY (". Job::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
 		. ")";
 		$this->sqlite_execute( "job", $sql, "Create table job" );
@@ -49,7 +49,7 @@ abstract class _Job extends Model
 {
 	const TABLE = 'job';
 	const id = 'id';
-	const type_id = 'type_id';
+	const type_code = 'type_code';
 	const endpoint_id = 'endpoint_id';
 	const enabled = 'enabled';
 	const one_shot = 'one_shot';
@@ -78,7 +78,7 @@ abstract class _Job extends Model
 	{
 		return array(
 			Job::id,
-			Job::type_id,
+			Job::type_code,
 			Job::endpoint_id,
 			Job::enabled,
 			Job::one_shot,
@@ -98,6 +98,11 @@ abstract class _Job extends Model
 	/**
 	 *	Simple fetches
 	 */
+
+	public function allForType_code($value)
+	{
+		return $this->allObjectsForKeyValue(Job::type_code, $value);
+	}
 
 
 
@@ -142,15 +147,18 @@ abstract class _Job extends Model
 
 
 
+	/**
+	 * Simple relationship fetches
+	 */
 	public function allForJobType($obj)
 	{
-		return $this->allObjectsForFK(Job::type_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Job::type_code, $obj, $this->sortOrder(), 50);
 	}
 
 	public function countForJobType($obj)
 	{
 		if ( is_null($obj) == false ) {
-			return $this->countForFK( Job::type_id, $obj );
+			return $this->countForFK( Job::type_code, $obj );
 		}
 		return false;
 	}
@@ -172,7 +180,7 @@ abstract class _Job extends Model
 		if ( is_null($joinModel) == false ) {
 			switch ( $joinModel->tableName() ) {
 				case "job_type":
-					return array( Job::type_id, "id"  );
+					return array( Job::type_code, "code"  );
 					break;
 				case "endpoint":
 					return array( Job::endpoint_id, "id"  );
@@ -269,10 +277,10 @@ abstract class _Job extends Model
 			if ( isset($values['jobType']) ) {
 				$local_jobType = $values['jobType'];
 				if ( $local_jobType instanceof Job_TypeDBO) {
-					$values[Job::type_id] = $local_jobType->id;
+					$values[Job::type_code] = $local_jobType->code;
 				}
-				else if ( is_integer( $local_jobType) ) {
-					$params[Job::type_id] = $local_jobType;
+				else if ( is_string( $local_jobType) ) {
+					$params[Job::type_code] = $local_jobType;
 				}
 			}
 			if ( isset($values['endpoint']) ) {
@@ -293,10 +301,10 @@ abstract class _Job extends Model
 			if ( isset($values['jobType']) ) {
 				$local_jobType = $values['jobType'];
 				if ( $local_jobType instanceof Job_TypeDBO) {
-					$values[Job::type_id] = $local_jobType->id;
+					$values[Job::type_code] = $local_jobType->code;
 				}
-				else if ( is_integer( $local_jobType) ) {
-					$params[Job::type_id] = $values['jobType'];
+				else if ( is_string( $local_jobType) ) {
+					$params[Job::type_code] = $values['jobType'];
 				}
 			}
 			if ( isset($values['endpoint']) ) {
@@ -374,7 +382,7 @@ abstract class _Job extends Model
 	{
 		if ( is_null($object) ) {
 			return array(
-				Job::type_id,
+				Job::type_code,
 				Job::minute,
 				Job::hour,
 				Job::dayOfWeek,
@@ -386,7 +394,7 @@ abstract class _Job extends Model
 
 	public function attributesMap() {
 		return array(
-			Job::type_id => Model::TO_ONE_TYPE,
+			Job::type_code => Model::TO_ONE_TYPE,
 			Job::endpoint_id => Model::TO_ONE_TYPE,
 			Job::enabled => Model::FLAG_TYPE,
 			Job::one_shot => Model::FLAG_TYPE,
@@ -415,13 +423,13 @@ abstract class _Job extends Model
 	/**
 	 * Validation
 	 */
-	function validate_type_id($object = null, $value)
+	function validate_type_code($object = null, $value)
 	{
 		// check for mandatory field
 		if (isset($value) == false || empty($value)  ) {
 			return Localized::ModelValidation(
 				$this->tableName(),
-				Job::type_id,
+				Job::type_code,
 				"FIELD_EMPTY"
 			);
 		}

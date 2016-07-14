@@ -30,8 +30,7 @@ class Migration_3 extends Migrator
 	{
 		/** ENDPOINT_TYPE */
 		$sql = "CREATE TABLE IF NOT EXISTS endpoint_type ( "
-			. Endpoint_Type::id . " INTEGER PRIMARY KEY, "
-			. Endpoint_Type::code . " TEXT, "
+			. Endpoint_Type::code . " TEXT PRIMARY KEY, "
 			. Endpoint_Type::name . " TEXT, "
 			. Endpoint_Type::comments . " TEXT, "
 			. Endpoint_Type::data_type . " TEXT, "
@@ -43,22 +42,20 @@ class Migration_3 extends Migrator
 		. ")";
 		$this->sqlite_execute( "endpoint_type", $sql, "Create table endpoint_type" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS endpoint_type_code on endpoint_type (code)';
-		$this->sqlite_execute( "endpoint_type", $sql, "Index on endpoint_type (code)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS endpoint_type_name on endpoint_type (name)';
 		$this->sqlite_execute( "endpoint_type", $sql, "Index on endpoint_type (name)" );
 
 		/** ENDPOINT */
 		$sql = "CREATE TABLE IF NOT EXISTS endpoint ( "
 			. Endpoint::id . " INTEGER PRIMARY KEY, "
-			. Endpoint::type_id . " INTEGER, "
+			. Endpoint::type_code . " TEXT, "
 			. Endpoint::name . " TEXT, "
 			. Endpoint::base_url . " TEXT, "
 			. Endpoint::api_key . " TEXT, "
 			. Endpoint::username . " TEXT, "
 			. Endpoint::enabled . " INTEGER, "
 			. Endpoint::compressed . " INTEGER, "
-			. "FOREIGN KEY (". Endpoint::type_id .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::id . ")"
+			. "FOREIGN KEY (". Endpoint::type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
 		. ")";
 		$this->sqlite_execute( "endpoint", $sql, "Create table endpoint" );
 
@@ -112,10 +109,10 @@ class Migration_3 extends Migrator
 		. ")";
 		$this->sqlite_execute( "flux", $sql, "Create table flux" );
 
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_src_endpointsrc_guid on flux (src_endpoint,src_guid)';
-		$this->sqlite_execute( "flux", $sql, "Index on flux (src_endpoint,src_guid)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_dest_endpointdest_guid on flux (dest_endpoint,dest_guid)';
-		$this->sqlite_execute( "flux", $sql, "Index on flux (dest_endpoint,dest_guid)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_src_guid on flux (src_guid)';
+		$this->sqlite_execute( "flux", $sql, "Index on flux (src_guid)" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_dest_guid on flux (dest_guid)';
+		$this->sqlite_execute( "flux", $sql, "Index on flux (dest_guid)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS flux_flux_hash on flux (flux_hash)';
 		$this->sqlite_execute( "flux", $sql, "Index on flux (flux_hash)" );
 
@@ -206,7 +203,7 @@ class Migration_3 extends Migrator
 		foreach ($types as $dict) {
 			$type = \SQL::Select( $ept_model, array( "code", "name") )->whereEqual( "code", $dict["code"] )->fetch();
 			if ($type == false) {
-				$newObjId = \SQL::Insert($ept_model)->addRecord($dict)->commitTransaction();
+				$newObjId = \SQL::Insert($ept_model, $ept_model->allColumnNames())->addRecord($dict)->commitTransaction();
 			}
 			else {
 				\SQL::Update($ept_model, $dict)->commitTransaction();

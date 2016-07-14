@@ -19,7 +19,7 @@
 
 				<?php if (isset($this->object) == false) : ?>
 					<?php
-						$attr = \model\network\Endpoint::type_id;
+						$attr = \model\network\Endpoint::type_code;
 						$attrName = $this->model->attributeName(null, null, $attr);
 
 						$this->renderFormField( \Model::TO_ONE_TYPE, null, null, $this->model, $attr, null, true );

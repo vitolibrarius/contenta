@@ -131,7 +131,7 @@ my_echo( "- - - - -" . PHP_EOL);
 
 $join = SQL::SelectJoin( Model::Named("Series"), null, db\Qualifier::Equals( "name", "David" ));
 $join->joinOn( Model::Named("Series"), Model::Named("Publication"), array("name"), db\Qualifier::Equals( "name", "pubname" ));
-$join->joinOn( Model::Named("Publication"), Model::Named("Media"), array("checksum"), db\Qualifier::Equals( "type_id", "1" ));
+$join->joinOn( Model::Named("Publication"), Model::Named("Media"), array("checksum"), db\Qualifier::Equals( "type_code", "cbz" ));
 my_echo( "SQL: " . $join->sqlStatement() . PHP_EOL . var_export($join->sqlParameters(), true));
 my_echo( "- - - - -" . PHP_EOL);
 
