@@ -51,6 +51,7 @@ class Migrator
 
 			// re-create data tables
 			Migrator::ApplyNeededMigrations($scratchDirectory);
+			Database::ResetConnection();
 
 			// reload old data
 			$skipTables = array( "version", "patch", "log_level", "endpoint_type", "job_type", "media_type", "pull_list_excl", "pull_list_expansion");
@@ -132,6 +133,12 @@ class Migrator
 					Logger::logInfo( "Fixing $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("update series_old set search_name = lower(name) where search_name is null or length(search_name) < 2");
 					break;
+				case 'flux_old':
+					Logger::logInfo( "Fixing $oldTable", "Migrator", "FixOldDataIssues" );
+					$dbConnection->execute_sql("delete from flux_old where src_guid in "
+						. "(select src_guid from flux_old group by src_guid having count(*) > 1)"
+					);
+					break;
 				case 'rss_old':
 					Logger::logInfo( "Fixing $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("delete from rss_old where guid in "
@@ -181,6 +188,8 @@ class Migrator
 		}
 
 		$copySrcToDestColumn = array();
+		$destKeys = array();
+		$sourceKeys = array();
 		foreach( $srcColumns as $sCol => $sDetails ) {
 			$dCol = $sCol;
 			if ( isset( $specialMappings[$sCol] ) ) {
@@ -189,38 +198,17 @@ class Migrator
 
 			if ( isset($destColumns[$dCol]) ) {
 				$copySrcToDestColumn[$sCol] = $dCol;
+				$destKeys[] = $dCol;
+				$sourceKeys[] = $sCol;
 			}
 			else {
 				Logger::logWarning( "$srcTable column '$sCol' will be dropped from $destTable", "Migrator", "LoadDataFromTo" );
 			}
 		}
 
-		/* this could be faster using a select .. into but this way makes it easier to identify specific data issues */
-		$batch = 0;
-		$count = 0;
-		while ( true ) {
-			$data = $dbConnection->dbFetchRawBatch( $srcTable, $batch );
-			if ( $data == false )  {
-				break;
-			}
-
-			foreach( $data as $row ) {
-				$insertKeys = array();
-				$insertParams = array();
-				$insertValues = array();
-				foreach( $row as $column => $value ) {
-					if ( isset($copySrcToDestColumn[$column]) ) {
-						$insertKeys[] = $copySrcToDestColumn[$column];
-						$insertParams[] = ":".$column;
-						$insertValues[":".$column] = $value;
-					}
-				}
-				$sql = "INSERT INTO " . $destTable . " (" . implode(",", $insertKeys) . ") values (" . implode(",", $insertParams) . ")";
-				$dbConnection->execute_sql($sql, $insertValues);
-			}
-			$batch ++;
-			$count += count($data);
-		}
+		$sql = "INSERT INTO " . $destTable . " (" . implode(",", $destKeys) . ") select " . implode(",", $sourceKeys) . " from " . $srcTable;
+		//Logger::logWarning( "$sql", "Migrator", "LoadDataFromTo" );
+		$dbConnection->execute_sql($sql);
 
 		$destCount = $dbConnection->dbFetchRawCount( $destTable );
 		if ( $destCount != $srcCount ) {
