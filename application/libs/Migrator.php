@@ -41,6 +41,7 @@ class Migrator
 				if ( endsWith( '_old', $oldTable ) == false ) {
 					$oldTableMap[$oldTable] = $dbConnection->dbPKForTable($oldTable);
 					$dbConnection->dbTableRename( $oldTable, $oldTable . '_old' );
+					Logger::logInfo( "Backup old $oldTable", "Migrator", "Upgrade" );
 
 					Migrator::FixOldDataIssues( $dbConnection,  $oldTable . '_old' );
 				}
@@ -55,6 +56,7 @@ class Migrator
 			$skipTables = array( "version", "patch", "log_level", "endpoint_type", "job_type", "media_type", "pull_list_excl", "pull_list_expansion");
 			foreach( $oldTableMap as $tblName => $pkArray ) {
 				if ( in_array( $tblName, $skipTables ) == false ) {
+					Logger::logInfo( "Reloading $tblName", "Migrator", "Upgrade" );
 					Migrator::LoadDataFromTo(
 						$tblName . "_old",
 						$tblName,
@@ -65,17 +67,16 @@ class Migrator
 			Database::ResetConnection();
 
 			// drop old data
-// 			$dbConnection = new Database();
-// 			$oldTableNames = $dbConnection->dbTableNames();
-// 			foreach( $oldTableNames as $oldTable ) {
-// 				if ( endsWith( '_old', $oldTable ) == true ) {
-// 					Logger::logInfo( "drop table " . $oldTable, "Migrator", "Upgrade" );
-// 					$dbConnection->execute_sql( "drop table " . $oldTable );
-// 				}
-// 			}
-// 			$dbConnection->dbOptimize();
-// 			unset($dbConnection);
-
+			$dbConnection = new Database();
+			$oldTableNames = $dbConnection->dbTableNames();
+			foreach( $oldTableNames as $oldTable ) {
+				if ( endsWith( '_old', $oldTable ) == true ) {
+					Logger::logInfo( "drop table " . $oldTable, "Migrator", "Upgrade" );
+					$dbConnection->execute_sql( "drop table " . $oldTable );
+				}
+			}
+			$dbConnection->dbOptimize();
+			unset($dbConnection);
 
 			// update database version
 			$dbversion = Database::DBVersion(Database::CONTENTA_DB_VERSION);
@@ -102,35 +103,43 @@ class Migrator
 		if ( is_array( $allColumns ) ) {
 			switch ( $oldTable ) {
 				case 'job_running_old':
+					Logger::logInfo( "Fixing old $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("alter table ".$oldTable." add column type_code TEXT");
 					$dbConnection->execute_sql("update ".$oldTable." set type_code = (select code from job_type_old where job_type_old.id = ".$oldTable.".job_type_id)");
 					break;
 				case 'job_old':
+					Logger::logInfo( "Fixing old $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("alter table ".$oldTable." add column type_code TEXT");
 					$dbConnection->execute_sql("update ".$oldTable." set type_code = (select code from job_type_old where job_type_old.id = ".$oldTable.".type_id)");
 					break;
 				case 'endpoint_old':
+					Logger::logInfo( "Fixing old $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("alter table ".$oldTable." add column type_code TEXT");
 					$dbConnection->execute_sql("update ".$oldTable." set type_code = (select code from endpoint_type_old where endpoint_type_old.id = ".$oldTable.".type_id)");
 					break;
 				case 'pull_list_excl_old':
 				case 'pull_list_expansion_old':
+					Logger::logInfo( "Fixing old $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("alter table ".$oldTable." add column endpoint_type_code TEXT");
 					$dbConnection->execute_sql("update ".$oldTable." set endpoint_type_code = (select code from endpoint_type_old where endpoint_type_old.id = ".$oldTable.".endpoint_type_id)");
 					break;
 				case 'media_old':
+					Logger::logInfo( "Fixing old $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("alter table ".$oldTable." add column type_code TEXT");
 					$dbConnection->execute_sql("update ".$oldTable." set type_code = (select code from media_type_old where media_type_old.id = ".$oldTable.".type_id)");
 					break;
 				case 'series_old':
+					Logger::logInfo( "Fixing old $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("update series_old set search_name = lower(name) where search_name is null or length(search_name) < 2");
 					break;
 				case 'rss_old':
+					Logger::logInfo( "Fixing old $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("delete from rss_old where guid in "
 						. "(select guid from rss_old group by guid having count(*) > 1)"
 					);
 					break;
 				case 'series_character_old':
+					Logger::logInfo( "Fixing old $oldTable", "Migrator", "FixOldDataIssues" );
 					$count_sql = "select count(*) as COUNT from series_character_old as s "
 						. " inner join (select d.series_id, d.character_id from series_character_old d group by d.series_id, d.character_id having count(*) > 1) "
 						. " as dup on s.series_id = dup.series_id and s.character_id = dup.character_id";
