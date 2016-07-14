@@ -1,3 +1,6 @@
+Version 0.7.0:
+
+
 Version 0.5.2:
 * c343f03 -  (HEAD -> master) Issue #82 - unable to script the removal of the unique index, so I altered my database by hand and changed the original migration (Sat Mar 12 10:39:04 2016 -0700) <Vito Librarius>
 
