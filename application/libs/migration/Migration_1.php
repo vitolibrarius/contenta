@@ -57,5 +57,20 @@ class Migration_1 extends Migrator
 
 	public function sqlite_postUpgrade()
 	{
+		$values = array(
+			"name" => "vito",
+			"password_hash" => "$2y$10$486J2llu2CS.2DnXlTIQgOsk3tzcIVki428mjELHoEr/evhymDLGO",
+			"email" => "vitolibrarius@gmail.com",
+			"active" => 1,
+			"account_type" => Users::AdministratorRole,
+			"creation_timestamp" => time(),
+			"failed_logins" => 0,
+			"api_hash" => "4bd3b2b9075571c95ade00002334e7b2"
+		);
+
+		$users_model = new Users();
+		$insert = SQL::Insert( $users_model );
+		$insert->addRecord( $values );
+		$success = $insert->commitTransaction();
 	}
 }

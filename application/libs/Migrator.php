@@ -149,6 +149,11 @@ class Migrator
 					Logger::logInfo( "Fixing $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("delete from log_old where (created < strftime('%s','now') - (3600*24*14))");
 					break;
+				case 'users_old':
+					Logger::logInfo( "Fixing $oldTable", "Migrator", "FixOldDataIssues" );
+					// delete all the default users since we are restoring the users_old
+					$dbConnection->execute_sql("delete from users");
+					break;
 				case 'series_character_old':
 					Logger::logInfo( "Fixing $oldTable", "Migrator", "FixOldDataIssues" );
 					$count_sql = "select count(*) as COUNT from series_character_old as s "
