@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
 .row.data {
 	background-color: #e3e3e3;
 	vertical-align: middle;

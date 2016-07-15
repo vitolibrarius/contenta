@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
 	table.Log {border-collapse:collapse; }
 	table.Log tr td {background-color:#fff; word-wrap:break-word;}
 	table.Log tr.warning td {background-color:#FAF1F3;}

@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
 	.grid_xx {background-color:blue; word-wrap:break-word;}
 </style>
 
