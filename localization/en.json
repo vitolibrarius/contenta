@@ -28,6 +28,10 @@
             "desc": "Uploaded content that is stuck in processing.  Usually due to a failure to automatically identify the content",
             "name": "Repair Processing"
         },
+        "ReviewDefaultDataLink": {
+            "desc": "Some default records may change over time, this process will assit you by creating stub records to assist the configuration.",
+            "name": "Review Default Data Configuration"
+        },
         "UpgradeLink": {
             "desc": "Check for new versions of this software and upgrade if necessary",
             "name": "Check Version"
@@ -774,6 +778,7 @@
         "Application Version": "Application Version",
         "Confirm Upgrade": "Confirm Upgrade",
         "Current Configuration": "Current Configuration",
+        "Initialize-Restore-Data": "Initialize \/ Restore Data",
         "PHP Memory": "PHP Memory",
         "PHP POST size": "PHP POST size",
         "PHP Upload Filesize": "PHP Upload Filesize",

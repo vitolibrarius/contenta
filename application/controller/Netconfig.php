@@ -60,16 +60,20 @@ class Netconfig extends Controller
 		}
 	}
 
-	function edit_new()
+	function edit_new($typeCode = null)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
+			$model = Model::Named('Endpoint_Type');
 			$values = splitPOSTValues($_POST);
-			if ( isset($values, $values['endpoint'], $values['endpoint']['type_code']) ) {
-				$model = Model::Named('Endpoint_Type');
+			$type = (is_null($typeCode) ? null : $model->objectForId($typeCode));
+			if ( isset($values, $values['endpoint'], $values['endpoint']['type_code'])) {
 				$type = $model->objectForId($values['endpoint']['type_code']);
+			}
+
+			if ( is_null($type) == false) {
 				if ( $type instanceof Endpoint_TypeDBO ) {
 					$this->view->setLocalizedViewTitle("NewRecord");
 					$this->view->saveAction = "netconfig/save";

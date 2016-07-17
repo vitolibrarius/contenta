@@ -6,7 +6,8 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Database as Database;
 use \Model as Model;
-use \http\Session as Session;;
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
 use \Logger as Logger;
 use \Auth as Auth;
 
@@ -14,7 +15,11 @@ use \utilities\ShellCommand as ShellCommand;
 use \utilities\Git as Git;
 
 use \model\user\Users as Users;
-use processor\Migration as Migration;
+use \model\jobs\Job as Job;
+use \model\jobs\Job_Type as Job_Type;
+use \model\network\Endpoint as Endpoint;
+use \model\network\Endpoint_Type as Endpoint_Type;
+use \processor\Migration as Migration;
 
 
 class Upgrade extends Controller
@@ -171,4 +176,139 @@ class Upgrade extends Controller
 			}
 		}
 	}
+
+	function reviewDefaultData()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->setLocalizedViewTitle("Initialize-Restore-Data");
+			$this->view->controllerAction = "reviewDefaultData";
+			$this->view->render('/upgrade/defaultDataReview');
+		}
+	}
+
+	function createRss()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Endpoint');
+			$endpointType = Model::Named( "Endpoint_Type" ) ->RSS();
+			$values = array(
+				"endpointType" => $endpointType,
+				Endpoint::name => "rss.binsearch.net (a.b.comics.dcp)",
+				Endpoint::base_url => "http://rss.binsearch.net/rss.php?max=50&g=alt.binaries.comics.dcp",
+				Endpoint::enabled => true,
+				Endpoint::compressed => true
+			);
+			$model->createObject( $values );
+
+			$this->view->setLocalizedViewTitle("Initialize-Restore-Data");
+			$this->view->controllerAction = "reviewDefaultData";
+			$this->view->render('/upgrade/defaultDataReview');
+		}
+	}
+
+	function createJob($type = null, $endpointId = null)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			if ( is_null( $type ) == false ) {
+				$job_type_model = Model::Named( "Job_Type" );
+				$job_model = Model::Named( "Job" );
+				$jobType = $job_type_model->objectForCode($type);
+				if ( $jobType != false ) {
+					switch ($type) {
+						case Job_Type::character:
+						case Job_Type::publication:
+						case Job_Type::publisher:
+						case Job_Type::series:
+						case Job_Type::story_arc:
+							$comicVineArray = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::ComicVine);
+							if (is_array($comicVineArray) && count($comicVineArray) == 1 ) {
+								$values = array(
+									Job::type_code => $type,
+									"endpoint" => $comicVineArray[0],
+									Job::minute => "15",
+									Job::hour => "1",
+									Job::dayOfWeek => "*",
+									Job::enabled => true,
+									Job::one_shot => false
+								);
+								$job_model->createObject( $values );
+							}
+							break;
+
+						case Job_Type::newznab_search:
+							$values = array(
+								Job::type_code => $type,
+								Job::minute => "43",
+								Job::hour => "3",
+								Job::dayOfWeek => "*",
+								Job::enabled => true,
+								Job::one_shot => false
+							);
+							$job_model->createObject( $values );
+							break;
+						case Job_Type::previewsworld:
+							$pwArray = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::PreviewsWorld);
+							if (is_array($pwArray) && count($pwArray) == 1 ) {
+								$values = array(
+									Job::type_code => $type,
+									"endpoint" => $pwArray[0],
+									Job::minute => "15",
+									Job::hour => "1",
+									Job::dayOfWeek => "3",
+									Job::enabled => true,
+									Job::one_shot => false
+								);
+								$job_model->createObject( $values );
+							}
+							break;
+
+						case Job_Type::reprocessor:
+							$values = array(
+								Job::type_code => $type,
+								Job::minute => "0/20",
+								Job::hour => "*",
+								Job::dayOfWeek => "*",
+								Job::enabled => true,
+								Job::one_shot => false
+							);
+							$job_model->createObject( $values );
+						case Job_Type::rss: break;
+						case Job_Type::sabnzbd:
+							$sabArray = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::SABnzbd);
+							if (is_array($sabArray) && count($sabArray) == 1 ) {
+								$values = array(
+									Job::type_code => $type,
+									"endpoint" => $sabArray[0],
+									Job::minute => "*/12",
+									Job::hour => "*",
+									Job::dayOfWeek => "*",
+									Job::enabled => true,
+									Job::one_shot => false
+								);
+								$job_model->createObject( $values );
+							}
+						break;
+						default:
+							Session::addNegativeFeedback("Unknown type for job $type");
+							$this->view->render('/error/index');
+							break;
+					}
+
+					$this->view->setLocalizedViewTitle("Initialize-Restore-Data");
+					$this->view->controllerAction = "reviewDefaultData";
+					$this->view->render('/upgrade/defaultDataReview');
+				}
+				else {
+					Session::addNegativeFeedback("Unexpected error, failed to find job $type");
+					$this->view->render('/error/index');
+				}
+			}
+			else {
+				Session::addNegativeFeedback("Unexpected error, no job type specified");
+				$this->view->render('/error/index');
+			}
+		}
+	}
 }
+
+

@@ -51,6 +51,8 @@ class Migrator
 
 			// re-create data tables
 			Migrator::ApplyNeededMigrations($scratchDirectory);
+			// delete all the default users created by the migration since we are restoring the users_old
+			Database::instance()->execute_sql("delete from users");
 			Database::ResetConnection();
 
 			// reload old data
@@ -148,11 +150,6 @@ class Migrator
 				case 'log_old':
 					Logger::logInfo( "Fixing $oldTable", "Migrator", "FixOldDataIssues" );
 					$dbConnection->execute_sql("delete from log_old where (created < strftime('%s','now') - (3600*24*14))");
-					break;
-				case 'users_old':
-					Logger::logInfo( "Fixing $oldTable", "Migrator", "FixOldDataIssues" );
-					// delete all the default users since we are restoring the users_old
-					$dbConnection->execute_sql("delete from users");
 					break;
 				case 'series_character_old':
 					Logger::logInfo( "Fixing $oldTable", "Migrator", "FixOldDataIssues" );

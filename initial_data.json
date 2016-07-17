@@ -1,0 +1,46 @@
+{
+	"users": {
+		"admin": {
+			"name": "Admin Users",
+			"description": "Ensure at least 1 admin user",
+			"qualifier": {"account_type": "admin" },
+			"tests": [
+				"EnsureOne"
+			],
+			"default": {
+				"name": "vito",
+				"password": "contenta",
+				"password_check": "contenta",
+				"email": "vitolibrarius@gmail.com",
+				"active": true,
+				"account_type": "admin"
+			}
+		}
+	},
+	"endpoint": {
+		"comicvine": {
+			"name": "ComicVine Endpoint",
+			"description": "There should be a single ComicVine configured endpoint",
+			"qualifier": { "type_code": "ComicVine" },
+			"tests": [
+				"EnsureOne"
+			],
+			"default": {
+				"name": "vito",
+				"password": "contenta",
+				"password_check": "contenta",
+				"email": "vitolibrarius@gmail.com",
+				"active": true,
+				"account_type": "admin"
+			}
+
+			"match": { "type_code": "ComicVine", "base_url": "http://www.comicvine.gamespot.com/api" },
+			"reference": { "endpointType/name": "ComicVine (Comic book database)" },
+			"values": {
+				"name": "ComicVine at Gamespot",
+				"enabled": true,
+				"compressed": false
+			}
+		},
+
+}

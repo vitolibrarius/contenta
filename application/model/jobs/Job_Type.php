@@ -17,6 +17,18 @@ use \model\jobs\JobDBO as JobDBO;
 
 class Job_Type extends _Job_Type
 {
+	const character = "character";
+	const publication = "publication";
+	const publisher = "publisher";
+	const series = "series";
+	const story_arc = "story_arc";
+
+	const newznab_search = "newznab_search";
+	const previewsworld = "previewsworld";
+	const reprocessor = "reprocessor";
+	const rss = "rss";
+	const sabnzbd = "sabnzbd";
+
 	/**
 	 *	Create/Update functions
 	 */

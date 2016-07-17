@@ -208,6 +208,12 @@
 					<p><?php echo $this->label( "UpgradeLink", "desc" ); ?></p>
 				</div>
 			</a>
+			<a href="<?php echo Config::Web('/upgrade/reviewDefaultData'); ?>">
+				<div class="admin_card_item">
+					<h3><?php echo $this->label( "ReviewDefaultDataLink", "name" ); ?></h3>
+					<p><?php echo $this->label( "ReviewDefaultDataLink", "desc" ); ?></p>
+				</div>
+			</a>
 		</div>
 
 
