@@ -4,8 +4,8 @@ namespace loggers;
 
 use \Model as Model;
 use \Logger as Logger;
-use \model\media\logs\Log as Log;
-use \model\media\logs\Log_Level as Log_Level;
+use \model\logs\Log as Log;
+use \model\logs\Log_Level as Log_Level;
 
 class DatabaseLogger extends Logger
 {
