@@ -94,7 +94,7 @@ class FluxTest extends PHPUnit_Framework_TestCase
 		$endpoint = Model::Named('Endpoint')->objectForId( 4 );
 		$src_guid = 'https://www.usenet-crawler.com/details/f3104528eb83af96c6b092a0dd69ef79';
 
-		$fluxDBO = $this->model->objectForSourceEndpointGUID( $endpoint, $src_guid );
+		$fluxDBO = $this->model->objectForSrc_guid($src_guid );
 		$this->assertTrue( $fluxDBO != false, "Failed to fetch record" );
 		$this->assertEquals( $endpoint, $fluxDBO->source_endpoint(), "Source endpoint not set" );
 		$this->assertNull( $fluxDBO->dest_status, "dest_status should be null" );
@@ -110,53 +110,18 @@ class FluxTest extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * @covers	objectForSourceEndpointGUID
-	 * 			T_FUNCTION T_PUBLIC objectForSourceEndpointGUID ( $src_endpoint, $src_guid)
+	 * @covers	objectForSrc_guid
+	 * 			T_FUNCTION T_PUBLIC objectForSrc_guid ( $src_endpoint, $src_guid)
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-17 09:39:59.
 	 */
-	public function testObjectForSourceEndpointGUID()
+	public function testobjectForSrc_guid()
 	{
 		$endpoint = Model::Named('Endpoint')->objectForId( 4 );
 		$src_guid = 'https://www.usenet-crawler.com/details/f3104528eb83af96c6b092a0dd69ef79';
 
-		$fluxDBO = $this->model->objectForSourceEndpointGUID( $endpoint, $src_guid );
+		$fluxDBO = $this->model->objectForSrc_guid($src_guid );
 		$this->assertTrue( $fluxDBO != false, "Failed to fetch record" );
 		$this->assertEquals( $endpoint, $fluxDBO->source_endpoint(), "Source endpoint not set" );
-	}
-
-	/**
-	 * @covers	objectForDestinationEndpointGUID
-	 * 			T_FUNCTION T_PUBLIC objectForDestinationEndpointGUID ( $dest_endpoint, $dest_guid)
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-17 09:39:59.
-	 */
-	public function testObjectForDestinationEndpointGUID()
-	{
-		$endpoint = Model::Named('Endpoint')->objectForId( 4 );
-		$dest_guid = 'SABnzbd_nzo_xxAthD';
-
-		$fluxDBO = $this->model->objectForDestinationEndpointGUID( $endpoint, $dest_guid );
-		$this->assertTrue( $fluxDBO != false, "Failed to fetch record" );
-		$this->assertEquals( $endpoint, $fluxDBO->source_endpoint(), "Source endpoint not set" );
-	}
-
-	/**
-	 * @covers	deleteAllForSource_endpoint
-	 * 			T_FUNCTION T_PUBLIC deleteAllForSource_endpoint ( EndpointDBO $obj)
-	 * @depends	testObjectForSourceEndpointGUID
-	 * @depends testObjectForDestinationEndpointGUID
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-17 09:39:59.
-	 */
-	public function testDeleteAllForSource_endpoint()
-	{
-		$endpoint = Model::Named('Endpoint')->objectForId( 4 );
-		$this->assertTrue( $endpoint != false, "Failed to find endpoint (4)" );
-
-		$count = $this->model->countForFK( Flux::src_endpoint, $endpoint );
-		$this->assertEquals( 2, $count, "Should be 2 flux records to delete" );
-
-		$this->model->deleteAllForSource_endpoint( $endpoint );
-		$count = $this->model->countForFK( Flux::src_endpoint, $endpoint );
-		$this->assertEquals( 0, $count, "Should be 0 flux records left" );
 	}
 
 	/**

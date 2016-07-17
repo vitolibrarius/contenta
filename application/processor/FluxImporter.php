@@ -158,7 +158,7 @@ class FluxImporter extends EndpointImporter
 			else if (isset($fluxImport['endpoint_id'], $fluxImport['name'],
 				$fluxImport['guid'], $fluxImport['publishedDate'], $fluxImport['url']) ) {
 				$srcEndpoint = Model::Named('Endpoint')->objectForId($fluxImport['endpoint_id']);
-				$flux = $FluxModel->objectForSourceEndpointGUID($srcEndpoint, $fluxImport['guid']);
+				$flux = $FluxModel->objectForSrc_guid($fluxImport['guid']);
 				if ( $flux == false ) {
 					list($flux, $errors) = $FluxModel->createObject( array(
 						Flux::name => $fluxImport['name'],

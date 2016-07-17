@@ -31,8 +31,8 @@
 				<?php echo ($item['password'] == true ? "<em>**** password protected</em>" : ""); ?>
 			</td>
 			<td>
-				<?php $fluxArray = $this->fluxModel->objectForSrc_guid( $item['guid'] );
-					if ($fluxArray == false ) : ?>
+				<?php $flux = $this->fluxModel->objectForSrc_guid( $item['guid'] );
+					if ($flux == false ) : ?>
 						<div id="dnld_<?php echo $item['safe_guid']; ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"
 							data-name="<?php echo $item['title']; ?>"
@@ -44,18 +44,16 @@
 							>Download</a>
 						</div>
 					<?php else: ?>
-					<?php foreach( $fluxArray as $fidx => $flux ) : ?>
-						<div>
-							<div style="white-space: nowrap;">
-								<span class="icon <?php echo ($flux->isSourceComplete()?'true':'false'); ?>"></span>
-								<?php echo $flux->src_status ; ?>
-							</div>
-							<div style="white-space: nowrap;">
-								<span class="icon <?php echo ($flux->isFlux_error()?'false':'true'); ?>"></span>
-								<span class="break-word"><?php echo $flux->dest_status ; ?></span>
-							</div>
+					<div>
+						<div style="white-space: nowrap;">
+							<span class="icon <?php echo ($flux->isSourceComplete()?'true':'false'); ?>"></span>
+							<?php echo $flux->src_status ; ?>
 						</div>
-					<?php endforeach; ?>
+						<div style="white-space: nowrap;">
+							<span class="icon <?php echo ($flux->isFlux_error()?'false':'true'); ?>"></span>
+							<span class="break-word"><?php echo $flux->dest_status ; ?></span>
+						</div>
+					</div>
 					<?php endif; ?>
 			</td>
 		</tr>

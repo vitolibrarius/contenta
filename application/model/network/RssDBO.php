@@ -45,7 +45,7 @@ class RssDBO extends _RssDBO
 	public function flux() {
 		if ( isset($this->guid) ) {
 			$model = Model::Named('Flux');
-			return $model->allForSrc_guid($this->guid);
+			return $model->objectForSrc_guid($this->guid);
 		}
 		return false;
 	}

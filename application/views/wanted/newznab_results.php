@@ -37,8 +37,8 @@
 				<?php echo ($item['password'] == true ? "<em>**** password protected</em>" : ""); ?>
 			</td>
 			<td>
-				<?php $fluxArray = $this->fluxModel->objectForSrc_guid( $item['guid'] );
-					if ($fluxArray == false ) : ?>
+				<?php $flux = $this->fluxModel->objectForSrc_guid( $item['guid'] );
+					if ($flux == false ) : ?>
 						<div id="ajaxDiv_<?php echo $item['safe_guid']; ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"
 							data-name="<?php echo $item['title']; ?>"
@@ -50,18 +50,16 @@
 							>Download</a>
 						</div>
 					<?php else: ?>
-					<?php foreach( $fluxArray as $fidx => $flux ) : ?>
+					<div>
 						<div>
-							<div>
-								<span class="icon <?php echo ($flux->isSourceComplete()?'true':'false'); ?>"></span>
-								<span class="break-word"><?php echo $flux->src_status ; ?></span>
-							</div>
-							<div>
-								<span style="display:block" class="icon <?php echo ($flux->isFlux_error()?'false':'true'); ?>"></span>
-								<span class="break-word"><?php echo $flux->dest_status ; ?></span>
-							</div>
+							<span class="icon <?php echo ($flux->isSourceComplete()?'true':'false'); ?>"></span>
+							<span class="break-word"><?php echo $flux->src_status ; ?></span>
 						</div>
-					<?php endforeach; ?>
+						<div>
+							<span style="display:block" class="icon <?php echo ($flux->isFlux_error()?'false':'true'); ?>"></span>
+							<span class="break-word"><?php echo $flux->dest_status ; ?></span>
+						</div>
+					</div>
 					<?php endif; ?>
 			</td>
 			<td class="name">
