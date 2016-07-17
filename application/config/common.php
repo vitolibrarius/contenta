@@ -131,6 +131,21 @@ function sanitize_filename($string, $maxLength = 256, $force_lowercase = true, $
 	return $clean . ((strlen($ext) > 1) ? $ext : "");
 }
 
+function sanitize_html_id($string = '')
+{
+	if ( is_string($string) == false ) {
+		$string = "$string";
+	}
+	$clean = str_replace(chr(0xCA), '', $string);
+
+	if (preg_match('/[^a-zA-Z0-9_\-\s?!,]/', $clean) == true) {
+		$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+			"}", "\\", "|", ";", ":", "\"", "'", ",", "<", ">", "/", "?", ".");
+		$clean = str_replace($strip, "_", $clean);
+	}
+	return $clean;
+}
+
 function sanitize($string, $force_lowercase = true, $anal = false, $default = null)
 {
 	if ( is_string($string) == false ) {

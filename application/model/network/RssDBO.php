@@ -28,14 +28,7 @@ class RssDBO extends _RssDBO
 
 	public function safe_guid()
 	{
-		$clean = $this->guid;
-		if (preg_match('/[^a-zA-Z0-9_\-\s?!,]/', $clean) == true) {
-			$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
-				"}", "\\", "|", ";", ":", "\"", "'", ",", "<", ">", "/", "?", ".");
-			$clean = str_replace($strip, "_", $clean);
-		}
-
-		return $clean;
+		return sanitize_html_id($this->guid);
 	}
 
 	public function publishedMonthYear() {

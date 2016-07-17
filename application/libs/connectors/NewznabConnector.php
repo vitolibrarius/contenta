@@ -136,7 +136,7 @@ class NewznabConnector extends RSSConnector
 			foreach ($xmlDocument->channel->item as $key => $item) {
 				$record['title'] = (string)(isset($item->title) ? $item->title : '');
 				$record['guid'] = (string)(isset($item->guid) ? $item->guid : $item->link);
-				$record['safe_guid'] = sanitize($record['guid'], true, true);
+				$record['safe_guid'] = sanitize_html_id($record['guid']);
 				$record['publishedDate'] = strtotime($item->pubDate);
 				$record['url'] = (string)$item->link;
 				$record['password'] = false;
