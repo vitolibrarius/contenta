@@ -45,7 +45,7 @@ class FluxStatusUpdater extends EndpointImporter
 				$sab_id = $slot['nzo_id'];
 				$sab_percent = $slot['percentage'];
 				$sab_status = $slot['status'];
-				$flux = $FluxModel->objectForDestinationEndpointGUID($sab_connector->endpoint(), $sab_id);
+				$flux = $FluxModel->objectForDest_guid($sab_id);
 				if ( $flux != false && $flux->isComplete() == false) {
 					$FluxModel->updateObject( $flux, array( Flux::dest_status => $sab_status . ' ' . $sab_percent . '%'	));
 				}
@@ -56,7 +56,7 @@ class FluxStatusUpdater extends EndpointImporter
 				$sab_id = $slot['nzo_id'];
 				$sab_fail_message = $slot['fail_message'];
 				$sab_status = $slot['status'];
-				$flux = $FluxModel->objectForDestinationEndpointGUID($sab_connector->endpoint(), $sab_id);
+				$flux = $FluxModel->objectForDest_guid($sab_id);
 				if ( $flux != false ) {
 					// delete the history from SABnzbd
 					$del_status = $sab_connector->historyDelete($sab_id);

@@ -113,7 +113,7 @@ if ( is_array($incomplete) && count($incomplete) > 0 ) {
 // 		$sab_id = $slot['nzo_id'];
 // 		$sab_percent = $slot['percentage'];
 // 		$sab_status = $slot['status'];
-// 		$flux = $FluxModel->objectForDestinationEndpointGUID($sab_connection->endpoint(), $sab_id);
+// 		$flux = $FluxModel->objectForDest_guid($sab_id);
 // 		if ( $flux != false && $flux->isComplete() == false) {
 // 		// 			Flux::dest_endpoint, Flux::dest_guid, Flux::dest_submission, Flux::dest_status
 //
@@ -125,7 +125,7 @@ if ( is_array($incomplete) && count($incomplete) > 0 ) {
 // 		$sab_id = $slot['nzo_id'];
 // 		$sab_fail_message = $slot['fail_message'];
 // 		$sab_status = $slot['status'];
-// 		$flux = $FluxModel->objectForDestinationEndpointGUID($sab_connection->endpoint(), $sab_id);
+// 		$flux = $FluxModel->objectForDest_guid($sab_id);
 // 		if ( $flux != false && $flux->isComplete() == false) {
 // 			if ( $sab_status == 'Failed' ) {
 // 				$FluxModel->updateObject( $flux, array(

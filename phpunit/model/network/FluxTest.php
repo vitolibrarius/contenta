@@ -124,25 +124,5 @@ class FluxTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( $endpoint, $fluxDBO->source_endpoint(), "Source endpoint not set" );
 	}
 
-	/**
-	 * @covers	deleteAllForDestination_endpoint
-	 * 			T_FUNCTION T_PUBLIC deleteAllForDestination_endpoint ( EndpointDBO $obj)
-	 * @depends	testObjectForSourceEndpointGUID
-	 * @depends testObjectForDestinationEndpointGUID
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-06-17 09:39:59.
-	 */
-	public function testDeleteAllForDestination_endpoint()
-	{
-		$endpoint = Model::Named('Endpoint')->objectForId( 3 );
-		$this->assertTrue( $endpoint != false, "Failed to find endpoint (3)" );
-
-		$count = $this->model->countForFK( Flux::dest_endpoint, $endpoint );
-		$this->assertEquals( 9, $count, "Should be 9 flux records to delete" );
-
-		$this->model->deleteAllForDestination_endpoint( $endpoint );
-		$count = $this->model->countForFK( Flux::dest_endpoint, $endpoint );
-		$this->assertEquals( 0, $count, "Should be 0 flux records left" );
-	}
-
 /* {functions} */
 }
