@@ -84,7 +84,7 @@ abstract class Model
 	public function updateStatistics( $xid = 0, $xsource = null ) { return true; }
 
 	public function notifyKeypaths() { return array(); }
-	public function processNotification( $type = 'none', $dbo )
+	public function processNotification( $type = 'none', DataObject $dbo )
 	{
 		$keypaths = $this->notifyKeypaths();
 		foreach ( $keypaths as $kp ) {
@@ -432,9 +432,11 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 				$insert = \SQL::Insert($this, $allkeys)->addRecord($values);
 				$obj = $insert->commitTransaction();
 
-				$this->processNotification( Model::NotifyInserted, $obj );
-
-				return array( $obj, null );
+				if ( $obj instanceof DataObject ) {
+					$this->processNotification( Model::NotifyInserted, $obj );
+					return array( $obj, null );
+				}
+				Logger::logError( "Failed to create record for " . var_export($values, true), __METHOD__, $this->tableName() );
 			}
 
 			// create failed, log validation errors
