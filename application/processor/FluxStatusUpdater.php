@@ -37,7 +37,7 @@ class FluxStatusUpdater extends EndpointImporter
 	{
 		$FluxModel = Model::Named('Flux');
 
-		$incomplete = $FluxModel->destinationIncomplete(-1);
+		$incomplete = $FluxModel->allDestinationIncomplete(-1);
 		if ( is_array($incomplete) && count($incomplete) > 0 ) {
 			$sab_connector = $this->endpointConnector();
 			$queue = $sab_connector->queueSlots();

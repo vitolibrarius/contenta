@@ -58,6 +58,16 @@ class Flux extends _Flux
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
+	public function allDestinationIncomplete($limit = 50)
+	{
+		$select = SQL::Select( $this )->where( Qualifier::AndQualifier(
+				Qualifier::IsNotNull( Flux::dest_guid ),
+				Qualifier::NotQualifier( Qualifier::IN( Flux::dest_status, array('Completed', 'Failed') ))
+			)
+		)->limit( $limit );
+		return $select->fetchAll();
+	}
+
 	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{

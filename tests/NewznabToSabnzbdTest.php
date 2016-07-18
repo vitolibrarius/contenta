@@ -101,7 +101,7 @@ $sab_connection = new SABnzbdConnector($sabnzbd_point);
 $fluxImporter = new FluxImporter( 'abc' );
 $fluxImporter->setEndpoint( $sabnzbd_point );
 
-$incomplete = $FluxModel->destinationIncomplete();
+$incomplete = $FluxModel->allDestinationIncomplete();
 if ( is_array($incomplete) && count($incomplete) > 0 ) {
 	$fluxStatus = new FluxStatusUpdater();
 	$fluxStatus->setEndpoint( $sabnzbd_point );
