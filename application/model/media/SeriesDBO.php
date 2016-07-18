@@ -119,7 +119,7 @@ class SeriesDBO extends _SeriesDBO
 
 	public function notify( $type = 'none', $object = null )
 	{
-// 		Logger::logInfo( $this . " Notified $type " . $object );
+		Logger::logInfo( $this . " Notified $type " . $object );
 		if ( $object instanceof DataObject ) {
 			switch( $object->tableName() ) {
 				case 'media':

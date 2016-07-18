@@ -17,6 +17,8 @@ use \model\media\PublicationDBO as PublicationDBO;
 
 class Story_Arc_Publication extends _Story_Arc_Publication
 {
+	public function notifyKeypaths() { return array( "story_arc" ); }
+
 	/**
 	 *	Create/Update functions
 	 */

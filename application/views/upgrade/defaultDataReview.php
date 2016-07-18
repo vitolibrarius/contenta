@@ -338,8 +338,16 @@
 					Create <?php echo ucfirst($type); ?> Job
 				</a>
 			<?php endif; ?>
-		</div>
+			</div>
 		<?php endforeach; ?>
+
+		<div class="desc"><p>Regenerate the stored statistics ofr tables that track details like character popularity
+			and issue counts for series and story arcs.</p></div>
+		<div style="white-space: nowrap;">
+			<a href="<?php echo Config::Web('/Upgrade/recalcStats/');?>" class="button job">
+				Recalculate Statistics on all tables
+			</a>
+		</div>
 
 	</div>
 </div>
