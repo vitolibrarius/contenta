@@ -27,7 +27,16 @@ function downloadImage($url = null, $dir = null, $key_name_hint = null )
 				$extension = file_ext(basename($url));
 				$filename = $key_name_hint . "." . $extension;
 			}
-			$data = file_get_contents($url);
+
+			$options = array(
+				'http'=>array(
+					'method'=>"GET",
+					'header'=>"Accept-language: en\r\n" .
+					"User-Agent: " . CONTENTA_USER_AGENT
+				)
+			);
+			$context = stream_context_create($options);
+			$data = file_get_contents($url, false, $context);
 			if ( $data != false )
 			{
 				$dest = appendPath($dir, $filename);
