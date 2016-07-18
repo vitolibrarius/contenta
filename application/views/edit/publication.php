@@ -4,7 +4,7 @@
 		$('a.confirm').click(function(e){
 			modal.open({
 				heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
-				img: '<?php echo Config::Web("/AdminMedia/thumbnailForMedia/") ?>' + $(this).attr('data_key'),
+				img: '<?php echo Config::Web("/AdminMedia/thumbnailForMedia/") ?>' +'/' + $(this).attr('data_key'),
 				description: '<?php echo $this->label( "media", "DeleteDescription"); ?> <br /><em>' + $(this).attr('data_filename') + '</em>',
 				confirm: '<?php echo $this->label( "media", "DeleteConfirmation"); ?>',
 				actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
