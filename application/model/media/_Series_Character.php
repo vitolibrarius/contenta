@@ -38,9 +38,15 @@ use \model\media\CharacterDBO as CharacterDBO;
 abstract class _Series_Character extends Model
 {
 	const TABLE = 'series_character';
+
+	// attribute keys
 	const id = 'id';
 	const series_id = 'series_id';
 	const character_id = 'character_id';
+
+	// relationship keys
+	const series = 'series';
+	const character = 'character';
 
 	public function tableName() { return Series_Character::TABLE; }
 	public function tablePK() { return Series_Character::id; }
@@ -223,7 +229,7 @@ abstract class _Series_Character extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForSeriesAndCharacter( $series, $char )
+	public function objectForSeriesAndCharacter(SeriesDBO $series,CharacterDBO $char )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

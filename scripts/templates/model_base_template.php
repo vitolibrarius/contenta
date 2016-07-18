@@ -80,8 +80,17 @@ use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassNam
 abstract class <?php echo $this->modelBaseName(); ?> extends Model
 {
 	const TABLE = '<?php echo $this->tableName(); ?>';
+
+	// attribute keys
 <?php
 foreach( $objectAttributes as $name => $detailArray ) {
+	echo "\tconst $name = '$name';" . PHP_EOL;
+}
+?>
+
+	// relationship keys
+<?php
+foreach( $objectRelationships as $name => $detailArray ) {
 	echo "\tconst $name = '$name';" . PHP_EOL;
 }
 ?>
@@ -331,8 +340,17 @@ foreach( $objectAttributes as $name => $detailArray ) {
 	 * Named fetches
 	 */
 <?php foreach( $this->namedFetches() as $name => $details ) : ?>
-	public function <?php echo $name; ?>( <?php echo (isset($details["arguments"]) ?
-		implode(', ', array_map(function($item) { return '$' . $item; }, $details["arguments"])) : "" ); ?> )
+	public function <?php echo $name; ?>(<?php
+if ( isset($details["arguments"]) && is_array($details["arguments"]) && count($details["arguments"]) > 0) {
+	$qArray = (isset($details['qualifiers']) ? $details['qualifiers'] : null);
+	$argsArray = array();
+	foreach ( $details["arguments"] as $item ) {
+		$argType = $this->estimateArgumentType($item, $qArray);
+		$argsArray[] = $argType . ' $' . $item;
+	}
+	echo implode( ',', $argsArray );
+}
+?> )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

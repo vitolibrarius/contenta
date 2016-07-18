@@ -40,6 +40,8 @@ use \model\jobs\JobDBO as JobDBO;
 abstract class _Job_Type extends Model
 {
 	const TABLE = 'job_type';
+
+	// attribute keys
 	const code = 'code';
 	const name = 'name';
 	const desc = 'desc';
@@ -47,6 +49,10 @@ abstract class _Job_Type extends Model
 	const parameter = 'parameter';
 	const scheduled = 'scheduled';
 	const requires_endpoint = 'requires_endpoint';
+
+	// relationship keys
+	const jobsRunning = 'jobsRunning';
+	const jobs = 'jobs';
 
 	public function tableName() { return Job_Type::TABLE; }
 	public function tablePK() { return Job_Type::code; }

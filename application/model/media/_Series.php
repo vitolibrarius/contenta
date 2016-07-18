@@ -63,6 +63,8 @@ use \model\media\User_SeriesDBO as User_SeriesDBO;
 abstract class _Series extends Model
 {
 	const TABLE = 'series';
+
+	// attribute keys
 	const id = 'id';
 	const publisher_id = 'publisher_id';
 	const created = 'created';
@@ -80,6 +82,14 @@ abstract class _Series extends Model
 	const xsource = 'xsource';
 	const xid = 'xid';
 	const xupdated = 'xupdated';
+
+	// relationship keys
+	const aliases = 'aliases';
+	const publisher = 'publisher';
+	const publications = 'publications';
+	const series_characters = 'series_characters';
+	const story_arc_series = 'story_arc_series';
+	const user_series = 'user_series';
 
 	public function tableName() { return Series::TABLE; }
 	public function tablePK() { return Series::id; }

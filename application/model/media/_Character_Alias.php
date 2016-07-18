@@ -35,9 +35,14 @@ use \model\media\CharacterDBO as CharacterDBO;
 abstract class _Character_Alias extends Model
 {
 	const TABLE = 'character_alias';
+
+	// attribute keys
 	const id = 'id';
 	const name = 'name';
 	const character_id = 'character_id';
+
+	// relationship keys
+	const character = 'character';
 
 	public function tableName() { return Character_Alias::TABLE; }
 	public function tablePK() { return Character_Alias::id; }
@@ -180,7 +185,7 @@ abstract class _Character_Alias extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForCharacterAndAlias( $character, $name )
+	public function objectForCharacterAndAlias(CharacterDBO $character, $name )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

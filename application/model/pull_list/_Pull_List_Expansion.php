@@ -36,12 +36,17 @@ use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 abstract class _Pull_List_Expansion extends Model
 {
 	const TABLE = 'pull_list_expansion';
+
+	// attribute keys
 	const id = 'id';
 	const pattern = 'pattern';
 	const replace = 'replace';
 	const sequence = 'sequence';
 	const created = 'created';
 	const endpoint_type_code = 'endpoint_type_code';
+
+	// relationship keys
+	const endpoint_type = 'endpoint_type';
 
 	public function tableName() { return Pull_List_Expansion::TABLE; }
 	public function tablePK() { return Pull_List_Expansion::id; }

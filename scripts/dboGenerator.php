@@ -152,6 +152,21 @@ class Template
 		return (is_null($type) == false && $type == 'Model::FLAG_TYPE');
 	}
 
+	public function estimateArgumentType($argName = '', $qualifiers) {
+		if ( is_array( $qualifiers )) {
+			foreach( $qualifiers as $aQualifier ) {
+				if ( isset( $aQualifier['argAttribute']) && $aQualifier['argAttribute'] == $argName ) {
+					if ( isset( $aQualifier['relationship'] )) {
+						$detailArray = $this->detailsForRelationship($aQualifier['relationship']);
+						return $detailArray['destination'] . 'DBO';
+					}
+					break;
+				}
+			}
+		}
+		return '';
+	}
+
     public function modelTypeForAttribute($name = '') {
     	if ( $this->isRelationshipKey($name) ) {
     		return "Model::TO_ONE_TYPE";

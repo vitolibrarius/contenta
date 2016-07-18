@@ -31,8 +31,12 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 abstract class _Log_Level extends Model
 {
 	const TABLE = 'log_level';
+
+	// attribute keys
 	const code = 'code';
 	const name = 'name';
+
+	// relationship keys
 
 	public function tableName() { return Log_Level::TABLE; }
 	public function tablePK() { return Log_Level::code; }

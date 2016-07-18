@@ -46,6 +46,8 @@ use \model\jobs\JobDBO as JobDBO;
 abstract class _Endpoint extends Model
 {
 	const TABLE = 'endpoint';
+
+	// attribute keys
 	const id = 'id';
 	const type_code = 'type_code';
 	const name = 'name';
@@ -54,6 +56,14 @@ abstract class _Endpoint extends Model
 	const username = 'username';
 	const enabled = 'enabled';
 	const compressed = 'compressed';
+
+	// relationship keys
+	const endpointType = 'endpointType';
+	const pull_lists = 'pull_lists';
+	const rss = 'rss';
+	const flux_sources = 'flux_sources';
+	const flux_destinations = 'flux_destinations';
+	const jobs = 'jobs';
 
 	public function tableName() { return Endpoint::TABLE; }
 	public function tablePK() { return Endpoint::id; }

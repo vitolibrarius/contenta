@@ -38,7 +38,7 @@
     },
 	"fetches" : {
 		"objectForStoryArcAndPublication": {
-			"arguments": [ "pub", "story" ],
+			"arguments": [ "story", "pub" ],
 			"maxCount" : 1,
 			"semantic": "AND",
 			"qualifiers": [

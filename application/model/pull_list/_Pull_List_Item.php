@@ -46,6 +46,8 @@ use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
 abstract class _Pull_List_Item extends Model
 {
 	const TABLE = 'pull_list_item';
+
+	// attribute keys
 	const id = 'id';
 	const data = 'data';
 	const created = 'created';
@@ -55,6 +57,10 @@ abstract class _Pull_List_Item extends Model
 	const year = 'year';
 	const pull_list_id = 'pull_list_id';
 	const pull_list_group_id = 'pull_list_group_id';
+
+	// relationship keys
+	const pull_list_group = 'pull_list_group';
+	const pull_list = 'pull_list';
 
 	public function tableName() { return Pull_List_Item::TABLE; }
 	public function tablePK() { return Pull_List_Item::id; }

@@ -38,9 +38,15 @@ use \model\media\CharacterDBO as CharacterDBO;
 abstract class _Story_Arc_Character extends Model
 {
 	const TABLE = 'story_arc_character';
+
+	// attribute keys
 	const id = 'id';
 	const story_arc_id = 'story_arc_id';
 	const character_id = 'character_id';
+
+	// relationship keys
+	const story_arc = 'story_arc';
+	const character = 'character';
 
 	public function tableName() { return Story_Arc_Character::TABLE; }
 	public function tablePK() { return Story_Arc_Character::id; }
@@ -223,7 +229,7 @@ abstract class _Story_Arc_Character extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForStoryArcAndCharacter( $story, $char )
+	public function objectForStoryArcAndCharacter(Story_ArcDBO $story,CharacterDBO $char )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

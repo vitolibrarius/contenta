@@ -38,9 +38,15 @@ use \model\network\NetworkDBO as NetworkDBO;
 abstract class _User_Network extends Model
 {
 	const TABLE = 'user_network';
+
+	// attribute keys
 	const id = 'id';
 	const user_id = 'user_id';
 	const network_id = 'network_id';
+
+	// relationship keys
+	const user = 'user';
+	const network = 'network';
 
 	public function tableName() { return User_Network::TABLE; }
 	public function tablePK() { return User_Network::id; }
@@ -223,7 +229,7 @@ abstract class _User_Network extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForUserAndNetwork( $user, $network )
+	public function objectForUserAndNetwork(UsersDBO $user,NetworkDBO $network )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

@@ -52,6 +52,8 @@ use \model\media\Publication_CharactersDBO as Publication_CharactersDBO;
 abstract class _Publication extends Model
 {
 	const TABLE = 'publication';
+
+	// attribute keys
 	const id = 'id';
 	const series_id = 'series_id';
 	const created = 'created';
@@ -64,6 +66,12 @@ abstract class _Publication extends Model
 	const xsource = 'xsource';
 	const xid = 'xid';
 	const xupdated = 'xupdated';
+
+	// relationship keys
+	const series = 'series';
+	const media = 'media';
+	const story_arc_publication = 'story_arc_publication';
+	const publication_characters = 'publication_characters';
 
 	public function tableName() { return Publication::TABLE; }
 	public function tablePK() { return Publication::id; }

@@ -38,9 +38,15 @@ use \model\media\PublicationDBO as PublicationDBO;
 abstract class _Story_Arc_Publication extends Model
 {
 	const TABLE = 'story_arc_publication';
+
+	// attribute keys
 	const id = 'id';
 	const story_arc_id = 'story_arc_id';
 	const publication_id = 'publication_id';
+
+	// relationship keys
+	const story_arc = 'story_arc';
+	const publication = 'publication';
 
 	public function tableName() { return Story_Arc_Publication::TABLE; }
 	public function tablePK() { return Story_Arc_Publication::id; }
@@ -223,7 +229,7 @@ abstract class _Story_Arc_Publication extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForStoryArcAndPublication( $pub, $story )
+	public function objectForStoryArcAndPublication(Story_ArcDBO $story,PublicationDBO $pub )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

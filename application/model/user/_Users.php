@@ -58,6 +58,8 @@ use \model\media\User_SeriesDBO as User_SeriesDBO;
 abstract class _Users extends Model
 {
 	const TABLE = 'users';
+
+	// attribute keys
 	const id = 'id';
 	const name = 'name';
 	const email = 'email';
@@ -73,6 +75,10 @@ abstract class _Users extends Model
 	const last_login_timestamp = 'last_login_timestamp';
 	const last_failed_login = 'last_failed_login';
 	const password_reset_timestamp = 'password_reset_timestamp';
+
+	// relationship keys
+	const user_network = 'user_network';
+	const user_series = 'user_series';
 
 	public function tableName() { return Users::TABLE; }
 	public function tablePK() { return Users::id; }

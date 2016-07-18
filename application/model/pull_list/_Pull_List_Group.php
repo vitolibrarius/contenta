@@ -37,10 +37,15 @@ use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 abstract class _Pull_List_Group extends Model
 {
 	const TABLE = 'pull_list_group';
+
+	// attribute keys
 	const id = 'id';
 	const name = 'name';
 	const data = 'data';
 	const created = 'created';
+
+	// relationship keys
+	const pull_list_items = 'pull_list_items';
 
 	public function tableName() { return Pull_List_Group::TABLE; }
 	public function tablePK() { return Pull_List_Group::id; }

@@ -44,6 +44,8 @@ use \model\media\Story_ArcDBO as Story_ArcDBO;
 abstract class _Publisher extends Model
 {
 	const TABLE = 'publisher';
+
+	// attribute keys
 	const id = 'id';
 	const name = 'name';
 	const created = 'created';
@@ -51,6 +53,11 @@ abstract class _Publisher extends Model
 	const xsource = 'xsource';
 	const xid = 'xid';
 	const xupdated = 'xupdated';
+
+	// relationship keys
+	const series = 'series';
+	const characters = 'characters';
+	const story_arcs = 'story_arcs';
 
 	public function tableName() { return Publisher::TABLE; }
 	public function tablePK() { return Publisher::id; }

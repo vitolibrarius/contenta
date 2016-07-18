@@ -41,12 +41,18 @@ use \model\media\SeriesDBO as SeriesDBO;
 abstract class _User_Series extends Model
 {
 	const TABLE = 'user_series';
+
+	// attribute keys
 	const id = 'id';
 	const user_id = 'user_id';
 	const series_id = 'series_id';
 	const favorite = 'favorite';
 	const read = 'read';
 	const mislabeled = 'mislabeled';
+
+	// relationship keys
+	const user = 'user';
+	const series = 'series';
 
 	public function tableName() { return User_Series::TABLE; }
 	public function tablePK() { return User_Series::id; }
@@ -253,7 +259,7 @@ abstract class _User_Series extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForUserAndSeries( $user, $series )
+	public function objectForUserAndSeries(UsersDBO $user,SeriesDBO $series )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );
@@ -279,7 +285,7 @@ abstract class _User_Series extends Model
 		return false;
 	}
 
-	public function allForUserFavorites( $user, $favorite, $read )
+	public function allForUserFavorites(UsersDBO $user, $favorite, $read )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

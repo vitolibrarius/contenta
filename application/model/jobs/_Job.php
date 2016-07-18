@@ -48,6 +48,8 @@ use \model\network\EndpointDBO as EndpointDBO;
 abstract class _Job extends Model
 {
 	const TABLE = 'job';
+
+	// attribute keys
 	const id = 'id';
 	const type_code = 'type_code';
 	const endpoint_id = 'endpoint_id';
@@ -63,6 +65,10 @@ abstract class _Job extends Model
 	const last_run = 'last_run';
 	const last_fail = 'last_fail';
 	const created = 'created';
+
+	// relationship keys
+	const jobType = 'jobType';
+	const endpoint = 'endpoint';
 
 	public function tableName() { return Job::TABLE; }
 	public function tablePK() { return Job::id; }

@@ -38,11 +38,16 @@ use \model\network\User_NetworkDBO as User_NetworkDBO;
 abstract class _Network extends Model
 {
 	const TABLE = 'network';
+
+	// attribute keys
 	const id = 'id';
 	const ip_address = 'ip_address';
 	const ip_hash = 'ip_hash';
 	const created = 'created';
 	const disable = 'disable';
+
+	// relationship keys
+	const user_network = 'user_network';
 
 	public function tableName() { return Network::TABLE; }
 	public function tablePK() { return Network::id; }

@@ -44,6 +44,8 @@ use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 abstract class _Endpoint_Type extends Model
 {
 	const TABLE = 'endpoint_type';
+
+	// attribute keys
 	const code = 'code';
 	const name = 'name';
 	const comments = 'comments';
@@ -53,6 +55,11 @@ abstract class _Endpoint_Type extends Model
 	const favicon_url = 'favicon_url';
 	const throttle_hits = 'throttle_hits';
 	const throttle_time = 'throttle_time';
+
+	// relationship keys
+	const endpoints = 'endpoints';
+	const pull_list_exclusions = 'pull_list_exclusions';
+	const pull_list_expansions = 'pull_list_expansions';
 
 	public function tableName() { return Endpoint_Type::TABLE; }
 	public function tablePK() { return Endpoint_Type::code; }

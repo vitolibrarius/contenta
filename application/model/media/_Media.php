@@ -45,6 +45,8 @@ use \model\media\PublicationDBO as PublicationDBO;
 abstract class _Media extends Model
 {
 	const TABLE = 'media';
+
+	// attribute keys
 	const id = 'id';
 	const publication_id = 'publication_id';
 	const type_code = 'type_code';
@@ -53,6 +55,10 @@ abstract class _Media extends Model
 	const checksum = 'checksum';
 	const created = 'created';
 	const size = 'size';
+
+	// relationship keys
+	const mediaType = 'mediaType';
+	const publication = 'publication';
 
 	public function tableName() { return Media::TABLE; }
 	public function tablePK() { return Media::id; }

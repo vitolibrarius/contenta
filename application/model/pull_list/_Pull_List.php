@@ -40,12 +40,18 @@ use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 abstract class _Pull_List extends Model
 {
 	const TABLE = 'pull_list';
+
+	// attribute keys
 	const id = 'id';
 	const name = 'name';
 	const etag = 'etag';
 	const created = 'created';
 	const published = 'published';
 	const endpoint_id = 'endpoint_id';
+
+	// relationship keys
+	const endpoint = 'endpoint';
+	const pull_list_items = 'pull_list_items';
 
 	public function tableName() { return Pull_List::TABLE; }
 	public function tablePK() { return Pull_List::id; }

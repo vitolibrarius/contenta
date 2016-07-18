@@ -54,6 +54,8 @@ use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
 abstract class _Story_Arc extends Model
 {
 	const TABLE = 'story_arc';
+
+	// attribute keys
 	const id = 'id';
 	const publisher_id = 'publisher_id';
 	const created = 'created';
@@ -68,6 +70,12 @@ abstract class _Story_Arc extends Model
 	const xsource = 'xsource';
 	const xid = 'xid';
 	const xupdated = 'xupdated';
+
+	// relationship keys
+	const publisher = 'publisher';
+	const story_arc_characters = 'story_arc_characters';
+	const story_arc_publication = 'story_arc_publication';
+	const story_arc_Series = 'story_arc_Series';
 
 	public function tableName() { return Story_Arc::TABLE; }
 	public function tablePK() { return Story_Arc::id; }

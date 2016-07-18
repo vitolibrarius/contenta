@@ -38,9 +38,15 @@ use \model\media\SeriesDBO as SeriesDBO;
 abstract class _Story_Arc_Series extends Model
 {
 	const TABLE = 'story_arc_series';
+
+	// attribute keys
 	const id = 'id';
 	const story_arc_id = 'story_arc_id';
 	const series_id = 'series_id';
+
+	// relationship keys
+	const story_arc = 'story_arc';
+	const series = 'series';
 
 	public function tableName() { return Story_Arc_Series::TABLE; }
 	public function tablePK() { return Story_Arc_Series::id; }
@@ -223,7 +229,7 @@ abstract class _Story_Arc_Series extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForStoryArcAndSeries( $story, $series )
+	public function objectForStoryArcAndSeries(Story_ArcDBO $story,SeriesDBO $series )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

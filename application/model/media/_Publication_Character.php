@@ -38,9 +38,15 @@ use \model\media\CharacterDBO as CharacterDBO;
 abstract class _Publication_Character extends Model
 {
 	const TABLE = 'publication_character';
+
+	// attribute keys
 	const id = 'id';
 	const publication_id = 'publication_id';
 	const character_id = 'character_id';
+
+	// relationship keys
+	const publication = 'publication';
+	const character = 'character';
 
 	public function tableName() { return Publication_Character::TABLE; }
 	public function tablePK() { return Publication_Character::id; }
@@ -223,7 +229,7 @@ abstract class _Publication_Character extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForPublicationAndCharacter( $pub, $char )
+	public function objectForPublicationAndCharacter(PublicationDBO $pub,CharacterDBO $char )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

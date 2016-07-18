@@ -36,10 +36,15 @@ use \model\version\VersionDBO as VersionDBO;
 abstract class _Patch extends Model
 {
 	const TABLE = 'patch';
+
+	// attribute keys
 	const id = 'id';
 	const name = 'name';
 	const created = 'created';
 	const version_id = 'version_id';
+
+	// relationship keys
+	const version = 'version';
 
 	public function tableName() { return Patch::TABLE; }
 	public function tablePK() { return Patch::id; }

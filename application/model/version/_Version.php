@@ -39,12 +39,17 @@ use \model\version\PatchDBO as PatchDBO;
 abstract class _Version extends Model
 {
 	const TABLE = 'version';
+
+	// attribute keys
 	const id = 'id';
 	const code = 'code';
 	const major = 'major';
 	const minor = 'minor';
 	const patch = 'patch';
 	const created = 'created';
+
+	// relationship keys
+	const patches = 'patches';
 
 	public function tableName() { return Version::TABLE; }
 	public function tablePK() { return Version::id; }
@@ -193,7 +198,7 @@ abstract class _Version extends Model
 	/**
 	 * Named fetches
 	 */
-	public function latestVersion(  )
+	public function latestVersion( )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

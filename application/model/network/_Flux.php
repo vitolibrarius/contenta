@@ -51,6 +51,8 @@ use \model\network\EndpointDBO as EndpointDBO;
 abstract class _Flux extends Model
 {
 	const TABLE = 'flux';
+
+	// attribute keys
 	const id = 'id';
 	const created = 'created';
 	const name = 'name';
@@ -65,6 +67,10 @@ abstract class _Flux extends Model
 	const dest_guid = 'dest_guid';
 	const dest_status = 'dest_status';
 	const dest_submission = 'dest_submission';
+
+	// relationship keys
+	const source_endpoint = 'source_endpoint';
+	const destination_endpoint = 'destination_endpoint';
 
 	public function tableName() { return Flux::TABLE; }
 	public function tablePK() { return Flux::id; }

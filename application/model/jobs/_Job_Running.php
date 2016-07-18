@@ -43,6 +43,8 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 abstract class _Job_Running extends Model
 {
 	const TABLE = 'job_running';
+
+	// attribute keys
 	const id = 'id';
 	const job_id = 'job_id';
 	const type_code = 'type_code';
@@ -51,6 +53,10 @@ abstract class _Job_Running extends Model
 	const pid = 'pid';
 	const desc = 'desc';
 	const created = 'created';
+
+	// relationship keys
+	const job = 'job';
+	const jobType = 'jobType';
 
 	public function tableName() { return Job_Running::TABLE; }
 	public function tablePK() { return Job_Running::id; }

@@ -31,8 +31,12 @@ use \model\media\Media_TypeDBO as Media_TypeDBO;
 abstract class _Media_Type extends Model
 {
 	const TABLE = 'media_type';
+
+	// attribute keys
 	const code = 'code';
 	const name = 'name';
+
+	// relationship keys
 
 	public function tableName() { return Media_Type::TABLE; }
 	public function tablePK() { return Media_Type::code; }

@@ -35,9 +35,14 @@ use \model\media\SeriesDBO as SeriesDBO;
 abstract class _Series_Alias extends Model
 {
 	const TABLE = 'series_alias';
+
+	// attribute keys
 	const id = 'id';
 	const name = 'name';
 	const series_id = 'series_id';
+
+	// relationship keys
+	const series = 'series';
 
 	public function tableName() { return Series_Alias::TABLE; }
 	public function tablePK() { return Series_Alias::id; }
@@ -180,7 +185,7 @@ abstract class _Series_Alias extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForSeriesAndAlias( $series, $name )
+	public function objectForSeriesAndAlias(SeriesDBO $series, $name )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );

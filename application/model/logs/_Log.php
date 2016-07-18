@@ -45,6 +45,8 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 abstract class _Log extends Model
 {
 	const TABLE = 'log';
+
+	// attribute keys
 	const id = 'id';
 	const trace = 'trace';
 	const trace_id = 'trace_id';
@@ -54,6 +56,9 @@ abstract class _Log extends Model
 	const session = 'session';
 	const level_code = 'level_code';
 	const created = 'created';
+
+	// relationship keys
+	const logLevel = 'logLevel';
 
 	public function tableName() { return Log::TABLE; }
 	public function tablePK() { return Log::id; }

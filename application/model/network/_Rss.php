@@ -49,6 +49,8 @@ use \model\network\EndpointDBO as EndpointDBO;
 abstract class _Rss extends Model
 {
 	const TABLE = 'rss';
+
+	// attribute keys
 	const id = 'id';
 	const endpoint_id = 'endpoint_id';
 	const created = 'created';
@@ -64,6 +66,9 @@ abstract class _Rss extends Model
 	const enclosure_mime = 'enclosure_mime';
 	const enclosure_hash = 'enclosure_hash';
 	const enclosure_password = 'enclosure_password';
+
+	// relationship keys
+	const endpoint = 'endpoint';
 
 	public function tableName() { return Rss::TABLE; }
 	public function tablePK() { return Rss::id; }
