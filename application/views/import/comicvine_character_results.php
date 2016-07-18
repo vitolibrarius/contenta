@@ -11,7 +11,7 @@
 		<div class="span_container_row">
 			<span class="nobreak">
 				<?php if (isset($this->pub_model, $record['publisher'], $record['publisher']['id']) ) {
-					$publisher = $this->pub_model->objectForExternal($record['publisher']['id'], $this->endpoint->endpointType()->code);
+					$publisher = $this->pub_model->objectForExternal($record['publisher']['id'], $this->endpoint->type_code);
 					if ( $publisher != false ) {
 						if ( $publisher->hasIcons() ) {
 							echo '<img src="' . Config::Web( "Image", "icon", $this->pub_model->tableName(), $publisher->id) . '" />';

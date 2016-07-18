@@ -331,7 +331,7 @@ class zipFileWrapper extends FileWrapper
 			$data = $this->wrappedDataForName($name);
 			if ( $data != false ) {
 				$tempPath = appendPath($this->tempDirectory(), sanitize_filename($name));
-				$thmbPath = appendPath($this->tempDirectory(), sanitize_filename($thmbName));
+				$thmbPath = appendPath($this->tempDirectory(), uniqid());
 
 				if (file_put_contents( $tempPath, $data ) ) {
 					$resized = resize_image( $tempPath, $width, $height);

@@ -42,8 +42,8 @@ abstract class EndpointImporter extends Processor
 		if ( $endpoint == false ) {
 			throw new Exception("No Endpoint set for Importer " . get_class() );
 		}
-		$this->setMeta(EndpointImporter::META_ENDPOINT_TYPE, $endpoint->endpointType()->code );
-		return $endpoint->endpointType()->code;
+		$this->setMeta(EndpointImporter::META_ENDPOINT_TYPE, $endpoint->type_code );
+		return $endpoint->type_code;
 	}
 
 	public function endpoint()
