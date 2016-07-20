@@ -51,8 +51,8 @@ class MediaFilenameTest extends PHPUnit_Framework_TestCase
 
 		$mediaFilename = new MediaFilename($source);
 		$meta = $mediaFilename->updateFileMetaData(null);
-		$this->assertEquals( $meta["clean"], $clean );
-		$this->assertEquals( $meta["name"], $name );
+		$this->assertEquals( $clean, $meta["clean"] );
+		$this->assertEquals( $name, $meta["name"] );
 
 		if ( isset( $meta["extension"]) ) {
 			$this->assertEquals( $meta["extension"], $extension );

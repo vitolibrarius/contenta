@@ -166,7 +166,11 @@ class MediaFilename
 		$clean = preg_replace("/([_])/u", " ", $clean);
 
 		// remove '.' but not 22.3
-		$clean = preg_replace("/(?<=vol(\\.|\\s)\\d)(\\.)|(?<=no(\\.|\\s)\\d)(\\.)|(?<=no(\\.|\\s)\\d\\d)(\\.)|(?<=\\D)(\\.)(?=\\D)/ui", " ", $clean);
+		$clean = preg_replace("/(?<=vol(\\.|\\s)\\d)(\\.)/ui", " ", $clean);  // vol.3.
+		$clean = preg_replace("/(\\.)(?=(\\D))/ui", " ", $clean); // .xyz
+		$clean = preg_replace("/(?<=\\d\\d)(\\.)(?=(\\d{2,4}))/ui", " ", $clean);  // Annual 02.2013...
+		$clean = preg_replace("/(?<=\\D)(\\.)(?=\\d\\d)/ui", " ", $clean);
+		$clean = preg_replace("/(?<=\\D)(\\.)(?=\\D)/ui", " ", $clean);
 
 		// remove any "of NN" phrase
 		$clean = preg_replace("/(of [\\d]+)/ui", " ", $clean);
