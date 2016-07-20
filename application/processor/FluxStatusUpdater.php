@@ -58,21 +58,30 @@ class FluxStatusUpdater extends EndpointImporter
 				$sab_status = $slot['status'];
 				$flux = $FluxModel->objectForDest_guid($sab_id);
 				if ( $flux != false ) {
-					// delete the history from SABnzbd
-					$del_status = $sab_connector->historyDelete($sab_id);
-					if ( $sab_status == 'Failed' ) {
-						$FluxModel->updateObject( $flux, array(
-								Flux::flux_error => Model::TERTIARY_TRUE,
-								Flux::dest_status => $sab_status . " ($sab_fail_message)",
-							)
-						);
+					$updates = array();
+					$deleteHistory = false;
+					switch ( strtolower($sab_status) ) {
+						case 'failed':
+							$updates[Flux::flux_error] = Model::TERTIARY_TRUE;
+							$updates[Flux::dest_status] = $sab_status . " ($sab_fail_message)";
+							$deleteHistory = true;
+							break;
+						case 'completed':
+							$updates[Flux::flux_error] = Model::TERTIARY_TRUE;
+							$updates[Flux::dest_status] = $sab_status;
+							$deleteHistory = true;
+							break;
+						case 'running':
+						case 'queued':
+						default:
+							$updates[Flux::dest_status] = $sab_status . (isset($slot['action_line']) ? " (" . $slot['action_line'] . ")": "");
+							break;
 					}
-					else {
-						$FluxModel->updateObject( $flux, array(
-								Flux::flux_error => Model::TERTIARY_FALSE,
-								Flux::dest_status => $sab_status
-							)
-						);
+					$FluxModel->updateObject( $flux, $updates);
+
+					if ( $deleteHistory === true ) {
+						// delete the history from SABnzbd
+						$del_status = $sab_connector->historyDelete($sab_id);
 					}
 				}
 			}

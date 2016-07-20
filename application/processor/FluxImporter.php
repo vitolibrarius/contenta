@@ -115,7 +115,15 @@ class FluxImporter extends EndpointImporter
 		if ( file_exists($localFile) == true ) {
 			safe_unlink($localFile);
 		}
-		$nzb = file_get_contents($flux->src_url);
+		$options = array(
+			'http'=>array(
+				'method'=>"GET",
+				'header'=>"Accept-language: en\r\n" .
+				"User-Agent: " . CONTENTA_USER_AGENT
+			)
+		);
+		$context = stream_context_create($options);
+		$nzb = file_get_contents($flux->src_url, false, $context);
 		if ( $nzb != null ) {
 			if (file_put_contents($localFile, $nzb)) {
 				Model::Named('Flux')->updateObject( $flux,
