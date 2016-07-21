@@ -308,11 +308,11 @@ abstract class _Users extends Model
 		if ( $object instanceof UsersDBO )
 		{
 			$user_network_model = Model::Named('User_Network');
-			if ( $user_network_model->deleteAllForKeyValue(User_Network::user_id, $this->id) == false ) {
+			if ( $user_network_model->deleteAllForKeyValue(User_Network::user_id, $object->id) == false ) {
 				return false;
 			}
 			$user_series_model = Model::Named('User_Series');
-			if ( $user_series_model->deleteAllForKeyValue(User_Series::user_id, $this->id) == false ) {
+			if ( $user_series_model->deleteAllForKeyValue(User_Series::user_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

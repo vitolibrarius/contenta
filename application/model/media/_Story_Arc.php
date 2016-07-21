@@ -321,15 +321,15 @@ abstract class _Story_Arc extends Model
 		{
 			// does not own publisher Publisher
 			$story_arc_character_model = Model::Named('Story_Arc_Character');
-			if ( $story_arc_character_model->deleteAllForKeyValue(Story_Arc_Character::story_arc_id, $this->id) == false ) {
+			if ( $story_arc_character_model->deleteAllForKeyValue(Story_Arc_Character::story_arc_id, $object->id) == false ) {
 				return false;
 			}
 			$story_arc_publication_model = Model::Named('Story_Arc_Publication');
-			if ( $story_arc_publication_model->deleteAllForKeyValue(Story_Arc_Publication::story_arc_id, $this->id) == false ) {
+			if ( $story_arc_publication_model->deleteAllForKeyValue(Story_Arc_Publication::story_arc_id, $object->id) == false ) {
 				return false;
 			}
 			$story_arc_series_model = Model::Named('Story_Arc_Series');
-			if ( $story_arc_series_model->deleteAllForKeyValue(Story_Arc_Series::story_arc_id, $this->id) == false ) {
+			if ( $story_arc_series_model->deleteAllForKeyValue(Story_Arc_Series::story_arc_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

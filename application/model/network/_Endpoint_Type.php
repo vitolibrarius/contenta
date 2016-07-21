@@ -243,15 +243,15 @@ abstract class _Endpoint_Type extends Model
 		if ( $object instanceof Endpoint_TypeDBO )
 		{
 			$endpoint_model = Model::Named('Endpoint');
-			if ( $endpoint_model->deleteAllForKeyValue(Endpoint::type_code, $this->code) == false ) {
+			if ( $endpoint_model->deleteAllForKeyValue(Endpoint::type_code, $object->code) == false ) {
 				return false;
 			}
 			$pull_list_excl_model = Model::Named('Pull_List_Exclusion');
-			if ( $pull_list_excl_model->deleteAllForKeyValue(Pull_List_Exclusion::endpoint_type_code, $this->code) == false ) {
+			if ( $pull_list_excl_model->deleteAllForKeyValue(Pull_List_Exclusion::endpoint_type_code, $object->code) == false ) {
 				return false;
 			}
 			$pull_list_expansion_model = Model::Named('Pull_List_Expansion');
-			if ( $pull_list_expansion_model->deleteAllForKeyValue(Pull_List_Expansion::endpoint_type_code, $this->code) == false ) {
+			if ( $pull_list_expansion_model->deleteAllForKeyValue(Pull_List_Expansion::endpoint_type_code, $object->code) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

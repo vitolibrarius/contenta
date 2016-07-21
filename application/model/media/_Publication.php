@@ -299,15 +299,15 @@ abstract class _Publication extends Model
 		{
 			// does not own series Series
 			$media_model = Model::Named('Media');
-			if ( $media_model->deleteAllForKeyValue(Media::publication_id, $this->id) == false ) {
+			if ( $media_model->deleteAllForKeyValue(Media::publication_id, $object->id) == false ) {
 				return false;
 			}
 			$story_arc_publication_model = Model::Named('Story_Arc_Publication');
-			if ( $story_arc_publication_model->deleteAllForKeyValue(Story_Arc_Publication::publication_id, $this->id) == false ) {
+			if ( $story_arc_publication_model->deleteAllForKeyValue(Story_Arc_Publication::publication_id, $object->id) == false ) {
 				return false;
 			}
 			$publication_character_model = Model::Named('Publication_Character');
-			if ( $publication_character_model->deleteAllForKeyValue(Publication_Character::publication_id, $this->id) == false ) {
+			if ( $publication_character_model->deleteAllForKeyValue(Publication_Character::publication_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

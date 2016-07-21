@@ -255,23 +255,23 @@ abstract class _Endpoint extends Model
 		{
 			// does not own endpointType Endpoint_Type
 			$pull_list_model = Model::Named('Pull_List');
-			if ( $pull_list_model->deleteAllForKeyValue(Pull_List::endpoint_id, $this->id) == false ) {
+			if ( $pull_list_model->deleteAllForKeyValue(Pull_List::endpoint_id, $object->id) == false ) {
 				return false;
 			}
 			$rss_model = Model::Named('Rss');
-			if ( $rss_model->deleteAllForKeyValue(Rss::endpoint_id, $this->id) == false ) {
+			if ( $rss_model->deleteAllForKeyValue(Rss::endpoint_id, $object->id) == false ) {
 				return false;
 			}
 			$flux_model = Model::Named('Flux');
-			if ( $flux_model->deleteAllForKeyValue(Flux::src_endpoint, $this->id) == false ) {
+			if ( $flux_model->deleteAllForKeyValue(Flux::src_endpoint, $object->id) == false ) {
 				return false;
 			}
 			$flux_model = Model::Named('Flux');
-			if ( $flux_model->deleteAllForKeyValue(Flux::dest_endpoint, $this->id) == false ) {
+			if ( $flux_model->deleteAllForKeyValue(Flux::dest_endpoint, $object->id) == false ) {
 				return false;
 			}
 			$job_model = Model::Named('Job');
-			if ( $job_model->deleteAllForKeyValue(Job::endpoint_id, $this->id) == false ) {
+			if ( $job_model->deleteAllForKeyValue(Job::endpoint_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

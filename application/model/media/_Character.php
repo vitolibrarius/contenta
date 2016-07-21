@@ -299,12 +299,12 @@ abstract class _Character extends Model
 		if ( $object instanceof CharacterDBO )
 		{
 			$character_alias_model = Model::Named('Character_Alias');
-			if ( $character_alias_model->deleteAllForKeyValue(Character_Alias::character_id, $this->id) == false ) {
+			if ( $character_alias_model->deleteAllForKeyValue(Character_Alias::character_id, $object->id) == false ) {
 				return false;
 			}
 			// does not own publisher Publisher
 			$publication_character_model = Model::Named('Publication_Character');
-			if ( $publication_character_model->deleteAllForKeyValue(Publication_Character::character_id, $this->id) == false ) {
+			if ( $publication_character_model->deleteAllForKeyValue(Publication_Character::character_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

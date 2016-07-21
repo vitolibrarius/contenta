@@ -199,11 +199,11 @@ abstract class _Job_Type extends Model
 		if ( $object instanceof Job_TypeDBO )
 		{
 			$job_running_model = Model::Named('Job_Running');
-			if ( $job_running_model->deleteAllForKeyValue(Job_Running::type_code, $this->code) == false ) {
+			if ( $job_running_model->deleteAllForKeyValue(Job_Running::type_code, $object->code) == false ) {
 				return false;
 			}
 			$job_model = Model::Named('Job');
-			if ( $job_model->deleteAllForKeyValue(Job::type_code, $this->code) == false ) {
+			if ( $job_model->deleteAllForKeyValue(Job::type_code, $object->code) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

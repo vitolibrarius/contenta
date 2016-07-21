@@ -378,24 +378,24 @@ abstract class _Series extends Model
 		if ( $object instanceof SeriesDBO )
 		{
 			$series_alias_model = Model::Named('Series_Alias');
-			if ( $series_alias_model->deleteAllForKeyValue(Series_Alias::series_id, $this->id) == false ) {
+			if ( $series_alias_model->deleteAllForKeyValue(Series_Alias::series_id, $object->id) == false ) {
 				return false;
 			}
 			// does not own publisher Publisher
 			$publication_model = Model::Named('Publication');
-			if ( $publication_model->deleteAllForKeyValue(Publication::series_id, $this->id) == false ) {
+			if ( $publication_model->deleteAllForKeyValue(Publication::series_id, $object->id) == false ) {
 				return false;
 			}
 			$series_characters_model = Model::Named('Series_Characters');
-			if ( $series_characters_model->deleteAllForKeyValue(Series_Characters::series_id, $this->id) == false ) {
+			if ( $series_characters_model->deleteAllForKeyValue(Series_Characters::series_id, $object->id) == false ) {
 				return false;
 			}
 			$story_arc_series_model = Model::Named('Story_Arc_Series');
-			if ( $story_arc_series_model->deleteAllForKeyValue(Story_Arc_Series::series_id, $this->id) == false ) {
+			if ( $story_arc_series_model->deleteAllForKeyValue(Story_Arc_Series::series_id, $object->id) == false ) {
 				return false;
 			}
 			$user_series_model = Model::Named('User_Series');
-			if ( $user_series_model->deleteAllForKeyValue(User_Series::series_id, $this->id) == false ) {
+			if ( $user_series_model->deleteAllForKeyValue(User_Series::series_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

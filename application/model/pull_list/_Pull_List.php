@@ -209,7 +209,7 @@ abstract class _Pull_List extends Model
 		{
 			// does not own endpoint Endpoint
 			$pull_list_item_model = Model::Named('Pull_List_Item');
-			if ( $pull_list_item_model->deleteAllForKeyValue(Pull_List_Item::pull_list_id, $this->id) == false ) {
+			if ( $pull_list_item_model->deleteAllForKeyValue(Pull_List_Item::pull_list_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

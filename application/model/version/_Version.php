@@ -185,7 +185,7 @@ abstract class _Version extends Model
 		if ( $object instanceof VersionDBO )
 		{
 			$patch_model = Model::Named('Patch');
-			if ( $patch_model->deleteAllForKeyValue(Patch::version_id, $this->id) == false ) {
+			if ( $patch_model->deleteAllForKeyValue(Patch::version_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

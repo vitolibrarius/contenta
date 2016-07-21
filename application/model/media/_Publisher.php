@@ -202,15 +202,15 @@ abstract class _Publisher extends Model
 		if ( $object instanceof PublisherDBO )
 		{
 			$series_model = Model::Named('Series');
-			if ( $series_model->deleteAllForKeyValue(Series::publisher_id, $this->id) == false ) {
+			if ( $series_model->deleteAllForKeyValue(Series::publisher_id, $object->id) == false ) {
 				return false;
 			}
 			$character_model = Model::Named('Character');
-			if ( $character_model->deleteAllForKeyValue(Character::publisher_id, $this->id) == false ) {
+			if ( $character_model->deleteAllForKeyValue(Character::publisher_id, $object->id) == false ) {
 				return false;
 			}
 			$story_arc_model = Model::Named('Story_Arc');
-			if ( $story_arc_model->deleteAllForKeyValue(Story_Arc::publisher_id, $this->id) == false ) {
+			if ( $story_arc_model->deleteAllForKeyValue(Story_Arc::publisher_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

@@ -295,7 +295,7 @@ foreach( $objectRelationships as $name => $detailArray ) {
 <?php $join = $joins[0]; ?>
 <?php if (isset($detailArray['ownsDestination']) && $detailArray['ownsDestination']) : ?>
 			$<?php echo $detailArray["destinationTable"]; ?>_model = Model::Named('<?php echo $detailArray["destination"]; ?>');
-			if ( $<?php echo $detailArray["destinationTable"]; ?>_model->deleteAllForKeyValue(<?php echo $detailArray["destination"] . "::" . $join["destinationAttribute"]; ?>, $this-><?php echo $join["sourceAttribute"]; ?>) == false ) {
+			if ( $<?php echo $detailArray["destinationTable"]; ?>_model->deleteAllForKeyValue(<?php echo $detailArray["destination"] . "::" . $join["destinationAttribute"]; ?>, $object-><?php echo $join["sourceAttribute"]; ?>) == false ) {
 				return false;
 			}
 <?php else : // owns destination ?>
