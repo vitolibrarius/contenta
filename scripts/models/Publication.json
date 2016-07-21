@@ -82,9 +82,9 @@
             "ownsDestination" : true
     	},
     	"publication_characters" : {
-    		"destination" : "Publication_Characters",
+    		"destination" : "Publication_Character",
     		"destinationPackage" : "\\model\\media\\",
-    		"destinationTable" : "publication_characters",
+    		"destinationTable" : "publication_character",
     		"joins" : [
     			{ "destinationAttribute": "publication_id", "sourceAttribute" : "id" }
     		],

@@ -21,8 +21,8 @@ use \model\media\Media as Media;
 use \model\media\MediaDBO as MediaDBO;
 use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
-use \model\media\Publication_Characters as Publication_Characters;
-use \model\media\Publication_CharactersDBO as Publication_CharactersDBO;
+use \model\media\Publication_Character as Publication_Character;
+use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 
 /** Sample Creation script */
 		/** PUBLICATION */
@@ -181,7 +181,7 @@ abstract class _Publication extends Model
 				case "story_arc_publication":
 					return array( Publication::id, "publication_id"  );
 					break;
-				case "publication_characters":
+				case "publication_character":
 					return array( Publication::id, "publication_id"  );
 					break;
 				default:
@@ -306,8 +306,8 @@ abstract class _Publication extends Model
 			if ( $story_arc_publication_model->deleteAllForKeyValue(Story_Arc_Publication::publication_id, $this->id) == false ) {
 				return false;
 			}
-			$publication_characters_model = Model::Named('Publication_Characters');
-			if ( $publication_characters_model->deleteAllForKeyValue(Publication_Characters::publication_id, $this->id) == false ) {
+			$publication_character_model = Model::Named('Publication_Character');
+			if ( $publication_character_model->deleteAllForKeyValue(Publication_Character::publication_id, $this->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

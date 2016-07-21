@@ -18,8 +18,8 @@ use \model\media\Media as Media;
 use \model\media\MediaDBO as MediaDBO;
 use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
-use \model\media\Publication_Characters as Publication_Characters;
-use \model\media\Publication_CharactersDBO as Publication_CharactersDBO;
+use \model\media\Publication_Character as Publication_Character;
+use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 
 class Publication extends _Publication
 {

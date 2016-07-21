@@ -19,8 +19,8 @@ use \model\media\Character_Alias as Character_Alias;
 use \model\media\Character_AliasDBO as Character_AliasDBO;
 use \model\media\Publisher as Publisher;
 use \model\media\PublisherDBO as PublisherDBO;
-use \model\media\Publication_Characters as Publication_Characters;
-use \model\media\Publication_CharactersDBO as Publication_CharactersDBO;
+use \model\media\Publication_Character as Publication_Character;
+use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 
 /** Sample Creation script */
 		/** CHARACTER */
@@ -182,7 +182,7 @@ abstract class _Character extends Model
 				case "publisher":
 					return array( Character::publisher_id, "id"  );
 					break;
-				case "publication_characters":
+				case "publication_character":
 					return array( Character::id, "character_id"  );
 					break;
 				default:
@@ -303,8 +303,8 @@ abstract class _Character extends Model
 				return false;
 			}
 			// does not own publisher Publisher
-			$publication_characters_model = Model::Named('Publication_Characters');
-			if ( $publication_characters_model->deleteAllForKeyValue(Publication_Characters::character_id, $this->id) == false ) {
+			$publication_character_model = Model::Named('Publication_Character');
+			if ( $publication_character_model->deleteAllForKeyValue(Publication_Character::character_id, $this->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

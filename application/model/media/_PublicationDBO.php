@@ -15,8 +15,8 @@ use \model\media\Media as Media;
 use \model\media\MediaDBO as MediaDBO;
 use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
-use \model\media\Publication_Characters as Publication_Characters;
-use \model\media\Publication_CharactersDBO as Publication_CharactersDBO;
+use \model\media\Publication_Character as Publication_Character;
+use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 
 abstract class _PublicationDBO extends DataObject
 {
@@ -96,8 +96,8 @@ abstract class _PublicationDBO extends DataObject
 	public function publication_characters()
 	{
 		if ( isset( $this->id ) ) {
-			$model = Model::Named('Publication_Characters');
-			return $model->allObjectsForKeyValue( Publication_Characters::publication_id, $this->id);
+			$model = Model::Named('Publication_Character');
+			return $model->allObjectsForKeyValue( Publication_Character::publication_id, $this->id);
 		}
 
 		return false;
