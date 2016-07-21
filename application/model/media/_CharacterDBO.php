@@ -15,6 +15,10 @@ use \model\media\Publisher as Publisher;
 use \model\media\PublisherDBO as PublisherDBO;
 use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
+use \model\media\Series_Character as Series_Character;
+use \model\media\Series_CharacterDBO as Series_CharacterDBO;
+use \model\media\Story_Arc_Character as Story_Arc_Character;
+use \model\media\Story_Arc_CharacterDBO as Story_Arc_CharacterDBO;
 
 abstract class _CharacterDBO extends DataObject
 {
@@ -82,6 +86,28 @@ abstract class _CharacterDBO extends DataObject
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Publication_Character');
 			return $model->allObjectsForKeyValue( Publication_Character::character_id, $this->id);
+		}
+
+		return false;
+	}
+
+	// to-many relationship
+	public function series_characters()
+	{
+		if ( isset( $this->id ) ) {
+			$model = Model::Named('Series_Character');
+			return $model->allObjectsForKeyValue( Series_Character::character_id, $this->id);
+		}
+
+		return false;
+	}
+
+	// to-many relationship
+	public function story_arc_characters()
+	{
+		if ( isset( $this->id ) ) {
+			$model = Model::Named('Story_Arc_Character');
+			return $model->allObjectsForKeyValue( Story_Arc_Character::character_id, $this->id);
 		}
 
 		return false;

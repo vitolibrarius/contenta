@@ -21,6 +21,10 @@ use \model\media\Publisher as Publisher;
 use \model\media\PublisherDBO as PublisherDBO;
 use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
+use \model\media\Series_Character as Series_Character;
+use \model\media\Series_CharacterDBO as Series_CharacterDBO;
+use \model\media\Story_Arc_Character as Story_Arc_Character;
+use \model\media\Story_Arc_CharacterDBO as Story_Arc_CharacterDBO;
 
 /** Sample Creation script */
 		/** CHARACTER */
@@ -71,6 +75,8 @@ abstract class _Character extends Model
 	const aliases = 'aliases';
 	const publisher = 'publisher';
 	const publication_characters = 'publication_characters';
+	const series_characters = 'series_characters';
+	const story_arc_characters = 'story_arc_characters';
 
 	public function tableName() { return Character::TABLE; }
 	public function tablePK() { return Character::id; }
@@ -183,6 +189,12 @@ abstract class _Character extends Model
 					return array( Character::publisher_id, "id"  );
 					break;
 				case "publication_character":
+					return array( Character::id, "character_id"  );
+					break;
+				case "series_character":
+					return array( Character::id, "character_id"  );
+					break;
+				case "story_arc_character":
 					return array( Character::id, "character_id"  );
 					break;
 				default:
@@ -305,6 +317,14 @@ abstract class _Character extends Model
 			// does not own publisher Publisher
 			$publication_character_model = Model::Named('Publication_Character');
 			if ( $publication_character_model->deleteAllForKeyValue(Publication_Character::character_id, $object->id) == false ) {
+				return false;
+			}
+			$series_character_model = Model::Named('Series_Character');
+			if ( $series_character_model->deleteAllForKeyValue(Series_Character::character_id, $object->id) == false ) {
+				return false;
+			}
+			$story_arc_character_model = Model::Named('Story_Arc_Character');
+			if ( $story_arc_character_model->deleteAllForKeyValue(Story_Arc_Character::character_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);
