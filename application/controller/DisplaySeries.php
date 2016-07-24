@@ -78,7 +78,7 @@ class DisplaySeries extends Controller
 
 	function details($oid = 0)
 	{
-		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+		if (Auth::handleLogin()) {
 			if ( $oid > 0 ) {
 				$model = Model::Named('Series');
 				$object = $model->objectForId($oid);

@@ -49,7 +49,7 @@ class DisplayStories extends Controller
 
 	function searchStoryArcs()
 	{
-		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+		if (Auth::handleLogin()) {
 			$model = Model::Named('Story_Arc');
 			$qualifiers = array();
 			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
@@ -90,7 +90,13 @@ class DisplayStories extends Controller
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
-			$select->orderBy( $model->sortOrder() );
+			$sort = array(
+				array( 'desc' => Story_Arc::pub_available ),
+				array( 'asc' => Story_Arc::name )
+			);
+			$select->orderBy( $sort );
+
+			Logger::LogInfo( $select->__toString() );
 //
 // 						Session::addPositiveFeedback("select ". $select);
 
@@ -103,7 +109,7 @@ class DisplayStories extends Controller
 
 	function details($oid = 0)
 	{
-		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+		if (Auth::handleLogin()) {
 			if ( $oid > 0 ) {
 				$model = Model::Named('Story_Arc');
 				$object = $model->objectForId($oid);
