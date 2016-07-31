@@ -478,8 +478,8 @@ class ComicVineConnector extends JSON_EndpointConnector
 				return array($json['results'], $headers);
 			}
 			else {
-				Logger::logError( $json['status_code'] . ': ' . $json['error']
-					. ' with URL: ' . $this->cleanURLForLog($url), get_short_class($this), $this->endpoint());
+// 				Logger::logError( $json['status_code'] . ': ' . $json['error']
+// 					. ' with URL: ' . $this->cleanURLForLog($url), get_short_class($this), $this->endpoint());
 				throw new EndpointConnectionException( $json['error'], $json['status_code'] );
 			}
 		}

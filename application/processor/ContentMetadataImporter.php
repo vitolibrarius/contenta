@@ -395,11 +395,9 @@ abstract class ContentMetadataImporter extends EndpointImporter
 						}
 					}
 					catch ( Exception $e ) {
-						Logger::logError( "Preprocessing error for " . var_export($meta, true), __method__, $this->guid);
+						// Logger::logError( "Preprocessing error for " . var_export($meta, true), __method__, $this->guid);
 						switch( $e->getCode() ) {
 							case 101:
-								Logger::logError( $meta[ContentMetadataImporter::META_IMPORT_TYPE] . " not found for xid " . $path,
-									$this->type, $this->guid);
 								// move object to the purge list
 								$this->setMeta( $new, null );
 								$purge = appendPath( ComicVineImporter::META_PURGE_ROOT, $path);
