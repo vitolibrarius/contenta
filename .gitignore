@@ -11,4 +11,6 @@
 /tests/RSS.json
 /tests/Newznab.json
 /tests/SABnzbd.json
+
+# cd application ; bbedit --maketags
 application/tags
