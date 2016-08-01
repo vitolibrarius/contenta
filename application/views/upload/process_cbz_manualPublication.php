@@ -1,4 +1,3 @@
-<?php use html\Element as H ?>
 <style type="text/css">
 	#slideshow #leftArrow {
 		background:url('<?php echo Config::Web("/public/img/left.png"); ?>') no-repeat;
@@ -91,49 +90,33 @@ fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key)
 
 <div class="tab-content" id="tab1">
 	<section>
+		<form id='searchForm' name='searchForm'>
 		<div class="row">
-		<?php if (empty($this->listArray)): ?>
-			<div style="background:hsl(326,50%,75%)">
-				There are no matching records
+			<div class="grid_2">
+				<input type="text" name="searchIssue" id="searchIssue"
+					class="text_input"
+					placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "issue_num" ); ?>"
+					value="<?php echo (isset($this->search['issue']) ? $this->search['issue'] : '');  ?>">
 			</div>
-		<?php else: ?>
-		<?php
-			$card = new html\Card();
-			$card->setDisplayDescriptionKey( "shortDescription" );
-			$card->setDetailKeys( array(
-				\model\media\Publication::issue_num => "issue_num",
-				\model\media\Publication::pub_date => "publishedMonthYear"
-				)
-			);
-			if ( is_null($this->listArray) || count($this->listArray) == 0) {
-				echo "No records";
-			}
+			<div class="grid_2">
+				<input type="number" name="searchYear" id="searchYear"
+					class="text_input"
+					min="1950"
+					max="<?php echo intval(date("Y") + 1); ?>"
+					placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "year" ); ?>"
+					value="<?php echo (isset($this->search['year']) ? $this->search['year'] : '');  ?>">
+			</div>
+		</div>
+		</form>
 
-			foreach($this->listArray as $key => $value) {
-				echo '<div class="grid_3">' . PHP_EOL;
-				echo $card->render($value, function() use($value) {
-						$all_media = $value->media();
-						if ( is_array($all_media) ) {
-							foreach ($all_media as $idx => $media) {
-								$c[] = H::p( $media->formattedSize() );
-							}
-						}
-
-						$c[] = H::a(
-							array(
-								"class" => "button",
-								"href" => Config::Web($this->saveAction, $value->id)),
-							"Select"
-						);
-						return (isset($c) ? $c : null);
-					}
-				);
-				echo '</div>' . PHP_EOL;
-			}
-		?>
-		<?php endif; ?>
+		<div class="row">
+			<div class="grid_12">
+				<h2><?php echo $this->seriesObj->name(); ?></h2>
+			</div>
 		</div>
 	</section>
+
+	<div id='ajaxDiv'></div>
 </div>
 
 <div class="tab-content" id="tab2">
@@ -162,6 +145,31 @@ $(document).ready(function() {
 		});
 		e.preventDefault();
 	});
+
+	$(".text_input").on('keyup change', function () {
+		delay( refresh(), 250 );
+	});
+
+	function refresh() {
+		$.ajax({
+			type: "GET",
+			url: "<?php echo Config::Web('/AdminUploadRepair/editUnprocessedManually_publicationList', $this->key, $this->series_id); ?>",
+			data: {
+				issue_num: $('input#searchIssue').val(),
+				year:  $('input#searchYear').val()
+			},
+			dataType: "text",
+			success: function(msg){
+				var ajaxDisplay = document.getElementById('ajaxDiv');
+				ajaxDisplay.innerHTML = msg;
+			},
+	        error: function(jqXHR, textStatus, errorThrown) {
+				var ajaxDisplay = document.getElementById('ajaxDiv');
+				ajaxDisplay.innerHTML = textStatus . errorThrown;
+	        }
+		});
+	};
+	refresh();
 });
 
 </script>

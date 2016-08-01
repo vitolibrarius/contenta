@@ -6,12 +6,15 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Auth as Auth;
-use \http\Session as Session;;
 use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
 use \Processor as Processor;
 use \SQL as SQL;
+
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
+
 use db\Qualifier as Qualifier;
 
 use processor\ComicVineImporter as ComicVineImporter;
@@ -295,19 +298,76 @@ class AdminUploadRepair extends Admin
 					$ext = $processor->sourceFileExtension();
 
 					$this->view->model = Model::Named('Publication');
-					$this->view->listArray = $seriesObj->publications();
 
 					$this->view->addStylesheet("select2.min.css");
 					$this->view->addStylesheet("slideshow.css");
 
 					$this->view->addScript("slideshow.js");
 					$this->view->addScript("select2.min.js");
-					$this->view->saveAction = appendPath("/AdminUploadRepair/editUnprocessedManually_selectMatch", $processKey, $seriesId);
 
 					$this->view->render( '/upload/process_' . $ext . '_manualPublication');
 				}
 				else {
 					$this->editUnprocessedManually_seriesList($processKey);
+				}
+			}
+			else {
+				Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
+				header('location: ' . Config::Web( get_short_class($this), 'index'));
+			}
+		}
+	}
+
+	function editUnprocessedManually_publicationList($processKey = null, $seriesId = 0)
+	{
+		Logger::logInfo("editUnprocessedManually_publicationList($processKey = null, $seriesId = 0)", $processKey, $seriesId);
+		if (Auth::handleLogin() && Auth::requireRole('admin')) {
+			Logger::logInfo("Logged in", $processKey, $seriesId);
+			if ( ImportManager::IsEditable($processKey) == true ) {
+				Logger::logInfo("Editable", $processKey, $seriesId);
+				if ( isset($seriesId) && $seriesId > 0) {
+					Logger::logInfo("series", $processKey, $seriesId);
+
+					$model = Model::Named('Publication');
+					$qualifiers = array();
+
+					$seriesObj = Model::Named('Series')->objectForId($seriesId);
+					if ( $seriesObj != false ) {
+						$qualifiers[] = Qualifier::FK( Publication::series_id, $seriesObj);
+					}
+					$year = HttpGet::get('year', '');
+					if ( strlen($year) == 4 ) {
+						$start = strtotime("01-01-" . $year . " 00:00");
+						$qualifiers[] = Qualifier::OrQualifier(
+							Qualifier::IsNull( Publication::pub_date ),
+							Qualifier::GreaterThanEqual(Publication::pub_date, $start)
+						);
+					}
+					$issNum = HttpGet::get('issue_num', '');
+					if ( strlen($issNum) > 0 ) {
+						$qualifiers[] = Qualifier::Like( Publication::issue_num, $issNum );
+					}
+
+					Logger::logInfo(var_export($qualifiers, true), $processKey, $seriesId);
+
+					$select = SQL::Select($model);
+					if ( count($qualifiers) > 0 ) {
+						$select->where( Qualifier::AndQualifier( $qualifiers ));
+					}
+					$select->orderBy( $model->sortOrder() );
+
+					$this->view->model = $model;
+					$this->view->key = $processKey;
+					$this->view->listArray = $select->fetchAll();
+					$this->view->saveAction = appendPath("/AdminUploadRepair/editUnprocessedManually_selectMatch", $processKey, $seriesId);
+
+					Logger::logInfo("rendering", $processKey, $seriesId);
+					$this->view->render( '/upload/process_cbz_manual_publicationCards', true);
+					Logger::logInfo("complete", $processKey, $seriesId);
+				}
+				else {
+					Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
+					header('location: ' . Config::Web( get_short_class($this), 'index'));
 				}
 			}
 			else {

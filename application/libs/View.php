@@ -118,6 +118,7 @@ class View
 			}
 		}
 		else {
+			Session::addNegativeFeedback("Could not find $filename", $this->controllerName);
 			header('location: ' . Config::Web('/error/index'));
 		}
 	}

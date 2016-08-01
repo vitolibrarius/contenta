@@ -125,6 +125,10 @@
             "DeleteConfirmation": "Are you sure you want to continue?",
             "DeleteDescription": "This will permanently delete this media "
         },
+        "media": {
+            "DeleteConfirmation": "Are you sure you want to continue?",
+            "DeleteDescription": "This will permanently delete this media"
+        },
         "title": "Unprocessed Uploads"
     },
     "AdminUsers": {
@@ -474,6 +478,9 @@
             },
             "xupdated": {
                 "label": "Last Updated"
+            },
+            "year": {
+                "search": "Published Year"
             }
         },
         "publisher": {
