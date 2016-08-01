@@ -1,8 +1,8 @@
-<script>
+<!-- script>
 	$(document).ready(function() {
 		$("#<?php echo $this->input_id; ?>").datepicker();
 	});
-</script>
+</script -->
 
 <label for="<?php echo $this->input_id; ?>">
 <?php echo $this->input_label; ?>
