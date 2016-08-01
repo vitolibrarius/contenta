@@ -304,6 +304,7 @@ class AdminUploadRepair extends Admin
 
 					$this->view->addScript("slideshow.js");
 					$this->view->addScript("select2.min.js");
+					$this->view->saveAction = appendPath("/AdminUploadRepair/editUnprocessedManually_selectMatch", $processKey, $seriesId);
 
 					$this->view->render( '/upload/process_' . $ext . '_manualPublication');
 				}
@@ -322,12 +323,8 @@ class AdminUploadRepair extends Admin
 	{
 		Logger::logInfo("editUnprocessedManually_publicationList($processKey = null, $seriesId = 0)", $processKey, $seriesId);
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {
-			Logger::logInfo("Logged in", $processKey, $seriesId);
 			if ( ImportManager::IsEditable($processKey) == true ) {
-				Logger::logInfo("Editable", $processKey, $seriesId);
 				if ( isset($seriesId) && $seriesId > 0) {
-					Logger::logInfo("series", $processKey, $seriesId);
-
 					$model = Model::Named('Publication');
 					$qualifiers = array();
 
@@ -348,8 +345,6 @@ class AdminUploadRepair extends Admin
 						$qualifiers[] = Qualifier::Like( Publication::issue_num, $issNum );
 					}
 
-					Logger::logInfo(var_export($qualifiers, true), $processKey, $seriesId);
-
 					$select = SQL::Select($model);
 					if ( count($qualifiers) > 0 ) {
 						$select->where( Qualifier::AndQualifier( $qualifiers ));
@@ -361,9 +356,7 @@ class AdminUploadRepair extends Admin
 					$this->view->listArray = $select->fetchAll();
 					$this->view->saveAction = appendPath("/AdminUploadRepair/editUnprocessedManually_selectMatch", $processKey, $seriesId);
 
-					Logger::logInfo("rendering", $processKey, $seriesId);
 					$this->view->render( '/upload/process_cbz_manual_publicationCards', true);
-					Logger::logInfo("complete", $processKey, $seriesId);
 				}
 				else {
 					Session::addNegativeFeedback(Localized::Get("Upload", 'NotEditable'));
