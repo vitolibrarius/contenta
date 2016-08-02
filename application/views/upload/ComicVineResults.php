@@ -47,8 +47,8 @@
 							</a>
 							<?php echo (isset($item['volume'], $item['volume']['name']) ? $item['volume']['name'] : ""); ?>
 						</h3>
-						<p class="issue_num"><?php echo $item['issue_number']; ?></p>
-						<p class="pub_date"><?php echo $item['cover_date']; ?></p>
+						<p class="property issue_num"><?php echo $item['issue_number']; ?></p>
+						<p class="property pub_date"><?php echo $item['cover_date']; ?></p>
 					</div>
 					<div class="figure_detail_middle">
 						<?php
@@ -117,8 +117,8 @@
 							</a>
 							<?php echo (isset($item['volume'], $item['volume']['name']) ? $item['volume']['name'] : ""); ?>
 						</h3>
-						<p class="issue_num"><?php echo $item['issue_number']; ?></p>
-						<p class="pub_date"><?php echo $item['cover_date']; ?></p>
+						<p class="property issue_num"><?php echo $item['issue_number']; ?></p>
+						<p class="property pub_date"><?php echo $item['cover_date']; ?></p>
 					</div>
 					<div class="figure_detail_middle">
 					</div>

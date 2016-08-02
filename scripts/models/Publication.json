@@ -8,7 +8,8 @@
         "desc": { "column": "desc", "length": 4096, "type": "TEXT",	"nullable": true },
         "pub_date": { "column": "pub_date", "type": "DATE" },
         "issue_num": { "column": "issue_num", "length": 256, "type": "TEXT", "default": "0"  },
-        "media_count": { "column": "media_count",	"type": "INTEGER", "default": 0  },
+        "issue_order": { "column": "issue_order", "type": "INTEGER", "default": 0 },
+        "media_count": { "column": "media_count", "type": "INTEGER", "default": 0  },
 
         "xurl": { "column": "xurl", "length": 1024, "type": "TEXT" },
         "xsource": { "column": "xsource", "length": 256, "type": "TEXT" },
@@ -21,7 +22,7 @@
     "model": "Publication",
     "dbo": "PublicationDBO",
 	"sort" : [
-		{ "asc": "issue_num" },
+		{ "asc": "issue_order" },
 		{ "asc": "pub_date" }
 	],
     "indexes" : [

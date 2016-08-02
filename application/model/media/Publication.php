@@ -38,6 +38,10 @@ class Publication extends _Publication
 			if ( isset($values[Publication::name]) == false ) {
 				$values[Publication::name] = "Issue" . (isset($values[Publication::issue_num]) ? " " . $values[Publication::issue_num] : "");
 			}
+
+			if ( isset($values[Publication::issue_num]) == true ) {
+				$values[Publication::issue_order] = intval(floatval($values[Publication::issue_num]) * 10);
+			}
 		}
 
 		return parent::createObject($values);
@@ -47,6 +51,10 @@ class Publication extends _Publication
 		if (isset($object) && $object instanceof PublicationDBO ) {
 			if ( isset($values['desc']) && strlen($values['desc']) > 0 ) {
 				$values['desc'] = strip_tags($values['desc']);
+			}
+
+			if ( isset($values[Publication::issue_num]) == true ) {
+				$values[Publication::issue_order] = intval(floatval($values[Publication::issue_num]) * 10);
 			}
 		}
 

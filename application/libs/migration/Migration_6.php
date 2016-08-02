@@ -155,6 +155,7 @@ class Migration_6 extends Migrator
 			. Publication::desc . " TEXT, "
 			. Publication::pub_date . " INTEGER, "
 			. Publication::issue_num . " TEXT, "
+			. Publication::issue_order . " INTEGER, "
 			. Publication::media_count . " INTEGER, "
 			. Publication::xurl . " TEXT, "
 			. Publication::xsource . " TEXT, "

@@ -26,6 +26,7 @@ abstract class _PublicationDBO extends DataObject
 	public $desc;
 	public $pub_date;
 	public $issue_num;
+	public $issue_order;
 	public $media_count;
 	public $xurl;
 	public $xsource;
@@ -143,6 +144,16 @@ abstract class _PublicationDBO extends DataObject
 	public function setIssue_num( $value = null)
 	{
 		parent::storeChange( Publication::issue_num, $value );
+	}
+
+	public function issue_order()
+	{
+		return parent::changedValue( Publication::issue_order, $this->issue_order );
+	}
+
+	public function setIssue_order( $value = null)
+	{
+		parent::storeChange( Publication::issue_order, $value );
 	}
 
 	public function media_count()

@@ -35,6 +35,7 @@ use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 			. Publication::desc . " TEXT, "
 			. Publication::pub_date . " INTEGER, "
 			. Publication::issue_num . " TEXT, "
+			. Publication::issue_order . " INTEGER, "
 			. Publication::media_count . " INTEGER, "
 			. Publication::xurl . " TEXT, "
 			. Publication::xsource . " TEXT, "
@@ -61,6 +62,7 @@ abstract class _Publication extends Model
 	const desc = 'desc';
 	const pub_date = 'pub_date';
 	const issue_num = 'issue_num';
+	const issue_order = 'issue_order';
 	const media_count = 'media_count';
 	const xurl = 'xurl';
 	const xsource = 'xsource';
@@ -79,7 +81,7 @@ abstract class _Publication extends Model
 	public function sortOrder()
 	{
 		return array(
-			array( 'asc' => Publication::issue_num),
+			array( 'asc' => Publication::issue_order),
 			array( 'asc' => Publication::pub_date)
 		);
 	}
@@ -94,6 +96,7 @@ abstract class _Publication extends Model
 			Publication::desc,
 			Publication::pub_date,
 			Publication::issue_num,
+			Publication::issue_order,
 			Publication::media_count,
 			Publication::xurl,
 			Publication::xsource,
@@ -126,6 +129,11 @@ abstract class _Publication extends Model
 		return $this->allObjectsForKeyValue(Publication::issue_num, $value);
 	}
 
+
+	public function allForIssue_order($value)
+	{
+		return $this->allObjectsForKeyValue(Publication::issue_order, $value);
+	}
 
 	public function allForMedia_count($value)
 	{
@@ -227,6 +235,12 @@ abstract class _Publication extends Model
 				$default_issue_num = $this->attributeDefaultValue( null, null, Publication::issue_num);
 				if ( is_null( $default_issue_num ) == false ) {
 					$values['issue_num'] = $default_issue_num;
+				}
+			}
+			if ( isset($values['issue_order']) == false ) {
+				$default_issue_order = $this->attributeDefaultValue( null, null, Publication::issue_order);
+				if ( is_null( $default_issue_order ) == false ) {
+					$values['issue_order'] = $default_issue_order;
 				}
 			}
 			if ( isset($values['media_count']) == false ) {
@@ -385,6 +399,7 @@ abstract class _Publication extends Model
 			Publication::desc => Model::TEXTAREA_TYPE,
 			Publication::pub_date => Model::DATE_TYPE,
 			Publication::issue_num => Model::TEXT_TYPE,
+			Publication::issue_order => Model::INT_TYPE,
 			Publication::media_count => Model::INT_TYPE,
 			Publication::xurl => Model::TEXTAREA_TYPE,
 			Publication::xsource => Model::TEXT_TYPE,
@@ -398,6 +413,8 @@ abstract class _Publication extends Model
 		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
 				case Publication::issue_num:
+					return 0;
+				case Publication::issue_order:
 					return 0;
 				case Publication::media_count:
 					return 0;
@@ -477,6 +494,23 @@ abstract class _Publication extends Model
 			return null;
 		}
 
+		return null;
+	}
+	function validate_issue_order($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Publication::issue_order,
+				"FILTER_VALIDATE_INT"
+			);
+		}
 		return null;
 	}
 	function validate_media_count($object = null, $value)
