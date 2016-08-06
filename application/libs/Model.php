@@ -350,7 +350,7 @@ abstract class Model
 			$qualifiers[] = db\Qualifier::GreaterThan( "start_year", $cutoff);
 		}
 		if ( $activeOnly && $this->hasColumn('pub_active') ) {
-			$qualifiers[] = db\Qualifier::Equals( "pub_active", 1 );
+			$qualifiers[] = db\Qualifier::Equals( "pub_active", Model::TERTIARY_TRUE );
 		}
 
 		$order = array();
