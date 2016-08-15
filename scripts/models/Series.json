@@ -69,9 +69,9 @@
             "ownsDestination" : true
     	},
     	"series_characters" : {
-    		"destination" : "Series_Characters",
+    		"destination" : "Series_Character",
     		"destinationPackage" : "\\model\\media\\",
-    		"destinationTable" : "series_characters",
+    		"destinationTable" : "series_character",
     		"joins" : [
     			{ "destinationAttribute": "series_id", "sourceAttribute" : "id" }
     		],

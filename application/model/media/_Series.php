@@ -21,8 +21,8 @@ use \model\media\Publisher as Publisher;
 use \model\media\PublisherDBO as PublisherDBO;
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
-use \model\media\Series_Characters as Series_Characters;
-use \model\media\Series_CharactersDBO as Series_CharactersDBO;
+use \model\media\Series_Character as Series_Character;
+use \model\media\Series_CharacterDBO as Series_CharacterDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
 use \model\media\User_Series as User_Series;
@@ -225,7 +225,7 @@ abstract class _Series extends Model
 				case "publication":
 					return array( Series::id, "series_id"  );
 					break;
-				case "series_characters":
+				case "series_character":
 					return array( Series::id, "series_id"  );
 					break;
 				case "story_arc_series":
@@ -386,8 +386,8 @@ abstract class _Series extends Model
 			if ( $publication_model->deleteAllForKeyValue(Publication::series_id, $object->id) == false ) {
 				return false;
 			}
-			$series_characters_model = Model::Named('Series_Characters');
-			if ( $series_characters_model->deleteAllForKeyValue(Series_Characters::series_id, $object->id) == false ) {
+			$series_character_model = Model::Named('Series_Character');
+			if ( $series_character_model->deleteAllForKeyValue(Series_Character::series_id, $object->id) == false ) {
 				return false;
 			}
 			$story_arc_series_model = Model::Named('Story_Arc_Series');

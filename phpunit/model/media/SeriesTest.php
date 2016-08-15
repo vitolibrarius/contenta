@@ -21,8 +21,8 @@ use \model\media\PublisherDBO as PublisherDBO;
 /* * Generated from UseStatements.tpl by PhpTestClassGenerator.php on 2016-06-22 20:44:16. */
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
-use \model\media\Series_Characters as Series_Characters;
-use \model\media\Series_CharactersDBO as Series_CharactersDBO;
+use \model\media\Series_Character as Series_Character;
+use \model\media\Series_CharacterDBO as Series_CharacterDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
 use \model\media\User_Series as User_Series;

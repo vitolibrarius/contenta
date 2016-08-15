@@ -15,8 +15,8 @@ use \model\media\Publisher as Publisher;
 use \model\media\PublisherDBO as PublisherDBO;
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
-use \model\media\Series_Characters as Series_Characters;
-use \model\media\Series_CharactersDBO as Series_CharactersDBO;
+use \model\media\Series_Character as Series_Character;
+use \model\media\Series_CharacterDBO as Series_CharacterDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
 use \model\media\User_Series as User_Series;
@@ -110,8 +110,8 @@ abstract class _SeriesDBO extends DataObject
 	public function series_characters()
 	{
 		if ( isset( $this->id ) ) {
-			$model = Model::Named('Series_Characters');
-			return $model->allObjectsForKeyValue( Series_Characters::series_id, $this->id);
+			$model = Model::Named('Series_Character');
+			return $model->allObjectsForKeyValue( Series_Character::series_id, $this->id);
 		}
 
 		return false;
