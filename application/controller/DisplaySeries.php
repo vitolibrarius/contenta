@@ -90,7 +90,7 @@ class DisplaySeries extends Controller
 					$this->view->render( '/series/seriesDetails' );
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]" );
 					$this->view->render('/error/index');
 				}
 			}

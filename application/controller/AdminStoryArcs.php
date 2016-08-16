@@ -118,7 +118,7 @@ class AdminStoryArcs extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]" );
 				}
 			}
 			else {
@@ -137,7 +137,10 @@ class AdminStoryArcs extends Admin
 			$model = Model::Named('Story_Arc');
 			$this->view->model = $model;
 			if ( $oid > 0 ) {
-				$this->view->object = $model->objectForId($oid);
+				$object = $model->objectForId($oid);
+				if ( $object != false ) {
+					$this->view->object = $object;
+				}
 			}
 			$this->view->saveAction = "/AdminStoryArcs/saveStoryArc";
 			$this->view->additionalAction = "/AdminStoryArcs/updatedAdditional";
@@ -192,7 +195,7 @@ class AdminStoryArcs extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]" );
 					$this->view->render('/error/index');
 				}
 			}

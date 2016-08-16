@@ -94,7 +94,7 @@ class AdminCharacters extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]");
 				}
 			}
 			else {
@@ -113,7 +113,10 @@ class AdminCharacters extends Admin
 			$model = Model::Named('Character');
 			$this->view->model = $model;
 			if ( $oid > 0 ) {
-				$this->view->object = $model->objectForId($oid);
+				$object = $model->objectForId($oid);
+				if ( $object != false ) {
+					$this->view->object = $object;
+				}
 			}
 			$this->view->saveAction = "/AdminCharacters/saveCharacter";
 			$this->view->additionalAction = "/AdminCharacters/updatedAdditional";
@@ -148,7 +151,7 @@ class AdminCharacters extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]");
 					$this->view->render('/error/index');
 				}
 			}
@@ -189,7 +192,7 @@ class AdminCharacters extends Admin
 					header('location: ' . Config::Web('/AdminCharacters/editCharacter', $oid ));
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) . " " . $model->tableName() . " [$oid]" );
 					$this->view->render('/error/index');
 				}
 			}

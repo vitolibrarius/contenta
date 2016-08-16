@@ -39,7 +39,7 @@ class AdminUsers extends Admin
 		}
 	}
 
-	function editUser($uid = 0)
+	function editUser($oid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->addStylesheet("select2.min.css");
@@ -47,8 +47,11 @@ class AdminUsers extends Admin
 
 			$user_model = Model::Named('Users');
 			$this->view->model = Model::Named('Users');
-			if ( $uid > 0 ) {
-				$this->view->object = $user_model->objectForId($uid);
+			if ( $oid > 0 ) {
+				$object = $model->objectForId($oid);
+				if ( $object != false ) {
+					$this->view->object = $object;
+				}
 			}
 			$this->view->saveAction = "/AdminUsers/saveUser";
 			$this->view->additionalAction = "/AdminUsers/additionalUser";
@@ -82,7 +85,7 @@ class AdminUsers extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$uid]" );
 					$this->view->render('/error/index');
 				}
 			}
@@ -118,7 +121,7 @@ class AdminUsers extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$uid]" );
 					$this->userlist();
 				}
 			}
@@ -147,7 +150,7 @@ class AdminUsers extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$uid]" );
 				}
 			}
 			else {

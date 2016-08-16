@@ -46,7 +46,7 @@ class Netconfig extends Controller
 					$this->view->render( '/edit/endpoint' );
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ));
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$netId]");
 					Logger::logError("Invalid endpoint requested " . $netId);
 					$this->view->render('/error/index');
 				}
@@ -85,7 +85,7 @@ class Netconfig extends Controller
 					return;
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ));
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$typeCode]");
 				}
 			}
 			else {
@@ -124,7 +124,7 @@ class Netconfig extends Controller
 					}
 				}
 				else {
-					Session::addNegativeFeedback( Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback( Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$netId]" );
 					$this->view->render('/error/index');
 				}
 			}
@@ -162,7 +162,7 @@ class Netconfig extends Controller
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$netId]" );
 				}
 			}
 			else {
@@ -190,7 +190,7 @@ class Netconfig extends Controller
 					echo $message;
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$netId]" );
 					echo "could not find $netId";
 				}
 			}

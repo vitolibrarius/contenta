@@ -59,7 +59,7 @@ class AdminPublishers extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$pubId]" );
 				}
 			}
 			else {
@@ -69,7 +69,7 @@ class AdminPublishers extends Admin
 		}
 	}
 
-	function editPublisher($pubId = 0)
+	function editPublisher($oid = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->addStylesheet("select2.min.css");
@@ -77,8 +77,11 @@ class AdminPublishers extends Admin
 
 			$model = Model::Named('Publisher');
 			$this->view->model = $model;
-			if ( $pubId > 0 ) {
-				$this->view->object = $model->objectForId($pubId);
+			if ( $oid > 0 ) {
+				$object = $model->objectForId($oid);
+				if ( $object != false ) {
+					$this->view->object = $object;
+				}
 			}
 			$this->view->saveAction = "/AdminPublishers/savePublisher";
 			$this->view->additionalAction = "/AdminPublishers/updatedAdditional";
@@ -110,7 +113,7 @@ class AdminPublishers extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$pubId]" );
 					$this->view->render('/error/index');
 				}
 			}
@@ -151,7 +154,7 @@ class AdminPublishers extends Admin
 					$this->editPublisher($pubId);
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) . " " . $model->tableName() . " [$pubId]" );
 					$this->view->render('/error/index');
 				}
 			}

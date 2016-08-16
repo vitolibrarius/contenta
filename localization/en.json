@@ -171,7 +171,7 @@
             "title": "Error"
         },
         "Failed": "Failed",
-        "Failed to find request record": "Failed to find request record",
+        "Failed to find request record": "Failed to find requested record",
         "HelpLink": "Help",
         "LoginButton": "Login",
         "Menu": {

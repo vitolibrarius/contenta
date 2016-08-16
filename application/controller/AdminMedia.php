@@ -212,7 +212,7 @@ class AdminMedia extends Admin
 				}
 			}
 			else {
-				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " .$oid);
+				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]");
 				$this->view->render('/error/index');
 			}
 		}
@@ -234,7 +234,7 @@ class AdminMedia extends Admin
 					}
 				}
 				else {
-					$this->view->renderJson( Localized::GlobalLabel( "Failed to find request record" ));
+					$this->view->renderJson( Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]");
 				}
 			}
 			else {

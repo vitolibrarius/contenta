@@ -96,7 +96,7 @@ class AdminSeries extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]" );
 				}
 			}
 			else {
@@ -115,7 +115,10 @@ class AdminSeries extends Admin
 			$model = Model::Named('Series');
 			$this->view->model = $model;
 			if ( $oid > 0 ) {
-				$this->view->object = $model->objectForId($oid);
+				$series = $model->objectForId($oid);
+				if ( $series != false ) {
+					$this->view->object = $series;
+				}
 			}
 			$this->view->saveAction = "/AdminSeries/saveSeries";
 			$this->view->additionalAction = "/AdminSeries/updatedAdditional";
@@ -203,7 +206,7 @@ class AdminSeries extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]" );
 					$this->view->render('/error/index');
 				}
 			}
@@ -244,7 +247,7 @@ class AdminSeries extends Admin
 					$this->editSeries($oid);
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) . " " . $model->tableName() . " [$oid]" );
 					$this->view->render('/error/index');
 				}
 			}

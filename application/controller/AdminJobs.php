@@ -57,7 +57,7 @@ class AdminJobs extends Admin
 					header('location: ' . Config::Web('/AdminJobs/index'));
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ));
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$jobId]");
 					Logger::logError("Invalid job requested " . $jobId);
 					$this->view->render('/error/index');
 				}
@@ -126,7 +126,7 @@ class AdminJobs extends Admin
 					$this->view->render( '/edit/job' );
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ));
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$jobId]");
 					Logger::logError("Invalid job requested " . $jobId);
 					$this->view->render('/error/index');
 				}
@@ -160,7 +160,7 @@ class AdminJobs extends Admin
 					return;
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ));
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName());
 				}
 			}
 			else {
@@ -205,7 +205,7 @@ class AdminJobs extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback( Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback( Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$jobId]" );
 					$this->view->render('/error/index');
 				}
 			}
@@ -243,7 +243,7 @@ class AdminJobs extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$jobId]" );
 				}
 			}
 			else {

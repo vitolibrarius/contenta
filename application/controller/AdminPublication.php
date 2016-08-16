@@ -77,7 +77,7 @@ class AdminPublication extends Admin
 				}
 			}
 			else {
-				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " .$oid);
+				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]");
 				$this->view->render('/error/index');
 			}
 		}
@@ -162,7 +162,7 @@ class AdminPublication extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]" );
 				}
 			}
 			else {
@@ -181,7 +181,10 @@ class AdminPublication extends Admin
 			$model = Model::Named('Publication');
 			$this->view->model = $model;
 			if ( $oid > 0 ) {
-				$this->view->object = $model->objectForId($oid);
+				$object = $model->objectForId($oid);
+				if ( $object != false ) {
+					$this->view->object = $object;
+				}
 			}
 			$this->view->saveAction = "/AdminPublication/savePublication";
 			$this->view->additionalAction = "/AdminPublication/updatedAdditional";
@@ -213,7 +216,7 @@ class AdminPublication extends Admin
 					}
 				}
 				else {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$oid]" );
 					$this->view->render('/error/index');
 				}
 			}
