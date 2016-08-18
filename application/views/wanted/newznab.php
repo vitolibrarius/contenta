@@ -75,6 +75,8 @@ $(document).ready(function($) {
 			data: {
 				endpoint_id: $(this).attr('data-endpoint_id'),
 				name: $(this).attr('data-name'),
+				issue: $(this).attr('data-issue'),
+				year: $(this).attr('data-year'),
 				guid: $(this).attr('data-guid'),
 				nzburl: $(this).attr('data-url'),
 				postedDate: $(this).attr('data-postedDate')

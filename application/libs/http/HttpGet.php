@@ -48,6 +48,30 @@ class HttpGet
 	}
 
 	/**
+	 * tests for a valid value
+	 */
+	public static function hasValue($key)
+	{
+		$value = self::get($key, null);
+		return (is_null($value) ? false : true);
+	}
+
+	/**
+	 * tests for a valid values
+	 */
+	public static function hasValues()
+	{
+		$keys = func_get_args();
+		$teeth = array_filter($keys, 'is_string');
+		foreach( $teeth as $key ) {
+			if ( self::hasValue($key) == false ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * gets/returns the value of a specific key of the HttpGet
 	 * @param mixed $key Usually a string, right ?
 	 * @return mixed
@@ -55,6 +79,17 @@ class HttpGet
 	public static function get($key, $default = null)
 	{
 		return self::adapter()->get($key, $default);
+	}
+
+	/**
+	 * gets/returns the value of a specific key as an integer
+	 * @param mixed $key Usually a string, right ?
+	 * @return mixed
+	 */
+	public static function getInt($key, $default = null)
+	{
+		$value = self::get($key, $default );
+		return intval($value);
 	}
 
 	public static function debugInfo()

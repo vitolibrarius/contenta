@@ -12,11 +12,11 @@
     <div class="wrapper">
 		<div class="row">
 			<div class="grid_12">
-
+<?php if ( isset($endpoint, $endpoint->name) ) : ?>
 <div class="mediaData">
 	<table>
 		<tr>
-			<th>Postings from <?php echo $endpoint->name; ?></th>
+			<th><?php echo 'Postings from ' . $endpoint->name; ?></th>
 			<th>Status</th>
 			<th>Publications Available</th>
 		</tr>
@@ -41,7 +41,9 @@
 					if ($flux == false ) : ?>
 						<div id="ajaxDiv_<?php echo $item['safe_guid']; ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"
-							data-name="<?php echo $item['title']; ?>"
+							data-name="<?php echo htmlentities($seriesName); ?>"
+							data-issue="<?php echo $issue; ?>"
+							data-year="<?php echo $year; ?>"
 							data-endpoint_id="<?php echo $this->endpoint_id; ?>"
 							data-guid="<?php echo $item['guid']; ?>"
 							data-url="<?php echo $item['url']; ?>"
@@ -87,6 +89,9 @@
 	<?php endif; ?>
 	</table>
 </div>
+<?php else : ?>
+	<em><?php echo Localized::GlobalLabel("No Search Criteria"); ?></em>
+<?php endif; ?>
   			</div>
 		</div>
 	</div>

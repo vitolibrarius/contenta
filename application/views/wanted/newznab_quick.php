@@ -8,13 +8,13 @@
 		}
 	}
 ?>
-<div class="mediaData">
-	<table>
+<?php if (isset($this->results) && count($this->results) > 0): ?>
+	<div class="mediaData">
+	<table width="100%">
 		<tr>
 			<th>Postings from <?php echo $endpoint->name; ?></th>
 			<th>Status</th>
 		</tr>
-	<?php if (isset($this->results) && count($this->results) > 0): ?>
 		<?php foreach ($this->results as $key => $item) : ?>
 			<?php if (isset($item['metadata'], $item['metadata']['name'])) {
 					$seriesName = $item['metadata']['name'];
@@ -35,7 +35,9 @@
 					if ($flux == false ) : ?>
 						<div id="dnld_<?php echo $item['safe_guid']; ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"
-							data-name="<?php echo $item['title']; ?>"
+							data-name="<?php echo htmlentities($seriesName); ?>"
+							data-issue="<?php echo $issue; ?>"
+							data-year="<?php echo $year; ?>"
 							data-endpoint_id="<?php echo $this->endpoint_id; ?>"
 							data-guid="<?php echo $item['guid']; ?>"
 							data-url="<?php echo $item['url']; ?>"
@@ -58,10 +60,8 @@
 			</td>
 		</tr>
 	<?php endforeach; ?>
-	<?php else : ?>
-		<tr>
-			<td colspan=3>No matching records</td>
-		</tr>
-	<?php endif; ?>
 	</table>
-</div>
+	</div>
+<?php else : ?>
+	<p style="text-align: center;"><em>No postings on <?php echo $endpoint->name; ?></em></p>
+<?php endif; ?>

@@ -11,6 +11,7 @@ use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
 use \Processor as Processor;
+use \http\HttpGet as HttpGet;
 
 use processor\ComicVineImporter as ComicVineImporter;
 use processor\UploadImport as UploadImport;
@@ -143,8 +144,8 @@ class AdminWanted extends Admin
 				Qualifier::IsNull( Publication::media_count )
 			);
 
-			if ( isset($_GET['date_range']) ) {
-				$monthRange = intval($_GET['date_range']);
+			if ( HttpGet::hasValue('date_range') ) {
+				$monthRange = HttpGet::getInt('date_range');
 				if ( $monthRange >= 0 ) {
 					$start_date = new \DateTime('first day of this month');
 					$start_date->modify( '-'.$monthRange.' month' );
@@ -172,14 +173,14 @@ class AdminWanted extends Admin
 				}
 			}
 
-			if ( isset($_GET['series_id']) ) {
-				$qualifiers[] = Qualifier::Equals( Publication::series_id, $_GET['series_id']);
+			if ( HttpGet::hasValue('series_id') ) {
+				$qualifiers[] = Qualifier::Equals( Publication::series_id, HttpGet::getInt('series_id'));
 			}
-			if ( isset($_GET['story_arc_id']) ) {
+			if ( HttpGet::hasValue('story_arc_id') ) {
 				$saj_model = Model::Named('Story_Arc_Publication');
 				$qualifiers[] = Qualifier::InSubQuery( Publication::id,
 					SQL::Select($saj_model, array("publication_id"))
-						->where( Qualifier::Equals( "story_arc_id", $_GET['story_arc_id']))
+						->where( Qualifier::Equals( "story_arc_id", HttpGet::getInt('story_arc_id') ))
 						->limit(0)
 				);
 			}
@@ -283,7 +284,7 @@ class AdminWanted extends Admin
 			}
 
 			$model = Model::Named('Endpoint');
-			$this->view->endpoints = $model->allForType_code(Endpoint_Type::Newznab);
+			$this->view->endpoints = $model->allForTypeCode(Endpoint_Type::Newznab, true);
 			$this->view->setLocalizedViewTitle("Search Newznab");
 			$this->view->controllerAction = "newznab";
 			$this->view->model = $model;
@@ -291,10 +292,11 @@ class AdminWanted extends Admin
 		}
 	}
 
+	// for manual search
 	function searchNewznab()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			if ( isset($_GET['endpoint_id'], $_GET['search']) && strlen($_GET['search']) > 4) {
+			if ( HttpGet::hasValues('endpoint_id', 'search') && strlen($_GET['search']) > 4) {
 				$model = Model::Named('Endpoint');
 				$endpoint = $model->objectForId( $_GET['endpoint_id'] );
 
@@ -315,28 +317,30 @@ class AdminWanted extends Admin
 	function newznabQuicksearch($pubId = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$points = Model::Named('Endpoint')->allForType_code(Endpoint_Type::Newznab);
+			$points = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::Newznab, true);
 			if ( $points == false || count($points) == 0) {
 				echo '<section class="feedback error">' . Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) . Endpoint_Type::Newznab. '</section>';
 			}
 			else if ( $pubId > 0 ) {
 				$publication = Model::Named('Publication')->objectForId( $pubId );
 				if ( $publication != false ) {
-					$endpoint = $points[0];
-// 					try {
-						$connection = new NewznabConnector( $endpoint );
-						$this->view->endpoint_id = $endpoint->id;
-						$this->view->fluxModel = Model::Named('Flux');
-						$results = $connection->searchComics($publication->searchString());
-						if ( is_array($results) == false ) {
-							$results = $connection->searchComics($publication->seriesName() . " " . $publication->paddedIssueNum());
+					$this->view->fluxModel = Model::Named('Flux');
+					foreach( $points as $endpoint ) {
+						try {
+							$connection = new NewznabConnector( $endpoint );
+							$results = $connection->searchComics($publication->searchString());
+							if ( is_array($results) == false ) {
+								$results = $connection->searchComics($publication->seriesName() . " " . $publication->paddedIssueNum());
+							}
+
+							$this->view->endpoint_id = $endpoint->id;
+							$this->view->results = $results;
+							$this->view->render( '/wanted/newznab_quick', true);
 						}
-						$this->view->results = $results;
-						$this->view->render( '/wanted/newznab_quick', true);
-// 					}
-// 					catch ( \Exception $e ) {
-// 						echo '<section class="feedback error">Exception: ' . $e->getMessage(). '</section>';
-// 					}
+						catch ( \Exception $e ) {
+							echo '<section class="feedback error">Exception: ' . $e->getMessage(). '</section>';
+						}
+					}
 				}
 				else {
 					echo '<section class="feedback error">No publication found</section>';
@@ -351,27 +355,31 @@ class AdminWanted extends Admin
 	function downloadNewznab()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			if ( isset($_GET['endpoint_id'], $_GET['name'], $_GET['guid'], $_GET['url'], $_GET['postedDate'])) {
-				$name = $_GET['name'];
-				$endpoint_id = $_GET['endpoint_id'];
-				$guid = $_GET['guid'];
-				$url = $_GET['nzburl'];
-				$postedDate = $_GET['postedDate'];
+			if ( HttpGet::hasValues( 'endpoint_id', 'name', 'guid', 'url', 'postedDate') ) {
+				$name = HttpGet::get('name');
+				$issue = HttpGet::get('issue');
+				$year = HttpGet::get('year');
+				$endpoint_id = HttpGet::get('endpoint_id');
+				$guid = HttpGet::get('guid');
+				$url = HttpGet::get('nzburl');
+				$postedDate = HttpGet::get('postedDate');
 
-				$points = Model::Named('Endpoint')->allForType_code(Endpoint_Type::SABnzbd);
+				$points = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::SABnzbd, true);
 				if ( $points == false || count($points) == 0) {
-					Session::addNegativeFeedback(Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) . Endpoint_Type::SABnzbd);
-					header('location: ' . Config::Web('/netconfig/index'));
+					$this->view->message = Localized::GlobalLabel( "PLEASE_ADD_ENDPOINT" ) . ' ' . Endpoint_Type::SABnzbd;
+ 					$this->view->url = Config::Web('/netconfig/index');
+ 					$this->view->url_title = "Network Config";
+					$this->view->render( '/error/index', true);
 				}
 				else {
 					$source = Model::Named('Endpoint')->objectForId($endpoint_id);
 
 					$fluxImporter = new FluxImporter();
 					$fluxImporter->setEndpoint( $points[0] );
-					$fluxImporter->importFluxValues( $source, $name, $guid, $postedDate, $url );
+					$fluxImporter->importFluxValues( $source, $name.' - '.$issue.' ('.$year.')', $guid, $postedDate, $url );
 					$fluxImporter->daemonizeProcess();
 
-					echo "<em>Importing ..</em>";
+					echo "<em>Importing ..</em> ";
 				}
 			}
 			else {

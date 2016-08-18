@@ -160,7 +160,9 @@ class NewznabSearchProcessor extends Processor
 					if ( $found_nzb_to_try == false ) {
 						foreach( $newznabSearch as $nzbSearch ) {
 							try {
-								$fluxImporter->findPostingsForPublication( $publication, $nzbSearch );
+								if ( $fluxImporter->findPostingsForPublication( $publication, $nzbSearch ) == true ) {
+									break;
+								}
 							}
 							catch ( \Exception $e ) {
 								Logger::logException( $e );

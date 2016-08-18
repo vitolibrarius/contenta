@@ -187,6 +187,7 @@
             "Confirm Delete": "Confirm Delete"
         },
         "NextButton": "Next",
+        "No Search Criteria": "Please enter search criteria",
         "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints.",
         "RefreshFromEndpoint": "Refresh From Endpoint",
         "Release": "Release",

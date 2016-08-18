@@ -54,7 +54,9 @@
 					<?php $flux = $rss->flux(); if ($flux == false ) : ?>
 						<div id="dnld_<?php echo $rss->safe_guid(); ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"
-							data-name="<?php echo $rss->clean_name; ?>"
+							data-name="<?php echo htmlentities($rss->clean_name); ?>"
+							data-issue="<?php echo $rss->clean_issue; ?>"
+							data-year="<?php echo $rss->clean_year; ?>"
 							data-endpoint_id="<?php echo $rss->endpoint_id; ?>"
 							data-guid="<?php echo $rss->guid; ?>"
 							data-url="<?php echo $rss->enclosure_url; ?>"

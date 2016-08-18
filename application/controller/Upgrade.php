@@ -220,7 +220,7 @@ class Upgrade extends Controller
 						case Job_Type::publisher:
 						case Job_Type::series:
 						case Job_Type::story_arc:
-							$comicVineArray = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::ComicVine);
+							$comicVineArray = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::ComicVine, true);
 							if (is_array($comicVineArray) && count($comicVineArray) == 1 ) {
 								$values = array(
 									Job::type_code => $type,
@@ -247,7 +247,7 @@ class Upgrade extends Controller
 							$job_model->createObject( $values );
 							break;
 						case Job_Type::previewsworld:
-							$pwArray = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::PreviewsWorld);
+							$pwArray = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::PreviewsWorld, true);
 							if (is_array($pwArray) && count($pwArray) == 1 ) {
 								$values = array(
 									Job::type_code => $type,
@@ -274,7 +274,7 @@ class Upgrade extends Controller
 							$job_model->createObject( $values );
 						case Job_Type::rss: break;
 						case Job_Type::sabnzbd:
-							$sabArray = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::SABnzbd);
+							$sabArray = Model::Named('Endpoint')->allForTypeCode(Endpoint_Type::SABnzbd, true);
 							if (is_array($sabArray) && count($sabArray) == 1 ) {
 								$values = array(
 									Job::type_code => $type,

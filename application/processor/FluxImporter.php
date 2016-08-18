@@ -49,7 +49,7 @@ class FluxImporter extends EndpointImporter
 
 	public function importFluxValues( EndpointDBO $endpoint = null, $name = null, $guid = null, $publishedDate = null, $url = null )
 	{
-		if ( is_null($endpoint) || is_null($endpoint) || is_null($endpoint) || is_null($endpoint) || is_null($endpoint) ) {
+		if ( is_null($endpoint) || is_null($name) || is_null($guid) || is_null($publishedDate) || is_null($url) ) {
 			throw new \Exception( "Invalid null argument for $endpoint | $name | $guid | $publishedDate | $url");
 		}
 		$imports = ($this->isMeta(FluxImporter::META_IMPORTS) ? $this->getMeta(FluxImporter::META_IMPORTS) : array());
@@ -71,6 +71,7 @@ class FluxImporter extends EndpointImporter
 
 	public function findPostingsForPublication( PublicationDBO $publication, NewznabConnector $nzbSearch )
 	{
+		$found = false;
 		if ( isset($publication, $nzbSearch)) {
 			$FluxModel = Model::Named('Flux');
 			$searchEndpoint = $nzbSearch->endpoint();
@@ -96,8 +97,8 @@ class FluxImporter extends EndpointImporter
 						}
 
 						if ( NewznabSearchProcessor::isAcceptableMatch($publication, $seriesName, $issue, $year) ) {
-// 							Logger::logWarning( "nzb " . $item['metadata']['name'] . " has accepted" );
 							$this->importFluxValues( $nzbSearch->endpoint(), $seriesName.' '.$issue.' ('.$year.')' , $guid, $pubDate, $link );
+							$found = true;
 							break;
 						}
 					}
@@ -107,6 +108,7 @@ class FluxImporter extends EndpointImporter
 				}
 			}
 		}
+		return $found;
 	}
 
 	private function downloadForFlux( FluxDBO $flux )
@@ -185,6 +187,7 @@ class FluxImporter extends EndpointImporter
 				}
 
 				if ( $flux->isSourceComplete() == false ) {
+					Logger::logWarning( "Requesting nzb " . $flux->name, $flux->source_endpoint()->name(), $flux->src_endpoint() );
 					$localFile = $this->downloadForFlux($flux);
 					if ( file_exists($localFile) ) {
 						$upload = $this->endpointConnector()->addNZB( $localFile, $flux->name );
