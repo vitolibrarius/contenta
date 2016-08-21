@@ -1,5 +1,7 @@
 <?php
 
+use utilities\ShellCommand as ShellCommand;
+
 // guard to ensure basic configuration is loaded
 defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
@@ -46,6 +48,17 @@ class Config
 	public static function GetPath($key, $default = null)
 	{
 		return self::instance()->absolutePathValue($key, $default);
+	}
+
+	public static function GetPHP()
+	{
+		$path = self::instance()->getValue( "General/php_cmd", false );
+		if ($path == false) {
+			$shell = ShellCommand::create('which php');
+			$status = $shell->exec();
+			return trim($shell->stdout());
+		}
+		return $path;
 	}
 
 	public static function GetRepository()
@@ -176,11 +189,6 @@ class Config
 		return (is_null($value) ? $default : intval($value));
 	}
 
-	/**
-	 * gets/returns the value of a specific key of the config
-	 * @param mixed $key Usually a string, path may be separated using '/', so 'Internet/appname'
-	 * @return mixed
-	 */
 	/**
 	 * gets/returns the absolute path value of a specific key of the config.
 	 * @param mixed $key Usually a string, key may be separated using '/', so 'Repository/path', the key must end with "path"

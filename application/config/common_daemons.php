@@ -24,7 +24,7 @@ function Daemonize( $processorName, $user_api = null, $guid = null, $job_id = nu
 		}
 	}
 
-	$shell = ((PHP_OS === 'Darwin') ? '' : 'nohup ') . 'php ';
+	$shell = ((PHP_OS === 'Darwin') ? '' : 'nohup ') . \Config::GetPHP() . ' ';
 	$daemon = appendPath(SYSTEM_PATH, 'Daemon.php');
 	$daemonCMD = $daemon . ' -d "' . $workingDir . '" >> "' . $workingDir . '"/daemon.log 2>&1  & echo $!';
 

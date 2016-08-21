@@ -159,6 +159,17 @@ path=logs  (results in $repositoryRoot/logs/script.log)
 <div class="mediaData config">
 	<table>
 		<tr>
+			<th colspan="3">General</th>
+		</tr>
+		<tr>
+			<th>PHP command line path</th>
+			<td>
+				<?php echo Config::Get("General/php_cmd"); ?>
+			</td>
+			<td><span>Full path for the php executable used by background processing tools.
+				Default path is <em><?php echo Config::GetPHP(); ?></em></span></td>
+		</tr>
+		<tr>
 			<th colspan="3">Internet</th>
 		</tr>
 		<tr>

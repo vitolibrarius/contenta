@@ -117,6 +117,7 @@ class PreviewsWorldImporter extends EndpointImporter
 			$dataArray
 		);
 
+		$count = 0;
 		$currentGroupName = "error";
 		foreach( $groupList as $line ) {
 			if ( is_array($line) ) {
@@ -148,6 +149,9 @@ class PreviewsWorldImporter extends EndpointImporter
 								"pull_list" => $pulllist
 								)
 							);
+							if ( $pulllist_item != false ) {
+								$count++;
+							}
 						}
 					}
 				}
@@ -156,6 +160,11 @@ class PreviewsWorldImporter extends EndpointImporter
 				throw new PreviewsWorldException( "unknown line " . var_export($line, true) );
 			}
 		}
+
+		if ( $count > 0 ) {
+			\Logger::logInfo( $pulllist->name() . " created " . $count . " new items", $endpoint->name );
+		}
+
 		$this->setPurgeOnExit(true);
 		return;
 	}

@@ -51,3 +51,64 @@ function downloadImage($url = null, $dir = null, $key_name_hint = null )
 	}
 	return null;
 }
+
+function open_image ($file)
+{
+	$image = false;
+
+	if (extension_loaded('gd') &&
+		function_exists('imagecreatefromjpeg') && function_exists('imagecreatefrompng') && function_exists('imagecreatefromgif')) {
+		//detect type and process accordinally
+		$size = getimagesize($file);
+		switch($size["mime"]) {
+			case "image/jpeg":
+				$image = imagecreatefromjpeg($file); //jpeg file
+				break;
+			case "image/gif":
+				$image = imagecreatefromgif($file); //gif file
+				break;
+			case "image/png":
+				$image = imagecreatefrompng($file); //png file
+				break;
+			default:
+				break;
+		}
+	}
+	else {
+		\Logger::logError( "Missing image functions 'imagecreatefromjpeg', 'imagecreatefrompng', 'imagecreatefromgif'" );
+	}
+	return $image;
+}
+
+function resize_image($sourcefile, $xmax, $ymax)
+{
+	if (function_exists('imagecreatetruecolor') && function_exists('imagecopyresampled')) {
+		$image = open_image( $sourcefile );
+		if ( $image != false ) {
+			$x = imagesx($image);
+			$y = imagesy($image);
+
+			if($x <= $xmax && $y <= $ymax)
+				return $image;
+
+			if($x >= $y) {
+				$newx = $xmax;
+				$newy = $newx * $y / $x;
+			}
+			else {
+				$newy = $ymax;
+				$newx = $x / $y * $newy;
+			}
+
+			$image2 = imagecreatetruecolor($newx, $newy);
+			imagecopyresampled($image2, $image, 0, 0, 0, 0, floor($newx), floor($newy), $x, $y);
+			return $image2;
+		}
+	}
+	else {
+		\Logger::logError( "Missing image functions 'imagecreatetruecolor', 'imagecopyresampled'" );
+	}
+
+	return false;
+}
+
