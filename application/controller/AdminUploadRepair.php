@@ -321,7 +321,6 @@ class AdminUploadRepair extends Admin
 
 	function editUnprocessedManually_publicationList($processKey = null, $seriesId = 0)
 	{
-		Logger::logInfo("editUnprocessedManually_publicationList($processKey = null, $seriesId = 0)", $processKey, $seriesId);
 		if (Auth::handleLogin() && Auth::requireRole('admin')) {
 			if ( ImportManager::IsEditable($processKey) == true ) {
 				if ( isset($seriesId) && $seriesId > 0) {
