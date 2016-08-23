@@ -556,7 +556,7 @@ class AdminUploadRepair extends Admin
 			}
 			else {
 				Session::addNegativeFeedback(Localized::Get("Upload", 'Not Active'));
-				header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
+				header('location: ' . Config::Web( get_short_class($this), 'index' ));
 			}
 		}
 	}
