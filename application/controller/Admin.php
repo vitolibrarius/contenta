@@ -11,6 +11,12 @@ use \Localized as Localized;
 use \Config as Config;
 use \Processor as Processor;
 
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
+
+use connectors\ComicVineConnector as ComicVineConnector;
+use processor\ComicVineImporter as ComicVineImporter;
+
 use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
 
@@ -44,6 +50,37 @@ class Admin extends Controller
 			$this->view->listArray = $model->allObjectsNeedingExternalUpdate(50);
 
 			$this->view->render( '/admin/updatePending' );
+		}
+	}
+
+	function refreshObject($modelName = null, $oid = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			if ( is_null($modelName) || $oid <= 0 ) {
+				// error
+				Session::addNegativeFeedback(Localized::GlobalLabel( "No model specified" ));
+				$this->view->render('/error/index');
+			}
+			else {
+				$model = Model::Named($modelName);
+				$object = $model->objectForId($oid);
+				$endpoint = $object->externalEndpoint();
+				if ( $endpoint != false ) {
+					$importer = new ComicVineImporter( $model->tableName() . "_" .$object->xid );
+					if ( $importer->endpoint() == false ) {
+						$importer->setEndpoint($endpoint);
+					}
+
+					if ( $importer->enqueueObject( $object ) ) {
+						$importer->processData();
+					}
+					header('location: ' . Config::Web('/Admin/updatePending' ) . "?model=" . $modelName);
+				}
+				else {
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) . " " . $model->tableName() . " [$oid]" );
+					$this->view->render('/error/index');
+				}
+			}
 		}
 	}
 }

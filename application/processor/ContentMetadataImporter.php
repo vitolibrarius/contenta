@@ -348,6 +348,20 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		return $object;
 	}
 
+	public function enqueueObject( \DataObject $obj )
+	{
+		if ( isset( $obj )) {
+			$model = $obj->model();
+			if ( $model->hasColumn( "xid" ) && $model->hasColumn( "xsource" ) ) {
+				$methodName = 'enqueue_' . $model->tableName();
+				call_user_func_array(array($this, $methodName), array( array( "xid" => $obj->xid), true, true) );
+				$this->strictErrors = false;
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function enqueueBatch( $objectType = '', $size = 0 )
 	{
 		if ( is_numeric($size) ) {

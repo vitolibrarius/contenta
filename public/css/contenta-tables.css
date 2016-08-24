@@ -19,6 +19,7 @@
 	border-style: solid;
 	border-color: #666666;
 	background-color: #dedede;
+	padding: 2px 4px;
 }
 
 .mediaData table td {
@@ -33,13 +34,26 @@
 	background-color: pink;
 }
 
-.mediaData td.issue {
+.mediaData td.issue,
+.mediaData td.issue_num,
+.mediaData [class*="issue_num"] {
 	font-size: 2em;
 	text-align:center
 }
 
 .mediaData td.published {
 	font-size: 1.2em;
+	text-align:center
+}
+
+.mediaData td.active {
+	font-size: 1.2em;
+	text-align:center
+}
+
+.mediaData [class*="formattedDate"],
+.mediaData [class*="updated"],
+.mediaData [class*="publishedMonthYear"] {
 	text-align:center
 }
 
@@ -56,8 +70,10 @@
 	word-wrap: break-word;
 }
 
-.mediaData td.name {
-	vertical-align:top;
+.mediaData td.name,
+.mediaData td.series_name {
+	font-size: 1.2em;
+    font-weight: bold;
 }
 
 .mediaData td.name > h3,
@@ -67,7 +83,7 @@
 
 .description {
 	display: block;
-	font-size: 11px;
+	font-size: 0.7em;
 	color: #999;
 	background: white;
 	height:100px;

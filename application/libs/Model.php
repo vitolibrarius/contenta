@@ -75,6 +75,11 @@ abstract class Model
 	{
 	}
 
+	public function modelName()
+	{
+		return Model::NormalizedModelName($this->tableName());
+	}
+
 	/* Common model methods */
 	abstract public function tableName();
 	abstract public function tablePK();

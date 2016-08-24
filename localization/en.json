@@ -248,6 +248,9 @@
             "gender": {
                 "label": "Gender"
             },
+            "lastXupdated": {
+                "label": "Updated"
+            },
             "mediaPath": {
                 "label": "Media Path"
             },
@@ -459,6 +462,9 @@
                 "label": "Issue Number",
                 "search": "Issue Number"
             },
+            "lastXupdated": {
+                "label": "Updated"
+            },
             "media": {
                 "label": "Available Media"
             },
@@ -473,8 +479,19 @@
                 "label": "Published Date",
                 "search": "Year"
             },
+            "publishedMonthYear": {
+                "label": "Published Date"
+            },
             "publisher_id": {
                 "search": "Select Publisher"
+            },
+            "series": {
+                "isPub_active": {
+                    "label": "Series Active"
+                },
+                "name": {
+                    "label": "Series Name"
+                }
             },
             "series_id": {
                 "label": "Series Name",
@@ -508,6 +525,9 @@
             },
             "Thumbnail": {
                 "label": "Thumbnail"
+            },
+            "lastXupdated": {
+                "label": "Updated"
             },
             "mediaPath": {
                 "label": "Media Path"
@@ -605,11 +625,19 @@
             "isActive": {
                 "label": "Actively publishing"
             },
-            "lastPublicationDate": {
-                "label": "Last Published"
+            "isPub_active": {
+                "label": "Actively publishing"
             },
-            "lastPublicationIssue": {
-                "label": "Last Issue"
+            "lastPublication": {
+                "issue_num": {
+                    "label": "Last Issue"
+                },
+                "publishedMonthYear": {
+                    "label": "Last Published"
+                }
+            },
+            "lastXupdated": {
+                "label": "Updated"
             },
             "mediaPath": {
                 "label": "Media Path"
@@ -660,6 +688,20 @@
             },
             "desc": {
                 "label": "Description"
+            },
+            "isPub_active": {
+                "label": "Actively publishing"
+            },
+            "lastPublication": {
+                "issue_num": {
+                    "label": "Last Issue"
+                },
+                "publishedMonthYear": {
+                    "label": "Last Published"
+                }
+            },
+            "lastXupdated": {
+                "label": "Updated"
             },
             "mediaPath": {
                 "label": "Media Path"

@@ -260,7 +260,8 @@ class Publication extends _Publication
 		$saj_model = Model::Named('Story_Arc_Publication');
 		$qualifiers[] = Qualifier::OrQualifier(
 			Qualifier::Equals( Publication::media_count, 0 ),
-			Qualifier::IsNull( Publication::media_count )
+			Qualifier::IsNull( Publication::media_count ),
+			Qualifier::IsNull( Publication::pub_date )
 		);
 		$qualifiers[] = Qualifier::OrQualifier(
 			Qualifier::InSubQuery( Publication::series_id,
@@ -282,7 +283,12 @@ class Publication extends _Publication
 		if ( count($qualifiers) > 0 ) {
 			$select->where( Qualifier::AndQualifier( $qualifiers ));
 		}
-		$select->orderBy( $this->sortOrder() );
+		$sortOrder = array(
+			array( 'asc' => Publication::xupdated),
+			array( 'asc' => Publication::created),
+			array( 'asc' => Publication::pub_date)
+		);
+		$select->orderBy( $sortOrder );
 		$select->limit( $limit );
 		$wantedFirst = $select->fetchAll();
 		if ( is_array($wantedFirst) && count($wantedFirst) > 0) {
