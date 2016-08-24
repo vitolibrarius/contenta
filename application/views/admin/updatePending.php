@@ -1,6 +1,7 @@
 <?php
 	$keys = array();
 	$activeKp = false;
+	$adminPage = "Admin" . $this->model->modelName() . "/edit" . $this->model->modelName();
 	switch( $this->model->tableName() ) {
 		case 'series':
 			$keys = array( "name", "start_year", "lastXupdated", "lastPublication/publishedMonthYear", "lastPublication/issue_num" );
@@ -9,12 +10,15 @@
 		case 'story_arc':
 			$keys = array( "name", "lastXupdated", "lastPublication/publishedMonthYear", "lastPublication/issue_num" );
 			$activeKp = "isPub_active";
+			$adminPage = "AdminStoryArcs/editStoryArc";
 			break;
 		case 'publisher':
 			$keys = array( "name", "lastXupdated" );
+			$adminPage = "Admin" . $this->model->modelName() . "s/edit" . $this->model->modelName();
 			break;
 		case 'character':
 			$keys = array( "name", "lastXupdated" );
+			$adminPage = "Admin" . $this->model->modelName() . "s/edit" . $this->model->modelName();
 			break;
 		case 'publication':
 			$keys = array( "series/name", "name", "lastXupdated", "publishedMonthYear", "issue_num"  );
@@ -48,7 +52,11 @@
 			</tr>
 			<?php foreach($this->listArray as $idx => $value): ?>
 				<tr>
-					<td><img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $value->pkValue()); ?>" class="thumbnail"></td>
+					<td>
+						<a href="<?php echo Config::Web($adminPage, $value->pkValue()); ?>">
+							<img src="<?php echo Config::Web( "Image", "thumbnail", $this->model->tableName(), $value->pkValue()); ?>" class="thumbnail">
+						</a>
+					</td>
 					<?php foreach ( $keys as $k ) : ?>
 						<td class="<?php echo sanitize_html_id($k); ?>"><?php echo $value->{$k}(); ?></td>
 					<?php endforeach; ?>
