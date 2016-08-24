@@ -88,6 +88,32 @@ abstract class _Pull_List_Item extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Pull_List_Item::data,
+			Pull_List_Item::created,
+			Pull_List_Item::search_name,
+			Pull_List_Item::name,
+			Pull_List_Item::issue,
+			Pull_List_Item::year,
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Pull_List_Item::pull_list_group_id,
+			Pull_List_Item::pull_list_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Pull_List_Item::pull_list_group,
+			Pull_List_Item::pull_list
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -376,6 +402,29 @@ abstract class _Pull_List_Item extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Pull_List_Item::pull_list_group_id:
+					$pull_list_group_model = Model::Named('Pull_List_Group');
+					$fkObject = $pull_list_group_model->objectForId( $value );
+					break;
+				case Pull_List_Item::pull_list_id:
+					$pull_list_model = Model::Named('Pull_List');
+					$fkObject = $pull_list_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

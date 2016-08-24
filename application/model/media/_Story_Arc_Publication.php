@@ -67,6 +67,26 @@ abstract class _Story_Arc_Publication extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Story_Arc_Publication::story_arc_id,
+			Story_Arc_Publication::publication_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Story_Arc_Publication::story_arc,
+			Story_Arc_Publication::publication
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -274,6 +294,29 @@ abstract class _Story_Arc_Publication extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Story_Arc_Publication::story_arc_id:
+					$story_arc_model = Model::Named('Story_Arc');
+					$fkObject = $story_arc_model->objectForId( $value );
+					break;
+				case Story_Arc_Publication::publication_id:
+					$publication_model = Model::Named('Publication');
+					$fkObject = $publication_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

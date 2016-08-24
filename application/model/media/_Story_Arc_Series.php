@@ -67,6 +67,26 @@ abstract class _Story_Arc_Series extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Story_Arc_Series::story_arc_id,
+			Story_Arc_Series::series_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Story_Arc_Series::story_arc,
+			Story_Arc_Series::series
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -274,6 +294,29 @@ abstract class _Story_Arc_Series extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Story_Arc_Series::story_arc_id:
+					$story_arc_model = Model::Named('Story_Arc');
+					$fkObject = $story_arc_model->objectForId( $value );
+					break;
+				case Story_Arc_Series::series_id:
+					$series_model = Model::Named('Series');
+					$fkObject = $series_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

@@ -122,6 +122,44 @@ foreach( $objectRelationships as $name => $detailArray ) {
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(<?php $lastKey = array_last_key($objectAttributes); foreach( $objectAttributes as $name => $detailArray ) {
+			if ($this->isPrimaryKey($name) == false && $this->isRelationshipKey($name) == false) {
+				echo "\n\t\t\t" . $this->modelClassName() . "::" . $name . ( $name != $lastKey ? "," : "");
+			}
+		} ?>
+
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		<?php
+			$fkArray = array();
+			foreach( $objectRelationships as $name => $detailArray ) {
+				if (isset($detailArray['isToMany']) == false || $detailArray['isToMany'] == false) {
+					$joins = $detailArray['joins'];
+					if (count($joins) == 1) {
+						$join = $joins[0];
+						$fkArray[] = $this->modelClassName() . "::" . $join["sourceAttribute"];
+					}
+				}
+			}
+		echo "return array(" . implode( ",\n\t\t\t", $fkArray) . ");";
+		?>
+
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(<?php $lastKey = array_last_key($objectRelationships); foreach( $objectRelationships as $name => $detailArray ) {
+			echo "\n\t\t\t" . $this->modelClassName() . "::" . $name . ( $name != $lastKey ? "," : "");
+		} ?>
+
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -432,6 +470,30 @@ if ( isset($details["arguments"]) && is_array($details["arguments"]) && count($d
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+<?php foreach( $objectRelationships as $name => $detailArray ) : ?>
+<?php if (isset($detailArray['isToMany']) == false || $detailArray['isToMany'] == false) : ?>
+<?php $joins = $detailArray['joins'];  $join = $joins[0]; ?>
+				case <?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>:
+					$<?php echo $detailArray["destinationTable"]; ?>_model = Model::Named('<?php echo $detailArray["destination"]; ?>');
+					$fkObject = $<?php echo $detailArray["destinationTable"]; ?>_model->objectForId( $value );
+					break;
+<?php endif; ?>
+<?php endforeach; ?>
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

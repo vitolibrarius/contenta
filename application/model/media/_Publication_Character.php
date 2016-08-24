@@ -67,6 +67,26 @@ abstract class _Publication_Character extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Publication_Character::publication_id,
+			Publication_Character::character_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Publication_Character::publication,
+			Publication_Character::character
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -274,6 +294,29 @@ abstract class _Publication_Character extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Publication_Character::publication_id:
+					$publication_model = Model::Named('Publication');
+					$fkObject = $publication_model->objectForId( $value );
+					break;
+				case Publication_Character::character_id:
+					$character_model = Model::Named('Character');
+					$fkObject = $character_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

@@ -70,13 +70,24 @@ class Series extends _Series
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
+		if (isset($object) && $object instanceof SeriesDBO ) {
+			if ( isset($object->xid, $object->xsource) && is_null($object->xid) == false ) {
+				switch ( $attr ) {
+					case Series::search_name:
+					case Series::pub_active:
+					case Series::pub_wanted:
+						return true;
+					default: break;
+				}
+
+				return false;
+			}
+		}
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
-	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }

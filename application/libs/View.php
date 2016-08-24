@@ -262,6 +262,8 @@ class View
 		$this->input_value = is_null($value) ?
 			$model->attributeDefaultValue($object, $type, $attr) :
 			$value;
+		$this->input_object = $model->attributeObject($object, $type, $attr, $this->input_value);
+		$this->input_disabled = ($editable == false);
 		$this->input_validation = $validation;
 
 		require $editPanel;

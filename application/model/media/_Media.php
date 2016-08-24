@@ -84,6 +84,31 @@ abstract class _Media extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Media::filename,
+			Media::original_filename,
+			Media::checksum,
+			Media::created,
+			Media::size
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Media::type_code,
+			Media::publication_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Media::mediaType,
+			Media::publication
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -333,6 +358,29 @@ abstract class _Media extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Media::type_code:
+					$media_type_model = Model::Named('Media_Type');
+					$fkObject = $media_type_model->objectForId( $value );
+					break;
+				case Media::publication_id:
+					$publication_model = Model::Named('Publication');
+					$fkObject = $publication_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

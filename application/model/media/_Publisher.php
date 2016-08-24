@@ -82,6 +82,32 @@ abstract class _Publisher extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Publisher::name,
+			Publisher::created,
+			Publisher::xurl,
+			Publisher::xsource,
+			Publisher::xid,
+			Publisher::xupdated
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array();
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Publisher::series,
+			Publisher::characters,
+			Publisher::story_arcs
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -281,6 +307,21 @@ abstract class _Publisher extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

@@ -56,6 +56,24 @@ abstract class _Log_Level extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Log_Level::name
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array();
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -158,6 +176,21 @@ abstract class _Log_Level extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

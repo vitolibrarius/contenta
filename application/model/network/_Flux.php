@@ -102,6 +102,37 @@ abstract class _Flux extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Flux::created,
+			Flux::name,
+			Flux::flux_hash,
+			Flux::flux_error,
+			Flux::src_guid,
+			Flux::src_url,
+			Flux::src_status,
+			Flux::src_pub_date,
+			Flux::dest_guid,
+			Flux::dest_status,
+			Flux::dest_submission
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Flux::src_endpoint,
+			Flux::dest_endpoint);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Flux::source_endpoint,
+			Flux::destination_endpoint
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -415,6 +446,29 @@ abstract class _Flux extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Flux::src_endpoint:
+					$endpoint_model = Model::Named('Endpoint');
+					$fkObject = $endpoint_model->objectForId( $value );
+					break;
+				case Flux::dest_endpoint:
+					$endpoint_model = Model::Named('Endpoint');
+					$fkObject = $endpoint_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

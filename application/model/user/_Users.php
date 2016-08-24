@@ -111,6 +111,39 @@ abstract class _Users extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Users::name,
+			Users::email,
+			Users::active,
+			Users::account_type,
+			Users::rememberme_token,
+			Users::api_hash,
+			Users::password_hash,
+			Users::password_reset_hash,
+			Users::activation_hash,
+			Users::failed_logins,
+			Users::created,
+			Users::last_login_timestamp,
+			Users::last_failed_login,
+			Users::password_reset_timestamp
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array();
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Users::user_network,
+			Users::user_series
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -405,6 +438,21 @@ abstract class _Users extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

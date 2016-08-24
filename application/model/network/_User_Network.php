@@ -67,6 +67,26 @@ abstract class _User_Network extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(User_Network::user_id,
+			User_Network::network_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			User_Network::user,
+			User_Network::network
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -274,6 +294,29 @@ abstract class _User_Network extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case User_Network::user_id:
+					$users_model = Model::Named('Users');
+					$fkObject = $users_model->objectForId( $value );
+					break;
+				case User_Network::network_id:
+					$network_model = Model::Named('Network');
+					$fkObject = $network_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

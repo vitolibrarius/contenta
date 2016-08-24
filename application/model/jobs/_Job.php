@@ -101,6 +101,38 @@ abstract class _Job extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Job::enabled,
+			Job::one_shot,
+			Job::fail_count,
+			Job::elapsed,
+			Job::minute,
+			Job::hour,
+			Job::dayOfWeek,
+			Job::parameter,
+			Job::next,
+			Job::last_run,
+			Job::last_fail,
+			Job::created
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Job::type_code,
+			Job::endpoint_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Job::jobType,
+			Job::endpoint
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -424,6 +456,29 @@ abstract class _Job extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Job::type_code:
+					$job_type_model = Model::Named('Job_Type');
+					$fkObject = $job_type_model->objectForId( $value );
+					break;
+				case Job::endpoint_id:
+					$endpoint_model = Model::Named('Endpoint');
+					$fkObject = $endpoint_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

@@ -105,6 +105,38 @@ abstract class _Publication extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Publication::created,
+			Publication::name,
+			Publication::desc,
+			Publication::pub_date,
+			Publication::issue_num,
+			Publication::issue_order,
+			Publication::media_count,
+			Publication::xurl,
+			Publication::xsource,
+			Publication::xid,
+			Publication::xupdated
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Publication::series_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Publication::series,
+			Publication::media,
+			Publication::story_arc_publication,
+			Publication::publication_characters
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -421,6 +453,25 @@ abstract class _Publication extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Publication::series_id:
+					$series_model = Model::Named('Series');
+					$fkObject = $series_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

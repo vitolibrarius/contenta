@@ -12,10 +12,13 @@
 	type="text"
 	name="<?php echo $this->input_name; ?>"
 	<?php if ($this->input_pattern != null) {
-		echo 'pattern="' . $this->input_pattern . '"';
+		echo 'pattern="' . $this->input_pattern . '" ';
+	} ?>
+	<?php if (isset($this->input_disabled) && boolValue($this->input_disabled, false)) {
+		echo 'disabled="disabled" ';
 	} ?>
 	<?php if ($this->input_placeholder != null) {
-		echo 'placeholder="' . $this->input_placeholder . '"';
+		echo 'placeholder="' . $this->input_placeholder . '" ';
 	} ?>
 	value="<?php echo $this->input_value; ?>"
 />

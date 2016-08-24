@@ -77,6 +77,31 @@ abstract class _Job_Type extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Job_Type::name,
+			Job_Type::desc,
+			Job_Type::processor,
+			Job_Type::parameter,
+			Job_Type::scheduled,
+			Job_Type::requires_endpoint
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array();
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Job_Type::jobsRunning,
+			Job_Type::jobs
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -243,6 +268,21 @@ abstract class _Job_Type extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

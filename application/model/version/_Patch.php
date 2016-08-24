@@ -66,6 +66,26 @@ abstract class _Patch extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Patch::name,
+			Patch::created,
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Patch::version_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Patch::version
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -232,6 +252,25 @@ abstract class _Patch extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Patch::version_id:
+					$version_model = Model::Named('Version');
+					$fkObject = $version_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

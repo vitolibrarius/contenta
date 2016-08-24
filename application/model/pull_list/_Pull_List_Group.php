@@ -67,6 +67,27 @@ abstract class _Pull_List_Group extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Pull_List_Group::name,
+			Pull_List_Group::data,
+			Pull_List_Group::created
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array();
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Pull_List_Group::pull_list_items
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -198,6 +219,21 @@ abstract class _Pull_List_Group extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

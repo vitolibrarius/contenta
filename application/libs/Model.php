@@ -602,6 +602,14 @@ select date(xupdated, 'unixepoch'), start_year, pub_active, name from series whe
 		return null;
 	}
 
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		return null;
+	}
+
 	public function attributeId($attr)
 	{
 		return $this->tableName() . Model::HTML_ATTR_SEPARATOR . $attr;

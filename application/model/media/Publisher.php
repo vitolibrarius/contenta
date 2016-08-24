@@ -56,13 +56,16 @@ class Publisher extends _Publisher
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
+		if (isset($object) && $object instanceof PublisherDBO ) {
+			if ( isset($object->xid, $object->xsource) && is_null($object->xid) == false ) {
+				return false;
+			}
+		}
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
-	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }

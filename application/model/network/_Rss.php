@@ -101,6 +101,37 @@ abstract class _Rss extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Rss::created,
+			Rss::title,
+			Rss::desc,
+			Rss::pub_date,
+			Rss::guid,
+			Rss::clean_name,
+			Rss::clean_issue,
+			Rss::clean_year,
+			Rss::enclosure_url,
+			Rss::enclosure_length,
+			Rss::enclosure_mime,
+			Rss::enclosure_hash,
+			Rss::enclosure_password
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Rss::endpoint_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Rss::endpoint
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -417,6 +448,25 @@ abstract class _Rss extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Rss::endpoint_id:
+					$endpoint_model = Model::Named('Endpoint');
+					$fkObject = $endpoint_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

@@ -20,6 +20,9 @@
 	<?php if ($this->input_pattern != null) {
 		echo 'pattern="' . $this->input_pattern . '"';
 	} ?>
+	<?php if (isset($this->input_disabled) && boolValue($this->input_disabled, false)) {
+		echo 'disabled="disabled" ';
+	} ?>
 	<?php if ($this->input_placeholder != null) {
 		echo 'placeholder="' . $this->input_placeholder . '"';
 	} ?>

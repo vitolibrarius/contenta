@@ -86,6 +86,34 @@ abstract class _Endpoint_Type extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Endpoint_Type::name,
+			Endpoint_Type::comments,
+			Endpoint_Type::data_type,
+			Endpoint_Type::site_url,
+			Endpoint_Type::api_url,
+			Endpoint_Type::favicon_url,
+			Endpoint_Type::throttle_hits,
+			Endpoint_Type::throttle_time
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array();
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Endpoint_Type::endpoints,
+			Endpoint_Type::pull_list_exclusions,
+			Endpoint_Type::pull_list_expansions
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -300,6 +328,21 @@ abstract class _Endpoint_Type extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

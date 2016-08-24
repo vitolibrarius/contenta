@@ -89,6 +89,35 @@ abstract class _Endpoint extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Endpoint::name,
+			Endpoint::base_url,
+			Endpoint::api_key,
+			Endpoint::username,
+			Endpoint::enabled,
+			Endpoint::compressed
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Endpoint::type_code);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Endpoint::endpointType,
+			Endpoint::pull_lists,
+			Endpoint::rss,
+			Endpoint::flux_sources,
+			Endpoint::flux_destinations,
+			Endpoint::jobs
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -339,6 +368,25 @@ abstract class _Endpoint extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Endpoint::type_code:
+					$endpoint_type_model = Model::Named('Endpoint_Type');
+					$fkObject = $endpoint_type_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

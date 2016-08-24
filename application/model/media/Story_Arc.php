@@ -56,13 +56,23 @@ class Story_Arc extends _Story_Arc
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
 
-	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
+		if (isset($object) && $object instanceof Story_ArcDBO ) {
+			if ( isset($object->xid, $object->xsource) && is_null($object->xid) == false ) {
+				switch ( $attr ) {
+					case Story_Arc::pub_active:
+					case Story_Arc::pub_wanted:
+						return true;
+					default: break;
+				}
+
+				return false;
+			}
+		}
 		// add customization here
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
-	*/
 
 	/*
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)	{ return null; }

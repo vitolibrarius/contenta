@@ -82,6 +82,31 @@ abstract class _Job_Running extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Job_Running::processor,
+			Job_Running::guid,
+			Job_Running::pid,
+			Job_Running::desc,
+			Job_Running::created
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Job_Running::job_id,
+			Job_Running::type_code);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Job_Running::job,
+			Job_Running::jobType
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -353,6 +378,29 @@ abstract class _Job_Running extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Job_Running::job_id:
+					$job_model = Model::Named('Job');
+					$fkObject = $job_model->objectForId( $value );
+					break;
+				case Job_Running::type_code:
+					$job_type_model = Model::Named('Job_Type');
+					$fkObject = $job_type_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

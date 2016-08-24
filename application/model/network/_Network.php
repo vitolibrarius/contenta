@@ -70,6 +70,28 @@ abstract class _Network extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Network::ip_address,
+			Network::ip_hash,
+			Network::created,
+			Network::disable
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array();
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Network::user_network
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -202,6 +224,21 @@ abstract class _Network extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

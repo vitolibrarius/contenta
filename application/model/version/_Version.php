@@ -73,6 +73,29 @@ abstract class _Version extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Version::code,
+			Version::major,
+			Version::minor,
+			Version::patch,
+			Version::created
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array();
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Version::patches
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -254,6 +277,21 @@ abstract class _Version extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

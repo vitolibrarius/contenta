@@ -76,6 +76,29 @@ abstract class _User_Series extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			User_Series::favorite,
+			User_Series::read,
+			User_Series::mislabeled
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(User_Series::user_id,
+			User_Series::series_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			User_Series::user,
+			User_Series::series
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -334,6 +357,29 @@ abstract class _User_Series extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case User_Series::user_id:
+					$users_model = Model::Named('Users');
+					$fkObject = $users_model->objectForId( $value );
+					break;
+				case User_Series::series_id:
+					$series_model = Model::Named('Series');
+					$fkObject = $series_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

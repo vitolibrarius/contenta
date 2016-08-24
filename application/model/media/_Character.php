@@ -107,6 +107,38 @@ abstract class _Character extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Character::created,
+			Character::name,
+			Character::realname,
+			Character::desc,
+			Character::popularity,
+			Character::gender,
+			Character::xurl,
+			Character::xsource,
+			Character::xid,
+			Character::xupdated
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Character::publisher_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Character::aliases,
+			Character::publisher,
+			Character::publication_characters,
+			Character::series_characters,
+			Character::story_arc_characters
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -421,6 +453,25 @@ abstract class _Character extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Character::publisher_id:
+					$publisher_model = Model::Named('Publisher');
+					$fkObject = $publisher_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**

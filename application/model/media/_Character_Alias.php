@@ -63,6 +63,25 @@ abstract class _Character_Alias extends Model
 		);
 	}
 
+	public function allAttributes()
+	{
+		return array(
+			Character_Alias::name,
+		);
+	}
+
+	public function allForeignKeys()
+	{
+		return array(Character_Alias::character_id);
+	}
+
+	public function allRelationshipNames()
+	{
+		return array(
+			Character_Alias::character
+		);
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -239,6 +258,25 @@ abstract class _Character_Alias extends Model
 			}
 		}
 		return parent::attributeDefaultValue($object, $type, $attr);
+	}
+
+	/*
+	 * return the foreign key object
+	 */
+	public function attributeObject($object = null, $type = null, $attr, $value)
+	{
+		$fkObject = false;
+		if ( isset( $attr ) ) {
+			switch ( $attr ) {
+				case Character_Alias::character_id:
+					$character_model = Model::Named('Character');
+					$fkObject = $character_model->objectForId( $value );
+					break;
+				default:
+					break;
+			}
+		}
+		return $fkObject;
 	}
 
 	/**
