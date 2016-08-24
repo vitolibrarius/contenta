@@ -46,6 +46,26 @@ class JobDBO extends _JobDBO
 		return $this->formattedDate( Job::next, "M d, Y H:i" );
 	}
 
+	public function nextDates($num = 3)
+	{
+		$fmted = array();
+		try {
+			$m = (isset($this->minute) ? $this->minute : null);
+			$h = (isset($this->hour) ? $this->hour : null);
+			$d = (isset($this->dayOfWeek) ? $this->dayOfWeek : null);
+
+			$cronEval = new CronEvaluator( $m, $h, $d );
+			$nextRunDates = $cronEval->nextSeriesDates('now', $num);
+			foreach( $nextRunDates as $nrd ) {
+				$fmted[] = date("M d, Y H:i", $nrd->getTimestamp());
+			}
+		}
+		catch ( \Exception $ve ) {
+			$fmted[] = "Schedule Error: " . $ve->getMessage();
+		}
+		return $fmted;
+	}
+
 	public function displayName() {
 		$type = $this->jobType();
 		return (empty($type) ? 'Unknown' : $type->name);

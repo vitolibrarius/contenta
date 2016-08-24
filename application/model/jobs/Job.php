@@ -23,8 +23,6 @@ class Job extends _Job
 	 *	Create/Update functions
 	 */
 	public function createObject(array $values = array()) {
-			Logger::logInfo( "createObject " . var_export($values, true) );
-
 		if ( isset( $values[Job::endpoint_id]) && intval($values[Job::endpoint_id]) <= 0 ) {
 			unset($values[Job::endpoint_id]);
 		}
@@ -35,7 +33,6 @@ class Job extends _Job
 			$values[Job::next] = $nextRunDate->getTimestamp();
 		}
 		catch ( \Exception $ve ) {
-			throw $ve;
 		}
 
 		return parent::createObject($values);

@@ -309,8 +309,11 @@
             }
         },
         "job": {
+            "EndpointMissing": {
+                "label": "Missing Endpoint"
+            },
             "EndpointNotRequired": {
-                "label": "Not Required"
+                "label": "No Endpoint Required"
             },
             "FormLegend": {
                 "label": "Job Schedule Details"
@@ -354,6 +357,9 @@
             },
             "parameter": {
                 "label": "Parameters"
+            },
+            "schedule": {
+                "label": "Schedule"
             },
             "type_code": {
                 "label": "Job Type"

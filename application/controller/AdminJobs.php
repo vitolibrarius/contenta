@@ -201,7 +201,7 @@ class AdminJobs extends Admin
 					}
 					else {
 						Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-						$this->index();
+						header('location: ' . Config::Web('/AdminJobs/index' ));
 					}
 				}
 				else {
@@ -220,7 +220,7 @@ class AdminJobs extends Admin
 				}
 				else {
 					Session::addPositiveFeedback(Localized::GlobalLabel( "Save Completed" ));
-					$this->index();
+					header('location: ' . Config::Web('/AdminJobs/index' ));
 				}
 			}
 		}
@@ -250,7 +250,7 @@ class AdminJobs extends Admin
 				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
 			}
 		}
-		$this->index();
+		header('location: ' . Config::Web('/AdminJobs/index' ));
 	}
 
 }

@@ -24,78 +24,106 @@
 	</ul>
 </div>
 
-<!-- 	const id =			'id';
-	const type_code =		'type_code';
-	const endpoint_id =	'endpoint_id';
-	const minute =		'minute';
-	const hour =		'hour';
-	const dayOfWeek =	'dayOfWeek';
-	const one_shot =	'one_shot';
-	const created =		'created';
-	const next =		'next';
-	const last_run =	'last_run';
-	const parameter =	'parameter';
-	const enabled =		'enabled';
--->
-<div class="mediaData">
-	<table>
-		<tr>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "type_code" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "endpoint_id" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "minute" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "hour" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "dayOfWeek" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "lastDate" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "lastFailDate" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "nextDate" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "elapsed" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "one_shot" ); ?></th>
-			<th><?php echo Localized::ModelLabel($this->model->tableName(), "enabled" ); ?></th>
-			<th colspan=3></th>
-		</tr>
-	<?php if (is_array($this->objects)): ?>
-		<?php foreach($this->objects as $key => $value): ?>
-				<?php
-					$runningJobs = \Model::Named("Job_Running")->allForJob($value);
-					$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
-					$endpointRequired = boolval($value->{"jobType/isRequires_endpoint"}());
-					$endpointEnabled = boolval($value->{"endpoint/isEnabled"}());
-					$endpointNote = ($endpointRequired
-						? $value->{"endpoint/name"}() . ($endpointEnabled ? "" : " (disabled)")
-						: Localized::ModelLabel($this->model->tableName(), "EndpointNotRequired" )
-					);
-				?>
-				<tr <?php if ( $running == true ) { echo 'class="blocked"'; } ?> >
-					<td><?php echo $value->{"jobType/name"}() . '<br><i>' . $value->jobType()->desc . '</i>'; ?></td>
-					<td><?php echo $endpointNote; ?></td>
-					<td><?php echo $value->minute; ?></td>
-					<td><?php echo $value->hour; ?></td>
-					<td><?php echo $value->dayOfWeek; ?></td>
-					<td><?php echo $value->formattedDateTime_last_run(); ?></td>
-					<td><?php echo $value->formattedDateTime_last_fail(); ?></td>
-					<td><?php echo $value->formattedDateTime_next(); ?></td>
-					<td><?php echo $value->elapsedFormatted(); ?></td>
-					<td><span class="icon <?php echo ($value->isOne_shot() ? 'true' : 'false') ?>"></span></td>
-					<td><span class="icon <?php echo ($value->isEnabled() ? 'true' : 'false') ?>"></span></td>
+<?php if (is_array($this->objects) && count($this->objects) > 0): ?>
+<?php
+	$jobGroups = array();
+	foreach($this->objects as $job) {
+		$endpointRequired = boolval($job->{"jobType/isRequires_endpoint"}());
+		$group = Localized::ModelLabel($this->model->tableName(), "EndpointNotRequired" );
+		if ( $endpointRequired == true ) {
+			$endpoint = $job->endpoint();
+			if ( $endpoint == false ) {
+				$group = Localized::ModelLabel($this->model->tableName(), "EndpointMissing" );
+			}
+			else {
+				$group = $endpoint->type_code;
+			}
+		}
+		$jobGroups[$group][] = $job;
+	}
+	ksort($jobGroups);
+?>
+<?php foreach($jobGroups as $group => $jobArray): ?>
+	<h3><?php echo $group; ?></h3>
+	<div class="row">
+		<?php foreach($jobArray as $key => $job): ?>
+		<?php
+			$runningJobs = \Model::Named("Job_Running")->allForJob($job);
+			$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
+			$endpointRequired = boolval($job->{"jobType/isRequires_endpoint"}());
+			$endpointEnabled = boolval($job->{"endpoint/isEnabled"}());
+			$endpointNote = ($endpointRequired
+				? $job->{"endpoint/name"}() . ($endpointEnabled ? "" : " (disabled)")
+				: Localized::ModelLabel($this->model->tableName(), "EndpointNotRequired" )
+			);
+		?>
 
-					<td><?php if ( $running == false ): ?>
-						<a href="<?php echo Config::Web('/AdminJobs/edit/'. $value->id); ?>"><span class="icon edit" /></a>
+		<div class="grid_4">
+		<figure class="card">
+			<div class="figure_top <?php if ( $running == true ) { echo 'blocked'; } ?>">
+				<div class="figure_image" style="min-height: 0">
+					<h3><?php echo $job->{"jobType/name"}(); ?></h3>
+				</div>
+					<div class="figure_detail_top">
+						<?php echo ($job->isEnabled() ? 'Enabled' : 'Disabled') ?>
+						<span class="icon <?php echo ($job->isEnabled() ? 'true' : 'false') ?>"></span>
+						<?php if ( $running == true ): ?>
+							<p><em>Running</em></p>
 						<?php endif; ?>
-					</td>
-					<td><?php if ( $running == false && $value->enabled && ($endpointRequired == false || $endpointEnabled) ): ?>
-						<a href="<?php echo Config::Web('/AdminJobs/execute/'. $value->id); ?>"><span class="icon run" /></a>
+					</div>
+
+				<br>
+				<p style="text-align: center;">
+					<?php if ( $running == false ): ?>
+						<a style="padding: 1em;" href="<?php echo Config::Web('/AdminJobs/edit/'. $job->id); ?>"><span class="icon edit" /></a>
+						<?php if ( $job->enabled && ($endpointRequired == false || $endpointEnabled) ): ?>
+							<a style="padding: 1em;" href="<?php echo Config::Web('/AdminJobs/execute/'. $job->id); ?>"><span class="icon run" /></a>
 						<?php endif; ?>
-					</td>
-					<td><?php if ( $running == false ): ?>
-						<a class="confirm" action="<?php echo Config::Web('/AdminJobs/delete/', $value->id); ?>" href="#">
-						<span class="icon recycle"></span></a>
-						<?php endif; ?>
-					</td>
-				</tr>
+						<a style="padding: 1em;" class="confirm" action="<?php echo Config::Web('/AdminJobs/delete/', $job->id); ?>" href="#">
+							<span class="icon recycle"></span></a>
+					<?php endif; ?>
+				</p>
+			</div>
+			<figcaption class="caption">
+				<p><em><?php echo $endpointNote; ?></em></p>
+				<div class="mediaData">
+					<table width="100%">
+						<tr>
+							<th><?php echo Localized::ModelLabel($this->model->tableName(), "schedule" ); ?></th>
+							<td><?php echo $job->minute(); ?></td>
+							<td><?php echo $job->hour(); ?></td>
+							<td><?php echo $job->dayOfWeek(); ?></td>
+						</tr>
+						<tr>
+							<th><?php echo Localized::ModelLabel($this->model->tableName(), "lastDate" ); ?></th>
+							<td colspan="3"><?php echo $job->formattedDateTime_last_run(); ?></td>
+						</tr>
+						<tr>
+							<th><?php echo Localized::ModelLabel($this->model->tableName(), "elapsed" ); ?></th>
+							<td colspan="3"><?php echo $job->elapsedFormatted(); ?></td>
+						</tr>
+						<tr>
+							<th><?php echo Localized::ModelLabel($this->model->tableName(), "lastFailDate" ); ?></th>
+							<td colspan="3"><?php echo $job->formattedDateTime_last_fail(); ?></td>
+						</tr>
+						<tr>
+							<th><?php echo Localized::ModelLabel($this->model->tableName(), "nextDate" ); ?></th>
+							<td colspan="3">
+								<p>
+								<?php $nrdates = $job->nextDates(3); echo implode( "</p><p>", $nrdates ); ?>
+								</p>
+							</td>
+						</tr>
+
+					</table>
+				</div>
+
+			</figcaption>
+		</figure>
+		</div>
 		<?php endforeach; ?>
-	<?php else: ?>
-		<?php echo 'No jobs yet. Create some !'; ?>
-	<?php endif ?>
-
-	</table>
-</div>
+	</div>
+<?php endforeach; ?>
+<?php else: ?>
+	<?php echo 'No jobs yet. Create some !'; ?>
+<?php endif; ?>
