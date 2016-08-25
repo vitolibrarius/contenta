@@ -23,21 +23,8 @@
 			</div>
 			<div class="grid_4 middle">
 				<?php echo Localized::GlobalLabel("Release"); ?>: <?php echo currentVersionNumber(); ?>
-                <br />
-				<em><?php echo currentVersionHash(); ?></em>
 			</div>
 			<div class="grid_4 right">
-				<?php if (\http\Session::get('user_logged_in') == true
-					&& \http\Session::get('user_account_type') === \model\user\Users::AdministratorRole ) :?>
-					<?php
-						$git = new utilities\Git(SYSTEM_PATH);
-						$remote = $git->remoteStatus();
-						if ( $remote != utilities\Git::UP_TO_DATE ): ?>
-							<a href="<?php echo Config::Web('/upgrade/upgradeEligibility'); ?>">
-								<?php echo $remote; ?>
-							</a>
-					<?php endif; ?>
-				<?php endif; ?>
 			</div>
 		</div>
 	</footer>
