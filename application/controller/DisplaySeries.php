@@ -6,10 +6,11 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Auth as Auth;
-use \http\Session as Session;;
 use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
+
+use \http\Session as Session;;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
@@ -26,7 +27,10 @@ use \model\media\Character_Alias as Character_Alias;
 use \model\media\Series as Series;
 use \model\media\Series_Alias as Series_Alias;
 use \model\media\Series_Character as Series_Character;
-use \model\media\User_Series as User_Series;
+use \model\reading\Reading_Queue as Reading_Queue;
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
+use \model\reading\Reading_Item as Reading_Item;
+use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 
 /**
  * Class Admin
@@ -70,8 +74,7 @@ class DisplaySeries extends Controller
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
  			$this->view->detailAction = "/DisplaySeries/details";
-// 			$this->view->editAction = "/AdminSeries/editSeries";
-// 			$this->view->deleteAction = "/AdminSeries/deleteSeries";
+			$this->view->queuedPath = "/DisplaySeries/toggleReadingQueue";
 			$this->view->render( '/series/seriesCards', true);
 		}
 	}
@@ -97,6 +100,30 @@ class DisplaySeries extends Controller
 			else {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
 				$this->view->render('/error/index');
+			}
+		}
+	}
+
+	function toggleReadingQueue($oid = 0)
+	{
+		if (Auth::handleLogin() ) {
+			if ( $oid > 0 ) {
+				$user = Session::sessionUser();
+
+				$model = Model::Named('Series');
+				$rq_model = Model::Named('Reading_Queue');
+				$series = $model->objectForId($oid);
+				if ( $series != false ) {
+					$readingQueue = $rq_model->objectForUserAndSeries($user, $series);
+					if ( $readingQueue != false ) {
+						$rq_model->deleteObject($readingQueue);
+						$this->view->renderJson(array("toggled_on" => false) );
+					}
+					else {
+						$rq_model->createReadingQueueSeries($user, $series);
+						$this->view->renderJson(array("toggled_on" => true) );
+					}
+				}
 			}
 		}
 	}

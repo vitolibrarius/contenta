@@ -2,6 +2,8 @@
 
 namespace http;
 
+use \Model as Model;
+
 /**
  * Session class
  *
@@ -106,5 +108,14 @@ class Session
 	{
 		$adapter = Session::adapter();
 		return get_called_class() . " [" . get_short_class($adapter) . "] " . var_export($adapter->allValues(), true);
+	}
+
+	public static function sessionUser()
+	{
+		$uid = Session::Get('user_id', false);
+		if ( $uid != false ) {
+			return Model::Named('Users')->objectForId($uid);
+		}
+		return false;
 	}
 }

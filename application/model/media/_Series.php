@@ -25,8 +25,8 @@ use \model\media\Series_Character as Series_Character;
 use \model\media\Series_CharacterDBO as Series_CharacterDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
-use \model\media\User_Series as User_Series;
-use \model\media\User_SeriesDBO as User_SeriesDBO;
+use \model\reading\Reading_Queue as Reading_Queue;
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 
 /** Sample Creation script */
 		/** SERIES */
@@ -89,7 +89,7 @@ abstract class _Series extends Model
 	const publications = 'publications';
 	const series_characters = 'series_characters';
 	const story_arc_series = 'story_arc_series';
-	const user_series = 'user_series';
+	const reading_queue = 'reading_queue';
 
 	public function tableName() { return Series::TABLE; }
 	public function tablePK() { return Series::id; }
@@ -159,7 +159,7 @@ abstract class _Series extends Model
 			Series::publications,
 			Series::series_characters,
 			Series::story_arc_series,
-			Series::user_series
+			Series::reading_queue
 		);
 	}
 
@@ -269,7 +269,7 @@ abstract class _Series extends Model
 				case "story_arc_series":
 					return array( Series::id, "series_id"  );
 					break;
-				case "user_series":
+				case "reading_queue":
 					return array( Series::id, "series_id"  );
 					break;
 				default:
@@ -432,8 +432,8 @@ abstract class _Series extends Model
 			if ( $story_arc_series_model->deleteAllForKeyValue(Story_Arc_Series::series_id, $object->id) == false ) {
 				return false;
 			}
-			$user_series_model = Model::Named('User_Series');
-			if ( $user_series_model->deleteAllForKeyValue(User_Series::series_id, $object->id) == false ) {
+			$reading_queue_model = Model::Named('Reading_Queue');
+			if ( $reading_queue_model->deleteAllForKeyValue(Reading_Queue::series_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

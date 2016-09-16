@@ -17,8 +17,10 @@ use \model\user\UsersDBO as UsersDBO;
 /* import related objects */
 use \model\network\User_Network as User_Network;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
-use \model\media\User_Series as User_Series;
-use \model\media\User_SeriesDBO as User_SeriesDBO;
+use \model\reading\Reading_Queue as Reading_Queue;
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
+use \model\reading\Reading_Item as Reading_Item;
+use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 
 /** Sample Creation script */
 		/** USERS */
@@ -78,7 +80,8 @@ abstract class _Users extends Model
 
 	// relationship keys
 	const user_network = 'user_network';
-	const user_series = 'user_series';
+	const reading_queues = 'reading_queues';
+	const reading_items = 'reading_items';
 
 	public function tableName() { return Users::TABLE; }
 	public function tablePK() { return Users::id; }
@@ -140,7 +143,8 @@ abstract class _Users extends Model
 	{
 		return array(
 			Users::user_network,
-			Users::user_series
+			Users::reading_queues,
+			Users::reading_items
 		);
 	}
 
@@ -218,7 +222,10 @@ abstract class _Users extends Model
 				case "user_network":
 					return array( Users::id, "user_id"  );
 					break;
-				case "user_series":
+				case "reading_queue":
+					return array( Users::id, "user_id"  );
+					break;
+				case "reading_item":
 					return array( Users::id, "user_id"  );
 					break;
 				default:
@@ -344,8 +351,12 @@ abstract class _Users extends Model
 			if ( $user_network_model->deleteAllForKeyValue(User_Network::user_id, $object->id) == false ) {
 				return false;
 			}
-			$user_series_model = Model::Named('User_Series');
-			if ( $user_series_model->deleteAllForKeyValue(User_Series::user_id, $object->id) == false ) {
+			$reading_queue_model = Model::Named('Reading_Queue');
+			if ( $reading_queue_model->deleteAllForKeyValue(Reading_Queue::user_id, $object->id) == false ) {
+				return false;
+			}
+			$reading_item_model = Model::Named('Reading_Item');
+			if ( $reading_item_model->deleteAllForKeyValue(Reading_Item::user_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

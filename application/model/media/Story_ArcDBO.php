@@ -7,6 +7,7 @@ use \Model as Model;
 use \Logger as Logger;
 use \db\Qualifier as Qualifier;
 
+use \http\Session as Session;
 use \model\media\Story_Arc as Story_Arc;
 
 /* import related objects */
@@ -34,6 +35,16 @@ class Story_ArcDBO extends _Story_ArcDBO
 			(isset($this->pub_available) ? $this->pub_available : 0 )
 			. " / "
 			. (isset($this->pub_count) ? $this->pub_count : count($this->publications()) );
+	}
+
+	public function queued()
+	{
+		$user = Session::sessionUser();
+		if ( $user != false ) {
+			$queue = Model::Named('Reading_Queue')->objectForUserAndStoryArc($user, $this);
+			return ( $queue != false );
+		}
+		return false;
 	}
 
 	public function characters($limit = null) {
@@ -99,7 +110,7 @@ class Story_ArcDBO extends _Story_ArcDBO
 
 	public function notify( $type = 'none', $object = null )
 	{
-		Logger::logInfo( $this . " Notified $type " . $object );
+		Logger::logInfo( $this . " Notified $type " . $object, "Notification", $type );
 		if ( $object instanceof DataObject ) {
 			switch( $object->tableName() ) {
 				case 'media':
@@ -110,6 +121,15 @@ class Story_ArcDBO extends _Story_ArcDBO
 								. "story_arc_publication.publication_id = publication.id "
 								. "where story_arc_publication.story_arc_id = story_arc.id AND publication.media_count > 0"
 								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+
+						\SQL::raw(
+							"update reading_queue set pub_available = ( "
+								. "select count(*) from story_arc_publication join publication on "
+								. "story_arc_publication.publication_id = publication.id "
+								. "where story_arc_publication.story_arc_id = reading_queue.story_arc_id AND publication.media_count > 0) "
+								. "where story_arc_id = :myid;",
 							array( ":myid" => $this->id)
 						);
 					}

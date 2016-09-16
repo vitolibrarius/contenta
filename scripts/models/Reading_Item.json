@@ -1,0 +1,75 @@
+{
+	"attributes": {
+        "id": 	{ "column": "id",	"type": "INTEGER" },
+        "user_id": { "column": "user_id",	"type": "INTEGER", "nullable": false },
+        "publication_id": { "column": "publication_id",	"type": "INTEGER", "nullable": false },
+        "created": { "column": "created", "type": "DATE" },
+        "read_date": { "column": "read_date", "type": "DATE" },
+        "mislabeled": { "column": "mislabeled", "type": "BOOLEAN", "default": "Model::TERTIARY_FALSE" }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "reading_item",
+    "package": "reading",
+    "model": "Reading_Item",
+    "dbo": "Reading_ItemDBO",
+	"sort" : [
+		{ "asc": "read_date" }
+	],
+    "relationships" :{
+    	"user" : {
+    		"destination" : "Users",
+    		"destinationTable" : "users",
+    		"destinationPackage" : "\\model\\user\\",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "user_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	},
+    	"publication" : {
+    		"destination" : "Publication",
+    		"destinationTable" : "publication",
+    		"destinationPackage" : "\\model\\media\\",
+    		"joins" : [
+    			{ "destinationAttribute": "id", "sourceAttribute" : "publication_id" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	},
+    	"reading_queue_items" : {
+    		"destination" : "Reading_Queue_Item",
+    		"destinationTable" : "reading_queue_item",
+    		"destinationPackage" : "\\model\\reading\\",
+    		"joins" : [
+    			{ "destinationAttribute": "reading_item_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	}
+    },
+	"fetches" : {
+		"objectForUserAndPublication": {
+			"arguments": [ "user", "publication" ],
+			"maxCount" : 1,
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Related",
+					"relationship": "user",
+					"argAttribute": "user"
+				},
+				{
+					"type" : "Related",
+					"relationship": "publication",
+					"argAttribute": "publication"
+				}
+			]
+		}
+	},
+	"indexes" : [
+    	{ "columns": ["read_date"], "unique": false }
+    ]
+}

@@ -82,6 +82,11 @@ span.icon.flag:before 		{ content:"\2690"; }
 span.icon.favorite:before	{ content:"\2665"; }
 span.icon.star:before		{ content:"\2605"; }
 
+span.icon.up:before 		{ content:"\25B2"; }
+span.icon.down:before		{ content:"\25BC"; }
+span.icon.top:before		{ content:"\2912"; }
+span.icon.bottom:before		{ content:"\2913"; }
+
 span.icon.on:before 		{ color:red;}
 
 .badges h6 {
@@ -146,6 +151,11 @@ span.icon.on:before 		{ color:red;}
 				url("../img/ajax-loader.gif")
 				50% 50%
 				no-repeat;
+}
+
+progress[value] {
+  width: 100%;
+  height: 20px;
 }
 
 .blocked {

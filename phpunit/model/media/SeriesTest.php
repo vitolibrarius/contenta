@@ -25,8 +25,6 @@ use \model\media\Series_Character as Series_Character;
 use \model\media\Series_CharacterDBO as Series_CharacterDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
-use \model\media\User_Series as User_Series;
-use \model\media\User_SeriesDBO as User_SeriesDBO;
 /* {useStatements} */
 
 class SeriesTest extends PHPUnit_Framework_TestCase

@@ -15,6 +15,8 @@ use \model\media\Media as Media;
 use \model\media\MediaDBO as MediaDBO;
 use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
+use \model\reading\Reading_Item as Reading_Item;
+use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 
@@ -88,6 +90,17 @@ abstract class _PublicationDBO extends DataObject
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc_Publication');
 			return $model->allObjectsForKeyValue( Story_Arc_Publication::publication_id, $this->id);
+		}
+
+		return false;
+	}
+
+	// to-many relationship
+	public function reading_items()
+	{
+		if ( isset( $this->id ) ) {
+			$model = Model::Named('Reading_Item');
+			return $model->allObjectsForKeyValue( Reading_Item::publication_id, $this->id);
 		}
 
 		return false;

@@ -130,7 +130,10 @@ class JoinSQL extends SQL
 			$qual = array_valueForKeypath("join/".$tableName."/qualifier", $this->joinMeta);
 			if ( is_null($qual) == false ) {
 				$qual->tablePrefix = array_valueForKeypath("join/".$tableName."/prefix", $this->joinMeta);
-				$parameters = array_merge($parameters, $qual->sqlParameters());
+				$q_params = $qual->sqlParameters();
+				if ( is_array($q_params)) {
+					$parameters = array_merge($parameters, $q_params);
+				}
 			}
 		}
 		return (count($parameters) > 0 ? $parameters : null);
@@ -167,6 +170,7 @@ class JoinSQL extends SQL
 
 		$components = array(
 			SQL::CMD_SELECT,
+			SQL::SQL_DISTINCT,
 			implode(",", $selectCols),
 			SQL::SQL_FROM,
 			implode("," . PHP_EOL . "	", $from)

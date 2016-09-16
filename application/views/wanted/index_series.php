@@ -43,6 +43,8 @@
 				?></span>
 			</div>
 			<div class="grid_2">
+				<progress max="<?php echo $value->pub_count; ?>"
+					value="<?php echo (isset($value->pub_available)?$value->pub_available:0);?>"></progress>
 				<span style="float: right;">
 					Issues <?php echo (isset($value->pub_available)?$value->pub_available:0); ?>
 					/ <?php echo $value->pub_count; ?>

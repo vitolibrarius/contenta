@@ -17,6 +17,7 @@ abstract class SQL
 	const CMD_UPDATE	= 'UPDATE';
 	const CMD_DELETE	= 'DELETE';
 
+	const SQL_DISTINCT	= 'DISTINCT';
 	const SQL_FROM		= 'FROM';
 	const SQL_WHERE		= 'WHERE';
 	const SQL_VALUES	= 'VALUES';

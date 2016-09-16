@@ -24,6 +24,10 @@
 			if ( isset($this->deleteAction) ) {
 	 			$card->setDeletePath( $this->deleteAction . '/' . $value->id );
 			}
+			if ( isset($this->queuedPath) ) {
+				$card->setQueuedPath( $this->queuedPath . '/' . $value->id );
+			}
+
 			echo '<div class="grid_3">' . PHP_EOL;
 			echo $card->render($value);
 			echo '</div>' . PHP_EOL;

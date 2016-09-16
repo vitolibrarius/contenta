@@ -12,8 +12,10 @@ use \model\user\UsersDBO as UsersDBO;
 /* import related objects */
 use \model\network\User_Network as User_Network;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
-use \model\media\User_Series as User_Series;
-use \model\media\User_SeriesDBO as User_SeriesDBO;
+use \model\reading\Reading_Queue as Reading_Queue;
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
+use \model\reading\Reading_Item as Reading_Item;
+use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 
 class Users extends _Users
 {

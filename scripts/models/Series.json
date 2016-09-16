@@ -90,10 +90,10 @@
             "isToMany" : true,
             "ownsDestination" : true
     	},
-    	"user_series" : {
-    		"destination" : "User_Series",
-    		"destinationPackage" : "\\model\\media\\",
-    		"destinationTable" : "user_series",
+    	"reading_queue" : {
+    		"destination" : "Reading_Queue",
+    		"destinationTable" : "reading_queue",
+    		"destinationPackage" : "\\model\\reading\\",
     		"joins" : [
     			{ "destinationAttribute": "series_id", "sourceAttribute" : "id" }
     		],

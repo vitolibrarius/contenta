@@ -39,7 +39,6 @@ use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_Arc_Character as Story_Arc_Character;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\User_Network as User_Network;
-use \model\media\User_Series as User_Series;
 use \model\user\Users as Users;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;

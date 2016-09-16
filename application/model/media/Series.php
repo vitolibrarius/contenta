@@ -20,8 +20,10 @@ use \model\media\Series_Character as Series_Character;
 use \model\media\Series_CharacterDBO as Series_CharacterDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
-use \model\media\User_Series as User_Series;
-use \model\media\User_SeriesDBO as User_SeriesDBO;
+use \model\reading\Reading_Queue as Reading_Queue;
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
+use \model\reading\Reading_Item as Reading_Item;
+use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 
 class Series extends _Series
 {
@@ -338,7 +340,6 @@ class Series extends _Series
 		}
 		return true;
 	}
-
 }
 
 ?>

@@ -19,8 +19,8 @@ use \model\media\Series_Character as Series_Character;
 use \model\media\Series_CharacterDBO as Series_CharacterDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
-use \model\media\User_Series as User_Series;
-use \model\media\User_SeriesDBO as User_SeriesDBO;
+use \model\reading\Reading_Queue as Reading_Queue;
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 
 abstract class _SeriesDBO extends DataObject
 {
@@ -129,11 +129,11 @@ abstract class _SeriesDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function user_series()
+	public function reading_queue()
 	{
 		if ( isset( $this->id ) ) {
-			$model = Model::Named('User_Series');
-			return $model->allObjectsForKeyValue( User_Series::series_id, $this->id);
+			$model = Model::Named('Reading_Queue');
+			return $model->allObjectsForKeyValue( Reading_Queue::series_id, $this->id);
 		}
 
 		return false;

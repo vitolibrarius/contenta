@@ -44,10 +44,21 @@
             "isToMany" : true,
             "ownsDestination" : true
     	},
-    	"user_series" : {
-    		"destination" : "User_Series",
-    		"destinationTable" : "user_series",
-    		"destinationPackage" : "\\model\\media\\",
+    	"reading_queues" : {
+    		"destination" : "Reading_Queue",
+    		"destinationTable" : "reading_queue",
+    		"destinationPackage" : "\\model\\reading\\",
+    		"joins" : [
+    			{ "destinationAttribute": "user_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"reading_items" : {
+    		"destination" : "Reading_Item",
+    		"destinationTable" : "reading_item",
+    		"destinationPackage" : "\\model\\reading\\",
     		"joins" : [
     			{ "destinationAttribute": "user_id", "sourceAttribute" : "id" }
     		],

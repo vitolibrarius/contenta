@@ -42,7 +42,6 @@ use \model\media\Story_Arc_Character as Story_Arc_Character;
 use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\User_Network as User_Network;
-use \model\media\User_Series as User_Series;
 use \model\user\Users as Users;
 use \model\version\Version as Version;
 /* {useStatements} */
@@ -264,17 +263,6 @@ class ImportDataTest extends PHPUnit_Framework_TestCase
 	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 21:42:44.
 	 */
 	public function testImportRow_series_alias()
-	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers	importRow_user_series
-	 * 			T_FUNCTION T_PUBLIC importRow_user_series ( Model $model, $rowDir)
-	 * @todo	Implement testImportRow_user_series().
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 21:42:44.
-	 */
-	public function testImportRow_user_series()
 	{
 		$this->markTestIncomplete('This test has not been implemented yet.');
 	}

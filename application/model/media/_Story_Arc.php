@@ -23,6 +23,8 @@ use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
+use \model\reading\Reading_Queue as Reading_Queue;
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 
 /** Sample Creation script */
 		/** STORY_ARC */
@@ -75,7 +77,8 @@ abstract class _Story_Arc extends Model
 	const publisher = 'publisher';
 	const story_arc_characters = 'story_arc_characters';
 	const story_arc_publication = 'story_arc_publication';
-	const story_arc_Series = 'story_arc_Series';
+	const story_arc_series = 'story_arc_series';
+	const reading_queue = 'reading_queue';
 
 	public function tableName() { return Story_Arc::TABLE; }
 	public function tablePK() { return Story_Arc::id; }
@@ -136,7 +139,8 @@ abstract class _Story_Arc extends Model
 			Story_Arc::publisher,
 			Story_Arc::story_arc_characters,
 			Story_Arc::story_arc_publication,
-			Story_Arc::story_arc_Series
+			Story_Arc::story_arc_series,
+			Story_Arc::reading_queue
 		);
 	}
 
@@ -225,6 +229,9 @@ abstract class _Story_Arc extends Model
 					return array( Story_Arc::id, "story_arc_id"  );
 					break;
 				case "story_arc_series":
+					return array( Story_Arc::id, "story_arc_id"  );
+					break;
+				case "reading_queue":
 					return array( Story_Arc::id, "story_arc_id"  );
 					break;
 				default:
@@ -363,6 +370,10 @@ abstract class _Story_Arc extends Model
 			}
 			$story_arc_series_model = Model::Named('Story_Arc_Series');
 			if ( $story_arc_series_model->deleteAllForKeyValue(Story_Arc_Series::story_arc_id, $object->id) == false ) {
+				return false;
+			}
+			$reading_queue_model = Model::Named('Reading_Queue');
+			if ( $reading_queue_model->deleteAllForKeyValue(Reading_Queue::story_arc_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

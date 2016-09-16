@@ -21,6 +21,8 @@ use \model\media\Media as Media;
 use \model\media\MediaDBO as MediaDBO;
 use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
+use \model\reading\Reading_Item as Reading_Item;
+use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 
@@ -73,6 +75,7 @@ abstract class _Publication extends Model
 	const series = 'series';
 	const media = 'media';
 	const story_arc_publication = 'story_arc_publication';
+	const reading_items = 'reading_items';
 	const publication_characters = 'publication_characters';
 
 	public function tableName() { return Publication::TABLE; }
@@ -133,6 +136,7 @@ abstract class _Publication extends Model
 			Publication::series,
 			Publication::media,
 			Publication::story_arc_publication,
+			Publication::reading_items,
 			Publication::publication_characters
 		);
 	}
@@ -219,6 +223,9 @@ abstract class _Publication extends Model
 					return array( Publication::id, "publication_id"  );
 					break;
 				case "story_arc_publication":
+					return array( Publication::id, "publication_id"  );
+					break;
+				case "reading_item":
 					return array( Publication::id, "publication_id"  );
 					break;
 				case "publication_character":
@@ -350,6 +357,10 @@ abstract class _Publication extends Model
 			}
 			$story_arc_publication_model = Model::Named('Story_Arc_Publication');
 			if ( $story_arc_publication_model->deleteAllForKeyValue(Story_Arc_Publication::publication_id, $object->id) == false ) {
+				return false;
+			}
+			$reading_item_model = Model::Named('Reading_Item');
+			if ( $reading_item_model->deleteAllForKeyValue(Reading_Item::publication_id, $object->id) == false ) {
 				return false;
 			}
 			$publication_character_model = Model::Named('Publication_Character');

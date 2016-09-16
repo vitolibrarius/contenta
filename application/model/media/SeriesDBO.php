@@ -7,6 +7,7 @@ use \Model as Model;
 use \Logger as Logger;
 use \db\Qualifier as Qualifier;
 
+use \http\Session as Session;
 use \model\media\Series as Series;
 
 /* import related objects */
@@ -107,19 +108,9 @@ class SeriesDBO extends _SeriesDBO
 		return false;
 	}
 
-	public function userJoin($userId = null) {
-		if (isset($userId)) {
-			$usermodel = Model::Named('Users');
-			$model = Model::Named('User_Series');
-			$user = $usermodel->objectForId($userId);
-			return $model->joinForUserAndSeries($user, $this);
-		}
-		return false;
-	}
-
 	public function notify( $type = 'none', $object = null )
 	{
-		Logger::logInfo( $this . " Notified $type " . $object );
+		Logger::logInfo( $this . " Notified $type " . $object, "Notification", $type );
 		if ( $object instanceof DataObject ) {
 			switch( $object->tableName() ) {
 				case 'media':
@@ -128,6 +119,13 @@ class SeriesDBO extends _SeriesDBO
 							"update series set pub_available = ( "
 								. "select count(*) from publication where publication.series_id = series.id AND publication.media_count > 0 "
 								. ") where id = :myid;",
+							array( ":myid" => $this->id)
+						);
+
+						\SQL::raw(
+							"update reading_queue set pub_available = ( "
+								. "select count(*) from publication where publication.series_id = series.id AND publication.media_count > 0 "
+								. ") where series_id = :myid;",
 							array( ":myid" => $this->id)
 						);
 					}
@@ -162,6 +160,16 @@ class SeriesDBO extends _SeriesDBO
 					break;
 			}
 		}
+	}
+
+	public function queued()
+	{
+		$user = Session::sessionUser();
+		if ( $user != false ) {
+			$queue = Model::Named('Reading_Queue')->objectForUserAndSeries($user, $this);
+			return ( $queue != false );
+		}
+		return false;
 	}
 }
 

@@ -27,7 +27,6 @@ use \model\media\Series as Series;
 use \model\media\Series_Alias as Series_Alias;
 use \model\media\Series_Character as Series_Character;
 use \model\media\Story_Arc as Story_Arc;
-use \model\media\User_Series as User_Series;
 
 /**
  * Class Admin
@@ -96,13 +95,10 @@ class DisplayStories extends Controller
 			);
 			$select->orderBy( $sort );
 
-			Logger::LogInfo( $select->__toString() );
-//
-// 						Session::addPositiveFeedback("select ". $select);
-
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
  			$this->view->detailAction = "/DisplayStories/details";
+			$this->view->queuedPath = "/DisplayStories/toggleReadingQueue";
 			$this->view->render( '/story_arcs/story_arcCards', true);
 		}
 	}
@@ -128,6 +124,30 @@ class DisplayStories extends Controller
 			else {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
 				$this->view->render('/error/index');
+			}
+		}
+	}
+
+	function toggleReadingQueue($oid = 0)
+	{
+		if (Auth::handleLogin() ) {
+			if ( $oid > 0 ) {
+				$user = Session::sessionUser();
+
+				$model = Model::Named('Story_Arc');
+				$rq_model = Model::Named('Reading_Queue');
+				$story = $model->objectForId($oid);
+				if ( $story != false ) {
+					$readingQueue = $rq_model->objectForUserAndStoryArc($user, $story);
+					if ( $readingQueue != false ) {
+						$rq_model->deleteObject($readingQueue);
+						$this->view->renderJson(array("toggled_on" => false) );
+					}
+					else {
+						$rq_model->createReadingQueueStoryArc($user, $story);
+						$this->view->renderJson(array("toggled_on" => true) );
+					}
+				}
 			}
 		}
 	}

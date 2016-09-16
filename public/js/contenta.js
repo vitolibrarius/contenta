@@ -60,7 +60,7 @@ $(document).ready(function() {
 		return false;
 	}) //end click
 
-	$('body').on('click', 'a.pub_wanted.toggle', function (e) {
+	$('body').on('click', 'a.toggle', function (e) {
 		var span = $(this).children("span.icon");
 		var action = $(this).attr("data-href");
 		if (action.length >= 1 ) {
@@ -68,9 +68,12 @@ $(document).ready(function() {
 				type: "GET",
 				url: action,
 				dataType: "text",
+				data: {
+					record_id: $(this).attr('data-recordId')
+				},
 				success: function(msg) {
 					var obj = jQuery.parseJSON( msg );
-					var toggle = (obj.pub_wanted == true);
+					var toggle = (obj.toggled_on == true);
 					span.toggleClass( "on", toggle );
 				}
 			});

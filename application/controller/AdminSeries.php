@@ -27,7 +27,6 @@ use \model\media\Character_Alias as Character_Alias;
 use \model\media\Series as Series;
 use \model\media\Series_Alias as Series_Alias;
 use \model\media\Series_Character as Series_Character;
-use \model\media\User_Series as User_Series;
 
 /**
  * Class Admin
@@ -158,10 +157,10 @@ class AdminSeries extends Admin
 								$importer->refreshPublicationsForObject( $object );
 								$importer->daemonizeProcess();
 							}
-							echo json_encode(array(Series::pub_wanted => true) );
+							echo json_encode(array("toggled_on" => true) );
 						}
 						else {
-							echo json_encode(array(Series::pub_wanted => false) );
+							echo json_encode(array("toggled_on" => false) );
 						}
 					}
 				}

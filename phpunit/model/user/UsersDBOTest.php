@@ -15,8 +15,6 @@ use \Logger as Logger;
 use \model\user\Users as Users;
 use \model\network\User_Network as User_Network;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
-use \model\User_Series as User_Series;
-use \model\User_SeriesDBO as User_SeriesDBO;
 /* {useStatements} */
 
 class UsersDBOTest extends PHPUnit_Framework_TestCase

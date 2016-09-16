@@ -82,6 +82,17 @@
             "isToMany" : true,
             "ownsDestination" : true
     	},
+    	"reading_items" : {
+    		"destination" : "Reading_Item",
+    		"destinationPackage" : "\\model\\reading\\",
+    		"destinationTable" : "reading_item",
+    		"joins" : [
+    			{ "destinationAttribute": "publication_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
     	"publication_characters" : {
     		"destination" : "Publication_Character",
     		"destinationPackage" : "\\model\\media\\",

@@ -18,7 +18,6 @@ use \model\media\Series_Alias as Series_Alias;
 use \model\media\Character as Character;
 use \model\media\Character_Alias as Character_Alias;
 use \model\media\Series_Character as Series_Character;
-use \model\media\User_Series as User_Series;
 use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_Arc_Character as Story_Arc_Character;
 use \model\media\Story_Arc_Series as Story_Arc_Series;

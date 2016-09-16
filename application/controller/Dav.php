@@ -24,7 +24,6 @@ use \model\media\Character_Alias as Character_Alias;
 use \model\media\Series as Series;
 use \model\media\Series_Alias as Series_Alias;
 use \model\media\Series_Character as Series_Character;
-use \model\media\User_Series as User_Series;
 
 use webdav\DavNavCollection as DavNavCollection;
 use webdav\DavModelCollection as DavModelCollection;

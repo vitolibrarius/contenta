@@ -23,7 +23,7 @@ use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 
 class Publication extends _Publication
 {
-	public function notifyKeypaths() { return array( "series", "story_arcs" ); }
+	public function notifyKeypaths() { return array( "series", "story_arcs", "series/reading_queue", "story_arcs/reading_queue" ); }
 
 	/**
 	 *	Create/Update functions

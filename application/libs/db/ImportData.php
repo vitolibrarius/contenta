@@ -38,7 +38,6 @@ use \model\media\Story_Arc_Character as Story_Arc_Character;
 use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\User_Network as User_Network;
-use \model\media\User_Series as User_Series;
 use \model\user\Users as Users;
 use \model\version as Version;
 
@@ -86,7 +85,6 @@ class ImportData
 			"Publisher",
 			"Series",
 			"Series_Alias",
-			"User_Series",
 
 			"Publication",
 
@@ -379,24 +377,6 @@ class ImportData
 	public function importRow_series_alias( Model $model, $rowDir )
 	{
 		$data = $this->dataForRow($rowDir);
-		$seriesModel = Model::Named( "Series" );
-		if ( isset($data['series_id']) && is_null($data['series_id']) == false) {
-			$oldseries = 'id_' . $data['series_id'];
-			$data['series_id'] = $this->mappedPrimaryKey( $seriesModel, $oldseries );
-		}
-
-		return $this->importRowData( $model, $rowDir, $data );
-	}
-
-	public function importRow_user_series( Model $model, $rowDir )
-	{
-		$data = $this->dataForRow($rowDir);
-		$userModel = Model::Named( "Users" );
-		if ( isset($data['user_id']) && is_null($data['user_id']) == false) {
-			$olduser = 'id_' . $data['user_id'];
-			$data['user_id'] = $this->mappedPrimaryKey( $userModel, $olduser );
-		}
-
 		$seriesModel = Model::Named( "Series" );
 		if ( isset($data['series_id']) && is_null($data['series_id']) == false) {
 			$oldseries = 'id_' . $data['series_id'];

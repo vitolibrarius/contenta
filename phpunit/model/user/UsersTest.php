@@ -15,8 +15,6 @@ use \Logger as Logger;
 use \model\user\UsersDBO as UsersDBO;
 use \model\network\User_Network as User_Network;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
-use \model\User_Series as User_Series;
-use \model\User_SeriesDBO as User_SeriesDBO;
 /* * Generated from UseStatements.tpl by PhpTestClassGenerator.php on 2016-05-29 19:22:52. */
 use \Localized as Localized;
 /* {useStatements} */
@@ -354,21 +352,6 @@ class UsersTest extends PHPUnit_Framework_TestCase
 	{
 	}
 
-	/**
-	 * @covers	joinAttributes
-	 * 			T_FUNCTION joinAttributes ( $joinModel = null)
-	 */
-	public function testJoinAttributes()
-	{
-		$expected = array( Users::id, "user_id"  );
-		$user_network = Model::Named( "user_network" );
-		$joins = $this->model->joinAttributes( $user_network );
-		$this->assertEmpty(array_merge(array_diff($expected, $joins), array_diff($joins, $expected)));
-
-		$user_series = Model::Named( "user_series" );
-		$joins = $this->model->joinAttributes( $user_series );
-		$this->assertEmpty(array_merge(array_diff($expected, $joins), array_diff($joins, $expected)));
-	}
 
 /*  Test functions */
 

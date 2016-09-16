@@ -39,7 +39,6 @@ class MediaTest extends PHPUnit_Framework_TestCase
 			"story_arc_character",
 			"story_arc_publication",
 			"story_arc_series",
-			"user_series",
 			"users"
 			)
 		);

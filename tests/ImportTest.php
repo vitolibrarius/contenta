@@ -47,7 +47,6 @@ require_once APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model/Story_Arc_Character
 require_once APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model/Story_Arc_Publication.php';
 require_once APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model/Story_Arc_Series.php';
 require_once APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model/User_Network.php';
-require_once APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model/User_Series.php';
 require_once APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model/Users.php';
 require_once APPLICATION_PATH . DIRECTORY_SEPARATOR . 'model/Version.php';
 

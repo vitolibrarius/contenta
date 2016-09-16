@@ -93,6 +93,32 @@ class Card
 		return null;
 	}
 
+	public function queuedPath()
+	{
+		if (isset($this->queuedPath)) {
+			return Config::Web( $this->queuedPath );
+		}
+		return null;
+	}
+
+	public function setQueuedPath( $path = null )
+	{
+		$this->queuedPath = $path;
+	}
+
+	public function readItemPath()
+	{
+		if (isset($this->readItemPath)) {
+			return Config::Web( $this->readItemPath );
+		}
+		return null;
+	}
+
+	public function setReadItemPath( $path = null )
+	{
+		$this->readItemPath = $path;
+	}
+
 	public function thumbnailTable(DataObject $record = null)
 	{
 		if (isset($this->thumbnailTable)) {
@@ -124,7 +150,7 @@ class Card
 		if (isset($record) && is_null($record) == false) {
 			$table = $this->thumbnailTable($record);
 			$pkAttribute = $this->thumbnailPrimaryKeypath();
-			$pk = $record->{$pkAttribute};
+			$pk = $record->{$pkAttribute}();
 			return Config::Web( "Image", "thumbnail", $table, $pk);
 		}
 		return Config::Web('/public/img/Logo_sm.png');
@@ -213,17 +239,54 @@ class Card
 									);
 								}
 
-								$flagPath = $this->flagPath();
-								if (isset($flagPath) && is_null($flagPath) == false) {
-									$c[] = H::a( array("href" => $flagPath ),
-										H::span( array( "class" => "icon flag"))
+								$supportsReadItem = (method_exists($record, "read_date") ? true : false);
+								$isReadItem = ($supportsReadItem ? ($record->{"read_date"}() == true) : false );
+								$readItemPath = $this->readItemPath();
+								if (isset($readItemPath) && is_null($readItemPath) == false && $supportsReadItem == true) {
+									$c[] = H::a( array(
+												"id" => "a_readable_" . $record->pkValue(),
+												"class" => "readable toggle",
+												"data-href" => $readItemPath,
+												"data-recordId" => $record->pkValue(),
+												"href" => "#"
+											),
+											H::span( array(
+												"id" => "span_readable_" . $record->pkValue(),
+												"class" => "icon flag " . ($isReadItem?"on":"")
+											)
+										)
 									);
 								}
 
-								$favoritePath = $this->favoritePath();
-								if (isset($favoritePath) && is_null($favoritePath) == false) {
-									$c[] = H::a( array("href" => $favoritePath ),
-										H::span( array( "class" => "icon favorite"))
+								$flagPath = $this->flagPath();
+								if (isset($flagPath) && is_null($flagPath) == false) {
+									$c[] = H::a( array(
+												"href" => $flagPath
+											),
+											H::span( array(
+												"id" => "span_flag_" . $record->pkValue(),
+												"class" => "icon flag"
+											)
+										)
+									);
+								}
+
+								$supportsQueue = (method_exists($record, "queued") ? true : false);
+								$isQueued = ($supportsQueue ? ($record->{"queued"}() == true) : false );
+								$queuedPath = $this->queuedPath();
+								if (isset($queuedPath) && is_null($queuedPath) == false && $supportsQueue == true) {
+									$c[] = H::a( array(
+												"id" => "a_queued_" . $record->pkValue(),
+												"class" => "queued toggle",
+												"data-recordId" => $record->pkValue(),
+												"data-href" => $queuedPath,
+												"href" => "#"
+											),
+											H::span( array(
+												"id" => "span_queued_" . $record->pkValue(),
+												"class" => "icon favorite " . ($isQueued?"on":"")
+											)
+										)
 									);
 								}
 
@@ -231,8 +294,17 @@ class Card
 								$isWanted = ($supportsWanted ? ($record->{"pub_wanted"} == true) : false );
 								$wantedPath = $this->wantedPath();
 								if (isset($wantedPath) && is_null($wantedPath) == false && $supportsWanted == true) {
-									$c[] = H::a( array( "class" => "pub_wanted toggle", "data-href" => $wantedPath, "href" => "#" ),
-										H::span( array( "class" => "icon star " . ($isWanted?"on":"")))
+									$c[] = H::a( array(
+												"class" => "pub_wanted toggle",
+												"data-recordId" => $record->pkValue(),
+												"data-href" => $wantedPath,
+												"href" => "#"
+											),
+											H::span( array(
+												"id" => "span_wanted_" . $record->pkValue(),
+												"class" => "icon star " . ($isWanted?"on":"")
+											)
+										)
 									);
 								}
 

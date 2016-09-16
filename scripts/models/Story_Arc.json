@@ -64,10 +64,21 @@
             "isToMany" : true,
             "ownsDestination" : true
     	},
-    	"story_arc_Series" : {
+    	"story_arc_series" : {
     		"destination" : "Story_Arc_Series",
     		"destinationPackage" : "\\model\\media\\",
     		"destinationTable" : "story_arc_series",
+    		"joins" : [
+    			{ "destinationAttribute": "story_arc_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
+    	"reading_queue" : {
+    		"destination" : "Reading_Queue",
+    		"destinationTable" : "reading_queue",
+    		"destinationPackage" : "\\model\\reading\\",
     		"joins" : [
     			{ "destinationAttribute": "story_arc_id", "sourceAttribute" : "id" }
     		],

@@ -125,12 +125,16 @@ class Api extends Controller
 			$mediaObj = $media_model->objectForId($id);
 			if ( $mediaObj != false )
 			{
+				$pub = $mediaObj->publication();
+				$item = Model::Named("Reading_Item")->objectForUserAndPublication($user, $pub);
 				$path = $mediaObj->contentaPath();
 				$etag = $mediaObj->checksum;
 
 				if ( file_exists($path) == true )
 				{
-// 					$user->flagMediaAsRead($mediaObj);
+					$item->setRead_date(time());
+					$item->saveChanges();
+
 					if ( !empty($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag) {
 						header('HTTP/1.1 304 Not Modified');
 						header('Content-Length: 0');

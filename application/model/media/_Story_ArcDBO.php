@@ -17,6 +17,8 @@ use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
+use \model\reading\Reading_Queue as Reading_Queue;
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 
 abstract class _Story_ArcDBO extends DataObject
 {
@@ -100,11 +102,22 @@ abstract class _Story_ArcDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function story_arc_Series()
+	public function story_arc_series()
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc_Series');
 			return $model->allObjectsForKeyValue( Story_Arc_Series::story_arc_id, $this->id);
+		}
+
+		return false;
+	}
+
+	// to-many relationship
+	public function reading_queue()
+	{
+		if ( isset( $this->id ) ) {
+			$model = Model::Named('Reading_Queue');
+			return $model->allObjectsForKeyValue( Reading_Queue::story_arc_id, $this->id);
 		}
 
 		return false;

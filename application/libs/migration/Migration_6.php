@@ -18,7 +18,6 @@ use \model\media\Series_Alias as Series_Alias;
 use \model\media\Character as Character;
 use \model\media\Character_Alias as Character_Alias;
 use \model\media\Series_Character as Series_Character;
-use \model\media\User_Series as User_Series;
 use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_Arc_Character as Story_Arc_Character;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
@@ -279,22 +278,6 @@ class Migration_6 extends Migrator
 
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS story_arc_series_story_arc_idseries_id on story_arc_series (story_arc_id,series_id)';
 		$this->sqlite_execute( "story_arc_series", $sql, "Index on story_arc_series (story_arc_id,series_id)" );
-
-		/** USER_SERIES */
-		$sql = "CREATE TABLE IF NOT EXISTS user_series ( "
-			. User_Series::id . " INTEGER PRIMARY KEY, "
-			. User_Series::user_id . " INTEGER, "
-			. User_Series::series_id . " INTEGER, "
-			. User_Series::favorite . " INTEGER, "
-			. User_Series::read . " INTEGER, "
-			. User_Series::mislabeled . " INTEGER, "
-			. "FOREIGN KEY (". User_Series::user_id .") REFERENCES " . Users::TABLE . "(" . Users::id . "),"
-			. "FOREIGN KEY (". User_Series::series_id .") REFERENCES " . Series::TABLE . "(" . Series::id . ")"
-		. ")";
-		$this->sqlite_execute( "user_series", $sql, "Create table user_series" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS user_series_user_idseries_id on user_series (user_id,series_id)';
-		$this->sqlite_execute( "user_series", $sql, "Index on user_series (user_id,series_id)" );
 	}
 
 	public function sqlite_postUpgrade()

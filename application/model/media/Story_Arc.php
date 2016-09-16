@@ -18,6 +18,10 @@ use \model\media\Story_Arc_Publication as Story_Arc_Publication;
 use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
+use \model\reading\Reading_Queue as Reading_Queue;
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
+use \model\reading\Reading_Item as Reading_Item;
+use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 
 class Story_Arc extends _Story_Arc
 {
