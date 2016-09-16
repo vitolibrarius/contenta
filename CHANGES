@@ -1,3 +1,51 @@
+Version 0.7.1:
+* dfa867c -  (HEAD -> master) Fixes #12	User additions, now tracking user reading queues (Thu Sep 15 22:46:42 2016 -0600) <Vito Librarius>
+* d0f3456 -  (origin/master, origin/HEAD) Fixes #63: removed git display from footer until a better cach strategy can be devised (Wed Aug 24 21:25:16 2016 -0600) <Vito Librarius>
+* 914dc02 -  (issue-105-missing-ability-to-read-comics-in-slideshow-style-) Fixes #134	admin pending should link to content details page (Wed Aug 24 13:43:21 2016 -0600) <Vito Librarius>
+* eefb486 -  Fixes #133	Pending updates page only shows Series (Wed Aug 24 13:27:12 2016 -0600) <Vito Librarius>
+* 75b2b95 -  Fixes #132	Scheduled jobs page needs redesign (Wed Aug 24 11:29:48 2016 -0600) <Vito Librarius>
+* b57b0c9 -  (issue-131-controller-functions-that-are-ajax-fragment-should) Fixes #42	Admin Edit pages should lockdown fields when metadata comes from endpoints (Tue Aug 23 18:15:26 2016 -0600) <Vito Librarius>
+* 83321a4 -  Issue #82: removed log (Tue Aug 23 09:44:23 2016 -0600) <Vito Librarius>
+* cbe2ad5 -  Issue #82: typo (Tue Aug 23 09:40:45 2016 -0600) <Vito Librarius>
+* ef95e01 -  Fixes #125	E_ERROR - Call to undefined function imagecreatefromjpeg() (Sun Aug 21 11:38:46 2016 -0600) <Vito Librarius>
+* bd6d499 -  (issue-82-misc-typos) Fixes #35	Wanted Publication search should include all Newznab sites (Wed Aug 17 21:41:58 2016 -0600) <Vito Librarius>
+* a6cac20 -  Issue #82: added additional logging for [oid] values when record not found (Tue Aug 16 12:07:53 2016 -0600) <Vito Librarius>
+* 088eab5 -  (issue-13-verify-delete-can-purge-data-and-filesystem-correct) Issue #13: fixed typo for Series_Character(s) (Mon Aug 15 13:30:13 2016 -0600) <Vito Librarius>
+* e313613 -  Issue #82: use defined value (Sat Aug 6 17:45:39 2016 -0600) <Vito Librarius>
+* e4ef797 -  Fixes #130	Publication issue_num as text does not sort (Mon Aug 1 20:40:38 2016 -0600) <Vito Librarius>
+* 4b32828 -  Fixes #127	AdminUploadRepair/cbz_initialComicVine - Undefined index: name (Mon Aug 1 19:55:03 2016 -0600) <Vito Librarius>
+* aca30bc -  Issue #82: remove debugging (Mon Aug 1 14:36:31 2016 -0600) <Vito Librarius>
+* 6189c70 -  Fixes #129	UploadRepair - manual publication match by issue num (Mon Aug 1 14:29:58 2016 -0600) <Vito Librarius>
+* 87c083f -  Issue #82: datepicker js is missing, needs new issue (Mon Aug 1 14:28:16 2016 -0600) <Vito Librarius>
+* 746382f -  (issue-128-lockphp---error-making-lockfile, issue-126-newznab-search-processing-error, issue-124-comicvine-objects-that-have-been-deleted-cause-err) Fixes #124	ComicVine objects that have been deleted cause error messages (Sun Jul 31 12:29:34 2016 -0600) <Vito Librarius>
+* 1c4540a -  Issue #82: added comment :) (Sun Jul 31 11:25:32 2016 -0600) <Vito Librarius>
+* e4ee3d3 -  Issue #82: ignore the tags file (Sun Jul 31 11:19:32 2016 -0600) <Vito Librarius>
+* 2913c49 -  Issue #82: non-admin users can access Series and StoryArc pages (Sun Jul 24 11:33:10 2016 -0600) <Vito Librarius>
+* 5f895bd -  Issue #82 (Thu Jul 21 12:51:19 2016 -0600) <Vito Librarius>
+* 0ed2139 -  issue #82: (Thu Jul 21 12:38:34 2016 -0600) <Vito Librarius>
+* 0d40a3f -  Issue #82: misspelled relationship destination (Thu Jul 21 08:33:24 2016 -0600) <Vito Librarius>
+* ccde5a9 -  Issue #82: small change stripping periods from media names (Wed Jul 20 15:25:35 2016 -0600) <Vito Librarius>
+* 6b2ba6a -  Fixes #122	SABnzbd history is deleted before script completes (Tue Jul 19 20:01:43 2016 -0600) <Vito Librarius>
+* 2dd3cd8 -  Issue #82: shortent the temp working file path (Mon Jul 18 19:28:35 2016 -0600) <Vito Librarius>
+* d269798 -  Issue #82: trying to trace a error from the logs (Mon Jul 18 16:59:38 2016 -0600) <Vito Librarius>
+* f025c81 -  Issue #82: Filewrapper path length (Mon Jul 18 16:45:25 2016 -0600) <Vito Librarius>
+* 9162936 -  Issue #82 function name change (Mon Jul 18 15:11:13 2016 -0600) <Vito Librarius>
+* e4246ff -  Fixes #121	UNIQUE constraint failed -- join tables (Mon Jul 18 15:04:34 2016 -0600) <Vito Librarius>
+* 01c36a8 -  Issue #82: missing imports (Mon Jul 18 15:03:20 2016 -0600) <Vito Librarius>
+* 2245ec2 -  Fixes #120	Unknown URL action thumbnailForMedia0b746f43b813a507feb0e9af209eae426abf4974f157a820ab45877e40d33ba7 (Mon Jul 18 13:56:59 2016 -0600) <Vito Librarius>
+* 754fb16 -  Fixes #119	E_ERROR - Call to undefined method model\network\Flux::destinationIncomplete() (Mon Jul 18 13:53:38 2016 -0600) <Vito Librarius>
+* 6f0c485 -  Fixes #118	Media Objects not updating statistics when saving and deleting (Sun Jul 17 19:22:17 2016 -0600) <Vito Librarius>
+* 45dfbbd -  Issue #82: ComicVine requires a user agent (Sun Jul 17 19:21:57 2016 -0600) <Vito Librarius>
+* 2b07bd8 -  Issue #82 html id from guid (Sun Jul 17 01:13:43 2016 -0600) <Vito Librarius>
+* e0ab8d3 -  Issue #82 ensuring src and dest guid is unique (Sun Jul 17 00:56:30 2016 -0600) <Vito Librarius>
+* ff500f3 -  Issue #82: typo (Sat Jul 16 22:41:56 2016 -0600) <Vito Librarius>
+* e5f425a -  Fixes #115: restore page (Sat Jul 16 20:47:49 2016 -0600) <Vito Librarius>
+* a58d841 -  Issue #82: missing html style declared type as css (Fri Jul 15 11:50:52 2016 -0600) <Vito Librarius>
+* f0d37b2 -  Issue #82: restore default users (Fri Jul 15 11:49:12 2016 -0600) <Vito Librarius>
+* a5e1d46 -  (issue-117-processing-directory-is-not-cleaning-up, issue-116-update-statistics) Issue #82: changes migrator to use insert into (Thu Jul 14 12:59:18 2016 -0600) <Vito Librarius>
+* 26209cc -  Issue #82 truncate logs before migration to last 14 days (Thu Jul 14 11:01:20 2016 -0600) <Vito Librarius>
+* d07f088 -  Issue #82 added more logging to Migrator (Thu Jul 14 10:27:49 2016 -0600) <Vito Librarius>
+
 Version 0.7.0:
 
 
