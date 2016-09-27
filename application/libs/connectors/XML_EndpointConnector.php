@@ -54,6 +54,6 @@ abstract class XML_EndpointConnector extends EndpointConnector
 				return array($xml, $headers);
 			}
 		}
-		return false;
+		return array(false, null);
 	}
 }

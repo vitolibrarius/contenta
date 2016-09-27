@@ -483,7 +483,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 				throw new EndpointConnectionException( $json['error'], $json['status_code'] );
 			}
 		}
-		return false;
+		return array(false, null);
 	}
 }
 

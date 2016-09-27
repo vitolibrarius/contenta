@@ -39,7 +39,7 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 				return array($json, $headers);
 			}
 		}
-		return false;
+		return array(false, null);
 	}
 
 	public function performGET($url, $force = false)
@@ -68,6 +68,6 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 						get_class($this), $this->endpointDisplayName());
 			}
 		}
-		return false;
+		return array(false, null);
 	}
 }

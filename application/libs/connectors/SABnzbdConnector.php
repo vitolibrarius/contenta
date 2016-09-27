@@ -317,6 +317,6 @@ Allows full nzbmatrix links (no need to parse out the ID).
 				return array($json, $headers);
 			}
 		}
-		return false;
+		return array(false, null);
 	}
 }

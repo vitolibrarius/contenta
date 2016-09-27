@@ -36,18 +36,18 @@ abstract class EndpointConnector
 	{
 		$endpointModel = Model::Named('Endpoint');
 		if ( is_a($point, '\model\network\EndpointDBO')) {
-			if ($point->isEnabled() ) {
-				$this->endpoint = $point;
-			}
-			else {
-				throw new InvalidEndpointConfigurationException("Endpoint " . $point->displayName() . " is disabled");
-			}
+			$this->endpoint = $point;
 		}
 		else {
 			throw new InvalidEndpointConfigurationException("Cannot be initialized with "
 				. (empty($point) ? '-null-' : get_class($point))
 				. ", requires a configuration of type 'endpointDBO'");
 		}
+	}
+
+	public function __toString()
+	{
+		return get_class($this) . " for " . $this->endpointDisplayName();
 	}
 
 	public function debugPath() {
@@ -96,10 +96,7 @@ abstract class EndpointConnector
 
 	public function endpointDisplayName() {
 		$ep = $this->endpoint();
-		if ( $ep!= null && empty( $ep->api_key ) == false ) {
-			return $this->endpoint->displayName();
-		}
-		return null;
+		return ( is_null($ep) ? "- no enpoint -" : $ep->displayName());
 	}
 
 	public function endpointAPIKey() {
@@ -178,9 +175,8 @@ abstract class EndpointConnector
 			list($data, $headers) = $this->performGET($url, true);
 		}
 		catch ( \Exception $e ) {
-			$this->endpoint()->increaseErrorCount();
 			$success = false;
-			$message = "exception " . $e->getMessage();
+			$message = $e->getMessage();
 		}
 
 		return array( $success, $message, $data );
@@ -190,6 +186,10 @@ abstract class EndpointConnector
 
 	public function performPOST( $url, array $postfields = null, array $headers = null)
 	{
+		if ( $this->endpointEnabled() != true ) {
+			throw new InvalidEndpointConfigurationException("Endpoint " . $point->displayName() . " is disabled");
+		}
+
 		$this->throttleRequestIfRequired();
 		if (empty($url) == false && is_array($postfields) && count($postfields) > 0) {
 			if ( function_exists('curl_version') == true) {
@@ -253,6 +253,10 @@ abstract class EndpointConnector
 	*/
 	public function performGET($url, $force = false)
 	{
+		if ( $this->endpointEnabled() != true ) {
+			throw new \Exception("Endpoint " . $this->endpointDisplayName() . " is disabled");
+		}
+
 		$this->throttleRequestIfRequired();
 		if (empty($url) == false) {
 			$cacheData = Cache::MakeKey( $url, "data" );
@@ -303,6 +307,7 @@ abstract class EndpointConnector
 
 					if ( $http_code >= 200 && $http_code < 300 ) {
 						$this->endpoint()->clearErrorCount();
+						$this->endpoint = Model::Named("Endpoint")->refreshObject($this->endpoint());
 						Cache::Store( $cacheHeaders, $headers );
 						Cache::Store( $cacheData, $data );
 					}
@@ -313,6 +318,7 @@ abstract class EndpointConnector
 					}
 					else {
 						$this->endpoint()->increaseErrorCount();
+						$this->endpoint = Model::Named("Endpoint")->refreshObject($this->endpoint());
 						throw new ResponseErrorException('Return code (' . $http_code . '): '
 							. http_stringForCode($http_code) . " "
 							. curl_error($ch)
