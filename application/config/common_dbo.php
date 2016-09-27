@@ -14,8 +14,30 @@ function dbo_valueForKeypath( $keypath, DataObject $dbo = null, $separator = '/'
 			if ( is_null($result) || is_bool($result) ) {
 				return null;
 			}
-			else if (is_array($result) && isset($result[$item])) {
-				$result = $result[$item];
+			else if (is_array($result) ) {
+				if ( isset($result[$item]) ) {
+					$result = $result[$item];
+				}
+				else {
+					$new_result = array();
+					foreach( $result as $obj ) {
+						if  ( $obj instanceof DataObject ) {
+							$v = dbo_valueForKeypath( $item, $obj, $separator );
+							if ( $v != null ) {
+								if ( is_array($v) ) {
+									$new_result = array_merge($new_result, $v);
+								}
+								else {
+									$new_result[] = $v;
+								}
+							}
+						}
+						else {
+							throw new \Exception( "Failed to find keypath for '$item' in keypath '$keypath' " . var_export($result, true));
+						}
+					}
+					$result = $new_result;
+				}
 			}
 			else if (method_exists($result, $item)) {
 				$result = $result->{$item}();

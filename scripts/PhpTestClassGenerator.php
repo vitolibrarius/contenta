@@ -71,7 +71,7 @@ foreach( $classTokens as $sourceClass ) {
 		continue;
 	}
 
-	$testFile = appendPath( $testDocumentPath, $sourceClass->testnameString() . ".php" );
+	$testFile = appendPath( $testDocumentPath, $sourceClass->testFilename() . ".php" );
 
 	$testDocument = new FileDocument($testFile);
 	$testClass = $testDocument->classNamed( $sourceClass->testnameString() );
@@ -756,6 +756,10 @@ class ClassToken extends Token
 	public function fullnameString() {
 		return $this->name;
 	}
+	public function testFilename() {
+		$result = str_replace("_", "-", $this->name);
+		return ucfirst($result) . "Test";
+	}
 
 	public function testnameString() {
 		return ucfirst($this->name) . "Test";
@@ -847,7 +851,7 @@ class Stack
     protected $maximum;
 
     //constructor
-    function Stack() {
+    function __construct() {
         $this->amount=0;
         $this->maximum=0;
     }
