@@ -75,6 +75,7 @@ class Endpoint extends _Endpoint
 			Endpoint::base_url,
 			Endpoint::api_key,
 			Endpoint::username,
+			Endpoint::error_count,
 			Endpoint::enabled,
 			Endpoint::compressed
 		);
@@ -92,13 +93,15 @@ class Endpoint extends _Endpoint
 		return parent::attributesMandatory($object);
 	}
 
-	/*
 	public function attributeIsEditable($object = null, $type = null, $attr)
 	{
-		// add customization here
+		if (isset($object) && $object instanceof EndpointDBO ) {
+			if ( $attr == Endpoint::error_count ) {
+				return false;
+			}
+		}
 		return parent::attributeIsEditable($object, $type, $attr);
 	}
-	*/
 
 	public function attributeRestrictionMessage($object = null, $type = null, $attr)
 	{

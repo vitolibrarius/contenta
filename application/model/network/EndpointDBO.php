@@ -38,6 +38,34 @@ class EndpointDBO extends _EndpointDBO
 	{
 		return $this->displayName() . ' (' . $this->pkValue() . ') ' . $this->base_url;
 	}
+
+	/** fail tracking */
+	function increaseErrorCount()
+	{
+		$count = $this->error_count();
+		if ( is_null($count) || intval($count) == 0) {
+			$count = 1;
+		}
+		else {
+			$count ++;
+		}
+		$this->setError_count($count);
+		if ( $count > 5 ) {
+			$this->setEnabled(false);
+			Logger::logWarning("Endpoint automatically disabled.  Too many errors", $this->displayName(), $this->pkValue());
+		}
+		return $this->saveChanges();
+	}
+
+	public function clearErrorCount()
+	{
+		if ($this->error_count() > 0 ) {
+			$this->setError_count(0);
+			$this->setEnabled(true);
+			return $this->saveChanges();
+		}
+		return true;
+	}
 }
 
 ?>

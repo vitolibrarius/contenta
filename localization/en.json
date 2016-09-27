@@ -297,6 +297,9 @@
             "endpoint_id": {
                 "search": "Select Endpoint"
             },
+            "error_count": {
+                "label": "Connection Errors"
+            },
             "name": {
                 "FIELD_EMPTY": "Name field was empty",
                 "label": "Name"

@@ -243,7 +243,8 @@ class AdminSeries extends Admin
 
 					$importer->enqueue_series( array( "xid" => $object->xid), true, true );
 					$importer->daemonizeProcess();
-					$this->editSeries($oid);
+					sleep(2);
+					header('location: ' . Config::Web('/AdminSeries/editSeries/' . $oid));
 				}
 				else {
 					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find requested endpoint" ) . " " . $model->tableName() . " [$oid]" );

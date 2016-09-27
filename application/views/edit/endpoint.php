@@ -68,12 +68,19 @@
 
 			<?php if ( isset($this->object)): ?>
 			<div class="grid_4">
-				<a href="#" class="test button" style="white-space:nowrap;"
-					data-href="<?php echo Config::Web($this->testAction, $this->object->id); ?>"
-					>
-					Test Connection
-				</a>
-				<pre id="ajaxDiv"></pre>
+				<div>
+					<a href="#" class="test button" style="white-space:nowrap;"
+						data-href="<?php echo Config::Web($this->testAction, $this->object->id); ?>"
+						>
+						Test Connection
+					</a>
+					<pre id="ajaxDiv"></pre>
+				</div>
+				<div>
+					<a href="<?php echo Config::Web($this->clearErrorsAction, $this->object->id); ?>" class="button" style="white-space:nowrap;">
+						Reset Error Count
+					</a>
+				</div>
 			</div>
 			<?php endif; ?>
 		</div>

@@ -9,6 +9,8 @@ use \http\Session as Session;;
 use \Auth as Auth;
 use \Localized as Localized;
 use \Logger as Logger;
+use \Config as Config;
+
 use \model\user\Users as Users;
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
@@ -42,6 +44,7 @@ class Netconfig extends Controller
 					$this->view->setLocalizedViewTitle("EditRecord");
 					$this->view->saveAction = "netconfig/save";
 					$this->view->testAction = "netconfig/testConnection";
+					$this->view->clearErrorsAction = "netconfig/clearErrors";
 					$this->view->object = $netObj;
 					$this->view->render( '/edit/endpoint' );
 				}
@@ -55,6 +58,7 @@ class Netconfig extends Controller
 				$this->view->setLocalizedViewTitle("NewRecord");
 				$this->view->saveAction = "netconfig/edit_new";
 				$this->view->testAction = "netconfig/testConnection";
+				$this->view->clearErrorsAction = "netconfig/clearErrors";
 				$this->view->render( '/edit/endpoint_select_type' );
 			}
 		}
@@ -95,6 +99,7 @@ class Netconfig extends Controller
 			$this->view->setLocalizedViewTitle("NewRecord");
 			$this->view->saveAction = "netconfig/edit_new";
 			$this->view->testAction = "netconfig/testConnection";
+			$this->view->clearErrorsAction = "netconfig/clearErrors";
 			$this->view->model = Model::Named('Endpoint');
 			$this->view->render( '/edit/endpoint_select_type' );
 		}
@@ -196,6 +201,27 @@ class Netconfig extends Controller
 			}
 			else {
 				echo "No id";
+				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
+			}
+		}
+	}
+
+	function clearErrors($netId = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Endpoint');
+			if ( $netId > 0 ) {
+				$object = $model->objectForId($netId);
+				if ( $object instanceof EndpointDBO ) {
+					$object->clearErrorCount();
+					sleep(2);
+					header('location: ' . Config::Web('/Netconfig/edit/' . $netId));
+				}
+				else {
+					Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) . " " . $model->tableName() . " [$netId]" );
+				}
+			}
+			else {
 				Session::addNegativeFeedback(Localized::GlobalLabel( "Failed to find request record" ) );
 			}
 		}

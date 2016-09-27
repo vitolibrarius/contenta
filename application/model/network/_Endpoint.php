@@ -36,6 +36,7 @@ use \model\jobs\JobDBO as JobDBO;
 			. Endpoint::base_url . " TEXT, "
 			. Endpoint::api_key . " TEXT, "
 			. Endpoint::username . " TEXT, "
+			. Endpoint::error_count . " INTEGER, "
 			. Endpoint::enabled . " INTEGER, "
 			. Endpoint::compressed . " INTEGER, "
 			. "FOREIGN KEY (". Endpoint::type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
@@ -54,6 +55,7 @@ abstract class _Endpoint extends Model
 	const base_url = 'base_url';
 	const api_key = 'api_key';
 	const username = 'username';
+	const error_count = 'error_count';
 	const enabled = 'enabled';
 	const compressed = 'compressed';
 
@@ -84,6 +86,7 @@ abstract class _Endpoint extends Model
 			Endpoint::base_url,
 			Endpoint::api_key,
 			Endpoint::username,
+			Endpoint::error_count,
 			Endpoint::enabled,
 			Endpoint::compressed
 		);
@@ -96,6 +99,7 @@ abstract class _Endpoint extends Model
 			Endpoint::base_url,
 			Endpoint::api_key,
 			Endpoint::username,
+			Endpoint::error_count,
 			Endpoint::enabled,
 			Endpoint::compressed
 		);
@@ -151,6 +155,11 @@ abstract class _Endpoint extends Model
 		return $this->allObjectsForKeyValue(Endpoint::username, $value);
 	}
 
+
+	public function allForError_count($value)
+	{
+		return $this->allObjectsForKeyValue(Endpoint::error_count, $value);
+	}
 
 
 
@@ -230,6 +239,12 @@ abstract class _Endpoint extends Model
 				$default_username = $this->attributeDefaultValue( null, null, Endpoint::username);
 				if ( is_null( $default_username ) == false ) {
 					$values['username'] = $default_username;
+				}
+			}
+			if ( isset($values['error_count']) == false ) {
+				$default_error_count = $this->attributeDefaultValue( null, null, Endpoint::error_count);
+				if ( is_null( $default_error_count ) == false ) {
+					$values['error_count'] = $default_error_count;
 				}
 			}
 			if ( isset($values['enabled']) == false ) {
@@ -352,6 +367,7 @@ abstract class _Endpoint extends Model
 			Endpoint::base_url => Model::TEXTAREA_TYPE,
 			Endpoint::api_key => Model::TEXT_TYPE,
 			Endpoint::username => Model::TEXT_TYPE,
+			Endpoint::error_count => Model::INT_TYPE,
 			Endpoint::enabled => Model::FLAG_TYPE,
 			Endpoint::compressed => Model::FLAG_TYPE
 		);
@@ -361,6 +377,8 @@ abstract class _Endpoint extends Model
 	{
 		if ( isset($object) === false || is_null($object) == true) {
 			switch ($attr) {
+				case Endpoint::error_count:
+					return 0;
 				case Endpoint::enabled:
 					return Model::TERTIARY_TRUE;
 				case Endpoint::compressed:
@@ -447,6 +465,23 @@ abstract class _Endpoint extends Model
 			return null;
 		}
 
+		return null;
+	}
+	function validate_error_count($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Endpoint::error_count,
+				"FILTER_VALIDATE_INT"
+			);
+		}
 		return null;
 	}
 	function validate_enabled($object = null, $value)

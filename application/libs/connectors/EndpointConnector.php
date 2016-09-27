@@ -178,6 +178,7 @@ abstract class EndpointConnector
 			list($data, $headers) = $this->performGET($url, true);
 		}
 		catch ( \Exception $e ) {
+			$this->endpoint()->increaseErrorCount();
 			$success = false;
 			$message = "exception " . $e->getMessage();
 		}
@@ -226,14 +227,20 @@ abstract class EndpointConnector
 // 				$headerLog->setMeta( $url . "/cookie", (isset($headers["Set-Cookie"]) ? $headers["Set-Cookie"] : ''));
 //
 				if ( $http_code >= 200 && $http_code < 300 ) {
+					$this->endpoint()->clearErrorCount();
 					// log?
 				}
 				else {
-					Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
-							get_class($this), $this->endpointDisplayName());
-					Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
-						get_class($this), $this->endpointDisplayName());
-					Logger::logError( "Headers " . var_export($headers, true), get_class($this), $this->endpointDisplayName());
+					$this->endpoint()->increaseErrorCount();
+					throw new ResponseErrorException('Return code (' . $http_code . '): '
+						. http_stringForCode($http_code) . " "
+						. curl_error($ch)
+					);
+// 					Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
+// 							get_class($this), $this->endpointDisplayName());
+// 					Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
+// 						get_class($this), $this->endpointDisplayName());
+// 					Logger::logError( "Headers " . var_export($headers, true), get_class($this), $this->endpointDisplayName());
 				}
 				curl_close($ch);
 				return array( $data, $headers );
@@ -295,6 +302,7 @@ abstract class EndpointConnector
 	// 				$headerLog->setMeta( $url . "/cookie", (isset($headers["Set-Cookie"]) ? $headers["Set-Cookie"] : ''));
 
 					if ( $http_code >= 200 && $http_code < 300 ) {
+						$this->endpoint()->clearErrorCount();
 						Cache::Store( $cacheHeaders, $headers );
 						Cache::Store( $cacheData, $data );
 					}
@@ -304,10 +312,7 @@ abstract class EndpointConnector
 						);
 					}
 					else {
-// 						Logger::logError( 'Return code (' . $http_code . '): ' . http_stringForCode($http_code),
-// 								get_class($this), $this->endpointDisplayName());
-// 						Logger::logError( 'Error (' . curl_error($ch) . ') with url: ' . $this->cleanURLForLog($url),
-// 							get_class($this), $this->endpointDisplayName());
+						$this->endpoint()->increaseErrorCount();
 						throw new ResponseErrorException('Return code (' . $http_code . '): '
 							. http_stringForCode($http_code) . " "
 							. curl_error($ch)

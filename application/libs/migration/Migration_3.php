@@ -54,6 +54,7 @@ class Migration_3 extends Migrator
 			. Endpoint::api_key . " TEXT, "
 			. Endpoint::username . " TEXT, "
 			. Endpoint::enabled . " INTEGER, "
+			. Endpoint::error_count . " INTEGER, "
 			. Endpoint::compressed . " INTEGER, "
 			. "FOREIGN KEY (". Endpoint::type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
 		. ")";
