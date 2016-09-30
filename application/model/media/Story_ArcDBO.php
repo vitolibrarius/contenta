@@ -125,7 +125,7 @@ class Story_ArcDBO extends _Story_ArcDBO
 						);
 
 						\SQL::raw(
-							"update reading_queue set pub_available = ( "
+							"update reading_queue set pub_count = ( "
 								. "select count(*) from story_arc_publication join publication on "
 								. "story_arc_publication.publication_id = publication.id "
 								. "where story_arc_publication.story_arc_id = reading_queue.story_arc_id AND publication.media_count > 0) "

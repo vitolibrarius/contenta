@@ -4,7 +4,7 @@
 		var href = $(this).attr('data_action');
 		modal.open({
 			heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
-			img: '<?php echo Config::Web("/AdminMedia/iconForMedia/") ?>' + $(this).attr('data_key'),
+			img: '<?php echo Config::Web("/AdminMedia/iconForMedia/") ?>' + '/' + $(this).attr('data_key'),
 			description: '<?php echo $this->label( "index", "DeleteDescription"); ?> <br /><em>' + $(this).attr('data_filename') + '</em>',
 			confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
 			actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',

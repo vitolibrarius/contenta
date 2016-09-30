@@ -398,6 +398,9 @@
             "characters": {
                 "search": "Select Characters"
             },
+            "checksum": {
+                "UNIQUE_FIELD_VALUE": "Media checksum exists."
+            },
             "filename": {
                 "FIELD_EMPTY": "Filename field was empty",
                 "FIELD_TOO_LONG": "Filename field was more than 256 characters"
@@ -865,6 +868,7 @@
         "FILE_CORRUPT": "Corrupt file format",
         "Finishing Import": "Finishing Import",
         "Hash Exists": "Already uploaded",
+        "IMPORTER_ERROR": "An error occurred while importing this media",
         "LARGE_FILE": "Unusually large content size.",
         "MULTIPLE_MATCHES": "Multiple matches found, please review",
         "NO_MATCHES": "Search failed to find series\/issue",

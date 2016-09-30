@@ -415,7 +415,7 @@ class UploadImport extends Processor
 			list($media, $errors) = Model::Named( "Media" )->createObject( array(
 				"publication" => $publication,
 				"mediaType" => $cbzType,
-				Media::filename => $filename,
+				Media::original_filename => $filename,
 				Media::checksum => $hash,
 				Media::size => $size
 				)

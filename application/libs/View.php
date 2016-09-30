@@ -280,7 +280,10 @@ class View
 
 	function renderImage($defaultImagePath, $imageData, $imageDataMimeType = 'image/png')
 	{
-		ob_clean();
+		if ( ob_get_contents() != false ) {
+			ob_clean();
+		}
+		
 		if ( isset($imageData) AND ($imageData != false)) {
 			$etag = '"'. hash(HASH_DEFAULT_ALGO, $imageData) .'"';
 
