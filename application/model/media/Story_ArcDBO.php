@@ -123,15 +123,6 @@ class Story_ArcDBO extends _Story_ArcDBO
 								. ") where id = :myid;",
 							array( ":myid" => $this->id)
 						);
-
-						\SQL::raw(
-							"update reading_queue set pub_count = ( "
-								. "select count(*) from story_arc_publication join publication on "
-								. "story_arc_publication.publication_id = publication.id "
-								. "where story_arc_publication.story_arc_id = reading_queue.story_arc_id AND publication.media_count > 0) "
-								. "where story_arc_id = :myid;",
-							array( ":myid" => $this->id)
-						);
 					}
 					break;
 				case 'publication':

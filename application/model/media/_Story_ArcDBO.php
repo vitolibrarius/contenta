@@ -113,7 +113,7 @@ abstract class _Story_ArcDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function reading_queue()
+	public function reading_queues()
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Reading_Queue');

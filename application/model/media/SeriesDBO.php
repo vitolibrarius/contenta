@@ -121,13 +121,6 @@ class SeriesDBO extends _SeriesDBO
 								. ") where id = :myid;",
 							array( ":myid" => $this->id)
 						);
-
-						\SQL::raw(
-							"update reading_queue set pub_count = ( "
-								. "select count(*) from publication where publication.series_id = reading_queue.series_id "
-								. " AND publication.media_count > 0 ) where series_id = :myid;",
-							array( ":myid" => $this->id)
-						);
 					}
 					break;
 				case 'publication':

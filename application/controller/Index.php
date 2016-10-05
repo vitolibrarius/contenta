@@ -15,8 +15,6 @@ use \model\reading\Reading_Queue as Reading_Queue;
 use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 use \model\reading\Reading_Item as Reading_Item;
 use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
-use \model\reading\Reading_Queue_Item as Reading_Queue_Item;
-use \model\reading\Reading_Queue_ItemDBO as Reading_Queue_ItemDBO;
 
 /**
  * Class Index
@@ -86,10 +84,13 @@ class Index extends Controller
 			$queue_id = HttpGet::get( "queue_id", 0 );
 			$showAll = HttpGet::get( "showAll", false );
 			if ( $queue_id > 0 ) {
+			
 				$queue = Model::Named("Reading_Queue")->objectForId($queue_id);
-				$item_model = Model::Named("Reading_Queue_Item");
+				$pubs = Model::Named("Publication")->allForReadingQueue( $queue, ($showAll == false) );
+								
+				$item_model = Model::Named("Publication");
 				$this->view->readItemPath = "/Index/ajax_readItem";
-				$this->view->listArray = $item_model->allForReadingQueue( $queue, ($showAll == false) );
+				$this->view->listArray = $pubs;
 			}
 
 			$this->view->render( '/reading_queue/readingItemCards', true );
@@ -99,23 +100,23 @@ class Index extends Controller
 	function ajax_readItem()
 	{
 		if (Auth::handleLogin()) {
-			$queue_item_id = HttpGet::get( "record_id", 0 );
-			if ( $queue_item_id > 0 ) {
-				$item_model = Model::Named("Reading_Queue_Item");
-				$queue_item = $item_model->objectForId($queue_item_id);
-
-				$item = $queue_item->reading_item();
-				if ( isset($item->read_date) && is_null($item->read_date) == false ) {
-					$item->setRead_date(null);
-					$item->saveChanges();
-					$this->view->renderJson(array("toggled_on" => false) );
-				}
-				else {
-					$item->setRead_date(time());
-					$item->saveChanges();
-					$this->view->renderJson(array("toggled_on" => true) );
-				}
-			}
+// 			$queue_item_id = HttpGet::get( "record_id", 0 );
+// 			if ( $queue_item_id > 0 ) {
+// 				$item_model = Model::Named("Reading_Queue_Item");
+// 				$queue_item = $item_model->objectForId($queue_item_id);
+// 
+// 				$item = $queue_item->reading_item();
+// 				if ( isset($item->read_date) && is_null($item->read_date) == false ) {
+// 					$item->setRead_date(null);
+// 					$item->saveChanges();
+// 					$this->view->renderJson(array("toggled_on" => false) );
+// 				}
+// 				else {
+// 					$item->setRead_date(time());
+// 					$item->saveChanges();
+// 					$this->view->renderJson(array("toggled_on" => true) );
+// 				}
+// 			}
 		}
 	}
 

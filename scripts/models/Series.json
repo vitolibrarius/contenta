@@ -90,7 +90,7 @@
             "isToMany" : true,
             "ownsDestination" : true
     	},
-    	"reading_queue" : {
+    	"reading_queues" : {
     		"destination" : "Reading_Queue",
     		"destinationTable" : "reading_queue",
     		"destinationPackage" : "\\model\\reading\\",

@@ -25,6 +25,8 @@ use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 
 class Story_Arc extends _Story_Arc
 {
+	public function notifyKeypaths() { return array( "reading_queues" ); }
+
 	/**
 	 *	Create/Update functions
 	 */

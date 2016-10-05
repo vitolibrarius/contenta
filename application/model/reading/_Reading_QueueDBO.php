@@ -15,8 +15,6 @@ use \model\media\Series as Series;
 use \model\media\SeriesDBO as SeriesDBO;
 use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_ArcDBO as Story_ArcDBO;
-use \model\reading\Reading_Queue_Item as Reading_Queue_Item;
-use \model\reading\Reading_Queue_ItemDBO as Reading_Queue_ItemDBO;
 
 abstract class _Reading_QueueDBO extends DataObject
 {
@@ -96,17 +94,6 @@ abstract class _Reading_QueueDBO extends DataObject
 			parent::storeChange( Reading_Queue::story_arc_id, $obj->id );
 			$this->saveChanges();
 		}
-	}
-
-	// to-many relationship
-	public function reading_queue_items()
-	{
-		if ( isset( $this->id ) ) {
-			$model = Model::Named('Reading_Queue_Item');
-			return $model->allObjectsForKeyValue( Reading_Queue_Item::reading_queue_id, $this->id);
-		}
-
-		return false;
 	}
 
 

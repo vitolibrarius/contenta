@@ -78,7 +78,7 @@ abstract class _Story_Arc extends Model
 	const story_arc_characters = 'story_arc_characters';
 	const story_arc_publication = 'story_arc_publication';
 	const story_arc_series = 'story_arc_series';
-	const reading_queue = 'reading_queue';
+	const reading_queues = 'reading_queues';
 
 	public function tableName() { return Story_Arc::TABLE; }
 	public function tablePK() { return Story_Arc::id; }
@@ -140,7 +140,7 @@ abstract class _Story_Arc extends Model
 			Story_Arc::story_arc_characters,
 			Story_Arc::story_arc_publication,
 			Story_Arc::story_arc_series,
-			Story_Arc::reading_queue
+			Story_Arc::reading_queues
 		);
 	}
 

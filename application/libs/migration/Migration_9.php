@@ -48,6 +48,9 @@ class Migration_9 extends Migrator
 				"Adding the error_count column to Endpoint"
 			);
 		}
+
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS reading_item_user_idpublication_id on reading_item (user_id,publication_id)';
+		$this->sqlite_execute( "reading_item", $sql, "Index on reading_item (user_id,publication_id)" );
 	}
 
 	public function sqlite_postUpgrade()

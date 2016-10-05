@@ -53,17 +53,6 @@
     		"isMandatory": false,
             "isToMany" : false,
             "ownsDestination" : false
-    	},
-    	"reading_queue_items" : {
-    		"destination" : "Reading_Queue_Item",
-    		"destinationTable" : "reading_queue_item",
-    		"destinationPackage" : "\\model\\reading\\",
-    		"joins" : [
-    			{ "destinationAttribute": "reading_queue_id", "sourceAttribute" : "id" }
-    		],
-    		"isMandatory": false,
-            "isToMany" : true,
-            "ownsDestination" : true
     	}
     },
 	"fetches" : {

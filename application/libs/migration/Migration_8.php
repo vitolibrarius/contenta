@@ -25,7 +25,6 @@ use \model\media\Publication as Publication;
 use \model\media\Publication_Character as Publication_Character;
 
 use \model\reading\Reading_Queue as Reading_Queue;
-use \model\reading\Reading_Queue_Item as Reading_Queue_Item;
 use \model\reading\Reading_Item as Reading_Item;
 
 class Migration_8 extends Migrator
@@ -55,6 +54,9 @@ class Migration_8 extends Migrator
 		. ")";
 		$this->sqlite_execute( "reading_item", $sql, "Create table reading_item" );
 
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS reading_item_user_idpublication_id on reading_item (user_id,publication_id)';
+		$this->sqlite_execute( "reading_item", $sql, "Index on reading_item (user_id,publication_id)" );
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS reading_item_read_date on reading_item (read_date)';
 		$this->sqlite_execute( "reading_item", $sql, "Index on reading_item (read_date)" );
 
@@ -78,20 +80,6 @@ class Migration_8 extends Migrator
 
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS reading_queue_user_idseries_idstory_arc_id on reading_queue (user_id,series_id,story_arc_id)';
 		$this->sqlite_execute( "reading_queue", $sql, "Index on reading_queue (user_id,series_id,story_arc_id)" );
-
-		/** READING_QUEUE_ITEM */
-		$sql = "CREATE TABLE IF NOT EXISTS reading_queue_item ( "
-			. Reading_Queue_Item::id . " INTEGER PRIMARY KEY, "
-			. Reading_Queue_Item::issue_order . " INTEGER, "
-			. Reading_Queue_Item::reading_item_id . " INTEGER, "
-			. Reading_Queue_Item::reading_queue_id . " INTEGER, "
-			. "FOREIGN KEY (". Reading_Queue_Item::reading_queue_id .") REFERENCES " . Reading_Queue::TABLE . "(" . Reading_Queue::id . "),"
-			. "FOREIGN KEY (". Reading_Queue_Item::reading_item_id .") REFERENCES " . Reading_Item::TABLE . "(" . Reading_Item::id . ")"
-		. ")";
-		$this->sqlite_execute( "reading_queue_item", $sql, "Create table reading_queue_item" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS reading_queue_item_reading_item_idreading_queue_id on reading_queue_item (reading_item_id,reading_queue_id)';
-		$this->sqlite_execute( "reading_queue_item", $sql, "Index on reading_queue_item (reading_item_id,reading_queue_id)" );
 	}
 
 	public function sqlite_postUpgrade()

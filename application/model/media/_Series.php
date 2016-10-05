@@ -89,7 +89,7 @@ abstract class _Series extends Model
 	const publications = 'publications';
 	const series_characters = 'series_characters';
 	const story_arc_series = 'story_arc_series';
-	const reading_queue = 'reading_queue';
+	const reading_queues = 'reading_queues';
 
 	public function tableName() { return Series::TABLE; }
 	public function tablePK() { return Series::id; }
@@ -159,7 +159,7 @@ abstract class _Series extends Model
 			Series::publications,
 			Series::series_characters,
 			Series::story_arc_series,
-			Series::reading_queue
+			Series::reading_queues
 		);
 	}
 

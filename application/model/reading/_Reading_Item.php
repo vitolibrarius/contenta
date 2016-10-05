@@ -19,8 +19,6 @@ use \model\user\Users as Users;
 use \model\user\UsersDBO as UsersDBO;
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
-use \model\reading\Reading_Queue_Item as Reading_Queue_Item;
-use \model\reading\Reading_Queue_ItemDBO as Reading_Queue_ItemDBO;
 
 /** Sample Creation script */
 		/** READING_ITEM */
@@ -37,6 +35,8 @@ use \model\reading\Reading_Queue_ItemDBO as Reading_Queue_ItemDBO;
 		. ")";
 		$this->sqlite_execute( "reading_item", $sql, "Create table reading_item" );
 
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS reading_item_user_idpublication_id on reading_item (user_id,publication_id)';
+		$this->sqlite_execute( "reading_item", $sql, "Index on reading_item (user_id,publication_id)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS reading_item_read_date on reading_item (read_date)';
 		$this->sqlite_execute( "reading_item", $sql, "Index on reading_item (read_date)" );
 */
@@ -55,7 +55,6 @@ abstract class _Reading_Item extends Model
 	// relationship keys
 	const user = 'user';
 	const publication = 'publication';
-	const reading_queue_items = 'reading_queue_items';
 
 	public function tableName() { return Reading_Item::TABLE; }
 	public function tablePK() { return Reading_Item::id; }
@@ -98,8 +97,7 @@ abstract class _Reading_Item extends Model
 	{
 		return array(
 			Reading_Item::user,
-			Reading_Item::publication,
-			Reading_Item::reading_queue_items
+			Reading_Item::publication
 		);
 	}
 
@@ -150,9 +148,6 @@ abstract class _Reading_Item extends Model
 					break;
 				case "publication":
 					return array( Reading_Item::publication_id, "id"  );
-					break;
-				case "reading_queue_item":
-					return array( Reading_Item::id, "reading_item_id"  );
 					break;
 				default:
 					break;
@@ -245,10 +240,6 @@ abstract class _Reading_Item extends Model
 		{
 			// does not own user Users
 			// does not own publication Publication
-			$reading_queue_item_model = Model::Named('Reading_Queue_Item');
-			if ( $reading_queue_item_model->deleteAllForKeyValue(Reading_Queue_Item::reading_item_id, $object->id) == false ) {
-				return false;
-			}
 			return parent::deleteObject($object);
 		}
 

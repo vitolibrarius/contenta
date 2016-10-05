@@ -21,8 +21,6 @@ use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_ArcDBO as Story_ArcDBO;
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
-use \model\reading\Reading_Queue_Item as Reading_Queue_Item;
-use \model\reading\Reading_Queue_ItemDBO as Reading_Queue_ItemDBO;
 
 class Reading_Queue extends _Reading_Queue
 {
@@ -198,18 +196,6 @@ class Reading_Queue extends _Reading_Queue
 				if ( is_array($errors) && count($errors) > 0) {
 					throw \Exception("Errors creating new Reading Queue " . var_export($errors, true) );
 				}
-				else {
-					$r_Item_model = Model::Named("Reading_Item");
-					$rq_Item_model = Model::Named("Reading_Queue_Item");
-					$pub_model = Model::Named('Publication');
-					$publications = $pub_model->allObjectsForKeyValue( Publication::series_id, $series->id, null, -1);
-					foreach( $publications as $pubDBO ) {
-						$item = $r_Item_model->createReadingItemPublication($user, $pubDBO);
-						if ( $item != false ) {
-							$join = $rq_Item_model->createJoin( $readingQueue, $item );
-						}
-					}
-				}
 			}
 			return $readingQueue;
 		}
@@ -231,18 +217,6 @@ class Reading_Queue extends _Reading_Queue
 				if ( is_array($errors) && count($errors) > 0) {
 					throw \Exception("Errors creating new Reading Queue " . var_export($errors, true) );
 				}
-				else {
-					$r_Item_model = Model::Named("Reading_Item");
-					$rq_Item_model = Model::Named("Reading_Queue_Item");
-					$pub_model = Model::Named('Publication');
-					$publications = $story->publications(-1);
-					foreach( $publications as $pubDBO ) {
-						$item = $r_Item_model->createReadingItemPublication($user, $pubDBO);
-						if ( $item != false ) {
-							$join = $rq_Item_model->createJoin( $readingQueue, $item );
-						}
-					}
-				}
 			}
 			return $readingQueue;
 		}
@@ -253,12 +227,19 @@ class Reading_Queue extends _Reading_Queue
 	{
 		if ( $user != null ) {
 			if ( $unreadOnly == true ) {
-				$select = \SQL::SelectJoin( $this, $this->allColumnNames(), Qualifier::Equals(Reading_Queue::user_id, $user->pkValue()) );
-				$select->joinOn( $this, Model::Named("Reading_Queue_Item"), null, null);
-				$select->joinOn( Model::Named("Reading_Queue_Item"), Model::Named("Reading_Item"), null, Qualifier::IsNull( Reading_Item::read_date ));
-				$select->orderby($this, Reading_Queue::queue_order, 'asc' );
-				$select->orderby($this, Reading_Queue::title, 'asc' );
-				$select->limit = $limit;
+				$select = \SQL::Select($this);
+				$select->where(
+					Qualifier::AndQualifier(
+						Qualifier::FK( Reading_Queue::user_id, $user ),
+						Qualifier::AttributeCompare( 
+							Reading_Queue::pub_count, 
+							Qualifier::GREATER_THAN,
+							Reading_Queue::pub_read
+						)
+					)
+				);
+				$select->orderBy( $this->sortOrder() );
+				$select->limit($limit);
 				return $select->fetchAll();
 			}
 			else {

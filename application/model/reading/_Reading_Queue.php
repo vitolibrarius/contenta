@@ -21,8 +21,6 @@ use \model\media\Series as Series;
 use \model\media\SeriesDBO as SeriesDBO;
 use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_ArcDBO as Story_ArcDBO;
-use \model\reading\Reading_Queue_Item as Reading_Queue_Item;
-use \model\reading\Reading_Queue_ItemDBO as Reading_Queue_ItemDBO;
 
 /** Sample Creation script */
 		/** READING_QUEUE */
@@ -67,7 +65,6 @@ abstract class _Reading_Queue extends Model
 	const user = 'user';
 	const series = 'series';
 	const story_arc = 'story_arc';
-	const reading_queue_items = 'reading_queue_items';
 
 	public function tableName() { return Reading_Queue::TABLE; }
 	public function tablePK() { return Reading_Queue::id; }
@@ -120,8 +117,7 @@ abstract class _Reading_Queue extends Model
 		return array(
 			Reading_Queue::user,
 			Reading_Queue::series,
-			Reading_Queue::story_arc,
-			Reading_Queue::reading_queue_items
+			Reading_Queue::story_arc
 		);
 	}
 
@@ -208,9 +204,6 @@ abstract class _Reading_Queue extends Model
 					break;
 				case "story_arc":
 					return array( Reading_Queue::story_arc_id, "id"  );
-					break;
-				case "reading_queue_item":
-					return array( Reading_Queue::id, "reading_queue_id"  );
 					break;
 				default:
 					break;
@@ -340,10 +333,6 @@ abstract class _Reading_Queue extends Model
 			// does not own user Users
 			// does not own series Series
 			// does not own story_arc Story_Arc
-			$reading_queue_item_model = Model::Named('Reading_Queue_Item');
-			if ( $reading_queue_item_model->deleteAllForKeyValue(Reading_Queue_Item::reading_queue_id, $object->id) == false ) {
-				return false;
-			}
 			return parent::deleteObject($object);
 		}
 

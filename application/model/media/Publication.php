@@ -21,9 +21,11 @@ use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
 use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 
+use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
+
 class Publication extends _Publication
 {
-	public function notifyKeypaths() { return array( "series", "story_arcs", "series/reading_queue", "story_arcs/reading_queue" ); }
+	public function notifyKeypaths() { return array( "series", "story_arcs" ); }
 
 	/**
 	 *	Create/Update functions
@@ -339,6 +341,49 @@ class Publication extends _Publication
 		$matches = $this->allObjectsForFKAndQualifier(Publication::series_id, $series, Qualifier::XID($issue_xid, $xsource));
 		if ( is_array($matches) && count($matches) > 0 ) {
 			return $matches[0];
+		}
+		return false;
+	}
+	
+	public function allForReadingQueue( Reading_QueueDBO $queue, $unreadOnly = true, $limit = 50 )
+	{
+		if ( $queue != null ) {
+			if ( isset($queue->series_id) ) {
+				try {
+					$result = \SQL::raw( "select p.id from publication p"
+							. " left join reading_item r on p.id = r.publication_id and r.user_id = :usr"
+							. " where p.series_id = :sid" . (boolValue($unreadOnly, true) ? " and r.read_date is null" : "")
+						, array( ":usr" => $queue->user_id, ":sid" => $queue->series_id)
+					);
+				}
+				catch( \Exception $e ) {
+					Logger::logException($e);
+				}
+			}
+			else if (isset($queue->story_arc_id)) {
+				try {
+					$result = \SQL::raw( "select p.id from publication p"
+							. " join story_arc_publication sap on sap.publication_id = p.id"
+							. " left join reading_item r on p.id = r.publication_id and r.user_id = :usr"
+							. " where sap.story_arc_id = :said" . (boolValue($unreadOnly, true) ? " and r.read_date is null" : "")
+						, array( ":usr" => $queue->user_id, ":said" => $queue->story_arc_id)
+					);
+				}
+				catch( \Exception $e ) {
+					Logger::logException($e);
+				}
+			}
+			else {
+				throw new \Exception("Bad queue object " . $queue->__toString());
+			}
+
+			if ( is_array($result) && count($result) > 0 ) {
+				$publication_idArray = array_map(function($stdClass) {return $stdClass->{Publication::id}; }, $result);
+			
+				$select = \SQL::Select( $this )->where( Qualifier::IN( Publication::id, $publication_idArray ));
+				$select->limit = $limit;
+				return $select->fetchAll();
+			}
 		}
 		return false;
 	}

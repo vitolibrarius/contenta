@@ -7,14 +7,12 @@
 <?php else: ?>
 	<?php
 		$card = new html\Card();
-		$card->setThumbnailTable( "publication" );
-		$card->setThumbnailPrimaryKeypath( "reading_item/publication/id" );
-		$card->setDisplayNameKey( "reading_item/publication/name" );
-		$card->setDisplayDescriptionKey( "reading_item/publication/shortDescription" );
+		$card->setDisplayNameKey( "name" );
+		$card->setDisplayDescriptionKey( "shortDescription" );
 		$card->setDetailKeys( array(
-			\model\media\Publication::series_id => "reading_item/publication/series/name",
-			\model\media\Publication::issue_num => "reading_item/publication/issue_num",
-			\model\media\Publication::pub_date => "reading_item/publication/publishedMonthYear",
+			\model\media\Publication::series_id => "series/name",
+			\model\media\Publication::issue_num => "issue_num",
+			\model\media\Publication::pub_date => "publishedMonthYear",
 			)
 		);
 		if ( isset($this->readItemPath) ) {
@@ -24,8 +22,7 @@
 		foreach($this->listArray as $key => $value) {
 			echo '<div class="grid_3">' . PHP_EOL;
 			echo $card->render($value, function() use($value) {
-					$item = $value->reading_item();
-					$publication = $item->publication();
+					$publication = $value;
 					$all_media = $publication->media();
 					if ( is_array($all_media) ) {
 						foreach ($all_media as $idx => $media) {

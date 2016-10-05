@@ -126,7 +126,7 @@ class Api extends Controller
 			if ( $mediaObj != false )
 			{
 				$pub = $mediaObj->publication();
-				$item = Model::Named("Reading_Item")->objectForUserAndPublication($user, $pub);
+				$item = Model::Named("Reading_Item")->createReadingItemPublication($user, $pub);
 				$path = $mediaObj->contentaPath();
 				$etag = $mediaObj->checksum;
 
@@ -150,8 +150,11 @@ class Api extends Controller
 					header('Content-Disposition: attachment; filename=' . basename($path));
 					header('Pragma: public');
 					header('Content-Length: ' . filesize($path));
-					ob_clean();
-					flush();
+
+					if ( ob_get_contents() != false ) {
+						ob_clean();
+						flush();
+					}
 					readfile($path);
 				}
 				else

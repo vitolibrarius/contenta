@@ -37,17 +37,6 @@
     		"isMandatory": true,
             "isToMany" : false,
             "ownsDestination" : false
-    	},
-    	"reading_queue_items" : {
-    		"destination" : "Reading_Queue_Item",
-    		"destinationTable" : "reading_queue_item",
-    		"destinationPackage" : "\\model\\reading\\",
-    		"joins" : [
-    			{ "destinationAttribute": "reading_item_id", "sourceAttribute" : "id" }
-    		],
-    		"isMandatory": false,
-            "isToMany" : true,
-            "ownsDestination" : true
     	}
     },
 	"fetches" : {
@@ -70,6 +59,7 @@
 		}
 	},
 	"indexes" : [
+    	{ "columns": ["user_id", "publication_id"], "unique": true },
     	{ "columns": ["read_date"], "unique": false }
     ]
 }

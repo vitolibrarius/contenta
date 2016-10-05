@@ -14,13 +14,9 @@ use \model\user\Users as Users;
 use \model\user\UsersDBO as UsersDBO;
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
-use \model\reading\Reading_Queue_Item as Reading_Queue_Item;
-use \model\reading\Reading_Queue_ItemDBO as Reading_Queue_ItemDBO;
 
 class Reading_Item extends _Reading_Item
 {
-	public function notifyKeypaths() { return array( "reading_queues" ); }
-
 	/**
 	 *	Create/Update functions
 	 */
@@ -144,6 +140,32 @@ class Reading_Item extends _Reading_Item
 			return $readingItem;
 		}
 		return false;
+	}
+
+	public function processNotification( $type = 'none', DataObject $dbo )
+	{
+		if ( $dbo instanceof Reading_ItemDBO ) {
+			$queueIds = \SQL::raw(
+				"select distinct q.id from reading_queue q, reading_item r, publication p"
+				. " left join story_arc_publication sap on sap.publication_id = p.id"
+				. " where ( p.series_id = q.series_id or sap.story_arc_id = q.story_arc_id )"
+				. " and q.user_id = r.user_id and r.publication_id = p.id and r.id = :itemId;",
+				array( ":itemId" => $dbo->pkValue() )
+			);
+
+			if ( is_array($queueIds) && count($queueIds) > 0 ) {
+				$queueIdArray = array_map(function($stdClass) {return $stdClass->{Reading_Queue::id}; }, $queueIds);
+				\SQL::raw(
+					"update reading_queue set pub_read = ( select count(r.read_date) from reading_item r, publication p "
+					. "  left join story_arc_publication sap on sap.publication_id = p.id "
+					. "  where ( p.series_id = reading_queue.series_id or sap.story_arc_id = reading_queue.story_arc_id ) "
+					. "  and reading_queue.user_id = r.user_id and r.publication_id = p.id) "
+					. "where id in (" . implode(",", $queueIdArray) . ");"
+				);
+			}
+
+		}
+		return parent::processNotification( $type, $dbo );
 	}
 }
 

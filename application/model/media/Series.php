@@ -27,6 +27,8 @@ use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 
 class Series extends _Series
 {
+	public function notifyKeypaths() { return array( "reading_queues" ); }
+
 	/**
 	 *	Create/Update functions
 	 */

@@ -13,8 +13,6 @@ use \model\user\Users as Users;
 use \model\user\UsersDBO as UsersDBO;
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
-use \model\reading\Reading_Queue_Item as Reading_Queue_Item;
-use \model\reading\Reading_Queue_ItemDBO as Reading_Queue_ItemDBO;
 
 abstract class _Reading_ItemDBO extends DataObject
 {
@@ -75,17 +73,6 @@ abstract class _Reading_ItemDBO extends DataObject
 			parent::storeChange( Reading_Item::publication_id, $obj->id );
 			$this->saveChanges();
 		}
-	}
-
-	// to-many relationship
-	public function reading_queue_items()
-	{
-		if ( isset( $this->id ) ) {
-			$model = Model::Named('Reading_Queue_Item');
-			return $model->allObjectsForKeyValue( Reading_Queue_Item::reading_item_id, $this->id);
-		}
-
-		return false;
 	}
 
 
