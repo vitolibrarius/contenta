@@ -33,6 +33,7 @@ class SelectSQL extends SQL
 
     	$this->model = $model;
     	$this->columns = $columns;
+    	$this->order = $model->sortOrder();
 
     	if ( isset($qualifier) && is_null($qualifier) == false) {
         	$this->where($qualifier);

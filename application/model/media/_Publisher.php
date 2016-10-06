@@ -36,6 +36,7 @@ use \model\media\Story_ArcDBO as Story_ArcDBO;
 		. ")";
 		$this->sqlite_execute( "publisher", $sql, "Create table publisher" );
 
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS publisher_name on publisher (name)';
 		$this->sqlite_execute( "publisher", $sql, "Index on publisher (name)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publisher_xidxsource on publisher (xid,xsource)';

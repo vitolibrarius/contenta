@@ -67,6 +67,17 @@ use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassNam
 		. ")";
 		$this->sqlite_execute( "<?php echo $this->tableName(); ?>", $sql, "Create table <?php echo $this->tableName(); ?>" );
 
+<?php foreach( $objectRelationships as $name => $detailArray ) : ?>
+<?php if (isset($detailArray['isToMany'])) : ?>
+<?php $joins = $detailArray['joins']; if ($detailArray['isToMany'] == false) : ?>
+<?php if (count($joins) == 1) : ?><?php $join = $joins[0]; ?>
+		$sql = 'CREATE INDEX IF NOT EXISTS <?php echo $this->tableName() . $detailArray["destination"]; ?>_fk on <?php echo $this->tableName(); ?> (<?php echo $join["sourceAttribute"]; ?>)';
+		$this->sqlite_execute( "<?php echo $this->tableName(); ?>", $sql, "FK Index on <?php echo $this->tableName(); ?> (<?php echo $join["sourceAttribute"]; ?>)" );
+<?php endif; // multiple joins ?>
+<?php endif; // isToMany or toOne ?>
+<?php endif; // has isToMany ?>
+<?php endforeach; // looprelationships ?>
+
 <?php if (is_array($this->indexes)) : ?>
 <?php foreach( $this->indexes as $detailArray ) : ?>
 <?php	$columns = $detailArray["columns"];

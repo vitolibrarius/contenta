@@ -25,6 +25,7 @@ use \model\media\Media_TypeDBO as Media_TypeDBO;
 		. ")";
 		$this->sqlite_execute( "media_type", $sql, "Create table media_type" );
 
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS media_type_name on media_type (name)';
 		$this->sqlite_execute( "media_type", $sql, "Index on media_type (name)" );
 */

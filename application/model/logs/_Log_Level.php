@@ -25,6 +25,7 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 		. ")";
 		$this->sqlite_execute( "log_level", $sql, "Create table log_level" );
 
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_name on log_level (name)';
 		$this->sqlite_execute( "log_level", $sql, "Index on log_level (name)" );
 */

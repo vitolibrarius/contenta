@@ -42,6 +42,13 @@ use \model\media\Story_ArcDBO as Story_ArcDBO;
 		. ")";
 		$this->sqlite_execute( "reading_queue", $sql, "Create table reading_queue" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS reading_queueUsers_fk on reading_queue (user_id)';
+		$this->sqlite_execute( "reading_queue", $sql, "FK Index on reading_queue (user_id)" );
+		$sql = 'CREATE INDEX IF NOT EXISTS reading_queueSeries_fk on reading_queue (series_id)';
+		$this->sqlite_execute( "reading_queue", $sql, "FK Index on reading_queue (series_id)" );
+		$sql = 'CREATE INDEX IF NOT EXISTS reading_queueStory_Arc_fk on reading_queue (story_arc_id)';
+		$this->sqlite_execute( "reading_queue", $sql, "FK Index on reading_queue (story_arc_id)" );
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS reading_queue_user_idseries_idstory_arc_id on reading_queue (user_id,series_id,story_arc_id)';
 		$this->sqlite_execute( "reading_queue", $sql, "Index on reading_queue (user_id,series_id,story_arc_id)" );
 */

@@ -53,6 +53,9 @@ use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 		. ")";
 		$this->sqlite_execute( "series", $sql, "Create table series" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS seriesPublisher_fk on series (publisher_id)';
+		$this->sqlite_execute( "series", $sql, "FK Index on series (publisher_id)" );
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS series_name on series (name)';
 		$this->sqlite_execute( "series", $sql, "Index on series (name)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS series_search_name on series (search_name)';

@@ -30,6 +30,7 @@ use \model\network\User_NetworkDBO as User_NetworkDBO;
 		. ")";
 		$this->sqlite_execute( "network", $sql, "Create table network" );
 
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS network_ip_address on network (ip_address)';
 		$this->sqlite_execute( "network", $sql, "Index on network (ip_address)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS network_ip_hash on network (ip_hash)';

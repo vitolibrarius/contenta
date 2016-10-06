@@ -190,7 +190,7 @@ class Reading_Queue extends _Reading_Queue
 					Reading_Queue::user => $user,
 					Reading_Queue::series => $series,
 					Reading_Queue::title => $series->displayName(),
-					Reading_Queue::pub_count => $series->pub_count
+					Reading_Queue::pub_count => $series->pub_available()
 					)
 				);
 				if ( is_array($errors) && count($errors) > 0) {
@@ -211,7 +211,7 @@ class Reading_Queue extends _Reading_Queue
 					Reading_Queue::user => $user,
 					Reading_Queue::story_arc => $story,
 					Reading_Queue::title => $story->displayName(),
-					Reading_Queue::pub_count => $story->pub_count
+					Reading_Queue::pub_count => $story->pub_available()
 					)
 				);
 				if ( is_array($errors) && count($errors) > 0) {
@@ -231,8 +231,8 @@ class Reading_Queue extends _Reading_Queue
 				$select->where(
 					Qualifier::AndQualifier(
 						Qualifier::FK( Reading_Queue::user_id, $user ),
-						Qualifier::AttributeCompare( 
-							Reading_Queue::pub_count, 
+						Qualifier::AttributeCompare(
+							Reading_Queue::pub_count,
 							Qualifier::GREATER_THAN,
 							Reading_Queue::pub_read
 						)

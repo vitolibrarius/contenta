@@ -32,6 +32,11 @@ use \model\network\NetworkDBO as NetworkDBO;
 		. ")";
 		$this->sqlite_execute( "user_network", $sql, "Create table user_network" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS user_networkUsers_fk on user_network (user_id)';
+		$this->sqlite_execute( "user_network", $sql, "FK Index on user_network (user_id)" );
+		$sql = 'CREATE INDEX IF NOT EXISTS user_networkNetwork_fk on user_network (network_id)';
+		$this->sqlite_execute( "user_network", $sql, "FK Index on user_network (network_id)" );
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS user_network_user_idnetwork_id on user_network (user_id,network_id)';
 		$this->sqlite_execute( "user_network", $sql, "Index on user_network (user_id,network_id)" );
 */

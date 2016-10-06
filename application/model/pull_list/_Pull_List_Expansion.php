@@ -32,6 +32,9 @@ use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 		. ")";
 		$this->sqlite_execute( "pull_list_expansion", $sql, "Create table pull_list_expansion" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS pull_list_expansionEndpoint_Type_fk on pull_list_expansion (endpoint_type_code)';
+		$this->sqlite_execute( "pull_list_expansion", $sql, "FK Index on pull_list_expansion (endpoint_type_code)" );
+
 */
 abstract class _Pull_List_Expansion extends Model
 {

@@ -35,6 +35,9 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 		. ")";
 		$this->sqlite_execute( "log", $sql, "Create table log" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS logLog_Level_fk on log (level_code)';
+		$this->sqlite_execute( "log", $sql, "FK Index on log (level_code)" );
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS log_level_code on log (level_code)';
 		$this->sqlite_execute( "log", $sql, "Index on log (level_code)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS log_tracetrace_id on log (trace,trace_id)';

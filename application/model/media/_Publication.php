@@ -47,6 +47,9 @@ use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 		. ")";
 		$this->sqlite_execute( "publication", $sql, "Create table publication" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS publicationSeries_fk on publication (series_id)';
+		$this->sqlite_execute( "publication", $sql, "FK Index on publication (series_id)" );
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS publication_name on publication (name)';
 		$this->sqlite_execute( "publication", $sql, "Index on publication (name)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publication_xidxsource on publication (xid,xsource)';

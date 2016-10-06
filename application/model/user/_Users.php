@@ -44,6 +44,7 @@ use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 		. ")";
 		$this->sqlite_execute( "users", $sql, "Create table users" );
 
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_rememberme_token on users (rememberme_token)';
 		$this->sqlite_execute( "users", $sql, "Index on users (rememberme_token)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_namepassword_hash on users (name,password_hash)';

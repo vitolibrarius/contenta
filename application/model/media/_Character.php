@@ -46,6 +46,9 @@ use \model\media\Story_Arc_CharacterDBO as Story_Arc_CharacterDBO;
 		. ")";
 		$this->sqlite_execute( "character", $sql, "Create table character" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS characterPublisher_fk on character (publisher_id)';
+		$this->sqlite_execute( "character", $sql, "FK Index on character (publisher_id)" );
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS character_name on character (name)';
 		$this->sqlite_execute( "character", $sql, "Index on character (name)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS character_realname on character (realname)';

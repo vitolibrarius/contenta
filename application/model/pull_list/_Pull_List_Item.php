@@ -38,6 +38,11 @@ use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
 		. ")";
 		$this->sqlite_execute( "pull_list_item", $sql, "Create table pull_list_item" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS pull_list_itemPull_List_Group_fk on pull_list_item (pull_list_group_id)';
+		$this->sqlite_execute( "pull_list_item", $sql, "FK Index on pull_list_item (pull_list_group_id)" );
+		$sql = 'CREATE INDEX IF NOT EXISTS pull_list_itemPull_List_fk on pull_list_item (pull_list_id)';
+		$this->sqlite_execute( "pull_list_item", $sql, "FK Index on pull_list_item (pull_list_id)" );
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS pull_list_item_name on pull_list_item (name)';
 		$this->sqlite_execute( "pull_list_item", $sql, "Index on pull_list_item (name)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS pull_list_item_search_name on pull_list_item (search_name)';

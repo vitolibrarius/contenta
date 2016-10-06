@@ -41,6 +41,9 @@ use \model\network\EndpointDBO as EndpointDBO;
 		. ")";
 		$this->sqlite_execute( "rss", $sql, "Create table rss" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS rssEndpoint_fk on rss (endpoint_id)';
+		$this->sqlite_execute( "rss", $sql, "FK Index on rss (endpoint_id)" );
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS rss_clean_nameclean_issueclean_year on rss (clean_name,clean_issue,clean_year)';
 		$this->sqlite_execute( "rss", $sql, "Index on rss (clean_name,clean_issue,clean_year)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS rss_guid on rss (guid)';

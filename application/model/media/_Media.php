@@ -37,6 +37,11 @@ use \model\media\PublicationDBO as PublicationDBO;
 		. ")";
 		$this->sqlite_execute( "media", $sql, "Create table media" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS mediaMedia_Type_fk on media (type_code)';
+		$this->sqlite_execute( "media", $sql, "FK Index on media (type_code)" );
+		$sql = 'CREATE INDEX IF NOT EXISTS mediaPublication_fk on media (publication_id)';
+		$this->sqlite_execute( "media", $sql, "FK Index on media (publication_id)" );
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS media_filename on media (filename)';
 		$this->sqlite_execute( "media", $sql, "Index on media (filename)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS media_checksum on media (checksum)';

@@ -41,6 +41,11 @@ use \model\network\EndpointDBO as EndpointDBO;
 		. ")";
 		$this->sqlite_execute( "flux", $sql, "Create table flux" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS fluxEndpoint_fk on flux (src_endpoint)';
+		$this->sqlite_execute( "flux", $sql, "FK Index on flux (src_endpoint)" );
+		$sql = 'CREATE INDEX IF NOT EXISTS fluxEndpoint_fk on flux (dest_endpoint)';
+		$this->sqlite_execute( "flux", $sql, "FK Index on flux (dest_endpoint)" );
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_src_guid on flux (src_guid)';
 		$this->sqlite_execute( "flux", $sql, "Index on flux (src_guid)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_dest_guid on flux (dest_guid)';

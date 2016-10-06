@@ -37,6 +37,11 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 		. ")";
 		$this->sqlite_execute( "job_running", $sql, "Create table job_running" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS job_runningJob_fk on job_running (job_id)';
+		$this->sqlite_execute( "job_running", $sql, "FK Index on job_running (job_id)" );
+		$sql = 'CREATE INDEX IF NOT EXISTS job_runningJob_Type_fk on job_running (type_code)';
+		$this->sqlite_execute( "job_running", $sql, "FK Index on job_running (type_code)" );
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS job_running_pid on job_running (pid)';
 		$this->sqlite_execute( "job_running", $sql, "Index on job_running (pid)" );
 */

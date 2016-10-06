@@ -44,6 +44,11 @@ use \model\network\EndpointDBO as EndpointDBO;
 		. ")";
 		$this->sqlite_execute( "job", $sql, "Create table job" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS jobJob_Type_fk on job (type_code)';
+		$this->sqlite_execute( "job", $sql, "FK Index on job (type_code)" );
+		$sql = 'CREATE INDEX IF NOT EXISTS jobEndpoint_fk on job (endpoint_id)';
+		$this->sqlite_execute( "job", $sql, "FK Index on job (endpoint_id)" );
+
 */
 abstract class _Job extends Model
 {

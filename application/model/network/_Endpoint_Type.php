@@ -38,6 +38,7 @@ use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 		. ")";
 		$this->sqlite_execute( "endpoint_type", $sql, "Create table endpoint_type" );
 
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS endpoint_type_name on endpoint_type (name)';
 		$this->sqlite_execute( "endpoint_type", $sql, "Index on endpoint_type (name)" );
 */

@@ -32,6 +32,11 @@ use \model\media\CharacterDBO as CharacterDBO;
 		. ")";
 		$this->sqlite_execute( "story_arc_character", $sql, "Create table story_arc_character" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS story_arc_characterStory_Arc_fk on story_arc_character (story_arc_id)';
+		$this->sqlite_execute( "story_arc_character", $sql, "FK Index on story_arc_character (story_arc_id)" );
+		$sql = 'CREATE INDEX IF NOT EXISTS story_arc_characterCharacter_fk on story_arc_character (character_id)';
+		$this->sqlite_execute( "story_arc_character", $sql, "FK Index on story_arc_character (character_id)" );
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS story_arc_character_story_arc_idcharacter_id on story_arc_character (story_arc_id,character_id)';
 		$this->sqlite_execute( "story_arc_character", $sql, "Index on story_arc_character (story_arc_id,character_id)" );
 */

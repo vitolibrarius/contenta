@@ -29,6 +29,9 @@ use \model\media\CharacterDBO as CharacterDBO;
 		. ")";
 		$this->sqlite_execute( "character_alias", $sql, "Create table character_alias" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS character_aliasCharacter_fk on character_alias (character_id)';
+		$this->sqlite_execute( "character_alias", $sql, "FK Index on character_alias (character_id)" );
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS character_alias_character_idname on character_alias (character_id,name)';
 		$this->sqlite_execute( "character_alias", $sql, "Index on character_alias (character_id,name)" );
 */

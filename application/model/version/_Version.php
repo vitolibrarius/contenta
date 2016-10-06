@@ -31,6 +31,7 @@ use \model\version\PatchDBO as PatchDBO;
 		. ")";
 		$this->sqlite_execute( "version", $sql, "Create table version" );
 
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS version_code on version (code)';
 		$this->sqlite_execute( "version", $sql, "Index on version (code)" );
 		$sql = 'CREATE  INDEX IF NOT EXISTS version_majorminorpatch on version (major,minor,patch)';

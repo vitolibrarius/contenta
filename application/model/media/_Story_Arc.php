@@ -48,6 +48,9 @@ use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 		. ")";
 		$this->sqlite_execute( "story_arc", $sql, "Create table story_arc" );
 
+		$sql = 'CREATE INDEX IF NOT EXISTS story_arcPublisher_fk on story_arc (publisher_id)';
+		$this->sqlite_execute( "story_arc", $sql, "FK Index on story_arc (publisher_id)" );
+
 		$sql = 'CREATE  INDEX IF NOT EXISTS story_arc_name on story_arc (name)';
 		$this->sqlite_execute( "story_arc", $sql, "Index on story_arc (name)" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS story_arc_xidxsource on story_arc (xid,xsource)';
