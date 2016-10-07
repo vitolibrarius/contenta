@@ -34,6 +34,8 @@ abstract class Model
 	private static $_named_models = null;
 	private static $_named_validators = null;
 
+	private $cached_dbo = array();
+
 	public static function NormalizedModelName( $tableName )
 	{
 		$parts = explode('\\', $tableName);
@@ -133,12 +135,31 @@ abstract class Model
 
 	public function refreshObject($object)
 	{
-		return SQL::SelectObject( $this, $object )->fetch();
+		if ( $object instanceof DataObject ) {
+			$pkValue = $object->pkValue();
+			if ( isset($cached_dbo[$pkValue]) ) {
+				unset($cached_dbo[$pkValue]);
+			}
+
+			$obj = SQL::SelectObject( $this, $object )->fetch();
+			if ( $obj != false ) {
+				$cached_dbo[$pkValue] = $obj;
+			}
+			return $obj;
+		}
+		return false;
 	}
 
 	public function objectForId($id = 0)
 	{
-		return SQL::Select( $this, null, db\Qualifier::Equals( $this->tablePK(), $id) )->fetch();
+		$obj = (isset($cached_dbo[$id]) ? $cached_dbo[$id] : false);
+		if ( $obj == false ) {
+			$obj = SQL::Select( $this, null, db\Qualifier::Equals( $this->tablePK(), $id) )->fetch();
+			if ( $obj != false ) {
+				$cached_dbo[$id] = $obj;
+			}
+		}
+		return $obj;
 	}
 
 	public function singleObjectForKeyValue($key, $value = null)

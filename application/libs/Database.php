@@ -41,7 +41,7 @@ class Database extends PDO
 		if ( $dbversion == Database::CONTENTA_DB_VERSION ) {
 			$versionNum = currentVersionNumber();
 			$maxPatchApplied = static::DBPatchLevel();
-			return (version_compare( $versionNum, $maxPatchApplied ) == 0);
+			return (version_compare( $versionNum, $maxPatchApplied, "<=" ) == true);
 		}
 		return false;
 	}
