@@ -178,7 +178,7 @@ class Media extends _Media
 
 		$series = $publication->series();
 		if ( $series != false ) {
-			$filename_comp[] = sanitize_filename($series->{Series::name}, 100, false, false);
+			$filename_comp[] = sanitize_filename($series->{Series::name}, 100, false, true);
 		}
 
 		$filename_comp[] = $publication->{Publication::issue_num};

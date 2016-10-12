@@ -116,7 +116,7 @@ function uuidShort()
 	);
 }
 
-function sanitize_filename($string, $maxLength = 256, $force_lowercase = true, $anal = true)
+function sanitize_filename($string, $maxLength = 256, $force_lowercase = false, $anal = true)
 {
 	$ext = "." . file_ext($string);
 	$clean = file_ext_strip($string);

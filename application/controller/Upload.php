@@ -164,7 +164,7 @@ class Upload extends Controller
 				}
 				else {
 					try {
-						$running = Model::Named("Job_Running")->allForProcessorGUID('UploadImport', null);
+						$running = Model::Named("Job_Running")->allForProcessor('UploadImport');
 
 						$importer = Processor::Named('UploadImport', $contentHash);
 						$importer->setMediaForImport($_FILES['mediaFile']['tmp_name'], basename($_FILES['mediaFile']['name']));

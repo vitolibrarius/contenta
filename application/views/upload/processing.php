@@ -68,11 +68,19 @@
 <section>
 	<div class="row">
 
+<?php
+	$runningJobs = $this->job_model->allForProcessor('UploadImport');
+	$runningIndex = array();
+	foreach( $runningJobs as $j ) {
+		$h = (isset($j->guid) ? $j->guid : "-none-");
+		$runningIndex[$h][] = $j;
+	}
+?>
+
 <?php if ($this->active): ?>
 <?php foreach ($this->active as $key => $value): ?>
 <?php
-	$runningJobs = $this->job_model->allForProcessorGUID('UploadImport', $key );
-	$running = ( is_array($runningJobs) && count($runningJobs) > 0 );
+	$running = (isset($runningIndex[$key]) && count($runningIndex[$key]) > 0);
 ?>
 <div class="grid_3">
 <figure class="card">
