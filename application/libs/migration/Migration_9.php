@@ -158,6 +158,17 @@ class Migration_9 extends Migrator
 
 		$sql = 'CREATE INDEX IF NOT EXISTS patchVersion_fk on patch (version_id)';
 		$this->sqlite_execute( "patch", $sql, "FK Index on patch (version_id)" );
+		
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publisher_xidxsource on publisher (xid,xsource)';
+		$this->sqlite_execute( "publisher", $sql, "xidxsource Index on publisher" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS series_xidxsource on series (xid,xsource)';
+		$this->sqlite_execute( "series", $sql, "xidxsource Index on series" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS story_arc_xidxsource on story_arc (xid,xsource)';
+		$this->sqlite_execute( "story_arc", $sql, "xidxsource Index on story_arc" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS character_xidxsource on character (xid,xsource)';
+		$this->sqlite_execute( "character", $sql, "xidxsource Index on character" );
+		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publication_xidxsource on publication (xid,xsource)';
+		$this->sqlite_execute( "publication", $sql, "xidxsource Index on publication" );
 	}
 
 	public function sqlite_postUpgrade()

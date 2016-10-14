@@ -36,10 +36,15 @@
 
 <script language="javascript" type="text/javascript">
 	$(document).ready(function($) {
+		search_timer = 0;
+
 		$(".logFilter").on('keyup change', function () {
-			delay( refreshJobs(), 250 );
+			if (search_timer) {
+				clearTimeout(search_timer);
+			}
+			search_timer = setTimeout(refresh, 400);
 		});
-		function refreshJobs() {
+		function refresh() {
 			var trace = document.getElementById('trace').value;
 			var trace_id = document.getElementById('trace_id').value;
 			var context = document.getElementById('context').value;
@@ -60,9 +65,6 @@
 				}
 			});
 		};
-		refreshJobs();
-		setInterval (function f() {
-			refreshJobs();
-		}, 10000);
+		refresh();
 	});
 </script>

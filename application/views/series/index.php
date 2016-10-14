@@ -30,6 +30,8 @@
 
 <script type="text/javascript">
 $(document).ready(function($) {
+	search_timer = 0;
+
 	$("#searchPublisher").select2({
 		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'publisher_id' ); ?>",
 		allowClear: true,
@@ -53,14 +55,22 @@ $(document).ready(function($) {
 			cache: true
 		}
 	}).on("change", function(e) {
-		delay( refresh(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400); 
 	});
 
 	$(".text_input").on('keyup change', function () {
-		delay( refresh(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400); 
 	});
 
-	function refresh() {
+	function refresh(change_count) {
+		var ajaxDisplay = document.getElementById('ajaxDiv');
+		ajaxDisplay.innerHTML = "<em>searching</em>";
 		$.ajax({
 			type: "GET",
 			url: "<?php echo Config::Web('/DisplaySeries/searchSeries'); ?>",

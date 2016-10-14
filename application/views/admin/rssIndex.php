@@ -41,9 +41,12 @@
 var NZBDownload_url="<?php echo Config::Web('/AdminWanted/downloadNewznab'); ?>";
 
 $(document).ready(function($) {
-
+	search_timer = 0;
 	$(".text_input").on('keyup change', function () {
-		delay( refresh(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400); 
 	});
 
 	function refresh() {

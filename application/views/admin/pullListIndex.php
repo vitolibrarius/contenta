@@ -15,6 +15,7 @@
 
 <script type="text/javascript">
 $(document).ready(function($) {
+	search_timer = 0;
 	$("#searchPullList").select2({
 		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'pull_list_id' ); ?>",
 		allowClear: true,
@@ -38,7 +39,10 @@ $(document).ready(function($) {
 			cache: true
 		}
 	}).on("change", function(e) {
-		delay( refresh(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400);
 	});
 
 	function refresh() {

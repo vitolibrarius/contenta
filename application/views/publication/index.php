@@ -75,6 +75,7 @@
 
 <script type="text/javascript">
 $(document).ready(function($) {
+	search_timer = 0;
 	$("#searchCharacter").select2({
 		multiple: true,
 		width: '100%',
@@ -100,7 +101,10 @@ $(document).ready(function($) {
 			cache: true
 		}
 	}).on("change", function(e) {
-		delay( refresh(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400);
 	});
 
 	$("#searchStoryArcs").select2({
@@ -128,11 +132,17 @@ $(document).ready(function($) {
 			cache: true
 		}
 	}).on("change", function(e) {
-		delay( refresh(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400);
 	});
 
 	$(".text_input").on('keyup change', function () {
-		delay( refresh(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400);
 	});
 
 	function refresh() {

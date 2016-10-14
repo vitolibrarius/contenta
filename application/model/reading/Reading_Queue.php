@@ -227,7 +227,7 @@ class Reading_Queue extends _Reading_Queue
 	{
 		if ( $user != null ) {
 			if ( $unreadOnly == true ) {
-				$select = \SQL::Select($this);
+				$select = SQL::Select($this);
 				$select->where(
 					Qualifier::AndQualifier(
 						Qualifier::FK( Reading_Queue::user_id, $user ),

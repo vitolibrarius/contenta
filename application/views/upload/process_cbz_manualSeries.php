@@ -127,6 +127,8 @@ fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key)
 
 <script language="javascript" type="text/javascript">
 $(document).ready(function() {
+	search_timer = 0;
+
 	$('#fullsizelink').click(function(e) {
 		var i = jQuery.inArray($('#page').attr('src'), images);
 		var href = fullsizedURL + (i < 0 ? 0 : i);
@@ -169,11 +171,17 @@ $(document).ready(function() {
 			cache: true
 		}
 	}).on("change", function(e) {
-		delay( refresh(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400);
 	});
 
 	$(".text_input").on('keyup change', function () {
-		delay( refresh(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400);
 	});
 
 	function refresh() {

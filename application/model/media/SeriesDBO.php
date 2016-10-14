@@ -127,8 +127,8 @@ class SeriesDBO extends _SeriesDBO
 					if ( $type === Model::NotifyInserted || $type === Model::NotifyUpdated || $type === Model::NotifyDeleted ) {
 						\SQL::raw(
 							"update series set pub_count = ( "
-								. "select count(*) from publication where publication.series_id = series.id"
-								. ") where id = :myid;",
+								. "select count(*) from publication where publication.pub_date is not null and "
+								. "publication.series_id = series.id) where id = :myid;",
 							array( ":myid" => $this->id)
 						);
 						\SQL::raw(

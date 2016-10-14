@@ -34,16 +34,20 @@
 
 <script type="text/javascript">
 $(document).ready(function($) {
+	search_timer = 0;
 	$("#searchEndpoint").select2({
 		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'endpoint_id' ); ?>",
 		allowClear: true
 	}).on("change", function(e) {
-		delay( refreshResults(), 250 );
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400);
 	});
 
 	$('.text_input').keypress(function (e) {
 		if (e.which == 13) {
-			refreshResults();
+			refresh();
 			e.preventDefault();
    			e.stopPropagation();
 
@@ -51,7 +55,7 @@ $(document).ready(function($) {
 		}
 	});
 
-	function refreshResults() {
+	function refresh() {
 		$.ajax({
 			type: "GET",
 			url: "<?php echo Config::Web('/AdminWanted/searchNewznab'); ?>",

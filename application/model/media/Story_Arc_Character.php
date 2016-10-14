@@ -6,6 +6,8 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
+
+use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
 use \model\media\Story_Arc_CharacterDBO as Story_Arc_CharacterDBO;
