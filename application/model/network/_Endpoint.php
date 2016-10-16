@@ -40,6 +40,7 @@ abstract class _Endpoint extends Model
 	const api_key = 'api_key';
 	const username = 'username';
 	const error_count = 'error_count';
+	const parameter = 'parameter';
 	const enabled = 'enabled';
 	const compressed = 'compressed';
 
@@ -71,6 +72,7 @@ abstract class _Endpoint extends Model
 			Endpoint::api_key,
 			Endpoint::username,
 			Endpoint::error_count,
+			Endpoint::parameter,
 			Endpoint::enabled,
 			Endpoint::compressed
 		);
@@ -84,6 +86,7 @@ abstract class _Endpoint extends Model
 			Endpoint::api_key,
 			Endpoint::username,
 			Endpoint::error_count,
+			Endpoint::parameter,
 			Endpoint::enabled,
 			Endpoint::compressed
 		);
@@ -144,6 +147,12 @@ abstract class _Endpoint extends Model
 	{
 		return $this->allObjectsForKeyValue(Endpoint::error_count, $value);
 	}
+
+	public function allForParameter($value)
+	{
+		return $this->allObjectsForKeyValue(Endpoint::parameter, $value);
+	}
+
 
 
 
@@ -229,6 +238,12 @@ abstract class _Endpoint extends Model
 				$default_error_count = $this->attributeDefaultValue( null, null, Endpoint::error_count);
 				if ( is_null( $default_error_count ) == false ) {
 					$values['error_count'] = $default_error_count;
+				}
+			}
+			if ( isset($values['parameter']) == false ) {
+				$default_parameter = $this->attributeDefaultValue( null, null, Endpoint::parameter);
+				if ( is_null( $default_parameter ) == false ) {
+					$values['parameter'] = $default_parameter;
 				}
 			}
 			if ( isset($values['enabled']) == false ) {
@@ -352,6 +367,7 @@ abstract class _Endpoint extends Model
 			Endpoint::api_key => Model::TEXT_TYPE,
 			Endpoint::username => Model::TEXT_TYPE,
 			Endpoint::error_count => Model::INT_TYPE,
+			Endpoint::parameter => Model::TEXTAREA_TYPE,
 			Endpoint::enabled => Model::FLAG_TYPE,
 			Endpoint::compressed => Model::FLAG_TYPE
 		);
@@ -466,6 +482,15 @@ abstract class _Endpoint extends Model
 				"FILTER_VALIDATE_INT"
 			);
 		}
+		return null;
+	}
+	function validate_parameter($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
 		return null;
 	}
 	function validate_enabled($object = null, $value)

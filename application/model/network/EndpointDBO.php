@@ -66,6 +66,41 @@ class EndpointDBO extends _EndpointDBO
 		}
 		return true;
 	}
+
+	public function setJsonParameters(array $values = array())
+	{
+		if (is_array($values) && count($values) > 0 ) {
+			$jsonData = json_encode($values);
+			if ( json_last_error() != 0 ) {
+				$jsonData = jsonErrorString(json_last_error()) . " " . var_export($values, true);
+			}
+
+			$this->setParameter($jsonData);
+		}
+		else {
+			$this->setParameter(null);
+		}
+	}
+
+	public function jsonParameters()
+	{
+		$jsonData = array();
+		$raw = $this->parameter();
+
+		if ( is_null($raw) == false ) {
+			$override = json_decode($raw, true);
+			if ( json_last_error() != 0 ) {
+				return jsonErrorString(json_last_error()) . "'" . $raw . "'";
+			}
+
+			if (is_array($override) ) {
+				foreach( $override as $key=>$value ) {
+					$jsonData[$key] = $value;
+				}
+			}
+		}
+		return (isset($jsonData) ? $jsonData : array());
+	}
 }
 
 ?>

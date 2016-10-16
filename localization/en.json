@@ -307,6 +307,9 @@
             "newznab": {
                 "search": "Search"
             },
+            "parameter": {
+                "label": "Model\/endpoint\/parameter\/label"
+            },
             "type_code": {
                 "label": "Connection Type"
             },

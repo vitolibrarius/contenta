@@ -138,6 +138,36 @@ abstract class EndpointConnector
 		return null;
 	}
 
+	public function endpointParameters()
+	{
+		if ( isset($this->endpoint) ) {
+			return $this->endpoint->jsonParameters();
+		}
+		return null;
+	}
+
+	public function refreshEndpointParameters()
+	{
+		// noop
+	}
+
+	public function endpointParameterForKey($key = null)
+	{
+		if ( isset($key) && is_null($key) == false ) {
+			return array_valueForKeypath( $key, $this->endpointParameters() );
+		}
+		return null;
+	}
+
+	public function setEndpointParamameterForKey( $key = null, $value = null )
+	{
+		if ( isset($key) && is_null($key) == false ) {
+			$json = array_setValueForKeypath($key, $value, $this->endpointParameters());
+			$this->endpoint->setJsonParameters($json);
+			$this->endpoint->saveChanges();
+		}
+	}
+
 	public function cleanURLForLog($url) {
 		$clean = urldecode($url);
 		if ( empty($url) == false) {

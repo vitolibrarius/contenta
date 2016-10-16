@@ -49,6 +49,14 @@ class Migration_9 extends Migrator
 			);
 		}
 
+		if ( isset($table_fields[ Endpoint::parameter ]) == false ) {
+			$this->sqlite_execute(
+				Endpoint::TABLE ,
+				"ALTER TABLE " . Endpoint::TABLE . " ADD COLUMN " . Endpoint::parameter . " TEXT",
+				"Adding the parameter column to Endpoint"
+			);
+		}
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS reading_item_user_idpublication_id on reading_item (user_id,publication_id)';
 		$this->sqlite_execute( "reading_item", $sql, "Index on reading_item (user_id,publication_id)" );
 

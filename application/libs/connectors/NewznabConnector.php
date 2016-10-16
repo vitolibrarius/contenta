@@ -18,9 +18,10 @@ class NewznabException extends \Exception {}
 
 class NewznabConnector extends RSSConnector
 {
-	const NEWZNAB_CAT_BOOK = 7000;
-	const NEWZNAB_CAT_COMIC = 7030;
-	const NEWZNAB_CAT_EBOOK = 7020;
+	const NEWZNAB_VERSION = "API_VERSION";
+	const NEWZNAB_CAT_BOOK = "Category_Book"; // 7000;
+	const NEWZNAB_CAT_COMIC = "Category_Comic"; // 7030;
+	const NEWZNAB_CAT_EBOOK = "Category_Ebook"; //7020;
 
 	public function __construct($endpoint)
 	{
@@ -46,6 +47,69 @@ class NewznabConnector extends RSSConnector
 		}
 
 		return array($success, $message);
+	}
+
+	public function newznabCategory()
+	{
+		$keys = func_get_args();
+		$teeth = array_filter($keys, 'is_string');
+
+		$categories = array();
+		$canRefresh = true;
+		foreach( $teeth as $tooth ) {
+			$category = $this->endpointParameterForKey($tooth);
+			if ( empty($category) && $canRefresh ) {
+				$this->refreshEndpointParameters();
+				$canRefresh = false;
+
+				$category = $this->endpointParameterForKey($tooth);
+			}
+
+			if ( empty($category) == false ) {
+				$categories[] = $category;
+			}
+		}
+		return $categories;
+	}
+
+	public function refreshEndpointParameters()
+	{
+		$xmlDocument = $this->capabilities();
+		if ( $xmlDocument instanceof SimpleXMLElement && isset($xmlDocument->categories, $xmlDocument->categories->category) ) {
+			$results = array();
+
+			$results = array_setValueForKeypath(NewznabConnector::NEWZNAB_VERSION, "0.0", $results);
+			if ( isset( $xmlDocument->server, $xmlDocument->server['version'])) {
+				$server = $xmlDocument->server;
+				$results = array_setValueForKeypath(NewznabConnector::NEWZNAB_VERSION, (string)$server['version'], $results);
+			}
+
+			$results = array_setValueForKeypath(NewznabConnector::NEWZNAB_CAT_BOOK, "7000", $results);
+			$results = array_setValueForKeypath(NewznabConnector::NEWZNAB_CAT_COMIC, "7030", $results);
+			$results = array_setValueForKeypath(NewznabConnector::NEWZNAB_CAT_EBOOK, "7030", $results);
+
+			foreach ($xmlDocument->categories->category as $key => $category) {
+				if ((string)(isset($category["name"], $category["id"]) ? $category["name"] : '') == "Books") {
+					$cat_id = (string)$category["id"];
+					$results = array_setValueForKeypath(NewznabConnector::NEWZNAB_CAT_BOOK, $cat_id, $results);
+
+					foreach ($category->subcat as $subkey => $subcategory) {
+						if ((string)(isset($subcategory["name"], $subcategory["id"]) ? $subcategory["name"] : '') == "Ebook") {
+							$cat_id = (string)$subcategory["id"];
+							$results = array_setValueForKeypath(NewznabConnector::NEWZNAB_CAT_EBOOK, $cat_id, $results);
+						}
+
+						if ((string)(isset($subcategory["name"], $subcategory["id"]) ? $subcategory["name"] : '') == "Comics") {
+							$cat_id = (string)$subcategory["id"];
+							$results = array_setValueForKeypath(NewznabConnector::NEWZNAB_CAT_COMIC, $cat_id, $results);
+						}
+					}
+				}
+			}
+			$this->endpoint()->setJsonParameters($results);
+			$this->endpoint()->saveChanges();
+			return $results;
+		}
 	}
 
 	public function defaultParameters() {
@@ -86,7 +150,11 @@ class NewznabConnector extends RSSConnector
 	}
 
 	public function searchComics( $query ) {
-		$details = $this->search($query, null, array(NewznabConnector::NEWZNAB_CAT_BOOK,NewznabConnector::NEWZNAB_CAT_COMIC));
+		$details = $this->search(
+			$query,
+			null,
+			$this->newznabCategory(NewznabConnector::NEWZNAB_CAT_BOOK, NewznabConnector::NEWZNAB_CAT_COMIC)
+		);
 		return ( $details instanceof SimpleXMLElement ? null : $details );
 	}
 

@@ -1,6 +1,6 @@
 /**
 	SQLite table creation script
-	generated: 10/15/2016 06:07:25 pm */
+ */
 
 
 /** ENDPOINT_TYPE */
@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS endpoint (
 			api_key TEXT,
 			username TEXT,
 			error_count INTEGER,
+			parameter TEXT,
 			enabled INTEGER,
 			compressed INTEGER,
 			FOREIGN KEY ( type_code ) REFERENCES endpoint_type ( code )

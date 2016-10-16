@@ -28,6 +28,7 @@ abstract class _EndpointDBO extends DataObject
 	public $api_key;
 	public $username;
 	public $error_count;
+	public $parameter;
 	public $enabled;
 	public $compressed;
 
@@ -173,6 +174,16 @@ abstract class _EndpointDBO extends DataObject
 	public function setError_count( $value = null)
 	{
 		parent::storeChange( Endpoint::error_count, $value );
+	}
+
+	public function parameter()
+	{
+		return parent::changedValue( Endpoint::parameter, $this->parameter );
+	}
+
+	public function setParameter( $value = null)
+	{
+		parent::storeChange( Endpoint::parameter, $value );
 	}
 
 	public function enabled()
