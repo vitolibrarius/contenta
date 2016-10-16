@@ -18,23 +18,8 @@ use \model\media\Series_AliasDBO as Series_AliasDBO;
 use \model\media\Series as Series;
 use \model\media\SeriesDBO as SeriesDBO;
 
-/** Sample Creation script */
-		/** SERIES_ALIAS */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS series_alias ( "
-			. Series_Alias::id . " INTEGER PRIMARY KEY, "
-			. Series_Alias::name . " TEXT, "
-			. Series_Alias::series_id . " INTEGER, "
-			. "FOREIGN KEY (". Series_Alias::series_id .") REFERENCES " . Series::TABLE . "(" . Series::id . ")"
-		. ")";
-		$this->sqlite_execute( "series_alias", $sql, "Create table series_alias" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS series_aliasSeries_fk on series_alias (series_id)';
-		$this->sqlite_execute( "series_alias", $sql, "FK Index on series_alias (series_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS series_alias_series_idname on series_alias (series_id,name)';
-		$this->sqlite_execute( "series_alias", $sql, "Index on series_alias (series_id,name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Series_Alias extends Model
 {
 	const TABLE = 'series_alias';

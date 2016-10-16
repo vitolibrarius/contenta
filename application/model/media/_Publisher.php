@@ -22,26 +22,8 @@ use \model\media\CharacterDBO as CharacterDBO;
 use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_ArcDBO as Story_ArcDBO;
 
-/** Sample Creation script */
-		/** PUBLISHER */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS publisher ( "
-			. Publisher::id . " INTEGER PRIMARY KEY, "
-			. Publisher::name . " TEXT, "
-			. Publisher::created . " INTEGER, "
-			. Publisher::xurl . " TEXT, "
-			. Publisher::xsource . " TEXT, "
-			. Publisher::xid . " TEXT, "
-			. Publisher::xupdated . " INTEGER "
-		. ")";
-		$this->sqlite_execute( "publisher", $sql, "Create table publisher" );
-
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS publisher_name on publisher (name)';
-		$this->sqlite_execute( "publisher", $sql, "Index on publisher (name)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publisher_xidxsource on publisher (xid,xsource)';
-		$this->sqlite_execute( "publisher", $sql, "Index on publisher (xid,xsource)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Publisher extends Model
 {
 	const TABLE = 'publisher';

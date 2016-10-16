@@ -20,26 +20,8 @@ use \model\media\SeriesDBO as SeriesDBO;
 use \model\media\Character as Character;
 use \model\media\CharacterDBO as CharacterDBO;
 
-/** Sample Creation script */
-		/** SERIES_CHARACTER */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS series_character ( "
-			. Series_Character::id . " INTEGER PRIMARY KEY, "
-			. Series_Character::series_id . " INTEGER, "
-			. Series_Character::character_id . " INTEGER, "
-			. "FOREIGN KEY (". Series_Character::series_id .") REFERENCES " . Series::TABLE . "(" . Series::id . "),"
-			. "FOREIGN KEY (". Series_Character::character_id .") REFERENCES " . Character::TABLE . "(" . Character::id . ")"
-		. ")";
-		$this->sqlite_execute( "series_character", $sql, "Create table series_character" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS series_characterSeries_fk on series_character (series_id)';
-		$this->sqlite_execute( "series_character", $sql, "FK Index on series_character (series_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS series_characterCharacter_fk on series_character (character_id)';
-		$this->sqlite_execute( "series_character", $sql, "FK Index on series_character (character_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS series_character_series_idcharacter_id on series_character (series_id,character_id)';
-		$this->sqlite_execute( "series_character", $sql, "Index on series_character (series_id,character_id)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Series_Character extends Model
 {
 	const TABLE = 'series_character';

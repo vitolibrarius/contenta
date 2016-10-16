@@ -20,26 +20,8 @@ use \model\media\Story_ArcDBO as Story_ArcDBO;
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
 
-/** Sample Creation script */
-		/** STORY_ARC_PUBLICATION */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS story_arc_publication ( "
-			. Story_Arc_Publication::id . " INTEGER PRIMARY KEY, "
-			. Story_Arc_Publication::story_arc_id . " INTEGER, "
-			. Story_Arc_Publication::publication_id . " INTEGER, "
-			. "FOREIGN KEY (". Story_Arc_Publication::story_arc_id .") REFERENCES " . Story_Arc::TABLE . "(" . Story_Arc::id . "),"
-			. "FOREIGN KEY (". Story_Arc_Publication::publication_id .") REFERENCES " . Publication::TABLE . "(" . Publication::id . ")"
-		. ")";
-		$this->sqlite_execute( "story_arc_publication", $sql, "Create table story_arc_publication" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS story_arc_publicationStory_Arc_fk on story_arc_publication (story_arc_id)';
-		$this->sqlite_execute( "story_arc_publication", $sql, "FK Index on story_arc_publication (story_arc_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS story_arc_publicationPublication_fk on story_arc_publication (publication_id)';
-		$this->sqlite_execute( "story_arc_publication", $sql, "FK Index on story_arc_publication (publication_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS story_arc_publication_story_arc_idpublication_id on story_arc_publication (story_arc_id,publication_id)';
-		$this->sqlite_execute( "story_arc_publication", $sql, "Index on story_arc_publication (story_arc_id,publication_id)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Story_Arc_Publication extends Model
 {
 	const TABLE = 'story_arc_publication';

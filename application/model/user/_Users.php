@@ -22,42 +22,8 @@ use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 use \model\reading\Reading_Item as Reading_Item;
 use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 
-/** Sample Creation script */
-		/** USERS */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS users ( "
-			. Users::id . " INTEGER PRIMARY KEY, "
-			. Users::name . " TEXT, "
-			. Users::email . " TEXT, "
-			. Users::active . " INTEGER, "
-			. Users::account_type . " TEXT, "
-			. Users::rememberme_token . " TEXT, "
-			. Users::api_hash . " TEXT, "
-			. Users::password_hash . " TEXT, "
-			. Users::password_reset_hash . " TEXT, "
-			. Users::activation_hash . " TEXT, "
-			. Users::failed_logins . " INTEGER, "
-			. Users::created . " INTEGER, "
-			. Users::last_login_timestamp . " INTEGER, "
-			. Users::last_failed_login . " INTEGER, "
-			. Users::password_reset_timestamp . " INTEGER "
-		. ")";
-		$this->sqlite_execute( "users", $sql, "Create table users" );
-
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_rememberme_token on users (rememberme_token)';
-		$this->sqlite_execute( "users", $sql, "Index on users (rememberme_token)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_namepassword_hash on users (name,password_hash)';
-		$this->sqlite_execute( "users", $sql, "Index on users (name,password_hash)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_activation_hash on users (activation_hash)';
-		$this->sqlite_execute( "users", $sql, "Index on users (activation_hash)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_api_hash on users (api_hash)';
-		$this->sqlite_execute( "users", $sql, "Index on users (api_hash)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_email on users (email)';
-		$this->sqlite_execute( "users", $sql, "Index on users (email)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS users_name on users (name)';
-		$this->sqlite_execute( "users", $sql, "Index on users (name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Users extends Model
 {
 	const TABLE = 'users';

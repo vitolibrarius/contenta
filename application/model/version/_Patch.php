@@ -18,24 +18,8 @@ use \model\version\PatchDBO as PatchDBO;
 use \model\version\Version as Version;
 use \model\version\VersionDBO as VersionDBO;
 
-/** Sample Creation script */
-		/** PATCH */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS patch ( "
-			. Patch::id . " INTEGER PRIMARY KEY, "
-			. Patch::name . " TEXT, "
-			. Patch::created . " INTEGER, "
-			. Patch::version_id . " INTEGER, "
-			. "FOREIGN KEY (". Patch::version_id .") REFERENCES " . Version::TABLE . "(" . Version::id . ")"
-		. ")";
-		$this->sqlite_execute( "patch", $sql, "Create table patch" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS patchVersion_fk on patch (version_id)';
-		$this->sqlite_execute( "patch", $sql, "FK Index on patch (version_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS patch_name on patch (name)';
-		$this->sqlite_execute( "patch", $sql, "Index on patch (name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Patch extends Model
 {
 	const TABLE = 'patch';

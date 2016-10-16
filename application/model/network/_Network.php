@@ -18,24 +18,8 @@ use \model\network\NetworkDBO as NetworkDBO;
 use \model\network\User_Network as User_Network;
 use \model\network\User_NetworkDBO as User_NetworkDBO;
 
-/** Sample Creation script */
-		/** NETWORK */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS network ( "
-			. Network::id . " INTEGER PRIMARY KEY, "
-			. Network::ip_address . " TEXT, "
-			. Network::ip_hash . " TEXT, "
-			. Network::created . " INTEGER, "
-			. Network::disable . " INTEGER "
-		. ")";
-		$this->sqlite_execute( "network", $sql, "Create table network" );
-
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS network_ip_address on network (ip_address)';
-		$this->sqlite_execute( "network", $sql, "Index on network (ip_address)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS network_ip_hash on network (ip_hash)';
-		$this->sqlite_execute( "network", $sql, "Index on network (ip_hash)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Network extends Model
 {
 	const TABLE = 'network';

@@ -18,23 +18,8 @@ use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
-/** Sample Creation script */
-		/** PULL_LIST_EXCL */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS pull_list_excl ( "
-			. Pull_List_Exclusion::id . " INTEGER PRIMARY KEY, "
-			. Pull_List_Exclusion::pattern . " TEXT, "
-			. Pull_List_Exclusion::type . " TEXT, "
-			. Pull_List_Exclusion::created . " INTEGER, "
-			. Pull_List_Exclusion::endpoint_type_code . " TEXT, "
-			. "FOREIGN KEY (". Pull_List_Exclusion::endpoint_type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
-		. ")";
-		$this->sqlite_execute( "pull_list_excl", $sql, "Create table pull_list_excl" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS pull_list_exclEndpoint_Type_fk on pull_list_excl (endpoint_type_code)';
-		$this->sqlite_execute( "pull_list_excl", $sql, "FK Index on pull_list_excl (endpoint_type_code)" );
-
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Pull_List_Exclusion extends Model
 {
 	const TABLE = 'pull_list_excl';

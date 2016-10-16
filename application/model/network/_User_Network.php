@@ -20,26 +20,8 @@ use \model\user\UsersDBO as UsersDBO;
 use \model\network\Network as Network;
 use \model\network\NetworkDBO as NetworkDBO;
 
-/** Sample Creation script */
-		/** USER_NETWORK */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS user_network ( "
-			. User_Network::id . " INTEGER PRIMARY KEY, "
-			. User_Network::user_id . " INTEGER, "
-			. User_Network::network_id . " INTEGER, "
-			. "FOREIGN KEY (". User_Network::user_id .") REFERENCES " . Users::TABLE . "(" . Users::id . "),"
-			. "FOREIGN KEY (". User_Network::network_id .") REFERENCES " . Network::TABLE . "(" . Network::id . ")"
-		. ")";
-		$this->sqlite_execute( "user_network", $sql, "Create table user_network" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS user_networkUsers_fk on user_network (user_id)';
-		$this->sqlite_execute( "user_network", $sql, "FK Index on user_network (user_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS user_networkNetwork_fk on user_network (network_id)';
-		$this->sqlite_execute( "user_network", $sql, "FK Index on user_network (network_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS user_network_user_idnetwork_id on user_network (user_id,network_id)';
-		$this->sqlite_execute( "user_network", $sql, "Index on user_network (user_id,network_id)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _User_Network extends Model
 {
 	const TABLE = 'user_network';

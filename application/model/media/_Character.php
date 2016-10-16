@@ -26,36 +26,8 @@ use \model\media\Series_CharacterDBO as Series_CharacterDBO;
 use \model\media\Story_Arc_Character as Story_Arc_Character;
 use \model\media\Story_Arc_CharacterDBO as Story_Arc_CharacterDBO;
 
-/** Sample Creation script */
-		/** CHARACTER */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS character ( "
-			. Character::id . " INTEGER PRIMARY KEY, "
-			. Character::publisher_id . " INTEGER, "
-			. Character::created . " INTEGER, "
-			. Character::name . " TEXT, "
-			. Character::realname . " TEXT, "
-			. Character::desc . " TEXT, "
-			. Character::popularity . " INTEGER, "
-			. Character::gender . " TEXT, "
-			. Character::xurl . " TEXT, "
-			. Character::xsource . " TEXT, "
-			. Character::xid . " TEXT, "
-			. Character::xupdated . " INTEGER, "
-			. "FOREIGN KEY (". Character::publisher_id .") REFERENCES " . Publisher::TABLE . "(" . Publisher::id . ")"
-		. ")";
-		$this->sqlite_execute( "character", $sql, "Create table character" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS characterPublisher_fk on character (publisher_id)';
-		$this->sqlite_execute( "character", $sql, "FK Index on character (publisher_id)" );
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS character_name on character (name)';
-		$this->sqlite_execute( "character", $sql, "Index on character (name)" );
-		$sql = 'CREATE  INDEX IF NOT EXISTS character_realname on character (realname)';
-		$this->sqlite_execute( "character", $sql, "Index on character (realname)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS character_xidxsource on character (xid,xsource)';
-		$this->sqlite_execute( "character", $sql, "Index on character (xid,xsource)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Character extends Model
 {
 	const TABLE = 'character';

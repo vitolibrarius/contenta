@@ -18,24 +18,8 @@ use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
-/** Sample Creation script */
-		/** PULL_LIST_EXPANSION */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS pull_list_expansion ( "
-			. Pull_List_Expansion::id . " INTEGER PRIMARY KEY, "
-			. Pull_List_Expansion::pattern . " TEXT, "
-			. Pull_List_Expansion::replace . " TEXT, "
-			. Pull_List_Expansion::sequence . " INTEGER, "
-			. Pull_List_Expansion::created . " INTEGER, "
-			. Pull_List_Expansion::endpoint_type_code . " TEXT, "
-			. "FOREIGN KEY (". Pull_List_Expansion::endpoint_type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
-		. ")";
-		$this->sqlite_execute( "pull_list_expansion", $sql, "Create table pull_list_expansion" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS pull_list_expansionEndpoint_Type_fk on pull_list_expansion (endpoint_type_code)';
-		$this->sqlite_execute( "pull_list_expansion", $sql, "FK Index on pull_list_expansion (endpoint_type_code)" );
-
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Pull_List_Expansion extends Model
 {
 	const TABLE = 'pull_list_expansion';

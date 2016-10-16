@@ -26,27 +26,8 @@ use \model\network\FluxDBO as FluxDBO;
 use \model\jobs\Job as Job;
 use \model\jobs\JobDBO as JobDBO;
 
-/** Sample Creation script */
-		/** ENDPOINT */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS endpoint ( "
-			. Endpoint::id . " INTEGER PRIMARY KEY, "
-			. Endpoint::type_code . " TEXT, "
-			. Endpoint::name . " TEXT, "
-			. Endpoint::base_url . " TEXT, "
-			. Endpoint::api_key . " TEXT, "
-			. Endpoint::username . " TEXT, "
-			. Endpoint::error_count . " INTEGER, "
-			. Endpoint::enabled . " INTEGER, "
-			. Endpoint::compressed . " INTEGER, "
-			. "FOREIGN KEY (". Endpoint::type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
-		. ")";
-		$this->sqlite_execute( "endpoint", $sql, "Create table endpoint" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS endpointEndpoint_Type_fk on endpoint (type_code)';
-		$this->sqlite_execute( "endpoint", $sql, "FK Index on endpoint (type_code)" );
-
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Endpoint extends Model
 {
 	const TABLE = 'endpoint';

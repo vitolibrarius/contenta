@@ -20,36 +20,8 @@ use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
 
-/** Sample Creation script */
-		/** JOB */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS job ( "
-			. Job::id . " INTEGER PRIMARY KEY, "
-			. Job::type_code . " TEXT, "
-			. Job::endpoint_id . " INTEGER, "
-			. Job::enabled . " INTEGER, "
-			. Job::one_shot . " INTEGER, "
-			. Job::fail_count . " INTEGER, "
-			. Job::elapsed . " INTEGER, "
-			. Job::minute . " TEXT, "
-			. Job::hour . " TEXT, "
-			. Job::dayOfWeek . " TEXT, "
-			. Job::parameter . " TEXT, "
-			. Job::next . " INTEGER, "
-			. Job::last_run . " INTEGER, "
-			. Job::last_fail . " INTEGER, "
-			. Job::created . " INTEGER, "
-			. "FOREIGN KEY (". Job::type_code .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::code . "),"
-			. "FOREIGN KEY (". Job::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
-		. ")";
-		$this->sqlite_execute( "job", $sql, "Create table job" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS jobJob_Type_fk on job (type_code)';
-		$this->sqlite_execute( "job", $sql, "FK Index on job (type_code)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS jobEndpoint_fk on job (endpoint_id)';
-		$this->sqlite_execute( "job", $sql, "FK Index on job (endpoint_id)" );
-
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Job extends Model
 {
 	const TABLE = 'job';

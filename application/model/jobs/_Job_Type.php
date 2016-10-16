@@ -20,24 +20,8 @@ use \model\jobs\Job_RunningDBO as Job_RunningDBO;
 use \model\jobs\Job as Job;
 use \model\jobs\JobDBO as JobDBO;
 
-/** Sample Creation script */
-		/** JOB_TYPE */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS job_type ( "
-			. Job_Type::code . " TEXT PRIMARY KEY, "
-			. Job_Type::name . " TEXT, "
-			. Job_Type::desc . " TEXT, "
-			. Job_Type::processor . " TEXT, "
-			. Job_Type::parameter . " TEXT, "
-			. Job_Type::scheduled . " INTEGER, "
-			. Job_Type::requires_endpoint . " INTEGER "
-		. ")";
-		$this->sqlite_execute( "job_type", $sql, "Create table job_type" );
-
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS job_type_name on job_type (name)';
-		$this->sqlite_execute( "job_type", $sql, "Index on job_type (name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Job_Type extends Model
 {
 	const TABLE = 'job_type';

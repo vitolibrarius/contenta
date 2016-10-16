@@ -20,26 +20,8 @@ use \model\media\PublicationDBO as PublicationDBO;
 use \model\media\Character as Character;
 use \model\media\CharacterDBO as CharacterDBO;
 
-/** Sample Creation script */
-		/** PUBLICATION_CHARACTER */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS publication_character ( "
-			. Publication_Character::id . " INTEGER PRIMARY KEY, "
-			. Publication_Character::publication_id . " INTEGER, "
-			. Publication_Character::character_id . " INTEGER, "
-			. "FOREIGN KEY (". Publication_Character::publication_id .") REFERENCES " . Publication::TABLE . "(" . Publication::id . "),"
-			. "FOREIGN KEY (". Publication_Character::character_id .") REFERENCES " . Character::TABLE . "(" . Character::id . ")"
-		. ")";
-		$this->sqlite_execute( "publication_character", $sql, "Create table publication_character" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS publication_characterPublication_fk on publication_character (publication_id)';
-		$this->sqlite_execute( "publication_character", $sql, "FK Index on publication_character (publication_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS publication_characterCharacter_fk on publication_character (character_id)';
-		$this->sqlite_execute( "publication_character", $sql, "FK Index on publication_character (character_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publication_character_publication_idcharacter_id on publication_character (publication_id,character_id)';
-		$this->sqlite_execute( "publication_character", $sql, "Index on publication_character (publication_id,character_id)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Publication_Character extends Model
 {
 	const TABLE = 'publication_character';

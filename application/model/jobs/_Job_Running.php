@@ -20,31 +20,8 @@ use \model\jobs\JobDBO as JobDBO;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 
-/** Sample Creation script */
-		/** JOB_RUNNING */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS job_running ( "
-			. Job_Running::id . " INTEGER PRIMARY KEY, "
-			. Job_Running::job_id . " INTEGER, "
-			. Job_Running::type_code . " TEXT, "
-			. Job_Running::processor . " TEXT, "
-			. Job_Running::guid . " TEXT, "
-			. Job_Running::pid . " INTEGER, "
-			. Job_Running::desc . " TEXT, "
-			. Job_Running::created . " INTEGER "
-			. "FOREIGN KEY (". Job_Running::job_id .") REFERENCES " . Job::TABLE . "(" . Job::id . "),"
-			. "FOREIGN KEY (". Job_Running::type_code .") REFERENCES " . Job_Type::TABLE . "(" . Job_Type::code . "),"
-		. ")";
-		$this->sqlite_execute( "job_running", $sql, "Create table job_running" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS job_runningJob_fk on job_running (job_id)';
-		$this->sqlite_execute( "job_running", $sql, "FK Index on job_running (job_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS job_runningJob_Type_fk on job_running (type_code)';
-		$this->sqlite_execute( "job_running", $sql, "FK Index on job_running (type_code)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS job_running_pid on job_running (pid)';
-		$this->sqlite_execute( "job_running", $sql, "Index on job_running (pid)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Job_Running extends Model
 {
 	const TABLE = 'job_running';

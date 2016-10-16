@@ -26,35 +26,8 @@ use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
 
-/** Sample Creation script */
-		/** PUBLICATION */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS publication ( "
-			. Publication::id . " INTEGER PRIMARY KEY, "
-			. Publication::series_id . " INTEGER, "
-			. Publication::created . " INTEGER, "
-			. Publication::name . " TEXT, "
-			. Publication::desc . " TEXT, "
-			. Publication::pub_date . " INTEGER, "
-			. Publication::issue_num . " TEXT, "
-			. Publication::issue_order . " INTEGER, "
-			. Publication::media_count . " INTEGER, "
-			. Publication::xurl . " TEXT, "
-			. Publication::xsource . " TEXT, "
-			. Publication::xid . " TEXT, "
-			. Publication::xupdated . " INTEGER, "
-			. "FOREIGN KEY (". Publication::series_id .") REFERENCES " . Series::TABLE . "(" . Series::id . ")"
-		. ")";
-		$this->sqlite_execute( "publication", $sql, "Create table publication" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS publicationSeries_fk on publication (series_id)';
-		$this->sqlite_execute( "publication", $sql, "FK Index on publication (series_id)" );
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS publication_name on publication (name)';
-		$this->sqlite_execute( "publication", $sql, "Index on publication (name)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publication_xidxsource on publication (xid,xsource)';
-		$this->sqlite_execute( "publication", $sql, "Index on publication (xid,xsource)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Publication extends Model
 {
 	const TABLE = 'publication';

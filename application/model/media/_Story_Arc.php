@@ -26,36 +26,8 @@ use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
 use \model\reading\Reading_Queue as Reading_Queue;
 use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 
-/** Sample Creation script */
-		/** STORY_ARC */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS story_arc ( "
-			. Story_Arc::id . " INTEGER PRIMARY KEY, "
-			. Story_Arc::publisher_id . " INTEGER, "
-			. Story_Arc::created . " INTEGER, "
-			. Story_Arc::name . " TEXT, "
-			. Story_Arc::desc . " TEXT, "
-			. Story_Arc::pub_active . " INTEGER, "
-			. Story_Arc::pub_wanted . " INTEGER, "
-			. Story_Arc::pub_cycle . " INTEGER, "
-			. Story_Arc::pub_available . " INTEGER, "
-			. Story_Arc::pub_count . " INTEGER, "
-			. Story_Arc::xurl . " TEXT, "
-			. Story_Arc::xsource . " TEXT, "
-			. Story_Arc::xid . " TEXT, "
-			. Story_Arc::xupdated . " INTEGER, "
-			. "FOREIGN KEY (". Story_Arc::publisher_id .") REFERENCES " . Publisher::TABLE . "(" . Publisher::id . ")"
-		. ")";
-		$this->sqlite_execute( "story_arc", $sql, "Create table story_arc" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS story_arcPublisher_fk on story_arc (publisher_id)';
-		$this->sqlite_execute( "story_arc", $sql, "FK Index on story_arc (publisher_id)" );
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS story_arc_name on story_arc (name)';
-		$this->sqlite_execute( "story_arc", $sql, "Index on story_arc (name)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS story_arc_xidxsource on story_arc (xid,xsource)';
-		$this->sqlite_execute( "story_arc", $sql, "Index on story_arc (xid,xsource)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Story_Arc extends Model
 {
 	const TABLE = 'story_arc';

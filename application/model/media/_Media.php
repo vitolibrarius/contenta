@@ -20,33 +20,8 @@ use \model\media\Media_TypeDBO as Media_TypeDBO;
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
 
-/** Sample Creation script */
-		/** MEDIA */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS media ( "
-			. Media::id . " INTEGER PRIMARY KEY, "
-			. Media::publication_id . " INTEGER, "
-			. Media::type_code . " INTEGER, "
-			. Media::filename . " TEXT, "
-			. Media::original_filename . " TEXT, "
-			. Media::checksum . " TEXT, "
-			. Media::created . " INTEGER, "
-			. Media::size . " INTEGER, "
-			. "FOREIGN KEY (". Media::type_code .") REFERENCES " . Media_Type::TABLE . "(" . Media_Type::code . "),"
-			. "FOREIGN KEY (". Media::publication_id .") REFERENCES " . Publication::TABLE . "(" . Publication::id . ")"
-		. ")";
-		$this->sqlite_execute( "media", $sql, "Create table media" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS mediaMedia_Type_fk on media (type_code)';
-		$this->sqlite_execute( "media", $sql, "FK Index on media (type_code)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS mediaPublication_fk on media (publication_id)';
-		$this->sqlite_execute( "media", $sql, "FK Index on media (publication_id)" );
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS media_filename on media (filename)';
-		$this->sqlite_execute( "media", $sql, "Index on media (filename)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS media_checksum on media (checksum)';
-		$this->sqlite_execute( "media", $sql, "Index on media (checksum)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Media extends Model
 {
 	const TABLE = 'media';

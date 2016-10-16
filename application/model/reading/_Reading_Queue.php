@@ -22,36 +22,8 @@ use \model\media\SeriesDBO as SeriesDBO;
 use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_ArcDBO as Story_ArcDBO;
 
-/** Sample Creation script */
-		/** READING_QUEUE */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS reading_queue ( "
-			. Reading_Queue::id . " INTEGER PRIMARY KEY, "
-			. Reading_Queue::user_id . " INTEGER, "
-			. Reading_Queue::series_id . " INTEGER, "
-			. Reading_Queue::story_arc_id . " INTEGER, "
-			. Reading_Queue::created . " INTEGER, "
-			. Reading_Queue::title . " TEXT, "
-			. Reading_Queue::favorite . " INTEGER, "
-			. Reading_Queue::pub_count . " INTEGER, "
-			. Reading_Queue::pub_read . " INTEGER, "
-			. Reading_Queue::queue_order . " INTEGER, "
-			. "FOREIGN KEY (". Reading_Queue::user_id .") REFERENCES " . Users::TABLE . "(" . Users::id . ")"
-			. "FOREIGN KEY (". Reading_Queue::series_id .") REFERENCES " . Series::TABLE . "(" . Series::id . "),"
-			. "FOREIGN KEY (". Reading_Queue::story_arc_id .") REFERENCES " . Story_Arc::TABLE . "(" . Story_Arc::id . "),"
-		. ")";
-		$this->sqlite_execute( "reading_queue", $sql, "Create table reading_queue" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS reading_queueUsers_fk on reading_queue (user_id)';
-		$this->sqlite_execute( "reading_queue", $sql, "FK Index on reading_queue (user_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS reading_queueSeries_fk on reading_queue (series_id)';
-		$this->sqlite_execute( "reading_queue", $sql, "FK Index on reading_queue (series_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS reading_queueStory_Arc_fk on reading_queue (story_arc_id)';
-		$this->sqlite_execute( "reading_queue", $sql, "FK Index on reading_queue (story_arc_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS reading_queue_user_idseries_idstory_arc_id on reading_queue (user_id,series_id,story_arc_id)';
-		$this->sqlite_execute( "reading_queue", $sql, "Index on reading_queue (user_id,series_id,story_arc_id)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Reading_Queue extends Model
 {
 	const TABLE = 'reading_queue';

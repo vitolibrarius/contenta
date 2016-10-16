@@ -32,6 +32,7 @@
     "indexes" : [
     	{ "columns": ["name"] },
     	{ "columns": ["search_name"] },
+    	{ "columns": ["search_name", "pub_wanted"] },
     	{ "columns": ["xid", "xsource"], "unique": true }
     ],
     "relationships" :{

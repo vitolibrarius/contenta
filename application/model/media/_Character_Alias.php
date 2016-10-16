@@ -18,23 +18,8 @@ use \model\media\Character_AliasDBO as Character_AliasDBO;
 use \model\media\Character as Character;
 use \model\media\CharacterDBO as CharacterDBO;
 
-/** Sample Creation script */
-		/** CHARACTER_ALIAS */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS character_alias ( "
-			. Character_Alias::id . " INTEGER PRIMARY KEY, "
-			. Character_Alias::name . " TEXT, "
-			. Character_Alias::character_id . " INTEGER, "
-			. "FOREIGN KEY (". Character_Alias::character_id .") REFERENCES " . Character::TABLE . "(" . Character::id . ")"
-		. ")";
-		$this->sqlite_execute( "character_alias", $sql, "Create table character_alias" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS character_aliasCharacter_fk on character_alias (character_id)';
-		$this->sqlite_execute( "character_alias", $sql, "FK Index on character_alias (character_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS character_alias_character_idname on character_alias (character_id,name)';
-		$this->sqlite_execute( "character_alias", $sql, "Index on character_alias (character_id,name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Character_Alias extends Model
 {
 	const TABLE = 'character_alias';

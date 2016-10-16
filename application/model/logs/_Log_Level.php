@@ -16,19 +16,8 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 
 /* import related objects */
 
-/** Sample Creation script */
-		/** LOG_LEVEL */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS log_level ( "
-			. Log_Level::code . " TEXT PRIMARY KEY, "
-			. Log_Level::name . " TEXT "
-		. ")";
-		$this->sqlite_execute( "log_level", $sql, "Create table log_level" );
-
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS log_level_name on log_level (name)';
-		$this->sqlite_execute( "log_level", $sql, "Index on log_level (name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Log_Level extends Model
 {
 	const TABLE = 'log_level';

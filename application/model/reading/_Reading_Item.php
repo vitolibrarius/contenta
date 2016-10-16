@@ -20,31 +20,8 @@ use \model\user\UsersDBO as UsersDBO;
 use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
 
-/** Sample Creation script */
-		/** READING_ITEM */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS reading_item ( "
-			. Reading_Item::id . " INTEGER PRIMARY KEY, "
-			. Reading_Item::user_id . " INTEGER, "
-			. Reading_Item::publication_id . " INTEGER, "
-			. Reading_Item::created . " INTEGER, "
-			. Reading_Item::read_date . " INTEGER, "
-			. Reading_Item::mislabeled . " INTEGER, "
-			. "FOREIGN KEY (". Reading_Item::user_id .") REFERENCES " . Users::TABLE . "(" . Users::id . "),"
-			. "FOREIGN KEY (". Reading_Item::publication_id .") REFERENCES " . Publication::TABLE . "(" . Publication::id . ")"
-		. ")";
-		$this->sqlite_execute( "reading_item", $sql, "Create table reading_item" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS reading_itemUsers_fk on reading_item (user_id)';
-		$this->sqlite_execute( "reading_item", $sql, "FK Index on reading_item (user_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS reading_itemPublication_fk on reading_item (publication_id)';
-		$this->sqlite_execute( "reading_item", $sql, "FK Index on reading_item (publication_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS reading_item_user_idpublication_id on reading_item (user_id,publication_id)';
-		$this->sqlite_execute( "reading_item", $sql, "Index on reading_item (user_id,publication_id)" );
-		$sql = 'CREATE  INDEX IF NOT EXISTS reading_item_read_date on reading_item (read_date)';
-		$this->sqlite_execute( "reading_item", $sql, "Index on reading_item (read_date)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Reading_Item extends Model
 {
 	const TABLE = 'reading_item';

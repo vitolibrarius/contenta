@@ -28,41 +28,8 @@ use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
 use \model\reading\Reading_Queue as Reading_Queue;
 use \model\reading\Reading_QueueDBO as Reading_QueueDBO;
 
-/** Sample Creation script */
-		/** SERIES */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS series ( "
-			. Series::id . " INTEGER PRIMARY KEY, "
-			. Series::publisher_id . " INTEGER, "
-			. Series::created . " INTEGER, "
-			. Series::name . " TEXT, "
-			. Series::search_name . " TEXT, "
-			. Series::desc . " TEXT, "
-			. Series::start_year . " INTEGER, "
-			. Series::issue_count . " INTEGER, "
-			. Series::pub_active . " INTEGER, "
-			. Series::pub_wanted . " INTEGER, "
-			. Series::pub_available . " INTEGER, "
-			. Series::pub_cycle . " INTEGER, "
-			. Series::pub_count . " INTEGER, "
-			. Series::xurl . " TEXT, "
-			. Series::xsource . " TEXT, "
-			. Series::xid . " TEXT, "
-			. Series::xupdated . " INTEGER, "
-			. "FOREIGN KEY (". Series::publisher_id .") REFERENCES " . Publisher::TABLE . "(" . Publisher::id . ")"
-		. ")";
-		$this->sqlite_execute( "series", $sql, "Create table series" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS seriesPublisher_fk on series (publisher_id)';
-		$this->sqlite_execute( "series", $sql, "FK Index on series (publisher_id)" );
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS series_name on series (name)';
-		$this->sqlite_execute( "series", $sql, "Index on series (name)" );
-		$sql = 'CREATE  INDEX IF NOT EXISTS series_search_name on series (search_name)';
-		$this->sqlite_execute( "series", $sql, "Index on series (search_name)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS series_xidxsource on series (xid,xsource)';
-		$this->sqlite_execute( "series", $sql, "Index on series (xid,xsource)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Series extends Model
 {
 	const TABLE = 'series';

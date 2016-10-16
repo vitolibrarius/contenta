@@ -31,63 +31,8 @@ use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassNam
 	}
 ?>
 
-/** Sample Creation script */
-		/** <?php echo strtoupper($this->tableName()); ?> */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS <?php echo $this->tableName(); ?> ( "
-<?php foreach( $objectAttributes as $name => $detailArray ) {
-	switch ($detailArray['type']) {
-		case 'DATE':
-		case 'INTEGER':
-		case 'BOOLEAN':
-			$type = 'INTEGER';
-			break;
-		default:
-			$type = 'TEXT';
-			break;
-		}
-
-		echo "			. " . $this->modelClassName() . "::" . $name . " . \" " . $type . (in_array($name, $this->primaryKeys) ? " PRIMARY KEY" : "");
-		if ($lastAttributeKey != $name || count($mandatoryObjectRelations) > 0 ) { echo ","; }
-		echo " \"" . PHP_EOL;
-} ?>
-<?php foreach( $objectRelationships as $name => $detailArray ) : ?>
-<?php if (isset($detailArray['isToMany'])) : ?>
-<?php $joins = $detailArray['joins']; if ($detailArray['isToMany'] == false) : ?>
-<?php if (count($joins) == 1) : ?><?php $join = $joins[0]; ?>
-			. "FOREIGN KEY (". <?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?> .") REFERENCES " . <?php echo $detailArray["destination"]; ?>::TABLE . "(" . <?php echo $detailArray["destination"] . "::" .  $join["destinationAttribute"]; ?> . ")<?php echo ($lastMandatoryRelation === $name ? "" : ","); ?>"
-<?php else : ?>
-			FixMe: relationship <?php echo $name; ?> has multiple joins
-<?php endif; // multiple joins ?>
-<?php endif; // isToMany or toOne ?>
-<?php else : ?>
-	Error: relationship <?php echo $name; ?> does not define 'isToMany'
-<?php endif; // has isToMany ?>
-<?php endforeach; // looprelationships ?>
-		. ")";
-		$this->sqlite_execute( "<?php echo $this->tableName(); ?>", $sql, "Create table <?php echo $this->tableName(); ?>" );
-
-<?php foreach( $objectRelationships as $name => $detailArray ) : ?>
-<?php if (isset($detailArray['isToMany'])) : ?>
-<?php $joins = $detailArray['joins']; if ($detailArray['isToMany'] == false) : ?>
-<?php if (count($joins) == 1) : ?><?php $join = $joins[0]; ?>
-		$sql = 'CREATE INDEX IF NOT EXISTS <?php echo $this->tableName() . $detailArray["destination"]; ?>_fk on <?php echo $this->tableName(); ?> (<?php echo $join["sourceAttribute"]; ?>)';
-		$this->sqlite_execute( "<?php echo $this->tableName(); ?>", $sql, "FK Index on <?php echo $this->tableName(); ?> (<?php echo $join["sourceAttribute"]; ?>)" );
-<?php endif; // multiple joins ?>
-<?php endif; // isToMany or toOne ?>
-<?php endif; // has isToMany ?>
-<?php endforeach; // looprelationships ?>
-
-<?php if (is_array($this->indexes)) : ?>
-<?php foreach( $this->indexes as $detailArray ) : ?>
-<?php	$columns = $detailArray["columns"];
-		$indexName = $this->tableName() . '_' . implode("", $columns);
-		$unique = ( (isset($detailArray["unique"]) && $detailArray["unique"]) ? "UNIQUE" : ""); ?>
-		$sql = 'CREATE <?php echo $unique; ?> INDEX IF NOT EXISTS <?php echo $indexName; ?> on <?php echo $this->tableName(); ?> (<?php echo implode(",", $columns); ?>)';
-		$this->sqlite_execute( "<?php echo $this->tableName(); ?>", $sql, "Index on <?php echo $this->tableName(); ?> (<?php echo implode(",", $columns); ?>)" );
-<?php endforeach; // loop indexes ?>
-<?php endif; // has indexes ?>
-*/
+/** Generated class, do not edit.
+ */
 abstract class <?php echo $this->modelBaseName(); ?> extends Model
 {
 	const TABLE = '<?php echo $this->tableName(); ?>';

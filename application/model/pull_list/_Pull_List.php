@@ -20,26 +20,8 @@ use \model\network\EndpointDBO as EndpointDBO;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
 use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 
-/** Sample Creation script */
-		/** PULL_LIST */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS pull_list ( "
-			. Pull_List::id . " INTEGER PRIMARY KEY, "
-			. Pull_List::name . " TEXT, "
-			. Pull_List::etag . " TEXT, "
-			. Pull_List::created . " INTEGER, "
-			. Pull_List::published . " INTEGER, "
-			. Pull_List::endpoint_id . " INTEGER, "
-			. "FOREIGN KEY (". Pull_List::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
-		. ")";
-		$this->sqlite_execute( "pull_list", $sql, "Create table pull_list" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS pull_listEndpoint_fk on pull_list (endpoint_id)';
-		$this->sqlite_execute( "pull_list", $sql, "FK Index on pull_list (endpoint_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS pull_list_etag on pull_list (etag)';
-		$this->sqlite_execute( "pull_list", $sql, "Index on pull_list (etag)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Pull_List extends Model
 {
 	const TABLE = 'pull_list';

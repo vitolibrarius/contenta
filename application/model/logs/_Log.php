@@ -18,33 +18,8 @@ use \model\logs\LogDBO as LogDBO;
 use \model\logs\Log_Level as Log_Level;
 use \model\logs\Log_LevelDBO as Log_LevelDBO;
 
-/** Sample Creation script */
-		/** LOG */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS log ( "
-			. Log::id . " INTEGER PRIMARY KEY, "
-			. Log::trace . " TEXT, "
-			. Log::trace_id . " TEXT, "
-			. Log::context . " TEXT, "
-			. Log::context_id . " TEXT, "
-			. Log::message . " TEXT, "
-			. Log::session . " TEXT, "
-			. Log::level_code . " TEXT, "
-			. Log::created . " INTEGER, "
-			. "FOREIGN KEY (". Log::level_code .") REFERENCES " . Log_Level::TABLE . "(" . Log_Level::code . ")"
-		. ")";
-		$this->sqlite_execute( "log", $sql, "Create table log" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS logLog_Level_fk on log (level_code)';
-		$this->sqlite_execute( "log", $sql, "FK Index on log (level_code)" );
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS log_level_code on log (level_code)';
-		$this->sqlite_execute( "log", $sql, "Index on log (level_code)" );
-		$sql = 'CREATE  INDEX IF NOT EXISTS log_tracetrace_id on log (trace,trace_id)';
-		$this->sqlite_execute( "log", $sql, "Index on log (trace,trace_id)" );
-		$sql = 'CREATE  INDEX IF NOT EXISTS log_contextcontext_id on log (context,context_id)';
-		$this->sqlite_execute( "log", $sql, "Index on log (context,context_id)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Log extends Model
 {
 	const TABLE = 'log';

@@ -20,34 +20,8 @@ use \model\pull_list\Pull_List_GroupDBO as Pull_List_GroupDBO;
 use \model\pull_list\Pull_List as Pull_List;
 use \model\pull_list\Pull_ListDBO as Pull_ListDBO;
 
-/** Sample Creation script */
-		/** PULL_LIST_ITEM */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS pull_list_item ( "
-			. Pull_List_Item::id . " INTEGER PRIMARY KEY, "
-			. Pull_List_Item::data . " TEXT, "
-			. Pull_List_Item::created . " INTEGER, "
-			. Pull_List_Item::search_name . " TEXT, "
-			. Pull_List_Item::name . " TEXT, "
-			. Pull_List_Item::issue . " TEXT, "
-			. Pull_List_Item::year . " INTEGER, "
-			. Pull_List_Item::pull_list_id . " INTEGER, "
-			. Pull_List_Item::pull_list_group_id . " INTEGER, "
-			. "FOREIGN KEY (". Pull_List_Item::pull_list_group_id .") REFERENCES " . Pull_List_Group::TABLE . "(" . Pull_List_Group::id . "),"
-			. "FOREIGN KEY (". Pull_List_Item::pull_list_id .") REFERENCES " . Pull_List::TABLE . "(" . Pull_List::id . ")"
-		. ")";
-		$this->sqlite_execute( "pull_list_item", $sql, "Create table pull_list_item" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS pull_list_itemPull_List_Group_fk on pull_list_item (pull_list_group_id)';
-		$this->sqlite_execute( "pull_list_item", $sql, "FK Index on pull_list_item (pull_list_group_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS pull_list_itemPull_List_fk on pull_list_item (pull_list_id)';
-		$this->sqlite_execute( "pull_list_item", $sql, "FK Index on pull_list_item (pull_list_id)" );
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS pull_list_item_name on pull_list_item (name)';
-		$this->sqlite_execute( "pull_list_item", $sql, "Index on pull_list_item (name)" );
-		$sql = 'CREATE  INDEX IF NOT EXISTS pull_list_item_search_name on pull_list_item (search_name)';
-		$this->sqlite_execute( "pull_list_item", $sql, "Index on pull_list_item (search_name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Pull_List_Item extends Model
 {
 	const TABLE = 'pull_list_item';

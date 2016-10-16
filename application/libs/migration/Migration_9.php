@@ -87,6 +87,8 @@ class Migration_9 extends Migrator
 
 		$sql = 'CREATE INDEX IF NOT EXISTS seriesPublisher_fk on series (publisher_id)';
 		$this->sqlite_execute( "series", $sql, "FK Index on series (publisher_id)" );
+		$sql = 'CREATE  INDEX IF NOT EXISTS series_search_namepub_wanted on series (search_name,pub_wanted)';
+		$this->sqlite_execute( "series", $sql, "Index on series (search_name,pub_wanted)" );
 
 		$sql = 'CREATE INDEX IF NOT EXISTS series_aliasSeries_fk on series_alias (series_id)';
 		$this->sqlite_execute( "series_alias", $sql, "FK Index on series_alias (series_id)" );
@@ -158,7 +160,7 @@ class Migration_9 extends Migrator
 
 		$sql = 'CREATE INDEX IF NOT EXISTS patchVersion_fk on patch (version_id)';
 		$this->sqlite_execute( "patch", $sql, "FK Index on patch (version_id)" );
-		
+
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS publisher_xidxsource on publisher (xid,xsource)';
 		$this->sqlite_execute( "publisher", $sql, "xidxsource Index on publisher" );
 		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS series_xidxsource on series (xid,xsource)';

@@ -18,23 +18,8 @@ use \model\pull_list\Pull_List_GroupDBO as Pull_List_GroupDBO;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
 use \model\pull_list\Pull_List_ItemDBO as Pull_List_ItemDBO;
 
-/** Sample Creation script */
-		/** PULL_LIST_GROUP */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS pull_list_group ( "
-			. Pull_List_Group::id . " INTEGER PRIMARY KEY, "
-			. Pull_List_Group::name . " TEXT, "
-			. Pull_List_Group::data . " TEXT, "
-			. Pull_List_Group::created . " INTEGER "
-		. ")";
-		$this->sqlite_execute( "pull_list_group", $sql, "Create table pull_list_group" );
-
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS pull_list_group_data on pull_list_group (data)';
-		$this->sqlite_execute( "pull_list_group", $sql, "Index on pull_list_group (data)" );
-		$sql = 'CREATE  INDEX IF NOT EXISTS pull_list_group_name on pull_list_group (name)';
-		$this->sqlite_execute( "pull_list_group", $sql, "Index on pull_list_group (name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Pull_List_Group extends Model
 {
 	const TABLE = 'pull_list_group';

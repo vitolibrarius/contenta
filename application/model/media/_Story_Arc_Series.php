@@ -20,26 +20,8 @@ use \model\media\Story_ArcDBO as Story_ArcDBO;
 use \model\media\Series as Series;
 use \model\media\SeriesDBO as SeriesDBO;
 
-/** Sample Creation script */
-		/** STORY_ARC_SERIES */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS story_arc_series ( "
-			. Story_Arc_Series::id . " INTEGER PRIMARY KEY, "
-			. Story_Arc_Series::story_arc_id . " INTEGER, "
-			. Story_Arc_Series::series_id . " INTEGER, "
-			. "FOREIGN KEY (". Story_Arc_Series::story_arc_id .") REFERENCES " . Story_Arc::TABLE . "(" . Story_Arc::id . "),"
-			. "FOREIGN KEY (". Story_Arc_Series::series_id .") REFERENCES " . Series::TABLE . "(" . Series::id . ")"
-		. ")";
-		$this->sqlite_execute( "story_arc_series", $sql, "Create table story_arc_series" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS story_arc_seriesStory_Arc_fk on story_arc_series (story_arc_id)';
-		$this->sqlite_execute( "story_arc_series", $sql, "FK Index on story_arc_series (story_arc_id)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS story_arc_seriesSeries_fk on story_arc_series (series_id)';
-		$this->sqlite_execute( "story_arc_series", $sql, "FK Index on story_arc_series (series_id)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS story_arc_series_story_arc_idseries_id on story_arc_series (story_arc_id,series_id)';
-		$this->sqlite_execute( "story_arc_series", $sql, "Index on story_arc_series (story_arc_id,series_id)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Story_Arc_Series extends Model
 {
 	const TABLE = 'story_arc_series';

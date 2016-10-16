@@ -18,41 +18,8 @@ use \model\network\FluxDBO as FluxDBO;
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
 
-/** Sample Creation script */
-		/** FLUX */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS flux ( "
-			. Flux::id . " INTEGER PRIMARY KEY, "
-			. Flux::created . " INTEGER, "
-			. Flux::name . " TEXT, "
-			. Flux::flux_hash . " TEXT, "
-			. Flux::flux_error . " INTEGER, "
-			. Flux::src_endpoint . " INTEGER, "
-			. Flux::src_guid . " TEXT, "
-			. Flux::src_url . " TEXT, "
-			. Flux::src_status . " TEXT, "
-			. Flux::src_pub_date . " INTEGER, "
-			. Flux::dest_endpoint . " INTEGER, "
-			. Flux::dest_guid . " TEXT, "
-			. Flux::dest_status . " TEXT, "
-			. Flux::dest_submission . " INTEGER, "
-			. "FOREIGN KEY (". Flux::src_endpoint .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
-			. "FOREIGN KEY (". Flux::dest_endpoint .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . "),"
-		. ")";
-		$this->sqlite_execute( "flux", $sql, "Create table flux" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS fluxEndpoint_fk on flux (src_endpoint)';
-		$this->sqlite_execute( "flux", $sql, "FK Index on flux (src_endpoint)" );
-		$sql = 'CREATE INDEX IF NOT EXISTS fluxEndpoint_fk on flux (dest_endpoint)';
-		$this->sqlite_execute( "flux", $sql, "FK Index on flux (dest_endpoint)" );
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_src_guid on flux (src_guid)';
-		$this->sqlite_execute( "flux", $sql, "Index on flux (src_guid)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS flux_dest_guid on flux (dest_guid)';
-		$this->sqlite_execute( "flux", $sql, "Index on flux (dest_guid)" );
-		$sql = 'CREATE  INDEX IF NOT EXISTS flux_flux_hash on flux (flux_hash)';
-		$this->sqlite_execute( "flux", $sql, "Index on flux (flux_hash)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Flux extends Model
 {
 	const TABLE = 'flux';

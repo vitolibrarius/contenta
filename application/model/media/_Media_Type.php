@@ -16,19 +16,8 @@ use \model\media\Media_TypeDBO as Media_TypeDBO;
 
 /* import related objects */
 
-/** Sample Creation script */
-		/** MEDIA_TYPE */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS media_type ( "
-			. Media_Type::code . " TEXT PRIMARY KEY, "
-			. Media_Type::name . " TEXT "
-		. ")";
-		$this->sqlite_execute( "media_type", $sql, "Create table media_type" );
-
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS media_type_name on media_type (name)';
-		$this->sqlite_execute( "media_type", $sql, "Index on media_type (name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Media_Type extends Model
 {
 	const TABLE = 'media_type';

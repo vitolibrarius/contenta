@@ -22,26 +22,8 @@ use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
-/** Sample Creation script */
-		/** ENDPOINT_TYPE */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS endpoint_type ( "
-			. Endpoint_Type::code . " TEXT PRIMARY KEY, "
-			. Endpoint_Type::name . " TEXT, "
-			. Endpoint_Type::comments . " TEXT, "
-			. Endpoint_Type::data_type . " TEXT, "
-			. Endpoint_Type::site_url . " TEXT, "
-			. Endpoint_Type::api_url . " TEXT, "
-			. Endpoint_Type::favicon_url . " TEXT, "
-			. Endpoint_Type::throttle_hits . " INTEGER, "
-			. Endpoint_Type::throttle_time . " INTEGER "
-		. ")";
-		$this->sqlite_execute( "endpoint_type", $sql, "Create table endpoint_type" );
-
-
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS endpoint_type_name on endpoint_type (name)';
-		$this->sqlite_execute( "endpoint_type", $sql, "Index on endpoint_type (name)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Endpoint_Type extends Model
 {
 	const TABLE = 'endpoint_type';

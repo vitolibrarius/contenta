@@ -18,37 +18,8 @@ use \model\network\RssDBO as RssDBO;
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
 
-/** Sample Creation script */
-		/** RSS */
-/*
-		$sql = "CREATE TABLE IF NOT EXISTS rss ( "
-			. Rss::id . " INTEGER PRIMARY KEY, "
-			. Rss::endpoint_id . " INTEGER, "
-			. Rss::created . " INTEGER, "
-			. Rss::title . " TEXT, "
-			. Rss::desc . " TEXT, "
-			. Rss::pub_date . " INTEGER, "
-			. Rss::guid . " TEXT, "
-			. Rss::clean_name . " TEXT, "
-			. Rss::clean_issue . " TEXT, "
-			. Rss::clean_year . " INTEGER, "
-			. Rss::enclosure_url . " TEXT, "
-			. Rss::enclosure_length . " INTEGER, "
-			. Rss::enclosure_mime . " TEXT, "
-			. Rss::enclosure_hash . " TEXT, "
-			. Rss::enclosure_password . " INTEGER, "
-			. "FOREIGN KEY (". Rss::endpoint_id .") REFERENCES " . Endpoint::TABLE . "(" . Endpoint::id . ")"
-		. ")";
-		$this->sqlite_execute( "rss", $sql, "Create table rss" );
-
-		$sql = 'CREATE INDEX IF NOT EXISTS rssEndpoint_fk on rss (endpoint_id)';
-		$this->sqlite_execute( "rss", $sql, "FK Index on rss (endpoint_id)" );
-
-		$sql = 'CREATE  INDEX IF NOT EXISTS rss_clean_nameclean_issueclean_year on rss (clean_name,clean_issue,clean_year)';
-		$this->sqlite_execute( "rss", $sql, "Index on rss (clean_name,clean_issue,clean_year)" );
-		$sql = 'CREATE UNIQUE INDEX IF NOT EXISTS rss_guid on rss (guid)';
-		$this->sqlite_execute( "rss", $sql, "Index on rss (guid)" );
-*/
+/** Generated class, do not edit.
+ */
 abstract class _Rss extends Model
 {
 	const TABLE = 'rss';
