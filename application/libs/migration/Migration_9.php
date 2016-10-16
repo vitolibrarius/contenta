@@ -183,5 +183,10 @@ class Migration_9 extends Migrator
 
 	public function sqlite_postUpgrade()
 	{
+		$ept_model = Model::Named("Endpoint_Type");
+		$type = \SQL::Select( $ept_model, array( "code", "favicon_url") )->whereEqual( "code", 'SABnzbd' )->fetch();
+		if ($type != false) {
+			\SQL::Update($ept_model, array( "favicon_url" => "https://sabnzbd.org/images/favicon.ico"))->commitTransaction();
+		}
 	}
 }
