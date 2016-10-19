@@ -404,11 +404,10 @@ class Upgrade extends Controller
 					$item->setIssue($issue);
 					$item->setYear($year);
 					$item->saveChanges();
-					Logger::logInfo("PullListItem Updated ".$name." - ".$issue." - ".$year, $item->data, $count);
 				}
 			}
 			if ( $count > 0 ) {
-				Logger::logInfo("Rescan PullListItems titles found  ".$count, __METHOD__, "RSS");
+				Logger::logInfo("Rescan PullListItems titles found  ".$count, __METHOD__, "PullListItem");
 			}
 
 			header('location: ' . Config::Web('/Upgrade/reviewDefaultData' ));
