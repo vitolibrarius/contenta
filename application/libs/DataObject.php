@@ -201,7 +201,7 @@ abstract class DataObject
 
 	public function storeChange( $attr = null, $value = null )
 	{
-		if ( is_null($attr) === false ) {
+		if ( is_null($attr) === false && $this->$attr != $value) {
 			$this->unsavedUpdates[$attr] = $value;
 		}
 	}

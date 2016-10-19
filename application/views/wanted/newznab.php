@@ -8,7 +8,7 @@
     <div class="wrapper">
 	<form id='searchForm' name='searchForm'>
 		<div class="row">
-			<div class="grid_3">
+			<div class="grid_4">
 				<select name="searchEndpoint" id="searchEndpoint"
 						class="text_input">
 					<?php foreach ($this->endpoints as $key => $endpoint) {

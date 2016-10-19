@@ -29,78 +29,6 @@
 <section class="DataReview">
 <div class="row">
 
-<?php
-	$cvType = $endpoint_type_model->ComicVine();
-	$points = $endpoint_model->allForTypeCode("ComicVine");
-	$comicVinePass = (is_array($points) && count($points) > 0);
-	$comicVineMultiplePass = (is_array($points) && count($points) == 1);
-	$cv = (is_array($points) && count($points) > 0) ? $points[0] : false;
-	$comicVineAPIPass = ($cv != false && strlen($cv->api_key) > 0);
-?>
-<!-- comicvine card -->
-<div class="grid_4">
-	<div class="card">
-		<h3>ComicVine</h3>
-		<div class="desc"><p><?php echo $cvType->comments; ?></p></div>
-
-		<div>
-			<div style="white-space: nowrap;">
-			<?php if ( $comicVinePass ) : ?>
-				<span class="icon true"></span> Endpoint Available
-			<?php else : ?>
-				<a href="<?php echo Config::Web('/Netconfig/edit_new/', $cvType->code);?>" class="button">
-					Create Endpoint
-				</a>
-			<?php endif; ?>
-			</div>
-
-			<?php if ( $comicVinePass && $comicVineMultiplePass == false) : ?>
-			<div>
-				<span class="icon false"></span> Multiple ComicVine connections are not permitted by ComicVine.
-					You will get IP banned for missuse.
-			</div>
-			<?php endif; ?>
-
-			<?php if ( $comicVinePass ) : ?>
-			<div style="white-space: nowrap;">
-				<?php if ( $comicVineAPIPass) : ?>
-					<span class="icon true"></span> API Configured
-				<?php else : ?>
-					<a href="<?php echo $cvType->api_url; ?>">Register for API Key</a>
-
-					<a href="<?php echo Config::Web('/Netconfig/edit/', $points[0]->id);?>" class="button job">
-						Edit <?php echo $points[0]->name; ?> Endpoint
-					</a>
-				<?php endif; ?>
-			</div>
-			<?php endif; ?>
-		</div>
-
-		<h4>Jobs Available</h4>
-		<?php if ( $comicVinePass && $comicVineAPIPass ) : ?>
-			<div>
-			<?php $list = array("publisher","series","character","story_arc"); foreach ( $list as $type ) : ?>
-			<?php $jobType = $job_type_model->objectForCode($type);
-				$jobs = $job_model->allForType_code($type); $jobPass = (is_array($jobs) && count($jobs) > 0); ?>
-				<span class="desc"><?php echo $jobType->desc; ?></span>
-				<div style="white-space: nowrap;">
-				<?php if ( $jobPass ) : ?>
-					<span class="icon true"></span> <?php echo ucfirst($type); ?> Job
-				<?php else : ?>
-					<a href="<?php echo Config::Web('/Upgrade/createJob/', $type);?>" class="button job">
-						Create <?php echo ucfirst($type); ?> Job
-					</a>
-				<?php endif; ?>
-				</div>
-			<?php endforeach; ?>
-			</div>
-		<?php else : ?>
-			<div class="desc"><p>An Endpoint configuration for <?php echo $cvType->name; ?>
-				is required before jobs can be scheduled</p></div>
-		<?php endif; ?>
-	</div>
-</div>
-
 <!-- sabnzbd card -->
 <?php
 	$sabnzbdType = $endpoint_type_model->SABnzbd();
@@ -218,6 +146,78 @@
 
 		<?php else : ?>
 			<div class="desc"><p>An Endpoint configuration for Newznab is required before jobs can be scheduled</p></div>
+		<?php endif; ?>
+	</div>
+</div>
+
+<?php
+	$cvType = $endpoint_type_model->ComicVine();
+	$points = $endpoint_model->allForTypeCode("ComicVine");
+	$comicVinePass = (is_array($points) && count($points) > 0);
+	$comicVineMultiplePass = (is_array($points) && count($points) == 1);
+	$cv = (is_array($points) && count($points) > 0) ? $points[0] : false;
+	$comicVineAPIPass = ($cv != false && strlen($cv->api_key) > 0);
+?>
+<!-- comicvine card -->
+<div class="grid_4">
+	<div class="card">
+		<h3>ComicVine</h3>
+		<div class="desc"><p><?php echo $cvType->comments; ?></p></div>
+
+		<div>
+			<div style="white-space: nowrap;">
+			<?php if ( $comicVinePass ) : ?>
+				<span class="icon true"></span> Endpoint Available
+			<?php else : ?>
+				<a href="<?php echo Config::Web('/Netconfig/edit_new/', $cvType->code);?>" class="button">
+					Create Endpoint
+				</a>
+			<?php endif; ?>
+			</div>
+
+			<?php if ( $comicVinePass && $comicVineMultiplePass == false) : ?>
+			<div>
+				<span class="icon false"></span> Multiple ComicVine connections are not permitted by ComicVine.
+					You will get IP banned for missuse.
+			</div>
+			<?php endif; ?>
+
+			<?php if ( $comicVinePass ) : ?>
+			<div style="white-space: nowrap;">
+				<?php if ( $comicVineAPIPass) : ?>
+					<span class="icon true"></span> API Configured
+				<?php else : ?>
+					<a href="<?php echo $cvType->api_url; ?>">Register for API Key</a>
+
+					<a href="<?php echo Config::Web('/Netconfig/edit/', $points[0]->id);?>" class="button job">
+						Edit <?php echo $points[0]->name; ?> Endpoint
+					</a>
+				<?php endif; ?>
+			</div>
+			<?php endif; ?>
+		</div>
+
+		<h4>Jobs Available</h4>
+		<?php if ( $comicVinePass && $comicVineAPIPass ) : ?>
+			<div>
+			<?php $list = array("publisher","series","character","story_arc"); foreach ( $list as $type ) : ?>
+			<?php $jobType = $job_type_model->objectForCode($type);
+				$jobs = $job_model->allForType_code($type); $jobPass = (is_array($jobs) && count($jobs) > 0); ?>
+				<span class="desc"><?php echo $jobType->desc; ?></span>
+				<div style="white-space: nowrap;">
+				<?php if ( $jobPass ) : ?>
+					<span class="icon true"></span> <?php echo ucfirst($type); ?> Job
+				<?php else : ?>
+					<a href="<?php echo Config::Web('/Upgrade/createJob/', $type);?>" class="button job">
+						Create <?php echo ucfirst($type); ?> Job
+					</a>
+				<?php endif; ?>
+				</div>
+			<?php endforeach; ?>
+			</div>
+		<?php else : ?>
+			<div class="desc"><p>An Endpoint configuration for <?php echo $cvType->name; ?>
+				is required before jobs can be scheduled</p></div>
 		<?php endif; ?>
 	</div>
 </div>
@@ -346,6 +346,13 @@
 		<div style="white-space: nowrap;">
 			<a href="<?php echo Config::Web('/Upgrade/recalcStats/');?>" class="button job">
 				Recalculate Statistics on all tables
+			</a>
+		</div>
+
+		<div class="desc"><p>Rescan Rss and PullList names using current filename identification rules.</p></div>
+		<div style="white-space: nowrap;">
+			<a href="<?php echo Config::Web('/Upgrade/rescanFilenames/');?>" class="button job">
+				Rescan Filenames (Rss and PullList)
 			</a>
 		</div>
 

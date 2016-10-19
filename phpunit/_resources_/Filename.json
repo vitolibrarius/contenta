@@ -1,353 +1,1000 @@
 {
-    "'68 Hallowed Ground 2013 digital Son of Ultron-Empire.cbz": {
-        "clean": "'68 Hallowed Ground 2013 digital Son of Ultron-Empire",
-        "extension": "cbz",
-        "issue": null,
-        "name": "'68 Hallowed Ground",
-        "source": "'68 Hallowed Ground 2013 digital Son of Ultron-Empire.cbz",
-        "volume": null,
-        "year": "2013"
-    },
-    "Teen.Titans.Annual.02.2013.Digital.Shining.Knight-SCC-Novus.cbz": {
-        "clean": "Teen Titans Annual 02 2013 Digital Shining Knight-SCC-Novus",
-        "extension": "cbz",
-        "issue": "2",
-        "name": "Teen Titans Annual",
-        "source": "Teen.Titans.Annual.02.2013.Digital.Shining.Knight-SCC-Novus.cbz",
-        "volume": null,
-        "year": "2013"
-    },
-    "100 Bullets Brother Lono 07 of 8 2014 Digital Zone-Empire.cbz": {
-        "clean": "100 Bullets Brother Lono 07 2014 Digital Zone-Empire",
-        "extension": "cbz",
-        "issue": "7",
-        "name": "100 Bullets Brother Lono",
-        "source": "100 Bullets Brother Lono 07 of 8 2014 Digital Zone-Empire.cbz",
-        "volume": null,
-        "year": "2014"
-    },
-    "13 COINS HC.cbz": {
-        "clean": "13 COINS HC",
-        "extension": "cbz",
-        "issue": null,
-        "name": "13 COINS HC",
-        "source": "13 COINS HC.cbz",
-        "volume": null,
-        "year": null
-    },
-    "1872 #1 SWA.cbz": {
-        "clean": "1872 1 SWA",
-        "extension": "cbz",
-        "issue": "1",
-        "name": "1872",
-        "source": "1872 #1 SWA.cbz",
-        "volume": null,
-        "year": null
-    },
-    "19 Charges Against The Young Herr Holm 2009 Digital Monafekk-Empire.cbz": {
-        "clean": "19 Charges Against The Young Herr Holm 2009 Digital Monafekk-Empire",
-        "extension": "cbz",
-        "issue": null,
-        "name": "19 Charges Against The Young Herr Holm",
-        "source": "19 Charges Against The Young Herr Holm 2009 Digital Monafekk-Empire.cbz",
-        "volume": null,
-        "year": "2009"
-    },
-    "2000AD 1620 28 01 09 John Williams P.cbz": {
-        "clean": "2000AD 1620 28 01 09 John Williams P",
-        "extension": "cbz",
-        "issue": "9",
-        "name": "2000AD",
-        "source": "2000AD 1620 28 01 09 John Williams P.cbz",
-        "volume": null,
-        "year": null
-    },
-    "2000AD 1857 2013  Nahga-Empire.cbz": {
-        "clean": "2000AD 1857 2013 Nahga-Empire",
-        "extension": "cbz",
-        "issue": null,
-        "name": "2000AD",
-        "source": "2000AD 1857 2013  Nahga-Empire.cbz",
-        "volume": null,
-        "year": "2013"
-    },
-    "30 Days of Night - 30 Days 'till Death 01 of 04 2008 digital-Empire.cbz": {
-        "clean": "30 Days of Night - 30 Days 'till Death 01 2008 digital-Empire",
-        "extension": "cbz",
-        "issue": "1",
-        "name": "30 Days of Night 30 Days 'till Death",
-        "source": "30 Days of Night - 30 Days 'till Death 01 of 04 2008 digital-Empire.cbz",
-        "volume": null,
-        "year": "2008"
-    },
-    "300.cbz": {
-        "clean": "300",
-        "extension": "cbz",
-        "issue": null,
-        "name": "300",
-        "source": "300.cbz",
-        "volume": null,
-        "year": null
-    },
-    "ARROW SEASON 2.5 #10 (2015).cbz": {
-        "clean": "ARROW SEASON 2.5 10 2015",
-        "extension": "cbz",
-        "issue": "10",
-        "name": "ARROW SEASON 2.5",
-        "source": "ARROW SEASON 2.5 #10 (2015).cbz",
-        "volume": null,
-        "year": "2015"
-    },
-    "ARROW SEASON 2.5 #10.cbz": {
-        "clean": "ARROW SEASON 2.5 10",
-        "extension": "cbz",
-        "issue": "10",
-        "name": "ARROW SEASON 2.5",
-        "source": "ARROW SEASON 2.5 #10.cbz",
-        "volume": null,
-        "year": null
-    },
-    "All-New X-Men 010.3 (2013) (Digital) (Zone-Empire).cbz": {
-        "clean": "All-New X-Men 010.3 2013 Digital Zone-Empire",
-        "extension": "cbz",
-        "issue": "10.3",
-        "name": "All-New X-Men",
-        "source": "All-New X-Men 010.3 (2013) (Digital) (Zone-Empire).cbz",
-        "volume": null,
-        "year": "2013"
-    },
-    "All.New.Invaders.Vol.1.No.10.Nov.2014.SCAN.Comic.eBook-iNTENSiTY.cbr": {
-        "clean": "All New Invaders Vol.1 No 10 Nov 2014 SCAN Comic eBook-iNTENSiTY",
+    "f61a9394e373dcc973895eeb36c30179": {
         "extension": "cbr",
-        "issue": "10",
-        "name": "All New Invaders",
-        "source": "All.New.Invaders.Vol.1.No.10.Nov.2014.SCAN.Comic.eBook-iNTENSiTY.cbr",
-        "volume": "Vol.1",
-        "year": "2014"
-    },
-    "All.New.Invaders.Vol.1.No.3.May.2014.SCAN.Comic.eBook-iNTENSiTY.cbr": {
-        "clean": "All New Invaders Vol.1 No.3 May 2014 SCAN Comic eBook-iNTENSiTY",
-        "extension": "cbr",
-        "issue": "3",
-        "name": "All New Invaders",
-        "source": "All.New.Invaders.Vol.1.No.3.May.2014.SCAN.Comic.eBook-iNTENSiTY.cbr",
-        "volume": "Vol.1",
-        "year": "2014"
-    },
-    "Angela - Asgard's Assassin 003 (2015) (Digital) (Zone-Empire).cbz": {
-        "clean": "Angela - Asgard's Assassin 003 2015 Digital Zone-Empire",
-        "extension": "cbz",
-        "issue": "3",
-        "name": "Angela Asgard's Assassin",
-        "source": "Angela - Asgard's Assassin 003 (2015) (Digital) (Zone-Empire).cbz",
-        "volume": null,
-        "year": "2015"
-    },
-    "Astro-City-The-Dark-Age-Book-Three - 1 - 2009.cbr": {
-        "clean": "Astro-City-The-Dark-Age-Book-Three - 1 - 2009",
-        "extension": "cbr",
+        "clean": "World of Warcraft - Legion 001 2016 digital Son of Ultron-Empire",
+        "year": 2016,
         "issue": "1",
-        "name": "Astro City The Dark Age Book Three",
-        "source": "Astro-City-The-Dark-Age-Book-Three - 1 - 2009.cbr",
-        "volume": null,
-        "year": "2009"
+        "name": "World of Warcraft Legion",
+        "source": "0-Day 2016.6.29 \"World of Warcraft - Legion 001 (2016) (digital) (Son of Ultron-Empire).cbr\" yEnc (1\/38)"
     },
-    "Batman '66 019 2013 digital Son of Ultron-Empire.cbz": {
-        "clean": "Batman '66 019 2013 digital Son of Ultron-Empire",
+    "685ab788d954568270c2201b3be10c73": {
         "extension": "cbz",
-        "issue": "19",
-        "name": "Batman '66",
-        "source": "Batman '66 019 2013 digital Son of Ultron-Empire.cbz",
-        "volume": null,
-        "year": "2013"
-    },
-    "Batman '66 026 2014 digital Son of Ultron-Empire.cbz": {
-        "clean": "Batman '66 026 2014 digital Son of Ultron-Empire",
-        "extension": "cbz",
-        "issue": "26",
-        "name": "Batman '66",
-        "source": "Batman '66 026 2014 digital Son of Ultron-Empire.cbz",
-        "volume": null,
-        "year": "2014"
-    },
-    "Batman - Knightfall Part 01 - Broken Bat 2000 Digital - TheHand-Empire.cbz": {
-        "clean": "Batman - Knightfall Part 01 - Broken Bat 2000 Digital - TheHand-Empire",
-        "extension": "cbz",
-        "issue": "1",
-        "name": "Batman Knightfall Part 01 - Broken Bat",
-        "source": "Batman - Knightfall Part 01 - Broken Bat 2000 Digital - TheHand-Empire.cbz",
-        "volume": null,
-        "year": "2000"
-    },
-    "Batman - Knightfall Part 02 - Who Rules The Night 2000 Digital - TheHand-Empire.cbz": {
-        "clean": "Batman - Knightfall Part 02 - Who Rules The Night 2000 Digital - TheHand-Empire",
-        "extension": "cbz",
-        "issue": "2",
-        "name": "Batman Knightfall Part 02 - Who Rules The Night",
-        "source": "Batman - Knightfall Part 02 - Who Rules The Night 2000 Digital - TheHand-Empire.cbz",
-        "volume": null,
-        "year": "2000"
-    },
-    "Batman - The Dark Knight 002.cbz": {
-        "clean": "Batman - The Dark Knight 002",
-        "extension": "cbz",
-        "issue": "2",
-        "name": "Batman The Dark Knight",
-        "source": "Batman - The Dark Knight 002.cbz",
-        "volume": null,
-        "year": null
-    },
-    "Batman - The Dark Knight 007.cbz": {
-        "clean": "Batman - The Dark Knight 007",
-        "extension": "cbz",
-        "issue": "7",
-        "name": "Batman The Dark Knight",
-        "source": "Batman - The Dark Knight 007.cbz",
-        "volume": null,
-        "year": null
-    },
-    "Batman - Year One 1987 Digital - TheHand-Empire.cbz": {
-        "clean": "Batman - Year One 1987 Digital - TheHand-Empire",
-        "extension": "cbz",
-        "issue": null,
-        "name": "Batman Year One",
-        "source": "Batman - Year One 1987 Digital - TheHand-Empire.cbz",
-        "volume": null,
-        "year": "1987"
-    },
-    "Batman 80-Page Giant 2011 2011 Digital - TheHand-Empire.cbz": {
-        "clean": "Batman 80-Page Giant 2011 2011 Digital - TheHand-Empire",
-        "extension": "cbz",
-        "issue": "80",
-        "name": "Batman 80-Page Giant",
-        "source": "Batman 80-Page Giant 2011 2011 Digital - TheHand-Empire.cbz",
-        "volume": null,
-        "year": "2011"
-    },
-    "Batman Beyond 001 (2012) v12.cbz": {
-        "clean": "Batman Beyond 001 2012 v12",
-        "extension": "cbz",
-        "issue": "1",
-        "name": "Batman Beyond",
-        "source": "Batman Beyond 001 (2012) v12.cbz",
-        "volume": "v12",
-        "year": "2012"
-    },
-    "Batman Black & White 004 2013 digital Son of Ultron-Empire.cbz": {
-        "clean": "Batman Black & White 004 2013 digital Son of Ultron-Empire",
-        "extension": "cbz",
-        "issue": "4",
-        "name": "Batman Black & White",
-        "source": "Batman Black & White 004 2013 digital Son of Ultron-Empire.cbz",
-        "volume": null,
-        "year": "2013"
-    },
-    "Batman The Complete Hush 2005 Zone.cbz": {
-        "clean": "Batman The Complete Hush 2005 Zone",
-        "extension": "cbz",
-        "issue": null,
-        "name": "Batman The Complete Hush",
-        "source": "Batman The Complete Hush 2005 Zone.cbz",
-        "volume": null,
-        "year": "2005"
-    },
-    "Batman The Court of Owls Vol  1 2011  TPB Zone-Empire.cbz": {
-        "clean": "Batman The Court of Owls Vol 1 2011 TPB Zone-Empire",
-        "extension": "cbz",
-        "issue": null,
-        "name": "Batman The Court of Owls",
-        "source": "Batman The Court of Owls Vol  1 2011  TPB Zone-Empire.cbz",
-        "volume": "Vol 1",
-        "year": "2011"
-    },
-    "Batman The Dark Knight 002 2011 Megan.cbr": {
-        "clean": "Batman The Dark Knight 002 2011 Megan",
-        "extension": "cbr",
-        "issue": "2",
-        "name": "Batman The Dark Knight",
-        "source": "Batman The Dark Knight 002 2011 Megan.cbr",
-        "volume": null,
-        "year": "2011"
-    },
-    "Batman The Dark Knight 007 2012 2 covers Megan.cbr": {
-        "clean": "Batman The Dark Knight 007 2012 2 covers Megan",
-        "extension": "cbr",
-        "issue": "7",
-        "name": "Batman The Dark Knight",
-        "source": "Batman The Dark Knight 007 2012 2 covers Megan.cbr",
-        "volume": null,
-        "year": "2012"
-    },
-    "Batman The Long Halloween 1998.cbz": {
-        "clean": "Batman The Long Halloween 1998",
-        "extension": "cbz",
-        "issue": null,
-        "name": "Batman The Long Halloween",
-        "source": "Batman The Long Halloween 1998.cbz",
-        "volume": null,
-        "year": "1998"
-    },
-    "Batman Year One.cbz": {
-        "clean": "Batman Year One",
-        "extension": "cbz",
-        "issue": null,
-        "name": "Batman Year One",
-        "source": "Batman Year One.cbz",
-        "volume": null,
-        "year": null
-    },
-    "Batman, Vampire Trilogy - Bloodstorm - Book 2.cbz": {
-        "clean": "Batman, Vampire Trilogy - Bloodstorm - Book 2",
-        "extension": "cbz",
-        "issue": null,
-        "name": "Batman, Vampire Trilogy Bloodstorm -",
-        "source": "Batman, Vampire Trilogy - Bloodstorm - Book 2.cbz",
-        "volume": "Book 2",
-        "year": null
-    },
-    "Batman, Vampire Trilogy - Crimson Mist - Book 3.cbz": {
-        "clean": "Batman, Vampire Trilogy - Crimson Mist - Book 3",
-        "extension": "cbz",
-        "issue": null,
-        "name": "Batman, Vampire Trilogy Crimson Mist -",
-        "source": "Batman, Vampire Trilogy - Crimson Mist - Book 3.cbz",
-        "volume": "Book 3",
-        "year": null
-    },
-    "Ben 10 002 2013 digital-Empire.cbz": {
-        "clean": "Ben 10 002 2013 digital-Empire",
-        "extension": "cbz",
-        "issue": "2",
-        "name": "Ben 10",
-        "source": "Ben 10 002 2013 digital-Empire.cbz",
-        "volume": null,
-        "year": "2013"
-    },
-    "Swamp Thing 012(1974)(FB-DCP)(C2C).cbz": {
-        "clean": "Swamp Thing 012 1974 FB-DCP C2C",
-        "extension": "cbz",
-        "issue": "12",
-        "name": "Swamp Thing",
-        "source": "Swamp Thing 012(1974)(FB-DCP)(C2C).cbz",
-        "volume": null,
-        "year": "1974"
-    },
-    "Critter v2 011 (c2c) (2013) (TLK-EMPIRE-HD).cbz": {
-        "clean": "Critter v2 011 2013 TLK-EMPIRE-HD",
-        "extension": "cbz",
-        "issue": "11",
-        "name": "Critter",
-        "source": "Critter v2 011 (c2c) (2013) (TLK-EMPIRE-HD).cbz",
-        "volume": "v2",
-        "year": "2013"
-    },
-    "The 14 Carat Roadster 22.3 2012 digital-Empire.cbz": {
         "clean": "The 14 Carat Roadster 22.3 2012 digital-Empire",
-        "extension": "cbz",
+        "year": 2012,
         "issue": "22.3",
         "name": "The 14 Carat Roadster",
-        "source": "The 14 Carat Roadster 22.3 2012 digital-Empire.cbz",
-        "volume": null,
-        "year": "2012"
+        "source": "The 14 Carat Roadster 22.3 2012 digital-Empire.cbz"
+    },
+    "487e88e53b13cbde907651f1c1480d32": {
+        "extension": "cbr",
+        "clean": "Teen Titans Annual 002 2016 Digital Thornn-Empire",
+        "year": 2016,
+        "issue": "2",
+        "name": "Teen Titans Annual",
+        "source": "0-Day 2016.6.29 \"Teen Titans Annual 002 (2016) (Digital) (Thornn-Empire).cbr\" yEnc (1\/111)"
+    },
+    "2cd9eff6ec5501186d105100ce2003d5": {
+        "extension": "cbr",
+        "clean": "Lobster Johnson - Metal Monsters of Midtown 02 2016 digital Son of Ultron-Empire",
+        "year": 2016,
+        "issue": "2",
+        "name": "Lobster Johnson Metal Monsters of Midtown",
+        "source": "0-Day 2016.6.29 \"Lobster Johnson - Metal Monsters of Midtown 02 (of 03) (2016) (digital) (Son of Ultron-Empire).cbr\" yEnc (1\/61)"
+    },
+    "162c06faa134b4454f9a68808d880962": {
+        "extension": "cbr",
+        "clean": "Lady Mechanika - Lost Boys of West Abbey 002 2016 HD Digital Thornn-Empire",
+        "year": 2016,
+        "issue": "2",
+        "name": "Lady Mechanika Lost Boys of West Abbey",
+        "source": "0-Day 2016.6.29 \"Lady Mechanika - Lost Boys of West Abbey 002 (2016) (HD) (Digital) (Thornn-Empire).cbr\" yEnc (1\/93)"
+    },
+    "e636e68b96e91e08fd77e815a089f424": {
+        "extension": "cbr",
+        "clean": "Jem and the Holograms 016 2016 Digital BlackManta-Empire",
+        "year": 2016,
+        "issue": "16",
+        "name": "Jem and the Holograms",
+        "source": "0-Day 2016.6.29 \"Jem and the Holograms 016 (2016) (Digital) (BlackManta-Empire).cbr\" yEnc (1\/52)"
+    },
+    "72e74f6a1e77d7652e2376f7781cea39": {
+        "extension": "cbr",
+        "clean": "Doctor Who The Twelfth Doctor Year Two 004 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "4",
+        "name": "Doctor Who The Twelfth Doctor Year Two",
+        "source": "For Ford Prefect - \" Doctor Who The Twelfth Doctor Year Two 004(2016)(3 covers)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/86)"
+    },
+    "e581b3ee49dbd92a1d195b92b8699888": {
+        "extension": "cbr",
+        "clean": "Doctor Who The Tenth Doctor Year Two 008 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "8",
+        "name": "Doctor Who The Tenth Doctor Year Two",
+        "source": "For Ford Prefect - \" Doctor Who The Tenth Doctor Year Two 008(2016)(2 covers)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/90)"
+    },
+    "6d4fbe8b2e67194f2005334f24dc0604": {
+        "extension": "cbr",
+        "clean": "Cryptocracy 001 2016 digital Son of Ultron-Empire",
+        "year": 2016,
+        "issue": "1",
+        "name": "Cryptocracy",
+        "source": "0-Day 2016.6.29 \"Cryptocracy 001 (2016) (digital) (Son of Ultron-Empire).cbr\" yEnc (1\/100)"
+    },
+    "2f1883df7c2092ebde25740612715755": {
+        "extension": "cbr",
+        "clean": "Satan's Hollow 004 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "4",
+        "name": "Satan's Hollow",
+        "source": "0-Day 2016.6.29 \"Satan's Hollow 004(2016)(2 covers)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/93)"
+    },
+    "b846104816aa9b89fc6e95a256464592": {
+        "extension": "cbr",
+        "clean": "Robyn Hood I Love NY 001 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "1",
+        "name": "Robyn Hood I Love NY",
+        "source": "0-Day 2016.6.29 \"Robyn Hood I Love NY 001(2016)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/66)"
+    },
+    "15828b4ca39914a2f0ba6e9ffe059b58": {
+        "extension": "cbr",
+        "clean": "Red Fury 004 2016 Digital DR & Quinch-Empire",
+        "year": 2016,
+        "issue": "4",
+        "name": "Red Fury",
+        "source": "0-Day 2016.6.29 \"Red Fury 004 (2016) (Digital) (DR & Quinch-Empire).cbr\" yEnc (1\/91)"
+    },
+    "878e6fabed3fc6627dec190b0f6fbdfb": {
+        "extension": "cbr",
+        "clean": "Doctor Strange - Flight of Bones 3",
+        "issue": "3",
+        "name": "Doctor Strange Flight of Bones",
+        "source": "For PostalPops - \" Doctor Strange - Flight of Bones #3.cbr\" yEnc (1\/13)"
+    },
+    "ff9a7f2a9b309edd7d5d3acdb46ebd02": {
+        "extension": "cbr",
+        "clean": "Doctor Strange - Flight of Bones 1",
+        "issue": "1",
+        "name": "Doctor Strange Flight of Bones",
+        "source": "For PostalPops - \" Doctor Strange - Flight of Bones #1.cbr\" yEnc (1\/13)"
+    },
+    "1daa935d4efc47e3b72db2659eff9a18": {
+        "extension": "cbz",
+        "clean": "Dr Strange Sorcerer Supreme annual 4",
+        "issue": "4",
+        "name": "Dr Strange Sorcerer Supreme annual",
+        "source": "For PostalPops - \" Dr Strange Sorcerer Supreme annual 4.cbz\" yEnc (1\/23)"
+    },
+    "1faa0fe944adb8c3161d81f4c81a785a": {
+        "extension": "cbr",
+        "clean": "Doctor Strange v3 Sorceror Supreme 90",
+        "issue": "90",
+        "volume": "v3",
+        "name": "Doctor Strange  Sorceror Supreme",
+        "source": "For PostalPops - \" Doctor Strange v3 Sorceror Supreme 90.cbr\" yEnc (1\/11)"
+    },
+    "94073746956c6474141f9c9008222265": {
+        "extension": "cbr",
+        "clean": "Meteora 004 2016 Digital BlurPixel-Empire",
+        "year": 2016,
+        "issue": "4",
+        "name": "Meteora",
+        "source": "0-Day 2016.6.29 \"Meteora 004 (2016) (Digital) (BlurPixel-Empire).cbr\" yEnc (1\/97)"
+    },
+    "b9d8791aa3534c85d8ef9b9e2c27b821": {
+        "extension": "cbr",
+        "clean": "Itty Bitty Bunnies Friendgasm 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "name": "Itty Bitty Bunnies Friendgasm",
+        "source": "0-Day 2016.6.29 \"Itty Bitty Bunnies Friendgasm(2016)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/142)"
+    },
+    "fb716912d15f16fa795f051b6af91d9a": {
+        "extension": "cbr",
+        "clean": "Injustice - Gods Among Us - Year Five 028 2016 digital Son of Ultron-Empire",
+        "year": 2016,
+        "issue": "28",
+        "name": "Injustice Gods Among Us - Year Five",
+        "source": "0-Day 2016.6.29 \"Injustice - Gods Among Us - Year Five 028 (2016) (digital) (Son of Ultron-Empire).cbr\" yEnc (1\/35)"
+    },
+    "9b5483234f63eadf150a39fd3f618b41": {
+        "extension": "cbr",
+        "clean": "Flare 013 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "13",
+        "name": "Flare",
+        "source": "0-Day 2016.6.29 \"Flare 013(2016)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/69)"
+    },
+    "e30fa180bf43e82d2a7231e779cb2f4a": {
+        "extension": "cbr",
+        "clean": "Exlibrium 004 2016 Digital BlurPixel-Empire",
+        "year": 2016,
+        "issue": "4",
+        "name": "Exlibrium",
+        "source": "0-Day 2016.6.29 \"Exlibrium 004 (2016) (Digital) (BlurPixel-Empire).cbr\" yEnc (1\/95)"
+    },
+    "ea0456e5dda802b3dad963687bdc08ae": {
+        "extension": "cbr",
+        "clean": "Doctor Who The Ninth Doctor 003 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "3",
+        "name": "Doctor Who The Ninth Doctor",
+        "source": "0-Day 2016.6.29 \"Doctor Who The Ninth Doctor 003(2016)(5 covers)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/80)"
+    },
+    "34a87ae814651789789bfb476ced5235": {
+        "extension": "cbr",
+        "clean": "Zoe Dare vs The Disasteroid 001 2016 digital d'argh-Empire",
+        "year": 2016,
+        "issue": "1",
+        "name": "Zoe Dare vs The Disasteroid",
+        "source": "0-Day 2016.6.29 \"Zoe Dare vs The Disasteroid 001 (2016) (digital) (d'argh-Empire).cbr\" yEnc (1\/53)"
+    },
+    "88bdbcffd0837615eec317f7c200483a": {
+        "clean": "Stringers 5 2015 digital Z-Scan",
+        "year": 2015,
+        "issue": "5",
+        "name": "Stringers",
+        "source": "Stringers 5 (of 5) (2 covers) (2015) (digital) (Z-Scan)"
+    },
+    "52942d4395ec1ceb22367604d4450c52": {
+        "clean": "Obi-Wan & Anakin 03 2016 digital Minutemen-Midas",
+        "year": 2016,
+        "issue": "3",
+        "name": "Obi-Wan & Anakin",
+        "source": "Obi-Wan & Anakin 03 (of 05) (2016) (digital) (Minutemen-Midas)"
+    },
+    "a5308a88b35e7ec05fd1296d81c383e9": {
+        "clean": "Conan the Barbarian 020 2013 digital",
+        "year": 2013,
+        "issue": "20",
+        "name": "Conan the Barbarian",
+        "source": "Conan the Barbarian 020 (2013) (digital)"
+    },
+    "7adb60292cbd05694b9880a45cdcf4d9": {
+        "clean": "Uncle Scrooge 012 2016 GreenManGroup-DCP",
+        "year": 2016,
+        "issue": "12",
+        "name": "Uncle Scrooge",
+        "source": "Uncle Scrooge 012 (2016) (c2c) (GreenManGroup-DCP)"
+    },
+    "168ecf49e09b3628d148daa99f4f353f": {
+        "clean": "Sonic the Hedgehog 279 2016 digital Oroboros-DCP",
+        "year": 2016,
+        "issue": "279",
+        "name": "Sonic the Hedgehog",
+        "source": "Sonic the Hedgehog 279 (2016) (digital) (Oroboros-DCP)"
+    },
+    "80c14d397a3f532b9a125abbbcc51c14": {
+        "clean": "DC Comics - Bombshells 036 2016 Digital BlackManta-Empire",
+        "year": 2016,
+        "issue": "36",
+        "name": "DC Comics Bombshells",
+        "source": "DC Comics - Bombshells 036 (2016) (Digital) (BlackManta-Empire)"
+    },
+    "e220960bb4265ddcb74d5b15adbd6865": {
+        "clean": "The Rattler OGN 2016 digital Son of Ultron-Empire",
+        "year": 2016,
+        "name": "The Rattler",
+        "source": "The Rattler OGN (2016) (digital) (Son of Ultron-Empire)"
+    },
+    "bb6acd16ccf58e3a4045eb27878ac9e2": {
+        "clean": "Walt Disney's Comics and Stories 728 2016 GreenManGroup-DCP",
+        "year": 2016,
+        "issue": "728",
+        "name": "Walt Disney's Comics and Stories",
+        "source": "Walt Disney's Comics and Stories 728 (2016) (c2c) (GreenManGroup-DCP)"
+    },
+    "cd90d952c4847b846d7bae48c105f631": {
+        "clean": "Wraithborn Redux Vol 01 002 2016 Digital HD Thornn-Empire",
+        "year": 2016,
+        "issue": "2",
+        "volume": "Vol 01",
+        "name": "Wraithborn Redux",
+        "source": "Wraithborn Redux Vol 01 002 (2016) (Digital) (HD) (Thornn-Empire)"
+    },
+    "c926ed59d9897321fbb680e627f3556d": {
+        "clean": "Venus 04 2016 digital Son of Ultron-Empire",
+        "year": 2016,
+        "issue": "4",
+        "name": "Venus",
+        "source": "Venus 04 (of 04) (2016) (digital) (Son of Ultron-Empire)"
+    },
+    "5f01d4a85da837a1b23e2d765369da23": {
+        "clean": "Hellchild 001 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "1",
+        "name": "Hellchild",
+        "source": "Hellchild 001(2016)(2 covers)(Digital)(TLK-EMPIRE-HD)"
+    },
+    "557b199db4b0088c8ba668618114b33e": {
+        "clean": "Doctor Who The Fourth Doctor 001 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "1",
+        "name": "Doctor Who The Fourth Doctor",
+        "source": "Doctor Who The Fourth Doctor 001(2016)(5 covers)(Digital)(TLK-EMPIRE-HD)"
+    },
+    "f6142debef73c999bb2d7749a95c0c3e": {
+        "clean": "Superman - Lois and Clark 006 2016 Digital Zone-Empire",
+        "year": 2016,
+        "issue": "6",
+        "name": "Superman Lois and Clark",
+        "source": "Superman - Lois and Clark 006 (2016) (Digital) (Zone-Empire)"
+    },
+    "26792208a52acec75e0b68c5dab3c887": {
+        "clean": "Suicide Squad Most Wanted - Deadshot and Katana 03 2016 digital Minutemen-Midas",
+        "year": 2016,
+        "issue": "3",
+        "name": "Suicide Squad Most Wanted Deadshot and Katana",
+        "source": "Suicide Squad Most Wanted - Deadshot and Katana 03 (of 06) (2016) (digital) (Minutemen-Midas)"
+    },
+    "d743ac43d785f83dca1075e265913a63": {
+        "clean": "Justice League 3001 010 2016 Digital Zone-Empire",
+        "year": 2016,
+        "issue": "10",
+        "name": "Justice League 3001",
+        "source": "Justice League 3001 010 (2016) (Digital) (Zone-Empire)"
+    },
+    "a6edf188a8c5c9e0830ff5b5d88b882f": {
+        "extension": "cbr",
+        "clean": "Uncanny Inhumans 011 2016 Digital Zone-Empire",
+        "year": 2016,
+        "issue": "11",
+        "name": "Uncanny Inhumans",
+        "source": "0-Day 2016.6.29 \"Uncanny Inhumans 011 (2016) (3 covers) (Digital) (Zone-Empire).cbr\" yEnc (1\/65)"
+    },
+    "5de0a428fc7c38f559bc86fc0289bc6c": {
+        "extension": "cbr",
+        "clean": "Transformers Sins Of The Wreckers 005 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "5",
+        "name": "Transformers Sins Of The Wreckers",
+        "source": "0-Day 2016.6.29 \"Transformers Sins Of The Wreckers 005(2016)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/84)"
+    },
+    "da3e95d9039ea8945e0e62832bff547b": {
+        "extension": "cbr",
+        "clean": "The Witchfinder General 006 2016 digital Son of Ultron-Empire",
+        "year": 2016,
+        "issue": "6",
+        "name": "The Witchfinder General",
+        "source": "0-Day 2016.6.29 \"The Witchfinder General 006 (2016) (digital) (Son of Ultron-Empire).cbr\" yEnc (1\/62)"
+    },
+    "4ef7fb60baf878bb2a16de48c58698f7": {
+        "extension": "cbr",
+        "clean": "Star-Lord 008 2016 Digital Zone-Empire",
+        "year": 2016,
+        "issue": "8",
+        "name": "Star-Lord",
+        "source": "0-Day 2016.6.29 \"Star-Lord 008 (2016) (3 covers) (Digital) (Zone-Empire).cbr\" yEnc (1\/76)"
+    },
+    "a62103c210e055dc37a146580750b49a": {
+        "extension": "cbr",
+        "clean": "Spider-Gwen v2 Annual 001 2016 Digital BlackManta-Empire",
+        "year": 2016,
+        "issue": "1",
+        "volume": "v2",
+        "name": "Spider-Gwen  Annual",
+        "source": "0-Day 2016.6.29 \"Spider-Gwen v2 Annual 001 (2016) (Digital) (BlackManta-Empire).cbr\" yEnc (1\/99)"
+    },
+    "7ede4912bd652570c1bc084c262c36c1": {
+        "extension": "cbz",
+        "clean": "Teen Titans Annual 02 2013 Digital Shining Knight-SCC-Novus",
+        "year": 2013,
+        "issue": "2",
+        "name": "Teen Titans Annual",
+        "source": "Teen.Titans.Annual.02.2013.Digital.Shining.Knight-SCC-Novus.cbz"
+    },
+    "bea5f2d22d5b14c1945efeb389baca5f": {
+        "extension": "cbr",
+        "clean": "Rogues! v4 - Odd Parenthood 04 2016 Digital TheArchivist-Empire",
+        "year": 2016,
+        "issue": "4",
+        "volume": "v4",
+        "name": "Rogues!  Odd Parenthood",
+        "source": "For Dozer - \" Rogues! v4 - Odd Parenthood 04 (of 05) (2016) (Digital) (TheArchivist-Empire).cbr\" yEnc (1\/65)"
+    },
+    "0885fd659de4768096ca467e470215b7": {
+        "extension": "cbr",
+        "clean": "The Colonel of Two Worlds 001 2015 digital-Empire",
+        "year": 2015,
+        "issue": "1",
+        "name": "The Colonel of Two Worlds",
+        "source": "Fills - \"The Colonel of Two Worlds 001 (2015) (digital-Empire).cbr\" (1\/32) 29.3 MBytes yEnc"
+    },
+    "5b5abfac9fbdd9fefcca2926f6245f1b": {
+        "extension": "cbr",
+        "clean": "The Shadow's Treasure",
+        "name": "The Shadow's Treasure",
+        "source": "Fills - \"The Shadow's Treasure.cbr\" (1\/60) 55.4 MBytes yEnc"
+    },
+    "c9eb177e9970684a7cff2ef206b179fe": {
+        "extension": "cbr",
+        "clean": "Hacktivist v2 006 2015 Digital mv-DCP",
+        "year": 2015,
+        "issue": "6",
+        "volume": "v2",
+        "name": "Hacktivist",
+        "source": "For Ford Prefect - \" Hacktivist v2 006 (2015) (Digital) (mv-DCP).cbr\" yEnc (1\/74)"
+    },
+    "88277cf4e661050cde779eb5faaadb9c": {
+        "extension": "cbr",
+        "clean": "Grimm Fairy Tales 121 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "121",
+        "name": "Grimm Fairy Tales",
+        "source": "For Ford Prefect - \" Grimm Fairy Tales 121(2016)(2 covers)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/60)"
+    },
+    "49a47b7b6311b4166b1c19a7572f20b5": {
+        "extension": "cbr",
+        "clean": "Dreaming Eagles 001 2015 Digital-Empire",
+        "year": 2015,
+        "issue": "1",
+        "name": "Dreaming Eagles",
+        "source": "For Ford Prefect - \" Dreaming Eagles 001 (2015) (Digital-Empire).cbr\" yEnc (1\/88)"
+    },
+    "a2255bfb764b34c9791a9c46e280a274": {
+        "extension": "cbr",
+        "clean": "Penny Dreadful 002 2016 Digital Mephisto-Empire",
+        "year": 2016,
+        "issue": "2",
+        "name": "Penny Dreadful",
+        "source": "For kre - \" Penny Dreadful 002 (2016) (Digital) (Mephisto-Empire).cbr\" yEnc (1\/78)"
+    },
+    "88559fdbf9839dcad16290a25a90897c": {
+        "extension": "cbz",
+        "clean": "Dr Strange 183 FB-DCP",
+        "issue": "183",
+        "name": "Dr Strange",
+        "source": "Doctor Strange V1 C2C [15 of 15] \"Dr. Strange 183 (c2c) (FB-DCP).cbz\" yEnc (1\/81)"
+    },
+    "c571fda1c2c80cef7d7c9beb4a0cc2d5": {
+        "clean": "Farscape Strange Detractors 004 2009 Part 4 - The Binds that Tie",
+        "year": 2009,
+        "issue": "4",
+        "name": "Farscape Strange Detractors",
+        "source": "Farscape Strange Detractors 004 2009 Part 4 - The Binds that Tie"
+    },
+    "6643f103deb254e13daab7c8fb0a2a95": {
+        "extension": "cbr",
+        "clean": "Superman 039 2015 Digital",
+        "year": 2015,
+        "issue": "39",
+        "name": "Superman",
+        "source": "For blabber - \" Superman 039 (2015) (Digital).cbr\" yEnc (1\/65)"
+    },
+    "5efc923d6d4e1a97df59408c928dfff8": {
+        "extension": "cbr",
+        "clean": "Xena - Warrior Princess 005 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "5",
+        "name": "Xena Warrior Princess",
+        "source": "0-Day 2016.8.17 - \" Xena - Warrior Princess 005(2016)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/95)"
+    },
+    "4893a6f94058bc6cc2abef6daa0d85bf": {
+        "extension": "cbr",
+        "clean": "Vampirella V3 006 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "6",
+        "volume": "V3",
+        "name": "Vampirella",
+        "source": "0-Day 2016.8.17 - \" Vampirella V3 006(2016)(2 covers)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/62)"
+    },
+    "a609479c38aaf84749da01abd28fbb14": {
+        "extension": "cbr",
+        "clean": "Transformers Till All Are One 003 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "3",
+        "name": "Transformers Till All Are One",
+        "source": "0-Day 2016.8.17 - \" Transformers Till All Are One 003(2016)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/71)"
+    },
+    "6f947335fa802b56f75557a8267bea6f": {
+        "extension": "cbr",
+        "clean": "Miss Fury V2 004 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "4",
+        "volume": "V2",
+        "name": "Miss Fury",
+        "source": "0-Day 2016.8.17 - \" Miss Fury V2 004(2016)(2 covers)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/59)"
+    },
+    "1e35e7c78a560d62c1c288e40abab5c2": {
+        "extension": "cbr",
+        "clean": "Lords Of The Jungle 006 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "6",
+        "name": "Lords Of The Jungle",
+        "source": "0-Day 2016.8.17 - \" Lords Of The Jungle 006(2016)(2 covers)(Digital)(TLK-EMPIRE-HD).cbr\" yEnc (1\/93)"
+    },
+    "9fdf7639f1c9354786adb1fcefe948dc": {
+        "extension": "cbz",
+        "clean": "Casanova 04 2010 Minutemen-DTs",
+        "year": 2010,
+        "issue": "4",
+        "name": "Casanova",
+        "source": "For flpennstater - \" Casanova 04 (2010) (c2c) (Minutemen-DTs).cbz\" yEnc (1\/55)"
+    },
+    "7ca77dbf43e9598af54d81b24a205af4": {
+        "extension": "cbr",
+        "clean": "DC Comics - Bombshells 056 2016 Digital BlackManta-Empire",
+        "year": 2016,
+        "issue": "56",
+        "name": "DC Comics Bombshells",
+        "source": "For RAWolf - \" DC Comics - Bombshells 056 (2016) (Digital) (BlackManta-Empire).cbr\" yEnc (1\/22)"
+    },
+    "965a950e9f1a06b72b488c4375add4aa": {
+        "extension": "cbz",
+        "clean": "'68 Hallowed Ground 2013 digital Son of Ultron-Empire",
+        "year": 2013,
+        "name": "'68 Hallowed Ground",
+        "source": "'68 Hallowed Ground 2013 digital Son of Ultron-Empire.cbz"
+    },
+    "0e76359d23f500fecf61be0785aa1c9d": {
+        "extension": "cbz",
+        "clean": "19 Charges Against The Young Herr Holm 2009 Digital Monafekk-Empire",
+        "year": 2009,
+        "name": "19 Charges Against The Young Herr Holm",
+        "source": "19 Charges Against The Young Herr Holm 2009 Digital Monafekk-Empire.cbz"
+    },
+    "9803aeaa1f0dea0cbe40bdefceef8f31": {
+        "extension": "cbz",
+        "clean": "300",
+        "name": "300",
+        "source": "300.cbz"
+    },
+    "c1bfa76ffa7b9a29e07c9259fe898735": {
+        "extension": "cbz",
+        "clean": "ARROW SEASON 2.5 10 2015",
+        "year": 2015,
+        "issue": "10",
+        "name": "ARROW SEASON 2.5",
+        "source": "ARROW SEASON 2.5 #10 (2015).cbz"
+    },
+    "9020500a19adbba2374182f4511f18e0": {
+        "extension": "cbz",
+        "clean": "ARROW SEASON 2.5 10",
+        "issue": "10",
+        "name": "ARROW SEASON 2.5",
+        "source": "ARROW SEASON 2.5 #10.cbz"
+    },
+    "4cc27b4dda91ef8288a0bd410665e64a": {
+        "extension": "cbz",
+        "clean": "All-New X-Men 010.3 2013 Digital Zone-Empire",
+        "year": 2013,
+        "issue": "10.3",
+        "name": "All-New X-Men",
+        "source": "All-New X-Men 010.3 (2013) (Digital) (Zone-Empire).cbz"
+    },
+    "7ec04b9bb91c36f7231870565d3f733f": {
+        "extension": "cbz",
+        "clean": "Angela - Asgard's Assassin 003 2015 Digital Zone-Empire",
+        "year": 2015,
+        "issue": "3",
+        "name": "Angela Asgard's Assassin",
+        "source": "Angela - Asgard's Assassin 003 (2015) (Digital) (Zone-Empire).cbz"
+    },
+    "d56a6743cd7fb0cfddf867f055fe4215": {
+        "extension": "cbr",
+        "clean": "Astro-City-The-Dark-Age-Book-Three - 1 - 2009",
+        "year": 2009,
+        "issue": "1",
+        "name": "Astro City The Dark Age Book Three",
+        "source": "Astro-City-The-Dark-Age-Book-Three - 1 - 2009.cbr"
+    },
+    "bd1b85beb334254f74c5cd8093901478": {
+        "extension": "cbz",
+        "clean": "Batman '66 019 2013 digital Son of Ultron-Empire",
+        "year": 2013,
+        "issue": "19",
+        "name": "Batman '66",
+        "source": "Batman '66 019 2013 digital Son of Ultron-Empire.cbz"
+    },
+    "ae1a567970c78b0240065cbd45bc7dc2": {
+        "extension": "cbz",
+        "clean": "Batman - The Dark Knight 002",
+        "issue": "2",
+        "name": "Batman The Dark Knight",
+        "source": "Batman - The Dark Knight 002.cbz"
+    },
+    "4d7989994ac5a30082bab085eee0a445": {
+        "extension": "cbz",
+        "clean": "Batman - Year One 1987 Digital - TheHand-Empire",
+        "year": 1987,
+        "name": "Batman Year One",
+        "source": "Batman - Year One 1987 Digital - TheHand-Empire.cbz"
+    },
+    "1894e8b9fb7601f9611e152a9b2ecd39": {
+        "extension": "cbz",
+        "clean": "Batman The Court of Owls Vol 1 2011 TPB Zone-Empire",
+        "year": 2011,
+        "volume": "Vol 1",
+        "name": "Batman The Court of Owls",
+        "source": "Batman The Court of Owls Vol  1 2011  TPB Zone-Empire.cbz"
+    },
+    "53e8a3f65004f4fa23ffadfa97965391": {
+        "extension": "cbz",
+        "clean": "Batman Year One",
+        "name": "Batman Year One",
+        "source": "Batman Year One.cbz"
+    },
+    "36e09786cdaba2b320d13131b64ba9ec": {
+        "extension": "cbz",
+        "clean": "Ben 10 002 2013 digital-Empire",
+        "year": 2013,
+        "issue": "2",
+        "name": "Ben 10",
+        "source": "Ben 10 002 2013 digital-Empire.cbz"
+    },
+    "2b1dbeb9ea58199243bde82e1df1c32d": {
+        "extension": "cbz",
+        "clean": "Critter v2 011 2013 TLK-EMPIRE-HD",
+        "year": 2013,
+        "issue": "11",
+        "volume": "v2",
+        "name": "Critter",
+        "source": "Critter v2 011 (c2c) (2013) (TLK-EMPIRE-HD).cbz"
+    },
+    "454d3898b782e80583ed88654a0dabb9": {
+        "extension": "cbz",
+        "clean": "Batman Beyond 001 2012 v12",
+        "year": 2012,
+        "issue": "1",
+        "volume": "v12",
+        "name": "Batman Beyond",
+        "source": "Batman Beyond 001 (2012) v12.cbz"
+    },
+    "4d5be3c5268da97ba44f9d38b9d743f0": {
+        "extension": "cbz",
+        "clean": "Star Trek New Visions Vol 3 TPB 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "volume": "Vol 3",
+        "name": "Star Trek New Visions",
+        "source": "Star Trek New Visions Vol. 3 (TPB)(2016)(Digital)(TLK-EMPIRE-HD).cbz"
+    },
+    "cdf73fce82e0d2bbc9b5a0b69690576d": {
+        "extension": "cbz",
+        "clean": "Superior Iron Man Vol 2 - Stark Contrast 2015 Digital HC BroadCast-Empire",
+        "year": 2015,
+        "volume": "Vol 2",
+        "name": "Superior Iron Man  Stark Contrast",
+        "source": "Superior Iron Man Vol 2 - Stark Contrast (2015) (Digital HC) (BroadCast-Empire).cbz"
+    },
+    "22138daa70e0d49e7ea91ab70b395fbe": {
+        "extension": "cbz",
+        "clean": "Flare The New Adventures Vol 6 TPB 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "volume": "Vol 6",
+        "name": "Flare The New Adventures",
+        "source": "Flare The New Adventures Vol. 6 (TPB)(2016)(Digital)(TLK-EMPIRE-HD).cbz"
+    },
+    "a185c67a4135566b368043566e01e164": {
+        "extension": "cbz",
+        "clean": "Batman v08 - Superheavy 2016 Digital Zone-Empire",
+        "year": 2016,
+        "volume": "v08",
+        "name": "Batman  Superheavy",
+        "source": "Batman v08 - Superheavy (2016) (Digital) (Zone-Empire).cbz"
+    },
+    "ff26d93eef79c683899031b97d4d7c3f": {
+        "extension": "cbz",
+        "clean": "The Tower Chronicles - Book 3 - FellQuest 005 2016 digital Son of Ultron-Empire",
+        "year": 2016,
+        "issue": "5",
+        "volume": "Book 3",
+        "name": "The Tower Chronicles  - FellQuest",
+        "source": "The Tower Chronicles - Book 3 - FellQuest 005 (2016) (digital) (Son of Ultron-Empire).cbz"
+    },
+    "60c1e7f16bca532ef23555b0c29ff259": {
+        "extension": "cbz",
+        "clean": "Guerillas v03 - Chapter 01 2016 digital Son of Ultron-Empire",
+        "year": 2016,
+        "issue": "1",
+        "volume": "v03",
+        "name": "Guerillas",
+        "source": "Guerillas v03 - Chapter 01 (2016) (digital) (Son of Ultron-Empire).cbz"
+    },
+    "d0d3fd166ffa49613da65a4321308433": {
+        "extension": "cbz",
+        "clean": "Chaos Campus Sorority Girls Vs Zombies 011 2016 Digital TLK-EMPIRE-HD",
+        "year": 2016,
+        "issue": "11",
+        "name": "Chaos Campus Sorority Girls Vs Zombies",
+        "source": "Chaos Campus Sorority Girls Vs. Zombies 011(2016)(Digital)(TLK-EMPIRE-HD).cbz"
+    },
+    "7287dde8e3560bc87e4dee4f35cda661": {
+        "extension": "cbz",
+        "clean": "Wonder Woman Vol 04 050 2016 Digital HD Thornn-Empire",
+        "year": 2016,
+        "issue": "50",
+        "volume": "Vol 04",
+        "name": "Wonder Woman",
+        "source": "Wonder Woman Vol 04 050 (2016) (Digital) (HD) (Thornn-Empire).cbz"
+    },
+    "b7425853b68856e0e6b1c680835560db": {
+        "extension": "cbz",
+        "clean": "Teen Titans Vol05 018 2016 Digital HD Thornn-Empire",
+        "year": 2016,
+        "issue": "18",
+        "volume": "Vol05",
+        "name": "Teen Titans",
+        "source": "Teen Titans Vol05 018 (2016) (Digital) (HD) (Thornn-Empire).cbz"
+    },
+    "2540553268fdad8400bab582af146513": {
+        "extension": "cbr",
+        "clean": "Rogues! v4 - Odd Parenthood 05 2016 Digital TheArchivist-Empire",
+        "year": 2016,
+        "issue": "5",
+        "volume": "v4",
+        "name": "Rogues!  Odd Parenthood",
+        "source": "For Dozer - \" Rogues! v4 - Odd Parenthood 05 (of 05) (2016) (Digital) (TheArchivist-Empire).cbr\" yEnc (1\/65)"
+    },
+    "75478b0ad719f5c38cc78dd0ad814285": {
+        "extension": "cbz",
+        "clean": "Antares - Episode 1 2011 Digital Empire-Bean",
+        "year": 2011,
+        "issue": "1",
+        "name": "Antares",
+        "source": "Fills - \"Antares - Episode 1 (2011) (Digital) (Empire-Bean).cbz\" (1\/114) 106 MBytes yEnc"
+    },
+    "dda0ee74b208627c4e0da70e38da4115": {
+        "extension": "cbr",
+        "clean": "The Survivors - Episode 03 2016 Cinebook digital Lynx-Empire",
+        "year": 2016,
+        "issue": "3",
+        "name": "The Survivors",
+        "source": "Fills - \"The Survivors - Episode 03 (2016) (Cinebook) (digital) (Lynx-Empire).cbr\" (1\/38) 34.8 MBytes yEnc"
+    },
+    "092f7ef10f8a4bb87d4049d2a35314b1": {
+        "extension": "cbr",
+        "clean": "Antares - Episode 6 2015 Cinebook digital Lynx-Empire",
+        "year": 2015,
+        "issue": "6",
+        "name": "Antares",
+        "source": "Fills - \"Antares - Episode 6 (2015) (Cinebook) (digital) (Lynx-Empire).cbr\" (1\/42) 38.5 MBytes yEnc"
+    },
+    "8ceedd18a2291d825dc3770c1a0d9884": {
+        "extension": "cbr",
+        "clean": "Hawk and Dove 1969-07 006 ctc",
+        "year": 1969,
+        "issue": "6",
+        "name": "Hawk and Dove",
+        "source": "Hawk and the Dove [7 of 14] \"Hawk and Dove [1969-07] 006 ctc.cbr\" yEnc (1\/78)"
+    },
+    "9f5002a31654732f6415a6724f723d48": {
+        "extension": "cbz",
+        "clean": "Captain Atom Annual 1988-01-00 02 digital Glorith-Novus-HD",
+        "year": 1988,
+        "issue": "2",
+        "name": "Captain Atom Annual",
+        "source": "For Speedy - \" Captain Atom Annual, 1988-01-00 (#02) (digital) (Glorith-Novus-HD).cbz\" yEnc (1\/97)"
+    },
+    "528ff455fd9ba01fab5a21f21f61cf63": {
+        "extension": "cbz",
+        "clean": "Captain Atom - Annual 2 1989",
+        "year": 1989,
+        "issue": "2",
+        "name": "Captain Atom Annual",
+        "source": "REQ:  Captain Atom - Annual 2 (1989).cbz"
+    },
+    "81d5388723b8fa263315994928317686": {
+        "extension": "cbr",
+        "clean": "Hawk and Dove 1968-11 002 ctc",
+        "year": 1968,
+        "issue": "2",
+        "name": "Hawk and Dove",
+        "source": "Hawk and the Dove [3 of 14] \"Hawk and Dove [1968-11] 002 ctc.cbr\" yEnc (1\/71)"
+    },
+    "12bbfa33daa3973505d660f3d82057e9": {
+        "extension": "cbz",
+        "clean": "Batman Vampire Trilogy - Crimson Mist - Book 3",
+        "volume": "Book 3",
+        "name": "Batman Vampire Trilogy Crimson Mist -",
+        "source": "Batman, Vampire Trilogy - Crimson Mist - Book 3.cbz"
+    },
+    "921cc0e3f7812c7a26499eb4470c3ceb": {
+        "extension": "cbz",
+        "clean": "Deadpool - Dracula's Gauntlet TPB 2016 Print Version",
+        "year": 2016,
+        "name": "Deadpool Dracula's Gauntlet",
+        "source": "REQ: Deadpool - Dracula's Gauntlet TPB (2016) (Print Version).cbz"
+    },
+    "710a85122dfec142accae9185c8e91ab": {
+        "extension": "cbr",
+        "clean": "Hawk and Dove 1969-01 003 ctc",
+        "year": 1969,
+        "issue": "3",
+        "name": "Hawk and Dove",
+        "source": "Hawk and the Dove [4 of 14] \"Hawk and Dove [1969-01] 003 ctc.cbr\" yEnc (1\/68)"
+    },
+    "d241a3030e5345925b15bb8e5bf63f39": {
+        "extension": "cbz",
+        "clean": "The Ray 004 2012 digital SeaKing-DCP",
+        "year": 2012,
+        "issue": "4",
+        "name": "The Ray",
+        "source": " The Ray 004 (2012) (digital) (SeaKing-DCP).cbz"
+    },
+    "ee5f49710bf30f939da6f5360634f8c3": {
+        "extension": "cbr",
+        "clean": "All New Invaders Vol.1 No 10 Nov 2014 SCAN Comic eBook-iNTENSiTY",
+        "year": 2014,
+        "issue": "10",
+        "volume": "Vol.1",
+        "name": "All New Invaders",
+        "source": "All.New.Invaders.Vol.1.No.10.Nov.2014.SCAN.Comic.eBook-iNTENSiTY.cbr"
+    },
+    "2d01c29ca4e8f58a4ef5b6f0c959351a": {
+        "extension": "cbr",
+        "clean": "Transformers vs G.I. Joe 013 2016 Digital AnHeroGold-Empire",
+        "year": 2016,
+        "issue": "13",
+        "name": "Transformers vs G.I. Joe",
+        "source": "0-Day 2016.6.29 \"Transformers vs. G.I. Joe 013 (2016) (Digital) (AnHeroGold-Empire).cbr\" yEnc (1\/238)"
+    },
+    "98c92b667ef4df573b1b7ce375700024": {
+        "extension": "cbr",
+        "clean": "Suiciders - Kings of HelL A. 004 2016 Digital Zone-Empire",
+        "year": 2016,
+        "issue": "4",
+        "name": "Suiciders Kings of HelL A.",
+        "source": "0-Day 2016.6.29 \"Suiciders - Kings of HelL.A. 004 (2016) (Digital) (Zone-Empire).cbr\" yEnc (1\/70)"
+    },
+    "5913973e618462de77f871af8dac5cac": {
+        "extension": "cbr",
+        "clean": "Street Fighter x G.I. Joe 005 2016 Digital AnHeroGold-Empire",
+        "year": 2016,
+        "issue": "5",
+        "name": "Street Fighter x G.I. Joe",
+        "source": "0-Day 2016.6.29 \"Street Fighter x G.I. Joe 005 (2016) (Digital) (AnHeroGold-Empire).cbr\" yEnc (1\/73)"
+    },
+    "a3525eef4daa6c4ca730c4f861386cf8": {
+        "extension": "cbz",
+        "clean": "Patsy Walker A.K.A. Hellcat! 004 2016 Digital Zone-Empire",
+        "year": 2016,
+        "issue": "4",
+        "name": "Patsy Walker A.K.A. Hellcat!",
+        "source": "Patsy Walker, A.K.A. Hellcat! 004 (2016) (Digital) (Zone-Empire).cbz"
+    },
+    "df9a09324e92a719d0da52a87d3f78c0": {
+        "extension": "cbz",
+        "clean": "L.E.G.I.O.N. Annual 01 1990 digital Glorith-Novus-HD",
+        "year": 1990,
+        "issue": "1",
+        "name": "L.E.G.I.O.N. Annual",
+        "source": " L.E.G.I.O.N. Annual 01 (1990) (digital) (Glorith-Novus-HD).cbz"
+    },
+    "086e3680b9e6d90998a157d41271f03c": {
+        "extension": "cbz",
+        "clean": "L.E.G.I.O.N. 08 1989 digital Glorith-Novus-HD",
+        "year": 1989,
+        "issue": "8",
+        "name": "L.E.G.I.O.N.",
+        "source": " L.E.G.I.O.N. 08 (1989) (digital) (Glorith-Novus-HD).cbz"
+    },
+    "bfa1b9a120e97b57fc08d4994c3e3896": {
+        "extension": "cbz",
+        "clean": "Superman 007 2012 037 2014",
+        "year": 2014,
+        "issue": "37",
+        "name": "Superman",
+        "source": "REQ: Superman 007 (2012), 037 (2014).cbz"
+    },
+    "05f0931c2bdbddc2e8ab32f2be76781a": {
+        "extension": "cbz",
+        "clean": "13 COINS HC",
+        "name": "13 COINS HC",
+        "source": "13 COINS HC.cbz"
+    },
+    "41aa7338a6d2b67aad111698247665a2": {
+        "extension": "cbz",
+        "clean": "Batman - Knightfall Part 02 - Who Rules The Night 2000 Digital - TheHand-Empire",
+        "year": 2000,
+        "issue": "2",
+        "name": "Batman Knightfall  - Who Rules The Night",
+        "source": "Batman - Knightfall Part 02 - Who Rules The Night 2000 Digital - TheHand-Empire.cbz"
+    },
+    "38b8d8e4023c81ed0041b231563dad85": {
+        "extension": "cbz",
+        "clean": "Batman - Knightfall Part 01 - Broken Bat 2000 Digital - TheHand-Empire",
+        "year": 2000,
+        "issue": "1",
+        "name": "Batman Knightfall  - Broken Bat",
+        "source": "Batman - Knightfall Part 01 - Broken Bat 2000 Digital - TheHand-Empire.cbz"
+    },
+    "9a7519c73e810cd5ce7fdc27b5c6a9ae": {
+        "extension": "cbz",
+        "clean": "100 Bullets Brother Lono 07 2014 Digital Zone-Empire",
+        "year": 2014,
+        "issue": "7",
+        "name": "100 Bullets Brother Lono",
+        "source": "100 Bullets Brother Lono 07 of 8 2014 Digital Zone-Empire.cbz"
+    },
+    "78a140b08bd79f0bd08ce9036aa43d58": {
+        "extension": "cbz",
+        "clean": "30 Days of Night - 30 Days 'till Death 01 2008 digital-Empire",
+        "year": 2008,
+        "issue": "1",
+        "name": "30 Days of Night 30 Days 'till Death",
+        "source": "30 Days of Night - 30 Days 'till Death 01 of 04 2008 digital-Empire.cbz"
+    },
+    "5dc90d55491c088c89cfeadc1cf33555": {
+        "extension": "cbz",
+        "clean": "L.E.G.I.O.N. 09 1989 digital Glorith-Novus-HD",
+        "year": 1989,
+        "issue": "9",
+        "name": "L.E.G.I.O.N.",
+        "source": " L.E.G.I.O.N. 09 (1989) (digital) (Glorith-Novus-HD).cbz"
+    },
+    "744cbffe320086d668f532b50651a4b4": {
+        "extension": "cbz",
+        "clean": "Swamp Thing 012 1974 FB-DCP",
+        "year": 1974,
+        "issue": "12",
+        "name": "Swamp Thing",
+        "source": "Swamp Thing 012(1974)(FB-DCP)(C2C).cbz"
+    },
+    "f99e2b7326ad0fe3544d5c8e33ecb98e": {
+        "clean": "Walt Disney's Comics and Stories 729 2016 GreenManGroup-DCP",
+        "year": 2016,
+        "issue": "729",
+        "name": "Walt Disney's Comics and Stories",
+        "source": "Walt Disney's Comics and Stories 729 (2016) (c2c) (GreenManGroup-DCP)"
+    },
+    "3d0e268d5624d48ee7ad1aa8e83b681d": {
+        "extension": "cbz",
+        "clean": "Buffy the Vampire Slayer Season 10 024 2016 Digital",
+        "year": 2016,
+        "issue": "24",
+        "name": "Buffy the Vampire Slayer Season 10",
+        "source": "Buffy the Vampire Slayer Season 10 024 (2016) (Digital) (Cypher 2.0-Empire).cbz"
+    },
+    "5f9c40341de135d579df2f5ff9c97277": {
+        "extension": "cbr",
+        "clean": "American Vampire v04 2012 digital X-MAS 2013-Empire",
+        "year": 2013,
+        "volume": "v04",
+        "name": "American Vampire",
+        "source": "As Requested - \" American Vampire v04 (2012) (digital) (X-MAS 2013-Empire).cbr\" yEnc (1\/710)"
+    },
+    "25a7355845687dde563821af2424206b": {
+        "extension": "cbr",
+        "clean": "Soul 004 - No Saint's Day 2016 digital-Empire",
+        "year": 2016,
+        "issue": "4",
+        "name": "Soul 004 No Saint's Day",
+        "source": "0-Day 2016.6.29 \"Soul 004 - No Saint's Day (2016) (digital-Empire).cbr\" yEnc (1\/189)"
+    },
+    "cfc1b6a57902a5205ad8776098859df4": {
+        "extension": "cbr",
+        "clean": "Dedication 002 - Midnight Snack 2015 digital-Empire",
+        "year": 2015,
+        "issue": "2",
+        "name": "Dedication 002 Midnight Snack",
+        "source": "For koop - \" Dedication 002 - Midnight Snack (2015) (digital-Empire).cbr\" yEnc (1\/274)"
+    },
+    "2ca18f8333b181309db9ce3df4b63628": {
+        "extension": "cbr",
+        "clean": "Dedication 001 - Dead Stock 2015 digital-Empire",
+        "year": 2015,
+        "issue": "1",
+        "name": "Dedication 001 Dead Stock",
+        "source": "For koop - \" Dedication 001 - Dead Stock (2015) (digital-Empire).cbr\" yEnc (1\/279)"
+    },
+    "86da8cfe122ad9cf9ce5519e59c7a9a5": {
+        "extension": "cbr",
+        "clean": "Rogues! v4 - Odd Parenthood 01 2016 Digital TheArchivist-Empire",
+        "year": 2016,
+        "issue": "1",
+        "volume": "v4",
+        "name": "Rogues!  Odd Parenthood",
+        "source": "Re:\" Rogues! v4 - Odd Parenthood 01 (2016) (Digital) (TheArchivist-Empire).cbr\""
+    },
+    "e246057aacf6bb587f1074d0c2b53b89": {
+        "extension": "par2",
+        "clean": "COMIC Batman Collection - Neal Adams - 04 Panini 2010 cbr",
+        "year": 2010,
+        "issue": "4",
+        "name": "COMIC Batman Collection Neal Adams - 04 Panini",
+        "source": "[01\/18] - \"[COMIC] Batman Collection - Neal Adams - 04 (Panini_2010).cbr.par2\" - 421,04 MB Usenet-Space-Cowboys.online >>No.1 NZB source<<<"
+    },
+    "7503978a42324f8f6c3c64dc4a46f106": {
+        "extension": "cbr",
+        "clean": "Overwatch 008 - Ana - Old Soldiers 2016 Digital Pirate-Empire",
+        "year": 2016,
+        "issue": "8",
+        "name": "Overwatch 008 Ana - Old Soldiers",
+        "source": "0-Day 2016.8.3 - \" Overwatch 008 - Ana - Old Soldiers (2016) (Digital) (Pirate-Empire).cbr\" yEnc (1\/24)"
+    },
+    "cc2f4398acc69f8419d4daefe4bb156d": {
+        "extension": "cbr",
+        "clean": "Dr Strange 177 Feb 1969 Fin Ende-DCP",
+        "year": 1969,
+        "issue": "177",
+        "name": "Dr Strange",
+        "source": "Doctor Strange V1 C2C [9 of 15] \"Dr. Strange 177 (Feb 1969) (c2c) (Fin Ende-DCP).cbr\" yEnc (1\/91)"
+    },
+    "dfde2f4acfb3697bf9ec38bad95d085e": {
+        "extension": "par2",
+        "clean": "COMIC Batman Collection - Neal Adams - 01 Panini 2009 cbr",
+        "year": 2009,
+        "issue": "1",
+        "name": "COMIC Batman Collection Neal Adams - 01 Panini",
+        "source": "[01\/22] - \"[COMIC] Batman Collection - Neal Adams - 01 (Panini_2009).cbr.par2\" - 498,98 MB Usenet-Space-Cowboys.online >>No.1 NZB source<<<"
+    },
+    "49beb8575c99c5b1cd704f4f600884a1": {
+        "extension": "par2",
+        "clean": "COMIC Batman Collection - Neal Adams - 03 Panini 2009 GCF-Psfm cbr",
+        "year": 2009,
+        "issue": "3",
+        "name": "COMIC Batman Collection Neal Adams - 03 Panini",
+        "source": "[01\/23] - \"[COMIC] Batman Collection - Neal Adams - 03 (Panini 2009)(GCF-Psfm).cbr.par2\" - 541,44 MB Usenet-Space-Cowboys.online >>No.1 NZB source<<<"
+    },
+    "34e94110768878f6ba37870da59c7b3e": {
+        "extension": "par2",
+        "clean": "COMIC A Scanner Darkly - Alles wird nicht gut Schirmer-Mosel 2007 cbz",
+        "year": 2007,
+        "name": "COMIC A Scanner Darkly Alles wird nicht gut Schirmer-Mosel",
+        "source": "[01\/21] - \"[COMIC] A_Scanner_Darkly_-_Alles_wird_nicht_gut_(Schirmer-Mosel_2007).cbz.par2\" - 270,32 MB Usenet-Space-Cowboys.online >>No.1 NZB source<<<"
+    },
+    "51a4d8052f236e811fa88fba7a43db46": {
+        "extension": "par2",
+        "clean": "COMIC Blutprinzessin Schreiber Leser 2011 cbr",
+        "year": 2011,
+        "name": "COMIC Blutprinzessin Schreiber Leser",
+        "source": "[01\/22] - \"[COMIC] Blutprinzessin (Schreiber . Leser 2011).cbr.par2\" - 497,86 MB Usenet-Space-Cowboys.online >>No.1 NZB source<<<"
+    },
+    "f12d3a375b7127d9cde486aa42f7d992": {
+        "extension": "cbz",
+        "clean": "Batman Vampire Trilogy - Bloodstorm - Book 2",
+        "volume": "Book 2",
+        "name": "Batman Vampire Trilogy Bloodstorm -",
+        "source": "Batman, Vampire Trilogy - Bloodstorm - Book 2.cbz"
     }
 }

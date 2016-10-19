@@ -6,10 +6,18 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Database as Database;
 use \Model as Model;
-use \http\Session as Session;
-use \http\HttpGet as HttpGet;
 use \Logger as Logger;
 use \Auth as Auth;
+use \Config as Config;
+
+use \SQL as SQL;
+use db\Qualifier as Qualifier;
+
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
+use \utilities\MediaFilename as MediaFilename;
+
+use controller\Admin as Admin;
 
 use \utilities\ShellCommand as ShellCommand;
 use \utilities\Git as Git;
@@ -19,6 +27,9 @@ use \model\jobs\Job as Job;
 use \model\jobs\Job_Type as Job_Type;
 use \model\network\Endpoint as Endpoint;
 use \model\network\Endpoint_Type as Endpoint_Type;
+use \model\network\Rss as Rss;
+use \model\pull_list\Pull_List_Item as Pull_List_Item;
+
 use \processor\Migration as Migration;
 
 
@@ -349,6 +360,58 @@ class Upgrade extends Controller
 			$this->view->setLocalizedViewTitle("Initialize-Restore-Data");
 			$this->view->controllerAction = "reviewDefaultData";
 			$this->view->render('/upgrade/defaultDataReview');
+		}
+	}
+
+	function rescanFilenames()
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Rss');
+			$allObjects = $model->allObjects($model->sortOrder(), -1);
+			$count=0;
+			foreach( $allObjects as $item ) {
+				$mediaFilename = new MediaFilename($item->title());
+				$meta = $mediaFilename->updateFileMetaData();
+				$name = (isset($meta["name"]) ? $meta["name"] : $item->clean_name());
+				$issue = (isset($meta["issue"]) ? $meta["issue"] : $item->clean_issue());
+				$year = (isset($meta["year"]) ? $meta["year"] : $item->clean_year());
+
+				if ( $item->clean_name() != $name || $item->clean_issue() != $issue || $item->clean_year() != $year ) {
+					$count++;
+					$item->setClean_name($name);
+					$item->setClean_issue($issue);
+					$item->setClean_year($year);
+					$item->saveChanges();
+				}
+			}
+			if ( $count > 0 ) {
+				Logger::logInfo("Rescan RSS titles found  ".$count, __METHOD__, "RSS");
+			}
+
+			$model = Model::Named('Pull_List_Item');
+			$allObjects = $model->allObjects($model->sortOrder(), -1);
+			$count=0;
+			foreach( $allObjects as $item ) {
+				$mediaFilename = new MediaFilename($item->data());
+				$meta = $mediaFilename->updateFileMetaData();
+				$name = (isset($meta["name"]) ? $meta["name"] : $item->name());
+				$issue = (isset($meta["issue"]) ? $meta["issue"] : $item->issue());
+				$year = (isset($meta["year"]) ? $meta["year"] : $item->year());
+
+				if ( $item->name() != $name || $item->issue() != $issue || $item->year() != $year ) {
+					$count++;
+					$item->setName($name);
+					$item->setIssue($issue);
+					$item->setYear($year);
+					$item->saveChanges();
+					Logger::logInfo("PullListItem Updated ".$name." - ".$issue." - ".$year, $item->data, $count);
+				}
+			}
+			if ( $count > 0 ) {
+				Logger::logInfo("Rescan PullListItems titles found  ".$count, __METHOD__, "RSS");
+			}
+
+			header('location: ' . Config::Web('/Upgrade/reviewDefaultData' ));
 		}
 	}
 }

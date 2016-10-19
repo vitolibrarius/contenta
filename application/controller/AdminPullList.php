@@ -6,10 +6,16 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Auth as Auth;
-use \http\Session as Session;;
 use \Logger as Logger;
 use \Localized as Localized;
+use \Config as Config;
+
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
+use \utilities\MediaFilename as MediaFilename;
+
 use controller\Admin as Admin;
+
 use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
 use \model\network\Rss as Rss;
@@ -48,6 +54,7 @@ class AdminPullList extends Admin
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
+			$select->limit( -1 );
 			$select->orderBy( $model->sortOrder() );
 
 			$this->view->model = $model;

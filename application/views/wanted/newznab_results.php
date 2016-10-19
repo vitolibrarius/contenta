@@ -9,34 +9,30 @@
 	}
 ?>
 <section>
-    <div class="wrapper">
-		<div class="row">
-			<div class="grid_12">
+<div class="wrapper">
 <?php if ( isset($endpoint, $endpoint->name) ) : ?>
-<div class="mediaData">
-	<table>
-		<tr>
-			<th><?php echo 'Postings from ' . $endpoint->name; ?></th>
-			<th>Status</th>
-			<th>Publications Available</th>
-		</tr>
-	<?php if (isset($this->results) && count($this->results) > 0): ?>
-		<?php foreach ($this->results as $key => $item) : ?>
-			<?php if (isset($item['metadata'], $item['metadata']['name'])) {
-					$seriesName = $item['metadata']['name'];
-					$issue = (isset($item['metadata']['issue']) ? $item['metadata']['issue'] : null);
-					$year = (isset($item['metadata']['year']) ? $item['metadata']['year'] : null);
-					$publications = Model::Named("Publication")->publicationsLike($seriesName, $issue, $year);
-				}
-			?>
-		<tr <?php echo ($item['password'] == true ? "class='blocked'" : ""); ?>>
-			<td class="name">
+<div class="row">
+	<div class="grid_12">
+	<h2><?php echo 'Postings from ' . $endpoint->name; ?></h2>
+	</div>
+</div>
+<?php if (isset($this->results) && count($this->results) > 0): ?>
+<?php foreach ($this->results as $key => $item) : ?>
+<?php if (isset($item['metadata'], $item['metadata']['name'])) {
+		$seriesName = $item['metadata']['name'];
+		$issue = (isset($item['metadata']['issue']) ? $item['metadata']['issue'] : null);
+		$year = (isset($item['metadata']['year']) ? $item['metadata']['year'] : null);
+		$publications = Model::Named("Publication")->publicationsLike($seriesName, $issue, $year);
+	}
+?>
+<div class="row"  style="background-color: #E3E3E3; margin: .8em;">
+	<div class="grid_10">
 				<h4><?php echo $item['title']; ?></h4>
 				<p><?php echo date("M d, Y", $item['publishedDate']); ?></p>
 				<p><?php echo formatSizeUnits($item['len']); ?></p>
 				<?php echo ($item['password'] == true ? "<em>**** password protected</em>" : ""); ?>
-			</td>
-			<td>
+	</div>
+	<div class="grid_2"><!-- status -->
 				<?php $flux = $this->fluxModel->objectForSrc_guid( $item['guid'] );
 					if ($flux == false ) : ?>
 						<div id="ajaxDiv_<?php echo $item['safe_guid']; ?>">
@@ -63,36 +59,41 @@
 						</div>
 					</div>
 					<?php endif; ?>
-			</td>
-			<td class="name">
-				<?php if (is_array($publications) && count($publications) > 0 ) : ?>
-					<?php foreach( $publications as $pub ) : ?>
-						<h4><nobr><?php echo $pub->seriesName() . " - " . $pub->issue_num . " - " . $pub->publishedMonthYear(); ?></nobr></h4>
-						<?php $mediaList = $pub->media(); if ( is_array($mediaList) && count($mediaList)  ) :?>
-							<?php foreach( $mediaList as $idx => $media ) : ?>
-								<P><?php echo $media->mediaType()->code . " - " . $media->formattedSize(); ?></p>
-							<?php endforeach; ?>
-						<?php else : ?>
-							<em>no media available</em>
-						<?php endif; ?>
-					<?php endforeach; ?>
-				<?php else: ?>
-					<em>No data for series named <span style="color:red"><?php echo $seriesName; ?></span></em>
-				<?php endif; ?>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	<?php else : ?>
-		<tr>
-			<td colspan=3>No matching records</td>
-		</tr>
-	<?php endif; ?>
-	</table>
-</div>
-<?php else : ?>
-	<em><?php echo Localized::GlobalLabel("No Search Criteria"); ?></em>
-<?php endif; ?>
-  			</div>
-		</div>
 	</div>
+</div>
+<div class="row">
+	<?php if (is_array($publications) && count($publications) > 0 ) : ?>
+	<?php foreach( $publications as $pub ) : ?>
+		<div class="grid_2">
+			<div style="box-shadow: 2px 2px 4px #aaa; border:1px solid #ccc;">
+				<h4><?php echo $pub->seriesName() . " - " . $pub->issue_num . " - " . $pub->publishedMonthYear(); ?></h4>
+				<?php $mediaList = $pub->media(); if ( is_array($mediaList) && count($mediaList)  ) :?>
+					<?php foreach( $mediaList as $idx => $media ) : ?>
+						<P><?php echo $media->mediaType()->code . " - " . $media->formattedSize(); ?></p>
+					<?php endforeach; ?>
+				<?php else : ?>
+					<em>no media available</em>
+				<?php endif; ?>
+			</div>
+		</div>
+	<?php endforeach; ?>
+	<?php else: ?>
+		<div class="grid_12">
+					<em>No data for series named <span style="color:red">
+						<?php echo $seriesName . " - " . $issue . " - " . $year ; ?></span></em>
+		</div>
+	<?php endif; ?>
+</div>
+<?php endforeach; ?>
+<?php endif; ?>
+
+<?php else : ?>
+<div class="row">
+	<div class="grid_12">
+	<em><?php echo Localized::GlobalLabel("No Search Criteria"); ?></em>
+	</div>
+</div>
+<?php endif; ?>
+
+</div> <!-- wrapper -->
 </section>

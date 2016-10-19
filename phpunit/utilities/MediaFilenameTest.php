@@ -24,11 +24,11 @@ class MediaFilenameTest extends PHPUnit_Framework_TestCase
     {
     }
 
-    public function additionProvider()
-    {
-		$metadata = test_jsonResource("Filename.json");
-		return $metadata->getMeta( "/" );
-    }
+//     public function additionProvider()
+//     {
+// 		$metadata = test_jsonResource("Filename.json");
+// 		return $metadata->getMeta( "/" );
+//     }
 
 	public function testMe()
 	{
@@ -40,10 +40,27 @@ class MediaFilenameTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( "cbr", $meta["extension"] );
 	}
 
+	public function testFilenames()
+	{
+		$metadata = test_jsonResource("Filename.json");
+		$data = $metadata->getMeta( "/" );
+		foreach( $data as $idxHash => $expected ) {
+			$this->evaluateFilename(
+				$idxHash,
+				(isset($expected["clean"]) ? $expected["clean"] : null),
+				(isset($expected["extension"]) ? $expected["extension"] : null),
+				(isset($expected["issue"]) ? $expected["issue"] : null),
+				(isset($expected["name"]) ? $expected["name"] : null),
+				(isset($expected["source"]) ? $expected["source"] : null),
+				(isset($expected["volume"]) ? $expected["volume"] : null),
+				(isset($expected["year"]) ? $expected["year"] : null)
+			);
+		}
+	}
+
     /**
-     * @dataProvider additionProvider
      */
-    public function testFilename( $clean, $extension, $issue, $name, $source, $volume, $year )
+    public function evaluateFilename($hash, $clean, $extension, $issue, $name, $source, $volume, $year )
     {
     	$this->assertNotEmpty( $source );
     	$this->assertNotEmpty( $clean );
@@ -55,31 +72,31 @@ class MediaFilenameTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( $name, $meta["name"] );
 
 		if ( isset( $meta["extension"]) ) {
-			$this->assertEquals( $meta["extension"], $extension );
+			$this->assertEquals( $meta["extension"], $extension, "in $hash" );
 		}
 		else {
-			$this->assertNull( $extension );
+			$this->assertNull( $extension, "in $hash" );
 		}
 
 		if ( isset( $meta["issue"]) ) {
-			$this->assertEquals( $meta["issue"], $issue );
+			$this->assertEquals( $meta["issue"], $issue, "in $hash" );
 		}
 		else {
-			$this->assertNull( $issue );
+			$this->assertNull( $issue, "in $hash" );
 		}
 
 		if ( isset( $meta["volume"]) ) {
-			$this->assertEquals( $meta["volume"], $volume );
+			$this->assertEquals( $meta["volume"], $volume, "in $hash" );
 		}
 		else {
-			$this->assertNull( $volume );
+			$this->assertNull( $volume, "in $hash" );
 		}
 
 		if ( isset( $meta["year"]) ) {
-			$this->assertEquals( $meta["year"], $year );
+			$this->assertEquals( $meta["year"], $year, "in $hash" );
 		}
 		else {
-			$this->assertNull( $year );
+			$this->assertNull( $year, "in $hash" );
 		}
     }
 
