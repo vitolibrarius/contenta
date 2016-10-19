@@ -59,6 +59,5 @@ $(document).ready(function($) {
 			}
 		});
 	};
-	refresh();
 });
 </script>
