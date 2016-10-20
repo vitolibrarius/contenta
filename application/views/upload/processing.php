@@ -123,7 +123,8 @@
 				<a href="#" class="confirm"
 					data_action="<?php echo Config::Web('/AdminUploadRepair/deleteUnprocessed', $key); ?>"
 					data_key="<?php echo $key; ?>"
-					data_filename="<?php echo (isset($value, $value['name']) ? $value['name'] : $value['filename']); ?>"
+					data_filename="<?php echo (isset($value, $value['name']) ? $value['name'] :
+						(isset($value['filename']) ? $value['filename'] : '')); ?>"
 					alt="Delete">
 					<span class="icon trash" />
 				</a>

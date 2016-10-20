@@ -117,6 +117,9 @@
         },
         "title": "Story Arc Administration"
     },
+    "AdminTest": {
+        "title": "AdminTest\/title"
+    },
     "AdminUploadRepair": {
         "UploadLink": {
             "name": "Upload"
