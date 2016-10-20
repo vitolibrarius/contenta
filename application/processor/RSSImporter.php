@@ -30,7 +30,6 @@ class RSSImporter extends EndpointImporter
 			$rss_model = Model::Named('Rss');
 			$count = 0;
 			$count_existing = 0;
-			$count_small = 0;
 			$total = count($xml->channel->item);
 			foreach ($xml->channel->item as $key => $item) {
 				$guid = (string)(isset($item->guid) ? $item->guid : $item->link);
@@ -45,38 +44,33 @@ class RSSImporter extends EndpointImporter
 					$type = (string)$item->enclosure['type'];
 				}
 
-				if ( $len > 0 ) {
-					$rss = $rss_model->objectForGuid($guid);
-					if ( $rss == false ) {
-						list($rss, $errors) = $rss_model->createObject( array(
-							"endpoint" => $endpoint,
-							"title" => (string)$item->title,
-							"desc" => strip_tags((string)$item->description),
-							"pub_date" => $publishedDate,
-							"guid" => $guid,
-							"enclosure_url" => $url,
-							"enclosure_length" => $len,
-							"enclosure_mime" => $type,
-							"enclosure_hash" => null,
-							"enclosure_password" => false
-							)
-						);
+				$rss = $rss_model->objectForGuid($guid);
+				if ( $rss == false ) {
+					list($rss, $errors) = $rss_model->createObject( array(
+						"endpoint" => $endpoint,
+						"title" => (string)$item->title,
+						"desc" => strip_tags((string)$item->description),
+						"pub_date" => $publishedDate,
+						"guid" => $guid,
+						"enclosure_url" => $url,
+						"enclosure_length" => $len,
+						"enclosure_mime" => $type,
+						"enclosure_hash" => null,
+						"enclosure_password" => false
+						)
+					);
 
-						if ( is_array($errors) && count($errors) > 0) {
-							Logger::logError( var_export($errors, true), $this->type, $this->guid);
-						}
-						$count++;
+					if ( is_array($errors) && count($errors) > 0) {
+						Logger::logError( var_export($errors, true), $this->type, $this->guid);
 					}
-					else {
-						$count_existing++;
-					}
+					$count++;
 				}
 				else {
-					$count_small++;
+					$count_existing++;
 				}
 			}
 
-			Logger::logInfo( "RSS Imported $count, Existing $count_existing, Small $count_small / $total", $this->type, $endpoint->displayName());
+			Logger::logInfo( "RSS Imported $count, Existing $count_existing / $total", $this->type, $endpoint->displayName());
 		}
 		else {
 			Logger::logError( "RSS response is not XML " . var_export($xml, true), $this->type, $this->guid);

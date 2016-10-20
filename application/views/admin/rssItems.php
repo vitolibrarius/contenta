@@ -17,7 +17,7 @@
 			<span><?php echo date("M d, Y", $rss->pub_date); ?></span>
 		</p>
 		<p class="details enclosure_length"><?php echo Localized::ModelLabel($this->model->tableName(), "enclosure_length" ); ?>:
-			<span><?php echo formatSizeUnits($rss->enclosure_length); ?></span>
+			<span><?php echo ($rss->enclosure_length > 0 ? formatSizeUnits($rss->enclosure_length) : Localized::GlobalLabel("Unknown")) ; ?></span>
 		</p>
 		<p class="details endpoint_id"><?php echo Localized::ModelLabel($this->model->tableName(), "endpoint_id" ); ?>:
 			<span><?php echo $rss->endpoint()->name(); ?></span>
