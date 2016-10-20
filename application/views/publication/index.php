@@ -138,7 +138,7 @@ $(document).ready(function($) {
 		search_timer = setTimeout(refresh, 400);
 	});
 
-	$(".text_input").on('keyup change', function () {
+	$(".text_input").on('keyup', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}

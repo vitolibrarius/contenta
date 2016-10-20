@@ -69,7 +69,7 @@
 <script language="javascript" type="text/javascript">
 	$(document).ready(function($) {
 		search_timer = 0;
-		$(".logFilter").on('keyup change', function () {
+		$(".logFilter").on('keyup', function () {
 			if (search_timer) {
 				clearTimeout(search_timer);
 			}

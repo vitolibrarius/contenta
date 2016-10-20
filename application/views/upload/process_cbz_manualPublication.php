@@ -147,7 +147,7 @@ $(document).ready(function() {
 		e.preventDefault();
 	});
 
-	$(".text_input").on('keyup change', function () {
+	$(".text_input").on('keyup', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
