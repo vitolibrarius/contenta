@@ -38,6 +38,16 @@ abstract class _Reading_Item extends Model
 	const user = 'user';
 	const publication = 'publication';
 
+	public function modelName()
+	{
+		return "Reading_Item";
+	}
+
+	public function dboName()
+	{
+		return '\model\reading\Reading_ItemDBO';
+	}
+
 	public function tableName() { return Reading_Item::TABLE; }
 	public function tablePK() { return Reading_Item::id; }
 

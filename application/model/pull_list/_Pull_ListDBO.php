@@ -32,6 +32,16 @@ abstract class _Pull_ListDBO extends DataObject
 		return $this->{Pull_List::id};
 	}
 
+	public function modelName()
+	{
+		return "Pull_List";
+	}
+
+	public function dboName()
+	{
+		return "\model\pull_list\Pull_ListDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Pull_List::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Pull_List::created, "M d, Y" ); }
 

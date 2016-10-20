@@ -38,6 +38,16 @@ abstract class _Pull_List extends Model
 	const endpoint = 'endpoint';
 	const pull_list_items = 'pull_list_items';
 
+	public function modelName()
+	{
+		return "Pull_List";
+	}
+
+	public function dboName()
+	{
+		return '\model\pull_list\Pull_ListDBO';
+	}
+
 	public function tableName() { return Pull_List::TABLE; }
 	public function tablePK() { return Pull_List::id; }
 

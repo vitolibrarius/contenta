@@ -25,6 +25,16 @@ abstract class _Story_Arc_PublicationDBO extends DataObject
 		return $this->{Story_Arc_Publication::id};
 	}
 
+	public function modelName()
+	{
+		return "Story_Arc_Publication";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\Story_Arc_PublicationDBO";
+	}
+
 
 	// to-one relationship
 	public function story_arc()

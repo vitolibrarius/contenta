@@ -38,6 +38,16 @@ abstract class _Endpoint_TypeDBO extends DataObject
 		return $this->{Endpoint_Type::code};
 	}
 
+	public function modelName()
+	{
+		return "Endpoint_Type";
+	}
+
+	public function dboName()
+	{
+		return "\model\network\Endpoint_TypeDBO";
+	}
+
 
 	// to-many relationship
 	public function endpoints()

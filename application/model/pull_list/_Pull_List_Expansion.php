@@ -35,6 +35,16 @@ abstract class _Pull_List_Expansion extends Model
 	// relationship keys
 	const endpoint_type = 'endpoint_type';
 
+	public function modelName()
+	{
+		return "Pull_List_Expansion";
+	}
+
+	public function dboName()
+	{
+		return '\model\pull_list\Pull_List_ExpansionDBO';
+	}
+
 	public function tableName() { return Pull_List_Expansion::TABLE; }
 	public function tablePK() { return Pull_List_Expansion::id; }
 

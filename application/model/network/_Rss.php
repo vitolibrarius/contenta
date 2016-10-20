@@ -44,6 +44,16 @@ abstract class _Rss extends Model
 	// relationship keys
 	const endpoint = 'endpoint';
 
+	public function modelName()
+	{
+		return "Rss";
+	}
+
+	public function dboName()
+	{
+		return '\model\network\RssDBO';
+	}
+
 	public function tableName() { return Rss::TABLE; }
 	public function tablePK() { return Rss::id; }
 

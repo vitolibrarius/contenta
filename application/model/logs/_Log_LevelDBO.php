@@ -25,6 +25,16 @@ abstract class _Log_LevelDBO extends DataObject
 		return $this->{Log_Level::code};
 	}
 
+	public function modelName()
+	{
+		return "Log_Level";
+	}
+
+	public function dboName()
+	{
+		return "\model\logs\Log_LevelDBO";
+	}
+
 
 
 	/** Attributes */

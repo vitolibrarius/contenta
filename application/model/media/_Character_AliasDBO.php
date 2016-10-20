@@ -27,6 +27,16 @@ abstract class _Character_AliasDBO extends DataObject
 		return $this->{Character_Alias::id};
 	}
 
+	public function modelName()
+	{
+		return "Character_Alias";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\Character_AliasDBO";
+	}
+
 
 	// to-one relationship
 	public function character()

@@ -26,6 +26,16 @@ abstract class _Pull_List_ExpansionDBO extends DataObject
 		return $this->{Pull_List_Expansion::id};
 	}
 
+	public function modelName()
+	{
+		return "Pull_List_Expansion";
+	}
+
+	public function dboName()
+	{
+		return "\model\pull_list\Pull_List_ExpansionDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Pull_List_Expansion::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Pull_List_Expansion::created, "M d, Y" ); }
 

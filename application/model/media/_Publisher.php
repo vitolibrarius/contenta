@@ -42,6 +42,16 @@ abstract class _Publisher extends Model
 	const characters = 'characters';
 	const story_arcs = 'story_arcs';
 
+	public function modelName()
+	{
+		return "Publisher";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\PublisherDBO';
+	}
+
 	public function tableName() { return Publisher::TABLE; }
 	public function tablePK() { return Publisher::id; }
 

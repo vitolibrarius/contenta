@@ -25,6 +25,16 @@ abstract class _Series_CharacterDBO extends DataObject
 		return $this->{Series_Character::id};
 	}
 
+	public function modelName()
+	{
+		return "Series_Character";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\Series_CharacterDBO";
+	}
+
 
 	// to-one relationship
 	public function series()

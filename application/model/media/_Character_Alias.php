@@ -32,6 +32,16 @@ abstract class _Character_Alias extends Model
 	// relationship keys
 	const character = 'character';
 
+	public function modelName()
+	{
+		return "Character_Alias";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\Character_AliasDBO';
+	}
+
 	public function tableName() { return Character_Alias::TABLE; }
 	public function tablePK() { return Character_Alias::id; }
 

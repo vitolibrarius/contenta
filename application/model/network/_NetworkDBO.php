@@ -25,6 +25,16 @@ abstract class _NetworkDBO extends DataObject
 		return $this->{Network::id};
 	}
 
+	public function modelName()
+	{
+		return "Network";
+	}
+
+	public function dboName()
+	{
+		return "\model\network\NetworkDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Network::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Network::created, "M d, Y" ); }
 

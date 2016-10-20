@@ -33,6 +33,16 @@ abstract class _Pull_List_Group extends Model
 	// relationship keys
 	const pull_list_items = 'pull_list_items';
 
+	public function modelName()
+	{
+		return "Pull_List_Group";
+	}
+
+	public function dboName()
+	{
+		return '\model\pull_list\Pull_List_GroupDBO';
+	}
+
 	public function tableName() { return Pull_List_Group::TABLE; }
 	public function tablePK() { return Pull_List_Group::id; }
 

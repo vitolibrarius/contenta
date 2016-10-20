@@ -38,6 +38,16 @@ abstract class _FluxDBO extends DataObject
 		return $this->{Flux::id};
 	}
 
+	public function modelName()
+	{
+		return "Flux";
+	}
+
+	public function dboName()
+	{
+		return "\model\network\FluxDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Flux::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Flux::created, "M d, Y" ); }
 

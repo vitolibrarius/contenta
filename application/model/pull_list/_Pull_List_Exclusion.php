@@ -34,6 +34,16 @@ abstract class _Pull_List_Exclusion extends Model
 	// relationship keys
 	const endpoint_type = 'endpoint_type';
 
+	public function modelName()
+	{
+		return "Pull_List_Exclusion";
+	}
+
+	public function dboName()
+	{
+		return '\model\pull_list\Pull_List_ExclusionDBO';
+	}
+
 	public function tableName() { return Pull_List_Exclusion::TABLE; }
 	public function tablePK() { return Pull_List_Exclusion::id; }
 

@@ -30,6 +30,16 @@ abstract class _Job_RunningDBO extends DataObject
 		return $this->{Job_Running::id};
 	}
 
+	public function modelName()
+	{
+		return "Job_Running";
+	}
+
+	public function dboName()
+	{
+		return "\model\jobs\Job_RunningDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Job_Running::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Job_Running::created, "M d, Y" ); }
 

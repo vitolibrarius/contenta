@@ -35,6 +35,16 @@ abstract class _Story_Arc_Series extends Model
 	const story_arc = 'story_arc';
 	const series = 'series';
 
+	public function modelName()
+	{
+		return "Story_Arc_Series";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\Story_Arc_SeriesDBO';
+	}
+
 	public function tableName() { return Story_Arc_Series::TABLE; }
 	public function tablePK() { return Story_Arc_Series::id; }
 

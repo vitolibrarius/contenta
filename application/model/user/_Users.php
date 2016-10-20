@@ -50,6 +50,16 @@ abstract class _Users extends Model
 	const reading_queues = 'reading_queues';
 	const reading_items = 'reading_items';
 
+	public function modelName()
+	{
+		return "Users";
+	}
+
+	public function dboName()
+	{
+		return '\model\user\UsersDBO';
+	}
+
 	public function tableName() { return Users::TABLE; }
 	public function tablePK() { return Users::id; }
 

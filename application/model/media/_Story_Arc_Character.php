@@ -35,6 +35,16 @@ abstract class _Story_Arc_Character extends Model
 	const story_arc = 'story_arc';
 	const character = 'character';
 
+	public function modelName()
+	{
+		return "Story_Arc_Character";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\Story_Arc_CharacterDBO';
+	}
+
 	public function tableName() { return Story_Arc_Character::TABLE; }
 	public function tablePK() { return Story_Arc_Character::id; }
 

@@ -28,6 +28,16 @@ abstract class _Log_Level extends Model
 
 	// relationship keys
 
+	public function modelName()
+	{
+		return "Log_Level";
+	}
+
+	public function dboName()
+	{
+		return '\model\logs\Log_LevelDBO';
+	}
+
 	public function tableName() { return Log_Level::TABLE; }
 	public function tablePK() { return Log_Level::code; }
 

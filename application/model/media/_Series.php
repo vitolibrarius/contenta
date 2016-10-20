@@ -61,6 +61,16 @@ abstract class _Series extends Model
 	const story_arc_series = 'story_arc_series';
 	const reading_queues = 'reading_queues';
 
+	public function modelName()
+	{
+		return "Series";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\SeriesDBO';
+	}
+
 	public function tableName() { return Series::TABLE; }
 	public function tablePK() { return Series::id; }
 

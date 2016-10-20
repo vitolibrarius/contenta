@@ -35,6 +35,16 @@ abstract class _Version extends Model
 	// relationship keys
 	const patches = 'patches';
 
+	public function modelName()
+	{
+		return "Version";
+	}
+
+	public function dboName()
+	{
+		return '\model\version\VersionDBO';
+	}
+
 	public function tableName() { return Version::TABLE; }
 	public function tablePK() { return Version::id; }
 

@@ -54,6 +54,16 @@ abstract class _Publication extends Model
 	const reading_items = 'reading_items';
 	const publication_characters = 'publication_characters';
 
+	public function modelName()
+	{
+		return "Publication";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\PublicationDBO';
+	}
+
 	public function tableName() { return Publication::TABLE; }
 	public function tablePK() { return Publication::id; }
 

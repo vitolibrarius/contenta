@@ -35,6 +35,16 @@ abstract class _Story_Arc_Publication extends Model
 	const story_arc = 'story_arc';
 	const publication = 'publication';
 
+	public function modelName()
+	{
+		return "Story_Arc_Publication";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\Story_Arc_PublicationDBO';
+	}
+
 	public function tableName() { return Story_Arc_Publication::TABLE; }
 	public function tablePK() { return Story_Arc_Publication::id; }
 

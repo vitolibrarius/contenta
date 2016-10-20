@@ -40,6 +40,16 @@ abstract class _Media extends Model
 	const mediaType = 'mediaType';
 	const publication = 'publication';
 
+	public function modelName()
+	{
+		return "Media";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\MediaDBO';
+	}
+
 	public function tableName() { return Media::TABLE; }
 	public function tablePK() { return Media::id; }
 

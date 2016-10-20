@@ -52,6 +52,16 @@ abstract class _Endpoint extends Model
 	const flux_destinations = 'flux_destinations';
 	const jobs = 'jobs';
 
+	public function modelName()
+	{
+		return "Endpoint";
+	}
+
+	public function dboName()
+	{
+		return '\model\network\EndpointDBO';
+	}
+
 	public function tableName() { return Endpoint::TABLE; }
 	public function tablePK() { return Endpoint::id; }
 

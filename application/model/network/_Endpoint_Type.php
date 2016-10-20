@@ -44,6 +44,16 @@ abstract class _Endpoint_Type extends Model
 	const pull_list_exclusions = 'pull_list_exclusions';
 	const pull_list_expansions = 'pull_list_expansions';
 
+	public function modelName()
+	{
+		return "Endpoint_Type";
+	}
+
+	public function dboName()
+	{
+		return '\model\network\Endpoint_TypeDBO';
+	}
+
 	public function tableName() { return Endpoint_Type::TABLE; }
 	public function tablePK() { return Endpoint_Type::code; }
 

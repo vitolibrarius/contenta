@@ -159,7 +159,7 @@ class SelectSQL extends SQL
 		if ($statement && $statement->execute($params)) {
 			try {
 				if ( isset($this->model) && $this->objectBasedSelect() ) {
-					$dboClassName = DataObject::NameForModel($this->model);
+					$dboClassName = $this->model->dboName();
 					if (class_exists($dboClassName)) {
 						return $statement->fetchObject($dboClassName);
 					}
@@ -191,11 +191,12 @@ class SelectSQL extends SQL
 		if ($statement && $statement->execute($params)) {
 			try {
 				if ( isset($this->model) && $this->objectBasedSelect() ) {
-					$dboClassName = DataObject::NameForModel($this->model);
+					$dboClassName = $this->model->dboName();
 					if (class_exists($dboClassName)) {
 						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
 					}
 					else {
+						Logger::logError("DBO class name not found for ". $dboClassName);
 						return $statement->fetchAll();
 					}
 				}

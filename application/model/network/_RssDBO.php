@@ -35,6 +35,16 @@ abstract class _RssDBO extends DataObject
 		return $this->{Rss::id};
 	}
 
+	public function modelName()
+	{
+		return "Rss";
+	}
+
+	public function dboName()
+	{
+		return "\model\network\RssDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Rss::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Rss::created, "M d, Y" ); }
 

@@ -41,6 +41,16 @@ abstract class _Pull_List_Item extends Model
 	const pull_list_group = 'pull_list_group';
 	const pull_list = 'pull_list';
 
+	public function modelName()
+	{
+		return "Pull_List_Item";
+	}
+
+	public function dboName()
+	{
+		return '\model\pull_list\Pull_List_ItemDBO';
+	}
+
 	public function tableName() { return Pull_List_Item::TABLE; }
 	public function tablePK() { return Pull_List_Item::id; }
 

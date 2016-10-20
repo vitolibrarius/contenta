@@ -28,6 +28,16 @@ abstract class _Media_Type extends Model
 
 	// relationship keys
 
+	public function modelName()
+	{
+		return "Media_Type";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\Media_TypeDBO';
+	}
+
 	public function tableName() { return Media_Type::TABLE; }
 	public function tablePK() { return Media_Type::code; }
 

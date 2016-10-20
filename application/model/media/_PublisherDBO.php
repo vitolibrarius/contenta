@@ -35,6 +35,16 @@ abstract class _PublisherDBO extends DataObject
 		return $this->{Publisher::id};
 	}
 
+	public function modelName()
+	{
+		return "Publisher";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\PublisherDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Publisher::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Publisher::created, "M d, Y" ); }
 

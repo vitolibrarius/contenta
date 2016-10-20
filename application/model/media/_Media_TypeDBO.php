@@ -25,6 +25,16 @@ abstract class _Media_TypeDBO extends DataObject
 		return $this->{Media_Type::code};
 	}
 
+	public function modelName()
+	{
+		return "Media_Type";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\Media_TypeDBO";
+	}
+
 
 
 	/** Attributes */

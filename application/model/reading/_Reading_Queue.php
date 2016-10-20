@@ -45,6 +45,16 @@ abstract class _Reading_Queue extends Model
 	const series = 'series';
 	const story_arc = 'story_arc';
 
+	public function modelName()
+	{
+		return "Reading_Queue";
+	}
+
+	public function dboName()
+	{
+		return '\model\reading\Reading_QueueDBO';
+	}
+
 	public function tableName() { return Reading_Queue::TABLE; }
 	public function tablePK() { return Reading_Queue::id; }
 

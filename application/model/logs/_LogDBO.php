@@ -29,6 +29,16 @@ abstract class _LogDBO extends DataObject
 		return $this->{Log::id};
 	}
 
+	public function modelName()
+	{
+		return "Log";
+	}
+
+	public function dboName()
+	{
+		return "\model\logs\LogDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Log::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Log::created, "M d, Y" ); }
 

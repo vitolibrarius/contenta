@@ -34,6 +34,16 @@ abstract class _Reading_QueueDBO extends DataObject
 		return $this->{Reading_Queue::id};
 	}
 
+	public function modelName()
+	{
+		return "Reading_Queue";
+	}
+
+	public function dboName()
+	{
+		return "\model\reading\Reading_QueueDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Reading_Queue::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Reading_Queue::created, "M d, Y" ); }
 

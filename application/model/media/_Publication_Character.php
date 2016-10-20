@@ -35,6 +35,16 @@ abstract class _Publication_Character extends Model
 	const publication = 'publication';
 	const character = 'character';
 
+	public function modelName()
+	{
+		return "Publication_Character";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\Publication_CharacterDBO';
+	}
+
 	public function tableName() { return Publication_Character::TABLE; }
 	public function tablePK() { return Publication_Character::id; }
 

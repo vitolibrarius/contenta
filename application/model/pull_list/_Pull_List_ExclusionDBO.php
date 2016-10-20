@@ -25,6 +25,16 @@ abstract class _Pull_List_ExclusionDBO extends DataObject
 		return $this->{Pull_List_Exclusion::id};
 	}
 
+	public function modelName()
+	{
+		return "Pull_List_Exclusion";
+	}
+
+	public function dboName()
+	{
+		return "\model\pull_list\Pull_List_ExclusionDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Pull_List_Exclusion::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Pull_List_Exclusion::created, "M d, Y" ); }
 

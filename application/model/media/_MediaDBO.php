@@ -30,6 +30,16 @@ abstract class _MediaDBO extends DataObject
 		return $this->{Media::id};
 	}
 
+	public function modelName()
+	{
+		return "Media";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\MediaDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Media::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Media::created, "M d, Y" ); }
 

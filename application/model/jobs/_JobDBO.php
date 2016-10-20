@@ -37,6 +37,16 @@ abstract class _JobDBO extends DataObject
 		return $this->{Job::id};
 	}
 
+	public function modelName()
+	{
+		return "Job";
+	}
+
+	public function dboName()
+	{
+		return "\model\jobs\JobDBO";
+	}
+
 	public function isEnabled() {
 		return (isset($this->enabled) && $this->enabled == Model::TERTIARY_TRUE);
 	}

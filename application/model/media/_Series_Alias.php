@@ -32,6 +32,16 @@ abstract class _Series_Alias extends Model
 	// relationship keys
 	const series = 'series';
 
+	public function modelName()
+	{
+		return "Series_Alias";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\Series_AliasDBO';
+	}
+
 	public function tableName() { return Series_Alias::TABLE; }
 	public function tablePK() { return Series_Alias::id; }
 

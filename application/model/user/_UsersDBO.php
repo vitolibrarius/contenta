@@ -43,6 +43,16 @@ abstract class _UsersDBO extends DataObject
 		return $this->{Users::id};
 	}
 
+	public function modelName()
+	{
+		return "Users";
+	}
+
+	public function dboName()
+	{
+		return "\model\user\UsersDBO";
+	}
+
 	public function isActive() {
 		return (isset($this->active) && $this->active == Model::TERTIARY_TRUE);
 	}

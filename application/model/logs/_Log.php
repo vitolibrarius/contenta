@@ -38,6 +38,16 @@ abstract class _Log extends Model
 	// relationship keys
 	const logLevel = 'logLevel';
 
+	public function modelName()
+	{
+		return "Log";
+	}
+
+	public function dboName()
+	{
+		return '\model\logs\LogDBO';
+	}
+
 	public function tableName() { return Log::TABLE; }
 	public function tablePK() { return Log::id; }
 

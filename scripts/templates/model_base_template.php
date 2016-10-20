@@ -51,6 +51,16 @@ foreach( $objectRelationships as $name => $detailArray ) {
 }
 ?>
 
+	public function modelName()
+	{
+		return "<?php echo $this->modelClassName(); ?>";
+	}
+
+	public function dboName()
+	{
+		return '<?php echo $this->dboPackageClassName(); ?>';
+	}
+
 	public function tableName() { return <?php echo $this->modelClassName(); ?>::TABLE; }
 	public function tablePK() { return <?php echo $this->modelClassName() . "::" . $this->primaryKeys[0]; ?>; }
 

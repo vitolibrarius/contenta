@@ -44,6 +44,16 @@ abstract class _CharacterDBO extends DataObject
 		return $this->{Character::id};
 	}
 
+	public function modelName()
+	{
+		return "Character";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\CharacterDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Character::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Character::created, "M d, Y" ); }
 

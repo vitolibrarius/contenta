@@ -39,6 +39,16 @@ abstract class _Job_Type extends Model
 	const jobsRunning = 'jobsRunning';
 	const jobs = 'jobs';
 
+	public function modelName()
+	{
+		return "Job_Type";
+	}
+
+	public function dboName()
+	{
+		return '\model\jobs\Job_TypeDBO';
+	}
+
 	public function tableName() { return Job_Type::TABLE; }
 	public function tablePK() { return Job_Type::code; }
 

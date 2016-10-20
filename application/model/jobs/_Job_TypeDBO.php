@@ -34,6 +34,16 @@ abstract class _Job_TypeDBO extends DataObject
 		return $this->{Job_Type::code};
 	}
 
+	public function modelName()
+	{
+		return "Job_Type";
+	}
+
+	public function dboName()
+	{
+		return "\model\jobs\Job_TypeDBO";
+	}
+
 	public function isScheduled() {
 		return (isset($this->scheduled) && $this->scheduled == Model::TERTIARY_TRUE);
 	}

@@ -47,6 +47,16 @@ abstract class _Job extends Model
 	const jobType = 'jobType';
 	const endpoint = 'endpoint';
 
+	public function modelName()
+	{
+		return "Job";
+	}
+
+	public function dboName()
+	{
+		return '\model\jobs\JobDBO';
+	}
+
 	public function tableName() { return Job::TABLE; }
 	public function tablePK() { return Job::id; }
 

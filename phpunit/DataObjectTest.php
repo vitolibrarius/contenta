@@ -28,28 +28,6 @@ class DataObjectTest extends PHPUnit_Framework_TestCase
 /*	 Test functions */
 
 	/**
-	 * @covers	NameForTable
-	 * 			T_FUNCTION T_STATIC T_PUBLIC NameForTable ( $table_name = null)
-	 * @todo	Implement testNameForTable().
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 21:44:52.
-	 */
-	public function testNameForTable()
-	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
-	 * @covers	NameForModel
-	 * 			T_FUNCTION T_STATIC T_PUBLIC NameForModel ( Model $model = null)
-	 * @todo	Implement testNameForModel().
-	 * Generated from Function.tpl by PhpTestClassGenerator.php on 2016-05-16 21:44:52.
-	 */
-	public function testNameForModel()
-	{
-		$this->markTestIncomplete('This test has not been implemented yet.');
-	}
-
-	/**
 	 * @covers	__call
 	 * 			T_FUNCTION T_PUBLIC __call ( $method, $args)
 	 * @todo	Implement test__call().

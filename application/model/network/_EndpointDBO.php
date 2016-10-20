@@ -42,6 +42,16 @@ abstract class _EndpointDBO extends DataObject
 		return $this->{Endpoint::id};
 	}
 
+	public function modelName()
+	{
+		return "Endpoint";
+	}
+
+	public function dboName()
+	{
+		return "\model\network\EndpointDBO";
+	}
+
 	public function isEnabled() {
 		return (isset($this->enabled) && $this->enabled == Model::TERTIARY_TRUE);
 	}

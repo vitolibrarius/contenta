@@ -34,7 +34,7 @@ abstract class Model
 	private static $_named_models = null;
 	private static $_named_validators = null;
 
-	private $cached_dbo = array();
+	private static $_cached_dbo = null;
 
 	public static function NormalizedModelName( $tableName )
 	{
@@ -80,6 +80,41 @@ abstract class Model
 	public function modelName()
 	{
 		return Model::NormalizedModelName($this->tableName());
+	}
+
+	public function dboName()
+	{
+		return Model::NormalizedModelName($this->tableName());
+	}
+
+	public static function objectForCacheKey($key = '')
+	{
+		if ( is_null(Model::$_named_models) ) {
+			Model::$_cached_dbo = array();
+		}
+
+		if ( isset(Model::$_cached_dbo[$key]) ) {
+			return Model::$_cached_dbo[$key];
+		}
+		return false;
+	}
+
+	public static function setObjectForCacheKey( $key = '', $obj = null )
+	{
+		if ( is_null(Model::$_named_models) ) {
+			Model::$_cached_dbo = array();
+		}
+
+		if ( empty($key) == false ) {
+			if ( is_null($obj) || $obj == false ) {
+				if (isset(Model::$_cached_dbo[$key])) {
+					unset(Model::$_cached_dbo[$key]);
+				}
+			}
+			else {
+				Model::$_cached_dbo[$key] = $obj;
+			}
+		}
 	}
 
 	/* Common model methods */
@@ -136,15 +171,9 @@ abstract class Model
 	public function refreshObject($object)
 	{
 		if ( $object instanceof DataObject ) {
-			$pkValue = $object->pkValue();
-			if ( isset($cached_dbo[$pkValue]) ) {
-				unset($cached_dbo[$pkValue]);
-			}
-
+			$cacheKey = $object->cacheKey();
 			$obj = SQL::SelectObject( $this, $object )->fetch();
-			if ( $obj != false ) {
-				$cached_dbo[$pkValue] = $obj;
-			}
+			Model::setObjectForCacheKey($cacheKey, $obj );
 			return $obj;
 		}
 		return false;
@@ -152,12 +181,11 @@ abstract class Model
 
 	public function objectForId($id = 0)
 	{
-		$obj = (isset($cached_dbo[$id]) ? $cached_dbo[$id] : false);
+		$cacheKey = $this->modelName().'-'.$id;
+		$obj = Model::objectForCacheKey($cacheKey);
 		if ( $obj == false ) {
 			$obj = SQL::Select( $this, null, db\Qualifier::Equals( $this->tablePK(), $id) )->fetch();
-			if ( $obj != false ) {
-				$cached_dbo[$id] = $obj;
-			}
+			Model::setObjectForCacheKey($cacheKey, $obj );
 		}
 		return $obj;
 	}

@@ -53,6 +53,16 @@ abstract class _Character extends Model
 	const series_characters = 'series_characters';
 	const story_arc_characters = 'story_arc_characters';
 
+	public function modelName()
+	{
+		return "Character";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\CharacterDBO';
+	}
+
 	public function tableName() { return Character::TABLE; }
 	public function tablePK() { return Character::id; }
 

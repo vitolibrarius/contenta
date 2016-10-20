@@ -208,7 +208,7 @@ class JoinSQL extends SQL
 			try {
 				$primaryModel = $this->objectBasedSelect();
 				if ( $primaryModel instanceof Model ) {
-					$dboClassName = DataObject::NameForModel($primaryModel);
+					$dboClassName = $primaryModel->dboName();
 					if (class_exists($dboClassName)) {
 						return $statement->fetchObject($dboClassName);
 					}
@@ -241,7 +241,7 @@ class JoinSQL extends SQL
 			try {
 				$primaryModel = $this->objectBasedSelect();
 				if ( $primaryModel instanceof Model ) {
-					$dboClassName = DataObject::NameForModel($primaryModel);
+					$dboClassName = $primaryModel->dboName();
 					if (class_exists($dboClassName)) {
 						return $statement->fetchAll(PDO::FETCH_CLASS, $dboClassName);
 					}

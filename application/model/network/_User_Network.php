@@ -35,6 +35,16 @@ abstract class _User_Network extends Model
 	const user = 'user';
 	const network = 'network';
 
+	public function modelName()
+	{
+		return "User_Network";
+	}
+
+	public function dboName()
+	{
+		return '\model\network\User_NetworkDBO';
+	}
+
 	public function tableName() { return User_Network::TABLE; }
 	public function tablePK() { return User_Network::id; }
 

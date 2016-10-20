@@ -27,6 +27,16 @@ abstract class _Series_AliasDBO extends DataObject
 		return $this->{Series_Alias::id};
 	}
 
+	public function modelName()
+	{
+		return "Series_Alias";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\Series_AliasDBO";
+	}
+
 
 	// to-one relationship
 	public function series()

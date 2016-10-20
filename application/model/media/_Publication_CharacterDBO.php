@@ -25,6 +25,16 @@ abstract class _Publication_CharacterDBO extends DataObject
 		return $this->{Publication_Character::id};
 	}
 
+	public function modelName()
+	{
+		return "Publication_Character";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\Publication_CharacterDBO";
+	}
+
 
 	// to-one relationship
 	public function publication()

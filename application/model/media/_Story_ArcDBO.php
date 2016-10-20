@@ -46,6 +46,16 @@ abstract class _Story_ArcDBO extends DataObject
 		return $this->{Story_Arc::id};
 	}
 
+	public function modelName()
+	{
+		return "Story_Arc";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\Story_ArcDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Story_Arc::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Story_Arc::created, "M d, Y" ); }
 

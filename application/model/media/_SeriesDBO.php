@@ -51,6 +51,16 @@ abstract class _SeriesDBO extends DataObject
 		return $this->{Series::id};
 	}
 
+	public function modelName()
+	{
+		return "Series";
+	}
+
+	public function dboName()
+	{
+		return "\model\media\SeriesDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Series::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Series::created, "M d, Y" ); }
 

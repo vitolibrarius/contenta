@@ -35,6 +35,16 @@ abstract class _Series_Character extends Model
 	const series = 'series';
 	const character = 'character';
 
+	public function modelName()
+	{
+		return "Series_Character";
+	}
+
+	public function dboName()
+	{
+		return '\model\media\Series_CharacterDBO';
+	}
+
 	public function tableName() { return Series_Character::TABLE; }
 	public function tablePK() { return Series_Character::id; }
 

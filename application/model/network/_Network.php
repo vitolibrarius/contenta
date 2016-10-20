@@ -34,6 +34,16 @@ abstract class _Network extends Model
 	// relationship keys
 	const user_network = 'user_network';
 
+	public function modelName()
+	{
+		return "Network";
+	}
+
+	public function dboName()
+	{
+		return '\model\network\NetworkDBO';
+	}
+
 	public function tableName() { return Network::TABLE; }
 	public function tablePK() { return Network::id; }
 

@@ -44,6 +44,16 @@ abstract class _Flux extends Model
 	const source_endpoint = 'source_endpoint';
 	const destination_endpoint = 'destination_endpoint';
 
+	public function modelName()
+	{
+		return "Flux";
+	}
+
+	public function dboName()
+	{
+		return '\model\network\FluxDBO';
+	}
+
 	public function tableName() { return Flux::TABLE; }
 	public function tablePK() { return Flux::id; }
 

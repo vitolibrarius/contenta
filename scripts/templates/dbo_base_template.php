@@ -47,6 +47,16 @@ foreach( $this->attributes as $name => $detailArray ) {
 		return $this->{<?php echo $this->modelClassName() . "::" . $this->primaryKeys[0]; ?>};
 	}
 
+	public function modelName()
+	{
+		return "<?php echo $this->modelClassName(); ?>";
+	}
+
+	public function dboName()
+	{
+		return "<?php echo $this->dboPackageClassName(); ?>";
+	}
+
 <?php foreach( $this->attributes as $name => $detailArray ) : ?>
 <?php if ($name != "id" && isset($detailArray['type'])) : ?>
 <?php if ($detailArray['type'] == 'DATE') : ?>

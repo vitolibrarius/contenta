@@ -11,35 +11,6 @@ abstract class DataObject
 	public $id;
 	public $unsavedUpdates;
 
-	public static function NameForTable( $name = null)
-	{
-		if ( is_null($name) == false) {
-			$parts = explode("_", $name);
-			$parts = array_map('ucfirst', $parts);
-			$name = implode("_", $parts) . 'DBO';
-			$className = "model\\" . $name;
-
-			$path = find_entry_with_name( appendPath( APPLICATION_PATH, "model"), $name . ".php" );
-			if ( is_null($path) == false ) {
-				$package = basename(dirname($path));
-				if ( $package != "model" ) {
-					$className = "model\\" . $package . "\\" . $name;
-				}
-			}
-
-			return $className;
-		}
-		return null;
-	}
-
-	public static function NameForModel(Model $model = null)
-	{
-		if ( is_null($model) == false) {
-			return DataObject::NameForTable($model->tableName());
-		}
-		return null;
-	}
-
 	function __construct()
 	{
 	}
@@ -53,6 +24,10 @@ abstract class DataObject
 	}
 
 	public abstract function pkValue();
+
+	public function cacheKey() {
+		return $this->modelName() . '-' . $this->pkValue();
+	}
 
 	public function displayName() {
 		return $this->modelName() . ' (' . $this->pkValue() . ')';

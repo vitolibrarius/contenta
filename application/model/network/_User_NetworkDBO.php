@@ -25,6 +25,16 @@ abstract class _User_NetworkDBO extends DataObject
 		return $this->{User_Network::id};
 	}
 
+	public function modelName()
+	{
+		return "User_Network";
+	}
+
+	public function dboName()
+	{
+		return "\model\network\User_NetworkDBO";
+	}
+
 
 	// to-one relationship
 	public function user()

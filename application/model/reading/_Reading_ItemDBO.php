@@ -28,6 +28,16 @@ abstract class _Reading_ItemDBO extends DataObject
 		return $this->{Reading_Item::id};
 	}
 
+	public function modelName()
+	{
+		return "Reading_Item";
+	}
+
+	public function dboName()
+	{
+		return "\model\reading\Reading_ItemDBO";
+	}
+
 	public function formattedDateTime_created() { return $this->formattedDate( Reading_Item::created, "M d, Y H:i" ); }
 	public function formattedDate_created() {return $this->formattedDate( Reading_Item::created, "M d, Y" ); }
 

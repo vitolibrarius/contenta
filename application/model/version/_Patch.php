@@ -33,6 +33,16 @@ abstract class _Patch extends Model
 	// relationship keys
 	const version = 'version';
 
+	public function modelName()
+	{
+		return "Patch";
+	}
+
+	public function dboName()
+	{
+		return '\model\version\PatchDBO';
+	}
+
 	public function tableName() { return Patch::TABLE; }
 	public function tablePK() { return Patch::id; }
 
