@@ -307,9 +307,6 @@
             "newznab": {
                 "search": "Search"
             },
-            "parameter": {
-                "label": "Model\/endpoint\/parameter\/label"
-            },
             "type_code": {
                 "label": "Connection Type"
             },
@@ -560,12 +557,18 @@
                 "label": "External URL"
             }
         },
+        "pull_list": {
+            "published": {
+                "label": "Pub Date"
+            }
+        },
         "pull_list_item": {
             "issue": {
                 "label": "Issue Number"
             },
             "name": {
-                "label": "Name"
+                "label": "Name",
+                "search": "Issue Name"
             },
             "pull_list_id": {
                 "search": "Pull List"
@@ -590,7 +593,8 @@
                 "search": "Year"
             },
             "enclosure_length": {
-                "label": "Size"
+                "label": "Size",
+                "search": "Min (Mb)"
             },
             "endpoint_id": {
                 "label": "Endpoint"
@@ -600,7 +604,7 @@
             },
             "pub_date": {
                 "label": "RSS Pub Date",
-                "search": "Published Date"
+                "search": "Published"
             }
         },
         "series": {

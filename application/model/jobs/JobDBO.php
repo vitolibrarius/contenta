@@ -83,10 +83,10 @@ class JobDBO extends _JobDBO
 			$jsonData = $jobType->jsonParameters();
 		}
 
-		if ( isset($this->parameter) ) {
+		if ( isset($this->parameter) && empty($this->parameter) == false) {
 			$override = json_decode($this->parameter, true);
 			if ( json_last_error() != 0 ) {
-				return jsonErrorString(json_last_error()) . "'" . $this->parameter . "'";
+				throw new \Exception( jsonErrorString(json_last_error()) . " '" . $this->parameter . "'" );
 			}
 
 			if (is_array($override) ) {

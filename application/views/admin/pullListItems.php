@@ -16,12 +16,14 @@
 		<th><?php echo Localized::ModelLabel($this->model->tableName(), "name" ); ?></th>
 		<th><?php echo Localized::ModelLabel($this->model->tableName(), "issue" ); ?></th>
 		<th><?php echo Localized::ModelLabel($this->model->tableName(), "year" ); ?></th>
+		<th><?php echo Localized::ModelLabel("pull_list", "published" ); ?></th>
 	</tr>
 <?php foreach( $groupList as $item ) : ?>
 	<tr>
 		<td><?php echo $item->name(); ?></td>
 		<td><?php echo $item->issue(); ?></td>
 		<td><?php echo $item->year(); ?></td>
+		<td><?php echo $item->pull_list()->formattedDate_published(); ?></td>
 	</tr>
 <?php endforeach; ?> <!-- items -->
 </table>

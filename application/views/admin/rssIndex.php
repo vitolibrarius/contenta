@@ -31,6 +31,14 @@
 				value="">
 			</input>
 		</div>
+		<div class="grid_1">
+			<input type="number" name="searchSize" id="searchSize"
+				min="0"
+				class="text_input"
+				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "enclosure_length" ); ?>"
+				value="">
+			</input>
+		</div>
 	</div>
 	</form>
 </section>
@@ -42,7 +50,7 @@ var NZBDownload_url="<?php echo Config::Web('/AdminWanted/downloadNewznab'); ?>"
 
 $(document).ready(function($) {
 	search_timer = 0;
-	$(".text_input").on('keyup change', function () {
+	$(".text_input").on('keyup', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
@@ -57,7 +65,8 @@ $(document).ready(function($) {
 				name: $('input#searchName').val(),
 				issue: $('input#searchIssue').val(),
 				year:  $('input#searchYear').val(),
-				age:  $('input#searchAge').val()
+				age:  $('input#searchAge').val(),
+				size:  $('input#searchSize').val()
 			},
 			dataType: "text",
 			success: function(msg){

@@ -111,7 +111,7 @@ $(document).ready(function($) {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
-		search_timer = setTimeout(refresh, 400); 
+		search_timer = setTimeout(refresh, 400);
 	});
 
 	$("#searchStoryArcs").select2({
@@ -142,14 +142,14 @@ $(document).ready(function($) {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
-		search_timer = setTimeout(refresh, 400); 
+		search_timer = setTimeout(refresh, 400);
 	});
 
-	$(".text_input").on('keyup change', function () {
+	$(".text_input").on('keyup', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
-		search_timer = setTimeout(refresh, 400); 
+		search_timer = setTimeout(refresh, 400);
 	});
 
 	function refresh() {

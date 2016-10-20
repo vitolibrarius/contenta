@@ -14,12 +14,17 @@ use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
 class Pull_List_ExpansionDBO extends _Pull_List_ExpansionDBO
 {
-	public function preg_quoted_pattern()
+	public function applyExpansion($source = '')
 	{
-		if ( isset($this->pattern) ) {
-			return preg_quote($this->pattern);
+		if ( is_string($source) && empty($source) == false) {
+			if ( $this->pattern != null ) {
+				$replacement = preg_replace('/(?:'.$this->pattern.')+/', $this->replace(), $source);
+				if ( $source != $replacement ) {
+					return $replacement;
+				}
+			}
 		}
-		return null;
+		return $source;
 	}
 }
 

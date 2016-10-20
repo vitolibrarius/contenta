@@ -7,6 +7,12 @@
 				<option></option>
 			</select>
 		</div>
+		<div class="grid_2">
+			<input type="text" name="searchName" id="searchName"
+				class="text_input"
+				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
+				value="">
+		</div>
 	</div>
 	</form>
 </section>
@@ -45,12 +51,20 @@ $(document).ready(function($) {
 		search_timer = setTimeout(refresh, 400);
 	});
 
+	$(".text_input").on('keyup', function () {
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 400);
+	});
+
 	function refresh() {
 		$.ajax({
 			type: "GET",
 			url: "<?php echo Config::Web('/AdminPullList/searchPullLists'); ?>",
 			data: {
-				pull_list_id: $('#searchPullList').val()
+				pull_list_id: $('#searchPullList').val(),
+				name: $('#searchName').val()
 			},
 			dataType: "text",
 			success: function(msg){

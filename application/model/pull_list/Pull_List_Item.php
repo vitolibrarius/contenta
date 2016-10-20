@@ -32,7 +32,11 @@ class Pull_List_Item extends _Pull_List_Item
 
 				$values[Pull_List_Item::search_name] = normalizeSearchString($meta['name']);
 
-				$existing = $this->objectsForNameIssueYear(
+				$pl_id = (isset($values['pull_list_id']) ? $values['pull_list_d'] :
+					(isset($values['pull_list']) ? $values['pull_list']->pkValue() : 0));
+
+				$existing = $this->objectsForPullListId_NameIssueYear(
+					$pl_id,
 					$values[Pull_List_Item::name],
 					$values[Pull_List_Item::issue],
 					$values[Pull_List_Item::year]

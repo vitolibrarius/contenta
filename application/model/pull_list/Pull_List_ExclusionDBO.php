@@ -14,7 +14,15 @@ use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
 class Pull_List_ExclusionDBO extends _Pull_List_ExclusionDBO
 {
-
+	public function isExcluded($source = '')
+	{
+		if ( is_string($source) && empty($source) == false) {
+			if ( preg_match('/(?:\b'.$this->pattern.'\b)+/', $source) ) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 ?>

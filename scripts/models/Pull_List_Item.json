@@ -67,6 +67,65 @@
 					"optional": true
 				}
 			]
+		},
+		"objectsForPullList_NameIssueYear": {
+			"arguments": [ "pull_list", "name", "issue", "year" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Related",
+					"relationship": "pull_list",
+					"argAttribute": "pull_list"
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "name",
+					"argAttribute": "name",
+					"optional": true
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "issue",
+					"argAttribute": "issue",
+					"optional": true
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "year",
+					"argAttribute": "year",
+					"optional": true
+				}
+			]
+		},
+		"objectsForPullListId_NameIssueYear": {
+			"arguments": [ "pull_list_id", "name", "issue", "year" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Equals",
+					"keyAttribute": "pull_list_id",
+					"argAttribute": "pull_list_id",
+					"optional": true
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "name",
+					"argAttribute": "name",
+					"optional": true
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "issue",
+					"argAttribute": "issue",
+					"optional": true
+				},
+				{
+					"type" : "Equals",
+					"keyAttribute": "year",
+					"argAttribute": "year",
+					"optional": true
+				}
+			]
 		}
 	},
     "indexes" : [

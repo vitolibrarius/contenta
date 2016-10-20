@@ -22,6 +22,7 @@ class PreviewsWorldImporter extends EndpointImporter
 {
 	public $expansions = null;
 	public $items_excluded = null;
+	public $groups_excluded = null;
 
 	function __construct($guid)
 	{
@@ -30,9 +31,19 @@ class PreviewsWorldImporter extends EndpointImporter
 
 	public function isGroupInExclusions( $groupname = "none" )
 	{
-		$type = $this->endpoint()->endpointType();
-		$matches = Model::Named( "Pull_List_Exclusion" )->objectsForPatternTypeAndEndpointType( $groupname, Pull_List_Exclusion::GROUP_TYPE, $type->code );
-		return (is_array($matches) && count($matches) > 0);
+		if ( $this->groups_excluded == null ) {
+			$type = $this->endpoint()->endpointType();
+			$this->groups_excluded = Model::Named( "Pull_List_Exclusion" )->objectsForTypeAndEndpointType( Pull_List_Exclusion::GROUP_TYPE, $type->code );
+		}
+
+		if (is_null($groupname) == false) {
+			foreach( $this->groups_excluded as $excl ) {
+				if ( $excl->isExcluded($groupname )) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public function isItemInExclusions( $itemname = "none" )
@@ -44,8 +55,7 @@ class PreviewsWorldImporter extends EndpointImporter
 
 		if (is_null($itemname) == false) {
 			foreach( $this->items_excluded as $excl ) {
-				$pattern = $excl->pattern;
-				if (contains($pattern, $itemname )) {
+				if ( $excl->isExcluded($itemname )) {
 					return true;
 				}
 			}
@@ -62,13 +72,7 @@ class PreviewsWorldImporter extends EndpointImporter
 
 		if ( is_array($this->expansions) ) {
 			foreach( $this->expansions as $pl_expand ) {
-				$quoted = $pl_expand->preg_quoted_pattern();
-				if ( $quoted != null ) {
-					$replacement = preg_replace('/(?:'.$quoted.')+/', $pl_expand->replace(), $itemname);
-					if ( $itemname != $replacement ) {
-						$itemname = $replacement;
-					}
-				}
+				$itemname = $pl_expand->applyExpansion($itemname);
 			}
 		}
 		return $itemname;
@@ -144,7 +148,7 @@ class PreviewsWorldImporter extends EndpointImporter
 							);
 
 							list($pulllist_item, $errors) = Model::Named("Pull_List_Item")->createObject( array(
-								Pull_List_Item::data => $line[1],
+								Pull_List_Item::data => $item,
 								"pull_list_group" => $pulllist_group,
 								"pull_list" => $pulllist
 								)

@@ -354,6 +354,56 @@ abstract class _Pull_List_Item extends Model
 		return $result;
 	}
 
+	public function objectsForPullList_NameIssueYear(Pull_ListDBO $pull_list, $name, $issue, $year )
+	{
+		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
+		$qualifiers = array();
+		$qualifiers[] = Qualifier::FK( 'pull_list_id', $pull_list);
+		if ( isset($name)) {
+			$qualifiers[] = Qualifier::Equals( 'name', $name);
+		}
+		if ( isset($issue)) {
+			$qualifiers[] = Qualifier::Equals( 'issue', $issue);
+		}
+		if ( isset($year)) {
+			$qualifiers[] = Qualifier::Equals( 'year', $year);
+		}
+
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
+		}
+
+		$result = $select->fetchAll();
+		return $result;
+	}
+
+	public function objectsForPullListId_NameIssueYear( $pull_list_id, $name, $issue, $year )
+	{
+		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
+		$qualifiers = array();
+		if ( isset($pull_list_id)) {
+			$qualifiers[] = Qualifier::Equals( 'pull_list_id', $pull_list_id);
+		}
+		if ( isset($name)) {
+			$qualifiers[] = Qualifier::Equals( 'name', $name);
+		}
+		if ( isset($issue)) {
+			$qualifiers[] = Qualifier::Equals( 'issue', $issue);
+		}
+		if ( isset($year)) {
+			$qualifiers[] = Qualifier::Equals( 'year', $year);
+		}
+
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
+		}
+
+		$result = $select->fetchAll();
+		return $result;
+	}
+
 
 	/**
 	 * Attribute editing

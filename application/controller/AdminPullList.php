@@ -20,6 +20,7 @@ use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
 use \model\network\Rss as Rss;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
+use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
@@ -43,25 +44,31 @@ class AdminPullList extends Admin
 	function searchPullLists()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$model = Model::Named('Pull_List_Item');
-			$qualifiers = array();
+			$pull_list_id = HttpGet::get('pull_list_id', false);
+			$name = HttpGet::get('name', false);
 
-			if ( isset($_GET['pull_list_id']) && intval($_GET['pull_list_id']) > 0 ) {
-				$qualifiers[] = Qualifier::Equals( Pull_List_Item::pull_list_id, $_GET['pull_list_id'] );
+			if ( $pull_list_id != false || $name != false) {
+				$model = Model::Named('Pull_List_Item');
+				$qualifiers = array();
+
+				if ( $pull_list_id != false ) {
+					$qualifiers[] = Qualifier::Equals( Pull_List_Item::pull_list_id, $pull_list_id );
+				}
+
+				if ( $name != false ) {
+					$qualifiers[] = Qualifier::Like( Pull_List_Item::search_name, normalizeSearchString($name));
+				}
+
+				$select = SQL::Select($model);
+				if ( count($qualifiers) > 0 ) {
+					$select->where( Qualifier::AndQualifier( $qualifiers ));
+				}
+				$select->limit( -1 );
+				$select->orderBy( $model->sortOrder() );
+
+				$this->view->model = $model;
+				$this->view->listArray = $select->fetchAll();
 			}
-
-			$select = SQL::Select($model);
-			if ( count($qualifiers) > 0 ) {
-				$select->where( Qualifier::AndQualifier( $qualifiers ));
-			}
-			$select->limit( -1 );
-			$select->orderBy( $model->sortOrder() );
-
-			$this->view->model = $model;
-			$this->view->listArray = $select->fetchAll();
-// 			$this->view->toggleWantedAction = "/AdminSeries/toggleWantedSeries";
-// 			$this->view->editAction = "/AdminSeries/editSeries";
-// 			$this->view->wantedAction = "/AdminSeries/toggleWantedSeries";
 			$this->view->render( '/admin/pullListItems', true);
 		}
 	}
@@ -95,6 +102,10 @@ class AdminPullList extends Admin
 			if ( isset($_GET['age']) && intval($_GET['age']) > 0 ) {
 				$ageTime = 86400 * intval($_GET['age']);
 				$qualifiers[] = Qualifier::GreaterThan( Rss::pub_date, (time() - $ageTime) );
+			}
+			if ( isset($_GET['size']) && intval($_GET['size']) > 0 ) {
+				$enclosure_length = intval($_GET['size']) * MEGABYTE;
+				$qualifiers[] = Qualifier::GreaterThan( Rss::enclosure_length, $enclosure_length );
 			}
 
 			$select = SQL::Select($model);

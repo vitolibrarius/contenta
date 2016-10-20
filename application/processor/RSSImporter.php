@@ -25,10 +25,11 @@ class RSSImporter extends EndpointImporter
 	{
 		$connection = $this->endpointConnector();
 		$endpoint = $this->endpoint();
-		list($xml, $headers) = $connection->performGET( $endpoint->base_url );
+		list($xml, $headers) = $connection->performGET( $endpoint->base_url, true );
 		if ( $xml instanceof SimpleXMLElement) {
 			$rss_model = Model::Named('Rss');
 			$count = 0;
+			$total = count($xml->channel->item);
 			foreach ($xml->channel->item as $key => $item) {
 				$guid = (string)(isset($item->guid) ? $item->guid : $item->link);
 				$publishedDate = strtotime($item->pubDate);
@@ -42,31 +43,8 @@ class RSSImporter extends EndpointImporter
 					$type = (string)$item->enclosure['type'];
 				}
 
-/*
-			Rss::pub_date => time(),
-			Rss::guid => uuid(),
-			Rss::clean_name => (isset($meta["name"]) ? $meta["name"] : null),
-			Rss::clean_issue => (isset($meta["issue"]) ? $meta["issue"] : null),
-			Rss::clean_year => (isset($meta["year"]) ? $meta["year"] : null),
-			Rss::enclosure_url => "http://url/to/file",
-			Rss::enclosure_length => 10000,
-			Rss::enclosure_mime => null,
-			Rss::enclosure_hash => '34e4eacc9168cf97e0625699e9b5cb65',
-			Rss::enclosure_password => false
-*/
 				$rss = $rss_model->objectForGuid($guid);
-				if ( $rss instanceof RssDBO ) {
-					list($rss, $errors) = $rss_model->updateObject( $rss, array(
-						"title" => (string)$item->title,
-						"desc" => strip_tags((string)$item->description),
-						"pub_date" => $publishedDate,
-						"enclosure_url" => $url,
-						"enclosure_length" => $len,
-						"enclosure_mime" => $type
-						)
-					);
-				}
-				else {
+				if ( $rss == false ) {
 					list($rss, $errors) = $rss_model->createObject( array(
 						"endpoint" => $endpoint,
 						"title" => (string)$item->title,
@@ -82,17 +60,21 @@ class RSSImporter extends EndpointImporter
 					);
 
 					if ( is_array($errors) && count($errors) > 0) {
-						echo PHP_EOL . var_export($errors, true) . PHP_EOL;
+						Logger::logError( var_export($errors, true), $this->type, $this->guid);
 					}
-					if ( $rss != false ) {
-						$count++;
-					}
+					$count++;
 				}
 			}
 
 			if ( $count > 0 ) {
-				Logger::logInfo( "Imported $count new RSS items", $this->type, $this->guid);
+				Logger::logInfo( "Imported $count/$total new RSS items", $this->type, $this->guid);
 			}
+			else {
+				Logger::logInfo( "Imported $count/$total new RSS items", $this->type, $this->guid);
+			}
+		}
+		else {
+			Logger::logError( "RSS response is not XML " . var_export($xml, true), $this->type, $this->guid);
 		}
 
 		$this->setPurgeOnExit(true);
