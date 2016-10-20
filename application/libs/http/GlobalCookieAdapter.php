@@ -2,6 +2,8 @@
 
 namespace http;
 
+use \Config as Config;
+
 class GlobalCookieAdapter implements \interfaces\GlobalAdapter
 {
 	public function allValues()
