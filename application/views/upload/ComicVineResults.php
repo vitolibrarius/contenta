@@ -125,7 +125,7 @@
 				</div>
 			</div>
 			<figcaption class="caption">
-				<h4><?php echo $item['name']; ?></h4>
+				<h4><?php echo (isset($item['name']) ? $item['name'] : ""); ?></h4>
 				<div style="min-height: 100px; height: 100px; overflow-y : scroll;"><?php
 					if ( isset($item['deck']) && strlen($item['deck']) > 0) { echo strip_tags($item['deck']); }
 					else if (isset($item['description']) ) { echo strip_tags($item['description']); }
