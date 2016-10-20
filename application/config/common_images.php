@@ -35,17 +35,21 @@ function downloadImage($url = null, $dir = null, $key_name_hint = null )
 					"User-Agent: " . CONTENTA_USER_AGENT
 				)
 			);
-			$context = stream_context_create($options);
-			$data = file_get_contents($url, false, $context);
+			try {
+				$context = stream_context_create($options);
+				$data = file_get_contents($url, false, $context);
+			}
+			catch( \Exception $e ) {
+				// no image
+				$data = false;
+			}
+
 			if ( $data != false )
 			{
 				$dest = appendPath($dir, $filename);
 				if (file_put_contents( $dest, $data )) {
 					return $filename;
 				}
-			}
-			else {
-				\Logger::logWarning( "Failed to load image from URL " . $url, $dir, $filename );
 			}
 		}
 	}
