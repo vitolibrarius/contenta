@@ -55,7 +55,7 @@
 				<p style="text-align: center;">
 					<a href="<?php echo Config::Web('/netconfig/edit/'. $endpoint->id); ?>"><span class="icon edit" /></a>
 
-					<a class="confirm" action="<?php echo Config::Web('/netconfig/delete/') . $endpoint->id; ?>" href="#">
+					<a class="confirm" action="<?php echo Config::Web('/netconfig/delete/', $endpoint->id); ?>" href="#">
 						<span class="icon recycle"></span></a>
 				</p>
 			</div>
