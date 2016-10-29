@@ -7,7 +7,7 @@
 	</div></div>
 </section>
 
-<?php if (is_array($this->listArray) && count($this->listArray) > 0) : ?>
+<?php if (isset($this->listArray) && count($this->listArray) > 0) : ?>
 <?php
 	$groups = array();
 	foreach($this->listArray as $item) {
