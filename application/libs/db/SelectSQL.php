@@ -17,7 +17,7 @@ class SelectSQL extends SQL
 	public $order;
 	public $group;
 	public $having;
-	public $limit = 50;
+	public $limit = SQL::SQL_DEFAULT_LIMIT;
 	public $offset;
 
     public function __construct(Model $model, array $columns = null, Qualifier $qualifier = null)
@@ -65,7 +65,7 @@ class SelectSQL extends SQL
 		return $this;
 	}
 
-	public function limit( $limit = 50 )
+	public function limit( $limit = SQL::SQL_DEFAULT_LIMIT )
 	{
 		$this->limit = $limit;
 		return $this;
@@ -141,10 +141,9 @@ class SelectSQL extends SQL
 
 		if ( isset($this->limit) && intval($this->limit) > 0 ) {
 			$components[] = "LIMIT " . $this->limit;
-		}
-
-		if ( isset($this->offset) && intval($this->offset) >= 0 ) {
-			$components[] = "OFFSET " . $this->offset;
+			if ( isset($this->offset) && intval($this->offset) >= 0 ) {
+				$components[] = "OFFSET " . ($this->offset * $this->limit);
+			}
 		}
 
 		return implode(" ", $components );

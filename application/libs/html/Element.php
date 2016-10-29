@@ -35,6 +35,9 @@ abstract class Element
 			else if (is_string($a)) {
 				$tag->addText($a);
 			}
+			else if (is_integer($a)) {
+				$tag->addText((string)$a);
+			}
 			else if (is_array($a)) {
 				$tag->addAttributes($a);
 			}

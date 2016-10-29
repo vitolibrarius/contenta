@@ -4,6 +4,8 @@ namespace http;
 
 use \Model as Model;
 
+use \http\PageParams as PageParams;
+
 /**
  * Session class
  *
@@ -117,5 +119,31 @@ class Session
 			return Model::Named('Users')->objectForId($uid);
 		}
 		return false;
+	}
+
+	public static function pageParameters( $page, $context = null)
+	{
+		if ( isset($page) == false ) {
+			throw new \Exception( "Page params require a key name" );
+		}
+
+		$pageName = '';
+		if ( is_string($page) ) {
+			$pageName = $page;
+		}
+		else {
+			$pageName = get_short_class($page);
+		}
+
+		if ( isset( $context ) && strlen($context) > 0) {
+			$pageName = appendPath($pageName, (string)$context);
+		}
+
+		$params = Session::Get( $pageName );
+		if ( is_null( $params ) ) {
+			$params = new PageParams( $pageName );
+			Session::Set( $pageName, $params );
+		}
+		return $params;
 	}
 }

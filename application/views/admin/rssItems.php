@@ -1,3 +1,11 @@
+<section>
+	<div class="row"><div class="grid_12">
+<?php use \html\Paginator as Paginator;
+	$p = new Paginator( $this->params, Config::Web('/AdminPullList/searchRss') );
+	echo $p->render();
+?>
+	</div></div>
+
 <?php if (is_array($this->listArray) && count($this->listArray) > 0) : ?>
 <?php foreach( $this->listArray as $idx => $rss ) : ?>
 <?php if ( $idx % 6 == 0) : ?>
@@ -68,3 +76,4 @@
 <?php if (isset($open) && $open == true) : ?>
 	</div>
 <?php endif; // open ?>
+</section>

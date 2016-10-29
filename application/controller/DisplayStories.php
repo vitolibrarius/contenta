@@ -46,7 +46,7 @@ class DisplayStories extends Controller
 		}
 	}
 
-	function searchStoryArcs()
+	function searchStoryArcs($pageNum = 0)
 	{
 		if (Auth::handleLogin()) {
 			$model = Model::Named('Story_Arc');

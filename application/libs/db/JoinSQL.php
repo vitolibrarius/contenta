@@ -16,6 +16,7 @@ class JoinSQL extends SQL
 	public $joinMeta;
 	public $order;
 	public $limit = 50;
+	public $offset;
 
     public function __construct(Model $model, array $columns = null, Qualifier $qualifier = null)
     {
@@ -56,6 +57,12 @@ class JoinSQL extends SQL
 	public function limit( $limit = 50 )
 	{
 		$this->limit = $limit;
+		return $this;
+	}
+
+	public function offset( $offset = 0 )
+	{
+		$this->offset = $offset;
 		return $this;
 	}
 
@@ -193,6 +200,9 @@ class JoinSQL extends SQL
 		if ( isset($this->limit) && intval($this->limit) > 0 ) {
 			$components[] = PHP_EOL;
 			$components[] = "LIMIT " . $this->limit;
+			if ( isset($this->offset) && intval($this->offset) >= 0 ) {
+				$components[] = "OFFSET " . ($this->offset * $this->limit);
+			}
 		}
 
 		return implode(" ", $components );

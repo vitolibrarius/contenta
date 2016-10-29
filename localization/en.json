@@ -192,6 +192,10 @@
         "NextButton": "Next",
         "No Search Criteria": "Please enter search criteria",
         "PLEASE_ADD_ENDPOINT": "Remote queries cannot be performed without appropriate endpoints.",
+        "Pagination": {
+            "Next": "Next",
+            "Previous": "Prev"
+        },
         "RefreshFromEndpoint": "Refresh From Endpoint",
         "Release": "Release",
         "ResetButton": "Reset",

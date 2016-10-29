@@ -6,13 +6,18 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Auth as Auth;
-use \http\Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
 use \Processor as Processor;
 use \SQL as SQL;
+
 use \db\Qualifier as Qualifier;
+
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
+use \http\HttpPost as HttpPost;
+use \http\PageParams as PageParams;
 
 use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
@@ -46,6 +51,9 @@ class AdminPublication extends Admin
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
+
+			$parameters = Session::pageParameters( $this, "index" );
+			$this->view->params = $parameters;
 
 			$model = Model::Named('Publication');
 			$this->view->model = $model;
@@ -82,27 +90,35 @@ class AdminPublication extends Admin
 		}
 	}
 
-	function searchPublication()
+	function searchPublication($pageNum = null)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$parameters = Session::pageParameters( $this, "index" );
+			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array(
+				'searchSeries',
+				'searchIssue',
+				'searchYear',
+				'searchMedia',
+				'searchCharacter',
+				'searchStoryArcs' )
+			);
+
 			$model = Model::Named('Publication');
 			$qualifiers = array();
-			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
-				$qualifiers[] = Qualifier::Like( Publication::name, $_GET['name']);
+			if ( isset($query['searchIssue']) && strlen($query['searchIssue']) > 0) {
+				$qualifiers[] = Qualifier::Equals( Publication::issue_num, $query['searchIssue'] );
 			}
-			if ( isset($_GET['issue']) && strlen($_GET['issue']) > 0) {
-				$qualifiers[] = Qualifier::Equals( Publication::issue_num, $_GET['issue'] );
-			}
-			if ( isset($_GET['year']) && strlen($_GET['year']) == 4 ) {
-				$start = strtotime("01-01-" . $_GET['year'] . " 00:00");
-				$end = strtotime("31-12-" . $_GET['year'] . " 23:59");
+			if ( isset($query['searchYear']) && strlen($query['searchYear']) == 4) {
+				$start = strtotime("01-01-" . $query['searchYear'] . " 00:00");
+				$end = strtotime("31-12-" . $query['searchYear'] . " 23:59");
 				$qualifiers[] = Qualifier::Between( Publication::pub_date, $start, $end );
 			}
-			if ( isset($_GET['media']) && $_GET['media'] === 'true') {
+			if ( isset($query['searchMedia']) && $query['searchMedia'] === 'true') {
 				$qualifiers[] = Qualifier::GreaterThan( Publication::media_count, 0 );
 			}
-			if ( isset($_GET['character_id']) && is_array($_GET['character_id']) && count($_GET['character_id']) > 0 ) {
-				$pub_idArray = Model::Named("Publication_Character")->publicationIdForCharacterIdArray($_GET['character_id']);
+			if ( isset($query['searchCharacter']) && empty($query['searchCharacter']) == false) {
+				$characterIdArray = (is_array($query['searchCharacter']) ? $query['searchCharacter'] : array($query['searchCharacter']));
+				$pub_idArray = Model::Named("Publication_Character")->publicationIdForCharacterIdArray($characterIdArray);
 				if ( is_array($pub_idArray) && count($pub_idArray) > 0 ) {
 					$qualifiers[] = Qualifier::IN( Publication::id, $pub_idArray );
 				}
@@ -110,9 +126,9 @@ class AdminPublication extends Admin
 					$qualifiers[] = Qualifier::Equals( Publication::id, 0 );
 				}
 			}
-			if ( isset($_GET['series_name']) && strlen($_GET['series_name']) > 0) {
+			if ( isset($query['searchSeries']) && strlen($query['searchSeries']) > 0) {
 				$select = \SQL::Select( Model::Named('Series'), array(Series::id))
-					->where( Qualifier::Like( Series::search_name, normalizeSearchString($_GET['series_name'])) );
+					->where( Qualifier::Like( Series::search_name, normalizeSearchString($query['searchSeries'])) );
 				$series_idArray = array_map(function($stdClass) {return $stdClass->{Series::id}; },
 					$select->fetchAll());
 
@@ -123,21 +139,44 @@ class AdminPublication extends Admin
 					$qualifiers[] = Qualifier::Equals( Publication::id, 0 );
 				}
 			}
-			if ( isset($_GET['story_arc_id']) && is_array($_GET['story_arc_id']) && count($_GET['story_arc_id']) > 0 ) {
+			if ( isset($query['searchStoryArcs']) && empty($query['searchStoryArcs']) == false) {
+				$storyArcIdArray = (is_array($query['searchStoryArcs']) ? $query['searchStoryArcs'] : array($query['searchStoryArcs']));
 				$qualifiers[] = Qualifier::InSubQuery( Publication::id,
 					SQL::Select(Model::Named('Story_Arc_Publication'), array("publication_id"))
-						->where( Qualifier::IN( "story_arc_id", $_GET['story_arc_id']))
+						->where( Qualifier::IN( "story_arc_id", $storyArcIdArray))
 						->limit(0)
 				);
+			}
+
+			if ( $hasNewValues ) {
+				if ( count($qualifiers) > 0 ) {
+					$count = SQL::Count( $model, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
+				}
+				else {
+					$count = SQL::Count( $model )->fetch();
+				}
+
+				$parameters->queryResults($count->count);
+			}
+			else {
+				if ( is_null( $pageNum) ) {
+					$pageNum = $parameters->valueForKey( PageParams::PAGE_SHOWN, 0 );
+				}
+				else {
+					$parameters->setValueForKey( PageParams::PAGE_SHOWN, $pageNum );
+				}
 			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
+			$select->limit($parameters->pageSize());
+			$select->offset($parameters->pageShown());
 			$select->orderBy( $model->sortOrder() );
 
 			$this->view->model = $model;
+			$this->view->params = $parameters;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminPublication/editPublication";
 			$this->view->deleteAction = "/AdminPublication/deletePublication";

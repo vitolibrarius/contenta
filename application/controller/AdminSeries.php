@@ -6,12 +6,17 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Auth as Auth;
-use \http\Session as Session;;
 use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
+
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
+
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
+use \http\HttpPost as HttpPost;
+use \http\PageParams as PageParams;
 
 use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
@@ -40,37 +45,68 @@ class AdminSeries extends Admin
 			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
+			$parameters = Session::pageParameters( $this, "index" );
+			$this->view->params = $parameters;
+
 			$model = Model::Named('Series');
 			$this->view->model = $model;
 			$this->view->render( '/admin/seriesIndex');
 		}
 	}
 
-	function searchSeries()
+	function searchSeries($pageNum = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$parameters = Session::pageParameters( $this, "index" );
+			$parameters->setPageSize(12);
+			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array(
+				'searchPublisher', 'searchName', 'searchWanted', 'searchYear' )
+			);
+
 			$model = Model::Named('Series');
 			$qualifiers = array();
-			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
-				$qualifiers[] = Qualifier::Like( Series::search_name, normalizeSearchString($_GET['name']));
+			if ( isset($query['searchName']) && strlen($query['searchName']) > 0) {
+				$qualifiers[] = Qualifier::Like( Series::search_name, normalizeSearchString($query['searchName']));
 			}
-			if ( isset($_GET['year']) && strlen($_GET['year']) == 4 ) {
-				$qualifiers[] = Qualifier::Equals( Series::start_year, $_GET['year'] );
+			if ( isset($query['searchYear']) && strlen($query['searchYear']) == 4 ) {
+				$qualifiers[] = Qualifier::Equals( Series::start_year, $query['searchYear'] );
 			}
-			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
-				$qualifiers[] = Qualifier::Equals( Series::publisher_id, $_GET['publisher_id'] );
+			if ( isset($query['searchPublisher']) && intval($query['searchPublisher']) > 0 ) {
+				$qualifiers[] = Qualifier::Equals( Series::publisher_id, $query['searchPublisher'] );
 			}
-			if ( isset($_GET['wanted']) && $_GET['wanted'] === 'true') {
+			if ( isset($query['searchWanted']) && $query['searchWanted'] == '1') {
 				$qualifiers[] = Qualifier::Equals( Series::pub_wanted, 1 );
+			}
+
+			if ( $hasNewValues ) {
+				if ( count($qualifiers) > 0 ) {
+					$count = SQL::Count( $model, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
+				}
+				else {
+					$count = SQL::Count( $model )->fetch();
+				}
+
+				$parameters->queryResults($count->count);
+			}
+			else {
+				if ( is_null( $pageNum) ) {
+					$pageNum = $parameters->valueForKey( PageParams::PAGE_SHOWN, 0 );
+				}
+				else {
+					$parameters->setValueForKey( PageParams::PAGE_SHOWN, $pageNum );
+				}
 			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
+			$select->limit($parameters->pageSize());
+			$select->offset($parameters->pageShown());
 			$select->orderBy( $model->sortOrder() );
 
 			$this->view->model = $model;
+			$this->view->params = $parameters;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->toggleWantedAction = "/AdminSeries/toggleWantedSeries";
 			$this->view->editAction = "/AdminSeries/editSeries";

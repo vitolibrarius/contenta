@@ -6,9 +6,11 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Auth as Auth;
-use \http\Session as Session;;
 use \Logger as Logger;
 use \Localized as Localized;
+
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
@@ -40,8 +42,15 @@ class Api extends Controller
 	{
 		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
 			$qualifiers = array();
-			if ( isset($_GET['q']) && strlen($_GET['q']) > 0) {
-				$qualifiers[] = Qualifier::Like( Publisher::name, $_GET['q'] );
+			$pub_id = HttpGet::getInt("id", 0);
+			if ( $pub_id > 0 ) {
+				$qualifiers[] = Qualifier::Equals( Publisher::id, $pub_id );
+			}
+			else {
+				$pub_name = HttpGet::get("q", false);
+				if ( $pub_name != false) {
+					$qualifiers[] = Qualifier::Like( Publisher::name, $pub_name );
+				}
 			}
 
 			$select = SQL::Select( Model::Named("Publisher"), array( Publisher::id, Publisher::name ));

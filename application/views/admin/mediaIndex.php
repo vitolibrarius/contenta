@@ -34,7 +34,7 @@
 			<input type="text" name="searchSeries" id="searchSeries"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "series_id" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchSeries') : ''); ?>">
 		</div>
 		<div class="grid_3">
 			<select name="searchCharacter" id="searchCharacter"
@@ -51,7 +51,7 @@
 				min="0"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "issue_num" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchIssue') : ''); ?>">
 			</input>
 		</div>
 		<div class="grid_1">
@@ -60,7 +60,7 @@
 				max="<?php echo intval(date("Y") + 1); ?>"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "pub_date" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchYear') : ''); ?>">
 			</input>
 		</div>
 		<div class="grid_1">
@@ -68,7 +68,7 @@
 				<input type="checkbox"  name="searchMedia" id="searchMedia"
 					class="text_input"
 					value="1"
-					checked>
+					<?php echo (isset($this->params) && $this->params->valueForKey('searchMedia') ? "checked" : ""); ?>">
 				</input>
 				<?php echo Localized::ModelSearch($this->model->tableName(), "multiple" ); ?>
 			</label>
@@ -145,7 +145,7 @@ $(document).ready(function($) {
 		search_timer = setTimeout(refresh, 400);
 	});
 
-	$(".text_input").on('keyup', function () {
+	$(".text_input").on('change keyup', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
@@ -153,30 +153,13 @@ $(document).ready(function($) {
 	});
 
 	function refresh() {
-		$.ajax({
-			type: "GET",
-			url: "<?php echo Config::Web('/AdminMedia/searchMedia'); ?>",
-			data: {
-				series_name: $('#searchSeries').val(),
-				character_id: $('#searchCharacter').val(),
-				story_arc_id: $('#searchStoryArcs').val(),
-				issue: $('input#searchIssue').val(),
-				media: $('input#searchMedia').is(':checked'),
-				year:  $('input#searchYear').val()
-			},
-			dataType: "text",
-			success: function(msg){
-				var ajaxDisplay = document.getElementById('ajaxDiv');
-				ajaxDisplay.innerHTML = msg;
-			}
-		});
+		var page_url = "<?php echo Config::Web('/AdminMedia/searchMedia'); ?>";
+		var resultsId = "ajaxDiv";
+		var inputValues = $("form#searchForm").serializeObject();
+		console.log( JSON.stringify(inputValues) );
+
+		refreshAjax( page_url, undefined, inputValues, resultsId );
 	};
 	refresh();
-});
-</script>
-
-<script type="text/javascript">
-$(document).ready(function($) {
-	$('#searchField').trigger('keyup');
 });
 </script>

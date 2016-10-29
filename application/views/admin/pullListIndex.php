@@ -11,7 +11,7 @@
 			<input type="text" name="searchName" id="searchName"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchName') : ''); ?>">
 		</div>
 	</div>
 	</form>
@@ -51,7 +51,7 @@ $(document).ready(function($) {
 		search_timer = setTimeout(refresh, 400);
 	});
 
-	$(".text_input").on('keyup', function () {
+	$(".text_input").on('keyup change', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
@@ -59,19 +59,12 @@ $(document).ready(function($) {
 	});
 
 	function refresh() {
-		$.ajax({
-			type: "GET",
-			url: "<?php echo Config::Web('/AdminPullList/searchPullLists'); ?>",
-			data: {
-				pull_list_id: $('#searchPullList').val(),
-				name: $('#searchName').val()
-			},
-			dataType: "text",
-			success: function(msg){
-				var ajaxDisplay = document.getElementById('ajaxDiv');
-				ajaxDisplay.innerHTML = msg;
-			}
-		});
+		var page_url = "<?php echo Config::Web('/AdminPullList/searchPullLists'); ?>";
+		var resultsId = "ajaxDiv";
+		var inputValues = $("form#searchForm").serializeObject();
+		console.log( JSON.stringify(inputValues) );
+
+		refreshAjax( page_url, undefined, inputValues, resultsId );
 	};
 });
 </script>

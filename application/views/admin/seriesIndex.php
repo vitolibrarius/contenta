@@ -36,7 +36,7 @@
 			<input type="text" name="searchName" id="searchName"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchName') : ''); ?>">
 		</div>
 		<div class="grid_1">
 			<input type="number" name="searchYear" id="searchYear"
@@ -44,14 +44,14 @@
 				min="1950"
 				max="<?php echo intval(date("Y") + 1); ?>"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "year" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchYear') : ''); ?>">
 		</div>
 		<div class="grid_1">
 			<label class="checkbox" for="searchMedia" >
 				<input type="checkbox"  name="searchWanted" id="searchWanted"
 					class="text_input"
 					value="1"
-					checked>
+					<?php echo (isset($this->params) && $this->params->valueForKey('searchWanted') ? "checked" : ""); ?>">
 				</input>
 				Wanted
 			</label>
@@ -96,7 +96,7 @@ $(document).ready(function($) {
 		search_timer = setTimeout(refresh, 400);
 	});
 
-	$(".text_input").on('keyup', function () {
+	$(".text_input").on('keyup change', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
@@ -104,21 +104,12 @@ $(document).ready(function($) {
 	});
 
 	function refresh() {
-		$.ajax({
-			type: "GET",
-			url: "<?php echo Config::Web('/AdminSeries/searchSeries'); ?>",
-			data: {
-				publisher_id: $('#searchPublisher').val(),
-				name: $('input#searchName').val(),
-				wanted: $('input#searchWanted').is(':checked'),
-				year:  $('input#searchYear').val()
-			},
-			dataType: "text",
-			success: function(msg){
-				var ajaxDisplay = document.getElementById('ajaxDiv');
-				ajaxDisplay.innerHTML = msg;
-			}
-		});
+		var page_url = "<?php echo Config::Web('/AdminSeries/searchSeries'); ?>";
+		var resultsId = "ajaxDiv";
+		var inputValues = $("form#searchForm").serializeObject();
+		console.log( JSON.stringify(inputValues) );
+
+		refreshAjax( page_url, undefined, inputValues, resultsId );
 	};
 	refresh();
 });

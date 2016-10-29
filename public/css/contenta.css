@@ -158,6 +158,44 @@ progress[value] {
   height: 20px;
 }
 
+.pagination {
+	background: #fdfdfd;
+	padding: 1rem;
+	margin: 2em auto;
+	border-radius: 0.2rem;
+	counter-reset: pagination;
+	text-align: center;
+}
+.pagination ul.page-numbers {
+	width: 100%;
+}
+.pagination ul.page-numbers, li.pageItem {
+	list-style: none;
+	display: inline;
+	padding-left: 0px;
+}
+.pagination li.pageItem:hover a {
+	color: #fdfdfd;
+	background-color: #929DA3;
+	border: solid 1px #1d1f20;
+}
+.pagination li.pageItem.active a {
+	color: #fdfdfd;
+	background-color: #1d1f20;
+	border: solid 1px #1d1f20;
+}
+.pagination li.pageItem > a {
+	border: solid 1px #d7d7d7;
+	border-radius: 0.2rem;
+	color: #7d7d7d;
+	text-decoration: none;
+	text-transform: uppercase;
+	display: inline-block;
+	text-align: center;
+	padding: 0.5rem 0.9rem;
+}
+
+
 .blocked {
  	background-color: #ff979a;
 }

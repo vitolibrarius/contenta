@@ -148,7 +148,7 @@ abstract class Qualifier extends SQL
 		return new NotQualifier( $qual );
 	}
 
-	public static function Like( $key = null, $value = null, $like = SQL::SQL_LIKE_BOTH, $prefix = '')
+	public static function Like( $key = null, $value = null, $like = SQL::SQL_LIKE_AFTER, $prefix = '')
 	{
 		if ( is_null($key) || is_null($value) ) {
 			throw new \Exception( "Must specify attribute key/value" );
@@ -499,7 +499,7 @@ class LikeQualifier extends BasicQualifier
 {
 	public $likeFormat;
 
-	public function __construct( $key = null, $v = null, $like = SQL::SQL_LIKE_BOT, $prefix = '')
+	public function __construct( $key = null, $v = null, $like = SQL::SQL_LIKE_AFTER, $prefix = '')
 	{
 		parent::__construct($key, Qualifier::LIKE_Q, $v, $prefix);
 		$this->likeFormat = $like;

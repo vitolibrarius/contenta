@@ -6,10 +6,14 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Auth as Auth;
-use \http\Session as Session;
 use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
+
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
+use \http\HttpPost as HttpPost;
+use \http\PageParams as PageParams;
 
 use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
@@ -38,38 +42,57 @@ class AdminCharacters extends Admin
 			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
+			$parameters = Session::pageParameters( $this, "index" );
+			$this->view->params = $parameters;
 			$model = Model::Named('Character');
 			$this->view->model = $model;
 			$this->view->render( '/admin/characterIndex');
 		}
 	}
 
-	function searchCharacters()
+	function searchCharacters($pageNum = null)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$parameters = Session::pageParameters( $this, "index" );
+			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array( 'searchName', 'searchPublisher' ));
+
 			$model = Model::Named('Character');
 			$qualifiers = array();
-			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
-				$qualifiers[] = Qualifier::Like( Character::name, $_GET['name']);
+			if ( isset($query['searchName']) && strlen($query['searchName']) > 0) {
+				$qualifiers[] = Qualifier::Like( Character::name, $query['searchName']);
 			}
-			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
-				$qualifiers[] = Qualifier::Equals( Character::publisher_id, $_GET['publisher_id'] );
+			if ( isset($query['searchPublisher']) && intval($query['searchPublisher']) > 0 ) {
+				$qualifiers[] = Qualifier::Equals( Character::publisher_id, $query['searchPublisher'] );
+			}
+
+			if ( $hasNewValues ) {
+				if ( count($qualifiers) > 0 ) {
+					$count = SQL::Count( $model, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
+				}
+				else {
+					$count = SQL::Count( $model )->fetch();
+				}
+
+				$parameters->queryResults($count->count);
+			}
+			else {
+				if ( is_null( $pageNum) ) {
+					$pageNum = $parameters->valueForKey( PageParams::PAGE_SHOWN, 0 );
+				}
+				else {
+					$parameters->setValueForKey( PageParams::PAGE_SHOWN, $pageNum );
+				}
 			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
+			$select->limit($parameters->pageSize());
+			$select->offset($parameters->pageShown());
 			$select->orderBy( $model->sortOrder() );
 
-			if ( count($qualifiers) > 0 ) {
-				$count = SQL::Count( $model, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
-			}
-			else {
-				$count = SQL::Count( $model )->fetch();
-			}
-			$this->view->total = $count->count;
-
+			$this->view->params = $parameters;
 			$this->view->model = $model;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminCharacters/editCharacter";

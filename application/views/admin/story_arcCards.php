@@ -1,4 +1,11 @@
 <section>
+	<div class="row"><div class="grid_12">
+<?php use \html\Paginator as Paginator;
+	$p = new Paginator( $this->params, Config::Web('/AdminStoryArcs/searchStoryArcs') );
+	echo $p->render();
+?>
+	</div></div>
+
 	<div class="row">
 	<?php if (empty($this->listArray)): ?>
 		<div style="background:hsl(326,50%,75%)">

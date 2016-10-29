@@ -6,10 +6,17 @@ use \Controller as Controller;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Auth as Auth;
-use \http\Session as Session;;
 use \Logger as Logger;
 use \Localized as Localized;
 use \Config as Config;
+
+use \SQL as SQL;
+use db\Qualifier as Qualifier;
+
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
+use \http\HttpPost as HttpPost;
+use \http\PageParams as PageParams;
 
 use connectors\ComicVineConnector as ComicVineConnector;
 use processor\ComicVineImporter as ComicVineImporter;
@@ -26,9 +33,6 @@ use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_Arc_Character as Story_Arc_Character;
 use \model\media\Series as Series;
 
-use \SQL as SQL;
-use db\Qualifier as Qualifier;
-
 /**
  * Class Admin
  * The index controller
@@ -41,26 +45,35 @@ class AdminStoryArcs extends Admin
 			$this->view->addStylesheet("select2.min.css");
 			$this->view->addScript("select2.min.js");
 
+			$parameters = Session::pageParameters( $this, "index" );
+			$this->view->params = $parameters;
+
 			$model = Model::Named('Story_Arc');
 			$this->view->model = $model;
 			$this->view->render( '/admin/story_arcIndex');
 		}
 	}
 
-	function searchStoryArcs()
+	function searchStoryArcs($pageNum = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$parameters = Session::pageParameters( $this, "index" );
+			$parameters->setPageSize(18);
+			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array(
+				'searchSeries', 'searchCharacter', 'searchPublisher', 'searchWanted', 'searchName' )
+			);
+
 			$model = Model::Named('Story_Arc');
 			$qualifiers = array();
-			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
-				$qualifiers[] = Qualifier::Like( Story_Arc::name, $_GET['name'] );
+			if ( isset($query['searchName']) && strlen($query['searchName']) > 0) {
+				$qualifiers[] = Qualifier::Like( Story_Arc::name, $query['searchName'] );
 			}
-			if ( isset($_GET['publisher_id']) && intval($_GET['publisher_id']) > 0 ) {
-				$qualifiers[] = Qualifier::Equals( Story_Arc::publisher_id, $_GET['publisher_id'] );
+			if ( isset($query['searchPublisher']) && intval($query['searchPublisher']) > 0 ) {
+				$qualifiers[] = Qualifier::Equals( Story_Arc::publisher_id, $query['searchPublisher'] );
 			}
-			if ( isset($_GET['series_name']) && strlen($_GET['series_name']) > 0) {
+			if ( isset($query['searchSeries']) && strlen($query['searchSeries']) > 0) {
 				$select = \SQL::Select( Model::Named('Series'), array(Series::id))
-					->where( Qualifier::Like( Series::search_name, normalizeSearchString($_GET['series_name'])) );
+					->where( Qualifier::Like( Series::search_name, normalizeSearchString($query['searchSeries'])) );
 				$series_idArray = array_map(function($stdClass) {return $stdClass->{Series::id}; },
 					$select->fetchAll());
 
@@ -73,8 +86,9 @@ class AdminStoryArcs extends Admin
 					$qualifiers[] = Qualifier::Equals( Story_Arc::id, 0 );
 				}
 			}
-			if ( isset($_GET['character_id']) && is_array($_GET['character_id']) && count($_GET['character_id']) > 0 ) {
-				$idArray = Model::Named("Story_Arc_Character")->storyArcIdForCharacterIdArray($_GET['character_id']);
+			if ( isset($query['searchCharacter']) && empty($query['searchCharacter']) == false) {
+				$characterIdArray = (is_array($query['searchCharacter']) ? $query['searchCharacter'] : array($query['searchCharacter']));
+				$idArray = Model::Named("Story_Arc_Character")->storyArcIdForCharacterIdArray($characterIdArray);
 				if ( is_array($idArray) && count($idArray) > 0 ) {
 					$qualifiers[] = Qualifier::IN( Story_Arc::id, $idArray );
 				}
@@ -82,19 +96,39 @@ class AdminStoryArcs extends Admin
 					$qualifiers[] = Qualifier::Equals( Story_Arc::id, 0 );
 				}
 			}
-			if ( isset($_GET['wanted']) && $_GET['wanted'] === 'true') {
+			if ( isset($query['searchWanted']) && $query['searchWanted'] == '1') {
 				$qualifiers[] = Qualifier::Equals( Story_Arc::pub_wanted, 1 );
+			}
+
+			if ( $hasNewValues ) {
+				if ( count($qualifiers) > 0 ) {
+					$count = SQL::Count( $model, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
+				}
+				else {
+					$count = SQL::Count( $model )->fetch();
+				}
+
+				$parameters->queryResults($count->count);
+			}
+			else {
+				if ( is_null( $pageNum) ) {
+					$pageNum = $parameters->valueForKey( PageParams::PAGE_SHOWN, 0 );
+				}
+				else {
+					$parameters->setValueForKey( PageParams::PAGE_SHOWN, $pageNum );
+				}
 			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
+			$select->limit($parameters->pageSize());
+			$select->offset($parameters->pageShown());
 			$select->orderBy( $model->sortOrder() );
-//
-// 						Session::addPositiveFeedback("select ". $select);
 
 			$this->view->model = $model;
+			$this->view->params = $parameters;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->editAction = "/AdminStoryArcs/editStoryArc";
 			$this->view->wantedAction = "/AdminStoryArcs/toggleWantedStoryArc";

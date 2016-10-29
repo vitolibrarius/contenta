@@ -37,6 +37,8 @@ abstract class SQL
 	const SQL_ORDER_ASC		= 'ASC';
 	const SQL_ORDER_DESC	= 'DESC';
 
+	const SQL_DEFAULT_LIMIT = 48;
+
 	public $qualifier;
 
 	public static function PrefixAlias( $idx = 0 )

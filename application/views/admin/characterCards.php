@@ -1,9 +1,11 @@
 <section>
-	<div class="row">
-		<h2>Count = <?php echo $this->total; ?></h2>
-	</div>
-</section>
-<section>
+	<div class="row"><div class="grid_12">
+<?php use \html\Paginator as Paginator;
+	$p = new Paginator( $this->params, Config::Web('/AdminCharacters/searchCharacters') );
+	echo $p->render();
+?>
+	</div></div>
+
 	<div class="row">
 	<?php if (empty($this->listArray)): ?>
 		<div style="background:hsl(326,50%,75%)">

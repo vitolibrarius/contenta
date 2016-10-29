@@ -200,7 +200,7 @@ class AdminWanted extends Admin
 		}
 	}
 
-	function searchWanted()
+	function searchWanted($pageNum = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$model = Model::Named('Publication');

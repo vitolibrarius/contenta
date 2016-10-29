@@ -50,7 +50,7 @@ class DisplaySeries extends Controller
 		}
 	}
 
-	function searchSeries()
+	function searchSeries($pageNum = 0)
 	{
 		if (Auth::handleLogin()) {
 			$model = Model::Named('Series');

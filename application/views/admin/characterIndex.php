@@ -1,16 +1,16 @@
 <script language="javascript" type="text/javascript">
 	// Wait until the DOM has loaded before querying the document
 	$('body').on('click', 'a.confirm', function (e) {
-		modal.open({
-			heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
-			img: '<?php echo Config::Web("/public/img/Logo_sm.png"); ?>',
-			description: '<?php echo $this->label( "index", "DeleteDescription"); ?>',
-			confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
-			actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
-			action: $(this).attr('action')
+			modal.open({
+				heading: '<?php echo Localized::GlobalLabel("Modal", "Confirm Delete"); ?>',
+				img: '<?php echo Config::Web("/public/img/Logo_sm.png"); ?>',
+				description: '<?php echo $this->label( "index", "DeleteDescription"); ?>',
+				confirm: '<?php echo $this->label( "index", "DeleteConfirmation"); ?>',
+				actionLabel: '<?php echo Localized::GlobalLabel("DeleteButton"); ?>',
+				action: $(this).attr('action')
+			});
+			e.preventDefault();
 		});
-		e.preventDefault();
-	});
 </script>
 
 <div class="paging">
@@ -27,8 +27,7 @@
 	<form id='searchForm' name='searchForm'>
 	<div class="row">
 		<div class="grid_4">
-			<select name="searchPublisher" id="searchPublisher"
-					class="text_input">
+			<select name="searchPublisher" id="searchPublisher" class="text_input">
 				<option></option>
 			</select>
 		</div>
@@ -36,7 +35,7 @@
 			<input type="text" name="searchName" id="searchName"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
-				value="<?php echo (isset($this->search_name) ? $this->search_name : ''); ?>">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchName') : ''); ?>">
 		</div>
 	</div>
 	</form>
@@ -49,13 +48,16 @@
 $(document).ready(function($) {
 	search_timer = 0;
 
-	$("#searchPublisher").select2({
-		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'publisher_id' ); ?>",
+	var $select = $("#searchPublisher");
+	$select.select2({
 		allowClear: true,
+		width: "element",
+		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'publisher_id' ); ?>",
 		ajax: {
 			url: "<?php echo Config::Web('/Api/publishers'); ?>",
 			dataType: 'json',
 			delay: 250,
+			cache: true,
 			data: function (params) {
 				return {
 					q: params.term, // search term
@@ -71,7 +73,26 @@ $(document).ready(function($) {
 			},
 			cache: true
 		}
-	}).on("change", function(e) {
+	});
+
+<?php if (isset($this->params) && $this->params->valueForKey('searchPublisher') != null) : ?>
+	var $initialValue = "<?php echo $this->params->valueForKey('searchPublisher'); ?>";
+	var $option = $('<option selected>Loading...</option>').val($initialValue);
+	$select.append($option).trigger('change');
+	$.ajax({
+		type: 'GET',
+		url: "<?php echo Config::Web('/Api/publishers'); ?>" +"?id=" + $initialValue,
+		dataType: 'json'
+	}).then(function (data) {
+		if (typeof data !== 'undefined' && data.length > 0) {
+			$option.text(data[0].name).val(data[0].id);
+		}
+		$option.removeData();
+		$select.trigger('change');
+	});
+<?php endif; ?>
+
+	$select.on("change", function(e) {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
@@ -86,19 +107,11 @@ $(document).ready(function($) {
 	});
 
 	function refresh() {
-		$.ajax({
-			type: "GET",
-			url: "<?php echo Config::Web('/AdminCharacters/searchCharacters'); ?>",
-			data: {
-				publisher_id: $('#searchPublisher').val(),
-				name: $('input#searchName').val()
-			},
-			dataType: "text",
-			success: function(msg){
-				var ajaxDisplay = document.getElementById('ajaxDiv');
-				ajaxDisplay.innerHTML = msg;
-			}
-		});
+		var page_url = "<?php echo Config::Web('/AdminCharacters/searchCharacters'); ?>";
+		var resultsId = "ajaxDiv";
+		var inputValues = $("form#searchForm").serializeObject();
+
+		refreshAjax( page_url, undefined, inputValues, resultsId );
 	};
 	refresh();
 });

@@ -36,7 +36,7 @@
 			<input type="text" name="searchSeries" id="searchSeries"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "series_id" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchSeries') : ''); ?>">
 		</div>
 		<div class="grid_2">
 			<select name="searchCharacter" id="searchCharacter"
@@ -47,14 +47,14 @@
 			<input type="text" name="searchName" id="searchName"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchName') : ''); ?>">
 		</div>
 		<div class="grid_1">
 			<label class="checkbox" for="searchMedia" >
 				<input type="checkbox"  name="searchWanted" id="searchWanted"
 					class="text_input"
 					value="1"
-					checked>
+					<?php echo (isset($this->params) && $this->params->valueForKey('searchWanted') ? "checked" : ""); ?>">
 				</input>
 				Wanted
 			</label>
@@ -129,7 +129,7 @@ $(document).ready(function($) {
 		search_timer = setTimeout(refresh, 400);
 	});
 
-	$(".text_input").on('keyup', function () {
+	$(".text_input").on('keyup change', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
@@ -137,22 +137,12 @@ $(document).ready(function($) {
 	});
 
 	function refresh() {
-		$.ajax({
-			type: "GET",
-			url: "<?php echo Config::Web('/AdminStoryArcs/searchStoryArcs'); ?>",
-			data: {
-				series_name: $('#searchSeries').val(),
-				character_id: $('#searchCharacter').val(),
-				publisher_id: $('#searchPublisher').val(),
-				wanted: $('input#searchWanted').is(':checked'),
-				name: $('input#searchName').val()
-			},
-			dataType: "text",
-			success: function(msg){
-				var ajaxDisplay = document.getElementById('ajaxDiv');
-				ajaxDisplay.innerHTML = msg;
-			}
-		});
+		var page_url = "<?php echo Config::Web('/AdminStoryArcs/searchStoryArcs'); ?>";
+		var resultsId = "ajaxDiv";
+		var inputValues = $("form#searchForm").serializeObject();
+		console.log( JSON.stringify(inputValues) );
+
+		refreshAjax( page_url, undefined, inputValues, resultsId );
 	};
 	refresh();
 });

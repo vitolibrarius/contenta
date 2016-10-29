@@ -1,3 +1,6 @@
+/* ***************
+	general functions
+ */
 var delay = (function(){
 	var timer = 0;
 	return function(callback, millisec){
@@ -5,6 +8,24 @@ var delay = (function(){
 		timer = setTimeout(callback, millisec);
 	};
 })();
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
 
 $(document).on({
 	ajaxStart: function() {
@@ -19,8 +40,27 @@ $(document).on({
 	}
 });
 
+function refreshAjax(page_url, page_num, data, resultsId) {
+	page_num = page_num || "";
+	resultsId = resultsId || "ajaxDiv";
+
+	$.ajax({
+		type: "GET",
+		url: page_url + "/" + page_num,
+		data: data,
+		dataType: "text",
+		success: function(msg){
+			var ajaxDisplay = document.getElementById(resultsId);
+			ajaxDisplay.innerHTML = msg;
+		}
+	});
+};
+
+
 $(document).ready(function() {
-	// top navigation
+	/* ***************
+		top navigation
+	 */
 	var button = $('#topnav > div');
 	var menu = $('#topnav > ul');
 
@@ -46,7 +86,10 @@ $(document).ready(function() {
 		}
 	}) //end click
 
-	// tabs
+
+	/* ***************
+		tabs
+	 */
 	$('.tab-content:not(:first)').hide();
 	$('.tabs li a:not(:first)').addClass('inactive');
 	$('.tabs li a').click(function(){
@@ -60,6 +103,9 @@ $(document).ready(function() {
 		return false;
 	}) //end click
 
+	/* ***************
+		toggling icons (favorite, wanted)
+	 */
 	$('body').on('click', 'a.toggle', function (e) {
 		var span = $(this).children("span.icon");
 		var action = $(this).attr("data-href");
@@ -80,4 +126,25 @@ $(document).ready(function() {
 		}
 		return false; // don't follow the link!
 	});
+
+	/* ***************
+		search results paging
+	 */
+	$('body').on('click', 'a.page', function (e) {
+		var page_num = $(this).attr('data-pagenum');
+		var page_url = $(this).attr('data-url');
+		var resultsId = $(this).attr('data-resultsId');
+		resultsId = resultsId || "ajaxDiv";
+
+		var inputValues = $("form#searchForm").serializeObject();
+		console.log( JSON.stringify(inputValues) );
+
+		refreshAjax( page_url, page_num, inputValues, resultsId );
+		e.preventDefault();
+	});
+
+	/* ***************
+		search results paging
+	 */
+
 });

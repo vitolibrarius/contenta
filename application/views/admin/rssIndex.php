@@ -5,13 +5,13 @@
 			<input type="text" name="searchName" id="searchName"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "clean_name" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchName') : ''); ?>">
 		</div>
 		<div class="grid_1">
 			<input type="text" name="searchIssue" id="searchIssue"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "clean_issue" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchIssue') : ''); ?>">
 			</input>
 		</div>
 		<div class="grid_1">
@@ -20,7 +20,7 @@
 				max="<?php echo intval(date("Y") + 1); ?>"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "clean_year" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchYear') : ''); ?>">
 			</input>
 		</div>
 		<div class="grid_1">
@@ -28,7 +28,7 @@
 				min="0"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "pub_date" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchAge') : ''); ?>">
 			</input>
 		</div>
 		<div class="grid_1">
@@ -36,7 +36,7 @@
 				min="0"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "enclosure_length" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchSize') : ''); ?>">
 			</input>
 		</div>
 	</div>
@@ -58,22 +58,12 @@ $(document).ready(function($) {
 	});
 
 	function refresh() {
-		$.ajax({
-			type: "GET",
-			url: "<?php echo Config::Web('/AdminPullList/searchRss'); ?>",
-			data: {
-				name: $('input#searchName').val(),
-				issue: $('input#searchIssue').val(),
-				year:  $('input#searchYear').val(),
-				age:  $('input#searchAge').val(),
-				size:  $('input#searchSize').val()
-			},
-			dataType: "text",
-			success: function(msg){
-				var ajaxDisplay = document.getElementById('ajaxDiv');
-				ajaxDisplay.innerHTML = msg;
-			}
-		});
+		var page_url = "<?php echo Config::Web('/AdminPullList/searchRss'); ?>";
+		var resultsId = "ajaxDiv";
+		var inputValues = $("form#searchForm").serializeObject();
+		console.log( JSON.stringify(inputValues) );
+
+		refreshAjax( page_url, undefined, inputValues, resultsId );
 	};
 	refresh();
 });

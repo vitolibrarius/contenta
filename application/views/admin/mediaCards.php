@@ -3,6 +3,13 @@
 </style>
 
 <section>
+	<div class="row"><div class="grid_12">
+<?php use \html\Paginator as Paginator;
+	$p = new Paginator( $this->params, Config::Web('/AdminMedia/searchMedia') );
+	echo $p->render();
+?>
+	</div></div>
+
 	<div class="row">
 
 <?php if (is_array($this->listArray) && count($this->listArray) > 0): ?>
