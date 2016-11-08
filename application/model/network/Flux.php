@@ -65,7 +65,12 @@ class Flux extends _Flux
 	{
 		$select = SQL::Select( $this )->where( Qualifier::AndQualifier(
 				Qualifier::IsNotNull( Flux::dest_guid ),
-				Qualifier::NotQualifier( Qualifier::IN( Flux::dest_status, array('Completed', 'Failed') ))
+				Qualifier::NotQualifier(
+					Qualifier::OrQualifier(
+						Qualifier::Equals( Flux::dest_status, 'Completed' ),
+						Qualifier::Like( Flux::dest_status, 'Failed' )
+					)
+				)
 			)
 		)->limit( $limit );
 		return $select->fetchAll();

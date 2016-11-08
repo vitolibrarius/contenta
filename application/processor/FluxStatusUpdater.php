@@ -38,7 +38,18 @@ class FluxStatusUpdater extends EndpointImporter
 		$FluxModel = Model::Named('Flux');
 
 		$incomplete = $FluxModel->allDestinationIncomplete(-1);
+		$statusForLog = array(
+			"incomplete" => 0,
+			"complete" => 0,
+			"failed" => 0
+		);
 		if ( is_array($incomplete) && count($incomplete) > 0 ) {
+			$map_incomplete = array();
+			foreach ($incomplete as $flux) {
+				$dest_guid = $flux->dest_guid();
+				$map_incomplete[$dest_guid] = $flux;
+			}
+
 			$sab_connector = $this->endpointConnector();
 			$queue = $sab_connector->queueSlots();
 			foreach( $queue as $slot ) {
@@ -47,7 +58,11 @@ class FluxStatusUpdater extends EndpointImporter
 				$sab_status = $slot['status'];
 				$flux = $FluxModel->objectForDest_guid($sab_id);
 				if ( $flux != false && $flux->isComplete() == false) {
+					$statusForLog["incomplete"]++;
 					$FluxModel->updateObject( $flux, array( Flux::dest_status => $sab_status . ' ' . $sab_percent . '%'	));
+				}
+				if ( isset($map_incomplete[$sab_id])) {
+					unset($map_incomplete[$sab_id]);
 				}
 			}
 
@@ -62,11 +77,13 @@ class FluxStatusUpdater extends EndpointImporter
 					$deleteHistory = false;
 					switch ( strtolower($sab_status) ) {
 						case 'failed':
+							$statusForLog["failed"]++;
 							$updates[Flux::flux_error] = Model::TERTIARY_TRUE;
 							$updates[Flux::dest_status] = $sab_status . " ($sab_fail_message)";
 							$deleteHistory = true;
 							break;
 						case 'completed':
+							$statusForLog["complete"]++;
 							$updates[Flux::flux_error] = Model::TERTIARY_TRUE;
 							$updates[Flux::dest_status] = $sab_status;
 							$deleteHistory = true;
@@ -74,6 +91,7 @@ class FluxStatusUpdater extends EndpointImporter
 						case 'running':
 						case 'queued':
 						default:
+							$statusForLog["incomplete"]++;
 							$updates[Flux::dest_status] = $sab_status . (isset($slot['action_line']) ? " (" . $slot['action_line'] . ")": "");
 							break;
 					}
@@ -84,7 +102,20 @@ class FluxStatusUpdater extends EndpointImporter
 						$del_status = $sab_connector->historyDelete($sab_id);
 					}
 				}
+
+				if ( isset($map_incomplete[$sab_id])) {
+					unset($map_incomplete[$sab_id]);
+				}
 			}
+
+			if ( count($map_incomplete) > 0 ) {
+				// anything still in the incomplete list has probably been removed from the SAB history by the user
+				foreach( $map_incomplete as $sab_id => $flux ) {
+					$FluxModel->updateObject( $flux, array( Flux::dest_status => "Failed (Unknown history)" ));
+				}
+			}
+
+			Logger::logInfo( "Flux status updated " . var_export($statusForLog, true), "SABnzbd" );
 		}
 		$this->setPurgeOnExit(true);
 		return true;
