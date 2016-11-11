@@ -57,6 +57,7 @@ abstract class _Pull_List_Item extends Model
 	public function sortOrder()
 	{
 		return array(
+			array( 'asc' => Pull_List_Item::pull_list_group_id),
 			array( 'asc' => Pull_List_Item::search_name),
 			array( 'asc' => Pull_List_Item::issue)
 		);

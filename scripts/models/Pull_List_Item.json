@@ -16,6 +16,7 @@
     "model": "Pull_List_Item",
     "dbo": "Pull_List_ItemDBO",
 	"sort" : [
+		{ "asc": "pull_list_group_id" },
 		{ "asc": "search_name" },
 		{ "asc": "issue" }
 	],
