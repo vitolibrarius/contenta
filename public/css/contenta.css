@@ -50,6 +50,14 @@ a:hover {
 	word-wrap: break-word;
 }
 
+.break-wrap {
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+
+	-ms-word-break: break-all;
+	word-break: break-word;
+}
+
 /** utf8 icon classes
 	"UTF8_PENCIL" => '\u270E',
 	"UTF8_BL_HEART" => '\u2665',

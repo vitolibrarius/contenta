@@ -61,11 +61,11 @@
 			</div>
 			<figcaption class="caption">
 				<div class="mediaData">
-					<table width="100%">
+					<table>
 						<tr>
 							<th><?php echo Localized::ModelLabel($this->model->tableName(), "base_url" ); ?></th>
 							<td>
-								<div style="word-wrap: break-word; width:275px" >
+								<div >
 									<?php echo $endpoint->base_url; ?>
 								</div>
 							</td>
