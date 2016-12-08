@@ -2,8 +2,10 @@
 <section>
 	<div class="row"><div class="grid_12">
 <?php use \html\Paginator as Paginator;
-	$p = new Paginator( $this->params, Config::Web('/AdminSeries/searchSeries') );
-	echo $p->render();
+	if ( isset($this->params) ) {
+		$p = new Paginator( $this->params, Config::Web('/AdminSeries/searchSeries') );
+		echo $p->render();
+	}
 ?>
 	</div></div>
 
