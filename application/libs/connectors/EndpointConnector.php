@@ -349,10 +349,10 @@ abstract class EndpointConnector
 					else {
 						$this->endpoint()->increaseErrorCount();
 						$this->endpoint = Model::Named("Endpoint")->refreshObject($this->endpoint());
-						throw new ResponseErrorException('Return code (' . $http_code . '): '
-							. http_stringForCode($http_code) . " "
-							. curl_error($ch)
-						);
+// 						throw new ResponseErrorException('Return code (' . $http_code . '): '
+// 							. http_stringForCode($http_code) . " "
+// 							. curl_error($ch)
+// 						);
 					}
 				}
 				finally {
