@@ -413,7 +413,7 @@ abstract class Model
 			$order[] = array(SQL::SQL_ORDER_DESC => "pub_active");
 		}
 		if ( $this->hasColumn('start_year') ) {
-			$order[] = array(SQL::SQL_ORDER_DESC => "start_year");
+			$order[] = array(SQL::SQL_ORDER_ASC => "start_year");
 		}
 
 		$select = SQL::Select( $this );
@@ -427,11 +427,11 @@ abstract class Model
 	public function allObjectsNeedingExternalUpdate($limit = -1)
 	{
 		/**
-select date(xupdated, 'unixepoch'), start_year, pub_active, name from series where (xupdated is null OR xupdated < strftime('%s','now') - (3600*24*7)) order by pub_active, xupdated desc;
+select date(xupdated, 'unixepoch'), start_year, pub_active, name from series where (xupdated is null OR xupdated < strftime('%s','now') - (3600*24*7)) order by pub_active desc, xupdated limit 50;
 
 		*/
 		$limit = intval( $limit );
-		$unlimited = ( $limit == -1 );
+		$unlimited = ( $limit <= 0 );
 		// update new items
 		$results = $this->allObjectsNeverExternalUpdate($limit);
 		if ( is_array($results) && $unlimited == false ) {

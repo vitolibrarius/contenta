@@ -77,7 +77,7 @@ $points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 $epoint = $points[0];
 echo "Connecting using " . $epoint . PHP_EOL;
 $connection = new ComicVineConnector($epoint);
-// $connection->trace = true;
+$connection->setDebuggingResponses(true);
 
 $issue_tests = array(
 	"Iron Man 20 (2014) (digital) (Minutemen-Midas).cbz" => array(
@@ -191,7 +191,9 @@ foreach( $issue_tests as $filename => $expected ) {
 				echo "	NO match" . PHP_EOL;
 				break;
 			case 1:
-				compareComicVineDetails( $expected, array_pop($issues) );
+				$issue = array_pop($issues);
+				compareComicVineDetails( $expected, $issue );
+				$series = $connection->seriesDetails( array_valueForKeypath( "volume/id", $issue ));
 				break;
 			default:
 				foreach( $issues as $dict ) {

@@ -8,7 +8,9 @@ use \Config as Config;
 use \Logger as Logger;
 use \Model as Model;
 use \Database as Database;
+
 use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\user\Users as Users;
 
@@ -63,7 +65,11 @@ class Migration_9 extends Migrator
 		$ept_model = Model::Named("Endpoint_Type");
 		$type = \SQL::Select( $ept_model, array( "code", "favicon_url") )->whereEqual( "code", 'SABnzbd' )->fetch();
 		if ($type != false) {
-			\SQL::Update($ept_model, array( "favicon_url" => "https://sabnzbd.org/images/favicon.ico"))->commitTransaction();
+			\SQL::Update(
+				$ept_model,
+				Qualifier::Equals( "code", 'SABnzbd' ),
+				array( "favicon_url" => "https://sabnzbd.org/images/favicon.ico")
+			)->commitTransaction();
 		}
 	}
 }
