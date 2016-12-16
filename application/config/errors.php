@@ -77,18 +77,25 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 	register_shutdown_function('shutdownHandler');
 
 	function customError($errno, $errstr, $errfile, $errline) {
-	    $trace = debug_backtrace();
-	    array_shift($trace);
+		$errName = FriendlyErrorType($errno);
+		if ( $errno == E_ERROR ) {
+			$trace = debug_backtrace();
+			array_shift($trace);
 
-		$backtrace = "(".$errno.") " . $errstr;
-        foreach($trace as $item) {
-            $backtrace .= "\n\t" . (isset($item['file']) ? shortendPath($item['file'], 3) : '<unknown file>')
-            	. ' ' . (isset($item['line']) ? $item['line'] : '<unknown line>')
-            	. ' calling ' . (isset($item['function']) ? $item['function'] : '<unknown function>') . '()';
-        }
+			$backtrace = "(".$errName.") " . $errstr;
+			foreach($trace as $item) {
+				$backtrace .= "\n\t" . (isset($item['file']) ? shortendPath($item['file'], 3) : '<unknown file>')
+					. ' ' . (isset($item['line']) ? $item['line'] : '<unknown line>')
+					. ' calling ' . (isset($item['function']) ? $item['function'] : '<unknown function>') . '()';
+			}
 
-		//echo "$backtrace, $errfile, $errline";
- 		\Logger::LogError( $backtrace, shortendPath($errfile), $errline );
+			//echo "$backtrace, $errfile, $errline";
+			\Logger::LogError( $backtrace, shortendPath($errfile), $errline );
+		}
+		else {
+			\Logger::LogWarning( "(".$errName.") " . $errstr, shortendPath($errfile), $errline );
+		}
+
 		return true;
 	}
 
