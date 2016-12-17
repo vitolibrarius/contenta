@@ -4,7 +4,7 @@
 defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 
 
-error_reporting(E_ALL);
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE | E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_COMPILE_WARNING | E_USER_ERROR);
 ini_set("display_errors", 1);
 
 // Set default timezone

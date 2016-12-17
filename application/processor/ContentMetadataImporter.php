@@ -80,9 +80,9 @@ abstract class ContentMetadataImporter extends EndpointImporter
 				$newfile = $mediaObject->mediaPath($filename);
 				rename(appendPath($this->workingDirectory(), $filename), $newfile) || die("failed install new file? " . $newfile);
 			}
-			else {
-				Logger::logError( "$mediaObject no file for $sourceurl", $this->type, $this->guid );
-			}
+// 			else {
+// 				Logger::logError( "$mediaObject no file for $sourceurl", $this->type, $this->guid );
+// 			}
 		}
 		else {
 			Logger::logError( "$mediaObject does not support images", $this->type, $this->guid );

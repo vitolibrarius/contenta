@@ -32,7 +32,10 @@
 		<figure class="card">
 			<div class="figure_top">
 				<div class="figure_image">
-					<img src="<?php echo $item['image']['thumb_url'] ?>" class="thumbnail" /><br>
+					<?php if ( isset($item['image'], $item['image']['thumb_url'])) : ?>
+						<img src="<?php echo $item['image']['thumb_url'] ?>" class="thumbnail" />
+					<?php endif; ?>
+					<br>
 				</div>
 				<div class="figure_details">
 					<div class="figure_detail_top">
@@ -41,14 +44,16 @@
 							echo '<span class="publisher name">' . $publisher->name . '</span>';
 						} ?>
 						<h3>
-							<a target="comicvine" href="<?php echo $item['site_detail_url']; ?>">
-								<img class="icon" src="<?php echo Model::Named('Endpoint_Type')->ComicVine()->favicon_url; ?>"
-									alt="ComicVine">
-							</a>
+							<?php if ( isset($item['site_detail_url'])) : ?>
+								<a target="comicvine" href="<?php echo $item['site_detail_url']; ?>">
+									<img class="icon" src="<?php echo Model::Named('Endpoint_Type')->ComicVine()->favicon_url; ?>"
+										alt="ComicVine">
+								</a>
+							<?php endif; ?>
 							<?php echo (isset($item['volume'], $item['volume']['name']) ? $item['volume']['name'] : ""); ?>
 						</h3>
 						<p class="property issue_num"><?php echo $item['issue_number']; ?></p>
-						<p class="property pub_date"><?php echo $item['cover_date']; ?></p>
+						<p class="property pub_date"><?php echo (isset($item['cover_date']) ? $item['cover_date'] : ""); ?></p>
 					</div>
 					<div class="figure_detail_middle">
 						<?php
@@ -106,15 +111,20 @@
 		<figure class="card">
 			<div class="figure_top">
 				<div class="figure_image">
-					<img src="<?php echo $item['image']['thumb_url'] ?>" class="thumbnail" /><br>
+					<?php if ( isset($item['image'], $item['image']['thumb_url'])) : ?>
+						<img src="<?php echo $item['image']['thumb_url'] ?>" class="thumbnail" />
+					<?php endif; ?>
+					<br>
 				</div>
 				<div class="figure_details">
 					<div class="figure_detail_top">
 						<h3>
-							<a target="comicvine" href="<?php echo $item['site_detail_url']; ?>">
-								<img class="icon" src="<?php echo Model::Named('Endpoint_Type')->ComicVine()->favicon_url; ?>"
-									alt="ComicVine">
-							</a>
+							<?php if ( isset($item['site_detail_url'])) : ?>
+								<a target="comicvine" href="<?php echo $item['site_detail_url']; ?>">
+									<img class="icon" src="<?php echo Model::Named('Endpoint_Type')->ComicVine()->favicon_url; ?>"
+										alt="ComicVine">
+								</a>
+							<?php endif; ?>
 							<?php echo (isset($item['volume'], $item['volume']['name']) ? $item['volume']['name'] : ""); ?>
 						</h3>
 						<p class="property issue_num"><?php echo $item['issue_number']; ?></p>

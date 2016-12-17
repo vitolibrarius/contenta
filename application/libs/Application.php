@@ -54,6 +54,7 @@ class Application
 			try {
 				$controllerClass = "controller\\" . $this->url_controller;
 				$this->url_controller = new $controllerClass();
+// 				$this->url_controller->view->params = Session::pageParameters( $this, $this->url_action );;
 
 				if ($this->url_action) {
 					if (method_exists($this->url_controller, $this->url_action)) {
