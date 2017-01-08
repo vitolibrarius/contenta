@@ -61,11 +61,18 @@ defined('SYSTEM_PATH') || exit("SYSTEM_PATH not found.");
 	{
 		try {
 			$error = error_get_last();
-			if ( $error !== NULL) {
-				$f = shortendPath($error["file"], 3);
-				\Logger::instance()->fatal( FriendlyErrorType($error["type"]) . " - " . $error["message"], $f, $error["line"]);
+			if ( $error !== NULL && $error["type"] == E_ERROR) {
+				$errName = FriendlyErrorType($error["type"]);
+				$backtrace = "(".$errName.") " . $error["message"];
 
-				debug_print_backtrace();
+				$trace = debug_backtrace();
+				foreach($trace as $item) {
+					$backtrace .= "\n\t" . (isset($item['file']) ? shortendPath($item['file'], 3) : '<unknown file>')
+						. ' ' . (isset($item['line']) ? $item['line'] : '<unknown line>')
+						. ' calling ' . (isset($item['function']) ? $item['function'] : '<unknown function>') . '()';
+				}
+
+				\Logger::instance()->fatal( $backtrace, shortendPath($error["file"], 3), $error["line"]);
 			}
 		}
 		catch (Exception $e) {
