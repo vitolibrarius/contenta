@@ -94,6 +94,48 @@ abstract class _Pull_List extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Pull_List::id == INTEGER
+
+			// Pull_List::name == TEXT
+				case Pull_List::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List::name] = Qualifier::Like(Pull_List::name, $value);
+					}
+					break;
+
+			// Pull_List::etag == TEXT
+				case Pull_List::etag:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List::etag] = Qualifier::Equals( Pull_List::etag, $value );
+					}
+					break;
+
+			// Pull_List::created == DATE
+
+			// Pull_List::published == DATE
+
+			// Pull_List::endpoint_id == INTEGER
+				case Pull_List::endpoint_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Pull_List::endpoint_id] = Qualifier::Equals( Pull_List::endpoint_id, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Pull_List::endpoint_id */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

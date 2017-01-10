@@ -86,6 +86,46 @@ abstract class _Pull_List_Exclusion extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Pull_List_Exclusion::id == INTEGER
+
+			// Pull_List_Exclusion::pattern == TEXT
+				case Pull_List_Exclusion::pattern:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Exclusion::pattern] = Qualifier::Equals( Pull_List_Exclusion::pattern, $value );
+					}
+					break;
+
+			// Pull_List_Exclusion::type == TEXT
+				case Pull_List_Exclusion::type:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Exclusion::type] = Qualifier::Equals( Pull_List_Exclusion::type, $value );
+					}
+					break;
+
+			// Pull_List_Exclusion::created == DATE
+
+			// Pull_List_Exclusion::endpoint_type_code == TEXT
+				case Pull_List_Exclusion::endpoint_type_code:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Exclusion::endpoint_type_code] = Qualifier::Equals( Pull_List_Exclusion::endpoint_type_code, $value );
+					}
+					break;
+
+				default:
+					/* no type specified for Pull_List_Exclusion::endpoint_type_code */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

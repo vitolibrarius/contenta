@@ -115,6 +115,100 @@ abstract class _Flux extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Flux::id == INTEGER
+
+			// Flux::created == DATE
+
+			// Flux::name == TEXT
+				case Flux::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Flux::name] = Qualifier::Equals( Flux::name, $value );
+					}
+					break;
+
+			// Flux::flux_hash == TEXT
+				case Flux::flux_hash:
+					if (strlen($value) > 0) {
+						$qualifiers[Flux::flux_hash] = Qualifier::Equals( Flux::flux_hash, $value );
+					}
+					break;
+
+			// Flux::flux_error == BOOLEAN
+				case Flux::flux_error:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Flux::flux_error] = Qualifier::Equals( Flux::flux_error, $v );
+					}
+					break;
+
+			// Flux::src_endpoint == INTEGER
+				case Flux::src_endpoint:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Flux::src_endpoint] = Qualifier::Equals( Flux::src_endpoint, intval($value) );
+					}
+					break;
+
+			// Flux::src_guid == TEXT
+				case Flux::src_guid:
+					if (strlen($value) > 0) {
+						$qualifiers[Flux::src_guid] = Qualifier::Equals( Flux::src_guid, $value );
+					}
+					break;
+
+			// Flux::src_url == TEXT
+				case Flux::src_url:
+					if (strlen($value) > 0) {
+						$qualifiers[Flux::src_url] = Qualifier::Equals( Flux::src_url, $value );
+					}
+					break;
+
+			// Flux::src_status == TEXT
+				case Flux::src_status:
+					if (strlen($value) > 0) {
+						$qualifiers[Flux::src_status] = Qualifier::Equals( Flux::src_status, $value );
+					}
+					break;
+
+			// Flux::src_pub_date == DATE
+
+			// Flux::dest_endpoint == INTEGER
+				case Flux::dest_endpoint:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Flux::dest_endpoint] = Qualifier::Equals( Flux::dest_endpoint, intval($value) );
+					}
+					break;
+
+			// Flux::dest_guid == TEXT
+				case Flux::dest_guid:
+					if (strlen($value) > 0) {
+						$qualifiers[Flux::dest_guid] = Qualifier::Equals( Flux::dest_guid, $value );
+					}
+					break;
+
+			// Flux::dest_status == TEXT
+				case Flux::dest_status:
+					if (strlen($value) > 0) {
+						$qualifiers[Flux::dest_status] = Qualifier::Equals( Flux::dest_status, $value );
+					}
+					break;
+
+			// Flux::dest_submission == DATE
+
+				default:
+					/* no type specified for Flux::dest_submission */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

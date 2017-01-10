@@ -110,6 +110,82 @@ abstract class _Reading_Queue extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Reading_Queue::id == INTEGER
+
+			// Reading_Queue::user_id == INTEGER
+				case Reading_Queue::user_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Reading_Queue::user_id] = Qualifier::Equals( Reading_Queue::user_id, intval($value) );
+					}
+					break;
+
+			// Reading_Queue::series_id == INTEGER
+				case Reading_Queue::series_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Reading_Queue::series_id] = Qualifier::Equals( Reading_Queue::series_id, intval($value) );
+					}
+					break;
+
+			// Reading_Queue::story_arc_id == INTEGER
+				case Reading_Queue::story_arc_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Reading_Queue::story_arc_id] = Qualifier::Equals( Reading_Queue::story_arc_id, intval($value) );
+					}
+					break;
+
+			// Reading_Queue::created == DATE
+
+			// Reading_Queue::title == TEXT
+				case Reading_Queue::title:
+					if (strlen($value) > 0) {
+						$qualifiers[Reading_Queue::title] = Qualifier::Equals( Reading_Queue::title, $value );
+					}
+					break;
+
+			// Reading_Queue::favorite == BOOLEAN
+				case Reading_Queue::favorite:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Reading_Queue::favorite] = Qualifier::Equals( Reading_Queue::favorite, $v );
+					}
+					break;
+
+			// Reading_Queue::pub_count == INTEGER
+				case Reading_Queue::pub_count:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Reading_Queue::pub_count] = Qualifier::Equals( Reading_Queue::pub_count, intval($value) );
+					}
+					break;
+
+			// Reading_Queue::pub_read == INTEGER
+				case Reading_Queue::pub_read:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Reading_Queue::pub_read] = Qualifier::Equals( Reading_Queue::pub_read, intval($value) );
+					}
+					break;
+
+			// Reading_Queue::queue_order == INTEGER
+				case Reading_Queue::queue_order:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Reading_Queue::queue_order] = Qualifier::Equals( Reading_Queue::queue_order, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Reading_Queue::queue_order */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

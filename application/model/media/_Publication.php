@@ -127,6 +127,92 @@ abstract class _Publication extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Publication::id == INTEGER
+
+			// Publication::series_id == INTEGER
+				case Publication::series_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Publication::series_id] = Qualifier::Equals( Publication::series_id, intval($value) );
+					}
+					break;
+
+			// Publication::created == DATE
+
+			// Publication::name == TEXT
+				case Publication::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Publication::name] = Qualifier::Equals( Publication::name, $value );
+					}
+					break;
+
+			// Publication::desc == TEXT
+				case Publication::desc:
+					if (strlen($value) > 0) {
+						$qualifiers[Publication::desc] = Qualifier::Equals( Publication::desc, $value );
+					}
+					break;
+
+			// Publication::pub_date == DATE
+
+			// Publication::issue_num == TEXT
+				case Publication::issue_num:
+					if (strlen($value) > 0) {
+						$qualifiers[Publication::issue_num] = Qualifier::Equals( Publication::issue_num, $value );
+					}
+					break;
+
+			// Publication::issue_order == INTEGER
+				case Publication::issue_order:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Publication::issue_order] = Qualifier::Equals( Publication::issue_order, intval($value) );
+					}
+					break;
+
+			// Publication::media_count == INTEGER
+				case Publication::media_count:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Publication::media_count] = Qualifier::Equals( Publication::media_count, intval($value) );
+					}
+					break;
+
+			// Publication::xurl == TEXT
+				case Publication::xurl:
+					if (strlen($value) > 0) {
+						$qualifiers[Publication::xurl] = Qualifier::Equals( Publication::xurl, $value );
+					}
+					break;
+
+			// Publication::xsource == TEXT
+				case Publication::xsource:
+					if (strlen($value) > 0) {
+						$qualifiers[Publication::xsource] = Qualifier::Equals( Publication::xsource, $value );
+					}
+					break;
+
+			// Publication::xid == TEXT
+				case Publication::xid:
+					if (strlen($value) > 0) {
+						$qualifiers[Publication::xid] = Qualifier::Equals( Publication::xid, $value );
+					}
+					break;
+
+			// Publication::xupdated == DATE
+
+				default:
+					/* no type specified for Publication::xupdated */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

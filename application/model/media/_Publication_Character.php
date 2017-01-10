@@ -84,6 +84,37 @@ abstract class _Publication_Character extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Publication_Character::id == INTEGER
+
+			// Publication_Character::publication_id == INTEGER
+				case Publication_Character::publication_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Publication_Character::publication_id] = Qualifier::Equals( Publication_Character::publication_id, intval($value) );
+					}
+					break;
+
+			// Publication_Character::character_id == INTEGER
+				case Publication_Character::character_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Publication_Character::character_id] = Qualifier::Equals( Publication_Character::character_id, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Publication_Character::character_id */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

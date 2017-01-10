@@ -3,7 +3,9 @@
 use \Localized as Localized;
 use \Logger as Logger;
 use \DataObject as DataObject;
+
 use \SQL as SQL;
+use db\Qualifier as Qualifier;
 
 /**
  * This is the "base model class". All other "real" models extend this class.
@@ -184,7 +186,7 @@ abstract class Model
 		$cacheKey = $this->modelName().'-'.$id;
 		$obj = Model::objectForCacheKey($cacheKey);
 		if ( $obj == false ) {
-			$obj = SQL::Select( $this, null, db\Qualifier::Equals( $this->tablePK(), $id) )->fetch();
+			$obj = SQL::Select( $this, null, Qualifier::Equals( $this->tablePK(), $id) )->fetch();
 			Model::setObjectForCacheKey($cacheKey, $obj );
 		}
 		return $obj;
@@ -193,13 +195,13 @@ abstract class Model
 	public function singleObjectForKeyValue($key, $value = null)
 	{
 		if ( is_null($value) ) {
-			return $this->singleObject( db\Qualifier::IsNull( $key ));
+			return $this->singleObject( Qualifier::IsNull( $key ));
 		}
 
-		return $this->singleObject( db\Qualifier::Equals( $key, $value ));
+		return $this->singleObject( Qualifier::Equals( $key, $value ));
 	}
 
-	public function singleObject( db\Qualifier $qualifier = null)
+	public function singleObject( Qualifier $qualifier = null)
 	{
 		if ( is_null($qualifier) == false) {
 			return SQL::Select( $this )->where( $qualifier )->fetch();
@@ -215,18 +217,18 @@ abstract class Model
 			$qArray = array();
 			foreach($kvArray as $key => $value ) {
 				if ( is_null($value) ) {
-					$qArray[] = db\Qualifier::IsNull( $key );
+					$qArray[] = Qualifier::IsNull( $key );
 				}
 				else {
-					$qArray[] = db\Qualifier::Equals( $key, $value );
+					$qArray[] = Qualifier::Equals( $key, $value );
 				}
 			}
 
 			if ( $and ) {
-				$select->where( db\Qualifier::AndQualifier( $qArray ));
+				$select->where( Qualifier::AndQualifier( $qArray ));
 			}
 			else {
-				$select->where( db\Qualifier::OrQualifier( $qArray ));
+				$select->where( Qualifier::OrQualifier( $qArray ));
 			}
 			$select->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) );
 			return $select->fetch();
@@ -242,7 +244,7 @@ abstract class Model
 		}
 
 		if ( isset($xid, $xsrc) ) {
-			return SQL::Select( $this, null, db\Qualifier::XID($xid, $xsrc))->fetch();
+			return SQL::Select( $this, null, Qualifier::XID($xid, $xsrc))->fetch();
 		}
 
 		return false;
@@ -260,10 +262,10 @@ abstract class Model
 	{
 		$select = SQL::Select( $this );
 		if ( is_null($value) ) {
-			$select->where( db\Qualifier::IsNull( $key ));
+			$select->where( Qualifier::IsNull( $key ));
 		}
 		else {
-			$select->where( db\Qualifier::Equals( $key, $value ));
+			$select->where( Qualifier::Equals( $key, $value ));
 		}
 		$select->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) );
 		$select->limit($limit);
@@ -277,18 +279,18 @@ abstract class Model
 			$qArray = array();
 			foreach($kvArray as $key => $value ) {
 				if ( is_null($value) ) {
-					$qArray[] = db\Qualifier::IsNull( $key );
+					$qArray[] = Qualifier::IsNull( $key );
 				}
 				else {
-					$qArray[] = db\Qualifier::Equals( $key, $value );
+					$qArray[] = Qualifier::Equals( $key, $value );
 				}
 			}
 
 			if ( $and ) {
-				$select->where( db\Qualifier::AndQualifier( $qArray ));
+				$select->where( Qualifier::AndQualifier( $qArray ));
 			}
 			else {
-				$select->where( db\Qualifier::OrQualifier( $qArray ));
+				$select->where( Qualifier::OrQualifier( $qArray ));
 			}
 			$select->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) );
 			$select->limit($limit);
@@ -297,7 +299,7 @@ abstract class Model
 		return false;
 	}
 
-	public function allObjectsForQualifier(db\Qualifier $qualifier = null, $sortColumns = null, $limit = 50)
+	public function allObjectsForQualifier(Qualifier $qualifier = null, $sortColumns = null, $limit = 50)
 	{
 		$select = SQL::Select( $this );
 		if ( is_null($qualifier) == false ) {
@@ -310,7 +312,7 @@ abstract class Model
 
 	public function allObjectsForFK($relatedAttribute, DataObject $sourceObject, array $sortColumns = null, $limit = 0)
 	{
-		return SQL::Select( $this, null, db\Qualifier::FK( $relatedAttribute, $sourceObject ) )
+		return SQL::Select( $this, null, Qualifier::FK( $relatedAttribute, $sourceObject ) )
 			->orderBy( ($sortColumns == null ? $this->sortOrder() : $sortColumns) )
 			->limit($limit)
 			->fetchAll();
@@ -319,21 +321,21 @@ abstract class Model
 	public function allObjectsForFKWithValue($relatedAttribute, DataObject $sourceObject, $key, $value = null, array $sortOrder = null, $limit = 0)
 	{
 		if ( is_null($value) ) {
-			return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, db\Qualifier::IsNull( $key ), $sortOrder, $limit);
+			return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, Qualifier::IsNull( $key ), $sortOrder, $limit);
 		}
 
-		return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, db\Qualifier::Equals( $key, $value ), $sortOrder, $limit);
+		return $this->allObjectsForFKAndQualifier($relatedAttribute, $sourceObject, Qualifier::Equals( $key, $value ), $sortOrder, $limit);
 	}
 
-	public function allObjectsForFKAndQualifier($relatedAttribute, DataObject $sourceObject, db\Qualifier $qual = null, array $sortOrder = null, $limit = 0)
+	public function allObjectsForFKAndQualifier($relatedAttribute, DataObject $sourceObject, Qualifier $qual = null, array $sortOrder = null, $limit = 0)
 	{
 		if ( is_null($qual) ) {
 			throw new \Exception( "Qualifier cannot be null" );
 		}
-		$fkQual = db\Qualifier::FK( $relatedAttribute, $sourceObject );
+		$fkQual = Qualifier::FK( $relatedAttribute, $sourceObject );
 
 		$select = SQL::Select( $this );
-		$select->where( db\Qualifier::AndQualifier($qual, $fkQual));
+		$select->where( Qualifier::AndQualifier($qual, $fkQual));
 		$select->orderBy($sortOrder);
 		$select->limit($limit);
 		return $select->fetchAll();
@@ -342,7 +344,7 @@ abstract class Model
 	/** special functions */
 	public function countForFK($relatedAttribute, DataObject $sourceObject)
 	{
-		$result = SQL::Count( $this, null, db\Qualifier::FK( $relatedAttribute, $sourceObject ) )->fetch();
+		$result = SQL::Count( $this, null, Qualifier::FK( $relatedAttribute, $sourceObject ) )->fetch();
 		return ( isset($result, $result->count) ? $result->count : false );
 	}
 
@@ -351,10 +353,10 @@ abstract class Model
 		$select = SQL::Count( $this );
 		if ( is_null($key) == false) {
 			if ( is_null($value) ) {
-				$select->where( db\Qualifier::IsNull( $key ));
+				$select->where( Qualifier::IsNull( $key ));
 			}
 			else {
-				$select->where( db\Qualifier::Equals( $key, $value ));
+				$select->where( Qualifier::Equals( $key, $value ));
 			}
 		}
 		$result = $select->fetch();
@@ -368,20 +370,68 @@ abstract class Model
 		$select->limit($limit);
 		return $select->fetchAll();
 	}
+
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				if ( $this->hasColumn($attr) ) {
+					$qualifiers[$attr] = Qualifier::Equals( $attr, $val );
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
+	public function searchQuery( $hasNewValues = false, array $query, $pageNum = 0, $pageParams )
+	{
+		$qualifiers = $this->searchQualifiers( $query );
+
+		if ( $hasNewValues ) {
+			if ( count($qualifiers) > 0 ) {
+				$count = SQL::Count( $this, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
+			}
+			else {
+				$count = SQL::Count( $this )->fetch();
+			}
+
+			$pageParams->queryResults($count->count);
+		}
+		else {
+			if ( is_null( $pageNum) || intval($pageNum) < 0 ) {
+				$pageNum = $pageParams->pageShown();
+			}
+			else {
+				$pageParams->setPageShown( intval($pageNum) );
+			}
+		}
+
+		$select = SQL::Select($this);
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::AndQualifier( $qualifiers ));
+		}
+		$select->limit($pageParams->pageSize());
+		$select->offset($pageParams->pageShown());
+		$select->orderBy( $this->sortOrder() );
+
+		return $select->fetchAll();
+	}
+
 	public function allObjectsNeverExternalUpdate($limit = -1)
 	{
 		$limit = intval( $limit );
 		/** select items never updated, ie a null xupdated or pub_active */
-		$hasXID = db\Qualifier::IsNotNull( "xid" );
+		$hasXID = Qualifier::IsNotNull( "xid" );
 		$needsQualifiers = array();
-		$needsQualifiers[] = db\Qualifier::IsNull( "xupdated" );
+		$needsQualifiers[] = Qualifier::IsNull( "xupdated" );
 		if ( $this->hasColumn('pub_active') ) {
-			$needsQualifiers[] = db\Qualifier::IsNull( "pub_active" );
+			$needsQualifiers[] = Qualifier::IsNull( "pub_active" );
 		}
-		$needsUpdate = db\Qualifier::OrQualifier($needsQualifiers);
+		$needsUpdate = Qualifier::OrQualifier($needsQualifiers);
 
 		$select = SQL::Select( $this );
-		$select->where( db\Qualifier::AndQualifier( $hasXID, $needsUpdate ));
+		$select->where( Qualifier::AndQualifier( $hasXID, $needsUpdate ));
 		$select->orderBy( array("xupdated") );
 		$select->limit( $limit );
 
@@ -397,14 +447,14 @@ abstract class Model
 		$startYearCutoff = intval($startYearCutoff);
 
 		$qualifiers = array();
-		$qualifiers[] = db\Qualifier::IsNotNull( "xid" );
-		$qualifiers[] = db\Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * $ageInDays)) );
+		$qualifiers[] = Qualifier::IsNotNull( "xid" );
+		$qualifiers[] = Qualifier::LessThan( "xupdated", (time() - (3600 * 24 * $ageInDays)) );
 		if ( $startYearCutoff > 0 && $this->hasColumn('start_year')) {
 			$cutoff = intval(date("Y")) - $startYearCutoff;
-			$qualifiers[] = db\Qualifier::GreaterThan( "start_year", $cutoff);
+			$qualifiers[] = Qualifier::GreaterThan( "start_year", $cutoff);
 		}
 		if ( $activeOnly && $this->hasColumn('pub_active') ) {
-			$qualifiers[] = db\Qualifier::Equals( "pub_active", Model::TERTIARY_TRUE );
+			$qualifiers[] = Qualifier::Equals( "pub_active", Model::TERTIARY_TRUE );
 		}
 
 		$order = array();
@@ -417,7 +467,7 @@ abstract class Model
 		}
 
 		$select = SQL::Select( $this );
-		$select->where( db\Qualifier::AndQualifier( $qualifiers ));
+		$select->where( Qualifier::AndQualifier( $qualifiers ));
 		$select->orderBy( $order );
 		$select->limit( $limit );
 

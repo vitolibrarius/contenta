@@ -120,6 +120,103 @@ abstract class _Job extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Job::id == INTEGER
+
+			// Job::type_code == TEXT
+				case Job::type_code:
+					if (strlen($value) > 0) {
+						$qualifiers[Job::type_code] = Qualifier::Equals( Job::type_code, $value );
+					}
+					break;
+
+			// Job::endpoint_id == INTEGER
+				case Job::endpoint_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Job::endpoint_id] = Qualifier::Equals( Job::endpoint_id, intval($value) );
+					}
+					break;
+
+			// Job::enabled == BOOLEAN
+				case Job::enabled:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Job::enabled] = Qualifier::Equals( Job::enabled, $v );
+					}
+					break;
+
+			// Job::one_shot == BOOLEAN
+				case Job::one_shot:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Job::one_shot] = Qualifier::Equals( Job::one_shot, $v );
+					}
+					break;
+
+			// Job::fail_count == INTEGER
+				case Job::fail_count:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Job::fail_count] = Qualifier::Equals( Job::fail_count, intval($value) );
+					}
+					break;
+
+			// Job::elapsed == INTEGER
+				case Job::elapsed:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Job::elapsed] = Qualifier::Equals( Job::elapsed, intval($value) );
+					}
+					break;
+
+			// Job::minute == TEXT
+				case Job::minute:
+					if (strlen($value) > 0) {
+						$qualifiers[Job::minute] = Qualifier::Equals( Job::minute, $value );
+					}
+					break;
+
+			// Job::hour == TEXT
+				case Job::hour:
+					if (strlen($value) > 0) {
+						$qualifiers[Job::hour] = Qualifier::Equals( Job::hour, $value );
+					}
+					break;
+
+			// Job::dayOfWeek == TEXT
+				case Job::dayOfWeek:
+					if (strlen($value) > 0) {
+						$qualifiers[Job::dayOfWeek] = Qualifier::Equals( Job::dayOfWeek, $value );
+					}
+					break;
+
+			// Job::parameter == TEXT
+				case Job::parameter:
+					if (strlen($value) > 0) {
+						$qualifiers[Job::parameter] = Qualifier::Equals( Job::parameter, $value );
+					}
+					break;
+
+			// Job::next == DATE
+
+			// Job::last_run == DATE
+
+			// Job::last_fail == DATE
+
+			// Job::created == DATE
+
+				default:
+					/* no type specified for Job::created */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

@@ -6,6 +6,22 @@
 	table.Log tr.fatal td {background-color:#f2888c;}
 </style>
 
+<section>
+	<div class="row"><div class="grid_12">
+<?php use \html\Paginator as Paginator;
+	if ( isset($this->params) ) {
+		echo "<b>parameter set ".$this->params."</b>";
+		$p = new Paginator( $this->params, Config::Web('/logs/log_table') );
+		echo $p->render();
+	}
+	else {
+		echo "<b> no parameters</b>";
+	}
+?>
+	</div></div>
+</section>
+
+
 <div class="mediaData">
 <?php if (is_array($this->logArray) && count($this->logArray) > 0): ?>
 	<table class="Log">

@@ -143,6 +143,127 @@ abstract class _Series extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Series::id == INTEGER
+
+			// Series::publisher_id == INTEGER
+				case Series::publisher_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Series::publisher_id] = Qualifier::Equals( Series::publisher_id, intval($value) );
+					}
+					break;
+
+			// Series::created == DATE
+
+			// Series::name == TEXT
+				case Series::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Series::name] = Qualifier::Like(Series::name, $value);
+					}
+					break;
+
+			// Series::search_name == TEXT
+				case Series::search_name:
+					if (strlen($value) > 0) {
+						$qualifiers[Series::search_name] = Qualifier::Like(Series::search_name, $value);
+					}
+					break;
+
+			// Series::desc == TEXT
+				case Series::desc:
+					if (strlen($value) > 0) {
+						$qualifiers[Series::desc] = Qualifier::Like(Series::desc, $value);
+					}
+					break;
+
+			// Series::start_year == INTEGER
+				case Series::start_year:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Series::start_year] = Qualifier::Equals( Series::start_year, intval($value) );
+					}
+					break;
+
+			// Series::issue_count == INTEGER
+				case Series::issue_count:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Series::issue_count] = Qualifier::Equals( Series::issue_count, intval($value) );
+					}
+					break;
+
+			// Series::pub_active == BOOLEAN
+				case Series::pub_active:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Series::pub_active] = Qualifier::Equals( Series::pub_active, $v );
+					}
+					break;
+
+			// Series::pub_wanted == BOOLEAN
+				case Series::pub_wanted:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Series::pub_wanted] = Qualifier::Equals( Series::pub_wanted, $v );
+					}
+					break;
+
+			// Series::pub_available == INTEGER
+				case Series::pub_available:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Series::pub_available] = Qualifier::Equals( Series::pub_available, intval($value) );
+					}
+					break;
+
+			// Series::pub_cycle == INTEGER
+				case Series::pub_cycle:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Series::pub_cycle] = Qualifier::Equals( Series::pub_cycle, intval($value) );
+					}
+					break;
+
+			// Series::pub_count == INTEGER
+				case Series::pub_count:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Series::pub_count] = Qualifier::Equals( Series::pub_count, intval($value) );
+					}
+					break;
+
+			// Series::xurl == TEXT
+				case Series::xurl:
+					if (strlen($value) > 0) {
+						$qualifiers[Series::xurl] = Qualifier::Equals( Series::xurl, $value );
+					}
+					break;
+
+			// Series::xsource == TEXT
+				case Series::xsource:
+					if (strlen($value) > 0) {
+						$qualifiers[Series::xsource] = Qualifier::Equals( Series::xsource, $value );
+					}
+					break;
+
+			// Series::xid == TEXT
+				case Series::xid:
+					if (strlen($value) > 0) {
+						$qualifiers[Series::xid] = Qualifier::Equals( Series::xid, $value );
+					}
+					break;
+
+			// Series::xupdated == DATE
+
+				default:
+					/* no type specified for Series::xupdated */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -154,18 +275,42 @@ abstract class _Series extends Model
 		return $this->allObjectsForKeyValue(Series::name, $value);
 	}
 
+	public function allLikeName($value)
+	{
+		return SQL::Select( $this )
+			->where( Qualifier::Like( Series::name, $value, SQL::SQL_LIKE_AFTER ))
+			->orderBy( $this->sortOrder() )
+			->limit( 50 )
+			->fetchAll();
+	}
 
 	public function allForSearch_name($value)
 	{
 		return $this->allObjectsForKeyValue(Series::search_name, $value);
 	}
 
+	public function allLikeSearch_name($value)
+	{
+		return SQL::Select( $this )
+			->where( Qualifier::Like( Series::search_name, $value, SQL::SQL_LIKE_AFTER ))
+			->orderBy( $this->sortOrder() )
+			->limit( 50 )
+			->fetchAll();
+	}
 
 	public function allForDesc($value)
 	{
 		return $this->allObjectsForKeyValue(Series::desc, $value);
 	}
 
+	public function allLikeDesc($value)
+	{
+		return SQL::Select( $this )
+			->where( Qualifier::Like( Series::desc, $value, SQL::SQL_LIKE_AFTER ))
+			->orderBy( $this->sortOrder() )
+			->limit( 50 )
+			->fetchAll();
+	}
 
 	public function allForStart_year($value)
 	{

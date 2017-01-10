@@ -60,9 +60,9 @@ class DeleteSQL extends SQL
 		$db = Database::instance();
 		$statement = $db->prepare($sql);
 		if ($statement ) {
-			$affectedRows = $statement->execute($params);
-			if ( $affectedRows > 0 ) {
-				return true;
+			$success = $statement->execute($params);
+			if ( $success > 0 ) {
+				return $statement->rowCount();
 			}
 		}
 

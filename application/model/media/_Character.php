@@ -124,6 +124,90 @@ abstract class _Character extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Character::id == INTEGER
+
+			// Character::publisher_id == INTEGER
+				case Character::publisher_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Character::publisher_id] = Qualifier::Equals( Character::publisher_id, intval($value) );
+					}
+					break;
+
+			// Character::created == DATE
+
+			// Character::name == TEXT
+				case Character::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Character::name] = Qualifier::Equals( Character::name, $value );
+					}
+					break;
+
+			// Character::realname == TEXT
+				case Character::realname:
+					if (strlen($value) > 0) {
+						$qualifiers[Character::realname] = Qualifier::Equals( Character::realname, $value );
+					}
+					break;
+
+			// Character::desc == TEXT
+				case Character::desc:
+					if (strlen($value) > 0) {
+						$qualifiers[Character::desc] = Qualifier::Equals( Character::desc, $value );
+					}
+					break;
+
+			// Character::popularity == INTEGER
+				case Character::popularity:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Character::popularity] = Qualifier::Equals( Character::popularity, intval($value) );
+					}
+					break;
+
+			// Character::gender == TEXT
+				case Character::gender:
+					if (strlen($value) > 0) {
+						$qualifiers[Character::gender] = Qualifier::Equals( Character::gender, $value );
+					}
+					break;
+
+			// Character::xurl == TEXT
+				case Character::xurl:
+					if (strlen($value) > 0) {
+						$qualifiers[Character::xurl] = Qualifier::Equals( Character::xurl, $value );
+					}
+					break;
+
+			// Character::xsource == TEXT
+				case Character::xsource:
+					if (strlen($value) > 0) {
+						$qualifiers[Character::xsource] = Qualifier::Equals( Character::xsource, $value );
+					}
+					break;
+
+			// Character::xid == TEXT
+				case Character::xid:
+					if (strlen($value) > 0) {
+						$qualifiers[Character::xid] = Qualifier::Equals( Character::xid, $value );
+					}
+					break;
+
+			// Character::xupdated == DATE
+
+				default:
+					/* no type specified for Character::xupdated */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

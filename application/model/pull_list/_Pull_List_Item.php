@@ -104,6 +104,74 @@ abstract class _Pull_List_Item extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Pull_List_Item::id == INTEGER
+
+			// Pull_List_Item::data == TEXT
+				case Pull_List_Item::data:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Item::data] = Qualifier::Equals( Pull_List_Item::data, $value );
+					}
+					break;
+
+			// Pull_List_Item::created == DATE
+
+			// Pull_List_Item::search_name == TEXT
+				case Pull_List_Item::search_name:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Item::search_name] = Qualifier::Equals( Pull_List_Item::search_name, $value );
+					}
+					break;
+
+			// Pull_List_Item::name == TEXT
+				case Pull_List_Item::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Item::name] = Qualifier::Equals( Pull_List_Item::name, $value );
+					}
+					break;
+
+			// Pull_List_Item::issue == TEXT
+				case Pull_List_Item::issue:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Item::issue] = Qualifier::Equals( Pull_List_Item::issue, $value );
+					}
+					break;
+
+			// Pull_List_Item::year == INTEGER
+				case Pull_List_Item::year:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Pull_List_Item::year] = Qualifier::Equals( Pull_List_Item::year, intval($value) );
+					}
+					break;
+
+			// Pull_List_Item::pull_list_id == INTEGER
+				case Pull_List_Item::pull_list_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Pull_List_Item::pull_list_id] = Qualifier::Equals( Pull_List_Item::pull_list_id, intval($value) );
+					}
+					break;
+
+			// Pull_List_Item::pull_list_group_id == INTEGER
+				case Pull_List_Item::pull_list_group_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Pull_List_Item::pull_list_group_id] = Qualifier::Equals( Pull_List_Item::pull_list_group_id, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Pull_List_Item::pull_list_group_id */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

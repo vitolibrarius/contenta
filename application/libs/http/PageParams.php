@@ -26,6 +26,12 @@ class PageParams
 		$this->pageName = (string)$page;
 	}
 
+	public function __toString()
+	{
+		$x = $this->currentQueryValues();
+		return "Page ($this->pageName) " . var_export($x, true);
+	}
+
 	public function queryResults( $total = 0, $pageSize = \SQL::SQL_DEFAULT_LIMIT )
 	{
 		if ( intval($pageSize) != \SQL::SQL_DEFAULT_LIMIT ) {
@@ -96,6 +102,17 @@ class PageParams
 		}
 
 		return (is_null( $v ) ? $default : $v);
+	}
+
+	public function currentQueryValues()
+	{
+		$results = array();
+		foreach( $this->params as $k => $v ) {
+			if ( in_array($k, array(PageParams::PAGE_SHOWN, PageParams::PAGE_SIZE, PageParams::PAGE_COUNT, PageParams::QUERY_SIZE)) == false ) {
+				$results[$k] = $v;
+			}
+		}
+		return $results;
 	}
 
 	public function updateParametersFromGET( array $keys = array() )

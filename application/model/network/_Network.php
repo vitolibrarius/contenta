@@ -87,6 +87,47 @@ abstract class _Network extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Network::id == INTEGER
+
+			// Network::ip_address == TEXT
+				case Network::ip_address:
+					if (strlen($value) > 0) {
+						$qualifiers[Network::ip_address] = Qualifier::Equals( Network::ip_address, $value );
+					}
+					break;
+
+			// Network::ip_hash == TEXT
+				case Network::ip_hash:
+					if (strlen($value) > 0) {
+						$qualifiers[Network::ip_hash] = Qualifier::Equals( Network::ip_hash, $value );
+					}
+					break;
+
+			// Network::created == DATE
+
+			// Network::disable == BOOLEAN
+				case Network::disable:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Network::disable] = Qualifier::Equals( Network::disable, $v );
+					}
+					break;
+
+				default:
+					/* no type specified for Network::disable */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

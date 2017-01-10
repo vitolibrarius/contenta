@@ -84,6 +84,37 @@ abstract class _Story_Arc_Series extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Story_Arc_Series::id == INTEGER
+
+			// Story_Arc_Series::story_arc_id == INTEGER
+				case Story_Arc_Series::story_arc_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Story_Arc_Series::story_arc_id] = Qualifier::Equals( Story_Arc_Series::story_arc_id, intval($value) );
+					}
+					break;
+
+			// Story_Arc_Series::series_id == INTEGER
+				case Story_Arc_Series::series_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Story_Arc_Series::series_id] = Qualifier::Equals( Story_Arc_Series::series_id, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Story_Arc_Series::series_id */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

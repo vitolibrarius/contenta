@@ -119,6 +119,88 @@ abstract class _Endpoint extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Endpoint::id == INTEGER
+
+			// Endpoint::type_code == TEXT
+				case Endpoint::type_code:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint::type_code] = Qualifier::Equals( Endpoint::type_code, $value );
+					}
+					break;
+
+			// Endpoint::name == TEXT
+				case Endpoint::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint::name] = Qualifier::Equals( Endpoint::name, $value );
+					}
+					break;
+
+			// Endpoint::base_url == TEXT
+				case Endpoint::base_url:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint::base_url] = Qualifier::Equals( Endpoint::base_url, $value );
+					}
+					break;
+
+			// Endpoint::api_key == TEXT
+				case Endpoint::api_key:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint::api_key] = Qualifier::Equals( Endpoint::api_key, $value );
+					}
+					break;
+
+			// Endpoint::username == TEXT
+				case Endpoint::username:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint::username] = Qualifier::Equals( Endpoint::username, $value );
+					}
+					break;
+
+			// Endpoint::error_count == INTEGER
+				case Endpoint::error_count:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Endpoint::error_count] = Qualifier::Equals( Endpoint::error_count, intval($value) );
+					}
+					break;
+
+			// Endpoint::parameter == TEXT
+				case Endpoint::parameter:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint::parameter] = Qualifier::Equals( Endpoint::parameter, $value );
+					}
+					break;
+
+			// Endpoint::enabled == BOOLEAN
+				case Endpoint::enabled:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Endpoint::enabled] = Qualifier::Equals( Endpoint::enabled, $v );
+					}
+					break;
+
+			// Endpoint::compressed == BOOLEAN
+				case Endpoint::compressed:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Endpoint::compressed] = Qualifier::Equals( Endpoint::compressed, $v );
+					}
+					break;
+
+				default:
+					/* no type specified for Endpoint::compressed */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

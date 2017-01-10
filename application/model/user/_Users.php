@@ -125,6 +125,102 @@ abstract class _Users extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Users::id == INTEGER
+
+			// Users::name == TEXT
+				case Users::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Users::name] = Qualifier::Equals( Users::name, $value );
+					}
+					break;
+
+			// Users::email == TEXT
+				case Users::email:
+					if (strlen($value) > 0) {
+						$qualifiers[Users::email] = Qualifier::Equals( Users::email, $value );
+					}
+					break;
+
+			// Users::active == BOOLEAN
+				case Users::active:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Users::active] = Qualifier::Equals( Users::active, $v );
+					}
+					break;
+
+			// Users::account_type == TEXT
+				case Users::account_type:
+					if (strlen($value) > 0) {
+						$qualifiers[Users::account_type] = Qualifier::Equals( Users::account_type, $value );
+					}
+					break;
+
+			// Users::rememberme_token == TEXT
+				case Users::rememberme_token:
+					if (strlen($value) > 0) {
+						$qualifiers[Users::rememberme_token] = Qualifier::Equals( Users::rememberme_token, $value );
+					}
+					break;
+
+			// Users::api_hash == TEXT
+				case Users::api_hash:
+					if (strlen($value) > 0) {
+						$qualifiers[Users::api_hash] = Qualifier::Equals( Users::api_hash, $value );
+					}
+					break;
+
+			// Users::password_hash == TEXT
+				case Users::password_hash:
+					if (strlen($value) > 0) {
+						$qualifiers[Users::password_hash] = Qualifier::Equals( Users::password_hash, $value );
+					}
+					break;
+
+			// Users::password_reset_hash == TEXT
+				case Users::password_reset_hash:
+					if (strlen($value) > 0) {
+						$qualifiers[Users::password_reset_hash] = Qualifier::Equals( Users::password_reset_hash, $value );
+					}
+					break;
+
+			// Users::activation_hash == TEXT
+				case Users::activation_hash:
+					if (strlen($value) > 0) {
+						$qualifiers[Users::activation_hash] = Qualifier::Equals( Users::activation_hash, $value );
+					}
+					break;
+
+			// Users::failed_logins == INTEGER
+				case Users::failed_logins:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Users::failed_logins] = Qualifier::Equals( Users::failed_logins, intval($value) );
+					}
+					break;
+
+			// Users::created == DATE
+
+			// Users::last_login_timestamp == DATE
+
+			// Users::last_failed_login == DATE
+
+			// Users::password_reset_timestamp == DATE
+
+				default:
+					/* no type specified for Users::password_reset_timestamp */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

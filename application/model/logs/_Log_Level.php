@@ -74,6 +74,35 @@ abstract class _Log_Level extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Log_Level::code == TEXT
+				case Log_Level::code:
+					if (strlen($value) > 0) {
+						$qualifiers[Log_Level::code] = Qualifier::Equals( Log_Level::code, $value );
+					}
+					break;
+
+			// Log_Level::name == TEXT
+				case Log_Level::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Log_Level::name] = Qualifier::Equals( Log_Level::name, $value );
+					}
+					break;
+
+				default:
+					/* no type specified for Log_Level::name */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

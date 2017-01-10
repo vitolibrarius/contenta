@@ -80,6 +80,37 @@ abstract class _Series_Alias extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Series_Alias::id == INTEGER
+
+			// Series_Alias::name == TEXT
+				case Series_Alias::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Series_Alias::name] = Qualifier::Equals( Series_Alias::name, $value );
+					}
+					break;
+
+			// Series_Alias::series_id == INTEGER
+				case Series_Alias::series_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Series_Alias::series_id] = Qualifier::Equals( Series_Alias::series_id, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Series_Alias::series_id */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

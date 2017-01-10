@@ -84,6 +84,39 @@ abstract class _Pull_List_Group extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Pull_List_Group::id == INTEGER
+
+			// Pull_List_Group::name == TEXT
+				case Pull_List_Group::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Group::name] = Qualifier::Like(Pull_List_Group::name, $value);
+					}
+					break;
+
+			// Pull_List_Group::data == TEXT
+				case Pull_List_Group::data:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Group::data] = Qualifier::Equals( Pull_List_Group::data, $value );
+					}
+					break;
+
+			// Pull_List_Group::created == DATE
+
+				default:
+					/* no type specified for Pull_List_Group::created */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

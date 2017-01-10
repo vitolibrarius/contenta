@@ -99,6 +99,67 @@ abstract class _Media extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Media::id == INTEGER
+
+			// Media::publication_id == INTEGER
+				case Media::publication_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Media::publication_id] = Qualifier::Equals( Media::publication_id, intval($value) );
+					}
+					break;
+
+			// Media::type_code == INTEGER
+				case Media::type_code:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Media::type_code] = Qualifier::Equals( Media::type_code, intval($value) );
+					}
+					break;
+
+			// Media::filename == TEXT
+				case Media::filename:
+					if (strlen($value) > 0) {
+						$qualifiers[Media::filename] = Qualifier::Equals( Media::filename, $value );
+					}
+					break;
+
+			// Media::original_filename == TEXT
+				case Media::original_filename:
+					if (strlen($value) > 0) {
+						$qualifiers[Media::original_filename] = Qualifier::Equals( Media::original_filename, $value );
+					}
+					break;
+
+			// Media::checksum == TEXT
+				case Media::checksum:
+					if (strlen($value) > 0) {
+						$qualifiers[Media::checksum] = Qualifier::Equals( Media::checksum, $value );
+					}
+					break;
+
+			// Media::created == DATE
+
+			// Media::size == INTEGER
+				case Media::size:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Media::size] = Qualifier::Equals( Media::size, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Media::size */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

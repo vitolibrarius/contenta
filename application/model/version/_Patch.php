@@ -83,6 +83,39 @@ abstract class _Patch extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Patch::id == INTEGER
+
+			// Patch::name == TEXT
+				case Patch::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Patch::name] = Qualifier::Like(Patch::name, $value);
+					}
+					break;
+
+			// Patch::created == DATE
+
+			// Patch::version_id == INTEGER
+				case Patch::version_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Patch::version_id] = Qualifier::Equals( Patch::version_id, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Patch::version_id */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

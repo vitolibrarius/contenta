@@ -1,12 +1,30 @@
 {
     "attributes": {
         "id": 	{ "column": "id",	"type": "INTEGER" },
-        "trace": { "column": "trace", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
+        "trace": {
+        	"column": "trace",
+        	"length": 256,
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"partialSearch" : true
+        },
         "trace_id": { "column": "trace_id", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
         "context": { "column": "context", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
         "context_id": { "column": "context_id", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true },
-        "message": { "column": "message", "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "nullable": false },
-        "session": { "column": "session", "length": 256, "type": "TEXT",	"collate": "NOCASE", "partialSearch" : true, "default": "session_id()" },
+        "message": {
+        	"column": "message",
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"partialSearch" : true,
+        	"nullable": false
+        },
+        "session": {
+        	"column": "session",
+        	"length": 256,
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"default": "session_id()"
+        },
         "level_code": { "column": "level_code", "length": 10, "type": "TEXT", "default": "'warning'" },
         "created": { "column": "created", "type": "DATE" }
     },

@@ -84,6 +84,37 @@ abstract class _Series_Character extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Series_Character::id == INTEGER
+
+			// Series_Character::series_id == INTEGER
+				case Series_Character::series_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Series_Character::series_id] = Qualifier::Equals( Series_Character::series_id, intval($value) );
+					}
+					break;
+
+			// Series_Character::character_id == INTEGER
+				case Series_Character::character_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Series_Character::character_id] = Qualifier::Equals( Series_Character::character_id, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Series_Character::character_id */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

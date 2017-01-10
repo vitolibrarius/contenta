@@ -116,6 +116,112 @@ abstract class _Rss extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Rss::id == INTEGER
+
+			// Rss::endpoint_id == INTEGER
+				case Rss::endpoint_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Rss::endpoint_id] = Qualifier::Equals( Rss::endpoint_id, intval($value) );
+					}
+					break;
+
+			// Rss::created == DATE
+
+			// Rss::title == TEXT
+				case Rss::title:
+					if (strlen($value) > 0) {
+						$qualifiers[Rss::title] = Qualifier::Equals( Rss::title, $value );
+					}
+					break;
+
+			// Rss::desc == TEXT
+				case Rss::desc:
+					if (strlen($value) > 0) {
+						$qualifiers[Rss::desc] = Qualifier::Equals( Rss::desc, $value );
+					}
+					break;
+
+			// Rss::pub_date == DATE
+
+			// Rss::guid == TEXT
+				case Rss::guid:
+					if (strlen($value) > 0) {
+						$qualifiers[Rss::guid] = Qualifier::Equals( Rss::guid, $value );
+					}
+					break;
+
+			// Rss::clean_name == TEXT
+				case Rss::clean_name:
+					if (strlen($value) > 0) {
+						$qualifiers[Rss::clean_name] = Qualifier::Equals( Rss::clean_name, $value );
+					}
+					break;
+
+			// Rss::clean_issue == TEXT
+				case Rss::clean_issue:
+					if (strlen($value) > 0) {
+						$qualifiers[Rss::clean_issue] = Qualifier::Equals( Rss::clean_issue, $value );
+					}
+					break;
+
+			// Rss::clean_year == INTEGER
+				case Rss::clean_year:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Rss::clean_year] = Qualifier::Equals( Rss::clean_year, intval($value) );
+					}
+					break;
+
+			// Rss::enclosure_url == TEXT
+				case Rss::enclosure_url:
+					if (strlen($value) > 0) {
+						$qualifiers[Rss::enclosure_url] = Qualifier::Equals( Rss::enclosure_url, $value );
+					}
+					break;
+
+			// Rss::enclosure_length == INTEGER
+				case Rss::enclosure_length:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Rss::enclosure_length] = Qualifier::Equals( Rss::enclosure_length, intval($value) );
+					}
+					break;
+
+			// Rss::enclosure_mime == TEXT
+				case Rss::enclosure_mime:
+					if (strlen($value) > 0) {
+						$qualifiers[Rss::enclosure_mime] = Qualifier::Equals( Rss::enclosure_mime, $value );
+					}
+					break;
+
+			// Rss::enclosure_hash == TEXT
+				case Rss::enclosure_hash:
+					if (strlen($value) > 0) {
+						$qualifiers[Rss::enclosure_hash] = Qualifier::Equals( Rss::enclosure_hash, $value );
+					}
+					break;
+
+			// Rss::enclosure_password == BOOLEAN
+				case Rss::enclosure_password:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Rss::enclosure_password] = Qualifier::Equals( Rss::enclosure_password, $v );
+					}
+					break;
+
+				default:
+					/* no type specified for Rss::enclosure_password */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

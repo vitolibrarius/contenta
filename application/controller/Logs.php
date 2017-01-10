@@ -8,6 +8,14 @@ use \Model as Model;
 use \Auth as Auth;
 use \Config as Config;
 
+use \SQL as SQL;
+use db\Qualifier as Qualifier;
+
+use \http\Session as Session;
+use \http\HttpGet as HttpGet;
+use \http\HttpPost as HttpPost;
+use \http\PageParams as PageParams;
+
 use \model\user\Users as Users;
 use \model\media\logs\Log as Log;
 use \model\media\logs\Log_Level as Log_Level;
@@ -26,6 +34,7 @@ class Logs extends Controller
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$type = Config::Get("Logging/type");
+			$this->view->params = Session::pageParameters( $this, "index" );
 			$this->view->render( '/logs/index_' . $type);
 		}
 	}
@@ -37,18 +46,38 @@ class Logs extends Controller
 		}
 	}
 
-	function log_table()
+	function purgeMatches()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			$log_model = Model::Named("Log");
-			$this->view->logArray = $log_model->mostRecentLike(
-				isset($_GET['trace']) ? $_GET['trace'] : null,
-				isset($_GET['trace_id']) ? $_GET['trace_id'] : null,
-				isset($_GET['context']) ? $_GET['context'] : null,
-				isset($_GET['context_id']) ? $_GET['context_id'] : null,
-				(isset($_GET['level']) && $_GET['level'] != 'any') ? $_GET['level'] : null,
-				isset($_GET['message']) ? $_GET['message'] : null
+			$parameters = Session::pageParameters( $this, "index" );
+			$query = $parameters->currentQueryValues();
+			$model = Model::Named("Log");
+			$qualifier = $model->searchQualifiers($query);
+			$delete = SQL::Delete( $model, Qualifier::AndQualifier( $qualifier ));
+			$succes = $delete->commitTransaction();
+			if ( $succes == false ) {
+				Session::addNegativeFeedback("Failed to delete");
+			}
+
+			header('location: ' . Config::Web('/Logs/index' ));
+		}
+	}
+
+	function log_table($pageNum = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$parameters = Session::pageParameters( $this, "index" );
+			$parameters->setPageSize(12);
+			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array(
+				'trace', 'trace_id', 'context', 'context_id', 'level_code', 'message' )
 			);
+
+			$model = Model::Named("Log");
+			$results = $model->searchQuery( $hasNewValues, $query, $pageNum, $parameters );
+
+			$this->view->model = $model;
+			$this->view->params = $parameters;
+			$this->view->logArray = $results;
 			$this->view->render( '/logs/log_table', true);
 		}
 	}

@@ -90,6 +90,53 @@ abstract class _Version extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Version::id == INTEGER
+
+			// Version::code == TEXT
+				case Version::code:
+					if (strlen($value) > 0) {
+						$qualifiers[Version::code] = Qualifier::Like(Version::code, $value);
+					}
+					break;
+
+			// Version::major == INTEGER
+				case Version::major:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Version::major] = Qualifier::Equals( Version::major, intval($value) );
+					}
+					break;
+
+			// Version::minor == INTEGER
+				case Version::minor:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Version::minor] = Qualifier::Equals( Version::minor, intval($value) );
+					}
+					break;
+
+			// Version::patch == INTEGER
+				case Version::patch:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Version::patch] = Qualifier::Equals( Version::patch, intval($value) );
+					}
+					break;
+
+			// Version::created == DATE
+
+				default:
+					/* no type specified for Version::created */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

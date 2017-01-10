@@ -4,9 +4,29 @@
         "publisher_id": { "column": "publisher_id", "type": "INTEGER", "nullable": false },
         "created": { "column": "created", "type": "DATE" },
 
-        "name": { "column": "name", "length": 256, "type": "TEXT", "collate": "NOCASE", "nullable": false },
-        "search_name": { "column": "search_name", "length": 256, "type": "TEXT", "collate": "NOCASE", "nullable": true },
-        "desc": { "column": "desc", "length": 4096, "type": "TEXT",	"nullable": true },
+        "name": {
+        	"column": "name",
+        	"length": 256,
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"nullable": false,
+        	"partialSearch": true
+        },
+        "search_name": {
+        	"column": "search_name",
+        	"length": 256,
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"nullable": true,
+        	"partialSearch": true
+        },
+        "desc": {
+        	"column": "desc",
+        	"length": 4096,
+        	"type": "TEXT",
+        	"nullable": true,
+        	"partialSearch": true
+        },
         "start_year": { "column": "start_year", "type": "INTEGER", "default": 1900  },
         "issue_count": { "column": "issue_count", "type": "INTEGER", "default": 0  },
         "pub_active": { "column": "pub_active", "type": "BOOLEAN", "default": "Model::TERTIARY_TRUE" },

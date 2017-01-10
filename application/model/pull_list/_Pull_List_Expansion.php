@@ -90,6 +90,53 @@ abstract class _Pull_List_Expansion extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Pull_List_Expansion::id == INTEGER
+
+			// Pull_List_Expansion::pattern == TEXT
+				case Pull_List_Expansion::pattern:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Expansion::pattern] = Qualifier::Equals( Pull_List_Expansion::pattern, $value );
+					}
+					break;
+
+			// Pull_List_Expansion::replace == TEXT
+				case Pull_List_Expansion::replace:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Expansion::replace] = Qualifier::Equals( Pull_List_Expansion::replace, $value );
+					}
+					break;
+
+			// Pull_List_Expansion::sequence == INTEGER
+				case Pull_List_Expansion::sequence:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Pull_List_Expansion::sequence] = Qualifier::Equals( Pull_List_Expansion::sequence, intval($value) );
+					}
+					break;
+
+			// Pull_List_Expansion::created == DATE
+
+			// Pull_List_Expansion::endpoint_type_code == TEXT
+				case Pull_List_Expansion::endpoint_type_code:
+					if (strlen($value) > 0) {
+						$qualifiers[Pull_List_Expansion::endpoint_type_code] = Qualifier::Equals( Pull_List_Expansion::endpoint_type_code, $value );
+					}
+					break;
+
+				default:
+					/* no type specified for Pull_List_Expansion::endpoint_type_code */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

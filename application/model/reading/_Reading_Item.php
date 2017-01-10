@@ -93,6 +93,49 @@ abstract class _Reading_Item extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Reading_Item::id == INTEGER
+
+			// Reading_Item::user_id == INTEGER
+				case Reading_Item::user_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Reading_Item::user_id] = Qualifier::Equals( Reading_Item::user_id, intval($value) );
+					}
+					break;
+
+			// Reading_Item::publication_id == INTEGER
+				case Reading_Item::publication_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Reading_Item::publication_id] = Qualifier::Equals( Reading_Item::publication_id, intval($value) );
+					}
+					break;
+
+			// Reading_Item::created == DATE
+
+			// Reading_Item::read_date == DATE
+
+			// Reading_Item::mislabeled == BOOLEAN
+				case Reading_Item::mislabeled:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Reading_Item::mislabeled] = Qualifier::Equals( Reading_Item::mislabeled, $v );
+					}
+					break;
+
+				default:
+					/* no type specified for Reading_Item::mislabeled */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

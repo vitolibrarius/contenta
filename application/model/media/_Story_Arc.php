@@ -129,6 +129,106 @@ abstract class _Story_Arc extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Story_Arc::id == INTEGER
+
+			// Story_Arc::publisher_id == INTEGER
+				case Story_Arc::publisher_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Story_Arc::publisher_id] = Qualifier::Equals( Story_Arc::publisher_id, intval($value) );
+					}
+					break;
+
+			// Story_Arc::created == DATE
+
+			// Story_Arc::name == TEXT
+				case Story_Arc::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Story_Arc::name] = Qualifier::Equals( Story_Arc::name, $value );
+					}
+					break;
+
+			// Story_Arc::desc == TEXT
+				case Story_Arc::desc:
+					if (strlen($value) > 0) {
+						$qualifiers[Story_Arc::desc] = Qualifier::Equals( Story_Arc::desc, $value );
+					}
+					break;
+
+			// Story_Arc::pub_active == BOOLEAN
+				case Story_Arc::pub_active:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Story_Arc::pub_active] = Qualifier::Equals( Story_Arc::pub_active, $v );
+					}
+					break;
+
+			// Story_Arc::pub_wanted == BOOLEAN
+				case Story_Arc::pub_wanted:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Story_Arc::pub_wanted] = Qualifier::Equals( Story_Arc::pub_wanted, $v );
+					}
+					break;
+
+			// Story_Arc::pub_cycle == INTEGER
+				case Story_Arc::pub_cycle:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Story_Arc::pub_cycle] = Qualifier::Equals( Story_Arc::pub_cycle, intval($value) );
+					}
+					break;
+
+			// Story_Arc::pub_available == INTEGER
+				case Story_Arc::pub_available:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Story_Arc::pub_available] = Qualifier::Equals( Story_Arc::pub_available, intval($value) );
+					}
+					break;
+
+			// Story_Arc::pub_count == INTEGER
+				case Story_Arc::pub_count:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Story_Arc::pub_count] = Qualifier::Equals( Story_Arc::pub_count, intval($value) );
+					}
+					break;
+
+			// Story_Arc::xurl == TEXT
+				case Story_Arc::xurl:
+					if (strlen($value) > 0) {
+						$qualifiers[Story_Arc::xurl] = Qualifier::Equals( Story_Arc::xurl, $value );
+					}
+					break;
+
+			// Story_Arc::xsource == TEXT
+				case Story_Arc::xsource:
+					if (strlen($value) > 0) {
+						$qualifiers[Story_Arc::xsource] = Qualifier::Equals( Story_Arc::xsource, $value );
+					}
+					break;
+
+			// Story_Arc::xid == TEXT
+				case Story_Arc::xid:
+					if (strlen($value) > 0) {
+						$qualifiers[Story_Arc::xid] = Qualifier::Equals( Story_Arc::xid, $value );
+					}
+					break;
+
+			// Story_Arc::xupdated == DATE
+
+				default:
+					/* no type specified for Story_Arc::xupdated */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

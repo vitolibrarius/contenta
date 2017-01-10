@@ -97,6 +97,72 @@ abstract class _Job_Type extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Job_Type::code == TEXT
+				case Job_Type::code:
+					if (strlen($value) > 0) {
+						$qualifiers[Job_Type::code] = Qualifier::Equals( Job_Type::code, $value );
+					}
+					break;
+
+			// Job_Type::name == TEXT
+				case Job_Type::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Job_Type::name] = Qualifier::Equals( Job_Type::name, $value );
+					}
+					break;
+
+			// Job_Type::desc == TEXT
+				case Job_Type::desc:
+					if (strlen($value) > 0) {
+						$qualifiers[Job_Type::desc] = Qualifier::Equals( Job_Type::desc, $value );
+					}
+					break;
+
+			// Job_Type::processor == TEXT
+				case Job_Type::processor:
+					if (strlen($value) > 0) {
+						$qualifiers[Job_Type::processor] = Qualifier::Equals( Job_Type::processor, $value );
+					}
+					break;
+
+			// Job_Type::parameter == TEXT
+				case Job_Type::parameter:
+					if (strlen($value) > 0) {
+						$qualifiers[Job_Type::parameter] = Qualifier::Equals( Job_Type::parameter, $value );
+					}
+					break;
+
+			// Job_Type::scheduled == BOOLEAN
+				case Job_Type::scheduled:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Job_Type::scheduled] = Qualifier::Equals( Job_Type::scheduled, $v );
+					}
+					break;
+
+			// Job_Type::requires_endpoint == BOOLEAN
+				case Job_Type::requires_endpoint:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[Job_Type::requires_endpoint] = Qualifier::Equals( Job_Type::requires_endpoint, $v );
+					}
+					break;
+
+				default:
+					/* no type specified for Job_Type::requires_endpoint */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

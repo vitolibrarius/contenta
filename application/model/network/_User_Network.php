@@ -84,6 +84,37 @@ abstract class _User_Network extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// User_Network::id == INTEGER
+
+			// User_Network::user_id == INTEGER
+				case User_Network::user_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[User_Network::user_id] = Qualifier::Equals( User_Network::user_id, intval($value) );
+					}
+					break;
+
+			// User_Network::network_id == INTEGER
+				case User_Network::network_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[User_Network::network_id] = Qualifier::Equals( User_Network::network_id, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for User_Network::network_id */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

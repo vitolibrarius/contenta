@@ -126,6 +126,54 @@ foreach( $objectRelationships as $name => $detailArray ) {
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+<?php foreach( $objectAttributes as $name => $detailArray ) : ?>
+			// <?php echo $this->modelClassName() . "::" . $name . " == " . $detailArray['type']; ?>
+
+<?php if (isset($detailArray['type'])) : ?>
+<?php if ('TEXT' == $detailArray['type']) : ?>
+				case <?php echo $this->modelClassName() . "::" . $name; ?>:
+					if (strlen($value) > 0) {
+<?php if (isset($detailArray['partialSearch']) && $detailArray['partialSearch'] == true) : ?>
+						$qualifiers[<?php echo $this->modelClassName() . "::" . $name; ?>] = Qualifier::Like(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
+<?php else : // partial ?>
+						$qualifiers[<?php echo $this->modelClassName() . "::" . $name; ?>] = Qualifier::Equals( <?php echo $this->modelClassName() . "::" . $name; ?>, $value );
+<?php endif; // partial ?>
+					}
+					break;
+<?php endif; // type TEXT ?>
+<?php if ('INTEGER' == $detailArray['type'] && $this->isPrimaryKey($name) == false) : ?>
+				case <?php echo $this->modelClassName() . "::" . $name; ?>:
+					if ( intval($value) > 0 ) {
+						$qualifiers[<?php echo $this->modelClassName() . "::" . $name; ?>] = Qualifier::Equals( <?php echo $this->modelClassName() . "::" . $name; ?>, intval($value) );
+					}
+					break;
+<?php endif; // type INTEGER ?>
+<?php if ('BOOLEAN' == $detailArray['type'] && $this->isPrimaryKey($name) == false && $this->isRelationshipKey($name) == false) : ?>
+				case <?php echo $this->modelClassName() . "::" . $name; ?>:
+					$v = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+					if (is_null($v) == false) {
+						$qualifiers[<?php echo $this->modelClassName() . "::" . $name; ?>] = Qualifier::Equals( <?php echo $this->modelClassName() . "::" . $name; ?>, $v );
+					}
+					break;
+<?php endif; // type boolean ?>
+
+<?php endif; // type ?>
+<?php endforeach; ?>
+				default:
+					/* no type specified for <?php echo $this->modelClassName() . "::" . $name; ?> */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

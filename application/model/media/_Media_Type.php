@@ -74,6 +74,35 @@ abstract class _Media_Type extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Media_Type::code == TEXT
+				case Media_Type::code:
+					if (strlen($value) > 0) {
+						$qualifiers[Media_Type::code] = Qualifier::Equals( Media_Type::code, $value );
+					}
+					break;
+
+			// Media_Type::name == TEXT
+				case Media_Type::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Media_Type::name] = Qualifier::Equals( Media_Type::name, $value );
+					}
+					break;
+
+				default:
+					/* no type specified for Media_Type::name */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

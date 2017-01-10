@@ -98,6 +98,74 @@ abstract class _Log extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Log::id == INTEGER
+
+			// Log::trace == TEXT
+				case Log::trace:
+					if (strlen($value) > 0) {
+						$qualifiers[Log::trace] = Qualifier::Like(Log::trace, $value);
+					}
+					break;
+
+			// Log::trace_id == TEXT
+				case Log::trace_id:
+					if (strlen($value) > 0) {
+						$qualifiers[Log::trace_id] = Qualifier::Like(Log::trace_id, $value);
+					}
+					break;
+
+			// Log::context == TEXT
+				case Log::context:
+					if (strlen($value) > 0) {
+						$qualifiers[Log::context] = Qualifier::Like(Log::context, $value);
+					}
+					break;
+
+			// Log::context_id == TEXT
+				case Log::context_id:
+					if (strlen($value) > 0) {
+						$qualifiers[Log::context_id] = Qualifier::Like(Log::context_id, $value);
+					}
+					break;
+
+			// Log::message == TEXT
+				case Log::message:
+					if (strlen($value) > 0) {
+						$qualifiers[Log::message] = Qualifier::Like(Log::message, $value);
+					}
+					break;
+
+			// Log::session == TEXT
+				case Log::session:
+					if (strlen($value) > 0) {
+						$qualifiers[Log::session] = Qualifier::Equals( Log::session, $value );
+					}
+					break;
+
+			// Log::level_code == TEXT
+				case Log::level_code:
+					if (strlen($value) > 0) {
+						$qualifiers[Log::level_code] = Qualifier::Equals( Log::level_code, $value );
+					}
+					break;
+
+			// Log::created == DATE
+
+				default:
+					/* no type specified for Log::created */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */
@@ -177,14 +245,6 @@ abstract class _Log extends Model
 		return $this->allObjectsForKeyValue(Log::session, $value);
 	}
 
-	public function allLikeSession($value)
-	{
-		return SQL::Select( $this )
-			->where( Qualifier::Like( Log::session, $value, SQL::SQL_LIKE_AFTER ))
-			->orderBy( $this->sortOrder() )
-			->limit( 50 )
-			->fetchAll();
-	}
 
 	public function allForLevel_code($value)
 	{

@@ -101,6 +101,55 @@ abstract class _Publisher extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Publisher::id == INTEGER
+
+			// Publisher::name == TEXT
+				case Publisher::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Publisher::name] = Qualifier::Equals( Publisher::name, $value );
+					}
+					break;
+
+			// Publisher::created == DATE
+
+			// Publisher::xurl == TEXT
+				case Publisher::xurl:
+					if (strlen($value) > 0) {
+						$qualifiers[Publisher::xurl] = Qualifier::Equals( Publisher::xurl, $value );
+					}
+					break;
+
+			// Publisher::xsource == TEXT
+				case Publisher::xsource:
+					if (strlen($value) > 0) {
+						$qualifiers[Publisher::xsource] = Qualifier::Equals( Publisher::xsource, $value );
+					}
+					break;
+
+			// Publisher::xid == TEXT
+				case Publisher::xid:
+					if (strlen($value) > 0) {
+						$qualifiers[Publisher::xid] = Qualifier::Equals( Publisher::xid, $value );
+					}
+					break;
+
+			// Publisher::xupdated == DATE
+
+				default:
+					/* no type specified for Publisher::xupdated */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

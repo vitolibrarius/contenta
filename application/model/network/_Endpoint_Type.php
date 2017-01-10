@@ -107,6 +107,84 @@ abstract class _Endpoint_Type extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Endpoint_Type::code == TEXT
+				case Endpoint_Type::code:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint_Type::code] = Qualifier::Equals( Endpoint_Type::code, $value );
+					}
+					break;
+
+			// Endpoint_Type::name == TEXT
+				case Endpoint_Type::name:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint_Type::name] = Qualifier::Equals( Endpoint_Type::name, $value );
+					}
+					break;
+
+			// Endpoint_Type::comments == TEXT
+				case Endpoint_Type::comments:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint_Type::comments] = Qualifier::Equals( Endpoint_Type::comments, $value );
+					}
+					break;
+
+			// Endpoint_Type::data_type == TEXT
+				case Endpoint_Type::data_type:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint_Type::data_type] = Qualifier::Equals( Endpoint_Type::data_type, $value );
+					}
+					break;
+
+			// Endpoint_Type::site_url == TEXT
+				case Endpoint_Type::site_url:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint_Type::site_url] = Qualifier::Equals( Endpoint_Type::site_url, $value );
+					}
+					break;
+
+			// Endpoint_Type::api_url == TEXT
+				case Endpoint_Type::api_url:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint_Type::api_url] = Qualifier::Equals( Endpoint_Type::api_url, $value );
+					}
+					break;
+
+			// Endpoint_Type::favicon_url == TEXT
+				case Endpoint_Type::favicon_url:
+					if (strlen($value) > 0) {
+						$qualifiers[Endpoint_Type::favicon_url] = Qualifier::Equals( Endpoint_Type::favicon_url, $value );
+					}
+					break;
+
+			// Endpoint_Type::throttle_hits == INTEGER
+				case Endpoint_Type::throttle_hits:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Endpoint_Type::throttle_hits] = Qualifier::Equals( Endpoint_Type::throttle_hits, intval($value) );
+					}
+					break;
+
+			// Endpoint_Type::throttle_time == INTEGER
+				case Endpoint_Type::throttle_time:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Endpoint_Type::throttle_time] = Qualifier::Equals( Endpoint_Type::throttle_time, intval($value) );
+					}
+					break;
+
+				default:
+					/* no type specified for Endpoint_Type::throttle_time */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

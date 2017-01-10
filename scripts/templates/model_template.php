@@ -26,6 +26,12 @@ use <?php echo $this->dboPackageClassName(); ?> as <?php echo $this->dboClassNam
 class <?php echo $this->modelClassName(); ?> extends <?php echo $this->modelBaseName(); ?>
 
 {
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = parent::searchQualifiers($query);
+		return $qualifiers;
+	}
+
 	/**
 	 *	Create/Update functions
 	 */

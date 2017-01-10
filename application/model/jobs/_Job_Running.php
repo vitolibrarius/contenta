@@ -99,6 +99,67 @@ abstract class _Job_Running extends Model
 		);
 	}
 
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = array();
+		if ( is_array($query) ) {
+			foreach( $query as $attr => $value ) {
+				switch ($attr) {
+			// Job_Running::id == INTEGER
+
+			// Job_Running::job_id == INTEGER
+				case Job_Running::job_id:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Job_Running::job_id] = Qualifier::Equals( Job_Running::job_id, intval($value) );
+					}
+					break;
+
+			// Job_Running::type_code == TEXT
+				case Job_Running::type_code:
+					if (strlen($value) > 0) {
+						$qualifiers[Job_Running::type_code] = Qualifier::Equals( Job_Running::type_code, $value );
+					}
+					break;
+
+			// Job_Running::processor == TEXT
+				case Job_Running::processor:
+					if (strlen($value) > 0) {
+						$qualifiers[Job_Running::processor] = Qualifier::Equals( Job_Running::processor, $value );
+					}
+					break;
+
+			// Job_Running::guid == TEXT
+				case Job_Running::guid:
+					if (strlen($value) > 0) {
+						$qualifiers[Job_Running::guid] = Qualifier::Equals( Job_Running::guid, $value );
+					}
+					break;
+
+			// Job_Running::pid == INTEGER
+				case Job_Running::pid:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Job_Running::pid] = Qualifier::Equals( Job_Running::pid, intval($value) );
+					}
+					break;
+
+			// Job_Running::desc == TEXT
+				case Job_Running::desc:
+					if (strlen($value) > 0) {
+						$qualifiers[Job_Running::desc] = Qualifier::Equals( Job_Running::desc, $value );
+					}
+					break;
+
+			// Job_Running::created == DATE
+
+				default:
+					/* no type specified for Job_Running::created */
+					break;
+				}
+			}
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Simple fetches
 	 */

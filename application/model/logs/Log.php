@@ -15,6 +15,15 @@ use \model\logs\Log_LevelDBO as Log_LevelDBO;
 
 class Log extends _Log
 {
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = parent::searchQualifiers($query);
+		if ( isset($query[Log::level_code]) && 'any' == strtolower($query[Log::level_code]) ) {
+			unset($qualifiers[Log::level_code]);
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Create/Update functions
 	 */
