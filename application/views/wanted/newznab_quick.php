@@ -33,7 +33,7 @@
 			<td>
 				<?php $flux = $this->fluxModel->objectForSrc_guid( $item['guid'] );
 					if ($flux == false ) : ?>
-						<div id="dnld_<?php echo $item['safe_guid']; ?>">
+						<div id="dnld_<?php echo $this->publication_id . "_" . $item['safe_guid']; ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"
 							data-name="<?php echo htmlentities($seriesName); ?>"
 							data-issue="<?php echo $issue; ?>"
@@ -42,7 +42,7 @@
 							data-guid="<?php echo $item['guid']; ?>"
 							data-url="<?php echo $item['url']; ?>"
 							data-postedDate="<?php echo $item['publishedDate']; ?>"
-							data-ref_guid="dnld_<?php echo $item['safe_guid']; ?>"
+							data-ref_guid="dnld_<?php echo $this->publication_id . "_" . $item['safe_guid']; ?>"
 							>Download</a>
 						</div>
 					<?php else: ?>

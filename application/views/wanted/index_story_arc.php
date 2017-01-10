@@ -75,7 +75,7 @@
 	});
 
 	$('body').on('click', 'a.nzb', function (e) {
-		var safe_guid = $(this).attr('data-safe_guid');
+		var ref_guid = "#" + $(this).attr('data-ref_guid');
 		$.ajax({
 			type: "GET",
 			url: "<?php echo Config::Web('/AdminWanted/downloadNewznab'); ?>",
@@ -90,9 +90,10 @@
 			},
 			dataType: "text",
 			success: function(msg){
-				var divId = "ajaxDiv_"+safe_guid;
-				var ajaxDisplay = document.getElementById(divId);
-				ajaxDisplay.innerHTML = msg;
+				var ajaxDisplay = $(ref_guid);
+				ajaxDisplay.hide();
+				ajaxDisplay.empty().append(msg);
+				ajaxDisplay.fadeIn(100).show();
 			}
 		});
 		e.stopPropagation();

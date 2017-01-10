@@ -333,6 +333,7 @@ class AdminWanted extends Admin
 								$results = $connection->searchComics($publication->seriesName() . " " . $publication->paddedIssueNum());
 							}
 
+							$this->view->publication_id = $pubId;
 							$this->view->endpoint_id = $endpoint->id;
 							$this->view->results = $results;
 							$this->view->render( '/wanted/newznab_quick', true);
