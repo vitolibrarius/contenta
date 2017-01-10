@@ -112,7 +112,7 @@ abstract class _Publisher extends Model
 			// Publisher::name == TEXT
 				case Publisher::name:
 					if (strlen($value) > 0) {
-						$qualifiers[Publisher::name] = Qualifier::Equals( Publisher::name, $value );
+						$qualifiers[Publisher::name] = Qualifier::Like(Publisher::name, $value);
 					}
 					break;
 
@@ -154,28 +154,36 @@ abstract class _Publisher extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publisher::name, $value);
+		return $this->allObjectsForKeyValue(Publisher::name, $value, null, $limit);
+	}
+
+	public function allLikeName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return SQL::Select( $this )
+			->where( Qualifier::Like( Publisher::name, $value, SQL::SQL_LIKE_AFTER ))
+			->orderBy( $this->sortOrder() )
+			->limit( $limit )
+			->fetchAll();
 	}
 
 
-
-	public function allForXurl($value)
+	public function allForXurl($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publisher::xurl, $value);
+		return $this->allObjectsForKeyValue(Publisher::xurl, $value, null, $limit);
 	}
 
 
-	public function allForXsource($value)
+	public function allForXsource($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publisher::xsource, $value);
+		return $this->allObjectsForKeyValue(Publisher::xsource, $value, null, $limit);
 	}
 
 
-	public function allForXid($value)
+	public function allForXid($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publisher::xid, $value);
+		return $this->allObjectsForKeyValue(Publisher::xid, $value, null, $limit);
 	}
 
 

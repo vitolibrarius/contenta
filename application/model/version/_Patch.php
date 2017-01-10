@@ -125,12 +125,12 @@ abstract class _Patch extends Model
 		return $this->singleObjectForKeyValue(Patch::name, $value);
 	}
 
-	public function allLikeName($value)
+	public function allLikeName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Patch::name, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
@@ -140,9 +140,9 @@ abstract class _Patch extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForVersion($obj)
+	public function allForVersion($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Patch::version_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Patch::version_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForVersion($obj)

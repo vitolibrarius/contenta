@@ -200,44 +200,44 @@ abstract class _Endpoint_Type extends Model
 	}
 
 
-	public function allForComments($value)
+	public function allForComments($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint_Type::comments, $value);
+		return $this->allObjectsForKeyValue(Endpoint_Type::comments, $value, null, $limit);
 	}
 
 
-	public function allForData_type($value)
+	public function allForData_type($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint_Type::data_type, $value);
+		return $this->allObjectsForKeyValue(Endpoint_Type::data_type, $value, null, $limit);
 	}
 
 
-	public function allForSite_url($value)
+	public function allForSite_url($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint_Type::site_url, $value);
+		return $this->allObjectsForKeyValue(Endpoint_Type::site_url, $value, null, $limit);
 	}
 
 
-	public function allForApi_url($value)
+	public function allForApi_url($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint_Type::api_url, $value);
+		return $this->allObjectsForKeyValue(Endpoint_Type::api_url, $value, null, $limit);
 	}
 
 
-	public function allForFavicon_url($value)
+	public function allForFavicon_url($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint_Type::favicon_url, $value);
+		return $this->allObjectsForKeyValue(Endpoint_Type::favicon_url, $value, null, $limit);
 	}
 
 
-	public function allForThrottle_hits($value)
+	public function allForThrottle_hits($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint_Type::throttle_hits, $value);
+		return $this->allObjectsForKeyValue(Endpoint_Type::throttle_hits, $value, null, $limit);
 	}
 
-	public function allForThrottle_time($value)
+	public function allForThrottle_time($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint_Type::throttle_time, $value);
+		return $this->allObjectsForKeyValue(Endpoint_Type::throttle_time, $value, null, $limit);
 	}
 
 

@@ -21,8 +21,8 @@
     "model": "Character",
     "dbo": "CharacterDBO",
 	"sort" : [
-		{ "asc": "name" },
-		{ "desc": "popularity" }
+		{ "desc": "popularity" },
+		{ "asc": "name" }
 	],
     "indexes" : [
     	{ "columns": ["name"] },

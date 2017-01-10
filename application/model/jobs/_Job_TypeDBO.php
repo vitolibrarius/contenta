@@ -5,6 +5,8 @@ namespace model\jobs;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\jobs\Job_Type as Job_Type;
 
@@ -54,22 +56,32 @@ abstract class _Job_TypeDBO extends DataObject
 
 
 	// to-many relationship
-	public function jobsRunning()
+	public function jobsRunning($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->code ) ) {
 			$model = Model::Named('Job_Running');
-			return $model->allObjectsForKeyValue( Job_Running::type_code, $this->code);
+			return $model->allObjectsForKeyValue(
+				Job_Running::type_code,
+				$this->code,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function jobs()
+	public function jobs($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->code ) ) {
 			$model = Model::Named('Job');
-			return $model->allObjectsForKeyValue( Job::type_code, $this->code);
+			return $model->allObjectsForKeyValue(
+				Job::type_code,
+				$this->code,
+				null,
+				$limit
+			);
 		}
 
 		return false;

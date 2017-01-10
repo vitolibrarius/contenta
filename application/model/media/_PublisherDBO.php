@@ -5,6 +5,8 @@ namespace model\media;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\media\Publisher as Publisher;
 
@@ -53,33 +55,48 @@ abstract class _PublisherDBO extends DataObject
 
 
 	// to-many relationship
-	public function series()
+	public function series($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Series');
-			return $model->allObjectsForKeyValue( Series::publisher_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Series::publisher_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function characters()
+	public function characters($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Character');
-			return $model->allObjectsForKeyValue( Character::publisher_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Character::publisher_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function story_arcs()
+	public function story_arcs($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc');
-			return $model->allObjectsForKeyValue( Story_Arc::publisher_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Story_Arc::publisher_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;

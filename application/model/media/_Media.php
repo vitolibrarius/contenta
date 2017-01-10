@@ -166,15 +166,15 @@ abstract class _Media extends Model
 
 
 
-	public function allForFilename($value)
+	public function allForFilename($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Media::filename, $value);
+		return $this->allObjectsForKeyValue(Media::filename, $value, null, $limit);
 	}
 
 
-	public function allForOriginal_filename($value)
+	public function allForOriginal_filename($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Media::original_filename, $value);
+		return $this->allObjectsForKeyValue(Media::original_filename, $value, null, $limit);
 	}
 
 
@@ -185,18 +185,18 @@ abstract class _Media extends Model
 
 
 
-	public function allForSize($value)
+	public function allForSize($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Media::size, $value);
+		return $this->allObjectsForKeyValue(Media::size, $value, null, $limit);
 	}
 
 
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForMediaType($obj)
+	public function allForMediaType($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Media::type_code, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Media::type_code, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForMediaType($obj)
@@ -206,9 +206,9 @@ abstract class _Media extends Model
 		}
 		return false;
 	}
-	public function allForPublication($obj)
+	public function allForPublication($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Media::publication_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Media::publication_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForPublication($obj)

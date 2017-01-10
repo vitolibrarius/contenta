@@ -140,17 +140,17 @@ abstract class _Pull_List extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List::name, $value);
+		return $this->allObjectsForKeyValue(Pull_List::name, $value, null, $limit);
 	}
 
-	public function allLikeName($value)
+	public function allLikeName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Pull_List::name, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
@@ -167,9 +167,9 @@ abstract class _Pull_List extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForEndpoint($obj)
+	public function allForEndpoint($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Pull_List::endpoint_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Pull_List::endpoint_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForEndpoint($obj)

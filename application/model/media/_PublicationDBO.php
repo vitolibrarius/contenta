@@ -5,6 +5,8 @@ namespace model\media;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\media\Publication as Publication;
 
@@ -84,44 +86,64 @@ abstract class _PublicationDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function media()
+	public function media($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Media');
-			return $model->allObjectsForKeyValue( Media::publication_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Media::publication_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function story_arc_publication()
+	public function story_arc_publication($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc_Publication');
-			return $model->allObjectsForKeyValue( Story_Arc_Publication::publication_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Story_Arc_Publication::publication_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function reading_items()
+	public function reading_items($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Reading_Item');
-			return $model->allObjectsForKeyValue( Reading_Item::publication_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Reading_Item::publication_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function publication_characters()
+	public function publication_characters($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Publication_Character');
-			return $model->allObjectsForKeyValue( Publication_Character::publication_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Publication_Character::publication_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;

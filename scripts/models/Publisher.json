@@ -1,7 +1,14 @@
 {
     "attributes": {
         "id": { "column": "id", "type": "INTEGER" },
-        "name": { "column": "name", "length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": false },
+        "name": {
+        	"column": "name",
+        	"length": 256,
+        	"type": "TEXT",
+        	"collate": "NOCASE",
+        	"partialSearch" : true,
+        	"nullable": false
+        },
         "created": { "column": "created", "type": "DATE" },
         "xurl": { "column": "xurl", "length": 1024, "type": "TEXT" },
         "xsource": { "column": "xsource", "length": 256, "type": "TEXT" },

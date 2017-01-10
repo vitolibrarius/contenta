@@ -178,21 +178,21 @@ abstract class _Job_Type extends Model
 	}
 
 
-	public function allForDesc($value)
+	public function allForDesc($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job_Type::desc, $value);
+		return $this->allObjectsForKeyValue(Job_Type::desc, $value, null, $limit);
 	}
 
 
-	public function allForProcessor($value)
+	public function allForProcessor($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job_Type::processor, $value);
+		return $this->allObjectsForKeyValue(Job_Type::processor, $value, null, $limit);
 	}
 
 
-	public function allForParameter($value)
+	public function allForParameter($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job_Type::parameter, $value);
+		return $this->allObjectsForKeyValue(Job_Type::parameter, $value, null, $limit);
 	}
 
 

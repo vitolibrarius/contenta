@@ -10,7 +10,6 @@
 	<div class="row"><div class="grid_12">
 <?php use \html\Paginator as Paginator;
 	if ( isset($this->params) ) {
-		echo "<b>parameter set ".$this->params."</b>";
 		$p = new Paginator( $this->params, Config::Web('/logs/log_table') );
 		echo $p->render();
 	}

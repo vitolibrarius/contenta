@@ -5,6 +5,8 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\network\Endpoint_Type as Endpoint_Type;
 
@@ -50,33 +52,48 @@ abstract class _Endpoint_TypeDBO extends DataObject
 
 
 	// to-many relationship
-	public function endpoints()
+	public function endpoints($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->code ) ) {
 			$model = Model::Named('Endpoint');
-			return $model->allObjectsForKeyValue( Endpoint::type_code, $this->code);
+			return $model->allObjectsForKeyValue(
+				Endpoint::type_code,
+				$this->code,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function pull_list_exclusions()
+	public function pull_list_exclusions($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->code ) ) {
 			$model = Model::Named('Pull_List_Exclusion');
-			return $model->allObjectsForKeyValue( Pull_List_Exclusion::endpoint_type_code, $this->code);
+			return $model->allObjectsForKeyValue(
+				Pull_List_Exclusion::endpoint_type_code,
+				$this->code,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function pull_list_expansions()
+	public function pull_list_expansions($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->code ) ) {
 			$model = Model::Named('Pull_List_Expansion');
-			return $model->allObjectsForKeyValue( Pull_List_Expansion::endpoint_type_code, $this->code);
+			return $model->allObjectsForKeyValue(
+				Pull_List_Expansion::endpoint_type_code,
+				$this->code,
+				null,
+				$limit
+			);
 		}
 
 		return false;

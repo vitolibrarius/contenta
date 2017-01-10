@@ -270,90 +270,90 @@ abstract class _Series extends Model
 
 
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Series::name, $value);
+		return $this->allObjectsForKeyValue(Series::name, $value, null, $limit);
 	}
 
-	public function allLikeName($value)
+	public function allLikeName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Series::name, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
-	public function allForSearch_name($value)
+	public function allForSearch_name($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Series::search_name, $value);
+		return $this->allObjectsForKeyValue(Series::search_name, $value, null, $limit);
 	}
 
-	public function allLikeSearch_name($value)
+	public function allLikeSearch_name($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Series::search_name, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
-	public function allForDesc($value)
+	public function allForDesc($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Series::desc, $value);
+		return $this->allObjectsForKeyValue(Series::desc, $value, null, $limit);
 	}
 
-	public function allLikeDesc($value)
+	public function allLikeDesc($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Series::desc, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
-	public function allForStart_year($value)
+	public function allForStart_year($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Series::start_year, $value);
+		return $this->allObjectsForKeyValue(Series::start_year, $value, null, $limit);
 	}
 
-	public function allForIssue_count($value)
+	public function allForIssue_count($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Series::issue_count, $value);
-	}
-
-
-
-	public function allForPub_available($value)
-	{
-		return $this->allObjectsForKeyValue(Series::pub_available, $value);
-	}
-
-	public function allForPub_cycle($value)
-	{
-		return $this->allObjectsForKeyValue(Series::pub_cycle, $value);
-	}
-
-	public function allForPub_count($value)
-	{
-		return $this->allObjectsForKeyValue(Series::pub_count, $value);
-	}
-
-	public function allForXurl($value)
-	{
-		return $this->allObjectsForKeyValue(Series::xurl, $value);
+		return $this->allObjectsForKeyValue(Series::issue_count, $value, null, $limit);
 	}
 
 
-	public function allForXsource($value)
+
+	public function allForPub_available($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Series::xsource, $value);
+		return $this->allObjectsForKeyValue(Series::pub_available, $value, null, $limit);
+	}
+
+	public function allForPub_cycle($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Series::pub_cycle, $value, null, $limit);
+	}
+
+	public function allForPub_count($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Series::pub_count, $value, null, $limit);
+	}
+
+	public function allForXurl($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Series::xurl, $value, null, $limit);
 	}
 
 
-	public function allForXid($value)
+	public function allForXsource($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Series::xid, $value);
+		return $this->allObjectsForKeyValue(Series::xsource, $value, null, $limit);
+	}
+
+
+	public function allForXid($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Series::xid, $value, null, $limit);
 	}
 
 
@@ -362,9 +362,9 @@ abstract class _Series extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForPublisher($obj)
+	public function allForPublisher($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Series::publisher_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Series::publisher_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForPublisher($obj)

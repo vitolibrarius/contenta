@@ -324,6 +324,8 @@ class Upgrade extends Controller
 	function recalcStats()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			\SQL::raw( "update character set popularity = (select count(*) from publication_character "
+				. " where publication_character.character_id = character.id)" );
 			\SQL::raw( "update publication set media_count = (select count(*) from media "
 				. " where media.publication_id = publication.id)" );
 			\SQL::raw( "update series set pub_count = (select count(*) from publication "

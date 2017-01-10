@@ -54,47 +54,14 @@ class AdminCharacters extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$parameters = Session::pageParameters( $this, "index" );
-			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array( 'searchName', 'searchPublisher' ));
+			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array( 'publisher_id', 'name', 'popularity' ));
 
 			$model = Model::Named('Character');
-			$qualifiers = array();
-			if ( isset($query['searchName']) && strlen($query['searchName']) > 0) {
-				$qualifiers[] = Qualifier::Like( Character::name, $query['searchName']);
-			}
-			if ( isset($query['searchPublisher']) && intval($query['searchPublisher']) > 0 ) {
-				$qualifiers[] = Qualifier::Equals( Character::publisher_id, $query['searchPublisher'] );
-			}
-
-			if ( $hasNewValues ) {
-				if ( count($qualifiers) > 0 ) {
-					$count = SQL::Count( $model, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
-				}
-				else {
-					$count = SQL::Count( $model )->fetch();
-				}
-
-				$parameters->queryResults($count->count);
-			}
-			else {
-				if ( is_null( $pageNum) ) {
-					$pageNum = $parameters->valueForKey( PageParams::PAGE_SHOWN, 0 );
-				}
-				else {
-					$parameters->setValueForKey( PageParams::PAGE_SHOWN, $pageNum );
-				}
-			}
-
-			$select = SQL::Select($model);
-			if ( count($qualifiers) > 0 ) {
-				$select->where( Qualifier::AndQualifier( $qualifiers ));
-			}
-			$select->limit($parameters->pageSize());
-			$select->offset($parameters->pageShown());
-			$select->orderBy( $model->sortOrder() );
+			$results = $model->searchQuery( $hasNewValues, $query, $pageNum, $parameters );
 
 			$this->view->params = $parameters;
 			$this->view->model = $model;
-			$this->view->listArray = $select->fetchAll();
+			$this->view->listArray = $results;
 			$this->view->editAction = "/AdminCharacters/editCharacter";
 			$this->view->deleteAction = "/AdminCharacters/deleteCharacter";
 			$this->view->render( '/admin/characterCards', true);

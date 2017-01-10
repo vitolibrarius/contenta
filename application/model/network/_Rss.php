@@ -228,15 +228,15 @@ abstract class _Rss extends Model
 
 
 
-	public function allForTitle($value)
+	public function allForTitle($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Rss::title, $value);
+		return $this->allObjectsForKeyValue(Rss::title, $value, null, $limit);
 	}
 
 
-	public function allForDesc($value)
+	public function allForDesc($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Rss::desc, $value);
+		return $this->allObjectsForKeyValue(Rss::desc, $value, null, $limit);
 	}
 
 
@@ -247,43 +247,43 @@ abstract class _Rss extends Model
 	}
 
 
-	public function allForClean_name($value)
+	public function allForClean_name($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Rss::clean_name, $value);
+		return $this->allObjectsForKeyValue(Rss::clean_name, $value, null, $limit);
 	}
 
 
-	public function allForClean_issue($value)
+	public function allForClean_issue($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Rss::clean_issue, $value);
+		return $this->allObjectsForKeyValue(Rss::clean_issue, $value, null, $limit);
 	}
 
 
-	public function allForClean_year($value)
+	public function allForClean_year($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Rss::clean_year, $value);
+		return $this->allObjectsForKeyValue(Rss::clean_year, $value, null, $limit);
 	}
 
-	public function allForEnclosure_url($value)
+	public function allForEnclosure_url($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Rss::enclosure_url, $value);
-	}
-
-
-	public function allForEnclosure_length($value)
-	{
-		return $this->allObjectsForKeyValue(Rss::enclosure_length, $value);
-	}
-
-	public function allForEnclosure_mime($value)
-	{
-		return $this->allObjectsForKeyValue(Rss::enclosure_mime, $value);
+		return $this->allObjectsForKeyValue(Rss::enclosure_url, $value, null, $limit);
 	}
 
 
-	public function allForEnclosure_hash($value)
+	public function allForEnclosure_length($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Rss::enclosure_hash, $value);
+		return $this->allObjectsForKeyValue(Rss::enclosure_length, $value, null, $limit);
+	}
+
+	public function allForEnclosure_mime($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Rss::enclosure_mime, $value, null, $limit);
+	}
+
+
+	public function allForEnclosure_hash($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Rss::enclosure_hash, $value, null, $limit);
 	}
 
 
@@ -292,9 +292,9 @@ abstract class _Rss extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForEndpoint($obj)
+	public function allForEndpoint($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Rss::endpoint_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Rss::endpoint_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForEndpoint($obj)

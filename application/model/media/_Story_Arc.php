@@ -235,50 +235,50 @@ abstract class _Story_Arc extends Model
 
 
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Story_Arc::name, $value);
+		return $this->allObjectsForKeyValue(Story_Arc::name, $value, null, $limit);
 	}
 
 
-	public function allForDesc($value)
+	public function allForDesc($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Story_Arc::desc, $value);
+		return $this->allObjectsForKeyValue(Story_Arc::desc, $value, null, $limit);
 	}
 
 
 
 
-	public function allForPub_cycle($value)
+	public function allForPub_cycle($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Story_Arc::pub_cycle, $value);
+		return $this->allObjectsForKeyValue(Story_Arc::pub_cycle, $value, null, $limit);
 	}
 
-	public function allForPub_available($value)
+	public function allForPub_available($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Story_Arc::pub_available, $value);
+		return $this->allObjectsForKeyValue(Story_Arc::pub_available, $value, null, $limit);
 	}
 
-	public function allForPub_count($value)
+	public function allForPub_count($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Story_Arc::pub_count, $value);
+		return $this->allObjectsForKeyValue(Story_Arc::pub_count, $value, null, $limit);
 	}
 
-	public function allForXurl($value)
+	public function allForXurl($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Story_Arc::xurl, $value);
-	}
-
-
-	public function allForXsource($value)
-	{
-		return $this->allObjectsForKeyValue(Story_Arc::xsource, $value);
+		return $this->allObjectsForKeyValue(Story_Arc::xurl, $value, null, $limit);
 	}
 
 
-	public function allForXid($value)
+	public function allForXsource($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Story_Arc::xid, $value);
+		return $this->allObjectsForKeyValue(Story_Arc::xsource, $value, null, $limit);
+	}
+
+
+	public function allForXid($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Story_Arc::xid, $value, null, $limit);
 	}
 
 
@@ -287,9 +287,9 @@ abstract class _Story_Arc extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForPublisher($obj)
+	public function allForPublisher($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Story_Arc::publisher_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Story_Arc::publisher_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForPublisher($obj)

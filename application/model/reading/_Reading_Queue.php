@@ -194,35 +194,35 @@ abstract class _Reading_Queue extends Model
 
 
 
-	public function allForTitle($value)
+	public function allForTitle($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Reading_Queue::title, $value);
+		return $this->allObjectsForKeyValue(Reading_Queue::title, $value, null, $limit);
 	}
 
 
 
-	public function allForPub_count($value)
+	public function allForPub_count($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Reading_Queue::pub_count, $value);
+		return $this->allObjectsForKeyValue(Reading_Queue::pub_count, $value, null, $limit);
 	}
 
-	public function allForPub_read($value)
+	public function allForPub_read($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Reading_Queue::pub_read, $value);
+		return $this->allObjectsForKeyValue(Reading_Queue::pub_read, $value, null, $limit);
 	}
 
-	public function allForQueue_order($value)
+	public function allForQueue_order($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Reading_Queue::queue_order, $value);
+		return $this->allObjectsForKeyValue(Reading_Queue::queue_order, $value, null, $limit);
 	}
 
 
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForUser($obj)
+	public function allForUser($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Reading_Queue::user_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Reading_Queue::user_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForUser($obj)
@@ -232,9 +232,9 @@ abstract class _Reading_Queue extends Model
 		}
 		return false;
 	}
-	public function allForSeries($obj)
+	public function allForSeries($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Reading_Queue::series_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Reading_Queue::series_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForSeries($obj)
@@ -244,9 +244,9 @@ abstract class _Reading_Queue extends Model
 		}
 		return false;
 	}
-	public function allForStory_arc($obj)
+	public function allForStory_arc($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Reading_Queue::story_arc_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Reading_Queue::story_arc_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForStory_arc($obj)

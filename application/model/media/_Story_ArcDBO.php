@@ -5,6 +5,8 @@ namespace model\media;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\media\Story_Arc as Story_Arc;
 
@@ -90,44 +92,64 @@ abstract class _Story_ArcDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function story_arc_characters()
+	public function story_arc_characters($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc_Character');
-			return $model->allObjectsForKeyValue( Story_Arc_Character::story_arc_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Story_Arc_Character::story_arc_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function story_arc_publication()
+	public function story_arc_publication($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc_Publication');
-			return $model->allObjectsForKeyValue( Story_Arc_Publication::story_arc_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Story_Arc_Publication::story_arc_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function story_arc_series()
+	public function story_arc_series($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc_Series');
-			return $model->allObjectsForKeyValue( Story_Arc_Series::story_arc_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Story_Arc_Series::story_arc_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function reading_queues()
+	public function reading_queues($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Reading_Queue');
-			return $model->allObjectsForKeyValue( Reading_Queue::story_arc_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Reading_Queue::story_arc_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;

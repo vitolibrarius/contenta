@@ -112,9 +112,9 @@ abstract class _Media_Type extends Model
 	}
 
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Media_Type::name, $value);
+		return $this->allObjectsForKeyValue(Media_Type::name, $value, null, $limit);
 	}
 
 

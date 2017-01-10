@@ -149,9 +149,9 @@ abstract class _Reading_Item extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForUser($obj)
+	public function allForUser($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Reading_Item::user_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Reading_Item::user_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForUser($obj)
@@ -161,9 +161,9 @@ abstract class _Reading_Item extends Model
 		}
 		return false;
 	}
-	public function allForPublication($obj)
+	public function allForPublication($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Reading_Item::publication_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Reading_Item::publication_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForPublication($obj)

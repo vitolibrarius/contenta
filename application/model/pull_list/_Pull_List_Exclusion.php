@@ -130,22 +130,22 @@ abstract class _Pull_List_Exclusion extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForPattern($value)
+	public function allForPattern($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Exclusion::pattern, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Exclusion::pattern, $value, null, $limit);
 	}
 
 
-	public function allForType($value)
+	public function allForType($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Exclusion::type, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Exclusion::type, $value, null, $limit);
 	}
 
 
 
-	public function allForEndpoint_type_code($value)
+	public function allForEndpoint_type_code($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Exclusion::endpoint_type_code, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Exclusion::endpoint_type_code, $value, null, $limit);
 	}
 
 
@@ -153,9 +153,9 @@ abstract class _Pull_List_Exclusion extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForEndpoint_type($obj)
+	public function allForEndpoint_type($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Pull_List_Exclusion::endpoint_type_code, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Pull_List_Exclusion::endpoint_type_code, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForEndpoint_type($obj)

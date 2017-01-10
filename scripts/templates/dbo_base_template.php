@@ -14,6 +14,8 @@ namespace <?php echo $this->packageName(); ?>;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use <?php echo $this->modelPackageClassName(); ?> as <?php echo $this->modelClassName(); ?>;
 
@@ -77,12 +79,17 @@ foreach( $this->attributes as $name => $detailArray ) {
 <?php if (isset($detailArray['isToMany'])) : ?>
 <?php $joins = $detailArray['joins']; if ($detailArray['isToMany']) : ?>
 	// to-many relationship
-	public function <?php echo $name; ?>()
+	public function <?php echo $name; ?>($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 <?php if (count($joins) == 1) : ?><?php $join = $joins[0]; ?>
 		if ( isset( $this-><?php echo $join["sourceAttribute"]; ?> ) ) {
 			$model = Model::Named('<?php echo $detailArray["destination"]; ?>');
-			return $model->allObjectsForKeyValue( <?php echo $detailArray["destination"] . "::" . $join["destinationAttribute"]; ?>, $this-><?php echo $join["sourceAttribute"]; ?>);
+			return $model->allObjectsForKeyValue(
+				<?php echo $detailArray["destination"] . "::" . $join["destinationAttribute"]; ?>,
+				$this-><?php echo $join["sourceAttribute"]; ?>,
+				null,
+				$limit
+			);
 		}
 <?php else : ?>
 			FixMe: relationship <?php echo $name; ?> has multiple joins

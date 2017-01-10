@@ -165,21 +165,21 @@ abstract class _Job_Running extends Model
 	 */
 
 
-	public function allForType_code($value)
+	public function allForType_code($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job_Running::type_code, $value);
+		return $this->allObjectsForKeyValue(Job_Running::type_code, $value, null, $limit);
 	}
 
 
-	public function allForProcessor($value)
+	public function allForProcessor($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job_Running::processor, $value);
+		return $this->allObjectsForKeyValue(Job_Running::processor, $value, null, $limit);
 	}
 
 
-	public function allForGuid($value)
+	public function allForGuid($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job_Running::guid, $value);
+		return $this->allObjectsForKeyValue(Job_Running::guid, $value, null, $limit);
 	}
 
 
@@ -188,9 +188,9 @@ abstract class _Job_Running extends Model
 		return $this->singleObjectForKeyValue(Job_Running::pid, $value);
 	}
 
-	public function allForDesc($value)
+	public function allForDesc($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job_Running::desc, $value);
+		return $this->allObjectsForKeyValue(Job_Running::desc, $value, null, $limit);
 	}
 
 
@@ -199,9 +199,9 @@ abstract class _Job_Running extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForJob($obj)
+	public function allForJob($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Job_Running::job_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Job_Running::job_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForJob($obj)
@@ -211,9 +211,9 @@ abstract class _Job_Running extends Model
 		}
 		return false;
 	}
-	public function allForJobType($obj)
+	public function allForJobType($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Job_Running::type_code, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Job_Running::type_code, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForJobType($obj)

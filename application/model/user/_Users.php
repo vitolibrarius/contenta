@@ -238,9 +238,9 @@ abstract class _Users extends Model
 
 
 
-	public function allForAccount_type($value)
+	public function allForAccount_type($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Users::account_type, $value);
+		return $this->allObjectsForKeyValue(Users::account_type, $value, null, $limit);
 	}
 
 
@@ -256,15 +256,15 @@ abstract class _Users extends Model
 	}
 
 
-	public function allForPassword_hash($value)
+	public function allForPassword_hash($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Users::password_hash, $value);
+		return $this->allObjectsForKeyValue(Users::password_hash, $value, null, $limit);
 	}
 
 
-	public function allForPassword_reset_hash($value)
+	public function allForPassword_reset_hash($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Users::password_reset_hash, $value);
+		return $this->allObjectsForKeyValue(Users::password_reset_hash, $value, null, $limit);
 	}
 
 
@@ -274,9 +274,9 @@ abstract class _Users extends Model
 	}
 
 
-	public function allForFailed_logins($value)
+	public function allForFailed_logins($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Users::failed_logins, $value);
+		return $this->allObjectsForKeyValue(Users::failed_logins, $value, null, $limit);
 	}
 
 

@@ -125,9 +125,9 @@ abstract class _User_Network extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForUser($obj)
+	public function allForUser($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(User_Network::user_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(User_Network::user_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForUser($obj)
@@ -137,9 +137,9 @@ abstract class _User_Network extends Model
 		}
 		return false;
 	}
-	public function allForNetwork($obj)
+	public function allForNetwork($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(User_Network::network_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(User_Network::network_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForNetwork($obj)

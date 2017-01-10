@@ -115,9 +115,9 @@ abstract class _Series_Alias extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Series_Alias::name, $value);
+		return $this->allObjectsForKeyValue(Series_Alias::name, $value, null, $limit);
 	}
 
 
@@ -126,9 +126,9 @@ abstract class _Series_Alias extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForSeries($obj)
+	public function allForSeries($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Series_Alias::series_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Series_Alias::series_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForSeries($obj)

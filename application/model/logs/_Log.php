@@ -170,85 +170,85 @@ abstract class _Log extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForTrace($value)
+	public function allForTrace($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Log::trace, $value);
+		return $this->allObjectsForKeyValue(Log::trace, $value, null, $limit);
 	}
 
-	public function allLikeTrace($value)
+	public function allLikeTrace($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Log::trace, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
-	public function allForTrace_id($value)
+	public function allForTrace_id($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Log::trace_id, $value);
+		return $this->allObjectsForKeyValue(Log::trace_id, $value, null, $limit);
 	}
 
-	public function allLikeTrace_id($value)
+	public function allLikeTrace_id($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Log::trace_id, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
-	public function allForContext($value)
+	public function allForContext($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Log::context, $value);
+		return $this->allObjectsForKeyValue(Log::context, $value, null, $limit);
 	}
 
-	public function allLikeContext($value)
+	public function allLikeContext($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Log::context, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
-	public function allForContext_id($value)
+	public function allForContext_id($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Log::context_id, $value);
+		return $this->allObjectsForKeyValue(Log::context_id, $value, null, $limit);
 	}
 
-	public function allLikeContext_id($value)
+	public function allLikeContext_id($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Log::context_id, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
-	public function allForMessage($value)
+	public function allForMessage($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Log::message, $value);
+		return $this->allObjectsForKeyValue(Log::message, $value, null, $limit);
 	}
 
-	public function allLikeMessage($value)
+	public function allLikeMessage($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Log::message, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
-	public function allForSession($value)
+	public function allForSession($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Log::session, $value);
+		return $this->allObjectsForKeyValue(Log::session, $value, null, $limit);
 	}
 
 
-	public function allForLevel_code($value)
+	public function allForLevel_code($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Log::level_code, $value);
+		return $this->allObjectsForKeyValue(Log::level_code, $value, null, $limit);
 	}
 
 
@@ -257,9 +257,9 @@ abstract class _Log extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForLogLevel($obj)
+	public function allForLogLevel($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Log::level_code, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Log::level_code, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForLogLevel($obj)

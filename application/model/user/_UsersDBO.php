@@ -5,6 +5,8 @@ namespace model\user;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\user\Users as Users;
 
@@ -71,33 +73,48 @@ abstract class _UsersDBO extends DataObject
 
 
 	// to-many relationship
-	public function user_network()
+	public function user_network($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('User_Network');
-			return $model->allObjectsForKeyValue( User_Network::user_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				User_Network::user_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function reading_queues()
+	public function reading_queues($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Reading_Queue');
-			return $model->allObjectsForKeyValue( Reading_Queue::user_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Reading_Queue::user_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function reading_items()
+	public function reading_items($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Reading_Item');
-			return $model->allObjectsForKeyValue( Reading_Item::user_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Reading_Item::user_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;

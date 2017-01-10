@@ -214,15 +214,15 @@ abstract class _Flux extends Model
 	 */
 
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Flux::name, $value);
+		return $this->allObjectsForKeyValue(Flux::name, $value, null, $limit);
 	}
 
 
-	public function allForFlux_hash($value)
+	public function allForFlux_hash($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Flux::flux_hash, $value);
+		return $this->allObjectsForKeyValue(Flux::flux_hash, $value, null, $limit);
 	}
 
 
@@ -234,15 +234,15 @@ abstract class _Flux extends Model
 	}
 
 
-	public function allForSrc_url($value)
+	public function allForSrc_url($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Flux::src_url, $value);
+		return $this->allObjectsForKeyValue(Flux::src_url, $value, null, $limit);
 	}
 
 
-	public function allForSrc_status($value)
+	public function allForSrc_status($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Flux::src_status, $value);
+		return $this->allObjectsForKeyValue(Flux::src_status, $value, null, $limit);
 	}
 
 
@@ -254,9 +254,9 @@ abstract class _Flux extends Model
 	}
 
 
-	public function allForDest_status($value)
+	public function allForDest_status($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Flux::dest_status, $value);
+		return $this->allObjectsForKeyValue(Flux::dest_status, $value, null, $limit);
 	}
 
 
@@ -265,9 +265,9 @@ abstract class _Flux extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForSource_endpoint($obj)
+	public function allForSource_endpoint($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Flux::src_endpoint, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Flux::src_endpoint, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForSource_endpoint($obj)
@@ -277,9 +277,9 @@ abstract class _Flux extends Model
 		}
 		return false;
 	}
-	public function allForDestination_endpoint($obj)
+	public function allForDestination_endpoint($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Flux::dest_endpoint, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Flux::dest_endpoint, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForDestination_endpoint($obj)

@@ -219,50 +219,50 @@ abstract class _Publication extends Model
 
 
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publication::name, $value);
+		return $this->allObjectsForKeyValue(Publication::name, $value, null, $limit);
 	}
 
 
-	public function allForDesc($value)
+	public function allForDesc($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publication::desc, $value);
+		return $this->allObjectsForKeyValue(Publication::desc, $value, null, $limit);
 	}
 
 
 
-	public function allForIssue_num($value)
+	public function allForIssue_num($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publication::issue_num, $value);
+		return $this->allObjectsForKeyValue(Publication::issue_num, $value, null, $limit);
 	}
 
 
-	public function allForIssue_order($value)
+	public function allForIssue_order($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publication::issue_order, $value);
+		return $this->allObjectsForKeyValue(Publication::issue_order, $value, null, $limit);
 	}
 
-	public function allForMedia_count($value)
+	public function allForMedia_count($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publication::media_count, $value);
+		return $this->allObjectsForKeyValue(Publication::media_count, $value, null, $limit);
 	}
 
-	public function allForXurl($value)
+	public function allForXurl($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publication::xurl, $value);
-	}
-
-
-	public function allForXsource($value)
-	{
-		return $this->allObjectsForKeyValue(Publication::xsource, $value);
+		return $this->allObjectsForKeyValue(Publication::xurl, $value, null, $limit);
 	}
 
 
-	public function allForXid($value)
+	public function allForXsource($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Publication::xid, $value);
+		return $this->allObjectsForKeyValue(Publication::xsource, $value, null, $limit);
+	}
+
+
+	public function allForXid($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Publication::xid, $value, null, $limit);
 	}
 
 
@@ -271,9 +271,9 @@ abstract class _Publication extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForSeries($obj)
+	public function allForSeries($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Publication::series_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Publication::series_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForSeries($obj)

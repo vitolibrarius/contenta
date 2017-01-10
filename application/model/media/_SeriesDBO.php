@@ -5,6 +5,8 @@ namespace model\media;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\media\Series as Series;
 
@@ -77,11 +79,16 @@ abstract class _SeriesDBO extends DataObject
 
 
 	// to-many relationship
-	public function aliases()
+	public function aliases($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Series_Alias');
-			return $model->allObjectsForKeyValue( Series_Alias::series_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Series_Alias::series_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
@@ -106,44 +113,64 @@ abstract class _SeriesDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function publications()
+	public function publications($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Publication');
-			return $model->allObjectsForKeyValue( Publication::series_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Publication::series_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function series_characters()
+	public function series_characters($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Series_Character');
-			return $model->allObjectsForKeyValue( Series_Character::series_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Series_Character::series_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function story_arc_series()
+	public function story_arc_series($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc_Series');
-			return $model->allObjectsForKeyValue( Story_Arc_Series::series_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Story_Arc_Series::series_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function reading_queues()
+	public function reading_queues($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Reading_Queue');
-			return $model->allObjectsForKeyValue( Reading_Queue::series_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Reading_Queue::series_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;

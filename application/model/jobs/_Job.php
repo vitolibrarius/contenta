@@ -221,46 +221,46 @@ abstract class _Job extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForType_code($value)
+	public function allForType_code($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job::type_code, $value);
+		return $this->allObjectsForKeyValue(Job::type_code, $value, null, $limit);
 	}
 
 
 
 
 
-	public function allForFail_count($value)
+	public function allForFail_count($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job::fail_count, $value);
+		return $this->allObjectsForKeyValue(Job::fail_count, $value, null, $limit);
 	}
 
-	public function allForElapsed($value)
+	public function allForElapsed($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job::elapsed, $value);
+		return $this->allObjectsForKeyValue(Job::elapsed, $value, null, $limit);
 	}
 
-	public function allForMinute($value)
+	public function allForMinute($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job::minute, $value);
-	}
-
-
-	public function allForHour($value)
-	{
-		return $this->allObjectsForKeyValue(Job::hour, $value);
+		return $this->allObjectsForKeyValue(Job::minute, $value, null, $limit);
 	}
 
 
-	public function allForDayOfWeek($value)
+	public function allForHour($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job::dayOfWeek, $value);
+		return $this->allObjectsForKeyValue(Job::hour, $value, null, $limit);
 	}
 
 
-	public function allForParameter($value)
+	public function allForDayOfWeek($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Job::parameter, $value);
+		return $this->allObjectsForKeyValue(Job::dayOfWeek, $value, null, $limit);
+	}
+
+
+	public function allForParameter($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Job::parameter, $value, null, $limit);
 	}
 
 
@@ -272,9 +272,9 @@ abstract class _Job extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForJobType($obj)
+	public function allForJobType($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Job::type_code, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Job::type_code, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForJobType($obj)
@@ -284,9 +284,9 @@ abstract class _Job extends Model
 		}
 		return false;
 	}
-	public function allForEndpoint($obj)
+	public function allForEndpoint($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Job::endpoint_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Job::endpoint_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForEndpoint($obj)

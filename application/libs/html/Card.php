@@ -207,7 +207,7 @@ class Card
 		$this->displayDescriptionKey = $key;
 	}
 
-	public function render( DataObject $record = null, \Closure $callback = null )
+	public function render( DataObject $record = null, \Closure $topClosure = null, \Closure $bottomClosure = null )
 	{
 		$card = H::figure( array( "class" => "card"),
 				H::div( array( "class" => "figure_top" ),
@@ -231,7 +231,7 @@ class Card
 						),
 
 						H::div( array( "class" => "figure_detail_bottom" ),
-							function() use($record, $callback) {
+							function() use($record, $topClosure) {
 								$editPath = $this->editPath();
 								if (isset($editPath) && is_null($editPath) == false) {
 									$c[] = H::a( array("href" => $editPath ),
@@ -316,8 +316,8 @@ class Card
 								}
 								return (isset($c) ? $c : null);
 							},
-							H::div( array( "class" => "actions" ), function() use($callback) {
-								return (is_null($callback) ? null : $callback());
+							H::div( array( "class" => "actions" ), function() use($topClosure) {
+								return (is_null($topClosure) ? null : $topClosure());
 							})
 						)
 					)
@@ -328,7 +328,11 @@ class Card
 					H::em( $record->{$this->displayNameKey()}() )
 				),
 
-				H::p( $record->{$this->displayDescriptionKey()}() )
+				H::p( $record->{$this->displayDescriptionKey()}() ),
+
+				H::div( function() use($bottomClosure) {
+					return (is_null($bottomClosure) ? null : $bottomClosure());
+				})
 			)
 		);
 		return $card->render();

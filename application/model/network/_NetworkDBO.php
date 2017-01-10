@@ -5,6 +5,8 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\network\Network as Network;
 
@@ -44,11 +46,16 @@ abstract class _NetworkDBO extends DataObject
 
 
 	// to-many relationship
-	public function user_network()
+	public function user_network($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('User_Network');
-			return $model->allObjectsForKeyValue( User_Network::network_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				User_Network::network_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;

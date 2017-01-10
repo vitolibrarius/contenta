@@ -125,9 +125,9 @@ abstract class _Series_Character extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForSeries($obj)
+	public function allForSeries($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Series_Character::series_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Series_Character::series_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForSeries($obj)
@@ -137,9 +137,9 @@ abstract class _Series_Character extends Model
 		}
 		return false;
 	}
-	public function allForCharacter($obj)
+	public function allForCharacter($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Series_Character::character_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Series_Character::character_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForCharacter($obj)

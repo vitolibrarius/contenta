@@ -125,9 +125,9 @@ abstract class _Story_Arc_Series extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForStory_arc($obj)
+	public function allForStory_arc($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Story_Arc_Series::story_arc_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Story_Arc_Series::story_arc_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForStory_arc($obj)
@@ -137,9 +137,9 @@ abstract class _Story_Arc_Series extends Model
 		}
 		return false;
 	}
-	public function allForSeries($obj)
+	public function allForSeries($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Story_Arc_Series::series_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Story_Arc_Series::series_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForSeries($obj)

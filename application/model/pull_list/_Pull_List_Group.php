@@ -121,17 +121,17 @@ abstract class _Pull_List_Group extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Group::name, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Group::name, $value, null, $limit);
 	}
 
-	public function allLikeName($value)
+	public function allLikeName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Pull_List_Group::name, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 

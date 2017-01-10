@@ -5,6 +5,8 @@ namespace model\network;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\network\Endpoint as Endpoint;
 
@@ -80,55 +82,80 @@ abstract class _EndpointDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function pull_lists()
+	public function pull_lists($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Pull_List');
-			return $model->allObjectsForKeyValue( Pull_List::endpoint_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Pull_List::endpoint_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function rss()
+	public function rss($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Rss');
-			return $model->allObjectsForKeyValue( Rss::endpoint_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Rss::endpoint_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function flux_sources()
+	public function flux_sources($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Flux');
-			return $model->allObjectsForKeyValue( Flux::src_endpoint, $this->id);
+			return $model->allObjectsForKeyValue(
+				Flux::src_endpoint,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function flux_destinations()
+	public function flux_destinations($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Flux');
-			return $model->allObjectsForKeyValue( Flux::dest_endpoint, $this->id);
+			return $model->allObjectsForKeyValue(
+				Flux::dest_endpoint,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function jobs()
+	public function jobs($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Job');
-			return $model->allObjectsForKeyValue( Job::endpoint_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Job::endpoint_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;

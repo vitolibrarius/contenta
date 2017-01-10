@@ -205,44 +205,44 @@ abstract class _Endpoint extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForType_code($value)
+	public function allForType_code($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint::type_code, $value);
+		return $this->allObjectsForKeyValue(Endpoint::type_code, $value, null, $limit);
 	}
 
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint::name, $value);
+		return $this->allObjectsForKeyValue(Endpoint::name, $value, null, $limit);
 	}
 
 
-	public function allForBase_url($value)
+	public function allForBase_url($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint::base_url, $value);
+		return $this->allObjectsForKeyValue(Endpoint::base_url, $value, null, $limit);
 	}
 
 
-	public function allForApi_key($value)
+	public function allForApi_key($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint::api_key, $value);
+		return $this->allObjectsForKeyValue(Endpoint::api_key, $value, null, $limit);
 	}
 
 
-	public function allForUsername($value)
+	public function allForUsername($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint::username, $value);
+		return $this->allObjectsForKeyValue(Endpoint::username, $value, null, $limit);
 	}
 
 
-	public function allForError_count($value)
+	public function allForError_count($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint::error_count, $value);
+		return $this->allObjectsForKeyValue(Endpoint::error_count, $value, null, $limit);
 	}
 
-	public function allForParameter($value)
+	public function allForParameter($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Endpoint::parameter, $value);
+		return $this->allObjectsForKeyValue(Endpoint::parameter, $value, null, $limit);
 	}
 
 
@@ -252,9 +252,9 @@ abstract class _Endpoint extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForEndpointType($obj)
+	public function allForEndpointType($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Endpoint::type_code, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Endpoint::type_code, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForEndpointType($obj)

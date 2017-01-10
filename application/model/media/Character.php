@@ -7,6 +7,9 @@ use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
 
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
+
 use \model\media\CharacterDBO as CharacterDBO;
 
 /* import related objects */
@@ -17,6 +20,16 @@ use \model\media\PublisherDBO as PublisherDBO;
 
 class Character extends _Character
 {
+	public function searchQualifiers( array $query )
+	{
+		$qualifiers = parent::searchQualifiers($query);
+		if ( isset($query[Character::popularity])) {
+			unset($qualifiers[Character::popularity]);
+			$qualifiers[Character::popularity] = Qualifier::GreaterThan( Character::popularity, intval($query[Character::popularity]) );
+		}
+		return $qualifiers;
+	}
+
 	/**
 	 *	Create/Update functions
 	 */

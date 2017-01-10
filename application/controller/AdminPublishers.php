@@ -29,17 +29,29 @@ class AdminPublishers extends Admin
 {
 	function index()
 	{
-		$this->publisherlist();
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->params = Session::pageParameters( $this, "index" );
+			$this->view->render( '/publishers/index' );
+		}
 	}
 
-	function publisherlist()
+	function publisherList($pageNum = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$parameters = Session::pageParameters( $this, "index" );
+			$parameters->setPageSize(12);
+			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array(
+				'name' )
+			);
+
 			$model = Model::Named('Publisher');
+			$results = $model->searchQuery( $hasNewValues, $query, $pageNum, $parameters );
+
 			$this->view->model = $model;
-			$this->view->list = $model->allObjects();
+			$this->view->params = $parameters;
+			$this->view->list = $results;
 			$this->view->editAction = "/AdminPublishers/editPublisher";
-			$this->view->render( '/publishers/index');
+			$this->view->render( '/publishers/list', true );
 		}
 	}
 

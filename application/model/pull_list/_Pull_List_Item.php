@@ -176,34 +176,34 @@ abstract class _Pull_List_Item extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForData($value)
+	public function allForData($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Item::data, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Item::data, $value, null, $limit);
 	}
 
 
 
-	public function allForSearch_name($value)
+	public function allForSearch_name($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Item::search_name, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Item::search_name, $value, null, $limit);
 	}
 
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Item::name, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Item::name, $value, null, $limit);
 	}
 
 
-	public function allForIssue($value)
+	public function allForIssue($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Item::issue, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Item::issue, $value, null, $limit);
 	}
 
 
-	public function allForYear($value)
+	public function allForYear($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Pull_List_Item::year, $value);
+		return $this->allObjectsForKeyValue(Pull_List_Item::year, $value, null, $limit);
 	}
 
 
@@ -212,9 +212,9 @@ abstract class _Pull_List_Item extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForPull_list_group($obj)
+	public function allForPull_list_group($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Pull_List_Item::pull_list_group_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Pull_List_Item::pull_list_group_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForPull_list_group($obj)
@@ -224,9 +224,9 @@ abstract class _Pull_List_Item extends Model
 		}
 		return false;
 	}
-	public function allForPull_list($obj)
+	public function allForPull_list($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Pull_List_Item::pull_list_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Pull_List_Item::pull_list_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForPull_list($obj)

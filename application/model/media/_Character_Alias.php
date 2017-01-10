@@ -115,9 +115,9 @@ abstract class _Character_Alias extends Model
 	 *	Simple fetches
 	 */
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Character_Alias::name, $value);
+		return $this->allObjectsForKeyValue(Character_Alias::name, $value, null, $limit);
 	}
 
 
@@ -126,9 +126,9 @@ abstract class _Character_Alias extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForCharacter($obj)
+	public function allForCharacter($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Character_Alias::character_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Character_Alias::character_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForCharacter($obj)

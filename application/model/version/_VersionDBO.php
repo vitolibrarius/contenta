@@ -5,6 +5,8 @@ namespace model\version;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\version\Version as Version;
 
@@ -41,11 +43,16 @@ abstract class _VersionDBO extends DataObject
 
 
 	// to-many relationship
-	public function patches()
+	public function patches($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Patch');
-			return $model->allObjectsForKeyValue( Patch::version_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Patch::version_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;

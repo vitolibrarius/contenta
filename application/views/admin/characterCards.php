@@ -20,6 +20,7 @@
 			$card->setDetailKeys( array(
 				\model\media\Character::realname => \model\media\Character::realname,
 				\model\media\Character::gender => \model\media\Character::gender,
+				\model\media\Character::popularity => \model\media\Character::popularity,
 				)
 			);
 			foreach($this->listArray as $key => $value) {

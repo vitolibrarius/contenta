@@ -5,6 +5,8 @@ namespace model\media;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\media\Character as Character;
 
@@ -62,11 +64,16 @@ abstract class _CharacterDBO extends DataObject
 
 
 	// to-many relationship
-	public function aliases()
+	public function aliases($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Character_Alias');
-			return $model->allObjectsForKeyValue( Character_Alias::character_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Character_Alias::character_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
@@ -91,33 +98,48 @@ abstract class _CharacterDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function publication_characters()
+	public function publication_characters($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Publication_Character');
-			return $model->allObjectsForKeyValue( Publication_Character::character_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Publication_Character::character_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function series_characters()
+	public function series_characters($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Series_Character');
-			return $model->allObjectsForKeyValue( Series_Character::character_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Series_Character::character_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
 	}
 
 	// to-many relationship
-	public function story_arc_characters()
+	public function story_arc_characters($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Story_Arc_Character');
-			return $model->allObjectsForKeyValue( Story_Arc_Character::character_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Story_Arc_Character::character_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;

@@ -186,19 +186,19 @@ foreach( $objectRelationships as $name => $detailArray ) {
 		return $this->singleObjectForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
 	}
 <?php else : ?>
-	public function allFor<?php echo ucwords($name); ?>($value)
+	public function allFor<?php echo ucwords($name); ?>($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
+		return $this->allObjectsForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value, null, $limit);
 	}
 <?php endif; // unique ?>
 
 <?php if (isset($detailArray['partialSearch']) && $detailArray['partialSearch'] == true) : ?>
-	public function allLike<?php echo ucwords($name); ?>($value)
+	public function allLike<?php echo ucwords($name); ?>($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( <?php echo $this->modelClassName() . "::" . $name; ?>, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 <?php endif; //partial search ?>
@@ -210,9 +210,9 @@ foreach( $objectRelationships as $name => $detailArray ) {
 		return $this->singleObjectForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
 	}
 <?php else : ?>
-	public function allFor<?php echo ucwords($name); ?>($value)
+	public function allFor<?php echo ucwords($name); ?>($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value);
+		return $this->allObjectsForKeyValue(<?php echo $this->modelClassName() . "::" . $name; ?>, $value, null, $limit);
 	}
 <?php endif; // unique ?>
 <?php endif; // INTEGER type ?>
@@ -230,9 +230,9 @@ foreach( $objectRelationships as $name => $detailArray ) {
 <?php if (isset($detailArray['isToMany']) == false || $detailArray['isToMany'] == false) : ?>
 <?php $joins = $detailArray['joins']; if (count($joins) == 1) : ?>
 <?php $join = $joins[0]; ?>
-	public function allFor<?php echo ucwords($name); ?>($obj)
+	public function allFor<?php echo ucwords($name); ?>($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(<?php echo $this->modelClassName() . "::" . $join["sourceAttribute"]; ?>, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countFor<?php echo ucwords($name); ?>($obj)

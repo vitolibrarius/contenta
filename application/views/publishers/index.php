@@ -20,34 +20,43 @@
 	<ul>
 		<li><a href="<?php echo Config::Web('/AdminCharacters/index'); ?>">Characters</a></li>
 		<li><a href="<?php echo Config::Web('/AdminSeries/index'); ?>">Series</a></li>
+		<li><a href="<?php echo Config::Web('/AdminStoryArcs/index'); ?>">Story Arcs</a></li>
 		<li><a href="<?php echo Config::Web('/AdminPublication/index'); ?>">Publications</a></li>
-		<li><a href="<?php echo Config::Web( '/AdminPublishers/comicVineSearch' ); ?>"><span class="">ComicVine Import</span></a></li>
 	</ul>
 </div>
 
 <section>
+	<form id='searchForm' name='searchForm'>
 	<div class="row">
-
-<?php if (is_array($this->list) && count($this->list) > 0 ): ?>
-	<?php
-		$card = new html\Card();
-		$card->setDetailKeys( array(
-			\model\media\Publisher::xsource => \model\media\Publisher::xsource
-			)
-		);
-		foreach($this->list as $key => $value) {
-			$card->setEditPath( $this->editAction . '/' . $value->id );
-			if ( isset( $this->deleteAction ) ) {
-				$card->setDeletePath( $this->deleteAction . '/' . $value->id );
-			}
-			echo '<div class="grid_3">' . PHP_EOL;
-			echo $card->render($value);
-			echo '</div>' . PHP_EOL;
-		}
-	?>
-<?php else: ?>
-	<?php echo 'No publishers yet. Create some !'; ?>
-<?php endif ?>
-
+		<div class="grid_3">
+			<input class="text_input" type='text' id='name' name='name' placeholder="Name"
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('name') : ''); ?>"
+			/>
+		</div>
 	</div>
+	</form>
 </section>
+
+<div id='ajaxDiv'></div>
+
+<script language="javascript" type="text/javascript">
+	$(document).ready(function($) {
+		search_timer = 0;
+
+		$(".text_input").on('keyup', function () {
+			if (search_timer) {
+				clearTimeout(search_timer);
+			}
+			search_timer = setTimeout(refresh, 400);
+		});
+		function refresh() {
+			var page_url = "<?php echo Config::Web('/AdminPublishers/publisherList'); ?>";
+			var resultsId = "ajaxDiv";
+			var inputValues = $("form#searchForm").serializeObject();
+
+			refreshAjax( page_url, undefined, inputValues, resultsId );
+		};
+		refresh();
+	});
+</script>
+

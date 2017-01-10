@@ -146,28 +146,28 @@ abstract class _Version extends Model
 		return $this->singleObjectForKeyValue(Version::code, $value);
 	}
 
-	public function allLikeCode($value)
+	public function allLikeCode($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return SQL::Select( $this )
 			->where( Qualifier::Like( Version::code, $value, SQL::SQL_LIKE_AFTER ))
 			->orderBy( $this->sortOrder() )
-			->limit( 50 )
+			->limit( $limit )
 			->fetchAll();
 	}
 
-	public function allForMajor($value)
+	public function allForMajor($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Version::major, $value);
+		return $this->allObjectsForKeyValue(Version::major, $value, null, $limit);
 	}
 
-	public function allForMinor($value)
+	public function allForMinor($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Version::minor, $value);
+		return $this->allObjectsForKeyValue(Version::minor, $value, null, $limit);
 	}
 
-	public function allForPatch($value)
+	public function allForPatch($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Version::patch, $value);
+		return $this->allObjectsForKeyValue(Version::patch, $value, null, $limit);
 	}
 
 

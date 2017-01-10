@@ -27,15 +27,21 @@
 	<form id='searchForm' name='searchForm'>
 	<div class="row">
 		<div class="grid_4">
-			<select name="searchPublisher" id="searchPublisher" class="text_input">
+			<select name="publisher_id" id="publisher_id" class="text_input">
 				<option></option>
 			</select>
 		</div>
 		<div class="grid_4">
-			<input type="text" name="searchName" id="searchName"
+			<input type="text" name="name" id="name"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
 				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchName') : ''); ?>">
+		</div>
+		<div class="grid_2">
+			<input type="number" name="popularity" id="popularity"
+				class="text_input"
+				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "popularity" ); ?>"
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('popularity') : ''); ?>">
 		</div>
 	</div>
 	</form>
@@ -48,7 +54,7 @@
 $(document).ready(function($) {
 	search_timer = 0;
 
-	var $select = $("#searchPublisher");
+	var $select = $("#publisher_id");
 	$select.select2({
 		allowClear: true,
 		width: "element",
@@ -75,8 +81,8 @@ $(document).ready(function($) {
 		}
 	});
 
-<?php if (isset($this->params) && $this->params->valueForKey('searchPublisher') != null) : ?>
-	var $initialValue = "<?php echo $this->params->valueForKey('searchPublisher'); ?>";
+<?php if (isset($this->params) && $this->params->valueForKey('publisher_id') != null) : ?>
+	var $initialValue = "<?php echo $this->params->valueForKey('publisher_id'); ?>";
 	var $option = $('<option selected>Loading...</option>').val($initialValue);
 	$select.append($option).trigger('change');
 	$.ajax({

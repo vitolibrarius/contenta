@@ -69,8 +69,8 @@ abstract class _Character extends Model
 	public function sortOrder()
 	{
 		return array(
-			array( 'asc' => Character::name),
-			array( 'desc' => Character::popularity)
+			array( 'desc' => Character::popularity),
+			array( 'asc' => Character::name)
 		);
 	}
 
@@ -214,50 +214,50 @@ abstract class _Character extends Model
 
 
 
-	public function allForName($value)
+	public function allForName($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Character::name, $value);
+		return $this->allObjectsForKeyValue(Character::name, $value, null, $limit);
 	}
 
 
-	public function allForRealname($value)
+	public function allForRealname($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Character::realname, $value);
+		return $this->allObjectsForKeyValue(Character::realname, $value, null, $limit);
 	}
 
 
-	public function allForDesc($value)
+	public function allForDesc($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Character::desc, $value);
+		return $this->allObjectsForKeyValue(Character::desc, $value, null, $limit);
 	}
 
 
-	public function allForPopularity($value)
+	public function allForPopularity($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Character::popularity, $value);
+		return $this->allObjectsForKeyValue(Character::popularity, $value, null, $limit);
 	}
 
-	public function allForGender($value)
+	public function allForGender($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Character::gender, $value);
-	}
-
-
-	public function allForXurl($value)
-	{
-		return $this->allObjectsForKeyValue(Character::xurl, $value);
+		return $this->allObjectsForKeyValue(Character::gender, $value, null, $limit);
 	}
 
 
-	public function allForXsource($value)
+	public function allForXurl($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Character::xsource, $value);
+		return $this->allObjectsForKeyValue(Character::xurl, $value, null, $limit);
 	}
 
 
-	public function allForXid($value)
+	public function allForXsource($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForKeyValue(Character::xid, $value);
+		return $this->allObjectsForKeyValue(Character::xsource, $value, null, $limit);
+	}
+
+
+	public function allForXid($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Character::xid, $value, null, $limit);
 	}
 
 
@@ -266,9 +266,9 @@ abstract class _Character extends Model
 	/**
 	 * Simple relationship fetches
 	 */
-	public function allForPublisher($obj)
+	public function allForPublisher($obj, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
-		return $this->allObjectsForFK(Character::publisher_id, $obj, $this->sortOrder(), 50);
+		return $this->allObjectsForFK(Character::publisher_id, $obj, $this->sortOrder(), $limit);
 	}
 
 	public function countForPublisher($obj)

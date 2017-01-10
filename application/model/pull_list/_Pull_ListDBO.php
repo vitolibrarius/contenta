@@ -5,6 +5,8 @@ namespace model\pull_list;
 use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
+use \SQL as SQL;
+use \db\Qualifier as Qualifier;
 
 use \model\pull_list\Pull_List as Pull_List;
 
@@ -68,11 +70,16 @@ abstract class _Pull_ListDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function pull_list_items()
+	public function pull_list_items($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->id ) ) {
 			$model = Model::Named('Pull_List_Item');
-			return $model->allObjectsForKeyValue( Pull_List_Item::pull_list_id, $this->id);
+			return $model->allObjectsForKeyValue(
+				Pull_List_Item::pull_list_id,
+				$this->id,
+				null,
+				$limit
+			);
 		}
 
 		return false;
