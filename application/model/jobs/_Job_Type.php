@@ -97,6 +97,38 @@ abstract class _Job_Type extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Job_Type::name => array('length' => 256,'type' => 'TEXT'),
+			Job_Type::desc => array('length' => 4096,'type' => 'TEXT'),
+			Job_Type::processor => array('length' => 256,'type' => 'TEXT'),
+			Job_Type::parameter => array('length' => 4096,'type' => 'TEXT'),
+			Job_Type::scheduled => array('type' => 'BOOLEAN'),
+			Job_Type::requires_endpoint => array('type' => 'BOOLEAN')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Job_Type::jobsRunning => array(
+				'destination' => 'Job_Running',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'code' => 'type_code')
+			),
+			Job_Type::jobs => array(
+				'destination' => 'Job',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'code' => 'type_code')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

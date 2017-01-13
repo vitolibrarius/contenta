@@ -107,6 +107,47 @@ abstract class _Endpoint_Type extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Endpoint_Type::name => array('length' => 256,'type' => 'TEXT'),
+			Endpoint_Type::comments => array('length' => 4096,'type' => 'TEXT'),
+			Endpoint_Type::data_type => array('length' => 256,'type' => 'TEXT'),
+			Endpoint_Type::site_url => array('length' => 1024,'type' => 'TEXT'),
+			Endpoint_Type::api_url => array('length' => 1024,'type' => 'TEXT'),
+			Endpoint_Type::favicon_url => array('length' => 1024,'type' => 'TEXT'),
+			Endpoint_Type::throttle_hits => array('type' => 'INTEGER'),
+			Endpoint_Type::throttle_time => array('type' => 'INTEGER')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Endpoint_Type::endpoints => array(
+				'destination' => 'Endpoint',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'code' => 'type_code')
+			),
+			Endpoint_Type::pull_list_exclusions => array(
+				'destination' => 'Pull_List_Exclusion',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'code' => 'endpoint_type_code')
+			),
+			Endpoint_Type::pull_list_expansions => array(
+				'destination' => 'Pull_List_Expansion',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'code' => 'endpoint_type_code')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

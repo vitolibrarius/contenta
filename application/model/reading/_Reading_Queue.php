@@ -110,6 +110,45 @@ abstract class _Reading_Queue extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Reading_Queue::created => array('type' => 'DATE'),
+			Reading_Queue::title => array('length' => 256,'type' => 'TEXT'),
+			Reading_Queue::favorite => array('type' => 'BOOLEAN'),
+			Reading_Queue::pub_count => array('type' => 'INTEGER'),
+			Reading_Queue::pub_read => array('type' => 'INTEGER'),
+			Reading_Queue::queue_order => array('type' => 'INTEGER')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Reading_Queue::user => array(
+				'destination' => 'Users',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'user_id' => 'id')
+			),
+			Reading_Queue::series => array(
+				'destination' => 'Series',
+				'ownsDestination' => false,
+				'isMandatory' => false,
+				'isToMany' => false,
+				'joins' => array( 'series_id' => 'id')
+			),
+			Reading_Queue::story_arc => array(
+				'destination' => 'Story_Arc',
+				'ownsDestination' => false,
+				'isMandatory' => false,
+				'isToMany' => false,
+				'joins' => array( 'story_arc_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

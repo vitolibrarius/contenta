@@ -87,6 +87,29 @@ abstract class _Network extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Network::ip_address => array('length' => 256,'type' => 'TEXT'),
+			Network::ip_hash => array('length' => 256,'type' => 'TEXT'),
+			Network::created => array('type' => 'DATE'),
+			Network::disable => array('type' => 'BOOLEAN')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Network::user_network => array(
+				'destination' => 'User_Network',
+				'ownsDestination' => false,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'network_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

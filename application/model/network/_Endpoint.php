@@ -119,6 +119,68 @@ abstract class _Endpoint extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Endpoint::name => array('length' => 256,'type' => 'TEXT'),
+			Endpoint::base_url => array('length' => 1024,'type' => 'TEXT'),
+			Endpoint::api_key => array('length' => 256,'type' => 'TEXT'),
+			Endpoint::username => array('length' => 256,'type' => 'TEXT'),
+			Endpoint::error_count => array('type' => 'INTEGER'),
+			Endpoint::parameter => array('length' => 4096,'type' => 'TEXT'),
+			Endpoint::enabled => array('type' => 'BOOLEAN'),
+			Endpoint::compressed => array('type' => 'BOOLEAN')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Endpoint::endpointType => array(
+				'destination' => 'Endpoint_Type',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'type_code' => 'code')
+			),
+			Endpoint::pull_lists => array(
+				'destination' => 'Pull_List',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'endpoint_id')
+			),
+			Endpoint::rss => array(
+				'destination' => 'Rss',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'endpoint_id')
+			),
+			Endpoint::flux_sources => array(
+				'destination' => 'Flux',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'src_endpoint')
+			),
+			Endpoint::flux_destinations => array(
+				'destination' => 'Flux',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'dest_endpoint')
+			),
+			Endpoint::jobs => array(
+				'destination' => 'Job',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'endpoint_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

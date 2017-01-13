@@ -126,6 +126,59 @@ foreach( $objectRelationships as $name => $detailArray ) {
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+<?php $lastKey = array_last_key($objectAttributes); foreach( $objectAttributes as $name => $detailArray ) : ?>
+<?php if ($this->isPrimaryKey($name) == false && $this->isRelationshipKey($name) == false) : ?>
+			<?php
+				echo $this->modelClassName() . "::" . $name . " => array(";
+				echo (isset($detailArray['length']) ? "'length' => ". $detailArray['length'] ."," : "");
+				echo (isset($detailArray['type']) ? "'type' => '". $detailArray['type'] ."'" : "");
+				echo ( $name != $lastKey ? ")," : ")");
+			?>
+
+<?php endif; ?>
+<?php endforeach; ?>
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+<?php $lastKey = array_last_key($objectRelationships); foreach( $objectRelationships as $name => $detailArray ) : ?>
+			<?php echo $this->modelClassName() . "::" . $name . " => array("; ?>
+
+				'destination' => '<?php echo (isset($detailArray['destination']) ? "". $detailArray['destination'] : ""); ?>',
+				'ownsDestination' => <?php
+					echo (isset($detailArray['ownsDestination']) && boolValue($detailArray['ownsDestination']) == true)
+						? "true" : "false"
+					?>,
+				'isMandatory' => <?php
+					echo (isset($detailArray['isMandatory']) && boolValue($detailArray['isMandatory']) == true)
+						? "true" : "false"
+					?>,
+				'isToMany' => <?php
+					echo (isset($detailArray['isToMany']) && boolValue($detailArray['isToMany']) == true)
+						? "true" : "false"
+					?>,
+				'joins' => array( <?php if (count($detailArray['joins']) > 1) {
+							echo implode(', ', array_map(function ($entry) {
+								return "'".$entry['sourceAttribute']."' => '".$entry['destinationAttribute']."'";
+							}, $detailArray['joins']));
+					}
+					else {
+						$joins = $detailArray['joins'];
+						$join = $joins[0];
+						echo "'".$join['sourceAttribute']."' => '".$join['destinationAttribute']."'";
+					}
+			?>)
+			<?php echo ( $name != $lastKey ? ")," : ")"); ?>
+
+<?php endforeach; ?>
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

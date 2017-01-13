@@ -90,6 +90,30 @@ abstract class _Version extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Version::code => array('length' => 10,'type' => 'TEXT'),
+			Version::major => array('type' => 'INTEGER'),
+			Version::minor => array('type' => 'INTEGER'),
+			Version::patch => array('type' => 'INTEGER'),
+			Version::created => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Version::patches => array(
+				'destination' => 'Patch',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'version_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

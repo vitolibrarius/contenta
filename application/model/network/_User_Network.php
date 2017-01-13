@@ -84,6 +84,32 @@ abstract class _User_Network extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			User_Network::user => array(
+				'destination' => 'Users',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'user_id' => 'id')
+			),
+			User_Network::network => array(
+				'destination' => 'Network',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'network_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

@@ -6,7 +6,7 @@ use \Logger as Logger;
 use \Model as Model;
 use \Config as Config;
 
-abstract class DataObject
+abstract class DataObject implements JsonSerializable
 {
 	public $id;
 	public $unsavedUpdates;
@@ -206,6 +206,47 @@ abstract class DataObject
 	public function consistencyTest()
 	{
 		return "ok";
+	}
+
+	public function jsonSerialize ()
+	{
+		$data = array(
+		  "_id" => $this->pkValue(),
+		  "_type" => $this->modelName(),
+		  "_uri" => Config::Web("Api", $this->modelName(), $this->pkValue() )
+		);
+
+		$attributes = $this->model()->attributes();
+		foreach ($attributes as $name => $details ) {
+			$type = $details['type'];
+			$value = $this->$name();
+			switch( $type ) {
+				case 'DATE':
+					$value = date("M d, Y H:i", $value);
+					break;
+				case 'BOOLEAN':
+					$value = (boolValue($value) ? true : false);
+					break;
+			}
+
+			$data[$name] = $value;
+		}
+
+		$relations = $this->model()->relationships();
+		foreach ($relations as $name => $details ) {
+			$data[$name] = Config::Web("Api", $this->modelName(), $this->pkValue(), $name );
+// 			$destName = $details['destination'];
+// 			$joins = $details['joins'];
+// 			$joinValue = array();
+// 			foreach( $joins as $src => $dest ) {
+// 				$foreignValue = $this->$src();
+// 				$joinValue[] = $dest;
+// 				$joinValue[] = $foreignValue;
+// 			}
+// 			$data[$name] = Config::Web("Api", $destName, $joinValue );
+		}
+
+		return $data;
 	}
 }
 ?>

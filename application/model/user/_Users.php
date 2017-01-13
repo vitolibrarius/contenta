@@ -125,6 +125,53 @@ abstract class _Users extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Users::name => array('length' => 64,'type' => 'TEXT'),
+			Users::email => array('length' => 256,'type' => 'TEXT'),
+			Users::active => array('type' => 'BOOLEAN'),
+			Users::account_type => array('length' => 10,'type' => 'TEXT'),
+			Users::rememberme_token => array('length' => 256,'type' => 'TEXT'),
+			Users::api_hash => array('length' => 256,'type' => 'TEXT'),
+			Users::password_hash => array('length' => 256,'type' => 'TEXT'),
+			Users::password_reset_hash => array('length' => 256,'type' => 'TEXT'),
+			Users::activation_hash => array('length' => 256,'type' => 'TEXT'),
+			Users::failed_logins => array('type' => 'INTEGER'),
+			Users::created => array('type' => 'DATE'),
+			Users::last_login_timestamp => array('type' => 'DATE'),
+			Users::last_failed_login => array('type' => 'DATE'),
+			Users::password_reset_timestamp => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Users::user_network => array(
+				'destination' => 'User_Network',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'user_id')
+			),
+			Users::reading_queues => array(
+				'destination' => 'Reading_Queue',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'user_id')
+			),
+			Users::reading_items => array(
+				'destination' => 'Reading_Item',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'user_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

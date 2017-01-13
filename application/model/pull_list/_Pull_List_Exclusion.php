@@ -86,6 +86,28 @@ abstract class _Pull_List_Exclusion extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Pull_List_Exclusion::pattern => array('length' => 256,'type' => 'TEXT'),
+			Pull_List_Exclusion::type => array('length' => 256,'type' => 'TEXT'),
+			Pull_List_Exclusion::created => array('type' => 'DATE'),
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Pull_List_Exclusion::endpoint_type => array(
+				'destination' => 'Endpoint_Type',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'endpoint_type_code' => 'code')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

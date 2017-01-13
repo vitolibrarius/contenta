@@ -129,6 +129,65 @@ abstract class _Story_Arc extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Story_Arc::created => array('type' => 'DATE'),
+			Story_Arc::name => array('length' => 256,'type' => 'TEXT'),
+			Story_Arc::desc => array('length' => 4096,'type' => 'TEXT'),
+			Story_Arc::pub_active => array('type' => 'BOOLEAN'),
+			Story_Arc::pub_wanted => array('type' => 'BOOLEAN'),
+			Story_Arc::pub_cycle => array('type' => 'INTEGER'),
+			Story_Arc::pub_available => array('type' => 'INTEGER'),
+			Story_Arc::pub_count => array('type' => 'INTEGER'),
+			Story_Arc::xurl => array('length' => 1024,'type' => 'TEXT'),
+			Story_Arc::xsource => array('length' => 256,'type' => 'TEXT'),
+			Story_Arc::xid => array('length' => 256,'type' => 'TEXT'),
+			Story_Arc::xupdated => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Story_Arc::publisher => array(
+				'destination' => 'Publisher',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'publisher_id' => 'id')
+			),
+			Story_Arc::story_arc_characters => array(
+				'destination' => 'Story_Arc_Character',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'story_arc_id')
+			),
+			Story_Arc::story_arc_publication => array(
+				'destination' => 'Story_Arc_Publication',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'story_arc_id')
+			),
+			Story_Arc::story_arc_series => array(
+				'destination' => 'Story_Arc_Series',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'story_arc_id')
+			),
+			Story_Arc::reading_queues => array(
+				'destination' => 'Reading_Queue',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'story_arc_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

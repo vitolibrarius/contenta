@@ -143,6 +143,75 @@ abstract class _Series extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Series::created => array('type' => 'DATE'),
+			Series::name => array('length' => 256,'type' => 'TEXT'),
+			Series::search_name => array('length' => 256,'type' => 'TEXT'),
+			Series::desc => array('length' => 4096,'type' => 'TEXT'),
+			Series::start_year => array('type' => 'INTEGER'),
+			Series::issue_count => array('type' => 'INTEGER'),
+			Series::pub_active => array('type' => 'BOOLEAN'),
+			Series::pub_wanted => array('type' => 'BOOLEAN'),
+			Series::pub_available => array('type' => 'INTEGER'),
+			Series::pub_cycle => array('type' => 'INTEGER'),
+			Series::pub_count => array('type' => 'INTEGER'),
+			Series::xurl => array('length' => 1024,'type' => 'TEXT'),
+			Series::xsource => array('length' => 256,'type' => 'TEXT'),
+			Series::xid => array('length' => 256,'type' => 'TEXT'),
+			Series::xupdated => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Series::aliases => array(
+				'destination' => 'Series_Alias',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'series_id')
+			),
+			Series::publisher => array(
+				'destination' => 'Publisher',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'publisher_id' => 'id')
+			),
+			Series::publications => array(
+				'destination' => 'Publication',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'series_id')
+			),
+			Series::series_characters => array(
+				'destination' => 'Series_Character',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'series_id')
+			),
+			Series::story_arc_series => array(
+				'destination' => 'Story_Arc_Series',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'series_id')
+			),
+			Series::reading_queues => array(
+				'destination' => 'Reading_Queue',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'series_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

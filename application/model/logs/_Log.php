@@ -98,6 +98,32 @@ abstract class _Log extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Log::trace => array('length' => 256,'type' => 'TEXT'),
+			Log::trace_id => array('length' => 256,'type' => 'TEXT'),
+			Log::context => array('length' => 256,'type' => 'TEXT'),
+			Log::context_id => array('length' => 256,'type' => 'TEXT'),
+			Log::message => array('type' => 'TEXT'),
+			Log::session => array('length' => 256,'type' => 'TEXT'),
+			Log::created => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Log::logLevel => array(
+				'destination' => 'Log_Level',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'level_code' => 'code')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

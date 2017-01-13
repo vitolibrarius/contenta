@@ -4,6 +4,11 @@ namespace http;
 
 class GlobalMemoryAdapter implements \interfaces\GlobalAdapter
 {
+	public function __toString()
+	{
+		return "GlobalMemoryAdapter " . var_export($this->global_sim, true);
+	}
+
     private $global_sim = array();
 	public function allValues()
 	{

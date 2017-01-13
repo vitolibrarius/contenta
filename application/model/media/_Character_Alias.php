@@ -80,6 +80,26 @@ abstract class _Character_Alias extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Character_Alias::name => array('length' => 256,'type' => 'TEXT'),
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Character_Alias::character => array(
+				'destination' => 'Character',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'character_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

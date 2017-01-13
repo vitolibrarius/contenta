@@ -99,6 +99,37 @@ abstract class _Job_Running extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Job_Running::processor => array('length' => 256,'type' => 'TEXT'),
+			Job_Running::guid => array('length' => 256,'type' => 'TEXT'),
+			Job_Running::pid => array('type' => 'INTEGER'),
+			Job_Running::desc => array('length' => 4096,'type' => 'TEXT'),
+			Job_Running::created => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Job_Running::job => array(
+				'destination' => 'Job',
+				'ownsDestination' => false,
+				'isMandatory' => false,
+				'isToMany' => false,
+				'joins' => array( 'job_id' => 'id')
+			),
+			Job_Running::jobType => array(
+				'destination' => 'Job_Type',
+				'ownsDestination' => false,
+				'isMandatory' => false,
+				'isToMany' => false,
+				'joins' => array( 'type_code' => 'code')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

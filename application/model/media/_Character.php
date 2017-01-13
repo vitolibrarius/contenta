@@ -124,6 +124,63 @@ abstract class _Character extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Character::created => array('type' => 'DATE'),
+			Character::name => array('length' => 256,'type' => 'TEXT'),
+			Character::realname => array('length' => 256,'type' => 'TEXT'),
+			Character::desc => array('length' => 4096,'type' => 'TEXT'),
+			Character::popularity => array('type' => 'INTEGER'),
+			Character::gender => array('length' => 25,'type' => 'TEXT'),
+			Character::xurl => array('length' => 1024,'type' => 'TEXT'),
+			Character::xsource => array('length' => 256,'type' => 'TEXT'),
+			Character::xid => array('length' => 256,'type' => 'TEXT'),
+			Character::xupdated => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Character::aliases => array(
+				'destination' => 'Character_Alias',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'character_id')
+			),
+			Character::publisher => array(
+				'destination' => 'Publisher',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'publisher_id' => 'id')
+			),
+			Character::publication_characters => array(
+				'destination' => 'Publication_Character',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'character_id')
+			),
+			Character::series_characters => array(
+				'destination' => 'Series_Character',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'character_id')
+			),
+			Character::story_arc_characters => array(
+				'destination' => 'Story_Arc_Character',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'character_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

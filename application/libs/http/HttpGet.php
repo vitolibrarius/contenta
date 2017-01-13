@@ -37,6 +37,11 @@ class HttpGet
 		return self::$adapter;
 	}
 
+	public static function allValues()
+	{
+		return self::adapter()->allValues();
+	}
+
 	/**
 	 * sets a specific value to a specific key of the HttpGet
 	 * @param mixed $key

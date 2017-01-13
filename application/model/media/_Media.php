@@ -99,6 +99,37 @@ abstract class _Media extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Media::filename => array('length' => 4096,'type' => 'TEXT'),
+			Media::original_filename => array('length' => 4096,'type' => 'TEXT'),
+			Media::checksum => array('length' => 256,'type' => 'TEXT'),
+			Media::created => array('type' => 'DATE'),
+			Media::size => array('type' => 'INTEGER')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Media::mediaType => array(
+				'destination' => 'Media_Type',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'type_code' => 'code')
+			),
+			Media::publication => array(
+				'destination' => 'Publication',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'publication_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

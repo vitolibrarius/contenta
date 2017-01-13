@@ -120,6 +120,44 @@ abstract class _Job extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Job::enabled => array('type' => 'BOOLEAN'),
+			Job::one_shot => array('type' => 'BOOLEAN'),
+			Job::fail_count => array('type' => 'INTEGER'),
+			Job::elapsed => array('type' => 'INTEGER'),
+			Job::minute => array('length' => 256,'type' => 'TEXT'),
+			Job::hour => array('length' => 256,'type' => 'TEXT'),
+			Job::dayOfWeek => array('length' => 256,'type' => 'TEXT'),
+			Job::parameter => array('length' => 4096,'type' => 'TEXT'),
+			Job::next => array('type' => 'DATE'),
+			Job::last_run => array('type' => 'DATE'),
+			Job::last_fail => array('type' => 'DATE'),
+			Job::created => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Job::jobType => array(
+				'destination' => 'Job_Type',
+				'ownsDestination' => false,
+				'isMandatory' => false,
+				'isToMany' => false,
+				'joins' => array( 'type_code' => 'code')
+			),
+			Job::endpoint => array(
+				'destination' => 'Endpoint',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'endpoint_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

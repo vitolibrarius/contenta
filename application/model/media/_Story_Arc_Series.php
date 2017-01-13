@@ -84,6 +84,32 @@ abstract class _Story_Arc_Series extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Story_Arc_Series::story_arc => array(
+				'destination' => 'Story_Arc',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'story_arc_id' => 'id')
+			),
+			Story_Arc_Series::series => array(
+				'destination' => 'Series',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'series_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();
