@@ -25,7 +25,18 @@ h1, h2, h3, h4, h5, h6 {
 	border-bottom: 1px solid #FFFFFF;
 }
 
-header	{ padding:15px 0; }
+header	{
+	position:fixed;
+	left:0px;
+	top:0px;
+	height:4em;
+	width:100%;
+	padding:15px 0;
+	background-color: white;
+}
+#main-content {
+	margin-top: 56px;;
+}
 section	{ /* border: 1px solid green; */ }
 p		{ margin:0;}
 img		{ max-width:100%; height:auto;}
@@ -463,12 +474,13 @@ nav .menu li li li a {
 /* 	border: 1px solid #999 */
 }
 
-body 					{ background:#fff; }
-h1, h2, h3, h4, h5, h6	{ color:#333; }
-
 /* footer */
 footer {
 	clear: both;
+	position:fixed;
+	left:0px;
+	bottom:0px;
+	width:100%;
 	font-size: 0.75em;
 	background:#333;
 	color:#ccc;

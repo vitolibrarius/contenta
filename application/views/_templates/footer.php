@@ -6,7 +6,7 @@
 
 	<!-- footer area -->
 	<footer>
-		<div id="colophon" class="wrapper clearfix">
+		<div id="colophon" class="clearfix">
 			<div class="grid_4 left">
 				<a target="ContentWeb" href="https://github.com/vitolibrarius/contenta">
 					<?php echo Localized::GlobalLabel("WebsiteLink"); ?>
@@ -29,5 +29,53 @@
 		</div>
 	</footer>
 	<!-- #end footer area -->
+
+<!-- header area -->
+    <header class="clearfix">
+        <div id="banner">
+        	<div id="logo"><a href="<?php echo Config::Web() ?>/">
+        		<img src="<?php echo Config::Web('/public/img/ContentaHeader.png'); ?>" alt="logo"></a>
+        	</div>
+        </div>
+
+        <!-- main navigation -->
+        <nav id="topnav" role="navigation">
+          <div class="toggle">Menu</div>
+			<?php
+				include 'menu.php';
+
+				$menu = menu::factory();
+				$menu->class = "menu";
+				$menu->id = "menu-main";
+
+				if (\http\Session::get('user_logged_in') == true)
+				{
+					if (\http\Session::get('user_account_type') === \model\user\Users::AdministratorRole )
+					{
+						$menu->addCallback( "Daemons", function() {
+								return "<div id='daemons' data-href='" . Config::Web("/AdminJobs/json_running")
+									. "' data-page='" . Config::Web("/AdminJobs/runningIndex") ."'>"
+									. "<span class='badge'>123</span></div>";
+							}
+						);
+						$menu->add( Localized::GlobalLabel("Menu", "Admin"), '/admin/index');
+						$menu->add( Localized::GlobalLabel("Menu", "Logs"), '/logs/index');
+					}
+					$menu->add( Localized::GlobalLabel("Menu", "Series"), '/DisplaySeries/index' );
+					$menu->add( Localized::GlobalLabel("Menu", "Story Arcs"), '/DisplayStories/index' );
+					$menu->add( Localized::GlobalLabel("Menu", "Profile"), '/profile/index' );
+				}
+
+				if (\http\Session::get('user_logged_in') == false)
+				{
+					$menu->add(Localized::GlobalLabel("Menu", "Login"), '/login/index');
+				}
+
+				$menu->current = Config::Web($this->controllerName, (isset($this->controllerAction) ? $this->controllerAction : 'index'));
+
+				echo $menu;
+			?>
+		</nav><!-- end main navigation -->
+    </header><!-- end header -->
 </body>
 </html>
