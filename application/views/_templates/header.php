@@ -9,6 +9,8 @@
 
 	<link rel="icon" type="image/png" href="<?php echo Config::Web('public/img/Logo_favicon.png'); ?>" />
 
+	<script type="text/javascript">webRoot="<?php echo Config::Web(); ?>";</script>
+
 	<!-- CSS -->
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/lib/select2.min.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta.css'); ?>" />
@@ -40,11 +42,6 @@
 		}
 	}
 ?>
-<script type="text/javascript">
-<!--
-	webRoot="<?php echo Config::Web(); ?>";
-//-->
-</script>
 </head>
 
 

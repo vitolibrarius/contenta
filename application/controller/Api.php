@@ -43,7 +43,7 @@ class Api extends Controller
 
 	public function __call($modelName, $args)
 	{
-		if (Auth::handleLogin()) {
+// 		if (Auth::handleLogin()) {
 			$model = Model::Named($modelName);
 			switch ( $_SERVER['REQUEST_METHOD'] ) {
 				case 'DELETE': // delete
@@ -65,7 +65,6 @@ class Api extends Controller
 						$object = $model->objectForId($oid);
 						if ( $object != false && is_null($related) == false) {
 							$data = array(
-								"sessionId" => Session::sessionId(),
 								"querySize" => $parameters->querySize(),
 								"pageShown" => $parameters->pageShown(),
 								"pageCount" => $parameters->pageCount(),
@@ -83,7 +82,6 @@ class Api extends Controller
 						}
 						else {
 							$data = array(
-								"sessionId" => Session::sessionId(),
 								"item" => $object
 							);
 
@@ -93,7 +91,6 @@ class Api extends Controller
 					else {
 						$results = $model->searchQuery( $hasNewValues, $query, $pageNum, $parameters );
 						$data = array(
-							"sessionId" => Session::sessionId(),
 							"querySize" => $parameters->querySize(),
 							"pageShown" => $parameters->pageShown(),
 							"pageCount" => $parameters->pageCount(),
@@ -105,7 +102,7 @@ class Api extends Controller
 					}
 					break;
 			}
-		}
+// 		}
     }
 
 	function publishers( $userHash = null)

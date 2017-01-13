@@ -32,6 +32,10 @@ class Index extends Controller
 			$this->view->addModule("libs");
 			$this->view->addModule("common");
 			$this->view->addModule("login");
+
+			$this->view->addModule("menu");
+			$this->view->addModule("media");
+
 			$this->view->addModule("contenta_ng.js");
 			$this->view->render( '/index/webapp' );
 		}
