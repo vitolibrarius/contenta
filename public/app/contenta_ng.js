@@ -11,13 +11,14 @@ angular.module('contenta').config([
 	'$locationProvider',
 	'$routeProvider',
 	function config($locationProvider, $routeProvider) {
+		$locationProvider.hashPrefix('!');
 // 		$locationProvider.html5Mode(true);
 		$routeProvider.
 			when('/menu', {
 				template: '<menu></menu>'
 			}).
 			when('/series', {
-				template: '<series-list></series-list>'
+				template: '<series-home></series-home>'
 			}).
 			when('/publication', {
 				template: '<publication-list></publication-list>'
@@ -25,7 +26,7 @@ angular.module('contenta').config([
 			when('/publisher', {
 				template: '<publisher-list></publisher-list>'
 			}).
-			otherwise('/menu');
+			otherwise('/series');
 	}
 ]);
 

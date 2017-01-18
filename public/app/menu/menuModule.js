@@ -1,4 +1,5 @@
 angular.module('menuModule', [
+	'ngRoute',
 	'contenta.menu.controllers',
 	'contenta.menu.directives'
 ]);
