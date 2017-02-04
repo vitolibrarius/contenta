@@ -115,6 +115,43 @@ abstract class _Flux extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Flux::created => array('type' => 'DATE'),
+			Flux::name => array('length' => 256,'type' => 'TEXT'),
+			Flux::flux_hash => array('length' => 256,'type' => 'TEXT'),
+			Flux::flux_error => array('type' => 'BOOLEAN'),
+			Flux::src_guid => array('length' => 256,'type' => 'TEXT'),
+			Flux::src_url => array('length' => 1024,'type' => 'TEXT'),
+			Flux::src_status => array('length' => 256,'type' => 'TEXT'),
+			Flux::src_pub_date => array('type' => 'DATE'),
+			Flux::dest_guid => array('length' => 256,'type' => 'TEXT'),
+			Flux::dest_status => array('length' => 256,'type' => 'TEXT'),
+			Flux::dest_submission => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Flux::source_endpoint => array(
+				'destination' => 'Endpoint',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'src_endpoint' => 'id')
+			),
+			Flux::destination_endpoint => array(
+				'destination' => 'Endpoint',
+				'ownsDestination' => false,
+				'isMandatory' => false,
+				'isToMany' => false,
+				'joins' => array( 'dest_endpoint' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

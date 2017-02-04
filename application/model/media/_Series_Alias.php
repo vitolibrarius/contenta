@@ -80,6 +80,26 @@ abstract class _Series_Alias extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Series_Alias::name => array('length' => 256,'type' => 'TEXT'),
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Series_Alias::series => array(
+				'destination' => 'Series',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'series_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

@@ -125,6 +125,9 @@ abstract class Model
 	abstract public function sortOrder();
 	abstract public function allColumnNames();
 
+	abstract public function attributes();
+	abstract public function relationships();
+
 	public function updateStatistics( $xid = 0, $xsource = null ) { return true; }
 
 	public function notifyKeypaths() { return array(); }

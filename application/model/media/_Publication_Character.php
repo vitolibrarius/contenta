@@ -84,6 +84,32 @@ abstract class _Publication_Character extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Publication_Character::publication => array(
+				'destination' => 'Publication',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'publication_id' => 'id')
+			),
+			Publication_Character::character => array(
+				'destination' => 'Character',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'character_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

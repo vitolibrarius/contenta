@@ -116,6 +116,38 @@ abstract class _Rss extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Rss::created => array('type' => 'DATE'),
+			Rss::title => array('length' => 256,'type' => 'TEXT'),
+			Rss::desc => array('length' => 4096,'type' => 'TEXT'),
+			Rss::pub_date => array('type' => 'DATE'),
+			Rss::guid => array('length' => 256,'type' => 'TEXT'),
+			Rss::clean_name => array('length' => 256,'type' => 'TEXT'),
+			Rss::clean_issue => array('length' => 256,'type' => 'TEXT'),
+			Rss::clean_year => array('type' => 'INTEGER'),
+			Rss::enclosure_url => array('length' => 256,'type' => 'TEXT'),
+			Rss::enclosure_length => array('type' => 'INTEGER'),
+			Rss::enclosure_mime => array('length' => 256,'type' => 'TEXT'),
+			Rss::enclosure_hash => array('length' => 256,'type' => 'TEXT'),
+			Rss::enclosure_password => array('type' => 'BOOLEAN')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Rss::endpoint => array(
+				'destination' => 'Endpoint',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'endpoint_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

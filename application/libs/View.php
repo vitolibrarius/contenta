@@ -69,6 +69,41 @@ class View
 		}
 	}
 
+	public function addModule($path = null) {
+		if ( isset($path) && strlen($path) > 0) {
+			$dir = appendPath(SYSTEM_PATH, '/public/app', $path );
+			if ( is_dir($dir) )
+			{
+				foreach (scandir($dir) as $file)
+				{
+					if ($file == '.' || $file == '..') continue;
+					if (is_dir($dir . DIRECTORY_SEPARATOR . $file) === true)
+					{
+						$newPath = appendPath( $dir, $file );
+						$this->addModule($newPath);
+					}
+					else if ( file_ext($file) == "css" ) {
+						$filename = appendPath( '/public/app', $path, $file );
+						$this->additionalStyles[] = $filename;
+					}
+					else if ( file_ext($file) == "js" ) {
+						$filename = appendPath( '/public/app', $path, $file );
+						$this->additionalScripts[] = $filename;
+					}
+				}
+			}
+			else if ( is_file($dir) ) {
+				$filename = appendPath( '/public/app', $path );
+				if ( file_ext($dir) == "css" ) {
+					$this->additionalStyles[] = $filename;
+				}
+				else if ( file_ext($dir) == "js" ) {
+					$this->additionalScripts[] = $filename;
+				}
+			}
+		}
+	}
+
 	public function addScript($path = null) {
 		if ( isset($path) && strlen($path) > 0) {
 			$filename = appendPath( '/public/js', implode('_', explode(DIRECTORY_SEPARATOR, trim($path, DIRECTORY_SEPARATOR))));
@@ -283,7 +318,7 @@ class View
 		if ( ob_get_contents() != false ) {
 			ob_clean();
 		}
-		
+
 		if ( isset($imageData) AND ($imageData != false)) {
 			$etag = '"'. hash(HASH_DEFAULT_ALGO, $imageData) .'"';
 

@@ -101,6 +101,45 @@ abstract class _Publisher extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Publisher::name => array('length' => 256,'type' => 'TEXT'),
+			Publisher::created => array('type' => 'DATE'),
+			Publisher::xurl => array('length' => 1024,'type' => 'TEXT'),
+			Publisher::xsource => array('length' => 256,'type' => 'TEXT'),
+			Publisher::xid => array('length' => 256,'type' => 'TEXT'),
+			Publisher::xupdated => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Publisher::series => array(
+				'destination' => 'Series',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'publisher_id')
+			),
+			Publisher::characters => array(
+				'destination' => 'Character',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'publisher_id')
+			),
+			Publisher::story_arcs => array(
+				'destination' => 'Story_Arc',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'publisher_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

@@ -90,6 +90,29 @@ abstract class _Pull_List_Expansion extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Pull_List_Expansion::pattern => array('length' => 256,'type' => 'TEXT'),
+			Pull_List_Expansion::replace => array('length' => 256,'type' => 'TEXT'),
+			Pull_List_Expansion::sequence => array('type' => 'INTEGER'),
+			Pull_List_Expansion::created => array('type' => 'DATE'),
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Pull_List_Expansion::endpoint_type => array(
+				'destination' => 'Endpoint_Type',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'endpoint_type_code' => 'code')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

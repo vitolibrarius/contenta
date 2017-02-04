@@ -84,6 +84,28 @@ abstract class _Pull_List_Group extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Pull_List_Group::name => array('length' => 256,'type' => 'TEXT'),
+			Pull_List_Group::data => array('length' => 256,'type' => 'TEXT'),
+			Pull_List_Group::created => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Pull_List_Group::pull_list_items => array(
+				'destination' => 'Pull_List_Item',
+				'ownsDestination' => false,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'pull_list_group_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

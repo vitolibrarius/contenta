@@ -74,6 +74,19 @@ abstract class _Media_Type extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Media_Type::name => array('length' => 256,'type' => 'TEXT')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

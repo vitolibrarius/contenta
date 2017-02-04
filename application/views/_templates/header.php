@@ -9,6 +9,8 @@
 
 	<link rel="icon" type="image/png" href="<?php echo Config::Web('public/img/Logo_favicon.png'); ?>" />
 
+	<script type="text/javascript">webRoot="<?php echo Config::Web(); ?>";</script>
+
 	<!-- CSS -->
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/lib/select2.min.css'); ?>" />
 	<link rel="stylesheet" href="<?php echo Config::Web('/public/css/contenta.css'); ?>" />
@@ -26,24 +28,20 @@
 <?php if (\http\Session::get('user_logged_in') == true) : ?>
 	<script type="text/javascript" src="<?php echo Config::Web('/public/js/contenta-notification.js'); ?>"></script>
 <?php endif; ?>
+
 	<!-- Custom component stylesheets and scripts -->
 <?php
 	if ( isset($this->additionalStyles)) {
 		foreach ($this->additionalStyles as $key => $css) {
-			echo '<link rel="stylesheet" href="' . Config::Web($css) . '" />';
+			echo '	<link rel="stylesheet" href="' . Config::Web($css) . '" />';
 		}
 	}
 	if ( isset($this->additionalScripts)) {
 		foreach ($this->additionalScripts as $key => $script) {
-			echo '<script type="text/javascript" src="' . Config::Web($script) . '"></script>';
+			echo '	<script type="text/javascript" src="' . Config::Web($script) . '"></script>' . PHP_EOL;
 		}
 	}
 ?>
-<script type="text/javascript">
-<!--
-	webRoot="<?php echo Config::Web(); ?>";
-//-->
-</script>
 </head>
 
 

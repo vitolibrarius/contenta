@@ -93,6 +93,35 @@ abstract class _Reading_Item extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Reading_Item::created => array('type' => 'DATE'),
+			Reading_Item::read_date => array('type' => 'DATE'),
+			Reading_Item::mislabeled => array('type' => 'BOOLEAN')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Reading_Item::user => array(
+				'destination' => 'Users',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'user_id' => 'id')
+			),
+			Reading_Item::publication => array(
+				'destination' => 'Publication',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'publication_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

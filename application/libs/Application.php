@@ -5,8 +5,9 @@ use \Exception as Exception;
 use \ClassNotFoundException as ClassNotFoundException;
 
 use \http\Session as Session;
+use \controller\Api as Api;
 
-use utilities\Stopwatch as Stopwatch;
+use \utilities\Stopwatch as Stopwatch;
 
 /**
  * Class Application
@@ -73,7 +74,7 @@ class Application
 							$this->url_controller->{$this->url_action}();
 						}
 					}
-					else if ( is_a($this->url_controller, "controller\\Dav") ) {
+					else if ( $this->url_controller instanceof Api || is_a($this->url_controller, "controller\\Dav") ) {
 						if (isset($this->url_parameter_3)) {
 							$this->url_controller->{$this->url_action}($this->url_parameter_1, $this->url_parameter_2, $this->url_parameter_3);
 						}

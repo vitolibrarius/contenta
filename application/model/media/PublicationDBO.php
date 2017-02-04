@@ -24,6 +24,13 @@ class PublicationDBO extends _PublicationDBO
 		return false;
 	}
 
+	public function displayName()
+	{
+		return $this->series()->name()
+			. " [" . $this->paddedIssueNum() . "]"
+			. ($this->publishedYear() > 1900 ? " " . $this->publishedYear() : '');
+	}
+
 	public function searchString()
 	{
 		return $this->series()->search_name

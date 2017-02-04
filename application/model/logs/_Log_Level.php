@@ -74,6 +74,19 @@ abstract class _Log_Level extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Log_Level::name => array('length' => 256,'type' => 'TEXT')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

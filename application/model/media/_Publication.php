@@ -127,6 +127,64 @@ abstract class _Publication extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Publication::created => array('type' => 'DATE'),
+			Publication::name => array('length' => 256,'type' => 'TEXT'),
+			Publication::desc => array('length' => 4096,'type' => 'TEXT'),
+			Publication::pub_date => array('type' => 'DATE'),
+			Publication::issue_num => array('length' => 256,'type' => 'TEXT'),
+			Publication::issue_order => array('type' => 'INTEGER'),
+			Publication::media_count => array('type' => 'INTEGER'),
+			Publication::xurl => array('length' => 1024,'type' => 'TEXT'),
+			Publication::xsource => array('length' => 256,'type' => 'TEXT'),
+			Publication::xid => array('length' => 256,'type' => 'TEXT'),
+			Publication::xupdated => array('type' => 'DATE')
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Publication::series => array(
+				'destination' => 'Series',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'series_id' => 'id')
+			),
+			Publication::media => array(
+				'destination' => 'Media',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'publication_id')
+			),
+			Publication::story_arc_publication => array(
+				'destination' => 'Story_Arc_Publication',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'publication_id')
+			),
+			Publication::reading_items => array(
+				'destination' => 'Reading_Item',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'publication_id')
+			),
+			Publication::publication_characters => array(
+				'destination' => 'Publication_Character',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'publication_id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

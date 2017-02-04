@@ -8,9 +8,12 @@ use \Model as Model;
 use \Auth as Auth;
 use \Logger as Logger;
 use \Localized as Localized;
+use \Config as Config;
 
 use \http\Session as Session;
 use \http\HttpGet as HttpGet;
+use \http\HttpPost as HttpPost;
+use \http\PageParams as PageParams;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
@@ -37,6 +40,70 @@ class Api extends Controller
 			$this->view->render( '/admin/index' );
 		}
 	}
+
+	public function __call($modelName, $args)
+	{
+// 		if (Auth::handleLogin()) {
+			$model = Model::Named($modelName);
+			switch ( $_SERVER['REQUEST_METHOD'] ) {
+				case 'DELETE': // delete
+					break;
+				case 'POST': // insert
+					break;
+				case 'PUT': // update
+					break;
+
+				case 'GET': // select
+				default:
+					$oid = (isset($args[0]) ? $args[0] : 0);
+					$related = (isset($args[1]) ? $args[1] : null);
+					$parameters = Session::pageParameters( $this, $modelName );
+					list( $hasNewValues, $query) = $parameters->updateParametersFromGET();
+					$pageNum = $parameters->valueForKey( "pageNum", 0 );
+
+					if ( $oid > 0 ) {
+						$object = $model->objectForId($oid);
+						if ( $object != false && is_null($related) == false) {
+							$data = array(
+								"querySize" => $parameters->querySize(),
+								"pageShown" => $parameters->pageShown(),
+								"pageCount" => $parameters->pageCount(),
+								"pageSize" => $parameters->pageSize()
+							);
+						 	$related = $object->$related();
+							if ( is_array($related) ) {
+								$data["items"] = $related;
+							}
+							else {
+								$data["item"] = $related;
+							}
+
+							$this->view->renderJson( $data );
+						}
+						else {
+							$data = array(
+								"item" => $object
+							);
+
+							$this->view->renderJson( $data );
+						}
+					}
+					else {
+						$results = $model->searchQuery( $hasNewValues, $query, $pageNum, $parameters );
+						$data = array(
+							"querySize" => $parameters->querySize(),
+							"pageShown" => $parameters->pageShown(),
+							"pageCount" => $parameters->pageCount(),
+							"pageSize" => $parameters->pageSize(),
+							"items" => $results
+						);
+
+						$this->view->renderJson( $data );
+					}
+					break;
+			}
+// 		}
+    }
 
 	function publishers( $userHash = null)
 	{

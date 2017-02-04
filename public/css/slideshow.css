@@ -1,12 +1,8 @@
 #slideshow{
-	height:100%;
-	max-width:100%;
-	position:relative;
 }
 #slideshow img {
-	max-width: 100%;
-	max-height: 100%;
-	height:90%;
+	max-width: 90%;
+	height:auto;
 	display: block;
 	margin: 0 auto;
 }
@@ -20,7 +16,7 @@
 	background-position:left center;
 	left:-10%;
 }
-#slideshow #leftArrow:hover { 
+#slideshow #leftArrow:hover {
 	background-position:left center;
 }
 #slideshow #rightArrow {
@@ -33,6 +29,6 @@
 	background-position:center right;
 	right:-10%;
 }
-#slideshow #rightArrow:hover { 
+#slideshow #rightArrow:hover {
 	background-position:center right;
 }

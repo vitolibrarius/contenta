@@ -84,6 +84,32 @@ abstract class _Series_Character extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Series_Character::series => array(
+				'destination' => 'Series',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'series_id' => 'id')
+			),
+			Series_Character::character => array(
+				'destination' => 'Character',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'character_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

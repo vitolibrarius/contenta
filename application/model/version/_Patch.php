@@ -83,6 +83,27 @@ abstract class _Patch extends Model
 		);
 	}
 
+	public function attributes()
+	{
+		return array(
+			Patch::name => array('length' => 256,'type' => 'TEXT'),
+			Patch::created => array('type' => 'DATE'),
+		);
+	}
+
+	public function relationships()
+	{
+		return array(
+			Patch::version => array(
+				'destination' => 'Version',
+				'ownsDestination' => false,
+				'isMandatory' => true,
+				'isToMany' => false,
+				'joins' => array( 'version_id' => 'id')
+			)
+		);
+	}
+
 	public function searchQualifiers( array $query )
 	{
 		$qualifiers = array();

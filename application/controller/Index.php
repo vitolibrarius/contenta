@@ -29,6 +29,23 @@ class Index extends Controller
 	function index()
 	{
 		if (Auth::handleLogin()) {
+			$this->view->addModule("libs");
+
+			$this->view->addModule("contenta_ng.js");
+
+			$this->view->addModule("common");
+			$this->view->addModule("login");
+
+			$this->view->addModule("menu");
+			$this->view->addModule("media");
+
+			$this->view->render( '/index/webapp' );
+		}
+	}
+
+	function index_old()
+	{
+		if (Auth::handleLogin()) {
 			$user = Session::sessionUser();
 			$queue_model = Model::Named("Reading_Queue");
 
@@ -84,10 +101,10 @@ class Index extends Controller
 			$queue_id = HttpGet::get( "queue_id", 0 );
 			$showAll = HttpGet::get( "showAll", false );
 			if ( $queue_id > 0 ) {
-			
+
 				$queue = Model::Named("Reading_Queue")->objectForId($queue_id);
 				$pubs = Model::Named("Publication")->allForReadingQueue( $queue, ($showAll == false) );
-								
+
 				$item_model = Model::Named("Publication");
 				$this->view->readItemPath = "/Index/ajax_readItem";
 				$this->view->listArray = $pubs;
@@ -104,7 +121,7 @@ class Index extends Controller
 // 			if ( $queue_item_id > 0 ) {
 // 				$item_model = Model::Named("Reading_Queue_Item");
 // 				$queue_item = $item_model->objectForId($queue_item_id);
-// 
+//
 // 				$item = $queue_item->reading_item();
 // 				if ( isset($item->read_date) && is_null($item->read_date) == false ) {
 // 					$item->setRead_date(null);

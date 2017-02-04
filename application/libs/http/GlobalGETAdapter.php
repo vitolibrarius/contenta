@@ -4,6 +4,11 @@ namespace http;
 
 class GlobalGETAdapter implements \interfaces\GlobalAdapter
 {
+	public function __toString()
+	{
+		return "GlobalGETAdapter " . var_export($_GET, true);
+	}
+
 	public function allValues()
 	{
 		return $_GET;
