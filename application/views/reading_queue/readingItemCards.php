@@ -30,7 +30,7 @@
 								H::a( array( "href" => Config::Web("/Api/mediaPayload/" . $media->id)),
 										H::img( array( "src" => Config::Web("/public/img/download.png" )))
 									),
-								H::a( array( "target" => "slideshow", "href" => Config::Web("/DisplaySeries/mediaSlideshow/".$media->id)),
+								H::a( array( "target" => "slideshow", "href" => Config::Web("/DisplayMedia/slideshow/".$media->id)),
 									H::img( array( "src" => Config::Web("/public/img/slideshow.png") ))
 									)
 							);

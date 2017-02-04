@@ -176,7 +176,7 @@
 									<a href="<?php echo Config::Web('/Api/mediaPayload/' . $media->id)?>">
 										<img src="<?php echo Config::Web('/public/img/download.png' ) ?>">
 									</a>
-									<a href="<?php echo Config::Web('/DisplaySeries/mediaSlideshow/' . $media->id)?>" target="slideshow">
+									<a href="<?php echo Config::Web('/DisplayMedia/slideshow/' . $media->id)?>" target="slideshow">
 										<img src="<?php echo Config::Web('/public/img/slideshow.png' ) ?>">
 									</a>
 								</div>
