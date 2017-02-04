@@ -40,13 +40,16 @@ class DisplayMedia extends Controller
 			$mediaObj = $media_model->objectForId($id);
 			if ( $mediaObj != false )
 			{
+				$item = Model::Named("Reading_Item")->createReadingItemPublication($user, $mediaObj->publication());
+				$item->setRead_date(time());
+				$item->saveChanges();
+
 				$this->view->addStylesheet("slideshow.css");
 				$this->view->addModule("libs");
 				$this->view->addModule("contenta_ng.js");
 				$this->view->addModule("common");
 
 				$this->view->publication = $mediaObj->publication();
-				$this->view->readingItem = Model::Named("Reading_Item")->createReadingItemPublication($user, $mediaObj->publication());
 				$this->view->fileWrapper = $mediaObj->fileWrapper();
 				$this->view->etag = $mediaObj->checksum;
 				$this->view->imgRoot = "DisplayMedia/imageNamed";
@@ -65,7 +68,6 @@ class DisplayMedia extends Controller
 		if (Auth::handleLogin()) {
 			$name = HttpGet::get('name', '');
 			$mediaId = HttpGet::get('media', '');
-			Logger::logWarning("Looking for media $mediaId with name '$name'");
 
 			$image = null;
 			$mimeType = 'image/' . file_ext($name);
