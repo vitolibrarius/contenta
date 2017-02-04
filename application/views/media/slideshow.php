@@ -25,7 +25,7 @@ var sliderApp=angular.module('sliderApp',['ngAnimate']);
 sliderApp.controller('SliderController', function($scope) {
     $scope.images=[
 <?php foreach ($this->fileWrapper->imageContents() as $idx => $name ) {
-		echo "	{src:'". Config::Web($this->imgRoot)."?media=".$this->media->pkValue()."&name=".urlencode($name)."', title:'".basename($name)."'},".PHP_EOL;
+		echo "	{src:'". Config::Web($this->imgRoot)."?media=".$this->media->pkValue()."&name=".urlencode($name)."', title:'".urlencode(basename($name))."'},".PHP_EOL;
 	}
 ?>
     ];

@@ -7,7 +7,7 @@
 	<!-- footer area -->
 	<footer>
 		<div id="colophon" class="clearfix">
-			<div class="grid_4 left">
+			<div class="grid_6 left">
 				<a target="ContentWeb" href="https://github.com/vitolibrarius/contenta">
 					<?php echo Localized::GlobalLabel("WebsiteLink"); ?>
 				</a> |
@@ -21,10 +21,8 @@
 					><?php echo Localized::GlobalLabel("AddIssueLink"); ?>
 				</a>
 			</div>
-			<div class="grid_4 middle">
+			<div class="grid_6 right">
 				<?php echo Localized::GlobalLabel("Release"); ?>: <?php echo currentVersionNumber(); ?>
-			</div>
-			<div class="grid_4 right">
 			</div>
 		</div>
 	</footer>

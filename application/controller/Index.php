@@ -26,7 +26,7 @@ class Index extends Controller
 	 * Handles what happens when user moves to URL/index/index, which is the same like URL/index or in this
 	 * case even URL (without any controller/action) as this is the default controller-action when user gives no input.
 	 */
-	function index()
+	function index_angular()
 	{
 		if (Auth::handleLogin()) {
 			$this->view->addModule("libs");
@@ -43,14 +43,14 @@ class Index extends Controller
 		}
 	}
 
-	function index_old()
+	function index()
 	{
 		if (Auth::handleLogin()) {
 			$user = Session::sessionUser();
 			$queue_model = Model::Named("Reading_Queue");
 
 			$this->view->model = $queue_model;
-			$this->view->queues = $queue_model->allForUserUnread($user);
+			$this->view->queues = $queue_model->allForUserUnread($user, true, 100);
 			$this->view->render( '/index/index' );
 		}
 	}
