@@ -165,8 +165,12 @@ class SABnzbdConnector extends JSON_EndpointConnector
 	public function history()
 	{
 		//http://localhost:8080/sabnzbd/api?mode=history&output=json
-		$json = $this->simpleRequestForMode( 'history' );
-// 		file_put_contents( "/tmp/sabtest_history.json", json_encode($json, JSON_PRETTY_PRINT));
+		$params = $this->defaultParameters();
+		$params['mode'] = 'history';
+		$params['limit'] = '100';
+
+		$status_url = $this->endpointBaseURL() . "?" . http_build_query($params);
+		list($json, $headers) = $this->performGET( $status_url );
 		return $json;
 	}
 
