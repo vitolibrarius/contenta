@@ -8,7 +8,7 @@
         "desc": { "column": "desc", "length": 4096, "type": "TEXT",	"nullable": true },
 
         "pub_active": { "column": "pub_active", "type": "BOOLEAN", "default": "Model::TERTIARY_TRUE" },
-        "pub_wanted": { "column": "pub_wanted", "type": "BOOLEAN", "default": "Model::TERTIARY_TRUE" },
+        "pub_wanted": { "column": "pub_wanted", "type": "BOOLEAN", "default": "Model::TERTIARY_FALSE" },
         "pub_cycle": { "column": "pub_cycle", "type": "INTEGER", "default": 0  },
         "pub_available": { "column": "pub_available", "type": "INTEGER", "default": 0  },
         "pub_count": { "column": "pub_count", "type": "INTEGER", "default": 0  },

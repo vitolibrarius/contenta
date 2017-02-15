@@ -627,7 +627,7 @@ abstract class _Story_Arc extends Model
 				case Story_Arc::pub_active:
 					return Model::TERTIARY_TRUE;
 				case Story_Arc::pub_wanted:
-					return Model::TERTIARY_TRUE;
+					return Model::TERTIARY_FALSE;
 				case Story_Arc::pub_cycle:
 					return 0;
 				case Story_Arc::pub_available:
