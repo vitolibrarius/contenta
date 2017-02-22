@@ -8,10 +8,6 @@
 	<?php
 		$card = new html\Card();
 		$card->setDisplayDescriptionKey( "shortDescription" );
-		$card->setDetailKeys( array(
-			\model\media\Story_Arc::pub_count => "availableSummary",
-			)
-		);
 		foreach($this->listArray as $key => $value) {
 			if ( isset($this->detailAction) ) {
 				$card->setSelectPath( $this->detailAction . '/' . $value->id );

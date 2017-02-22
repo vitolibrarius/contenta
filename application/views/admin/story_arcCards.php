@@ -17,10 +17,6 @@
 		<?php
 			$card = new html\Card();
 			$card->setDisplayDescriptionKey( "shortDescription" );
-			$card->setDetailKeys( array(
-				\model\media\Series::pub_count => "availableSummary",
-				)
-			);
 			foreach($this->listArray as $key => $value) {
 				if ( isset($this->editAction) ) {
 					$card->setEditPath( $this->editAction . '/' . $value->id );
@@ -35,7 +31,7 @@
 				if ( isset($this->wantedAction) ) {
 					$card->setWantedPath( $this->wantedAction . '/' . $value->id );
 				}
-				echo '<div class="grid_2">' . PHP_EOL;
+				echo '<div class="grid_3">' . PHP_EOL;
 				echo $card->render($value);
 				echo '</div>' . PHP_EOL;
 			}

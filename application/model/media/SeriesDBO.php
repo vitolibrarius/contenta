@@ -16,7 +16,7 @@ use \model\media\Series_AliasDBO as Series_AliasDBO;
 use \model\media\Publisher as Publisher;
 use \model\media\PublisherDBO as PublisherDBO;
 
-class SeriesDBO extends _SeriesDBO
+class SeriesDBO extends _SeriesDBO implements \interfaces\ObjectProgress
 {
 	public function availableSummary()
 	{
@@ -160,9 +160,24 @@ class SeriesDBO extends _SeriesDBO
 		$user = Session::sessionUser();
 		if ( $user != false ) {
 			$queue = Model::Named('Reading_Queue')->objectForUserAndSeries($user, $this);
-			return ( $queue != false );
+			return $queue;
 		}
 		return false;
+	}
+
+	public function progressMaximum()
+	{
+		return (isset($this->pub_count) ? $this->pub_count : count($this->publications()) );
+	}
+
+	public function progressMinimum()
+	{
+		return 0;
+	}
+
+	public function progressValue()
+	{
+		return (isset($this->pub_available) ? $this->pub_available : 0 );
 	}
 }
 

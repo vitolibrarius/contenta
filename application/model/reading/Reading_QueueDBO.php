@@ -20,7 +20,7 @@ use \model\media\Story_ArcDBO as Story_ArcDBO;
 use \model\reading\Reading_Item as Reading_Item;
 use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 
-class Reading_QueueDBO extends _Reading_QueueDBO
+class Reading_QueueDBO extends _Reading_QueueDBO implements \interfaces\ObjectProgress
 {
 	public function source()
 	{
@@ -73,6 +73,19 @@ class Reading_QueueDBO extends _Reading_QueueDBO
 			}
 		}
 	}
-}
 
-?>
+	public function progressMaximum()
+	{
+		return (isset($this->pub_count) ? $this->pub_count : count($this->source()->publications()) );
+	}
+
+	public function progressMinimum()
+	{
+		return 0;
+	}
+
+	public function progressValue()
+	{
+		return (isset($this->pub_read) ? $this->pub_read : 0 );
+	}
+}

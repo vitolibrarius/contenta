@@ -1,4 +1,4 @@
-<?php use html\Element as H ?>
+<?php use \html\Element as H; ?>
 <section>
 	<div class="row"><div class="grid_12">
 <?php use \html\Paginator as Paginator;
@@ -19,8 +19,7 @@
 			$card = new html\Card();
 			$card->setDisplayDescriptionKey( "shortDescription" );
 			$card->setDetailKeys( array(
-				\model\media\Series::start_year => \model\media\Series::start_year,
-				\model\media\Series::pub_count => "availableSummary",
+				\model\media\Series::start_year => \model\media\Series::start_year
 				)
 			);
 			foreach($this->listArray as $key => $value) {

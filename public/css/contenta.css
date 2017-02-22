@@ -173,10 +173,26 @@ span.icon.on:before 		{ color:red;}
 				no-repeat;
 }
 
-progress[value] {
-  width: 100%;
-  height: 20px;
+progress,
+progress[role]
+{
+	color: #0063a6;
+	font-size: .8em;
+	width: 80%;
+	height: 1.8em;
+	border: 1px solid #0063a6;
+	background: #fff;
+	margin-top: .35em;
 }
+progress::-webkit-progress-bar { background: #fff; }
+progress::-webkit-progress-value { background: #0063a6; }
+
+progress.reading_queue,
+progress.reading_queue[role]
+{
+	border: 1px solid rgb(13, 143, 3);
+}
+progress.reading_queue::-webkit-progress-value { background: rgb(13, 143, 3); }
 
 .pagination {
 	background: #fdfdfd;

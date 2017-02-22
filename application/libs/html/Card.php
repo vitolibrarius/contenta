@@ -7,7 +7,8 @@ use \ClassNotFoundException as ClassNotFoundException;
 use \DataObject as DataObject;
 use \Config as Config;
 
-use html\Element as H;
+use \html\Element as H;
+use \html\ProgressBar as ProgressBar;
 
 class Card
 {
@@ -227,6 +228,12 @@ class Card
 									$c[] = H::p( array( "class" => array("property", $record->tableName(), $key) ), $record->{$keypath}() );
 								}
 								return (isset($c) ? $c : null);
+							},
+							function() use($record) {
+								if ( $record instanceof \interfaces\ObjectProgress ) {
+									$progress = new ProgressBar();
+									return $progress->elements($record);
+								}
 							}
 						),
 
@@ -272,20 +279,36 @@ class Card
 								}
 
 								$supportsQueue = (method_exists($record, "queued") ? true : false);
-								$isQueued = ($supportsQueue ? ($record->{"queued"}() == true) : false );
+								$queued = ($supportsQueue ? ($record->{"queued"}()) : false );
 								$queuedPath = $this->queuedPath();
 								if (isset($queuedPath) && is_null($queuedPath) == false && $supportsQueue == true) {
-									$c[] = H::a( array(
+// 									if ( $queued instanceof \interfaces\ObjectProgress ) {
+// 										$progress = new ProgressBar();
+// 										$c[] = $progress->elements($queued);
+// 									}
+
+									$c[] = H::div( null,
+										H::div( array("style" => "display: inline-block;"),
+											H::a( array(
 												"id" => "a_queued_" . $record->pkValue(),
 												"class" => "queued toggle",
 												"data-recordId" => $record->pkValue(),
 												"data-href" => $queuedPath,
 												"href" => "#"
-											),
-											H::span( array(
-												"id" => "span_queued_" . $record->pkValue(),
-												"class" => "icon favorite " . ($isQueued?"on":"")
+												),
+												H::span( array(
+													"id" => "span_queued_" . $record->pkValue(),
+													"class" => "icon favorite " . ($queued != false ? "on" : "")
+												)
 											)
+										)),
+										H::div( array("style" => "display: inline-block; width: 70%;"),
+											function() use($queued) {
+													$progress = new ProgressBar();
+													return $progress->elements($queued);
+												if ( $queued instanceof \interfaces\ObjectProgress ) {
+												}
+											}
 										)
 									);
 								}

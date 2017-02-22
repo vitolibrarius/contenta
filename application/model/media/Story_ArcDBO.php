@@ -27,7 +27,7 @@ use \model\media\Story_Arc_PublicationDBO as Story_Arc_PublicationDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
 
-class Story_ArcDBO extends _Story_ArcDBO
+class Story_ArcDBO extends _Story_ArcDBO implements \interfaces\ObjectProgress
 {
 	public function availableSummary()
 	{
@@ -42,7 +42,7 @@ class Story_ArcDBO extends _Story_ArcDBO
 		$user = Session::sessionUser();
 		if ( $user != false ) {
 			$queue = Model::Named('Reading_Queue')->objectForUserAndStoryArc($user, $this);
-			return ( $queue != false );
+			return $queue;
 		}
 		return false;
 	}
@@ -159,6 +159,21 @@ class Story_ArcDBO extends _Story_ArcDBO
 					break;
 			}
 		}
+	}
+
+	public function progressMaximum()
+	{
+		return (isset($this->pub_count) ? $this->pub_count : count($this->publications()) );
+	}
+
+	public function progressMinimum()
+	{
+		return 0;
+	}
+
+	public function progressValue()
+	{
+		return (isset($this->pub_available) ? $this->pub_available : 0 );
 	}
 }
 

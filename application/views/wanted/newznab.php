@@ -9,7 +9,7 @@
 	<form id='searchForm' name='searchForm'>
 		<div class="row">
 			<div class="grid_4">
-				<select name="searchEndpoint" id="searchEndpoint"
+				<select name="endpoint_id" id="endpoint_id"
 						class="text_input">
 					<?php foreach ($this->endpoints as $key => $endpoint) {
 						echo '<option value="' . $endpoint->pkValue() . '"';
@@ -19,7 +19,7 @@
 				</select>
 			</div>
 			<div class="grid_4">
-				<input type="text" name="searchName" id="searchName"
+				<input type="text" name="search" id="search"
 					class="text_input"
 					placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "newznab" ); ?>"
 					value="<?php echo (isset($this->searchString)?$this->searchString:''); ?>">
@@ -35,7 +35,7 @@
 <script type="text/javascript">
 $(document).ready(function($) {
 	search_timer = 0;
-	$("#searchEndpoint").select2({
+	$("#endpoint_id").select2({
 		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'endpoint_id' ); ?>",
 		allowClear: true
 	}).on("change", function(e) {
@@ -56,19 +56,12 @@ $(document).ready(function($) {
 	});
 
 	function refresh() {
-		$.ajax({
-			type: "GET",
-			url: "<?php echo Config::Web('/AdminWanted/searchNewznab'); ?>",
-			data: {
-				endpoint_id: $('#searchEndpoint').val(),
-				search: $('#searchName').val()
-			},
-			dataType: "text",
-			success: function(msg){
-				var ajaxDisplay = document.getElementById('ajaxDiv');
-				ajaxDisplay.innerHTML = msg;
-			}
-		});
+		var page_url = "<?php echo Config::Web('/AdminWanted/searchNewznab'); ?>";
+		var resultsId = "ajaxDiv";
+		var inputValues = $("form#searchForm").serializeObject();
+		console.log( JSON.stringify(inputValues) );
+
+		refreshAjax( page_url, undefined, inputValues, resultsId );
 	};
 
 	$('body').on('click', 'a.nzb', function (e) {

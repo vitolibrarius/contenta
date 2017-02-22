@@ -1,4 +1,5 @@
-<?php use html\Element as H ?>
+<?php use \html\Element as H; ?>
+<?php use \html\ProgressBar as ProgressBar; $progress = new ProgressBar(); ?>
 
 <section>
 	<div class="row">
@@ -9,6 +10,8 @@
 			<p class="description"><?php echo $this->detail->displayDescription(); ?></p>
 		</div>
 		<div class="grid_4">
+			<h6>Reading Progress</h6>
+			<?php echo $progress->render($this->detail); ?>
 			<div class="badges">
 				<?php $list = $this->detail->characters(10);
 					if ( is_array($list) && count($list) > 0 ): ?>

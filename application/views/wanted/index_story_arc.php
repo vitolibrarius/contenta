@@ -1,3 +1,4 @@
+<?php use \html\ProgressBar as ProgressBar; $progress = new ProgressBar(); ?>
 <style type="text/css">
 .row.data {
 	background-color: #e3e3e3;
@@ -40,12 +41,7 @@
 				?></span>
 			</div>
 			<div class="grid_2">
-				<span style="float: right;">
-					<progress max="<?php echo $value->pub_count; ?>"
-						value="<?php echo (isset($value->pub_available)?$value->pub_available:0);?>"></progress>
-					Issues <?php echo (isset($value->pub_available)?$value->pub_available:0); ?>
-					/ <?php echo $value->pub_count; ?>
-				</span>
+				<?php echo $progress->render($value); ?>
 			</div>
 		</div>
 		<span id='<?php echo "wanted_" . $value->id; ?>'></span>

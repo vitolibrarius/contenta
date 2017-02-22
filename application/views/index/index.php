@@ -1,3 +1,4 @@
+<?php use \html\ProgressBar as ProgressBar; $progress = new ProgressBar(); ?>
 <section>
 
 <?php foreach($this->queues as $key => $queue) : ?>
@@ -20,10 +21,11 @@
 			<p><em><?php echo $src->displayDescription(); ?></em></p>
 		</div>
 		<div class="grid_2">
-			<progress max="<?php echo $queue->pub_count; ?>" value="<?php echo (isset($queue->pub_read)?$queue->pub_read:0);?>"></progress>
-			<div style="text-align: center;"><?php echo (isset($queue->pub_read)?$queue->pub_read:0); ?>
-				/ <?php echo $queue->pub_count; ?>
-			</div>
+			<span>Collection Status</span>
+			<?php echo $progress->render($queue->source()); ?>
+			<hr>
+			<span>Reading Progress</span>
+			<?php echo $progress->render($queue); ?>
 		</div>
 		<div class="grid_1">
 			<span class="icon <?php echo ($src->isPub_active() ? 'true' : 'false'); ?>"></span>
