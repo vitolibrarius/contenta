@@ -287,9 +287,8 @@ class Card
 // 										$c[] = $progress->elements($queued);
 // 									}
 
-									$c[] = H::div( null,
-										H::div( array("style" => "display: inline-block;"),
-											H::a( array(
+									$c[] = H::div( array("style" => "display: flex;"),
+										H::a( array(
 												"id" => "a_queued_" . $record->pkValue(),
 												"class" => "queued toggle",
 												"data-recordId" => $record->pkValue(),
@@ -301,15 +300,11 @@ class Card
 													"class" => "icon favorite " . ($queued != false ? "on" : "")
 												)
 											)
-										)),
-										H::div( array("style" => "display: inline-block; width: 70%;"),
-											function() use($queued) {
-													$progress = new ProgressBar();
-													return $progress->elements($queued);
-												if ( $queued instanceof \interfaces\ObjectProgress ) {
-												}
-											}
-										)
+										),
+										function() use($queued) {
+											$progress = new ProgressBar();
+											return $progress->elements($queued);
+										}
 									);
 								}
 
