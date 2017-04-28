@@ -18,6 +18,11 @@ use \model\media\PublisherDBO as PublisherDBO;
 
 class SeriesDBO extends _SeriesDBO implements \interfaces\ObjectProgress
 {
+	public function displayName()
+	{
+		return $this->name() . " (" . $this->seriesStartYearString() . ")";
+	}
+
 	public function availableSummary()
 	{
 		return

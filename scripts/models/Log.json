@@ -51,6 +51,7 @@
     },
     "indexes" : [
     	{ "columns": ["level_code"] },
+    	{ "columns": ["created"] },
     	{ "columns": ["trace", "trace_id"] },
     	{ "columns": ["context", "context_id"] }
     ],

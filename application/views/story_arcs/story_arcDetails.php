@@ -3,7 +3,7 @@
 
 <section>
 	<div class="row">
-		<div class="grid_2">
+		<div class="grid_1">
 			<img class="thumbnail cbz" src="<?php echo Config::Web( "Image", "thumbnail", "story_arc", $this->detail->id); ?>" />
 		</div>
 		<div class="grid_4">

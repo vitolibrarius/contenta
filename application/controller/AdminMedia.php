@@ -105,11 +105,24 @@ class AdminMedia extends Admin
 			$parameters = Session::pageParameters( $this, "index" );
 			$parameters->setPageSize(5);
 			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array(
-				'searchSeries', 'searchCharacter', 'searchStoryArcs', 'searchIssue', 'searchMedia', 'searchYear' )
+				'searchSeries', 'searchCharacter', 'searchStoryArcs', 'searchIssue', 'searchMedia', 'searchYear', 'searchSize' )
 			);
 
 			$model = Model::Named('Publication');
 			$qualifiers = array();
+			if ( isset($query['searchSize']) && strlen($query['searchSize']) > 0) {
+				$select = \SQL::Select( Model::Named('Media'), array(Media::publication_id))
+					->where( Qualifier::LessThanEqual( Media::size, convertToBytes($query['searchSize']."mb")) );
+				$results = $select->fetchAll();
+
+				$pub_idArray = array_map(function($stdClass) {return $stdClass->{Media::publication_id}; }, $results);
+				if ( is_array($pub_idArray) && count($pub_idArray) > 0 ) {
+					$qualifiers[] = Qualifier::IN( Publication::id, $pub_idArray );
+				}
+				else {
+					$qualifiers[] = Qualifier::Equals( Publication::id, 0 );
+				}
+			}
 			if ( isset($query['searchIssue']) && strlen($query['searchIssue']) > 0) {
 				$qualifiers[] = Qualifier::Equals( Publication::issue_num, $query['searchIssue'] );
 			}

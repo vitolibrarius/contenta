@@ -18,7 +18,7 @@
 					<?php echo $queue->displayName(); ?>
 				</a>
 			</h2>
-			<p><em><?php echo $src->displayDescription(); ?></em></p>
+			<p class="description"><?php echo $src->displayDescription(); ?></p>
 		</div>
 		<div class="grid_2">
 			<span>Collection Status</span>

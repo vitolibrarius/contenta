@@ -51,6 +51,7 @@
 	],
     "indexes" : [
     	{ "columns": ["name"] },
+    	{ "columns": ["name", "start_year" ] },
     	{ "columns": ["search_name"] },
     	{ "columns": ["search_name", "pub_wanted"] },
     	{ "columns": ["xid", "xsource"], "unique": true }

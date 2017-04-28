@@ -52,7 +52,7 @@
 			if (search_timer) {
 				clearTimeout(search_timer);
 			}
-			search_timer = setTimeout(refresh, 400);
+			search_timer = setTimeout(refresh, 1000);
 		});
 		function refresh() {
 			var page_url = "<?php echo Config::Web('/logs/log_table'); ?>";

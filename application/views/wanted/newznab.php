@@ -42,7 +42,7 @@ $(document).ready(function($) {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
-		search_timer = setTimeout(refresh, 400);
+		search_timer = setTimeout(refresh, 1000);
 	});
 
 	$('.text_input').keypress(function (e) {

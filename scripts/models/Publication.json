@@ -27,6 +27,7 @@
 	],
     "indexes" : [
     	{ "columns": ["name"] },
+    	{ "columns": ["issue_order", "pub_date"] },
     	{ "columns": ["xid", "xsource"], "unique": true }
     ],
 	"fetches" : {

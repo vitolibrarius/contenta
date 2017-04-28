@@ -18,7 +18,7 @@
 <?php
 	$seriesGroups = array();
 	foreach($this->listArray as $publication) {
-		$series_id = $publication->seriesName();
+		$series_id = $publication->series()->displayName();
 		$seriesGroups[$series_id][] = $publication;
 	}
 	ksort($seriesGroups);

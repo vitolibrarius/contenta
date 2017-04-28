@@ -26,6 +26,7 @@
 	],
     "indexes" : [
     	{ "columns": ["name"] },
+    	{ "columns": ["name", "popularity"] },
     	{ "columns": ["realname"] },
     	{ "columns": ["xid", "xsource"], "unique": true }
     ],

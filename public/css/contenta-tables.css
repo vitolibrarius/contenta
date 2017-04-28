@@ -86,19 +86,6 @@
 	margin: 0 0 .5em 0;
 }
 
-.description {
-	display: block;
-	font-size: 0.7em;
-	color: #999;
-	background: white;
-	height:100px;
-	overflow:scroll;
-	border:1px solid white;
-	border-radius:5px;
-	margin-right:5px;
-	padding: 4px;
-}
-
 .mediaData td.name > span * {
 	margin:0;
 }

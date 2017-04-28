@@ -372,10 +372,15 @@ progress.reading_queue::-webkit-progress-value { background: rgb(13, 143, 3); }
 	color: #666666;
 }
 
-p.series.description {
-	font-size: 0.8em;
-	max-height : 180px;
-	overflow : auto;
+.description {
+	display: block;
+	font-size: 0.7em;
+	height:125px;
+	overflow:scroll;
+	border:2px solid white;
+	border-radius:5px;
+	margin-right:5px;
+	padding: 4px;
 }
 
 /* main menu */

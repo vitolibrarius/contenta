@@ -425,6 +425,9 @@
             "series_id": {
                 "search": "Series Name"
             },
+            "size": {
+                "search": "Max Size"
+            },
             "story_arcs": {
                 "search": "Select Story Arcs"
             }

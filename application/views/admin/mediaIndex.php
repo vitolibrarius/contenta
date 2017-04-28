@@ -30,7 +30,7 @@
 <section>
 	<form id='searchForm' name='searchForm'>
 	<div class="row">
-		<div class="grid_3">
+		<div class="grid_2">
 			<input type="text" name="searchSeries" id="searchSeries"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "series_id" ); ?>"
@@ -61,6 +61,14 @@
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "pub_date" ); ?>"
 				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchYear') : ''); ?>">
+			</input>
+		</div>
+		<div class="grid_1">
+			<input type="number" name="searchSize" id="searchSize"
+				min="0"
+				class="text_input"
+				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "size" ); ?>"
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchSize') : ''); ?>">
 			</input>
 		</div>
 		<div class="grid_1">
@@ -111,7 +119,7 @@ $(document).ready(function($) {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
-		search_timer = setTimeout(refresh, 400);
+		search_timer = setTimeout(refresh, 1000);
 	});
 
 	$("#searchStoryArcs").select2({
@@ -142,14 +150,14 @@ $(document).ready(function($) {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
-		search_timer = setTimeout(refresh, 400);
+		search_timer = setTimeout(refresh, 1000);
 	});
 
 	$(".text_input").on('change keyup', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);
 		}
-		search_timer = setTimeout(refresh, 400);
+		search_timer = setTimeout(refresh, 1000);
 	});
 
 	function refresh() {
