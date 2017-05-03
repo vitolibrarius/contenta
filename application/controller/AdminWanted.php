@@ -326,6 +326,8 @@ class AdminWanted extends Admin
 				if ( $publication != false ) {
 					$this->view->fluxModel = Model::Named('Flux');
 					foreach( $points as $endpoint ) {
+						Session::addPositiveFeedback("Searching ". $endpoint . "  for " . $publication->searchString());
+
 						try {
 							$connection = new NewznabConnector( $endpoint );
 							$results = $connection->searchComics($publication->searchString());
@@ -339,6 +341,7 @@ class AdminWanted extends Admin
 							$this->view->render( '/wanted/newznab_quick', true);
 						}
 						catch ( \Exception $e ) {
+							Logger::logException($e);
 							echo '<section class="feedback error">Exception: ' . $e->getMessage(). '</section>';
 						}
 					}

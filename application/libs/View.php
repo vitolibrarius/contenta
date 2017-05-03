@@ -129,7 +129,9 @@ class View
 	{
 		// page without header and footer, for whatever reason
 		if ( file_exists(VIEWS_PATH . $filename . '.php')) {
-			header('Content-Type: text/html; charset=utf-8');
+			if (headers_sent() == false) {
+				header('Content-Type: text/html; charset=utf-8');
+			}
 
 			// if filename is "/series/index" this will add custom stylesheets for
 			// "/public/css/series.css" and "/public/css/series/index.css"
@@ -154,7 +156,9 @@ class View
 		}
 		else {
 			Session::addNegativeFeedback("Could not find $filename", $this->controllerName);
-			header('location: ' . Config::Web('/error/index'));
+			if (headers_sent() == false) {
+				header('location: ' . Config::Web('/error/index'));
+			}
 		}
 	}
 
@@ -190,7 +194,9 @@ class View
 
 	public function renderJson($content)
 	{
-		header('Content-Type: application/json; charset=utf8');
+		if (headers_sent() == false) {
+			header('Content-Type: application/json; charset=utf8');
+		}
 		echo json_encode($content, JSON_PRETTY_PRINT);
 	}
 
@@ -198,11 +204,15 @@ class View
 	{
 		// page without header and footer, for whatever reason
 		if ( file_exists(VIEWS_PATH . $filename . '.php')) {
-			header('Content-Type: text/xml; charset="utf-8"');
+			if (headers_sent() == false) {
+				header('Content-Type: text/xml; charset="utf-8"');
+			}
 			require VIEWS_PATH . $filename . '.php';
 		}
 		else {
-			header('location: ' . Config::Web('/error/index'));
+			if (headers_sent() == false) {
+				header('location: ' . Config::Web('/error/index'));
+			}
 		}
 	}
 
