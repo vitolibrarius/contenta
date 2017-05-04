@@ -24,9 +24,9 @@
 		$year = (isset($item['metadata']['year']) ? $item['metadata']['year'] : null);
 		$publications = Model::Named("Publication")->publicationsLike($seriesName, $issue, $year);
 	}
-				$seriesNameMatch = "close";
-				$issueMatch = "close";
-				$yearMatch = "close";
+	$seriesNameMatch = "close";
+	$issueMatch = "close";
+	$yearMatch = "close";
 ?>
 <div class="row"  style="background-color: #E3E3E3; margin: .8em;">
 	<div class="grid_10">

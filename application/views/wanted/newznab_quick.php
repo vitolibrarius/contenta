@@ -28,7 +28,7 @@
 					$year = (isset($item['metadata']['year']) ? $item['metadata']['year'] : null);
 				}
 				if ( is_null($seriesName) == false ) {
-					similar_text($seriesName, $this->publication->seriesName(), $percent);
+					similar_text(strtolower($seriesName), strtolower($this->publication->seriesName()), $percent);
 					if ( $percent > 90 ) { $seriesNameMatch = "match"; }
 					else if ( $percent > 75 ) { $seriesNameMatch = "close"; }
 				}
@@ -42,11 +42,11 @@
 					if ( $percent > 90 ) { $yearMatch = "match"; }
 					else if ( $percent > 75 ) { $yearMatch = "close"; }
 				}
-				if ($item['len'] > MEGABYTE * 10) {
+				if ($item['len'] > (MEGABYTE * 10)) {
 					$sizeMatch = "close";
-				}
-				if ($item['len'] < MEGABYTE * 75) {
-					$sizeMatch = "match";
+					if ($item['len'] > (MEGABYTE * 25) && $item['len'] < (MEGABYTE * 75)) {
+						$sizeMatch = "match";
+					}
 				}
 				if (isset($this->publication->pub_date)) {
 					if ( $item['publishedDate'] > $this->publication->pub_date ) {
@@ -79,7 +79,7 @@
 				</div>
 				<div>
 					<p class="nzbsearch size <?php echo $sizeMatch; ?>">
-						<?php echo formatSizeUnits($item['len']); ;?></p>
+						<?php echo formatSizeUnits($item['len']);?></p>
 					</p>
 				</div>
 				<?php echo ($item['password'] == true ? "<em>**** password protected</em>" : ""); ?>
