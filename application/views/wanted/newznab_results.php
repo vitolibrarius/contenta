@@ -53,10 +53,25 @@
 							<span class="icon <?php echo ($flux->isSourceComplete()?'true':'false'); ?>"></span>
 							<span class="break-word"><?php echo $flux->src_status ; ?></span>
 						</div>
-						<div>
-							<span style="display:block" class="icon <?php echo ($flux->isFlux_error()?'false':'true'); ?>"></span>
-							<span class="break-word"><?php echo $flux->dest_status ; ?></span>
-						</div>
+						<?php if ($flux->isSourceComplete() == false): ?>
+							<div id="ajaxDiv_<?php echo $item['safe_guid']; ?>">
+							<a href="#" class="nzb button" style="white-space:nowrap;"
+								data-name="<?php echo htmlentities($seriesName); ?>"
+								data-issue="<?php echo $issue; ?>"
+								data-year="<?php echo $year; ?>"
+								data-endpoint_id="<?php echo $this->endpoint_id; ?>"
+								data-guid="<?php echo $item['guid']; ?>"
+								data-url="<?php echo $item['url']; ?>"
+								data-postedDate="<?php echo $item['publishedDate']; ?>"
+								data-safe_guid="<?php echo $item['safe_guid']; ?>"
+							>Try Again</a>
+							</div>
+						<?php else: ?>
+							<div style="white-space: nowrap;">
+								<span class="icon <?php echo ($flux->isFlux_error()?'false':'true'); ?>"></span>
+								<span class="break-word"><?php echo $flux->dest_status ; ?></span>
+							</div>
+						<?php endif; ?>
 					</div>
 					<?php endif; ?>
 	</div>
