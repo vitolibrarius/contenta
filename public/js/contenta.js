@@ -127,6 +127,12 @@ $(document).ready(function() {
 		return false; // don't follow the link!
 	});
 
+	$('body').on('click', '.togglable', function (e) {
+		var toggle_items = $(this).children(".toggle_item");
+		toggle_items.toggle();
+		return false; // don't follow the link!
+	});
+
 	/* ***************
 		search results paging
 	 */

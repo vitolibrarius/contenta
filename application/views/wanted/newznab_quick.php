@@ -16,18 +16,72 @@
 			<th>Status</th>
 		</tr>
 		<?php foreach ($this->results as $key => $item) : ?>
-			<?php if (isset($item['metadata'], $item['metadata']['name'])) {
+			<?php
+				$seriesNameMatch = "wrong";
+				$issueMatch = "wrong";
+				$yearMatch = "wrong";
+				$sizeMatch = "wrong";
+				$pubMatch = "wrong";
+				if (isset($item['metadata'], $item['metadata']['name'])) {
 					$seriesName = $item['metadata']['name'];
 					$issue = (isset($item['metadata']['issue']) ? $item['metadata']['issue'] : null);
 					$year = (isset($item['metadata']['year']) ? $item['metadata']['year'] : null);
-					$publications = Model::Named("Publication")->publicationsLike($seriesName, $issue, $year);
+				}
+				if ( is_null($seriesName) == false ) {
+					similar_text($seriesName, $this->publication->seriesName(), $percent);
+					if ( $percent > 90 ) { $seriesNameMatch = "match"; }
+					else if ( $percent > 75 ) { $seriesNameMatch = "close"; }
+				}
+				if ( is_null($issue) == false ) {
+					similar_text($issue, $this->publication->issue_num(), $percent);
+					if ( $percent > 90 ) { $issueMatch = "match"; }
+					else if ( $percent > 75 ) { $issueMatch = "close"; }
+				}
+				if ( is_null($year) == false ) {
+					similar_text($year, $this->publication->publishedYear(), $percent);
+					if ( $percent > 90 ) { $yearMatch = "match"; }
+					else if ( $percent > 75 ) { $yearMatch = "close"; }
+				}
+				if ($item['len'] > MEGABYTE * 10) {
+					$sizeMatch = "close";
+				}
+				if ($item['len'] < MEGABYTE * 75) {
+					$sizeMatch = "match";
+				}
+				if (isset($this->publication->pub_date)) {
+					if ( $item['publishedDate'] > $this->publication->pub_date ) {
+						$pubMatch = "match";
+					}
+					else if ( ($this->publication->pub_date - $item['publishedDate']) < 15768000 ) {
+						$pubMatch = "close";
+					}
+				}
+				else {
+					$pubMatch = "close";
 				}
 			?>
 		<tr <?php echo ($item['password'] == true ? "class='blocked'" : ""); ?>>
 			<td class="name">
-				<h4><?php echo $item['title']; ?></h4>
-				<p><?php echo date("M d, Y", $item['publishedDate']); ?></p>
-				<p><?php echo formatSizeUnits($item['len']); ?></p>
+				<h4><a href="#" class="togglable">
+					<div class="toggle_item" id="title_<?php echo $this->publication_id . "_" . $item['safe_guid']; ?>" style="display:none;">
+						<span class="nzbsearch title"><?php echo $item['title']; ?></span>
+					</div>
+					<div class="toggle_item" id="meta_<?php echo $this->publication_id . "_" . $item['safe_guid']; ?>">
+						<span class="nzbsearch seriesName <?php echo $seriesNameMatch; ?>"><?php echo $seriesName; ?></span>
+						<span class="nzbsearch issue <?php echo $issueMatch; ?>"><?php echo $issue; ?></span>
+						<span class="nzbsearch year <?php echo $yearMatch; ?>"><?php echo $year;?></span>
+					</div>
+				</a></h4>
+				<div>
+					<p class="nzbsearch pub_date <?php echo $pubMatch; ?>">
+						<?php echo date("M d, Y", $item['publishedDate']); ?>
+					</p>
+				</div>
+				<div>
+					<p class="nzbsearch size <?php echo $sizeMatch; ?>">
+						<?php echo formatSizeUnits($item['len']); ;?></p>
+					</p>
+				</div>
 				<?php echo ($item['password'] == true ? "<em>**** password protected</em>" : ""); ?>
 			</td>
 			<td>

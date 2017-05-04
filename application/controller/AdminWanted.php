@@ -336,6 +336,7 @@ class AdminWanted extends Admin
 							}
 
 							$this->view->publication_id = $pubId;
+							$this->view->publication = $publication;
 							$this->view->endpoint_id = $endpoint->id;
 							$this->view->results = $results;
 							$this->view->render( '/wanted/newznab_quick', true);

@@ -552,6 +552,27 @@ a.button:hover { background:#8dbc01; }
   clear: both;
 }
 
+.nzbsearch {
+	padding: .25em;
+	margin: .1em;
+	background: none;
+	border-radius: .2em;
+	display: inline-block;
+}
+
+.nzbsearch.match {
+	background: rgba(4, 206, 31, 0.28);
+}
+
+.nzbsearch.close {
+	background: rgba(197, 255, 76, 0.28);
+}
+
+.nzbsearch.wrong {
+	background: rgba(255, 20, 5, 0.28);
+}
+
+
 /* iPhone 5 & 5S in portrait & landscape */
 @media only screen and (min-device-width : 320px) and (max-device-width : 568px)
 {

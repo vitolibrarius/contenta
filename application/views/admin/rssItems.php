@@ -17,7 +17,14 @@
 
 	<div class="grid_2">
 	<div class="<?php echo $this->model->tableName(); ?>">
-		<h4><?php echo $rss->clean_name(); ?></h4>
+		<h4><a href="#" class="togglable">
+			<div class="toggle_item" style="display:none; font-size: 0.75em">
+				<span class="nzbsearch title"><?php echo $rss->title; ?></span>
+			</div>
+			<div class="toggle_item">
+				<span class="nzbsearch clean_name"><?php echo $rss->clean_name(); ?></span>
+			</div>
+		</a></h4>
 		<div class="issue_year">
 			<span class="issue large"><?php echo $rss->clean_issue(); ?></span>
 			<span class="year"><?php echo $rss->clean_year(); ?></span>

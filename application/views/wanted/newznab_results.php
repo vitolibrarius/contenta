@@ -24,10 +24,22 @@
 		$year = (isset($item['metadata']['year']) ? $item['metadata']['year'] : null);
 		$publications = Model::Named("Publication")->publicationsLike($seriesName, $issue, $year);
 	}
+				$seriesNameMatch = "close";
+				$issueMatch = "close";
+				$yearMatch = "close";
 ?>
 <div class="row"  style="background-color: #E3E3E3; margin: .8em;">
 	<div class="grid_10">
-				<h4><?php echo $item['title']; ?></h4>
+				<h4><a href="#" class="togglable">
+					<div class="toggle_item" id="title_<?php echo $item['safe_guid']; ?>" style="display:none;">
+						<span class="nzbsearch title"><?php echo $item['title']; ?></span>
+					</div>
+					<div class="toggle_item" id="meta_<?php echo $item['safe_guid']; ?>">
+						<span class="nzbsearch seriesName <?php echo $seriesNameMatch; ?>"><?php echo $seriesName; ?></span>
+						<span class="nzbsearch issue <?php echo $issueMatch; ?>"><?php echo $issue; ?></span>
+						<span class="nzbsearch year <?php echo $yearMatch; ?>"><?php echo $year;?></span>
+					</div>
+				</a></h4>
 				<p><?php echo date("M d, Y", $item['publishedDate']); ?></p>
 				<p><?php echo formatSizeUnits($item['len']); ?></p>
 				<?php echo ($item['password'] == true ? "<em>**** password protected</em>" : ""); ?>
