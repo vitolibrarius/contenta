@@ -182,10 +182,6 @@ class FluxImporter extends EndpointImporter
 			}
 
 			if ( $flux instanceof FluxDBO ) {
-				if ( $flux->isFlux_error() ) {
-					throw new \Exception( $flux->__toString() . ' cannot import, is in error state ' . $flux->errorReason() );
-				}
-
 				if ( $flux->isSourceComplete() == false ) {
 					Logger::logWarning( "Requesting nzb " . $flux->name, $flux->source_endpoint()->name(), $flux->src_endpoint() );
 					$localFile = $this->downloadForFlux($flux);
