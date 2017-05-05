@@ -299,7 +299,7 @@ Allows full nzbmatrix links (no need to parse out the ID).
 		else {
 			Logger::logError( 'No file at "' . $filepath
 				. '" with URL: ' . $this->cleanURLForLog($url), get_short_class($this), $this->endpoint());
-			throw new EndpointConnectionException('No file at "' . $filepath, -1 );
+			throw new EndpointConnectionException($this->endpointDisplayName() ."::". 'No file at "' . $filepath, -1 );
 		}
 
 		return false;
@@ -314,7 +314,7 @@ Allows full nzbmatrix links (no need to parse out the ID).
 			{
 				Logger::logError( 'Error connecting to SABnzbd "' . $json['error']
 					. '" with URL: ' . $this->cleanURLForLog($url), get_short_class($this), $this->endpoint());
-				throw new EndpointConnectionException( $json['error'], $json['status'] );
+				throw new EndpointConnectionException($this->endpointDisplayName() ."::". $json['error'], $json['status'] );
 			}
 			else
 			{

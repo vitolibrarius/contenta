@@ -131,7 +131,7 @@ class NewznabSearchProcessor extends Processor
 		$endpoint_model = Model::Named('Endpoint');
 		$newznab = $endpoint_model->allForTypeCode(Endpoint_Type::Newznab, true);
 		if ( is_array($newznab) == false || count($newznab) == 0 ) {
-			throw new EndpointConnectionException('No Newznab endpoints configured');
+			throw new EndpointConnectionException($this->endpointDisplayName() ."::". 'No Newznab endpoints configured');
 		}
 		$newznabSearch = array();
 		foreach( $newznab as $nzbd ) {
@@ -140,7 +140,7 @@ class NewznabSearchProcessor extends Processor
 
 		$sabnzbd = $endpoint_model->allForTypeCode(Endpoint_Type::SABnzbd, true);
 		if ( is_array($sabnzbd) == false || count($sabnzbd) == 0 ) {
-			throw new EndpointConnectionException('No SABnzbd endpoints configured');
+			throw new EndpointConnectionException($this->endpointDisplayName() ."::". 'No SABnzbd endpoints configured');
 		}
 
 		while ( true ) {

@@ -182,9 +182,11 @@ abstract class Logger implements LoggerInterface {
 		catch (Exception $e) {
 			\Logger::$catastrophicFail = true;
 			$plog = new \loggers\PrintLogger();
-			$plog->_doLog(\Logger::INFO, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+			$plog->_doLog(\Logger::INFO, (string)$message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
+
+			list($message, $file, $line) = Logger::exceptionMessage( $e );
 			$plog->_doLog(\Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
-				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
+				$this->currentTrace, $this->currentTraceId, $file, $line);
 		}
 	}
 
@@ -209,8 +211,16 @@ abstract class Logger implements LoggerInterface {
 			\Logger::$catastrophicFail = true;
 			$plog = new \loggers\PrintLogger();
 			$plog->_doLog(\Logger::ERROR, $message, $this->currentTrace, $this->currentTraceId, $context , $context_id);
-			$plog->_doLog(\Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage(),
-				$this->currentTrace, $this->currentTraceId, "Line", $e->getLine());
+
+			list($message, $file, $line) = Logger::exceptionMessage( $e );
+				$trace = $e->getTrace();
+				foreach($trace as $item) {
+					$backtrace .= "\n\t" . (isset($item['file']) ? shortendPath($item['file'], 3) : '<unknown file>')
+						. ' ' . (isset($item['line']) ? $item['line'] : '<unknown line>')
+						. ' calling ' . (isset($item['function']) ? $item['function'] : '<unknown function>') . '()';
+				}
+			$plog->_doLog(\Logger::ERROR, get_class($e)." thrown. Message: ".$e->getMessage() . $backtrace,
+				$this->currentTrace, $this->currentTraceId, $file, $line);
 		}
 	}
 

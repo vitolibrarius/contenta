@@ -8,7 +8,7 @@ use \Model as Model;
 use \Cache as Cache;
 use \Database as Database;
 
-use exceptions\EndpointConnectionException as EndpointConnectionException;
+use \exceptions\EndpointConnectionException as EndpointConnectionException;
 
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
@@ -480,7 +480,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 			else {
 // 				Logger::logError( $json['status_code'] . ': ' . $json['error']
 // 					. ' with URL: ' . $this->cleanURLForLog($url), get_short_class($this), $this->endpoint());
-				throw new EndpointConnectionException( $json['error'], $json['status_code'] );
+				throw new EndpointConnectionException( $this->endpointDisplayName() ."::". $json['error'], $json['status_code'] );
 			}
 		}
 		return array(false, null);

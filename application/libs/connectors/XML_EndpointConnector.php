@@ -40,15 +40,14 @@ abstract class XML_EndpointConnector extends EndpointConnector
 							throw new ResponseErrorException("XML Parsing error: " . $xmlErrors[0]->message . PHP_EOL . $data);
 						}
 						else {
-							throw new ResponseErrorException("Parsing encountered " . count($xmlErrors) . " unparsable errors");
+							Logger::logError( $this->cleanURLForLog($url) . PHP_EOL . "Parsing encountered " . count($xmlErrors) . " unparsable errors",
+								$this->endpointDisplayName());
 						}
 					}
 					else {
-						throw new ResponseErrorException("Error parsing XML " . var_export($xml, true));
+						Logger::logError( $this->cleanURLForLog($url) . PHP_EOL . "Error parsing XML " . var_export($xml, true),
+							$this->endpointDisplayName());
 					}
-				}
-				else if ( $this->isDebuggingResponses() ) {
-					$this->debugData( $data, $this->cleanURLForLog($url) . ".xml" );
 				}
 
 				return array($xml, $headers);

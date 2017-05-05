@@ -12,7 +12,8 @@ use \SimpleXMLElement as SimpleXMLElement;
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
 
-use utilities\MediaFilename as MediaFilename;
+use \utilities\MediaFilename as MediaFilename;
+use \exceptions\EndpointConnectionException as EndpointConnectionException;
 
 class NewznabException extends \Exception {}
 
@@ -199,37 +200,49 @@ class NewznabConnector extends RSSConnector
 			throw new \Exception( "No Newznab data" );
 		}
 
-		if ( $xmlDocument instanceof SimpleXMLElement && isset($xmlDocument->channel, $xmlDocument->channel->item) ) {
-			$results = array();
-			foreach ($xmlDocument->channel->item as $key => $item) {
-				$record['title'] = (string)(isset($item->title) ? $item->title : '');
-				$record['guid'] = (string)(isset($item->guid) ? $item->guid : $item->link);
-				$record['safe_guid'] = sanitize_html_id($record['guid']);
-				$record['publishedDate'] = strtotime($item->pubDate);
-				$record['url'] = (string)$item->link;
-				$record['password'] = false;
-				$record['desc'] = strip_tags((string)$item->description);
-				if (isset($item->enclosure, $item->enclosure['url'])) {
-					$record['url'] = (string)$item->enclosure['url'];
-					$record['len'] = (string)$item->enclosure['length'];
-					$record['type'] = (string)$item->enclosure['type'];
-				}
-				$children = $item->children('newznab', true);
-				foreach( $children as $node ) {
-					$attr = $node->attributes();
-					if ( $attr['name'] === 'password' ) {
-						$record['password'] = boolval($attr['value']);
+		if ( $xmlDocument instanceof SimpleXMLElement ) {
+			if ( isset($xmlDocument->channel, $xmlDocument->channel->item) ) {
+				$results = array();
+				foreach ($xmlDocument->channel->item as $key => $item) {
+					$record['title'] = (string)(isset($item->title) ? $item->title : '');
+					$record['guid'] = (string)(isset($item->guid) ? $item->guid : $item->link);
+					$record['safe_guid'] = sanitize_html_id($record['guid']);
+					$record['publishedDate'] = strtotime($item->pubDate);
+					$record['url'] = (string)$item->link;
+					$record['password'] = false;
+					$record['desc'] = strip_tags((string)$item->description);
+					if (isset($item->enclosure, $item->enclosure['url'])) {
+						$record['url'] = (string)$item->enclosure['url'];
+						$record['len'] = (string)$item->enclosure['length'];
+						$record['type'] = (string)$item->enclosure['type'];
 					}
-				}
+					$children = $item->children('newznab', true);
+					foreach( $children as $node ) {
+						$attr = $node->attributes();
+						if ( $attr['name'] === 'password' ) {
+							$record['password'] = boolval($attr['value']);
+						}
+					}
 
-				if ( isset($item->title) ) {
-					$mediaFilename = new MediaFilename($item->title);
-					$record['metadata'] = $mediaFilename->updateFileMetaData(null);
-				}
+					if ( isset($item->title) ) {
+						$mediaFilename = new MediaFilename($item->title);
+						$record['metadata'] = $mediaFilename->updateFileMetaData(null);
+					}
 
-				$results[] = $record;
+					$results[] = $record;
+				}
+				return array( $results, $headers );
 			}
-			return array( $results, $headers );
+			else if ($xmlDocument->getName() == 'error') {
+				$code = (isset($xmlDocument['code']) ? (string)$xmlDocument['code'] : "-1");
+				$desc = (isset($xmlDocument['description']) ? (string)$xmlDocument['description'] : $xmlDocument->asXML());
+				$this->endpoint()->increaseErrorCount();
+				Logger::logError( $desc, $this->endpointDisplayName(), $code);
+				//throw new EndpointConnectionException( $this->endpointDisplayName() ."::". $desc, $code );
+			}
+		}
+		else {
+			Logger::logError( $xmlDocument->__toString(), get_class($xmlDocument), $this->endpointDisplayName());
 		}
 
 		return array($xmlDocument, $headers);

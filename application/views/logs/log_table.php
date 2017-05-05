@@ -39,7 +39,7 @@
 					. '<td rowspan="2">' . $log->level_code . '</td>'
 					. '<td>' . $log->trace . '</td>'
 					. '<td>' . $log->context . '</td>'
-					. '<td rowspan="2" class="log_msg" valign="top"><pre>' . $log->message . '</pre></td>'
+					. '<td rowspan="2" class="log_msg" valign="top"><pre>' . htmlentities($log->message) . '</pre></td>'
 					. '</tr>';
 			echo '<tr class="' . $log->level_code . '">'
 					. '<td>' . $log->trace_id . '</td>'

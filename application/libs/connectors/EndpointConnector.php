@@ -236,8 +236,8 @@ abstract class EndpointConnector
 				curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
 				curl_setopt($ch, CURLOPT_HEADER, true);
 				curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30 );		# seconds to wait for connection
-				curl_setopt($ch, CURLOPT_TIMEOUT, 180 );			# seconds to wait for completion
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15 );		# seconds to wait for connection
+				curl_setopt($ch, CURLOPT_TIMEOUT, 30 );			# seconds to wait for completion
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
 				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
