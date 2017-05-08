@@ -196,9 +196,6 @@ class NewznabConnector extends RSSConnector
 	public function performGET($url, $force = false)
 	{
 		list($xmlDocument, $headers) = parent::performGET($url, $force);
-		if ( empty($xmlDocument) == true ) {
-			throw new \Exception( "No Newznab data" );
-		}
 
 		if ( $xmlDocument instanceof SimpleXMLElement ) {
 			if ( isset($xmlDocument->channel, $xmlDocument->channel->item) ) {
@@ -236,15 +233,10 @@ class NewznabConnector extends RSSConnector
 			else if ($xmlDocument->getName() == 'error') {
 				$code = (isset($xmlDocument['code']) ? (string)$xmlDocument['code'] : "-1");
 				$desc = (isset($xmlDocument['description']) ? (string)$xmlDocument['description'] : $xmlDocument->asXML());
-				$this->endpoint()->increaseErrorCount();
 				Logger::logError( $desc, $this->endpointDisplayName(), $code);
-				//throw new EndpointConnectionException( $this->endpointDisplayName() ."::". $desc, $code );
 			}
 		}
-		else {
-			Logger::logError( $xmlDocument->__toString(), get_class($xmlDocument), $this->endpointDisplayName());
-		}
 
-		return array($xmlDocument, $headers);
+		return false;
 	}
 }
