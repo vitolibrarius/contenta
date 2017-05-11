@@ -1,3 +1,68 @@
+Version 0.7.5:
+*   33707eb -  (HEAD -> master, origin/master, origin/HEAD) Merge branch 'issue-149-automated-search-should-prioritize-recent-publicat' (Wed May 10 22:51:06 2017 -0600) <Vito Librarius>
+|\  
+| * 9419a91 -  Fixes #149: tracking last search date (Wed May 10 22:50:34 2017 -0600) <Vito Librarius>
+* | 01881c6 -  Issue 82: fewer exceptions in newznab connection (Mon May 8 09:23:33 2017 -0600) <Vito Librarius>
+* | e1d30f0 -  Issue #82 Rss connector should not throw exception due to no data (Mon May 8 09:14:30 2017 -0600) <Vito Librarius>
+|/  
+* 0faca37 -  Issue #82: Cast code to int (Fri May 5 10:13:30 2017 -0600) <Vito Librarius>
+* 2f6b711 -  Issue #82: allow flux to retry (Fri May 5 08:04:59 2017 -0600) <Vito Librarius>
+* 02f3e29 -  issue #82: modified endpoint connection error logs (Thu May 4 22:48:05 2017 -0600) <Vito Librarius>
+* fe9fc5f -  Issue #82: search size file warning (Wed May 3 22:35:42 2017 -0600) <Vito Librarius>
+* 7885675 -  Fixes #57: improved parsing and display of newznab result data (Wed May 3 22:04:05 2017 -0600) <Vito Librarius>
+* ce6ed1c -  Fixes #111: allows nzb downloads to be retried (Wed May 3 21:55:22 2017 -0600) <Vito Librarius>
+* a62dc82 -  Issue #82 trying to trace silent error on quickNewznab search function (Wed May 3 10:28:17 2017 -0600) <Vito Librarius>
+* 74d6837 -  Issue #82: increased JS tiemouts for typing to 1000.  Added media size search (Fri Apr 28 13:36:50 2017 -0600) <Vito Librarius>
+* e42b3b0 -  Issue #82: updated layout (Wed Feb 22 09:33:53 2017 -0700) <Vito Librarius>
+* 9ae8279 -  Issue #82 improved progress displays (Tue Feb 21 22:02:35 2017 -0700) <Vito Librarius>
+* 64bf91b -  Issue #82: check larger sabnzb history slots (Tue Feb 14 21:26:00 2017 -0700) <Vito Librarius>
+* 2a94858 -  Issue #82: Default for Story Arcs is to not make them wanted (Tue Feb 14 17:23:05 2017 -0700) <Vito Librarius>
+* 1606176 -  Issue #82: tweaking the css (Tue Feb 14 10:13:19 2017 -0700) <Vito Librarius>
+* 86f51b4 -  Update reading item when slideshow (Fri Feb 3 17:53:49 2017 -0700) <Vito Librarius>
+* 13d26d4 -  restored reading list (Fri Feb 3 17:51:04 2017 -0700) <Vito Librarius>
+*   ea53837 -  Merge pull request #148 from vitolibrarius/angular (Fri Feb 3 17:05:28 2017 -0700) <Vito Librarius>
+|\  
+| * 93f3d91 -  (origin/angular, angular) Fixes #105 slideshow (Fri Feb 3 17:00:06 2017 -0700) <Vito Librarius>
+| * 33645a6 -  experimenting (Tue Jan 17 17:00:42 2017 -0700) <Vito Librarius>
+| * c8f365f -  experimental menu components/module/controller (Fri Jan 13 09:25:26 2017 -0700) <Vito Librarius>
+| * 6df22d7 -  Initial changes to get an angular test but working (Thu Jan 12 20:57:41 2017 -0700) <Vito Librarius>
+|/  
+* 5f71f6f -  Issue #82 updated headers and footers (Thu Jan 12 20:56:27 2017 -0700) <Vito Librarius>
+* 158d44d -  (issue-143-exclusions-and-expansions-need-an-editor-interface) Issue #82: Wanted StoryArc failed to update after nzb requested (Tue Jan 10 11:40:40 2017 -0700) <Vito Librarius>
+* d0dc160 -  Fixes #36	Publisher list needs paging or searching (Tue Jan 10 10:59:19 2017 -0700) <Vito Librarius>
+* 49c9801 -  Fixes #144	Logs: better search / paging / delete functions (Mon Jan 9 21:30:34 2017 -0700) <Vito Librarius>
+* 681d9cc -  Issue #82 - shutdown handler should only log E_ERROR events (Sun Jan 8 11:37:40 2017 -0700) <Vito Librarius>
+* 0e1d1df -  Issue #82 misc (Fri Dec 16 17:37:01 2016 -0700) <Vito Librarius>
+* aacb23f -  Fixes #147	Exception: libs/connectors/EndpointConnector.php (Fri Dec 16 16:52:31 2016 -0700) <Vito Librarius>
+* e5796a9 -  (issue-146-errors-modelpulllistpulllistexclusiondbophp) Fixes #145	application/config/common_images.php - exception when no image found (Fri Dec 16 16:43:14 2016 -0700) <Vito Librarius>
+* d5cbef3 -  (issue-142-rss-feeds-should-have-expansion-and-exclusions-lik, issue-135-add-series-and-story-ratings) Issue #82 small fixes (Fri Dec 16 15:29:11 2016 -0700) <Vito Librarius>
+* b31d0e1 -  Issue #82: page params are not initialized in all cases, added null check (Wed Dec 7 20:45:32 2016 -0700) <Vito Librarius>
+* 2e8f2a0 -  Issue #82: improved word wrap for URLs (Fri Nov 25 17:58:41 2016 -0700) <Vito Librarius>
+* bad47dd -  Issue #82: changed sort order for pull list item (Thu Nov 10 18:53:09 2016 -0700) <Vito Librarius>
+* 4de6893 -  Issue #82 more sabnzbd logging (Mon Nov 7 21:53:13 2016 -0700) <Vito Librarius>
+* ef6b8c8 -  Fixes #55	Admin list pages don't page (Sat Oct 29 10:33:01 2016 -0600) <Vito Librarius>
+* befc239 -  Fixes Issue #55	Admin list pages don't page (Sat Oct 29 10:32:28 2016 -0600) <Vito Librarius>
+* 49a6daa -  (issue-99-pending-queue-datamodel, issue-83-admin-media-page-is-slow, issue-82-misc-typos, issue-81-create-a-scheduled-processor-to-search-from-items-f, issue-8-track-publication-series-that-have-actual-media, issue-77-file-wrapper-failure---uploadimport-status-tracking, issue-64-some-rss-feeds-report-errors-but-will-work-if-retri, issue-60-order-by-syntax-for-sql-classes-is-difficult-to-get, issue-56-select2-drop-down-is-not-mobile-friendly, issue-131-controller-functions-that-are-ajax-fragment-should, issue-13-verify-delete-can-purge-data-and-filesystem-correct, issue-128-lockphp---error-making-lockfile, issue-126-newznab-search-processing-error, issue-124-comicvine-objects-that-have-been-deleted-cause-err, issue-1-log-reporting-ui-only-supports-database-tables-i-sho) Issue #82 want the 0 size rss items back :) (Thu Oct 20 09:59:18 2016 -0600) <Vito Librarius>
+* 89fb8c8 -  Issue #82 delete endpoint invalid url (Thu Oct 20 09:30:25 2016 -0600) <Vito Librarius>
+* 028fc35 -  Issue #82 rss import filters and logs small postings (Thu Oct 20 09:16:34 2016 -0600) <Vito Librarius>
+* 0d9719f -  Issue #82 reduced logging (Thu Oct 20 08:35:28 2016 -0600) <Vito Librarius>
+* c0e6fcf -  Issue #82 null index check for filename (Thu Oct 20 08:33:01 2016 -0600) <Vito Librarius>
+* 7a2bd65 -  Issue #82 import Config; (Thu Oct 20 08:25:37 2016 -0600) <Vito Librarius>
+* ee977d6 -  Issue #82 Connection timed out (Thu Oct 20 08:22:43 2016 -0600) <Vito Librarius>
+* c908f20 -  Issue #82 no index check (Thu Oct 20 08:16:56 2016 -0600) <Vito Librarius>
+* 53eae78 -  Fixes #141: clean up RSS code and update display.  Also fixed pull list filtering and expansions (Wed Oct 19 21:47:35 2016 -0600) <Vito Librarius>
+* d92e722 -  Issue #82: ajax still fires to often, removed on-change event (Wed Oct 19 21:46:23 2016 -0600) <Vito Librarius>
+* b3d4caa -  Issue #82: added convienience methods for ModelName and DBOName (Wed Oct 19 20:54:51 2016 -0600) <Vito Librarius>
+* 360c047 -  Issue #82 do not auto-submit (Tue Oct 18 22:17:19 2016 -0600) <Vito Librarius>
+* fef5fa6 -  Issue #82: logging typo (Tue Oct 18 21:59:39 2016 -0600) <Vito Librarius>
+* dd5dfe7 -  Fixes #54: improvements in filename -> publication parsing (Tue Oct 18 21:53:42 2016 -0600) <Vito Librarius>
+* 8457f1a -  Fixes #140	Endpoint list display sucks (Sun Oct 16 12:47:34 2016 -0600) <Vito Librarius>
+* 1ef8cfa -  Fixes #139	Newznab site categories are not uniform. (Sun Oct 16 12:02:37 2016 -0600) <Vito Librarius>
+* b7d1f38 -  Fixes #138: created new script templates and generate sql files in documentation/schema (Sat Oct 15 18:14:26 2016 -0600) <Vito Librarius>
+* db49a44 -  Issue #82 added missing indexes, changed ajax from delay to timer to reduce multiple calls (Fri Oct 14 09:06:14 2016 -0600) <Vito Librarius>
+* 9ff2af5 -  Issue #82 tweaked job_running lookup (Tue Oct 11 19:51:26 2016 -0600) <Vito Librarius>
+* c46ebb2 -  Issue #82 tweaking obj cache (Thu Oct 6 20:27:06 2016 -0600) <Vito Librarius>
+
 Version 0.7.2:
 * cee17cd -  (HEAD -> master) Fixes #137: add FK indexes (Wed Oct 5 20:44:19 2016 -0600) <Vito Librarius>
 * c56aef1 -  (origin/master, origin/HEAD) Fixes #136 Reading queue management is too slow (Wed Oct 5 09:59:57 2016 -0600) <Vito Librarius>
