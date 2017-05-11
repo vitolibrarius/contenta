@@ -97,6 +97,12 @@
 					<p>Search any configured Newznab sites for specific content</p>
 				</div>
 			</a>
+			<a href="<?php echo Config::Web('/AdminWanted/enqueued'); ?>">
+				<div class="admin_card_item">
+					<h3>Enqueued Search</h3>
+					<p>Publication enqueued for automated NZB searching</p>
+				</div>
+			</a>
 		</div>
 
 </div>

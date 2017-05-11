@@ -344,7 +344,7 @@ class Publication extends _Publication
 		}
 		return false;
 	}
-	
+
 	public function allForReadingQueue( Reading_QueueDBO $queue, $unreadOnly = true, $limit = 50 )
 	{
 		if ( $queue != null ) {
@@ -379,13 +379,77 @@ class Publication extends _Publication
 
 			if ( is_array($result) && count($result) > 0 ) {
 				$publication_idArray = array_map(function($stdClass) {return $stdClass->{Publication::id}; }, $result);
-			
+
 				$select = \SQL::Select( $this )->where( Qualifier::IN( Publication::id, $publication_idArray ));
 				$select->limit = $limit;
 				return $select->fetchAll();
 			}
 		}
 		return false;
+	}
+
+	public function countQueueList()
+	{
+		$series_model = Model::Named('Series');
+		$saj_model = Model::Named('Story_Arc_Publication');
+
+		$qualifiers[] = Qualifier::OrQualifier(
+			Qualifier::Equals( Publication::media_count, 0 ),
+			Qualifier::IsNull( Publication::media_count )
+		);
+
+		$qualifiers[] = Qualifier::OrQualifier(
+			Qualifier::InSubQuery( Publication::series_id,
+				SQL::Select($series_model, array("id"))->where(Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE ))->limit(0)
+			),
+			Qualifier::InSubQuery( Publication::id,
+				SQL::SelectJoin($saj_model, array("publication_id"))
+					->joinOn( $saj_model, Model::Named("Story_Arc"), null, Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE))
+					->limit(0)
+			)
+		);
+
+		$count = SQL::Count( $this, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
+		return ($count == false ? 0 : $count->count);
+	}
+	public function searchQueueList( $pageNum = 0, $limit = 50 )
+	{
+		$limit = max(intval( $limit ), 0);
+		if ( $limit <= 0 ) {
+			$pageNum = 0;
+		}
+
+		$series_model = Model::Named('Series');
+		$saj_model = Model::Named('Story_Arc_Publication');
+
+		$qualifiers[] = Qualifier::OrQualifier(
+			Qualifier::Equals( Publication::media_count, 0 ),
+			Qualifier::IsNull( Publication::media_count )
+		);
+
+		$qualifiers[] = Qualifier::OrQualifier(
+			Qualifier::LessThan( Publication::search_date, (time() - (3600 * 24 * 14)) ),
+			Qualifier::IsNull( Publication::search_date )
+		);
+
+		$qualifiers[] = Qualifier::OrQualifier(
+			Qualifier::InSubQuery( Publication::series_id,
+				SQL::Select($series_model, array("id"))->where(Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE ))->limit(0)
+			),
+			Qualifier::InSubQuery( Publication::id,
+				SQL::SelectJoin($saj_model, array("publication_id"))
+					->joinOn( $saj_model, Model::Named("Story_Arc"), null, Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE))
+					->limit(0)
+			)
+		);
+
+		$select = SQL::Select($this)
+			->where( Qualifier::AndQualifier( $qualifiers ))
+			->orderBy( array( array(SQL::SQL_ORDER_DESC => Publication::pub_date)))
+			->limit( $limit )
+			->offset( $pageNum * $limit );
+
+		return $select->fetchAll();
 	}
 }
 

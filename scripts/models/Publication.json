@@ -14,7 +14,9 @@
         "xurl": { "column": "xurl", "length": 1024, "type": "TEXT" },
         "xsource": { "column": "xsource", "length": 256, "type": "TEXT" },
         "xid": { "column": "xid", "length": 256, "type": "TEXT" },
-        "xupdated": { "column": "xupdated", "type": "DATE" }
+        "xupdated": { "column": "xupdated", "type": "DATE" },
+
+        "search_date": { "column": "search_date", "type": "DATE" }
     },
     "primaryKeys": [ "id" ],
     "table": "publication",
