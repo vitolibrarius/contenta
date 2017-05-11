@@ -48,11 +48,14 @@ function refreshAjax(page_url, page_num, data, resultsId) {
 		type: "GET",
 		url: page_url + "/" + page_num,
 		data: data,
-		dataType: "text",
-		success: function(msg){
-			var ajaxDisplay = document.getElementById(resultsId);
-			ajaxDisplay.innerHTML = msg;
-		}
+		dataType: "text"
+	})
+	.then(function (msg) {
+		var ajaxDisplay = document.getElementById(resultsId);
+		ajaxDisplay.innerHTML = msg;
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+		alert( "Error: " + textStatus );
 	});
 };
 

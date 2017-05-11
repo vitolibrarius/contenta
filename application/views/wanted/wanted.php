@@ -34,7 +34,8 @@
 				</div>
 			</div>
 			<figcaption class="caption">
-				<p class="search_string"><?php echo $publication->searchString(); ?><br></p>
+				<p style="height:1em;"><span class="search_string" style="float:left"><?php echo $publication->searchString(); ?></span>
+					<span class="search_date" style="float:right;"><?php echo $publication->formattedDate_search_date(); ?></span></p>
 				<?php $rssMatch = $publication->rssMatches(); if ( is_array($rssMatch) && count($rssMatch) > 0 ) :?>
 				<div class="mediaData">
 					<table>

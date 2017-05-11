@@ -314,6 +314,17 @@ class AdminWanted extends Admin
 		}
 	}
 
+	function enqueued($pageNum = 0)
+	{
+		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$model = Model::Named('Publication');
+			$this->view->model = $model;
+			$this->view->total = $model->countQueueList();
+			$this->view->results = $model->searchQueueList(intval($pageNum), 50);
+			$this->view->render( '/wanted/index_enqueued');
+		}
+	}
+
 	function newznabQuicksearch($pubId = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
@@ -324,6 +335,8 @@ class AdminWanted extends Admin
 			else if ( $pubId > 0 ) {
 				$publication = Model::Named('Publication')->objectForId( $pubId );
 				if ( $publication != false ) {
+					$publication->setSearch_date(time());
+					$publication->saveChanges();
 					$this->view->fluxModel = Model::Named('Flux');
 					foreach( $points as $endpoint ) {
 						Session::addPositiveFeedback("Searching ". $endpoint . "  for " . $publication->searchString());

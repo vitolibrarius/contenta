@@ -46,6 +46,7 @@ abstract class _Publication extends Model
 	const xsource = 'xsource';
 	const xid = 'xid';
 	const xupdated = 'xupdated';
+	const search_date = 'search_date';
 
 	// relationship keys
 	const series = 'series';
@@ -90,7 +91,8 @@ abstract class _Publication extends Model
 			Publication::xurl,
 			Publication::xsource,
 			Publication::xid,
-			Publication::xupdated
+			Publication::xupdated,
+			Publication::search_date
 		);
 	}
 
@@ -107,7 +109,8 @@ abstract class _Publication extends Model
 			Publication::xurl,
 			Publication::xsource,
 			Publication::xid,
-			Publication::xupdated
+			Publication::xupdated,
+			Publication::search_date
 		);
 	}
 
@@ -140,7 +143,8 @@ abstract class _Publication extends Model
 			Publication::xurl => array('length' => 1024,'type' => 'TEXT'),
 			Publication::xsource => array('length' => 256,'type' => 'TEXT'),
 			Publication::xid => array('length' => 256,'type' => 'TEXT'),
-			Publication::xupdated => array('type' => 'DATE')
+			Publication::xupdated => array('type' => 'DATE'),
+			Publication::search_date => array('type' => 'DATE')
 		);
 	}
 
@@ -262,8 +266,10 @@ abstract class _Publication extends Model
 
 			// Publication::xupdated == DATE
 
+			// Publication::search_date == DATE
+
 				default:
-					/* no type specified for Publication::xupdated */
+					/* no type specified for Publication::search_date */
 					break;
 				}
 			}
@@ -322,6 +328,7 @@ abstract class _Publication extends Model
 	{
 		return $this->allObjectsForKeyValue(Publication::xid, $value, null, $limit);
 	}
+
 
 
 
@@ -440,6 +447,12 @@ abstract class _Publication extends Model
 				$default_xupdated = $this->attributeDefaultValue( null, null, Publication::xupdated);
 				if ( is_null( $default_xupdated ) == false ) {
 					$values['xupdated'] = $default_xupdated;
+				}
+			}
+			if ( isset($values['search_date']) == false ) {
+				$default_search_date = $this->attributeDefaultValue( null, null, Publication::search_date);
+				if ( is_null( $default_search_date ) == false ) {
+					$values['search_date'] = $default_search_date;
 				}
 			}
 
@@ -577,7 +590,8 @@ abstract class _Publication extends Model
 			Publication::xurl => Model::TEXTAREA_TYPE,
 			Publication::xsource => Model::TEXT_TYPE,
 			Publication::xid => Model::TEXT_TYPE,
-			Publication::xupdated => Model::DATE_TYPE
+			Publication::xupdated => Model::DATE_TYPE,
+			Publication::search_date => Model::DATE_TYPE
 		);
 	}
 
@@ -750,6 +764,15 @@ abstract class _Publication extends Model
 		return null;
 	}
 	function validate_xupdated($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		return null;
+	}
+	function validate_search_date($object = null, $value)
 	{
 		// not mandatory field
 		if (isset($value) == false || empty($value)  ) {

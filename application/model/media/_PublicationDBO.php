@@ -36,6 +36,7 @@ abstract class _PublicationDBO extends DataObject
 	public $xsource;
 	public $xid;
 	public $xupdated;
+	public $search_date;
 
 	public function displayName()
 	{
@@ -65,6 +66,9 @@ abstract class _PublicationDBO extends DataObject
 
 	public function formattedDateTime_xupdated() { return $this->formattedDate( Publication::xupdated, "M d, Y H:i" ); }
 	public function formattedDate_xupdated() {return $this->formattedDate( Publication::xupdated, "M d, Y" ); }
+
+	public function formattedDateTime_search_date() { return $this->formattedDate( Publication::search_date, "M d, Y H:i" ); }
+	public function formattedDate_search_date() {return $this->formattedDate( Publication::search_date, "M d, Y" ); }
 
 
 	// to-one relationship
@@ -249,6 +253,16 @@ abstract class _PublicationDBO extends DataObject
 	public function setXupdated( $value = null)
 	{
 		parent::storeChange( Publication::xupdated, $value );
+	}
+
+	public function search_date()
+	{
+		return parent::changedValue( Publication::search_date, $this->search_date );
+	}
+
+	public function setSearch_date( $value = null)
+	{
+		parent::storeChange( Publication::search_date, $value );
 	}
 
 

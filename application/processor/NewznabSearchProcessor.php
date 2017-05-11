@@ -143,8 +143,12 @@ class NewznabSearchProcessor extends Processor
 			throw new EndpointConnectionException($this->endpointDisplayName() ."::". 'No SABnzbd endpoints configured');
 		}
 
+		$publication_model = Model::Named('Publication');
+		$total = max($publication_model->countQueueList(), 1);
+		$queueLimit = 5;
+
 		while ( true ) {
-			$pubs = $this->batchWantedPublications( $page );
+			$pubs = $publication_model->searchQueueList( $page, $queueLimit );
 			if ( $pubs == false )  {
 				break;
 			}
@@ -152,12 +156,13 @@ class NewznabSearchProcessor extends Processor
 			foreach ( $pubs as $publication ) {
 				$fluxImporter = new FluxImporter();
 				$fluxImporter->setEndpoint( $sabnzbd[0] );
-// 				Logger::logInfo( "searching for " . $publication->id . "'" . $publication->searchString() . "'" );
 				if ( strlen($publication->seriesName()) > 5
 					&& strlen($publication->paddedIssueNum()) > 2
 					&& $publication->publishedYear() > 1900) {
 					$found_nzb_to_try = $this->processRss( $publication, $fluxImporter );
 					if ( $found_nzb_to_try == false ) {
+						$publication->setSearch_date(time());
+						$publication->saveChanges();
 						foreach( $newznabSearch as $nzbSearch ) {
 							if ( $nzbSearch->endpointEnabled() ) {
 								try {
@@ -175,6 +180,10 @@ class NewznabSearchProcessor extends Processor
 					$fluxImporter->processData();
 				}
 			}
+			// limit to 1/3 of all possible
+			if (($page * $queueLimit) > intval($total/3)) break;
+
+			// otherwise move to next page
 			$page ++;
 		}
 	}

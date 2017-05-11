@@ -77,6 +77,11 @@ $(document).ready(function($) {
 					})
 				};
 			},
+			transport: function() {
+				return $.ajax().error(function() {
+				   alert("error fetching data");
+				});
+			},
 			cache: true
 		}
 	});
@@ -87,9 +92,13 @@ $(document).ready(function($) {
 	$select.append($option).trigger('change');
 	$.ajax({
 		type: 'GET',
-		url: "<?php echo Config::Web('/Api/publishers'); ?>" +"?id=" + $initialValue,
+		url: "<?php echo Config::Web('/Api/publishers'); ?>"+"?id=" + $initialValue,
 		dataType: 'json'
-	}).then(function (data) {
+	})
+	.fail(function(jqXHR, textStatus, errorThrown) {
+		alert( "Error: " + textStatus );
+	})
+	.then(function (data) {
 		if (typeof data !== 'undefined' && data.length > 0) {
 			$option.text(data[0].name).val(data[0].id);
 		}

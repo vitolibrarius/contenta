@@ -118,7 +118,7 @@
         "title": "Story Arc Administration"
     },
     "AdminTest": {
-        "title": "AdminTest\/title"
+        "title": "Admin Test"
     },
     "AdminUploadRepair": {
         "UploadLink": {
@@ -267,6 +267,9 @@
                 "FIELD_TOO_LONG": "Name field was more than 256 characters",
                 "label": "Name",
                 "search": "Character name"
+            },
+            "popularity": {
+                "search": "Popularity"
             },
             "publisher_id": {
                 "label": "Publisher",
@@ -474,6 +477,9 @@
             },
             "desc": {
                 "label": "Description"
+            },
+            "formattedDate_search_date": {
+                "label": "Last Searched"
             },
             "issue_num": {
                 "label": "Issue Number",
