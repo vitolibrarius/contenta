@@ -43,7 +43,7 @@ class NewznabConnector extends RSSConnector
 			}
 			else {
 				$success = false;
-				$message = "Invalid RSS response " . var_export($data->server, true);
+				$message = "Invalid RSS response [". $detail_url ."] " . var_export($data, true);
 			}
 		}
 
