@@ -317,6 +317,9 @@ class AdminWanted extends Admin
 	function enqueued($pageNum = 0)
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
+			$this->view->addStylesheet("select2.min.css");
+			$this->view->addScript("select2.min.js");
+
 			$model = Model::Named('Publication');
 			$this->view->model = $model;
 			$this->view->total = $model->countQueueList();
