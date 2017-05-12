@@ -127,7 +127,6 @@ class NewznabSearchProcessor extends Processor
 
 	public function processData()
 	{
-		$page = 0;
 		$endpoint_model = Model::Named('Endpoint');
 		$newznab = $endpoint_model->allForTypeCode(Endpoint_Type::Newznab, true);
 		if ( is_array($newznab) == false || count($newznab) == 0 ) {
@@ -144,15 +143,17 @@ class NewznabSearchProcessor extends Processor
 		}
 
 		$publication_model = Model::Named('Publication');
-		$total = max($publication_model->countQueueList(), 1);
+		$srchMax = Config::GetInteger("Search/daemon_max", 200);
 		$queueLimit = 5;
+		$srchCount = 0;
 
 		while ( true ) {
-			$pubs = $publication_model->searchQueueList( $page, $queueLimit );
+			$pubs = $publication_model->searchQueueList( $queueLimit );
 			if ( $pubs == false )  {
 				break;
 			}
 
+			$srchCount += count($pubs);
 			foreach ( $pubs as $publication ) {
 				$fluxImporter = new FluxImporter();
 				$fluxImporter->setEndpoint( $sabnzbd[0] );
@@ -180,11 +181,8 @@ class NewznabSearchProcessor extends Processor
 					$fluxImporter->processData();
 				}
 			}
-			// limit to 1/3 of all possible
-			if (($page * $queueLimit) > intval($total/3)) break;
 
-			// otherwise move to next page
-			$page ++;
+			if ($srchCount > $srchMax) break;
 		}
 	}
 }

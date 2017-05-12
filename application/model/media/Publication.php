@@ -412,24 +412,17 @@ class Publication extends _Publication
 		$count = SQL::Count( $this, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
 		return ($count == false ? 0 : $count->count);
 	}
-	public function searchQueueList( $pageNum = 0, $limit = 50 )
-	{
-		$limit = max(intval( $limit ), 0);
-		if ( $limit <= 0 ) {
-			$pageNum = 0;
-		}
 
+	private function searchQueueListForPublishedAge($ageInMonths = 0, $limit = SQL::SQL_DEFAULT_LIMIT) {
+		$limit = max(intval( $limit ), 0);
+		$months = intval($ageInMonths);
 		$series_model = Model::Named('Series');
 		$saj_model = Model::Named('Story_Arc_Publication');
 
+		// base qualifier
 		$qualifiers[] = Qualifier::OrQualifier(
 			Qualifier::Equals( Publication::media_count, 0 ),
 			Qualifier::IsNull( Publication::media_count )
-		);
-
-		$qualifiers[] = Qualifier::OrQualifier(
-			Qualifier::LessThan( Publication::search_date, (time() - (3600 * 24 * 14)) ),
-			Qualifier::IsNull( Publication::search_date )
 		);
 
 		$qualifiers[] = Qualifier::OrQualifier(
@@ -443,13 +436,46 @@ class Publication extends _Publication
 			)
 		);
 
+		// don't repeat for at least 2 days
+		$qualifiers[] = Qualifier::OrQualifier(
+			Qualifier::LessThan( Publication::search_date, (time() - (3600 * 24 * 2)) ),
+			Qualifier::IsNull( Publication::search_date )
+		);
+
+		// restrict to publications that are no more than X months old
+		if ( $months > 0 ) {
+			$qualifiers[] = Qualifier::GreaterThan( "pub_date", (time() - (3600 * 24 * (30 * $months))) );
+		}
+
 		$select = SQL::Select($this)
 			->where( Qualifier::AndQualifier( $qualifiers ))
 			->orderBy( array( array(SQL::SQL_ORDER_DESC => Publication::pub_date)))
-			->limit( $limit )
-			->offset( $pageNum * $limit );
+			->limit( $limit );
 
 		return $select->fetchAll();
+	}
+
+	public function searchQueueList( $limit = SQL::SQL_DEFAULT_LIMIT )
+	{
+		$limit = intval( $limit );
+		$results = array();
+		if ( $limit <= 0 ) {
+			// fetch all
+			$results = $this->searchQueueListForPublishedAge( -1, $limit);
+		}
+		else {
+			$pubRanges = array( 1, 3, 6, 12, 24, -1);
+			foreach ( $pubRanges as $range ) {
+				$more_results = $this->searchQueueListForPublishedAge( $range, $limit - count($results));
+				//Logger::LogInfo( "Searching pubs $range, results so far: " . count($results) . " found more " . count($more_results));
+
+				$results = array_unique(array_merge($results, $more_results));
+				if (($limit - count($results)) <= 0 ) {
+					break;
+				}
+			}
+		}
+		return $results;
 	}
 }
 

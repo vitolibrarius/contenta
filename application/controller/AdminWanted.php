@@ -314,7 +314,7 @@ class AdminWanted extends Admin
 		}
 	}
 
-	function enqueued($pageNum = 0)
+	function enqueued()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$this->view->addStylesheet("select2.min.css");
@@ -323,7 +323,7 @@ class AdminWanted extends Admin
 			$model = Model::Named('Publication');
 			$this->view->model = $model;
 			$this->view->total = $model->countQueueList();
-			$this->view->results = $model->searchQueueList(intval($pageNum), 50);
+			$this->view->results = $model->searchQueueList();
 			$this->view->render( '/wanted/index_enqueued');
 		}
 	}
