@@ -7,6 +7,8 @@ use \Migrator as Migrator;
 use \Config as Config;
 use \Logger as Logger;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 class Migration extends Processor
 {
 	function __construct($guid)
@@ -14,7 +16,7 @@ class Migration extends Processor
 		parent::__construct($guid);
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		$this->createWorkingDirectory();
 

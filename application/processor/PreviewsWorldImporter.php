@@ -8,6 +8,8 @@ use \Logger as Logger;
 use \Model as Model;
 use \SimpleXMLElement as SimpleXMLElement;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 use \model\pull_list\Pull_List as Pull_List;
 use \model\pull_list\Pull_List_Group as Pull_List_Group;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
@@ -78,7 +80,7 @@ class PreviewsWorldImporter extends EndpointImporter
 		return $itemname;
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		$connection = $this->endpointConnector();
 		$endpoint = $this->endpoint();

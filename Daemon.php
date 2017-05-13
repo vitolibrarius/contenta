@@ -181,7 +181,7 @@ try {
 			$jobRunning->setDesc( $processor->jobDescription() );
 			$jobRunning->saveChanges();
 
-			$processor->processData();
+			$processor->processData($jobRunning);
 
 			if ( null != $jobObj ) {
 				// success, calc next job schedule run
@@ -203,9 +203,6 @@ try {
 		if ( $jobRunning instanceof \model\jobs\Job_RunningDBO ) {
 			$job_run_model->deleteObject($jobRunning);
 		}
-	}
-	else {
-		Logger::logError('Daemon blocked by running processes ' . var_export($jobList, true));
 	}
 }
 catch ( ClassNotFoundException $exception ) {

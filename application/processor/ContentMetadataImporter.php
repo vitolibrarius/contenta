@@ -9,6 +9,8 @@ use \Logger as Logger;
 use \Model as Model;
 use \Exception as Exception;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
 use \model\media\Character as Character;
@@ -390,10 +392,14 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		}
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		$enqueued = $this->getMeta( ComicVineImporter::META_ENQUEUE_ROOT );
 		while ( is_array($enqueued) && count($enqueued) > 0) {
+			if ( is_null($reporter) == false ) {
+				$reporter->setProcessMessage("Preprocessing " . count($enqueued) . " records");
+			}
+
 			// move to imported
 			foreach( $enqueued as $path => $data_keypath ) {
 				$old = appendPath( ComicVineImporter::META_ENQUEUE_ROOT, $path);
@@ -440,6 +446,10 @@ abstract class ContentMetadataImporter extends EndpointImporter
 
 		$imported = $this->getMeta( ComicVineImporter::META_IMPORT_ROOT );
 		if ( is_array($imported) && count($imported) > 0 ) {
+			if ( is_null($reporter) == false ) {
+				$reporter->setProcessMessage("Importing " . count($imported) . " records");
+			}
+
 			foreach( $imported as $path => $data_keypath ) {
 				$meta = $this->getMeta( appendPath( ComicVineImporter::META_DATA_ROOT, $path ));
 

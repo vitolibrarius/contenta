@@ -9,6 +9,8 @@ use \Logger as Logger;
 use \Model as Model;
 use \Exception as Exception;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 use \model\user\Users as Users;
 use \model\network\Flux as Flux;
 use \model\network\FluxDBO as FluxDBO;
@@ -156,7 +158,7 @@ class FluxImporter extends EndpointImporter
 		return false;
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 // 		Logger::logInfo( "starting flux import" );
 		$FluxModel = Model::Named('Flux');

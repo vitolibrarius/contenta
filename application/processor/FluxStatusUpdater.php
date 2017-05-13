@@ -9,6 +9,8 @@ use \Logger as Logger;
 use \Model as Model;
 use \Exception as Exception;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
 use \model\media\Character as Character;
@@ -33,7 +35,7 @@ class FluxStatusUpdater extends EndpointImporter
 		parent::__construct($guid);
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		$FluxModel = Model::Named('Flux');
 

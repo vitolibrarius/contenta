@@ -8,6 +8,8 @@ use \Logger as Logger;
 use \Model as Model;
 use \SimpleXMLElement as SimpleXMLElement;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
@@ -21,7 +23,7 @@ class RSSImporter extends EndpointImporter
 		parent::__construct($guid);
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		$connection = $this->endpointConnector();
 		$endpoint = $this->endpoint();
@@ -42,6 +44,10 @@ class RSSImporter extends EndpointImporter
 					$url = (string)$item->enclosure['url'];
 					$len = intval((string)$item->enclosure['length']);
 					$type = (string)$item->enclosure['type'];
+				}
+
+				if ( is_null($reporter) == false && (($count + $count_existing) % 10) == 0) {
+					$reporter->setProcessMessage("RSS import " .($count + $count_existing). " / " . $total);
 				}
 
 				$rss = $rss_model->objectForGuid($guid);
@@ -70,7 +76,7 @@ class RSSImporter extends EndpointImporter
 				}
 			}
 
-			Logger::logInfo( "RSS Imported $count, Existing $count_existing / $total", $this->type, $endpoint->displayName());
+			if ( $count > 0 ) Logger::logInfo( "RSS Imported $count, Existing $count_existing / $total", $this->type, $endpoint->displayName());
 		}
 		else {
 			Logger::logError( "RSS response is not XML " . var_export($xml, true), $this->type, $this->guid);

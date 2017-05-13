@@ -14,7 +14,9 @@ use \model\jobs\JobDBO as JobDBO;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 
-class Job_RunningDBO extends _Job_RunningDBO
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
+class Job_RunningDBO extends _Job_RunningDBO implements ProcessStatusReporter
 {
 	public function elapsedSeconds()
 	{
@@ -58,6 +60,26 @@ class Job_RunningDBO extends _Job_RunningDBO
 		$output = shell_exec(  $shell );
 		$pids = explode(PHP_EOL, $output);
 		return in_array($this->pid, $pids);
+	}
+
+	public function setProcessMaximum($value = 100)
+	{
+	}
+
+	public function setProcessMinimum($value = 0)
+	{
+	}
+
+	public function setProcessCurrent($value)
+	{
+	}
+
+	public function setProcessMessage($msg)
+	{
+		if ( isset($msg) && strlen((string)$msg) > 0 ) {
+			$this->setDesc( (string)$msg );
+			$this->saveChanges();
+		}
 	}
 }
 

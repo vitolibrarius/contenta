@@ -11,6 +11,8 @@ use \http\Session as Session;;
 use \Localized as Localized;
 use \Metadata as Metadata;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 use utilities\FileWrapper as FileWrapper;
 use utilities\Stopwatch as Stopwatch;
 use utilities\Lock as Lock;
@@ -84,7 +86,7 @@ class ImportManager extends Processor
 		return appendPath($root, "UploadImport" );
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		if ( is_null($this->sorted_pending) ) {
 			$lockfile = $this->workingDirectory( "updating.lock" );

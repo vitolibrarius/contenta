@@ -8,6 +8,8 @@ use \Exception as Exception;
 use \http\Session as Session;;
 use \Metadata as Metadata;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 /**
  * Class Processor
  */
@@ -174,5 +176,5 @@ abstract class Processor
 		}
 	}
 
-	public abstract function processData();
+	public abstract function processData(ProcessStatusReporter $reporter = null);
 }

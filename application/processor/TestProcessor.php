@@ -11,6 +11,8 @@ use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;
 use \model\jobs\Job as Job;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 class TestProcessor extends Processor
 {
 	public $items;
@@ -45,7 +47,7 @@ class TestProcessor extends Processor
 		}
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		echo ". items = $this->items" . PHP_EOL;
 		foreach( $this->list as $idx=>$item ) {

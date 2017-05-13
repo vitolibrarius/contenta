@@ -9,6 +9,8 @@ use \Model as Model;
 use \Localized as Localized;
 use \Metadata as Metadata;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;
 use \model\jobs\Job as Job;
@@ -28,7 +30,7 @@ class ImportQueueReprocess extends Processor
 		return appendPath($root, "UploadImport" );
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		$itemCount = 0;
 
@@ -53,7 +55,7 @@ class ImportQueueReprocess extends Processor
 					if ( "BUSY_NO_SEARCH" == $status ) {
 						$importer = Processor::Named('UploadImport', $processKey);
 						if ($importer->resetSearchCriteria() == true) {
-							$importer->processData();
+							$importer->processData($reporter);
 							$itemCount++;
 						}
 						else {

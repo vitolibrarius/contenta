@@ -15,6 +15,7 @@ use utilities\MediaFilename as MediaFilename;
 use connectors\ComicVineConnector as ComicVineConnector;
 
 use exceptions\ImportMediaException as ImportMediaException;
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
 
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\media\PublicationDBO as PublicationDBO;
@@ -323,7 +324,7 @@ class UploadImport extends Processor
 		return false;
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		$wrapper = FileWrapper::instance($this->importFilePath());
 		$testStatus = $wrapper->testWrapper($errorCode);
@@ -403,7 +404,7 @@ class UploadImport extends Processor
 		);
 
 		try {
-			$importer->processData();
+			$importer->processData($reporter);
 
 			$cbzType = Model::Named( "Media_Type" )->cbz();
 			$pub_xid = array_valueForKeypath( "id", $matchingIssue);

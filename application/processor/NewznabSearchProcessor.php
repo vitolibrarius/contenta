@@ -12,6 +12,8 @@ use \Metadata as Metadata;
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_Running as Job_Running;
 use \model\jobs\Job as Job;
@@ -33,37 +35,6 @@ class NewznabSearchProcessor extends Processor
 	function __construct($guid = null)
 	{
 		parent::__construct(NewznabSearchProcessor::GUID);
-	}
-
-	public function batchWantedPublications( $page = 0, $page_size = 5 )
-	{
-		$model = Model::Named('Publication');
-		$series_model = Model::Named('Series');
-		$saj_model = Model::Named('Story_Arc_Publication');
-
-		$qualifiers[] = Qualifier::OrQualifier(
-			Qualifier::Equals( Publication::media_count, 0 ),
-			Qualifier::IsNull( Publication::media_count )
-		);
-
-		$qualifiers[] = Qualifier::OrQualifier(
-			Qualifier::InSubQuery( Publication::series_id,
-				SQL::Select($series_model, array("id"))->where(Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE ))->limit(0)
-			),
-			Qualifier::InSubQuery( Publication::id,
-				SQL::SelectJoin($saj_model, array("publication_id"))
-					->joinOn( $saj_model, Model::Named("Story_Arc"), null, Qualifier::Equals( "pub_wanted", Model::TERTIARY_TRUE))
-					->limit(0)
-			)
-		);
-
-		$select = SQL::Select($model)
-			->where( Qualifier::AndQualifier( $qualifiers ))
-			->orderBy( array( array(SQL::SQL_ORDER_DESC => Publication::pub_date)))
-			->limit( $page_size )
-			->offset( $page * $page_size );
-
-		return $select->fetchAll();
 	}
 
 	public static function isAcceptableMatch($publication, $name, $issue, $year)
@@ -125,7 +96,7 @@ class NewznabSearchProcessor extends Processor
 		return $found_nzb_to_try;
 	}
 
-	public function processData()
+	public function processData(ProcessStatusReporter $reporter = null)
 	{
 		$endpoint_model = Model::Named('Endpoint');
 		$newznab = $endpoint_model->allForTypeCode(Endpoint_Type::Newznab, true);
@@ -147,6 +118,13 @@ class NewznabSearchProcessor extends Processor
 		$queueLimit = 5;
 		$srchCount = 0;
 
+		if ( is_null($reporter) == false ) {
+			$reporter->setProcessMaximum($srchMax);
+			$reporter->setProcessMinimum(0);
+			$reporter->setProcessCurrent(0);
+			$reporter->setProcessMessage("NZB searching started");
+		}
+
 		while ( true ) {
 			$pubs = $publication_model->searchQueueList( $queueLimit );
 			if ( $pubs == false )  {
@@ -155,6 +133,13 @@ class NewznabSearchProcessor extends Processor
 
 			$srchCount += count($pubs);
 			foreach ( $pubs as $publication ) {
+				$srchCount++;
+				if ( is_null($reporter) == false && ($srchCount % 10) == 0) {
+					$reporter->setProcessCurrent($srchCount);
+					$reporter->setProcessMessage("NZB seraching for " . $publication->searchString());
+				}
+				sleep(1);
+
 				$fluxImporter = new FluxImporter();
 				$fluxImporter->setEndpoint( $sabnzbd[0] );
 				if ( strlen($publication->seriesName()) > 5
@@ -178,7 +163,7 @@ class NewznabSearchProcessor extends Processor
 						}
 					}
 
-					$fluxImporter->processData();
+					$fluxImporter->processData($reporter);
 				}
 			}
 

@@ -9,6 +9,8 @@ use \Logger as Logger;
 use \Exception as Exception;
 use \Model as Model;
 
+use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
+
 use processor\EndpointImporter as EndpointImporter;
 use connectors\ComicVineConnector as ComicVineConnector;
 
