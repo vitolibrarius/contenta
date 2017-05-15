@@ -64,7 +64,7 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 				return array($json, $headers);
 			}
 			else {
-				Logger::logError( 'Error (?) with url: ' . var_export($data, true),
+				Logger::logError( 'Error (?) with url: ' . var_export($url, true),
 						get_class($this), $this->endpointDisplayName());
 			}
 		}

@@ -220,8 +220,12 @@ abstract class EndpointConnector
 			throw new InvalidEndpointConfigurationException("Endpoint " . $point->displayName() . " is disabled");
 		}
 
+		if (filter_var($url, FILTER_VALIDATE_URL) == false) {
+			throw new \Exception("Invalid url requested [" . var_export($url, true) . "]" );
+		}
+
 		$this->throttleRequestIfRequired();
-		if (empty($url) == false && is_array($postfields) && count($postfields) > 0) {
+		if ( is_array($postfields) && count($postfields) > 0) {
 			if ( function_exists('curl_version') == true) {
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $url);
@@ -287,95 +291,99 @@ abstract class EndpointConnector
 			throw new \Exception("Endpoint " . $this->endpointDisplayName() . " is disabled");
 		}
 
-		$this->throttleRequestIfRequired();
-		if (empty($url) == false) {
-			$cacheData = Cache::MakeKey( $url, "data" );
-			$cacheHeaders = Cache::MakeKey( $url, "headers" );
-			// check the cashe for the data, there is no point in calling the same API call multiple times in one day
-			if ( $force == false ) {
-				$data = Cache::Fetch( $cacheData, false, Cache::TTL_DAY );
-				$headers = Cache::Fetch( $cacheHeaders, false, Cache::TTL_DAY );
-				if ( $data != false ) {
-					return array($data, $headers);
-				}
-			}
+		if (filter_var($url, FILTER_VALIDATE_URL) == false) {
+			throw new \Exception("Invalid url requested [" . var_export($url, true) . "]" );
+		}
 
-			if ( function_exists('curl_version') == true) {
+		$this->throttleRequestIfRequired();
+		$cacheData = Cache::MakeKey( $url, "data" );
+		$cacheHeaders = Cache::MakeKey( $url, "headers" );
+		$data = null;
+		$headers = null;
+
+		// check the cache for the data, there is no point in calling the same API call multiple times in one day
+		if ( $force == false ) {
+			$data = Cache::Fetch( $cacheData, false, Cache::TTL_DAY );
+			$headers = Cache::Fetch( $cacheHeaders, false, Cache::TTL_DAY );
+			if ( $data != false ) {
+				return array($data, $headers);
+			}
+		}
+
+		if ( function_exists('curl_version') == true) {
 // 				$cacheKey = Cache::MakeKey( "Cookies", parse_url($url, PHP_URL_HOST));
 // 				$cookie = Cache::Fetch( $cacheKey, "" );
 
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL, $url);
-				curl_setopt($ch, CURLOPT_USERAGENT, CONTENTA_USER_AGENT);
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_USERAGENT, CONTENTA_USER_AGENT);
 // 				curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie );
-				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true );
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
-				curl_setopt($ch, CURLOPT_AUTOREFERER, true );
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false );	# required for https urls
-				curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
-				curl_setopt($ch, CURLOPT_HEADER, true);
-				curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5 );		# seconds to wait for connection
-				curl_setopt($ch, CURLOPT_TIMEOUT, 30 );			# seconds to wait for completion
-				curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true );
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
+			curl_setopt($ch, CURLOPT_AUTOREFERER, true );
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false );	# required for https urls
+			curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
+			curl_setopt($ch, CURLOPT_HEADER, true);
+			curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5 );		# seconds to wait for connection
+			curl_setopt($ch, CURLOPT_TIMEOUT, 30 );			# seconds to wait for completion
+			curl_setopt($ch, CURLOPT_ENCODING, "gzip,deflate");
 
-				try {
-					$response = curl_exec($ch);
-					$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			try {
+				$response = curl_exec($ch);
+				$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-					// extract the headers
-					$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-					$headers = http_parse_headers(substr($response, 0, $header_size));
-					$data = substr($response, $header_size);
+				// extract the headers
+				$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+				$headers = http_parse_headers(substr($response, 0, $header_size));
+				$data = substr($response, $header_size);
 
-	// 				$whoami = trim(`whoami`);
-	// 				$headerLog = new Metadata('/tmp/http_headers_' . $whoami . '.json');
-	// 				$info = curl_getinfo($ch);
-	// 				$headerLog->setMeta( $url . "/info", $info );
-	// 				$headerLog->setMeta( $url . "/headers", $headers );
-	// 				$headerLog->setMeta( $url . "/cookie", (isset($headers["Set-Cookie"]) ? $headers["Set-Cookie"] : ''));
+// 				$whoami = trim(`whoami`);
+// 				$headerLog = new Metadata('/tmp/http_headers_' . $whoami . '.json');
+// 				$info = curl_getinfo($ch);
+// 				$headerLog->setMeta( $url . "/info", $info );
+// 				$headerLog->setMeta( $url . "/headers", $headers );
+// 				$headerLog->setMeta( $url . "/cookie", (isset($headers["Set-Cookie"]) ? $headers["Set-Cookie"] : ''));
 
-					if ( $http_code >= 200 && $http_code < 300 ) {
-						$this->endpoint()->clearErrorCount();
-						$this->endpoint = Model::Named("Endpoint")->refreshObject($this->endpoint());
-						Cache::Store( $cacheHeaders, $headers );
-						Cache::Store( $cacheData, $data );
-					}
-					else if ( $http_code == 302 ) {
-						throw new ResponseErrorException('Return code (' . $http_code . '): '
-							. var_export($headers, true)
-						);
-					}
-					else {
-						$this->endpoint()->increaseErrorCount();
-						$this->endpoint = Model::Named("Endpoint")->refreshObject($this->endpoint());
+				if ( $http_code >= 200 && $http_code < 300 ) {
+					$this->endpoint()->clearErrorCount();
+					$this->endpoint = Model::Named("Endpoint")->refreshObject($this->endpoint());
+					Cache::Store( $cacheHeaders, $headers );
+					Cache::Store( $cacheData, $data );
+				}
+				else if ( $http_code == 302 ) {
+					throw new ResponseErrorException('Return code (' . $http_code . '): '
+						. var_export($headers, true)
+					);
+				}
+				else {
+					$this->endpoint()->increaseErrorCount();
+					$this->endpoint = Model::Named("Endpoint")->refreshObject($this->endpoint());
 // 						throw new ResponseErrorException('Return code (' . $http_code . '): '
 // 							. http_stringForCode($http_code) . " "
 // 							. curl_error($ch)
 // 						);
-					}
-				}
-				finally {
-					curl_close($ch);
 				}
 			}
-			else if ( $this->endpointCompressed() == false) {
-				$data = file_get_contents($url);
-				$headers = $http_response_header;
-				if ( $data == false ) {
-					Logger::logError( 'Error (?) with url: ' . $this->cleanURLForLog($url),
-						get_class($this), $this->endpointDisplayName());
-					Logger::logError( "Headers " . var_export($headers, true), get_class($this), $this->endpointDisplayName());
-				}
+			finally {
+				curl_close($ch);
 			}
-			else {
-				Logger::logError( 'Unable to process compressed url: ' . $this->cleanURLForLog($url),
-					get_class($this), $this->endpointDisplayName());
-			}
-
-			return array( $data, $headers );
 		}
-		return false;
+		else if ( $this->endpointCompressed() == false) {
+			$data = file_get_contents($url);
+			$headers = $http_response_header;
+			if ( $data == false ) {
+				Logger::logError( 'Error (?) with url: ' . $this->cleanURLForLog($url),
+					get_class($this), $this->endpointDisplayName());
+				Logger::logError( "Headers " . var_export($headers, true), get_class($this), $this->endpointDisplayName());
+			}
+		}
+		else {
+			Logger::logError( 'Unable to process compressed url: ' . $this->cleanURLForLog($url),
+				get_class($this), $this->endpointDisplayName());
+		}
+
+		return array( $data, $headers );
 	}
 }
 
