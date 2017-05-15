@@ -14,9 +14,10 @@ use \model\jobs\JobDBO as JobDBO;
 use \model\jobs\Job_Type as Job_Type;
 use \model\jobs\Job_TypeDBO as Job_TypeDBO;
 
+use \interfaces\ObjectProgress as ObjectProgress;
 use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
 
-class Job_RunningDBO extends _Job_RunningDBO implements ProcessStatusReporter
+class Job_RunningDBO extends _Job_RunningDBO implements ProcessStatusReporter, ObjectProgress
 {
 	public function elapsedSeconds()
 	{
@@ -71,6 +72,18 @@ class Job_RunningDBO extends _Job_RunningDBO implements ProcessStatusReporter
 	}
 
 	public function setProcessCurrent($value)
+	{
+	}
+
+	public function progressMaximum()
+	{
+	}
+
+	public function progressMinimum()
+	{
+	}
+
+	public function progressCurrent()
 	{
 	}
 

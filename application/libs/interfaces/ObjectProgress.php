@@ -6,5 +6,5 @@ interface ObjectProgress
 {
 	public function progressMaximum();
 	public function progressMinimum();
-	public function progressValue();
+	public function progressCurrent();
 }

@@ -84,7 +84,7 @@ class Reading_QueueDBO extends _Reading_QueueDBO implements \interfaces\ObjectPr
 		return 0;
 	}
 
-	public function progressValue()
+	public function progressCurrent()
 	{
 		return (isset($this->pub_read) ? $this->pub_read : 0 );
 	}

@@ -87,7 +87,7 @@ class NewznabSearchProcessor extends Processor
 
 				if ( NewznabSearchProcessor::isAcceptableMatch($publication, $rss->clean_name, $rss->clean_issue, $rss->clean_year) ) {
 					$found_nzb_to_try = true;
-// 					Logger::logWarning( "RSS " . $rss->displayName() . " is excepted" );
+// 					Logger::logWarning( "RSS " . $rss->displayName() . " is accepted" );
 					$fluxImporter->importFluxRSS( $rss );
 					break;
 				}
@@ -101,7 +101,7 @@ class NewznabSearchProcessor extends Processor
 		$endpoint_model = Model::Named('Endpoint');
 		$newznab = $endpoint_model->allForTypeCode(Endpoint_Type::Newznab, true);
 		if ( is_array($newznab) == false || count($newznab) == 0 ) {
-			throw new EndpointConnectionException($this->endpointDisplayName() ."::". 'No Newznab endpoints configured');
+			throw new EndpointConnectionException( 'No Newznab endpoints configured');
 		}
 		$newznabSearch = array();
 		foreach( $newznab as $nzbd ) {
@@ -110,7 +110,7 @@ class NewznabSearchProcessor extends Processor
 
 		$sabnzbd = $endpoint_model->allForTypeCode(Endpoint_Type::SABnzbd, true);
 		if ( is_array($sabnzbd) == false || count($sabnzbd) == 0 ) {
-			throw new EndpointConnectionException($this->endpointDisplayName() ."::". 'No SABnzbd endpoints configured');
+			throw new EndpointConnectionException( 'No SABnzbd endpoints configured');
 		}
 
 		$publication_model = Model::Named('Publication');
@@ -131,24 +131,20 @@ class NewznabSearchProcessor extends Processor
 				break;
 			}
 
-			$srchCount += count($pubs);
 			foreach ( $pubs as $publication ) {
 				$srchCount++;
-				if ( is_null($reporter) == false && ($srchCount % 10) == 0) {
+				if ( is_null($reporter) == false ) {
 					$reporter->setProcessCurrent($srchCount);
-					$reporter->setProcessMessage("NZB seraching for " . $publication->searchString());
+					$reporter->setProcessMessage( "[".$srchCount . "/". $srchMax . "] for " . $publication->searchString() );
 				}
-				sleep(1);
+				$publication->setSearch_date(time());
+				$publication->saveChanges();
 
 				$fluxImporter = new FluxImporter();
 				$fluxImporter->setEndpoint( $sabnzbd[0] );
-				if ( strlen($publication->seriesName()) > 5
-					&& strlen($publication->paddedIssueNum()) > 2
-					&& $publication->publishedYear() > 1900) {
+				if ( strlen($publication->seriesName()) > 5 && strlen($publication->paddedIssueNum()) > 2 && $publication->publishedYear() > 1900) {
 					$found_nzb_to_try = $this->processRss( $publication, $fluxImporter );
 					if ( $found_nzb_to_try == false ) {
-						$publication->setSearch_date(time());
-						$publication->saveChanges();
 						foreach( $newznabSearch as $nzbSearch ) {
 							if ( $nzbSearch->endpointEnabled() ) {
 								try {

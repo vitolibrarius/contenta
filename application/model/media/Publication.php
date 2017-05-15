@@ -419,7 +419,11 @@ class Publication extends _Publication
 		$series_model = Model::Named('Series');
 		$saj_model = Model::Named('Story_Arc_Publication');
 
-		// base qualifier
+		// base qualifiers
+		$qualifiers[] = Qualifier::AndQualifier(
+			Qualifier::IsNotNull( Publication::issue_num ),
+			Qualifier::IsNotNull( Publication::pub_date )
+		);
 		$qualifiers[] = Qualifier::OrQualifier(
 			Qualifier::Equals( Publication::media_count, 0 ),
 			Qualifier::IsNull( Publication::media_count )
@@ -436,14 +440,17 @@ class Publication extends _Publication
 			)
 		);
 
-		// don't repeat for at least 2 days
-		$qualifiers[] = Qualifier::OrQualifier(
-			Qualifier::LessThan( Publication::search_date, (time() - (3600 * 24 * 2)) ),
-			Qualifier::IsNull( Publication::search_date )
-		);
+		if ( $months == 0 ) {
+			$qualifiers[] = Qualifier::IsNull( Publication::search_date );
+		}
+		else {
+			// don't repeat for at least 2 days
+			$qualifiers[] = Qualifier::OrQualifier(
+				Qualifier::LessThan( Publication::search_date, (time() - (3600 * 24 * 2)) ),
+				Qualifier::IsNull( Publication::search_date )
+			);
 
-		// restrict to publications that are no more than X months old
-		if ( $months > 0 ) {
+			// restrict to publications that are no more than X months old
 			$qualifiers[] = Qualifier::GreaterThan( "pub_date", (time() - (3600 * 24 * (30 * $months))) );
 		}
 
@@ -464,7 +471,8 @@ class Publication extends _Publication
 			$results = $this->searchQueueListForPublishedAge( -1, $limit);
 		}
 		else {
-			$pubRanges = array( 1, 3, 6, 12, 24, -1);
+			// ranges are (never searched before, published in last 1,3,6,12,24 months, anything else)
+			$pubRanges = array(0, 1, 3, 6, 12, 24, -1);
 			foreach ( $pubRanges as $range ) {
 				$more_results = $this->searchQueueListForPublishedAge( $range, $limit - count($results));
 				//Logger::LogInfo( "Searching pubs $range, results so far: " . count($results) . " found more " . count($more_results));

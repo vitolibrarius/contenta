@@ -171,7 +171,7 @@ class Story_ArcDBO extends _Story_ArcDBO implements \interfaces\ObjectProgress
 		return 0;
 	}
 
-	public function progressValue()
+	public function progressCurrent()
 	{
 		return (isset($this->pub_available) ? $this->pub_available : 0 );
 	}

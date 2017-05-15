@@ -20,7 +20,7 @@ class ProgressBar
 		if ( is_null($object) == false && $object instanceof ObjectProgress) {
 			$max = max((float)$object->progressMaximum(), 1);
 			$min = (float)$object->progressMinimum();
-			$value = (float)$object->progressValue();
+			$value = (float)$object->progressCurrent();
 			if ( is_null($value) == false ) {
 				$percentage = (($value / ($max - $min)) * 100) . "%";
 			}
