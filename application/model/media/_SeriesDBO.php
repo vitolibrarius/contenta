@@ -19,6 +19,8 @@ use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
 use \model\media\Series_Character as Series_Character;
 use \model\media\Series_CharacterDBO as Series_CharacterDBO;
+use \model\media\Series_Artist as Series_Artist;
+use \model\media\Series_ArtistDBO as Series_ArtistDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
 use \model\reading\Reading_Queue as Reading_Queue;
@@ -135,6 +137,22 @@ abstract class _SeriesDBO extends DataObject
 			$model = Model::Named('Series_Character');
 			return $model->allObjectsForKeyValue(
 				Series_Character::series_id,
+				$this->id,
+				null,
+				$limit
+			);
+		}
+
+		return false;
+	}
+
+	// to-many relationship
+	public function series_artists($limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		if ( isset( $this->id ) ) {
+			$model = Model::Named('Series_Artist');
+			return $model->allObjectsForKeyValue(
+				Series_Artist::series_id,
 				$this->id,
 				null,
 				$limit

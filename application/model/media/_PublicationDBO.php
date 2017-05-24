@@ -21,6 +21,8 @@ use \model\reading\Reading_Item as Reading_Item;
 use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
+use \model\media\Publication_Artist as Publication_Artist;
+use \model\media\Publication_ArtistDBO as Publication_ArtistDBO;
 
 abstract class _PublicationDBO extends DataObject
 {
@@ -144,6 +146,22 @@ abstract class _PublicationDBO extends DataObject
 			$model = Model::Named('Publication_Character');
 			return $model->allObjectsForKeyValue(
 				Publication_Character::publication_id,
+				$this->id,
+				null,
+				$limit
+			);
+		}
+
+		return false;
+	}
+
+	// to-many relationship
+	public function publication_artists($limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		if ( isset( $this->id ) ) {
+			$model = Model::Named('Publication_Artist');
+			return $model->allObjectsForKeyValue(
+				Publication_Artist::publication_id,
 				$this->id,
 				null,
 				$limit

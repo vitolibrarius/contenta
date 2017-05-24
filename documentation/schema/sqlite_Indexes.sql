@@ -1,4 +1,25 @@
 
+/** ARTIST */
+DROP INDEX IF EXISTS artist_name;
+DROP INDEX IF EXISTS artist_name_01;
+CREATE  INDEX IF NOT EXISTS artist_name_01 on artist (name COLLATE NOCASE);
+DROP INDEX IF EXISTS artist_xidxsource;
+DROP INDEX IF EXISTS artist_xidxsource_02;
+CREATE UNIQUE INDEX IF NOT EXISTS artist_xidxsource_02 on artist (xid COLLATE NOCASE,xsource COLLATE NOCASE);
+
+/** ARTIST_ALIAS */
+DROP INDEX IF EXISTS artist_aliasArtist_fk;
+DROP INDEX IF EXISTS artist_aliasArtist_a_01_fk;
+CREATE INDEX IF NOT EXISTS artist_aliasArtist_a_01_fk on artist_alias (artist_id);
+DROP INDEX IF EXISTS artist_alias_artist_idname;
+DROP INDEX IF EXISTS artist_alias_artist__02;
+CREATE UNIQUE INDEX IF NOT EXISTS artist_alias_artist__02 on artist_alias (artist_id,name COLLATE NOCASE);
+
+/** ARTIST_ROLE */
+DROP INDEX IF EXISTS artist_role_name;
+DROP INDEX IF EXISTS artist_role_name_01;
+CREATE  INDEX IF NOT EXISTS artist_role_name_01 on artist_role (name COLLATE NOCASE);
+
 /** CHARACTER */
 DROP INDEX IF EXISTS characterPublisher_fk;
 DROP INDEX IF EXISTS characterPublisher_p_01_fk;
@@ -6,12 +27,15 @@ CREATE INDEX IF NOT EXISTS characterPublisher_p_01_fk on character (publisher_id
 DROP INDEX IF EXISTS character_name;
 DROP INDEX IF EXISTS character_name_02;
 CREATE  INDEX IF NOT EXISTS character_name_02 on character (name COLLATE NOCASE);
+DROP INDEX IF EXISTS character_namepopularity;
+DROP INDEX IF EXISTS character_namepopula_03;
+CREATE  INDEX IF NOT EXISTS character_namepopula_03 on character (name COLLATE NOCASE,popularity);
 DROP INDEX IF EXISTS character_realname;
-DROP INDEX IF EXISTS character_realname_03;
-CREATE  INDEX IF NOT EXISTS character_realname_03 on character (realname COLLATE NOCASE);
+DROP INDEX IF EXISTS character_realname_04;
+CREATE  INDEX IF NOT EXISTS character_realname_04 on character (realname COLLATE NOCASE);
 DROP INDEX IF EXISTS character_xidxsource;
-DROP INDEX IF EXISTS character_xidxsource_04;
-CREATE UNIQUE INDEX IF NOT EXISTS character_xidxsource_04 on character (xid COLLATE NOCASE,xsource COLLATE NOCASE);
+DROP INDEX IF EXISTS character_xidxsource_05;
+CREATE UNIQUE INDEX IF NOT EXISTS character_xidxsource_05 on character (xid COLLATE NOCASE,xsource COLLATE NOCASE);
 
 /** CHARACTER_ALIAS */
 DROP INDEX IF EXISTS character_aliasCharacter_fk;
@@ -79,12 +103,15 @@ CREATE INDEX IF NOT EXISTS logLog_Level_level_c_01_fk on log (level_code);
 DROP INDEX IF EXISTS log_level_code;
 DROP INDEX IF EXISTS log_level_code_02;
 CREATE  INDEX IF NOT EXISTS log_level_code_02 on log (level_code);
+DROP INDEX IF EXISTS log_created;
+DROP INDEX IF EXISTS log_created_03;
+CREATE  INDEX IF NOT EXISTS log_created_03 on log (created);
 DROP INDEX IF EXISTS log_tracetrace_id;
-DROP INDEX IF EXISTS log_tracetrace_id_03;
-CREATE  INDEX IF NOT EXISTS log_tracetrace_id_03 on log (trace COLLATE NOCASE,trace_id COLLATE NOCASE);
+DROP INDEX IF EXISTS log_tracetrace_id_04;
+CREATE  INDEX IF NOT EXISTS log_tracetrace_id_04 on log (trace COLLATE NOCASE,trace_id COLLATE NOCASE);
 DROP INDEX IF EXISTS log_contextcontext_id;
-DROP INDEX IF EXISTS log_contextcontext_i_04;
-CREATE  INDEX IF NOT EXISTS log_contextcontext_i_04 on log (context COLLATE NOCASE,context_id COLLATE NOCASE);
+DROP INDEX IF EXISTS log_contextcontext_i_05;
+CREATE  INDEX IF NOT EXISTS log_contextcontext_i_05 on log (context COLLATE NOCASE,context_id COLLATE NOCASE);
 
 /** LOG_LEVEL */
 DROP INDEX IF EXISTS log_level_name;
@@ -133,9 +160,26 @@ CREATE INDEX IF NOT EXISTS publicationSeries_se_01_fk on publication (series_id)
 DROP INDEX IF EXISTS publication_name;
 DROP INDEX IF EXISTS publication_name_02;
 CREATE  INDEX IF NOT EXISTS publication_name_02 on publication (name COLLATE NOCASE);
+DROP INDEX IF EXISTS publication_issue_orderpub_date;
+DROP INDEX IF EXISTS publication_issue_or_03;
+CREATE  INDEX IF NOT EXISTS publication_issue_or_03 on publication (issue_order,pub_date);
 DROP INDEX IF EXISTS publication_xidxsource;
-DROP INDEX IF EXISTS publication_xidxsour_03;
-CREATE UNIQUE INDEX IF NOT EXISTS publication_xidxsour_03 on publication (xid COLLATE NOCASE,xsource COLLATE NOCASE);
+DROP INDEX IF EXISTS publication_xidxsour_04;
+CREATE UNIQUE INDEX IF NOT EXISTS publication_xidxsour_04 on publication (xid COLLATE NOCASE,xsource COLLATE NOCASE);
+
+/** PUBLICATION_ARTIST */
+DROP INDEX IF EXISTS publication_artistPublication_fk;
+DROP INDEX IF EXISTS publication_artistPu_01_fk;
+CREATE INDEX IF NOT EXISTS publication_artistPu_01_fk on publication_artist (publication_id);
+DROP INDEX IF EXISTS publication_artistArtist_fk;
+DROP INDEX IF EXISTS publication_artistAr_02_fk;
+CREATE INDEX IF NOT EXISTS publication_artistAr_02_fk on publication_artist (artist_id);
+DROP INDEX IF EXISTS publication_artistArtist_Role_fk;
+DROP INDEX IF EXISTS publication_artistAr_03_fk;
+CREATE INDEX IF NOT EXISTS publication_artistAr_03_fk on publication_artist (role_code);
+DROP INDEX IF EXISTS publication_artist_publication_idartist_idrole_code;
+DROP INDEX IF EXISTS publication_artist_p_04;
+CREATE UNIQUE INDEX IF NOT EXISTS publication_artist_p_04 on publication_artist (publication_id,artist_id,role_code);
 
 /** PUBLICATION_CHARACTER */
 DROP INDEX IF EXISTS publication_characterPublication_fk;
@@ -234,6 +278,9 @@ CREATE  INDEX IF NOT EXISTS rss_clean_nameclean__02 on rss (clean_name COLLATE N
 DROP INDEX IF EXISTS rss_guid;
 DROP INDEX IF EXISTS rss_guid_03;
 CREATE UNIQUE INDEX IF NOT EXISTS rss_guid_03 on rss (guid COLLATE NOCASE);
+DROP INDEX IF EXISTS rss_created;
+DROP INDEX IF EXISTS rss_created_04;
+CREATE  INDEX IF NOT EXISTS rss_created_04 on rss (created);
 
 /** SERIES */
 DROP INDEX IF EXISTS seriesPublisher_fk;
@@ -242,15 +289,18 @@ CREATE INDEX IF NOT EXISTS seriesPublisher_publ_01_fk on series (publisher_id);
 DROP INDEX IF EXISTS series_name;
 DROP INDEX IF EXISTS series_name_02;
 CREATE  INDEX IF NOT EXISTS series_name_02 on series (name COLLATE NOCASE);
+DROP INDEX IF EXISTS series_namestart_year;
+DROP INDEX IF EXISTS series_namestart_yea_03;
+CREATE  INDEX IF NOT EXISTS series_namestart_yea_03 on series (name COLLATE NOCASE,start_year);
 DROP INDEX IF EXISTS series_search_name;
-DROP INDEX IF EXISTS series_search_name_03;
-CREATE  INDEX IF NOT EXISTS series_search_name_03 on series (search_name COLLATE NOCASE);
+DROP INDEX IF EXISTS series_search_name_04;
+CREATE  INDEX IF NOT EXISTS series_search_name_04 on series (search_name COLLATE NOCASE);
 DROP INDEX IF EXISTS series_search_namepub_wanted;
-DROP INDEX IF EXISTS series_search_namepu_04;
-CREATE  INDEX IF NOT EXISTS series_search_namepu_04 on series (search_name COLLATE NOCASE,pub_wanted);
+DROP INDEX IF EXISTS series_search_namepu_05;
+CREATE  INDEX IF NOT EXISTS series_search_namepu_05 on series (search_name COLLATE NOCASE,pub_wanted);
 DROP INDEX IF EXISTS series_xidxsource;
-DROP INDEX IF EXISTS series_xidxsource_05;
-CREATE UNIQUE INDEX IF NOT EXISTS series_xidxsource_05 on series (xid COLLATE NOCASE,xsource COLLATE NOCASE);
+DROP INDEX IF EXISTS series_xidxsource_06;
+CREATE UNIQUE INDEX IF NOT EXISTS series_xidxsource_06 on series (xid COLLATE NOCASE,xsource COLLATE NOCASE);
 
 /** SERIES_ALIAS */
 DROP INDEX IF EXISTS series_aliasSeries_fk;
@@ -259,6 +309,20 @@ CREATE INDEX IF NOT EXISTS series_aliasSeries_s_01_fk on series_alias (series_id
 DROP INDEX IF EXISTS series_alias_series_idname;
 DROP INDEX IF EXISTS series_alias_series__02;
 CREATE UNIQUE INDEX IF NOT EXISTS series_alias_series__02 on series_alias (series_id,name COLLATE NOCASE);
+
+/** SERIES_ARTIST */
+DROP INDEX IF EXISTS series_artistSeries_fk;
+DROP INDEX IF EXISTS series_artistSeries__01_fk;
+CREATE INDEX IF NOT EXISTS series_artistSeries__01_fk on series_artist (series_id);
+DROP INDEX IF EXISTS series_artistartist_fk;
+DROP INDEX IF EXISTS series_artistartist__02_fk;
+CREATE INDEX IF NOT EXISTS series_artistartist__02_fk on series_artist (artist_id);
+DROP INDEX IF EXISTS series_artistArtist_Role_fk;
+DROP INDEX IF EXISTS series_artistArtist__03_fk;
+CREATE INDEX IF NOT EXISTS series_artistArtist__03_fk on series_artist (role_code);
+DROP INDEX IF EXISTS series_artist_series_idartist_idrole_code;
+DROP INDEX IF EXISTS series_artist_series_04;
+CREATE UNIQUE INDEX IF NOT EXISTS series_artist_series_04 on series_artist (series_id,artist_id,role_code);
 
 /** SERIES_CHARACTER */
 DROP INDEX IF EXISTS series_characterSeries_fk;

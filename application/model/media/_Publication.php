@@ -25,6 +25,8 @@ use \model\reading\Reading_Item as Reading_Item;
 use \model\reading\Reading_ItemDBO as Reading_ItemDBO;
 use \model\media\Publication_Character as Publication_Character;
 use \model\media\Publication_CharacterDBO as Publication_CharacterDBO;
+use \model\media\Publication_Artist as Publication_Artist;
+use \model\media\Publication_ArtistDBO as Publication_ArtistDBO;
 
 /** Generated class, do not edit.
  */
@@ -54,6 +56,7 @@ abstract class _Publication extends Model
 	const story_arc_publication = 'story_arc_publication';
 	const reading_items = 'reading_items';
 	const publication_characters = 'publication_characters';
+	const publication_artists = 'publication_artists';
 
 	public function modelName()
 	{
@@ -126,7 +129,8 @@ abstract class _Publication extends Model
 			Publication::media,
 			Publication::story_arc_publication,
 			Publication::reading_items,
-			Publication::publication_characters
+			Publication::publication_characters,
+			Publication::publication_artists
 		);
 	}
 
@@ -181,6 +185,13 @@ abstract class _Publication extends Model
 			),
 			Publication::publication_characters => array(
 				'destination' => 'Publication_Character',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'publication_id')
+			),
+			Publication::publication_artists => array(
+				'destination' => 'Publication_Artist',
 				'ownsDestination' => true,
 				'isMandatory' => false,
 				'isToMany' => true,
@@ -368,6 +379,9 @@ abstract class _Publication extends Model
 				case "publication_character":
 					return array( Publication::id, "publication_id"  );
 					break;
+				case "publication_artist":
+					return array( Publication::id, "publication_id"  );
+					break;
 				default:
 					break;
 			}
@@ -508,6 +522,10 @@ abstract class _Publication extends Model
 			}
 			$publication_character_model = Model::Named('Publication_Character');
 			if ( $publication_character_model->deleteAllForKeyValue(Publication_Character::publication_id, $object->id) == false ) {
+				return false;
+			}
+			$publication_artist_model = Model::Named('Publication_Artist');
+			if ( $publication_artist_model->deleteAllForKeyValue(Publication_Artist::publication_id, $object->id) == false ) {
 				return false;
 			}
 			return parent::deleteObject($object);

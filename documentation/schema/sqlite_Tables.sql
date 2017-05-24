@@ -3,6 +3,37 @@
  */
 
 
+/** ARTIST */
+CREATE TABLE IF NOT EXISTS artist (
+			id INTEGER PRIMARY KEY,
+			created INTEGER,
+			name TEXT,
+			desc TEXT,
+			gender TEXT,
+			birth_date INTEGER,
+			death_date INTEGER,
+			pub_wanted INTEGER,
+			xurl TEXT,
+			xsource TEXT,
+			xid TEXT,
+			xupdated INTEGER
+		);
+
+/** ARTIST_ALIAS */
+CREATE TABLE IF NOT EXISTS artist_alias (
+			id INTEGER PRIMARY KEY,
+			name TEXT,
+			artist_id INTEGER,
+			FOREIGN KEY ( artist_id ) REFERENCES artist ( id )
+		);
+
+/** ARTIST_ROLE */
+CREATE TABLE IF NOT EXISTS artist_role (
+			code TEXT PRIMARY KEY,
+			name TEXT,
+			enabled INTEGER
+		);
+
 /** ENDPOINT_TYPE */
 CREATE TABLE IF NOT EXISTS endpoint_type (
 			code TEXT PRIMARY KEY,
@@ -280,7 +311,19 @@ CREATE TABLE IF NOT EXISTS publication (
 			xsource TEXT,
 			xid TEXT,
 			xupdated INTEGER,
+			search_date INTEGER,
 			FOREIGN KEY ( series_id ) REFERENCES series ( id )
+		);
+
+/** PUBLICATION_ARTIST */
+CREATE TABLE IF NOT EXISTS publication_artist (
+			id INTEGER PRIMARY KEY,
+			publication_id INTEGER,
+			artist_id INTEGER,
+			role_code TEXT,
+			FOREIGN KEY ( publication_id ) REFERENCES publication ( id ),
+			FOREIGN KEY ( artist_id ) REFERENCES artist ( id ),
+			FOREIGN KEY ( role_code ) REFERENCES artist_role ( code )
 		);
 
 /** PUBLICATION_CHARACTER */
@@ -304,7 +347,7 @@ CREATE TABLE IF NOT EXISTS series_alias (
 CREATE TABLE IF NOT EXISTS media (
 			id INTEGER PRIMARY KEY,
 			publication_id INTEGER,
-			type_code INTEGER,
+			type_code TEXT,
 			filename TEXT,
 			original_filename TEXT,
 			checksum TEXT,
@@ -312,6 +355,17 @@ CREATE TABLE IF NOT EXISTS media (
 			size INTEGER,
 			FOREIGN KEY ( type_code ) REFERENCES media_type ( code ),
 			FOREIGN KEY ( publication_id ) REFERENCES publication ( id )
+		);
+
+/** SERIES_ARTIST */
+CREATE TABLE IF NOT EXISTS series_artist (
+			id INTEGER PRIMARY KEY,
+			series_id INTEGER,
+			artist_id INTEGER,
+			role_code TEXT,
+			FOREIGN KEY ( series_id ) REFERENCES series ( id ),
+			FOREIGN KEY ( artist_id ) REFERENCES artist ( id ),
+			FOREIGN KEY ( role_code ) REFERENCES artist_role ( code )
 		);
 
 /** SERIES_CHARACTER */

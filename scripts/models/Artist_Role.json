@@ -1,0 +1,20 @@
+{
+    "attributes": {
+        "code": { "column": "code",	"length": 10, "type": "TEXT", "nullable": false },
+        "name": { "column": "name",	"length": 256, "type": "TEXT", "nullable": false },
+        "enabled": { "column": "enabled", "type": "BOOLEAN", "default": "Model::TERTIARY_FALSE" }
+    },
+    "primaryKeys": [ "code" ],
+    "table": "artist_role",
+    "package": "media",
+    "model": "Artist_Role",
+    "dbo": "Artist_RoleDBO",
+	"sort" : [
+		{ "asc": "name" }
+	],
+    "relationships" :{
+    },
+    "indexes" : [
+    	{ "columns": ["name"] }
+    ]
+}

@@ -71,6 +71,30 @@ function compareComicVineDetails( $expected, $issue )
 	}
 }
 
+
+function downloadImages($type = '', $cvData ) {
+	$imagepaths = array(
+		"icon_url",
+		"medium_url",
+		"screen_url",
+		"small_url",
+		"super_url",
+		"thumb_url",
+		"tiny_url"
+	);
+	foreach( $imagepaths as $imgkey ) {
+		$name = $type . "_" . array_valueForKeypath( "name", $cvData ) . "_" . $imgkey;
+		$url = array_valueForKeypath( appendPath("image", $imgkey), $cvData );
+		if ( is_null($url) ) {
+			echo PHP_EOL . "no url for " . $imgkey;
+		}
+		else {
+			$filename = downloadImage($url, Config::GetMedia(), $name );
+			echo PHP_EOL . $imgkey . "\t" . $filename;
+		}
+	}
+}
+
 $points = $ep_model->allForTypeCode(Endpoint_Type::ComicVine);
 ($points != false && count($points) > 0) || die('No endpoint defined');
 
@@ -194,6 +218,24 @@ foreach( $issue_tests as $filename => $expected ) {
 				$issue = array_pop($issues);
 				compareComicVineDetails( $expected, $issue );
 				$series = $connection->seriesDetails( array_valueForKeypath( "volume/id", $issue ));
+				if ( $series != false ) {
+					downloadImages( "series", $series );
+				}
+
+				$pub = $connection->issueDetails( array_valueForKeypath( "id", $issue ));
+				$artists = array_valueForKeypath( "person_credits", $pub );
+				if ( is_array($artists) ) {
+					foreach ($artists as $artist ) {
+						$role = array_valueForKeypath( "role", $artist );
+						if ( in_array($role, array( "writer", "artist" ))) {
+							echo PHP_EOL . array_valueForKeypath( "name", $artist );
+							$cv_artist = $connection->personDetails(array_valueForKeypath( "id", $artist ));
+							if ( $cv_artist != false ) {
+								downloadImages( "artist", $cv_artist );
+							}
+						}
+					}
+				}
 				break;
 			default:
 				foreach( $issues as $dict ) {
@@ -211,5 +253,5 @@ foreach( $issue_tests as $filename => $expected ) {
 		echo "	NO match " . var_export($issues, true) . PHP_EOL;
 	}
 
-// 	die();
+//  	die();
 }

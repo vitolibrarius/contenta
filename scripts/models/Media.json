@@ -2,7 +2,7 @@
     "attributes": {
         "id": { "column": "id", "type": "INTEGER" },
         "publication_id": { "column": "publication_id", "type": "INTEGER", "nullable": false },
-        "type_code": { "column": "type_code", "type": "INTEGER", "nullable": false },
+        "type_code": { "column": "type_code", "length": 10, "type": "TEXT", "nullable": false },
         "filename": { "column": "filename", "length": 4096, "type": "TEXT", "nullable": false },
         "original_filename": { "column": "original_filename", "length": 4096, "type": "TEXT", "nullable": true },
         "checksum": { "column": "checksum", "length": 256, "type": "TEXT" },

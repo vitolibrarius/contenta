@@ -26,7 +26,7 @@ class PublicationDBO extends _PublicationDBO
 
 	public function displayName()
 	{
-		return $this->series()->name()
+		return $this->seriesName()
 			. " [" . $this->paddedIssueNum() . "]"
 			. ($this->publishedYear() > 1900 ? " " . $this->publishedYear() : '');
 	}
@@ -89,6 +89,12 @@ class PublicationDBO extends _PublicationDBO
 	{
 		$model = Model::Named('Publication_Character');
 		return $model->createJoin( $this, $object );
+	}
+
+	public function joinToArtist($object, $roleCode = 'unknown')
+	{
+		$model = Model::Named('Publication_Artist');
+		return $model->createJoin( $this, $object, $roleCode );
 	}
 
 	public function story_arcs($limit = null)

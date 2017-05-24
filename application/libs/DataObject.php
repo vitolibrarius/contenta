@@ -97,7 +97,7 @@ abstract class DataObject implements JsonSerializable
 	public function hasAdditionalMedia()
 	{
 		$tbl = $this->tableName();
-		return in_array($tbl, array('series', 'publication', 'media', 'story_arc', 'character', 'publisher'));
+		return in_array($tbl, array('series', 'publication', 'media', 'story_arc', 'character', 'publisher', 'artist'));
 	}
 
 	public function hasIcons()
@@ -142,6 +142,14 @@ abstract class DataObject implements JsonSerializable
 			}
 		}
 		return null;
+	}
+
+	public function neverEndpointUpdated()
+	{
+		if ( isset( $this->xsource) ) {
+			return (isset($this->xupdated) == false);
+		}
+		return false;
 	}
 
 	public function needsEndpointUpdate()

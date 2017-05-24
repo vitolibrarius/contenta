@@ -16,6 +16,7 @@ use connectors\ComicVineConnector as ComicVineConnector;
 
 use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
+use \model\media\Artist as Artist;
 use \model\media\Character as Character;
 use \model\media\Series as Series;
 use \model\media\Publication as Publication;
@@ -93,6 +94,16 @@ class ComicVineImporter extends ContentMetadataImporter
 		return (is_string($coverDate) ? strtotime($coverDate) : $coverDate);
 	}
 
+	public function convert_birth_date($coverDate = null)
+	{
+		return (is_string($coverDate) ? strtotime($coverDate) : $coverDate);
+	}
+
+	public function convert_death_date($coverDate = null)
+	{
+		return (is_string($coverDate) ? strtotime($coverDate) : $coverDate);
+	}
+
 	public function convert_pub_count($pub_count = null)
 	{
 		if (isset($pub_count) && strlen($pub_count) > 0 && intval($pub_count) > 0) {
@@ -101,7 +112,6 @@ class ComicVineImporter extends ContentMetadataImporter
 
 		return null;
 	}
-
 
 	public function convert_start_year($start_year = null)
 	{
@@ -122,6 +132,23 @@ class ComicVineImporter extends ContentMetadataImporter
 			"deck" 				=> "desc", // not currently used
 			"image/tiny_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
 			"image/icon_url" 	=> ComicVineImporter::META_IMPORT_LARGE_ICON
+		);
+	}
+
+	public function importMap_artist()
+	{
+		// comicvine => model attribute
+		return array( //,
+			"aliases"			=> "aliases",
+			"id" 				=> Artist::xid,
+			"site_detail_url" 	=> Artist::xurl,
+			"name" 				=> Artist::name,
+			"deck" 				=> Artist::desc,
+			"gender" 			=> Artist::gender,
+			"birth"				=> Artist::birth_date,
+			"role"				=> "role",
+			"image/icon_url" 	=> ComicVineImporter::META_IMPORT_SMALL_ICON,
+			"image/thumb_url" 	=> ComicVineImporter::META_IMPORT_LARGE_ICON
 		);
 	}
 
@@ -192,7 +219,14 @@ class ComicVineImporter extends ContentMetadataImporter
 	/** PRE-PROCESSING
 	 * imports a minimal record that can later be fleshed out
 	 */
-	public function preprocessRelationship( $model = null, $path = "error", array $cvData = array(), array $map = array(), $forceMeta = false, $forceImages = false )
+	public function preprocessRelationship(
+		$model = null,
+		$source_path = "error",
+		array $cvData = array(),
+		array $map = array(),
+		$relationRole = 'unknown',
+		$forceMeta = false,
+		$forceImages = false )
 	{
 		if ( is_null($model) || ($model instanceof \Model) == false) {
 			throw new Exception("Destination Model is required " . var_export($model, true));
@@ -205,9 +239,10 @@ class ComicVineImporter extends ContentMetadataImporter
 
 		// relationship reference
 		$relations_key = $model->tableName() . "_" . $cvData['id'];
-		$relation_path = appendPath( $path, ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $relations_key );
+		$relation_path = appendPath( $source_path, ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $relations_key );
 		if ( $this->isMeta($relation_path) == false ) {
-			$this->setMeta( $relation_path, $cvData['id'] );
+			$this->setMeta( appendPath($relation_path, "id"), $cvData['id'] );
+			$this->setMeta( appendPath($relation_path, "role"), $relationRole );
 		}
 
 		// ensure the related record is enqueued for import
@@ -238,7 +273,7 @@ class ComicVineImporter extends ContentMetadataImporter
 			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
 			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( ContentMetadataImporter::META_DATA_ROOT, Publisher::TABLE . '_' . $xid );
+			$path = $this->data_path( Publisher::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				$record = $connection->publisherDetails( $xid );
@@ -266,6 +301,46 @@ class ComicVineImporter extends ContentMetadataImporter
 		return $object;
 	}
 
+	public function preprocess_artist(array $metaRecord = array())
+	{
+		$object = parent::preprocess(Model::Named("Artist"), $metaRecord);
+
+		if ( $object != null ) {
+			$forceMeta = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE, $metaRecord );
+			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
+			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
+
+			$path = $this->data_path( Artist::TABLE . '_' . $xid );
+			if ( $forceMeta === true || $object->neverEndpointUpdated() ) {
+				$connection = $this->connection();
+				try {
+					$record = $connection->personDetails( $xid );
+				}
+				catch (\Exception $e) {
+					throw new Exception("Connection failed to find artist for " . $xid);
+				}
+
+				$map = $this->importMap_artist();
+				foreach( $map as $cvKey => $modelKey ) {
+					$value = array_valueForKeypath($cvKey, $record);
+					$convert_method = 'convert_' . $modelKey;
+					if (method_exists($this, $convert_method)) {
+						$value = $this->$convert_method( $value );
+					}
+					$this->setMeta( appendPath( $path, $modelKey), $value );
+				}
+				$this->setMeta( appendPath($path, Artist::xupdated), time() );
+
+				$descPath = appendPath( $path, "desc");
+				$this->setMeta( $descPath, $this->descriptionForRecord( $record) );
+
+				// ignore volume credits for now
+			}
+		}
+
+		return $object;
+	}
+
 	public function preprocess_character(array $metaRecord = array())
 	{
 		$object = parent::preprocess(Model::Named("Character"), $metaRecord);
@@ -275,7 +350,7 @@ class ComicVineImporter extends ContentMetadataImporter
 			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
 			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( ContentMetadataImporter::META_DATA_ROOT, Character::TABLE . '_' . $xid );
+			$path = $this->data_path( Character::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				try {
@@ -333,7 +408,7 @@ class ComicVineImporter extends ContentMetadataImporter
 			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
 			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( ContentMetadataImporter::META_DATA_ROOT, Series::TABLE . '_' . $xid );
+			$path = $this->data_path( Series::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				try {
@@ -394,6 +469,7 @@ class ComicVineImporter extends ContentMetadataImporter
 							$path,
 							$issue,
 							$this->importMap_publication(),
+							"series",
 							$destinationNeedsUpdate,
 							$destinationNeedsUpdate
 						);
@@ -414,7 +490,7 @@ class ComicVineImporter extends ContentMetadataImporter
 			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
 			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( ContentMetadataImporter::META_DATA_ROOT, Story_Arc::TABLE . '_' . $xid );
+			$path = $this->data_path( Story_Arc::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				$record = $connection->story_arcDetails( $xid );
@@ -451,6 +527,7 @@ class ComicVineImporter extends ContentMetadataImporter
 							$path,
 							$issue,
 							$this->importMap_publication(),
+							"story_arc",
 							true,
 							true
 						);
@@ -471,7 +548,7 @@ class ComicVineImporter extends ContentMetadataImporter
 			$forceImages = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_FORCE_ICON, $metaRecord );
 			$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
 
-			$path = appendPath( ContentMetadataImporter::META_DATA_ROOT, Publication::TABLE . '_' . $xid );
+			$path = $this->data_path( Publication::TABLE . '_' . $xid );
 			if ( $forceMeta === true ) {
 				$connection = $this->connection();
 				$record = $connection->issueDetails( $xid );
@@ -517,6 +594,17 @@ class ComicVineImporter extends ContentMetadataImporter
 						$enqueued = $this->preprocessRelationship( Model::Named('Character'), $path, $character, $this->importMap_character() );
 					}
 				}
+
+				$person_array = array_valueForKeypath("person_credits", $record);
+				if ( is_array($person_array) ) {
+					foreach ( $person_array as $person ) {
+						$roleName = (isset($person['role']) ? $person['role'] : 'unknown');
+						$role = Model::Named("Artist_Role")->findRoleOrCreate($roleName, $roleName);
+						if ( $role instanceof \model\media\Artist_RoleDBO && $role->isEnabled() ) {
+	 						$enqueued = $this->preprocessRelationship( Model::Named('Artist'), $path, $person, $this->importMap_artist(), $roleName);
+	 					}
+					}
+				}
 			}
 		}
 
@@ -534,20 +622,58 @@ class ComicVineImporter extends ContentMetadataImporter
 		return $object;
 	}
 
+	public function finalize_artist(array $metaRecord = array())
+	{
+		$object = parent::finalize(Model::Named("Artist"), $metaRecord);
+// 		if ( $object instanceof \model\media\ArtistDBO ) {
+// 			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
+// 			if ( is_array($relationships) ) {
+// 				foreach( $relationships as $path => $relatedId ) {
+// 					$table = substr($path, 0, strrpos($path, '_'));
+// 					$related_model = Model::Named( $table );
+// 					if ( $related_model == null ) {
+// 						throw new Exception( "failed to find model for " . $table);
+// 					}
+//
+// 					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+// 					if ( $relatedObj == false ) {
+// 						throw new Exception( "failed to find object for $table xid=$relatedId");
+// 					}
+//
+// 					switch( $table ) {
+// 						case "publisher":
+// 							$object->setPublisher( $relatedObj );
+// 							break;
+// 						case "story_arc":
+// 							if ( $object->isWanted() ) {
+// 								$object->joinToStory_Arc( $relatedObj );
+// 							}
+// 							break;
+// 						default:
+// 							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
+// 							break;
+// 					}
+// 				}
+// 			}
+// 		}
+
+		return $object;
+	}
+
 	public function finalize_character(array $metaRecord = array())
 	{
 		$object = parent::finalize(Model::Named("Character"), $metaRecord);
 		if ( $object instanceof \model\media\CharacterDBO ) {
 			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
-				foreach( $relationships as $path => $relatedId ) {
+				foreach( $relationships as $path => $relatedData ) {
 					$table = substr($path, 0, strrpos($path, '_'));
 					$related_model = Model::Named( $table );
 					if ( $related_model == null ) {
 						throw new Exception( "failed to find model for " . $table);
 					}
 
-					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+					$relatedObj = $related_model->objectForExternal($relatedData['id'], $this->endpointTypeCode());
 					if ( $relatedObj == false ) {
 						throw new Exception( "failed to find object for $table xid=$relatedId");
 					}
@@ -578,14 +704,14 @@ class ComicVineImporter extends ContentMetadataImporter
 		if ( $object instanceof \model\media\SeriesDBO ) {
 			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
-				foreach( $relationships as $path => $relatedId ) {
+				foreach( $relationships as $path => $relatedData ) {
 					$table = substr($path, 0, strrpos($path, '_'));
 					$related_model = Model::Named( $table );
 					if ( $related_model == null ) {
 						throw new Exception( "failed to find model for " . $table);
 					}
 
-					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+					$relatedObj = $related_model->objectForExternal($relatedData['id'], $this->endpointTypeCode());
 					if ( $relatedObj == false ) {
 						throw new Exception( "failed to find object for $table xid=$relatedId");
 					}
@@ -620,14 +746,14 @@ class ComicVineImporter extends ContentMetadataImporter
 		if ( $object instanceof \model\media\Story_ArcDBO ) {
 			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
-				foreach( $relationships as $path => $relatedId ) {
+				foreach( $relationships as $path => $relatedData ) {
 					$table = substr($path, 0, strrpos($path, '_'));
 					$related_model = Model::Named( $table );
 					if ( $related_model == null ) {
 						throw new Exception( "failed to find model for " . $table);
 					}
 
-					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+					$relatedObj = $related_model->objectForExternal($relatedData['id'], $this->endpointTypeCode());
 					if ( $relatedObj == false ) {
 						throw new Exception( "failed to find object for $table xid=$relatedId");
 					}
@@ -656,14 +782,14 @@ class ComicVineImporter extends ContentMetadataImporter
 		if ( $object instanceof \model\media\PublicationDBO ) {
 			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
 			if ( is_array($relationships) ) {
-				foreach( $relationships as $path => $relatedId ) {
+				foreach( $relationships as $path => $relatedData ) {
 					$table = substr($path, 0, strrpos($path, '_'));
 					$related_model = Model::Named( $table );
 					if ( $related_model == null ) {
 						throw new Exception( "failed to find model for " . $table);
 					}
 
-					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
+					$relatedObj = $related_model->objectForExternal($relatedData['id'], $this->endpointTypeCode());
 					if ( $relatedObj == false ) {
 						throw new Exception( "failed to find object for $table xid=$relatedId");
 					}
@@ -680,6 +806,10 @@ class ComicVineImporter extends ContentMetadataImporter
 							break;
 						case "story_arc":
 							$object->joinToStory_Arc( $relatedObj );
+							break;
+						case "artist":
+							$roleCode = $relatedData['role'];
+							$object->joinToArtist( $relatedObj, $roleCode );
 							break;
 						default:
 							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );

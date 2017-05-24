@@ -23,6 +23,8 @@ use \model\media\Publication as Publication;
 use \model\media\PublicationDBO as PublicationDBO;
 use \model\media\Series_Character as Series_Character;
 use \model\media\Series_CharacterDBO as Series_CharacterDBO;
+use \model\media\Series_Artist as Series_Artist;
+use \model\media\Series_ArtistDBO as Series_ArtistDBO;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
 use \model\media\Story_Arc_SeriesDBO as Story_Arc_SeriesDBO;
 use \model\reading\Reading_Queue as Reading_Queue;
@@ -58,6 +60,7 @@ abstract class _Series extends Model
 	const publisher = 'publisher';
 	const publications = 'publications';
 	const series_characters = 'series_characters';
+	const series_artists = 'series_artists';
 	const story_arc_series = 'story_arc_series';
 	const reading_queues = 'reading_queues';
 
@@ -138,6 +141,7 @@ abstract class _Series extends Model
 			Series::publisher,
 			Series::publications,
 			Series::series_characters,
+			Series::series_artists,
 			Series::story_arc_series,
 			Series::reading_queues
 		);
@@ -190,6 +194,13 @@ abstract class _Series extends Model
 			),
 			Series::series_characters => array(
 				'destination' => 'Series_Character',
+				'ownsDestination' => true,
+				'isMandatory' => false,
+				'isToMany' => true,
+				'joins' => array( 'id' => 'series_id')
+			),
+			Series::series_artists => array(
+				'destination' => 'Series_Artist',
 				'ownsDestination' => true,
 				'isMandatory' => false,
 				'isToMany' => true,
@@ -460,6 +471,9 @@ abstract class _Series extends Model
 				case "series_character":
 					return array( Series::id, "series_id"  );
 					break;
+				case "series_artist":
+					return array( Series::id, "series_id"  );
+					break;
 				case "story_arc_series":
 					return array( Series::id, "series_id"  );
 					break;
@@ -620,6 +634,10 @@ abstract class _Series extends Model
 			}
 			$series_character_model = Model::Named('Series_Character');
 			if ( $series_character_model->deleteAllForKeyValue(Series_Character::series_id, $object->id) == false ) {
+				return false;
+			}
+			$series_artist_model = Model::Named('Series_Artist');
+			if ( $series_artist_model->deleteAllForKeyValue(Series_Artist::series_id, $object->id) == false ) {
 				return false;
 			}
 			$story_arc_series_model = Model::Named('Story_Arc_Series');

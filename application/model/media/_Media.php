@@ -145,10 +145,10 @@ abstract class _Media extends Model
 					}
 					break;
 
-			// Media::type_code == INTEGER
+			// Media::type_code == TEXT
 				case Media::type_code:
-					if ( intval($value) > 0 ) {
-						$qualifiers[Media::type_code] = Qualifier::Equals( Media::type_code, intval($value) );
+					if (strlen($value) > 0) {
+						$qualifiers[Media::type_code] = Qualifier::Equals( Media::type_code, $value );
 					}
 					break;
 
@@ -195,6 +195,11 @@ abstract class _Media extends Model
 	 *	Simple fetches
 	 */
 
+
+	public function allForType_code($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Media::type_code, $value, null, $limit);
+	}
 
 
 	public function allForFilename($value, $limit = SQL::SQL_DEFAULT_LIMIT)
@@ -312,7 +317,7 @@ abstract class _Media extends Model
 				if ( $local_mediaType instanceof Media_TypeDBO) {
 					$values[Media::type_code] = $local_mediaType->code;
 				}
-				else if ( is_integer( $local_mediaType) ) {
+				else if ( is_string( $local_mediaType) ) {
 					$params[Media::type_code] = $local_mediaType;
 				}
 			}
@@ -336,7 +341,7 @@ abstract class _Media extends Model
 				if ( $local_mediaType instanceof Media_TypeDBO) {
 					$values[Media::type_code] = $local_mediaType->code;
 				}
-				else if ( is_integer( $local_mediaType) ) {
+				else if ( is_string( $local_mediaType) ) {
 					$params[Media::type_code] = $values['mediaType'];
 				}
 			}

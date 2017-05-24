@@ -240,7 +240,7 @@ class Character extends _Character
 				if ( count($updates) > 0 ) {
 					list($obj, $errors) = $this->updateObject($obj, $updates );
 					if ( is_array($errors) && count($errors) > 0) {
-						throw \Exception("Errors creating new Publication " . var_export($errors, true) );
+						throw \Exception("Errors updating Character " . var_export($errors, true) );
 					}
 				}
 			}

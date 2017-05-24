@@ -22,6 +22,7 @@ use \model\network\EndpointDBO as EndpointDBO;
 use \model\media\Story_Arc as Story_Arc;
 use \model\media\Story_Arc_Character as Story_Arc_Character;
 use \model\media\Story_Arc_Series as Story_Arc_Series;
+use \model\media\Artist as Artist;
 
 abstract class ContentMetadataImporter extends EndpointImporter
 {
@@ -92,6 +93,30 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		return false;
 	}
 
+	public function metapath( $root, $itemKey )
+	{
+		$VALID_ROOTS = array(
+			ContentMetadataImporter::META_ENQUEUE_ROOT,
+			ContentMetadataImporter::META_IMPORT_ROOT,
+			ContentMetadataImporter::META_DATA_ROOT,
+			ContentMetadataImporter::META_PURGE_ROOT,
+			ContentMetadataImporter::META_FULL_ROOT
+		);
+		if ( in_array($root, $VALID_ROOTS) == false ) {
+			throw new Exception("Metapath root is invalid '" . $root . "'");
+		}
+		if ( is_string($itemKey) == false || strlen($itemKey) == 0 ) {
+			throw new Exception("Metapath key is invalid '" . $root . "' / '" . var_export($itemKey, true) . "'");
+		}
+		return appendPath( $root, $itemKey);
+	}
+
+	public function enqueue_path( $itemKey )	{ return $this->metapath( ContentMetadataImporter::META_ENQUEUE_ROOT, $itemKey ); }
+	public function import_path( $itemKey )		{ return $this->metapath( ContentMetadataImporter::META_IMPORT_ROOT, $itemKey ); }
+	public function data_path( $itemKey )		{ return $this->metapath( ContentMetadataImporter::META_DATA_ROOT, $itemKey ); }
+	public function purge_path( $itemKey )		{ return $this->metapath( ContentMetadataImporter::META_PURGE_ROOT, $itemKey ); }
+	public function fullmetal_path( $itemKey )	{ return $this->metapath( ContentMetadataImporter::META_FULL_ROOT, $itemKey ); }
+
 	/**
 	 * Set meta data for async processing
 	 */
@@ -136,10 +161,10 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		}
 
 		// check to see if the record has been pre-processed
-		$imported_path = appendPath( ContentMetadataImporter::META_IMPORT_ROOT, $queue_key);
+		$imported_path = $this->import_path($queue_key);
 		if ( $this->isMeta( $imported_path ) == false ) {
 			// not pre-processed, it may or may not be enqueued
-			$this->setMeta( appendPath( ContentMetadataImporter::META_ENQUEUE_ROOT, $queue_key), $queue_key );
+			$this->setMeta( $this->enqueue_path($queue_key), $queue_key );
 		}
 
 		return $this->getMeta( $data_path );
@@ -168,6 +193,11 @@ abstract class ContentMetadataImporter extends EndpointImporter
 	public function enqueue_story_arc(array $importValues = array(), $forceMeta = false, $forceImages = false)
 	{
 		return $this->enqueue( Model::Named('Story_Arc'), $importValues, $forceMeta, $forceImages);
+	}
+
+	public function enqueue_artist(array $importValues = array(), $forceMeta = false, $forceImages = false)
+	{
+		return $this->enqueue( Model::Named('Artist'), $importValues, $forceMeta, $forceImages);
 	}
 
 	// purge records?
@@ -257,6 +287,26 @@ abstract class ContentMetadataImporter extends EndpointImporter
 		}
 
 		return true;
+	}
+
+	public function purge_artist(array $metaRecord = array())
+	{
+		if ( isset($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == false ||
+			strlen($metaRecord[ContentMetadataImporter::META_IMPORT_XID]) == 0) {
+			throw new Exception("External ID '" . ContentMetadataImporter::META_IMPORT_XID . "'is required" . var_export($metaRecord, true));
+		}
+
+		$xid = array_valueForKeypath( ContentMetadataImporter::META_IMPORT_XID, $metaRecord );
+		$object = Model::Named("Artist")->objectForExternal($xid, $this->endpointTypeCode());
+		if ( $object != false ) {
+			return Model::Named("Artist")->deleteObject( $object );
+		}
+		else {
+			// object already purged
+			return true;
+		}
+
+		return false;
 	}
 
 
@@ -402,9 +452,9 @@ abstract class ContentMetadataImporter extends EndpointImporter
 
 			// move to imported
 			foreach( $enqueued as $path => $data_keypath ) {
-				$old = appendPath( ComicVineImporter::META_ENQUEUE_ROOT, $path);
-				$new = appendPath( ComicVineImporter::META_IMPORT_ROOT, $path);
-				$meta = $this->getMeta( appendPath( ComicVineImporter::META_DATA_ROOT, $path ));
+				$old = $this->enqueue_path($path);
+				$new = $this->import_path($path);
+				$meta = $this->getMeta( $this->data_path($path));
 
 				$pre_process_method = 'preprocess_' . $meta[ContentMetadataImporter::META_IMPORT_TYPE];
 				if (method_exists($this, $pre_process_method)) {

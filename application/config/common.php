@@ -157,9 +157,11 @@ function sanitize($string, $force_lowercase = true, $anal = false, $default = nu
 		$clean = normalize($clean);
 
 		if ( $anal === true ) {
-			$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+			$strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "=", "+", "[", "{", "]",
 				"}", "\\", "|", ";", ":", "\"", "'", ",", "<", ">", "/", "?");
-			$clean = str_replace($strip, "", $clean);
+			$clean = str_replace($strip, "_", $clean);
+			// remove duplicates
+			$clean = preg_replace('/(_)\1+/', '$1', $clean);
 		}
 	}
 

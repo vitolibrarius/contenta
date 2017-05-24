@@ -106,6 +106,17 @@
     		"isMandatory": false,
             "isToMany" : true,
             "ownsDestination" : true
+    	},
+    	"publication_artists" : {
+    		"destination" : "Publication_Artist",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "publication_artist",
+    		"joins" : [
+    			{ "destinationAttribute": "publication_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
     	}
     }
 }

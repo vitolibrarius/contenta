@@ -101,6 +101,17 @@
             "isToMany" : true,
             "ownsDestination" : true
     	},
+    	"series_artists" : {
+    		"destination" : "Series_Artist",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "series_artist",
+    		"joins" : [
+    			{ "destinationAttribute": "series_id", "sourceAttribute" : "id" }
+    		],
+    		"isMandatory": false,
+            "isToMany" : true,
+            "ownsDestination" : true
+    	},
     	"story_arc_series" : {
     		"destination" : "Story_Arc_Series",
     		"destinationPackage" : "\\model\\media\\",
