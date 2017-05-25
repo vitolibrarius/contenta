@@ -8,6 +8,34 @@
 		</div>
 		<div class="grid_4">
 			<p class="description"><?php echo $this->detail->displayDescription(); ?></p>
+			<div class="badges">
+				<?php $list = $this->detail->series_artists();
+					if ( is_array($list) && count($list) > 0 ): ?>
+					<?php
+						$roleGroups = array();
+						foreach($list as $serArtist) {
+							$key = $serArtist->roleName();
+							$artistGroups[$key][] = $serArtist->artist();
+						}
+						ksort($artistGroups); ?>
+					<?php foreach ($artistGroups as $role => $artists): ?>
+					<div class="<?php echo $role; ?>">
+						<h6><?php echo $role; ?></h6>
+						<ul class="badge artist">
+						<?php foreach ($artists as $artist): ?>
+							<li class="artist">
+								<?php if ( isset($this->artistAction) ): ?>
+									<a href="<?php echo Config::Web($this->artistAction, $artist->id); ?>">
+								<?php endif; ?>
+								<?php echo $artist->name(); ?>
+								<?php if ( isset($this->artistAction) ) :?></a><?php endif; ?>
+							</li>
+						<?php endforeach; ?>
+						</ul>
+					</div>
+					<?php endforeach; ?>
+				<?php endif; ?>
+			</div>
 		</div>
 		<div class="grid_4">
 			<h6>Reading Progress</h6>

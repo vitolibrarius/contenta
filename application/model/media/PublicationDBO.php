@@ -97,6 +97,15 @@ class PublicationDBO extends _PublicationDBO
 		return $model->createJoin( $this, $object, $roleCode );
 	}
 
+	public function artists($limit = null) {
+		$select = \SQL::SelectJoin( Model::Named("Artist") );
+		$select->joinOn( Model::Named("Artist"), Model::Named("Publication_Artist"), null,
+			Qualifier::FK( Publication_Artist::publication_id, $this)
+		);
+		$select->limit($limit);
+		return $select->fetchAll();
+	}
+
 	public function story_arcs($limit = null)
 	{
 		$select = \SQL::SelectJoin( Model::Named("Story_Arc") );

@@ -602,6 +602,10 @@ class ComicVineImporter extends ContentMetadataImporter
 						$role = Model::Named("Artist_Role")->findRoleOrCreate($roleName, $roleName);
 						if ( $role instanceof \model\media\Artist_RoleDBO && $role->isEnabled() ) {
 	 						$enqueued = $this->preprocessRelationship( Model::Named('Artist'), $path, $person, $this->importMap_artist(), $roleName);
+	 						if ( is_array($seriesEnqueued) && isset($seriesEnqueued[ContentMetadataImporter::META_IMPORT_XID])) {
+	 							$series_path = $this->data_path( Series::TABLE . '_' . $seriesEnqueued[ContentMetadataImporter::META_IMPORT_XID] );
+		 						$enqueued = $this->preprocessRelationship( Model::Named('Artist'), $series_path, $person, $this->importMap_artist(), $roleName);
+	 						}
 	 					}
 					}
 				}
@@ -728,6 +732,10 @@ class ComicVineImporter extends ContentMetadataImporter
 							break;
 						case "story_arc":
 							$object->joinToStory_Arc( $relatedObj );
+							break;
+						case "artist":
+							$roleCode = $relatedData['role'];
+							$object->joinToArtist( $relatedObj, $roleCode );
 							break;
 						default:
 							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );

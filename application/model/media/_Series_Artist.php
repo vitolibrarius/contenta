@@ -17,8 +17,8 @@ use \model\media\Series_ArtistDBO as Series_ArtistDBO;
 /* import related objects */
 use \model\media\Series as Series;
 use \model\media\SeriesDBO as SeriesDBO;
-use \model\media\artist as artist;
-use \model\media\artistDBO as artistDBO;
+use \model\media\Artist as Artist;
+use \model\media\ArtistDBO as ArtistDBO;
 use \model\media\Artist_Role as Artist_Role;
 use \model\media\Artist_RoleDBO as Artist_RoleDBO;
 
@@ -108,7 +108,7 @@ abstract class _Series_Artist extends Model
 				'joins' => array( 'series_id' => 'id')
 			),
 			Series_Artist::artist => array(
-				'destination' => 'artist',
+				'destination' => 'Artist',
 				'ownsDestination' => false,
 				'isMandatory' => true,
 				'isToMany' => false,
@@ -256,7 +256,7 @@ abstract class _Series_Artist extends Model
 			}
 			if ( isset($values['artist']) ) {
 				$local_artist = $values['artist'];
-				if ( $local_artist instanceof artistDBO) {
+				if ( $local_artist instanceof ArtistDBO) {
 					$values[Series_Artist::artist_id] = $local_artist->id;
 				}
 				else if ( is_integer( $local_artist) ) {
@@ -289,7 +289,7 @@ abstract class _Series_Artist extends Model
 			}
 			if ( isset($values['artist']) ) {
 				$local_artist = $values['artist'];
-				if ( $local_artist instanceof artistDBO) {
+				if ( $local_artist instanceof ArtistDBO) {
 					$values[Series_Artist::artist_id] = $local_artist->id;
 				}
 				else if ( is_integer( $local_artist) ) {
@@ -318,7 +318,7 @@ abstract class _Series_Artist extends Model
 		if ( $object instanceof Series_ArtistDBO )
 		{
 			// does not own series Series
-			// does not own artist artist
+			// does not own artist Artist
 			// does not own artist_role Artist_Role
 			return parent::deleteObject($object);
 		}
@@ -343,7 +343,7 @@ abstract class _Series_Artist extends Model
 		}
 		return $success;
 	}
-	public function deleteAllForArtist(artistDBO $obj)
+	public function deleteAllForArtist(ArtistDBO $obj)
 	{
 		$success = true;
 		if ( $obj != false ) {
@@ -381,13 +381,14 @@ abstract class _Series_Artist extends Model
 	/**
 	 * Named fetches
 	 */
-	public function objectForSeriesAndArtist(SeriesDBO $series,artistDBO $art )
+	public function objectForSeriesArtistRole(SeriesDBO $series,ArtistDBO $char,Artist_RoleDBO $role )
 	{
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
 		$qualifiers[] = Qualifier::FK( 'series_id', $series);
-		$qualifiers[] = Qualifier::FK( 'artist_id', $art);
+		$qualifiers[] = Qualifier::FK( 'artist_id', $char);
+		$qualifiers[] = Qualifier::FK( 'role_code', $role);
 
 		if ( count($qualifiers) > 0 ) {
 			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
@@ -400,11 +401,30 @@ abstract class _Series_Artist extends Model
 				return $result[0];
 			}
 			else if ($result_size > 1 ) {
-				throw new \Exception( "objectForSeriesAndArtist expected 1 result, but fetched " . count($result) );
+				throw new \Exception( "objectForSeriesArtistRole expected 1 result, but fetched " . count($result) );
 			}
 		}
 
 		return false;
+	}
+
+	public function objectsLikeSeriesArtist(SeriesDBO $series,ArtistDBO $char,Artist_RoleDBO $role )
+	{
+		$select = SQL::Select( $this );
+		$select->orderBy( $this->sortOrder() );
+		$qualifiers = array();
+		$qualifiers[] = Qualifier::FK( 'series_id', $series);
+		$qualifiers[] = Qualifier::FK( 'artist_id', $char);
+		if ( isset($role)) {
+			$qualifiers[] = Qualifier::FK( 'role_code', $role);
+		}
+
+		if ( count($qualifiers) > 0 ) {
+			$select->where( Qualifier::Combine( 'AND', $qualifiers ));
+		}
+
+		$result = $select->fetchAll();
+		return $result;
 	}
 
 
@@ -442,7 +462,7 @@ abstract class _Series_Artist extends Model
 					$fkObject = $series_model->objectForId( $value );
 					break;
 				case Series_Artist::artist_id:
-					$artist_model = Model::Named('artist');
+					$artist_model = Model::Named('Artist');
 					$fkObject = $artist_model->objectForId( $value );
 					break;
 				case Series_Artist::role_code:

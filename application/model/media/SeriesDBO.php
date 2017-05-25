@@ -75,6 +75,21 @@ class SeriesDBO extends _SeriesDBO implements \interfaces\ObjectProgress
 		return false;
 	}
 
+	public function joinToArtist($object, $roleCode = 'unknown')
+	{
+		$model = Model::Named('Series_Artist');
+		return $model->createJoin( $this, $object, $roleCode );
+	}
+
+	public function artists($limit = null) {
+		$select = \SQL::SelectJoin( Model::Named("Artist") );
+		$select->joinOn( Model::Named("Artist"), Model::Named("Series_Artist"), null,
+			Qualifier::FK( Series_Artist::series_id, $this)
+		);
+		$select->limit($limit);
+		return $select->fetchAll();
+	}
+
 	public function characters($limit = null) {
 		$select = \SQL::SelectJoin( Model::Named("Character") );
 		$select->joinOn( Model::Named("Character"), Model::Named("Series_Character"), null,

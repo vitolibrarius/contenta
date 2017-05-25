@@ -13,8 +13,8 @@ use \model\media\Series_Artist as Series_Artist;
 /* import related objects */
 use \model\media\Series as Series;
 use \model\media\SeriesDBO as SeriesDBO;
-use \model\media\artist as artist;
-use \model\media\artistDBO as artistDBO;
+use \model\media\Artist as Artist;
+use \model\media\ArtistDBO as ArtistDBO;
 use \model\media\Artist_Role as Artist_Role;
 use \model\media\Artist_RoleDBO as Artist_RoleDBO;
 
@@ -63,13 +63,13 @@ abstract class _Series_ArtistDBO extends DataObject
 	public function artist()
 	{
 		if ( isset( $this->artist_id ) ) {
-			$model = Model::Named('artist');
+			$model = Model::Named('Artist');
 			return $model->objectForId($this->artist_id);
 		}
 		return false;
 	}
 
-	public function setArtist(artistDBO $obj = null)
+	public function setArtist(ArtistDBO $obj = null)
 	{
 		if ( isset($obj, $obj->id) && (isset($this->artist_id) == false || $obj->id != $this->artist_id) ) {
 			parent::storeChange( Series_Artist::artist_id, $obj->id );

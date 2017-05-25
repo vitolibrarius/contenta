@@ -26,7 +26,7 @@
             "ownsDestination" : false
     	},
     	"artist" : {
-    		"destination" : "artist",
+    		"destination" : "Artist",
     		"destinationTable" : "artist",
     		"destinationPackage" : "\\model\\media\\",
     		"joins" : [
@@ -49,8 +49,8 @@
     	}
     },
 	"fetches" : {
-		"objectForSeriesAndArtist": {
-			"arguments": [ "series", "art" ],
+		"objectForSeriesArtistRole": {
+			"arguments": [ "series", "char", "role" ],
 			"maxCount" : 1,
 			"semantic": "AND",
 			"qualifiers": [
@@ -62,7 +62,36 @@
 				{
 					"type" : "Related",
 					"relationship": "artist",
-					"argAttribute": "art"
+					"argAttribute": "char"
+				},
+				{
+					"type" : "Related",
+					"relationship": "artist_role",
+					"argAttribute": "role"
+				}
+			]
+		},
+		"objectsLikeSeriesArtist": {
+			"arguments": [ "series", "char", "role" ],
+			"semantic": "AND",
+			"qualifiers": [
+				{
+					"type" : "Related",
+					"relationship": "series",
+					"argAttribute": "series",
+					"optional": false
+				},
+				{
+					"type" : "Related",
+					"relationship": "artist",
+					"argAttribute": "char",
+					"optional": false
+				},
+				{
+					"type" : "Related",
+					"relationship": "artist_role",
+					"argAttribute": "role",
+					"optional": true
 				}
 			]
 		}

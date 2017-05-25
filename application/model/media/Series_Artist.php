@@ -106,6 +106,66 @@ class Series_Artist extends _Series_Artist
 	}
 */
 
+	public function createJoin( SeriesDBO $seriesObj, ArtistDBO $artistObj, $role = null)
+	{
+		if (is_null($role)) {
+			$role = Model::Named('Artist_Role')->unknownRole();
+		}
+		else if ( is_string($role) ) {
+			$role = Model::Named('Artist_Role')->findRoleOrCreate($role, $role );
+		}
+
+		if (isset($seriesObj, $seriesObj->id, $artistObj, $artistObj->id)) {
+			$existing = $this->objectForSeriesArtistRole($seriesObj, $artistObj, $role);
+
+			// the role is not known, check to see if a join exists, otherwise create it
+			if ( $role->isUnknown() ) {
+				if ($existing == false) {
+					list( $existing, $errorList ) = $this->createObject(array(
+						"series" => $seriesObj,
+						"artist" => $artistObj,
+						"artist_role" => $role
+						)
+					);
+
+					if ( is_array($errorList) ) {
+						return $errorList;
+					}
+				}
+				return $existing;
+			}
+
+			if ( $existing == false ) {
+				// no existing join, check for unknown join and update to correct role
+				$unknownJoin = $this->objectForSeriesArtistRole($seriesObj, $artistObj, Model::Named('Artist_Role')->unknownRole());
+				if ( $unknownJoin != false ) {
+					list($join, $errorList) = $this->updateObject( $unknownJoin, array("artist_role" => $role));
+					if ( is_array($errorList) ) {
+						return $errorList;
+					}
+					return $join;
+				}
+
+				// no unknown join, so create one
+				list( $join, $errorList ) = $this->createObject(array(
+					"series" => $seriesObj,
+					"artist" => $artistObj,
+					"artist_role" => $role
+					)
+				);
+
+				if ( is_array($errorList) ) {
+					return $errorList;
+				}
+				return $join;
+			}
+
+			// return existing value
+			return $existing;
+		}
+
+		return false;
+	}
 }
 
 ?>

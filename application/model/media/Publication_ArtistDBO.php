@@ -16,7 +16,14 @@ use \model\media\ArtistDBO as ArtistDBO;
 
 class Publication_ArtistDBO extends _Publication_ArtistDBO
 {
-
+	public function roleName()
+	{
+		$role = $this->artist_role();
+		if ( $role != false ) {
+			return $role->name();
+		}
+		return Artist_Role::UNKNOWN_ROLE;
+	}
 }
 
 ?>
