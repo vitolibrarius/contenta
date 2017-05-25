@@ -144,7 +144,6 @@ class Migration_11 extends Migrator
 	{
 		$role_model = Model::Named("Artist_Role");
 		$roles = array(
-			array("code"=>"unknown",	"name"=>"Unknown",	"enabled"=>1),
 			array("code"=>"colorist",	"name"=>"colorist",	"enabled"=>0),
 			array("code"=>"cover",		"name"=>"cover",	"enabled"=>0),
 			array("code"=>"editor",		"name"=>"editor",	"enabled"=>0),

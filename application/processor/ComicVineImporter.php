@@ -599,14 +599,17 @@ class ComicVineImporter extends ContentMetadataImporter
 				if ( is_array($person_array) ) {
 					foreach ( $person_array as $person ) {
 						$roleName = (isset($person['role']) ? $person['role'] : 'unknown');
-						$role = Model::Named("Artist_Role")->findRoleOrCreate($roleName, $roleName);
-						if ( $role instanceof \model\media\Artist_RoleDBO && $role->isEnabled() ) {
-	 						$enqueued = $this->preprocessRelationship( Model::Named('Artist'), $path, $person, $this->importMap_artist(), $roleName);
-	 						if ( is_array($seriesEnqueued) && isset($seriesEnqueued[ContentMetadataImporter::META_IMPORT_XID])) {
-	 							$series_path = $this->data_path( Series::TABLE . '_' . $seriesEnqueued[ContentMetadataImporter::META_IMPORT_XID] );
-		 						$enqueued = $this->preprocessRelationship( Model::Named('Artist'), $series_path, $person, $this->importMap_artist(), $roleName);
-	 						}
-	 					}
+						$roles = array_map('trim', explode(",", $roleName));
+						foreach ($roles as $roleCode ) {
+							$roleObj = Model::Named("Artist_Role")->findRoleOrCreate($roleCode, $roleCode);
+							if ( $roleObj instanceof \model\media\Artist_RoleDBO && $roleObj->isEnabled() ) {
+								$enqueued = $this->preprocessRelationship( Model::Named('Artist'), $path, $person, $this->importMap_artist(), $roleCode);
+								if ( is_array($seriesEnqueued) && isset($seriesEnqueued[ContentMetadataImporter::META_IMPORT_XID])) {
+									$series_path = $this->data_path( Series::TABLE . '_' . $seriesEnqueued[ContentMetadataImporter::META_IMPORT_XID] );
+									$enqueued = $this->preprocessRelationship( Model::Named('Artist'), $series_path, $person, $this->importMap_artist(), $roleCode);
+								}
+							}
+						}
 					}
 				}
 			}
