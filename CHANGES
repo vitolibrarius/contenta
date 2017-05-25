@@ -1,3 +1,13 @@
+Version 0.8.0:
+* 309177d -  (HEAD -> master, origin/master, origin/HEAD) Fixes #151: added display of artists grouped by roles (Wed May 24 21:49:15 2017 -0600) <Vito Librarius>
+* ff81835 -  Issue #151: modeled Artists and relationships to Pubs/Series.  Updated importer to load Artist (Wed May 24 11:30:31 2017 -0600) <Vito Librarius>
+* 46a1914 -  Issue #82: adjusted endpoint error reporting (Mon May 15 14:18:34 2017 -0600) <Vito Librarius>
+* ab5d993 -  Issue #82: modified search priority order (Mon May 15 12:05:16 2017 -0600) <Vito Librarius>
+* c6d686b -  Fixes #81: better feedback to processes (Fri May 12 21:34:27 2017 -0600) <Vito Librarius>
+* 2b7bb2d -  Issue #82: adjusted intervals for nzb searching (Fri May 12 17:19:54 2017 -0600) <Vito Librarius>
+* 361850a -  Issue #82: fixed non-object error (Fri May 12 10:41:46 2017 -0600) <Vito Librarius>
+* 3ce3d9e -  Fixes #150: added publication cards (Thu May 11 21:04:22 2017 -0600) <Vito Librarius>
+
 Version 0.7.5:
 *   33707eb -  (HEAD -> master, origin/master, origin/HEAD) Merge branch 'issue-149-automated-search-should-prioritize-recent-publicat' (Wed May 10 22:51:06 2017 -0600) <Vito Librarius>
 |\  
