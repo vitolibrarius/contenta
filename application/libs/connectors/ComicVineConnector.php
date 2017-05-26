@@ -66,9 +66,21 @@ class ComicVineConnector extends JSON_EndpointConnector
 		}
 	}
 
+	/*
+	 * api parameters must have api_key as first value
+	 */
+	public function parameterKeySort( $a, $b )
+	{
+		if ( $a == 'api_key' ) { return -1;	}
+		else if ($b == 'api_key' ) { return 1; }
+
+		return strcasecmp($a, $b);
+	}
+
 	public function testConnnector()
 	{
 		$params = $this->defaultParameters();
+		uksort($params, array( $this, "parameterKeySort"));
 		$detail_url = $this->endpointBaseURL() . "/types" . "/?" . http_build_query($params);
 		list( $success, $message, $data ) = $this->performTestConnnector($detail_url);
 
@@ -89,6 +101,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 	public function types()
 	{
 		$params = $this->defaultParameters();
+		uksort($params, array( $this, "parameterKeySort"));
 		$detail_url = $this->endpointBaseURL() . "/types" . "/?" . http_build_query($params);
 		try {
 			list($details, $headers) = $this->performGET( $detail_url, false );
@@ -113,6 +126,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 		if ( is_array($additionalParams) ) {
 			$params = array_merge($params, $additionalParams);
 		}
+		uksort($params, array( $this, "parameterKeySort"));
 
 		$detail_url = $this->endpointBaseURL() . "/" . $resource . "/"
 			. ($type == null ? '' : $type . "-") . $id . "/?" . http_build_query($params);
@@ -199,6 +213,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 			throw new ComicVineParameterException("Unable to search for query of type " . var_export($query_string, true));
 		}
 
+		uksort($params, array( $this, "parameterKeySort"));
 		$search_url = $this->endpointBaseURL() . "/search/?" . http_build_query($params);
 		list($details, $headers) = $this->performGET( $search_url );
 		return $details;
@@ -285,6 +300,7 @@ class ComicVineConnector extends JSON_EndpointConnector
 			$filter_array[] = $attribute . ":" . $f;
 		}
 		$params['filter'] = implode( ',', $filter_array);
+		uksort($params, array( $this, "parameterKeySort"));
 
 		$search_url = $this->endpointBaseURL() ."/". $resource . "s/?" . http_build_query($params);
 // 		echo $this->cleanURLForLog($search_url) . PHP_EOL;

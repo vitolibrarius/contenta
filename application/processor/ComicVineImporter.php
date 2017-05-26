@@ -632,38 +632,6 @@ class ComicVineImporter extends ContentMetadataImporter
 	public function finalize_artist(array $metaRecord = array())
 	{
 		$object = parent::finalize(Model::Named("Artist"), $metaRecord);
-// 		if ( $object instanceof \model\media\ArtistDBO ) {
-// 			$relationships = array_valueForKeypath(ContentMetadataImporter::META_IMPORT_RELATIONSHIP, $metaRecord);
-// 			if ( is_array($relationships) ) {
-// 				foreach( $relationships as $path => $relatedId ) {
-// 					$table = substr($path, 0, strrpos($path, '_'));
-// 					$related_model = Model::Named( $table );
-// 					if ( $related_model == null ) {
-// 						throw new Exception( "failed to find model for " . $table);
-// 					}
-//
-// 					$relatedObj = $related_model->objectForExternal($relatedId, $this->endpointTypeCode());
-// 					if ( $relatedObj == false ) {
-// 						throw new Exception( "failed to find object for $table xid=$relatedId");
-// 					}
-//
-// 					switch( $table ) {
-// 						case "publisher":
-// 							$object->setPublisher( $relatedObj );
-// 							break;
-// 						case "story_arc":
-// 							if ( $object->isWanted() ) {
-// 								$object->joinToStory_Arc( $relatedObj );
-// 							}
-// 							break;
-// 						default:
-// 							Logger::logError( "$object Unknown relationship $table", $this->type, $this->guid );
-// 							break;
-// 					}
-// 				}
-// 			}
-// 		}
-
 		return $object;
 	}
 
