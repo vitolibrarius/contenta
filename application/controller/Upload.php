@@ -156,11 +156,11 @@ class Upload extends Controller
 
 				if ( is_dir($workingDir) == true ) {
 					Session::addNegativeFeedback( Localized::Get("Upload", 'Hash Exists') .' "'. $_FILES['mediaFile']['name'] . '"' );
-					http_response_code(415); // Unsupported Media Type
+					http_response_code(409); // already uploaded
 				}
 				else if ( $existing instanceof \model\media\MediaDBO ) {
 					Session::addNegativeFeedback(Localized::Get("Upload", 'Already imported') .' "'. $existing->publication()->searchString() .'"');
-					http_response_code(415); // Unsupported Media Type
+					http_response_code(409); // already uploaded
 				}
 				else {
 					try {
