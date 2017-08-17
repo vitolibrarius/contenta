@@ -6,6 +6,7 @@
         "base_url": { "column": "base_url", "length": 1024, "type": "TEXT", "nullable": false },
         "api_key": { "column": "api_key", "length": 256, "type": "TEXT", "nullable": true },
         "username": { "column": "username", "length": 256, "type": "TEXT", "nullable": true },
+        "daily_max": { "column": "daily_max", "type": "INTEGER", "nullable": true },
         "error_count": { "column": "error_count", "type": "INTEGER", "default": 0 },
         "parameter": { "column": "parameter", "length": 4096, "type": "TEXT" },
         "enabled": { "column": "enabled", "type": "BOOLEAN", "default": "Model::TERTIARY_TRUE" },

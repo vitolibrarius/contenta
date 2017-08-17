@@ -49,7 +49,8 @@ abstract class _Patch extends Model
 	public function sortOrder()
 	{
 		return array(
-			array( 'asc' => Patch::name)
+			array( 'desc' => Patch::created),
+			array( 'desc' => Patch::name)
 		);
 	}
 

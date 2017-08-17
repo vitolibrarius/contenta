@@ -314,9 +314,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS series_alias_series__02 on series_alias (serie
 DROP INDEX IF EXISTS series_artistSeries_fk;
 DROP INDEX IF EXISTS series_artistSeries__01_fk;
 CREATE INDEX IF NOT EXISTS series_artistSeries__01_fk on series_artist (series_id);
-DROP INDEX IF EXISTS series_artistartist_fk;
-DROP INDEX IF EXISTS series_artistartist__02_fk;
-CREATE INDEX IF NOT EXISTS series_artistartist__02_fk on series_artist (artist_id);
+DROP INDEX IF EXISTS series_artistArtist_fk;
+DROP INDEX IF EXISTS series_artistArtist__02_fk;
+CREATE INDEX IF NOT EXISTS series_artistArtist__02_fk on series_artist (artist_id);
 DROP INDEX IF EXISTS series_artistArtist_Role_fk;
 DROP INDEX IF EXISTS series_artistArtist__03_fk;
 CREATE INDEX IF NOT EXISTS series_artistArtist__03_fk on series_artist (role_code);

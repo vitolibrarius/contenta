@@ -75,6 +75,7 @@ class Endpoint extends _Endpoint
 			Endpoint::base_url,
 			Endpoint::api_key,
 			Endpoint::username,
+			Endpoint::daily_max,
 			Endpoint::error_count,
 			Endpoint::enabled,
 			Endpoint::compressed

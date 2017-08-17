@@ -13,7 +13,8 @@ use \Cache as Cache;
 use \Database as Database;
 use \Metadata as Metadata;
 
-use utilities\EndpointThrottle as EndpointThrottle;
+use \utilities\EndpointThrottle as EndpointThrottle;
+use \utilities\EndpointRequestCounter as EndpointRequestCounter;
 
 use \model\user\Users as Users;
 use \model\network\Endpoint as Endpoint;
@@ -31,6 +32,7 @@ abstract class EndpointConnector
 	private $debug = false;
 	private $endpoint = null;
 	private $throttle = null;
+	private $maxRequests = null;
 
 	public function __construct($point)
 	{
@@ -195,6 +197,18 @@ abstract class EndpointConnector
 		}
 	}
 
+	public function overDailyMaximum() {
+		if ( is_null( $this->maxRequests ) && isset($this->endpoint) ) {
+			$ep = $this->endpoint();
+			$name = $ep->pkValue() . '_' . $ep->displayName();
+			$this->maxRequests = new EndpointRequestCounter( $name, $ep->daily_max );
+		}
+
+		if ( is_null( $this->maxRequests ) == false ) {
+			return $this->maxRequests->overMaximum();
+		}
+		return false;
+	}
 
 	public function performTestConnnector($url)
 	{
@@ -222,6 +236,11 @@ abstract class EndpointConnector
 
 		if (filter_var($url, FILTER_VALIDATE_URL) == false) {
 			throw new \Exception("Invalid url requested [" . var_export($url, true) . "]" );
+		}
+
+		if ( $this->overDailyMaximum() ) {
+			Logger::logError( "Over the daily maximum for :" . $this->endpointDisplayName());
+			return array( null, null );
 		}
 
 		$this->throttleRequestIfRequired();
@@ -293,6 +312,11 @@ abstract class EndpointConnector
 
 		if (filter_var($url, FILTER_VALIDATE_URL) == false) {
 			throw new \Exception("Invalid url requested [" . var_export($url, true) . "]" );
+		}
+
+		if ( $this->overDailyMaximum() ) {
+			Logger::logError( "Over the daily maximum for :" . $this->endpointDisplayName());
+			return array( null, null );
 		}
 
 		$this->throttleRequestIfRequired();

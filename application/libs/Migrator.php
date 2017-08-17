@@ -251,7 +251,7 @@ class Migrator
 
 					if ( $worker->canMigrateToVersion( $currentVersionNumber ) ) {
 						$success = $worker->performMigration();
-						if ( $success ) {
+						if ( $success && $worker->reRunMigration() === false ) {
 							$version = $worker->targetVersionDBO();
 							list($patch, $errors) = $patch_model->createObject( array( "version" => $version, "name" => $migrationClass));
 							if ( ($patch instanceof PatchDBO ) == false) {
@@ -359,6 +359,7 @@ class Migrator
 	{
 		return $this->versionDBO( $this->targetVersion() );
 	}
+	public function reRunMigration() { return false; }
 
 	public function versionDBO( $code )
 	{

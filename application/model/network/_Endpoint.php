@@ -39,6 +39,7 @@ abstract class _Endpoint extends Model
 	const base_url = 'base_url';
 	const api_key = 'api_key';
 	const username = 'username';
+	const daily_max = 'daily_max';
 	const error_count = 'error_count';
 	const parameter = 'parameter';
 	const enabled = 'enabled';
@@ -81,6 +82,7 @@ abstract class _Endpoint extends Model
 			Endpoint::base_url,
 			Endpoint::api_key,
 			Endpoint::username,
+			Endpoint::daily_max,
 			Endpoint::error_count,
 			Endpoint::parameter,
 			Endpoint::enabled,
@@ -95,6 +97,7 @@ abstract class _Endpoint extends Model
 			Endpoint::base_url,
 			Endpoint::api_key,
 			Endpoint::username,
+			Endpoint::daily_max,
 			Endpoint::error_count,
 			Endpoint::parameter,
 			Endpoint::enabled,
@@ -126,6 +129,7 @@ abstract class _Endpoint extends Model
 			Endpoint::base_url => array('length' => 1024,'type' => 'TEXT'),
 			Endpoint::api_key => array('length' => 256,'type' => 'TEXT'),
 			Endpoint::username => array('length' => 256,'type' => 'TEXT'),
+			Endpoint::daily_max => array('type' => 'INTEGER'),
 			Endpoint::error_count => array('type' => 'INTEGER'),
 			Endpoint::parameter => array('length' => 4096,'type' => 'TEXT'),
 			Endpoint::enabled => array('type' => 'BOOLEAN'),
@@ -224,6 +228,13 @@ abstract class _Endpoint extends Model
 					}
 					break;
 
+			// Endpoint::daily_max == INTEGER
+				case Endpoint::daily_max:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Endpoint::daily_max] = Qualifier::Equals( Endpoint::daily_max, intval($value) );
+					}
+					break;
+
 			// Endpoint::error_count == INTEGER
 				case Endpoint::error_count:
 					if ( intval($value) > 0 ) {
@@ -296,6 +307,11 @@ abstract class _Endpoint extends Model
 		return $this->allObjectsForKeyValue(Endpoint::username, $value, null, $limit);
 	}
 
+
+	public function allForDaily_max($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Endpoint::daily_max, $value, null, $limit);
+	}
 
 	public function allForError_count($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
@@ -386,6 +402,12 @@ abstract class _Endpoint extends Model
 				$default_username = $this->attributeDefaultValue( null, null, Endpoint::username);
 				if ( is_null( $default_username ) == false ) {
 					$values['username'] = $default_username;
+				}
+			}
+			if ( isset($values['daily_max']) == false ) {
+				$default_daily_max = $this->attributeDefaultValue( null, null, Endpoint::daily_max);
+				if ( is_null( $default_daily_max ) == false ) {
+					$values['daily_max'] = $default_daily_max;
 				}
 			}
 			if ( isset($values['error_count']) == false ) {
@@ -520,6 +542,7 @@ abstract class _Endpoint extends Model
 			Endpoint::base_url => Model::TEXTAREA_TYPE,
 			Endpoint::api_key => Model::TEXT_TYPE,
 			Endpoint::username => Model::TEXT_TYPE,
+			Endpoint::daily_max => Model::INT_TYPE,
 			Endpoint::error_count => Model::INT_TYPE,
 			Endpoint::parameter => Model::TEXTAREA_TYPE,
 			Endpoint::enabled => Model::FLAG_TYPE,
@@ -619,6 +642,23 @@ abstract class _Endpoint extends Model
 			return null;
 		}
 
+		return null;
+	}
+	function validate_daily_max($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Endpoint::daily_max,
+				"FILTER_VALIDATE_INT"
+			);
+		}
 		return null;
 	}
 	function validate_error_count($object = null, $value)

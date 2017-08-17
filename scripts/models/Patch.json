@@ -34,6 +34,7 @@
     "model": "Patch",
     "dbo": "PatchDBO",
 	"sort" : [
-		{ "asc": "name" }
+		{ "desc": "created" },
+		{ "desc": "name" }
 	]
 }

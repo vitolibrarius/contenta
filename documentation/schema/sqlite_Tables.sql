@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS endpoint (
 			parameter TEXT,
 			enabled INTEGER,
 			compressed INTEGER,
+			daily_max INTEGER,
 			FOREIGN KEY ( type_code ) REFERENCES endpoint_type ( code )
 		);
 
