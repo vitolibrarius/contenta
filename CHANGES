@@ -1,3 +1,9 @@
+Version 0.8.1:
+* 0718d78 -  (HEAD -> master) Added Daily maximum request counter (Wed Aug 16 22:21:08 2017 -0600) <Vito Librarius>
+* 8b60f0b -  (origin/master, origin/HEAD) Changed response code to 409 for already imported content (Fri Jul 28 11:20:02 2017 -0600) <Vito Librarius>
+* ad7dff1 -  Issue #82: comicvine seems to always want the api_key as the first parameter (Fri May 26 09:38:10 2017 -0600) <Vito Librarius>
+* 3122324 -  Issue 82: artist roles can be comma separate (Thu May 25 08:45:07 2017 -0600) <Vito Librarius>
+
 Version 0.8.0:
 * 309177d -  (HEAD -> master, origin/master, origin/HEAD) Fixes #151: added display of artists grouped by roles (Wed May 24 21:49:15 2017 -0600) <Vito Librarius>
 * ff81835 -  Issue #151: modeled Artists and relationships to Pubs/Series.  Updated importer to load Artist (Wed May 24 11:30:31 2017 -0600) <Vito Librarius>
