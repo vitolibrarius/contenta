@@ -19,6 +19,8 @@ class EndpointRequestCounter
 	const NoEndpoint = 'NoEndpoint';
 	const MAX_USER_PAUSE = 20;
 
+	private $pdoDatabase;
+
 	function __construct($endpointName = NoEndpoint, $dailyMax = -1)
 	{
 		$dbPath = appendPath(Config::GetProcessing(), "EndpointRequestCounters" );
@@ -48,11 +50,18 @@ class EndpointRequestCounter
 
 	private function database()
 	{
-		$database = new PDO("sqlite:" . $this->fullpath);
-    	$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$database->exec( 'PRAGMA foreign_keys = ON;' );
-		$database->exec( 'PRAGMA busy_timeout = 10000;' );
-		return $database;
+		if ( isset($this->pdoDatabase) == false ) {
+			try {
+				$this->pdoDatabase = new PDO("sqlite:" . $this->fullpath);
+				$this->pdoDatabase->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$this->pdoDatabase->exec( 'PRAGMA foreign_keys = ON;' );
+				$this->pdoDatabase->exec( 'PRAGMA busy_timeout = 10000;' );
+			}
+			catch(PDOException $e) {
+				Logger::logException($e);
+			}
+		}
+		return $this->pdoDatabase;
 	}
 
 	private function purge()
