@@ -198,15 +198,15 @@ abstract class EndpointConnector
 	}
 
 	public function overDailyMaximum() {
-		if ( is_null( $this->maxRequests ) && isset($this->endpoint) ) {
-			$ep = $this->endpoint();
-			$name = $ep->pkValue() . '_' . $ep->displayName();
-			$this->maxRequests = new EndpointRequestCounter( $name, $ep->daily_max );
-		}
-
-		if ( is_null( $this->maxRequests ) == false ) {
-			return $this->maxRequests->overMaximum();
-		}
+// 		if ( is_null( $this->maxRequests ) && isset($this->endpoint) ) {
+// 			$ep = $this->endpoint();
+// 			$name = $ep->pkValue() . '_' . $ep->displayName();
+// 			$this->maxRequests = new EndpointRequestCounter( $name, $ep->daily_max );
+// 		}
+//
+// 		if ( is_null( $this->maxRequests ) == false ) {
+// 			return $this->maxRequests->overMaximum();
+// 		}
 		return false;
 	}
 
