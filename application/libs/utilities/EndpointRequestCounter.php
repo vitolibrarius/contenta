@@ -26,7 +26,7 @@ class EndpointRequestCounter
 		$dbPath = appendPath(Config::GetProcessing(), "EndpointRequestCounters" );
 		makeRequiredDirectory($dbPath, 'endpoint throttle subdirectory for ' . get_class($this));
 
-		$this->fullpath = appendPath( $dbPath, $endpointName . EndpointRequestCounter::DefaultExtension );
+		$this->fullpath = appendPath( $dbPath, sanitize_filename($endpointName) . EndpointRequestCounter::DefaultExtension );
 		$this->endpointName = $endpointName;
 		$this->dailyMax = max( -1, intval($dailyMax));
 		$this->initializeSchema();
