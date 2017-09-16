@@ -40,6 +40,7 @@ abstract class _Endpoint extends Model
 	const api_key = 'api_key';
 	const username = 'username';
 	const daily_max = 'daily_max';
+	const daily_dnld_max = 'daily_dnld_max';
 	const error_count = 'error_count';
 	const parameter = 'parameter';
 	const enabled = 'enabled';
@@ -83,6 +84,7 @@ abstract class _Endpoint extends Model
 			Endpoint::api_key,
 			Endpoint::username,
 			Endpoint::daily_max,
+			Endpoint::daily_dnld_max,
 			Endpoint::error_count,
 			Endpoint::parameter,
 			Endpoint::enabled,
@@ -98,6 +100,7 @@ abstract class _Endpoint extends Model
 			Endpoint::api_key,
 			Endpoint::username,
 			Endpoint::daily_max,
+			Endpoint::daily_dnld_max,
 			Endpoint::error_count,
 			Endpoint::parameter,
 			Endpoint::enabled,
@@ -130,6 +133,7 @@ abstract class _Endpoint extends Model
 			Endpoint::api_key => array('length' => 256,'type' => 'TEXT'),
 			Endpoint::username => array('length' => 256,'type' => 'TEXT'),
 			Endpoint::daily_max => array('type' => 'INTEGER'),
+			Endpoint::daily_dnld_max => array('type' => 'INTEGER'),
 			Endpoint::error_count => array('type' => 'INTEGER'),
 			Endpoint::parameter => array('length' => 4096,'type' => 'TEXT'),
 			Endpoint::enabled => array('type' => 'BOOLEAN'),
@@ -235,6 +239,13 @@ abstract class _Endpoint extends Model
 					}
 					break;
 
+			// Endpoint::daily_dnld_max == INTEGER
+				case Endpoint::daily_dnld_max:
+					if ( intval($value) > 0 ) {
+						$qualifiers[Endpoint::daily_dnld_max] = Qualifier::Equals( Endpoint::daily_dnld_max, intval($value) );
+					}
+					break;
+
 			// Endpoint::error_count == INTEGER
 				case Endpoint::error_count:
 					if ( intval($value) > 0 ) {
@@ -311,6 +322,11 @@ abstract class _Endpoint extends Model
 	public function allForDaily_max($value, $limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		return $this->allObjectsForKeyValue(Endpoint::daily_max, $value, null, $limit);
+	}
+
+	public function allForDaily_dnld_max($value, $limit = SQL::SQL_DEFAULT_LIMIT)
+	{
+		return $this->allObjectsForKeyValue(Endpoint::daily_dnld_max, $value, null, $limit);
 	}
 
 	public function allForError_count($value, $limit = SQL::SQL_DEFAULT_LIMIT)
@@ -408,6 +424,12 @@ abstract class _Endpoint extends Model
 				$default_daily_max = $this->attributeDefaultValue( null, null, Endpoint::daily_max);
 				if ( is_null( $default_daily_max ) == false ) {
 					$values['daily_max'] = $default_daily_max;
+				}
+			}
+			if ( isset($values['daily_dnld_max']) == false ) {
+				$default_daily_dnld_max = $this->attributeDefaultValue( null, null, Endpoint::daily_dnld_max);
+				if ( is_null( $default_daily_dnld_max ) == false ) {
+					$values['daily_dnld_max'] = $default_daily_dnld_max;
 				}
 			}
 			if ( isset($values['error_count']) == false ) {
@@ -543,6 +565,7 @@ abstract class _Endpoint extends Model
 			Endpoint::api_key => Model::TEXT_TYPE,
 			Endpoint::username => Model::TEXT_TYPE,
 			Endpoint::daily_max => Model::INT_TYPE,
+			Endpoint::daily_dnld_max => Model::INT_TYPE,
 			Endpoint::error_count => Model::INT_TYPE,
 			Endpoint::parameter => Model::TEXTAREA_TYPE,
 			Endpoint::enabled => Model::FLAG_TYPE,
@@ -656,6 +679,23 @@ abstract class _Endpoint extends Model
 			return Localized::ModelValidation(
 				$this->tableName(),
 				Endpoint::daily_max,
+				"FILTER_VALIDATE_INT"
+			);
+		}
+		return null;
+	}
+	function validate_daily_dnld_max($object = null, $value)
+	{
+		// not mandatory field
+		if (isset($value) == false || empty($value)  ) {
+			return null;
+		}
+
+		// integers
+		if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+			return Localized::ModelValidation(
+				$this->tableName(),
+				Endpoint::daily_dnld_max,
 				"FILTER_VALIDATE_INT"
 			);
 		}

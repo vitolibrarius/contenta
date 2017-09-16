@@ -142,7 +142,7 @@ class FluxImporter extends EndpointImporter
 					)
 				);
 			}
-			else if ( isset($data->nzb) == false ) {
+			else if ( isset($xml->nzb) == false ) {
 				Model::Named('Flux')->updateObject( $flux,
 					array(
 						Flux::flux_error => Model::TERTIARY_TRUE,
@@ -205,7 +205,9 @@ class FluxImporter extends EndpointImporter
 			}
 
 			if ( $flux instanceof FluxDBO ) {
-				if ( $flux->isSourceComplete() == false && $flux->source_endpoint() != false && $flux->source_endpoint()->markOverMaximum() == false ) {
+				if ( $flux->isSourceComplete() == false && $flux->source_endpoint() != false
+					&& $flux->source_endpoint()->markOverMaximum('daily_dnld_max') == false ) {
+
 					Logger::logWarning( "Requesting nzb " . $flux->name, $flux->source_endpoint()->name(), $flux->src_endpoint() );
 					$localFile = $this->downloadForFlux($flux);
 					if ( file_exists($localFile) ) {

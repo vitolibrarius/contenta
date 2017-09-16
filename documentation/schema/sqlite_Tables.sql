@@ -55,11 +55,12 @@ CREATE TABLE IF NOT EXISTS endpoint (
 			base_url TEXT,
 			api_key TEXT,
 			username TEXT,
+			daily_max INTEGER,
+			daily_dnld_max INTEGER,
 			error_count INTEGER,
 			parameter TEXT,
 			enabled INTEGER,
 			compressed INTEGER,
-			daily_max INTEGER,
 			FOREIGN KEY ( type_code ) REFERENCES endpoint_type ( code )
 		);
 

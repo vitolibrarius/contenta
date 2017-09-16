@@ -199,7 +199,7 @@ abstract class EndpointConnector
 
 	public function overDailyMaximum() {
 		if ( isset($this->endpoint) ) {
-			return $this->endpoint->markOverMaximum();
+			return $this->endpoint->markOverMaximum('daily_max');
 		}
 		return false;
 	}

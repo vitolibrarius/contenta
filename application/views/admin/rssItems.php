@@ -39,7 +39,7 @@
 		</p>
 		<?php echo ($rss->enclosure_password == true ? "<em>**** password protected</em>" : ""); ?>
 		<?php $flux = $rss->flux(); if ($flux == false ) : ?>
-			<?php if ($rss->endpoint() != false && $rss->endpoint()->isOverMaximum() == false) : ?>
+			<?php if ($rss->endpoint() != false && $rss->endpoint()->isOverMaximum('daily_dnld_max') == false) : ?>
 				<div class="status flux" id="dnld_<?php echo $rss->safe_guid(); ?>">
 				<a href="#" class="nzb button" style="white-space:nowrap;"
 					data-name="<?php echo htmlentities($rss->clean_name); ?>"

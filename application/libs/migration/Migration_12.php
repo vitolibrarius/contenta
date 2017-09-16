@@ -53,6 +53,14 @@ class Migration_12 extends Migrator
 			);
 		}
 
+		if ( isset($table_fields[ Endpoint::daily_dnld_max ]) == false ) {
+			$this->sqlite_execute(
+				Endpoint::TABLE ,
+				"ALTER TABLE " . Endpoint::TABLE . " ADD COLUMN " . Endpoint::daily_dnld_max . " INTEGER",
+				"Adding the Endpoint::daily_dnld_max column"
+			);
+		}
+
 	}
 
 	public function sqlite_postUpgrade()

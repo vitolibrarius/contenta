@@ -299,7 +299,7 @@ class AdminWanted extends Admin
 			if ( HttpGet::hasValues('endpoint_id', 'search') && strlen($_GET['search']) > 4) {
 				$model = Model::Named('Endpoint');
 				$endpoint = $model->objectForId( $_GET['endpoint_id'] );
-				if ( $endpoint->isOverMaximum() == false ) {
+				if ( $endpoint->isOverMaximum('daily_max') == false ) {
 					try {
 						$connection = new NewznabConnector( $endpoint );
 						$this->view->endpoint_id = $_GET['endpoint_id'];
@@ -347,7 +347,7 @@ class AdminWanted extends Admin
 					$this->view->fluxModel = Model::Named('Flux');
 					foreach( $points as $endpoint ) {
 						//Session::addPositiveFeedback("Searching ". $endpoint . "  for " . $publication->searchString());
-						if ( $endpoint->isOverMaximum() == false ) {
+						if ( $endpoint->isOverMaximum('daily_max') == false ) {
 							try {
 								$connection = new NewznabConnector( $endpoint );
 								$results = $connection->searchComics($publication->searchString());

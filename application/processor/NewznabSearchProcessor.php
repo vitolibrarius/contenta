@@ -105,7 +105,7 @@ class NewznabSearchProcessor extends Processor
 		}
 		$newznabSearch = array();
 		foreach( $newznab as $nzbd ) {
-			if ( $nzbd->isOverMaximum() == false ) {
+			if ( $nzbd->isOverMaximum('daily_max') == false ) {
 				$newznabSearch[] = new NewznabConnector( $nzbd );
 			}
 		}

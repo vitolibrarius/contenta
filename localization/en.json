@@ -302,6 +302,9 @@
             "compressed": {
                 "label": "Compressed"
             },
+            "daily_dnld_max": {
+                "label": "Max Daily Downloads"
+            },
             "daily_max": {
                 "label": "Max Daily Requests"
             },

@@ -48,27 +48,29 @@ class EndpointDBO extends _EndpointDBO
 		if ( intval($this->daily_max()) > 0 ) {
 			$parse = parse_url($this->base_url);
 			$maxCounter = new EndpointRequestCounter( $this );
-			list($count, $mindate) = $maxCounter->count();
+			list($daily_max_count, $minapidate) = $maxCounter->count('daily_max');
+			list($daily_dnld_count, $mindlnddate) = $maxCounter->count('daily_dnld_max');
 
-			return $count ."/". $this->daily_max() . " next in " . formattedTimeElapsed(time() - $mindate);
+			return "API " . $daily_max_count ."/". $this->daily_max() . " next in " . formattedTimeElapsed(time() - $minapidate)
+				. " Download " . $daily_dnld_count ."/". $this->daily_dnld_max() . " next in " . formattedTimeElapsed(time() - $mindlnddate) ;
 		}
 		return "";
 	}
 
-	public function markOverMaximum()
+	public function markOverMaximum($type = 'daily_max')
 	{
 		if ( intval($this->daily_max()) > 0 ) {
 			$maxCounter = new EndpointRequestCounter( $this );
-			return $maxCounter->markOverMaximum();
+			return $maxCounter->markOverMaximum($type);
 		}
 		return false;
 	}
 
-	public function isOverMaximum()
+	public function isOverMaximum($type = 'daily_max')
 	{
 		if ( intval($this->daily_max()) > 0 ) {
 			$maxCounter = new EndpointRequestCounter( $this );
-			return $maxCounter->isOverMaximum();
+			return $maxCounter->isOverMaximum($type);
 		}
 		return false;
 	}

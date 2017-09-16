@@ -25,11 +25,13 @@ class EndpointRequestCounter
 
 		$fname = EndpointRequestCounter::NoEndpoint;
 		$this->endpointName = EndpointRequestCounter::NoEndpoint;
-		$this->dailyMax = -1;
+		$this->daily_max = -1;
+		$this->daily_dnld_max = -1;
 
 		if ( is_null($endpoint) == false ) {
 			$this->endpointName = $endpoint->displayName();
-			$this->dailyMax = max( -1, intval($endpoint->daily_max));
+			$this->daily_max = max( -1, intval($endpoint->daily_max));
+			$this->daily_dnld_max = max( -1, intval($endpoint->daily_dnld_max));
 			$parse = parse_url($endpoint->base_url);
 			if ( isset($parse['host']) ) {
 				$fname = $parse['host'];
@@ -39,27 +41,27 @@ class EndpointRequestCounter
 		$this->initializeSchema();
 	}
 
-	public function isOverMaximum()
+	public function isOverMaximum($type = 'daily_max')
 	{
 		// if we are disabled, skip everything
-		if ( $this->dailyMax <= 0 ) {
+		if ( $this->{$type} <= 0 ) {
 			return false;
 		}
 
 		list($count, $mindate) = $this->count();
-		if ( $count > $this->dailyMax ) {
+		if ( $count > $this->{$type} ) {
 			return true;
 		}
 		return false;
 	}
 
-	public function markOverMaximum()
+	public function markOverMaximum($type = 'daily_max')
 	{
-		if ( $this->isOverMaximum() ) {
+		if ( $this->isOverMaximum($type) ) {
 			return true;
 		}
 
-		$this->mark();
+		$this->mark($type);
 		return false;
 	}
 
@@ -92,11 +94,11 @@ class EndpointRequestCounter
 		$database = null;
 	}
 
-	public function count()
+	public function count($type = 'daily_max')
 	{
 		$this->purge();
-		$sql = "select COUNT(*) as COUNT, MIN(date_val) as MINDATE from PRIMITIVE";
-		$params = null;
+		$sql = "select COUNT(*) as COUNT, MIN(date_val) as MINDATE from PRIMITIVE where type = :t";
+		$params = array( ":t" => $type );
 
 		$database = $this->database();
 		$statement = $database->prepare($sql);
@@ -117,10 +119,10 @@ class EndpointRequestCounter
 		return array( 0, 0 );
 	}
 
-	private function mark()
+	private function mark($type = 'daily_max')
 	{
-		$sql = "insert into PRIMITIVE ( pid, date_val) values (:p, :d)";
-		$params = array(":d" => time(), ":p" => getmypid());
+		$sql = "insert into PRIMITIVE ( pid, date_val, type ) values (:p, :d, :t)";
+		$params = array(":d" => time(), ":p" => getmypid(), ":t" => $type );
 		$database = $this->database();
 		$statement = $database->prepare($sql);
 		if ($statement == false || $statement->execute($params) == false) {
@@ -140,6 +142,7 @@ class EndpointRequestCounter
 		$sql = "CREATE TABLE IF NOT EXISTS PRIMITIVE ( "
 			. "id INTEGER PRIMARY KEY, "
 			. "pid INTEGER, "
+			. "type TEXT, "
 			. "date_val INTEGER "
 			. ")";
 		$database = $this->database();

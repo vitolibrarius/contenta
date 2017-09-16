@@ -30,6 +30,7 @@ abstract class _EndpointDBO extends DataObject
 	public $api_key;
 	public $username;
 	public $daily_max;
+	public $daily_dnld_max;
 	public $error_count;
 	public $parameter;
 	public $enabled;
@@ -212,6 +213,16 @@ abstract class _EndpointDBO extends DataObject
 	public function setDaily_max( $value = null)
 	{
 		parent::storeChange( Endpoint::daily_max, $value );
+	}
+
+	public function daily_dnld_max()
+	{
+		return parent::changedValue( Endpoint::daily_dnld_max, $this->daily_dnld_max );
+	}
+
+	public function setDaily_dnld_max( $value = null)
+	{
+		parent::storeChange( Endpoint::daily_dnld_max, $value );
 	}
 
 	public function error_count()
