@@ -105,7 +105,9 @@ class NewznabSearchProcessor extends Processor
 		}
 		$newznabSearch = array();
 		foreach( $newznab as $nzbd ) {
-			$newznabSearch[] = new NewznabConnector( $nzbd );
+			if ( $nzbd->isOverMaximum() == false ) {
+				$newznabSearch[] = new NewznabConnector( $nzbd );
+			}
 		}
 
 		$sabnzbd = $endpoint_model->allForTypeCode(Endpoint_Type::SABnzbd, true);

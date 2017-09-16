@@ -6,6 +6,11 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 
+use \SQL as SQL;
+use db\Qualifier as Qualifier;
+
+use \utilities\EndpointRequestCounter as EndpointRequestCounter;
+
 use \model\network\Endpoint as Endpoint;
 
 /* import related objects */
@@ -37,6 +42,80 @@ class EndpointDBO extends _EndpointDBO
 	public function __toString()
 	{
 		return $this->displayName() . ' (' . $this->pkValue() . ') ' . $this->base_url;
+	}
+
+	public function dailyMaximumStatus() {
+		if ( intval($this->daily_max()) > 0 ) {
+			$parse = parse_url($this->base_url);
+			$maxCounter = new EndpointRequestCounter( $this );
+			list($count, $mindate) = $maxCounter->count();
+
+			return $count ."/". $this->daily_max() . " next in " . formattedTimeElapsed(time() - $mindate);
+		}
+		return "";
+	}
+
+	public function markOverMaximum()
+	{
+		if ( intval($this->daily_max()) > 0 ) {
+			$maxCounter = new EndpointRequestCounter( $this );
+			return $maxCounter->markOverMaximum();
+		}
+		return false;
+	}
+
+	public function isOverMaximum()
+	{
+		if ( intval($this->daily_max()) > 0 ) {
+			$maxCounter = new EndpointRequestCounter( $this );
+			return $maxCounter->isOverMaximum();
+		}
+		return false;
+	}
+
+	public function rssCount()
+	{
+		$model = Model::Named('Rss');
+		$ep_qualifier = Qualifier::Equals( Rss::endpoint_id, $this->pkValue() );
+		$results = array();
+
+		foreach( [1, 7, 14] as $age ) {
+			$ageTime = 86400 * $age;
+			$age_qualifier = Qualifier::GreaterThan( Rss::pub_date, (time() - $ageTime) );
+			$count = SQL::Count( $model, null, Qualifier::AndQualifier( [$ep_qualifier, $age_qualifier] ) )->fetch();
+			$results[$ageTime] = $count->count;
+		}
+		return $results;
+	}
+
+	public function fluxSrcCount()
+	{
+		$model = Model::Named('Flux');
+		$ep_qualifier = Qualifier::Equals( Flux::src_endpoint, $this->pkValue() );
+		$results = array();
+
+		foreach( [1, 7, 14, 30] as $age ) {
+			$ageTime = 86400 * $age;
+			$age_qualifier = Qualifier::GreaterThan( Flux::created, (time() - $ageTime) );
+			$count = SQL::Count( $model, [Flux::src_status], Qualifier::AndQualifier( [$ep_qualifier, $age_qualifier] ) )->fetchAll();
+			$results[$ageTime] = $count;
+		}
+		return $results;
+	}
+
+	public function fluxDestCount()
+	{
+		$model = Model::Named('Flux');
+		$ep_qualifier = Qualifier::Equals( Flux::dest_endpoint, $this->pkValue() );
+		$results = array();
+
+		foreach( [1, 7, 14, 30] as $age ) {
+			$ageTime = 86400 * $age;
+			$age_qualifier = Qualifier::GreaterThan( Flux::dest_submission, (time() - $ageTime) );
+			$count = SQL::Count( $model, [Flux::dest_status], Qualifier::AndQualifier( [$ep_qualifier, $age_qualifier] ) )->fetchAll();
+			$results[$ageTime] = $count;
+		}
+		return $results;
 	}
 
 	/** fail tracking */

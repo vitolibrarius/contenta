@@ -17,22 +17,29 @@ class EndpointRequestCounter
 {
 	const DefaultExtension = '.sqlite';
 	const NoEndpoint = 'NoEndpoint';
-	const MAX_USER_PAUSE = 20;
 
-	private $pdoDatabase;
-
-	function __construct($endpointName = NoEndpoint, $dailyMax = -1)
+	function __construct( $endpoint = null )
 	{
 		$dbPath = appendPath(Config::GetProcessing(), "EndpointRequestCounters" );
 		makeRequiredDirectory($dbPath, 'endpoint throttle subdirectory for ' . get_class($this));
 
-		$this->fullpath = appendPath( $dbPath, sanitize_filename($endpointName) . EndpointRequestCounter::DefaultExtension );
-		$this->endpointName = $endpointName;
-		$this->dailyMax = max( -1, intval($dailyMax));
+		$fname = EndpointRequestCounter::NoEndpoint;
+		$this->endpointName = EndpointRequestCounter::NoEndpoint;
+		$this->dailyMax = -1;
+
+		if ( is_null($endpoint) == false ) {
+			$this->endpointName = $endpoint->displayName();
+			$this->dailyMax = max( -1, intval($endpoint->daily_max));
+			$parse = parse_url($endpoint->base_url);
+			if ( isset($parse['host']) ) {
+				$fname = $parse['host'];
+			}
+		}
+		$this->fullpath = appendPath( $dbPath, sanitize_filename($fname) . EndpointRequestCounter::DefaultExtension );
 		$this->initializeSchema();
 	}
 
-	public function overMaximum()
+	public function isOverMaximum()
 	{
 		// if we are disabled, skip everything
 		if ( $this->dailyMax <= 0 ) {
@@ -43,25 +50,26 @@ class EndpointRequestCounter
 		if ( $count > $this->dailyMax ) {
 			return true;
 		}
-		$this->mark();
+		return false;
+	}
 
+	public function markOverMaximum()
+	{
+		if ( $this->isOverMaximum() ) {
+			return true;
+		}
+
+		$this->mark();
 		return false;
 	}
 
 	private function database()
 	{
-		if ( isset($this->pdoDatabase) == false ) {
-			try {
-				$this->pdoDatabase = new PDO("sqlite:" . $this->fullpath);
-				$this->pdoDatabase->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$this->pdoDatabase->exec( 'PRAGMA foreign_keys = ON;' );
-				$this->pdoDatabase->exec( 'PRAGMA busy_timeout = 10000;' );
-			}
-			catch(PDOException $e) {
-				Logger::logException($e);
-			}
-		}
-		return $this->pdoDatabase;
+		$database = new PDO("sqlite:" . $this->fullpath);
+    	$database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$database->exec( 'PRAGMA foreign_keys = ON;' );
+		$database->exec( 'PRAGMA busy_timeout = 10000;' );
+		return $database;
 	}
 
 	private function purge()
@@ -84,7 +92,7 @@ class EndpointRequestCounter
 		$database = null;
 	}
 
-	private function count()
+	public function count()
 	{
 		$this->purge();
 		$sql = "select COUNT(*) as COUNT, MIN(date_val) as MINDATE from PRIMITIVE";

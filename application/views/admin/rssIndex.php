@@ -1,6 +1,16 @@
 <section>
 	<form id='searchForm' name='searchForm'>
 	<div class="row">
+		<div class="grid_4">
+			<select name="endpoint_id" id="endpoint_id" class="text_input">
+				<option></option>
+				<?php foreach ($this->endpoints as $key => $endpoint) {
+					echo '<option value="' . $endpoint->pkValue() . '"';
+					echo '>' . $endpoint->displayName() . '</option>';
+				}
+				?>
+			</select>
+		</div>
 		<div class="grid_3">
 			<input type="text" name="searchName" id="searchName"
 				class="text_input"
@@ -50,6 +60,16 @@ var NZBDownload_url="<?php echo Config::Web('/AdminWanted/downloadNewznab'); ?>"
 
 $(document).ready(function($) {
 	search_timer = 0;
+	$("#endpoint_id").select2({
+		placeholder: "<?php echo Localized::ModelSearch($this->model->tableName(), 'endpoint_id' ); ?>",
+		allowClear: true
+	}).on("change", function(e) {
+		if (search_timer) {
+			clearTimeout(search_timer);
+		}
+		search_timer = setTimeout(refresh, 1000);
+	});
+
 	$(".text_input").on('keyup', function () {
 		if (search_timer) {
 			clearTimeout(search_timer);

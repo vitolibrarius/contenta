@@ -37,7 +37,7 @@
 				<p style="height:1em;"><span class="search_string" style="float:left"><?php echo $publication->searchString(); ?></span>
 					<span class="search_date" style="float:right;"><?php echo $publication->formattedDate_search_date(); ?></span></p>
 				<?php $rssMatch = $publication->rssMatches(); if ( is_array($rssMatch) && count($rssMatch) > 0 ) :?>
-				<div class="mediaData">
+				<div class="mediaData rss flux">
 					<table>
 						<tr>
 							<th>RSS Item</th>
@@ -47,24 +47,36 @@
 						<tr>
 							<td>
 								<h4><?php echo $rss->displayName(); ?></h4>
-								<p><?php echo date("M d, Y", $rss->pub_date); ?></p>
-								<p><?php echo formatSizeUnits($rss->enclosure_length); ?></p>
+								<span><?php echo date("M d, Y", $rss->pub_date); ?></span>
+								<span><?php echo formatSizeUnits($rss->enclosure_length); ?></span>
+								<p><?php echo $rss->endpoint()->name; ?></p>
 								<?php echo ($rss->enclosure_password == true ? "<em>**** password protected</em>" : ""); ?>
 							</td>
 							<td>
 					<?php $flux = $rss->flux(); if ($flux == false ) : ?>
-						<div id="dnld_<?php echo $rss->safe_guid(); ?>">
-						<a href="#" class="nzb button" style="white-space:nowrap;"
-							data-name="<?php echo htmlentities($rss->clean_name); ?>"
-							data-issue="<?php echo $rss->clean_issue; ?>"
-							data-year="<?php echo $rss->clean_year; ?>"
-							data-endpoint_id="<?php echo $rss->endpoint_id; ?>"
-							data-guid="<?php echo $rss->guid; ?>"
-							data-url="<?php echo $rss->enclosure_url; ?>"
-							data-postedDate="<?php echo $rss->pub_date; ?>"
-							data-ref_guid="dnld_<?php echo $rss->safe_guid(); ?>"
-							>Download</a>
-						</div>
+						<?php if ($rss->endpoint() != false && $rss->endpoint()->isOverMaximum() == false) : ?>
+							<div id="dnld_<?php echo $rss->safe_guid(); ?>">
+							<a href="#" class="nzb button" style="white-space:nowrap;"
+								data-name="<?php echo htmlentities($rss->clean_name); ?>"
+								data-issue="<?php echo $rss->clean_issue; ?>"
+								data-year="<?php echo $rss->clean_year; ?>"
+								data-endpoint_id="<?php echo $rss->endpoint_id; ?>"
+								data-guid="<?php echo $rss->guid; ?>"
+								data-url="<?php echo $rss->enclosure_url; ?>"
+								data-postedDate="<?php echo $rss->pub_date; ?>"
+								data-ref_guid="dnld_<?php echo $rss->safe_guid(); ?>"
+								>Download</a>
+							</div>
+						<?php else: ?>
+							<div style="white-space: nowrap;">
+								<span class="icon false"></span>
+								<span class="break-word"><?php echo ($rss->endpoint() ? "Over Daily Maximum" : "No Endpoint"); ?></span>
+							</div>
+							<div style="white-space: nowrap;">
+								<span class="icon false"></span>
+								<span class="break-word"><?php echo ($rss->endpoint() ? $rss->endpoint()->dailyMaximumStatus() : "No Status"); ?></span>
+							</div>
+						<?php endif; ?>
 					<?php else: ?>
 						<div>
 							<div style="white-space: nowrap;">
@@ -80,8 +92,9 @@
 							</td>
 						</tr>
 				<?php endforeach; ?>
+					</table>
+				</div>
 				<?php endif; ?>
-				</table>
 				<a href="#" class="srch button" style="white-space:nowrap;" data-pub_id="<?php echo $publication->id; ?>">Search now</a>
 				<div id="ajaxDiv_<?php echo $publication->id; ?>"></div>
 			</figcaption>

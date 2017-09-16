@@ -81,3 +81,8 @@
 	max-height : 100px;
 	overflow : auto;
 }
+
+.card .caption .rss span {
+	margin-bottom: 0;
+	font-size: .8em;
+}

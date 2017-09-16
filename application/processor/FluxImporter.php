@@ -129,7 +129,28 @@ class FluxImporter extends EndpointImporter
 		$context = stream_context_create($options);
 		$nzb = file_get_contents($flux->src_url, false, $context);
 		if ( $nzb != null ) {
-			if (file_put_contents($localFile, $nzb)) {
+			libxml_use_internal_errors(true);
+			$xml = simplexml_load_string($nzb);
+			$xmlErrors = libxml_get_errors();
+			libxml_clear_errors();
+
+			if ( is_a($xml, 'SimpleXMLElement') == false ) {
+				Model::Named('Flux')->updateObject( $flux,
+					array(
+						Flux::flux_error => Model::TERTIARY_TRUE,
+						Flux::src_status => 'Not XML'
+					)
+				);
+			}
+			else if ( isset($data->nzb) == false ) {
+				Model::Named('Flux')->updateObject( $flux,
+					array(
+						Flux::flux_error => Model::TERTIARY_TRUE,
+						Flux::src_status => htmlentities($nzb)
+					)
+				);
+			}
+			else if (file_put_contents($localFile, $nzb)) {
 				Model::Named('Flux')->updateObject( $flux,
 					array(
 						Flux::flux_hash => hash_file(HASH_DEFAULT_ALGO, $localFile),
@@ -184,7 +205,7 @@ class FluxImporter extends EndpointImporter
 			}
 
 			if ( $flux instanceof FluxDBO ) {
-				if ( $flux->isSourceComplete() == false ) {
+				if ( $flux->isSourceComplete() == false && $flux->source_endpoint() != false && $flux->source_endpoint()->markOverMaximum() == false ) {
 					Logger::logWarning( "Requesting nzb " . $flux->name, $flux->source_endpoint()->name(), $flux->src_endpoint() );
 					$localFile = $this->downloadForFlux($flux);
 					if ( file_exists($localFile) ) {
@@ -202,6 +223,7 @@ class FluxImporter extends EndpointImporter
 						else {
 							$FluxModel->updateObject( $flux,
 								array(
+									Flux::flux_error => Model::TERTIARY_TRUE,
 									Flux::dest_endpoint => $this->endpoint()->id,
 									Flux::dest_status => 'Failed ' . var_export($upload, true)
 								)

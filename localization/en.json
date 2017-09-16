@@ -314,6 +314,9 @@
             "error_count": {
                 "label": "Connection Errors"
             },
+            "jobs": {
+                "label": "Jobs"
+            },
             "name": {
                 "FIELD_EMPTY": "Name field was empty",
                 "label": "Name"
@@ -617,7 +620,8 @@
                 "search": "Min (Mb)"
             },
             "endpoint_id": {
-                "label": "Endpoint"
+                "label": "Endpoint",
+                "search": "Endpoint"
             },
             "issue_num": {
                 "search": "Issue"

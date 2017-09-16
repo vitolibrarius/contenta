@@ -22,6 +22,7 @@ use \utilities\MediaFilename as MediaFilename;
 
 use controller\Admin as Admin;
 
+use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
 use \model\network\Rss as Rss;
@@ -110,6 +111,9 @@ class AdminPullList extends Admin
 
 			$this->view->setLocalizedViewTitle("RSS");
 			$this->view->controllerAction = "rssindex";
+			$ep_model = Model::Named('Endpoint');
+			$this->view->endpoints = $ep_model->allForTypeCode(Endpoint_Type::RSS, true);
+
 			$model = Model::Named('Rss');
 			$this->view->model = $model;
 			$this->view->render( '/admin/rssIndex');
@@ -120,9 +124,9 @@ class AdminPullList extends Admin
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
 			$parameters = Session::pageParameters( $this, "index" );
-			$parameters->setPageSize(18);
+			$parameters->setPageSize(16);
 			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array(
-				'searchName', 'searchIssue', 'searchYear', 'searchAge', 'searchSize' )
+				'searchName', 'searchIssue', 'searchYear', 'searchAge', 'searchSize', 'endpoint_id' )
 			);
 
 			$model = Model::Named('Rss');
@@ -145,6 +149,9 @@ class AdminPullList extends Admin
 				$enclosure_length = intval($query['searchSize']) * MEGABYTE;
 				$qualifiers[] = Qualifier::GreaterThan( Rss::enclosure_length, $enclosure_length );
 			}
+			if ( isset($query['endpoint_id']) && intval($query['endpoint_id']) > 0 ) {
+				$qualifiers[] = Qualifier::Equals( Rss::endpoint_id, $query['endpoint_id'] );
+			}
 
 			if ( $hasNewValues ) {
 				if ( count($qualifiers) > 0 ) {
@@ -163,6 +170,8 @@ class AdminPullList extends Admin
 				else {
 					$parameters->setValueForKey( PageParams::PAGE_SHOWN, $pageNum );
 				}
+				$count = SQL::Count( $model )->fetch();
+				$parameters->queryResults($count->count);
 			}
 
 			$select = SQL::Select($model);

@@ -149,6 +149,7 @@ class View
 			}
 // 			echo out the system feedback (error and success messages)
 // 			$this->renderFeedbackMessages();
+			echo "<!-- ". $filename ." -->" . PHP_EOL;
 			require VIEWS_PATH . $filename . '.php';
 			if ($render_without_header_and_footer == false) {
 				require VIEWS_PATH . '_templates/footer.php';

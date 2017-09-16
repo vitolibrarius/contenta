@@ -299,15 +299,19 @@ class AdminWanted extends Admin
 			if ( HttpGet::hasValues('endpoint_id', 'search') && strlen($_GET['search']) > 4) {
 				$model = Model::Named('Endpoint');
 				$endpoint = $model->objectForId( $_GET['endpoint_id'] );
-
-				try {
-					$connection = new NewznabConnector( $endpoint );
-					$this->view->endpoint_id = $_GET['endpoint_id'];
-					$this->view->fluxModel = Model::Named('Flux');
-					$this->view->results = $connection->searchComics($_GET['search']);
+				if ( $endpoint->isOverMaximum() == false ) {
+					try {
+						$connection = new NewznabConnector( $endpoint );
+						$this->view->endpoint_id = $_GET['endpoint_id'];
+						$this->view->fluxModel = Model::Named('Flux');
+						$this->view->results = $connection->searchComics($_GET['search']);
+					}
+					catch ( \Exception $e ) {
+						Session::addNegativeFeedback( $e->getMessage() );
+					}
 				}
-				catch ( \Exception $e ) {
-					Session::addNegativeFeedback( $e->getMessage() );
+				else {
+					Session::addNegativeFeedback( "Over Daily Maximum " . $endpoint->dailyMaximumStatus() );
 				}
 			}
 			$this->view->render( '/wanted/newznab_results', true);
@@ -342,24 +346,25 @@ class AdminWanted extends Admin
 					$publication->saveChanges();
 					$this->view->fluxModel = Model::Named('Flux');
 					foreach( $points as $endpoint ) {
-						Session::addPositiveFeedback("Searching ". $endpoint . "  for " . $publication->searchString());
+						//Session::addPositiveFeedback("Searching ". $endpoint . "  for " . $publication->searchString());
+						if ( $endpoint->isOverMaximum() == false ) {
+							try {
+								$connection = new NewznabConnector( $endpoint );
+								$results = $connection->searchComics($publication->searchString());
+								if ( is_array($results) == false ) {
+									$results = $connection->searchComics($publication->seriesName() . " " . $publication->paddedIssueNum());
+								}
 
-						try {
-							$connection = new NewznabConnector( $endpoint );
-							$results = $connection->searchComics($publication->searchString());
-							if ( is_array($results) == false ) {
-								$results = $connection->searchComics($publication->seriesName() . " " . $publication->paddedIssueNum());
+								$this->view->publication_id = $pubId;
+								$this->view->publication = $publication;
+								$this->view->endpoint_id = $endpoint->id;
+								$this->view->results = $results;
+								$this->view->render( '/wanted/newznab_quick', true);
 							}
-
-							$this->view->publication_id = $pubId;
-							$this->view->publication = $publication;
-							$this->view->endpoint_id = $endpoint->id;
-							$this->view->results = $results;
-							$this->view->render( '/wanted/newznab_quick', true);
-						}
-						catch ( \Exception $e ) {
-							Logger::logException($e);
-							echo '<section class="feedback error">Exception: ' . $e->getMessage(). '</section>';
+							catch ( \Exception $e ) {
+								Logger::logException($e);
+								echo '<section class="feedback error">Exception: ' . $e->getMessage(). '</section>';
+							}
 						}
 					}
 				}
