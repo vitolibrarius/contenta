@@ -13,6 +13,8 @@ use \model\network\EndpointDBO as EndpointDBO;
 
 use utilities\MediaFilename as MediaFilename;
 use exceptions\EndpointConnectionException as EndpointConnectionException;
+use connectors\NetworkErrorException as NetworkErrorException;
+use connectors\ResponseErrorException as ResponseErrorException;
 
 class SABnzbdException extends \Exception {}
 
@@ -116,10 +118,12 @@ class SABnzbdConnector extends JSON_EndpointConnector
 	{
 		$category = null;
 		$all = $this->categories();
-		foreach($all as $value) {
-			if (preg_match("/(comics?)/uiU",$value)) {
-				$category = $value;
-				break;
+		if ( is_array($all) ) {
+			foreach($all as $value) {
+				if (preg_match("/(comics?)/uiU",$value)) {
+					$category = $value;
+					break;
+				}
 			}
 		}
 		return $category;
@@ -136,10 +140,12 @@ class SABnzbdConnector extends JSON_EndpointConnector
 	{
 		$script = null;
 		$all = $this->scripts();
-		foreach($all as $value) {
-			if (preg_match("/(contenta)/uiU",$value)) {
-				$script = $value;
-				break;
+		if ( is_array($all) ) {
+			foreach($all as $value) {
+				if (preg_match("/(contenta)/uiU",$value)) {
+					$script = $value;
+					break;
+				}
 			}
 		}
 		return $script;
@@ -293,8 +299,14 @@ Allows full nzbmatrix links (no need to parse out the ID).
 			$params['nzbfile'] = new CurlFile($filepath, 'application/x-nzb', $name);
 			$headers[] = 'Content-Type:multipart/form-data';
 
-			list( $data, $headers ) = parent::performPOST($url, $params, $headers);
-			return $data;
+			try {
+				list( $data, $headers ) = parent::performPOST($url, $params, $headers);
+			}
+			catch (ResponseErrorException $rex ) {
+				Logger::logException( $rex );
+			}
+
+			return (isset($data) ? $data : null);
 		}
 		else {
 			Logger::logError( 'No file at "' . $filepath

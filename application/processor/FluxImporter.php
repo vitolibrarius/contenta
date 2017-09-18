@@ -115,7 +115,9 @@ class FluxImporter extends EndpointImporter
 
 	private function downloadForFlux( FluxDBO $flux )
 	{
-		$localFile = $this->workingDirectory( "flux_" . $flux->id . "." . file_ext($flux->name));
+		Model::Named('Flux')->updateObject( $flux, array( Flux::src_status => 'Starting' ) );
+
+		$localFile = $this->workingDirectory( "flux_" . $flux->id );
 		if ( file_exists($localFile) == true ) {
 			safe_unlink($localFile);
 		}
@@ -142,11 +144,12 @@ class FluxImporter extends EndpointImporter
 					)
 				);
 			}
-			else if ( isset($xml->nzb) == false ) {
+			else if ( $xml->getName() != "nzb" ) {
+				// <error code="501" description="Download limit reached"/>
 				Model::Named('Flux')->updateObject( $flux,
 					array(
 						Flux::flux_error => Model::TERTIARY_TRUE,
-						Flux::src_status => htmlentities($nzb)
+						Flux::src_status => ($xml->getName() == 'error' && isset($xml['description']) ? $xml['description'] : htmlentities($nzb))
 					)
 				);
 			}

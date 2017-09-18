@@ -60,6 +60,11 @@ class RSSConnector extends XML_EndpointConnector
 		return array($success, $message);
 	}
 
+	public function overDailyMaximum() {
+		// no one I know of limits the RSS hits
+		return false;
+	}
+
 	public function performGET($url, $force = false)
 	{
 		$this->xmlDocument = null;

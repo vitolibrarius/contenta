@@ -258,13 +258,22 @@ abstract class EndpointConnector
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
 				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-				$response = curl_exec($ch);
-				$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+				$data = false;
+				try {
+					$response = curl_exec($ch);
 
-				// extract the headers
-				$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-				$headers = http_parse_headers(substr($response, 0, $header_size));
-				$data = substr($response, $header_size);
+					// extract the headers
+					$header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+					$headers = http_parse_headers(substr($response, 0, $header_size));
+					$data = substr($response, $header_size);
+				}
+				catch ( \Exception $e2 ) {
+					Logger::logException( $e2 );
+					$info = curl_getinfo($ch);
+					Logger::logWarning( "Curl info ". json_encode($info, JSON_PRETTY_PRINT), get_class($this), $this->endpointDisplayName());
+				}
+
+				$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 // 				$whoami = trim(`whoami`);
 // 				$headerLog = new Metadata('/tmp/http_headers_' . $whoami . '.json');

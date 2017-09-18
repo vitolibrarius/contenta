@@ -44,15 +44,23 @@ class EndpointRequestCounter
 	public function isOverMaximum($type = 'daily_max')
 	{
 		// if we are disabled, skip everything
-		if ( $this->{$type} <= 0 ) {
+		$max = -1;
+		switch ( $type ) {
+			case 'daily_dnld_max':
+				$max = $this->daily_dnld_max;
+				break;
+			case 'daily_max':
+			default:
+				$max = $this->daily_max;
+				break;
+		}
+
+		if ( $max <= 0 ) {
 			return false;
 		}
 
-		list($count, $mindate) = $this->count();
-		if ( $count > $this->{$type} ) {
-			return true;
-		}
-		return false;
+		list($count, $mindate) = $this->count($type);
+		return ( $count > $max );
 	}
 
 	public function markOverMaximum($type = 'daily_max')
