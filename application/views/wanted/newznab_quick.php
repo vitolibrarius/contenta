@@ -85,8 +85,9 @@
 				<?php echo ($item['password'] == true ? "<em>**** password protected</em>" : ""); ?>
 			</td>
 			<td>
+				<?php if ($endpoint->isOverMaximum('daily_dnld_max') == false) : ?>
 				<?php $flux = $this->fluxModel->objectForSrc_guid( $item['guid'] );
-					if ($flux == false ) : ?>
+					if ($flux == false) : ?>
 						<div id="dnld_<?php echo $this->publication_id . "_" . $item['safe_guid']; ?>">
 						<a href="#" class="nzb button" style="white-space:nowrap;"
 							data-name="<?php echo htmlentities($seriesName); ?>"
@@ -125,7 +126,17 @@
 							</div>
 						<?php endif; ?>
 					</div>
-					<?php endif; ?>
+				<?php endif; ?>
+				<?php else : ?>
+					<div style="white-space: nowrap;">
+						<span class="icon false"></span>
+						<span class="break-word">Over Daily Maximum</span>
+					</div>
+					<div style="white-space: nowrap;">
+						<span class="icon false"></span>
+						<span class="break-word"><?php echo $endpoint->dailyMaximumStatus(); ?></span>
+					</div>
+				<?php endif; ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>

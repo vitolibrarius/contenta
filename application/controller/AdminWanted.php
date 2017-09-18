@@ -296,25 +296,29 @@ class AdminWanted extends Admin
 	function searchNewznab()
 	{
 		if (Auth::handleLogin() && Auth::requireRole(Users::AdministratorRole)) {
-			if ( HttpGet::hasValues('endpoint_id', 'search') && strlen($_GET['search']) > 4) {
+			if ( HttpGet::hasValues('endpoint_id', 'search') ) {
 				$model = Model::Named('Endpoint');
 				$endpoint = $model->objectForId( $_GET['endpoint_id'] );
-				if ( $endpoint->isOverMaximum('daily_max') == false ) {
-					try {
-						$connection = new NewznabConnector( $endpoint );
-						$this->view->endpoint_id = $_GET['endpoint_id'];
-						$this->view->fluxModel = Model::Named('Flux');
-						$this->view->results = $connection->searchComics($_GET['search']);
+				if ( $endpoint->isOverMaximum('daily_max') == false && $endpoint->isOverMaximum('daily_dnld_max') == false) {
+					if (strlen($_GET['search']) > 4 ) {
+						try {
+							$connection = new NewznabConnector( $endpoint );
+							$this->view->endpoint_id = $_GET['endpoint_id'];
+							$this->view->fluxModel = Model::Named('Flux');
+							$this->view->results = $connection->searchComics($_GET['search']);
+
+						}
+						catch ( \Exception $e ) {
+							Session::addNegativeFeedback( $e->getMessage() );
+						}
 					}
-					catch ( \Exception $e ) {
-						Session::addNegativeFeedback( $e->getMessage() );
-					}
+					$this->view->render( '/wanted/newznab_results', true);
 				}
 				else {
-					Session::addNegativeFeedback( "Over Daily Maximum " . $endpoint->dailyMaximumStatus() );
+					echo $endpoint->name . " is over maximum " . $endpoint->dailyMaximumStatus();
+					//Session::addNegativeFeedback( "Over Daily Maximum " . $endpoint->dailyMaximumStatus() );
 				}
 			}
-			$this->view->render( '/wanted/newznab_results', true);
 		}
 	}
 
