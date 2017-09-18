@@ -56,26 +56,40 @@ class PublicationWantedCard {
 							$flux = $rss->flux();
 							if ($flux == false ) {
 								// create download
-								$fluxHTML = H::div( array("id"=>"dnld_".$rss->safe_guid()),
-									H::a( array(
-										"href"=>"#",
-										"class"			=>	"nzb button",
-										"style"			=>	"white-space:nowrap;",
-										"data-name"		=>	htmlentities($rss->clean_name),
-										"data-issue"	=>	$rss->clean_issue,
-										"data-year"		=>	$rss->clean_year,
-										"data-endpoint_id"=>$rss->endpoint_id,
-										"data-guid"		=>	$rss->guid,
-										"data-url"		=>	$rss->enclosure_url,
-										"data-postedDate"	=>	$rss->pub_date,
-										"data-ref_guid"	=>	"dnld_".$rss->safe_guid()), "Download")
-								);
+								if ( $rss->endpoint()->isOverMaximum('daily_dnld_max') == false ) {
+									$fluxHTML = H::div( array("id"=>"dnld_".$rss->safe_guid()),
+										H::a( array(
+											"href"=>"#",
+											"class"			=>	"nzb button",
+											"style"			=>	"white-space:nowrap;",
+											"data-name"		=>	htmlentities($rss->clean_name),
+											"data-issue"	=>	$rss->clean_issue,
+											"data-year"		=>	$rss->clean_year,
+											"data-endpoint_id"=>$rss->endpoint_id,
+											"data-guid"		=>	$rss->guid,
+											"data-url"		=>	$rss->enclosure_url,
+											"data-postedDate"	=>	$rss->pub_date,
+											"data-ref_guid"	=>	"dnld_".$rss->safe_guid()), "Download")
+									);
+								}
+								else {
+									$fluxHTML = H::div(
+										H::div( array("style"=>"white-space: nowrap;"),
+											H::span( array("class"=>"icon false")),
+											H::span( array("class"=>"break-word"), $rss->endpoint()->dailyMaximumStatus())
+										)
+									);
+								}
 							}
 							else {
 								$fluxHTML = H::div(
 									H::div( array("style"=>"white-space: nowrap;"),
 										H::span( array("class"=>"icon ".($flux->isSourceComplete()?'true':'false'))),
 										H::span( array("class"=>"break-word"), $flux->src_status)
+									),
+									H::div( array("style"=>"white-space: nowrap;"),
+										H::span( array("class"=>"icon ".($flux->isComplete()?'true':'false'))),
+										H::span( array("class"=>"break-word"), $flux->dest_status)
 									)
 								);
 							}
@@ -84,7 +98,8 @@ class PublicationWantedCard {
 									H::td(
 										H::h4( $rss->displayName() ),
 										H::p( date("M d, Y", $rss->pub_date) ),
-										H::p( formatSizeUnits($rss->enclosure_length) )
+										H::p( formatSizeUnits($rss->enclosure_length) ),
+										H::p( $rss->endpoint()->displayName() )
 									),
 									H::td( $fluxHTML )
 								)
