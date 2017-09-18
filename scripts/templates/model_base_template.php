@@ -463,7 +463,7 @@ if ( isset($details["arguments"]) && is_array($details["arguments"]) && count($d
 		$qualifiers = array();
 <?php foreach( $details['qualifiers'] as $qualDetail ) : ?>
 <?php if (isset($qualDetail['optional'], $qualDetail['argAttribute']) && boolval($qualDetail['optional'])) : ?>
-		if ( isset($<?php echo $qualDetail['argAttribute']; ?>)) {
+		if ( isset($<?php echo $qualDetail['argAttribute']; ?>) && is_null($this-><?php echo $qualDetail['argAttribute']; ?>) == false) {
 			$qualifiers[] = <?php echo $this->qualifierString($qualDetail); ?>;
 		}
 <?php else : ?>

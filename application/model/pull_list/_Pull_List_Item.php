@@ -437,13 +437,13 @@ abstract class _Pull_List_Item extends Model
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
-		if ( isset($name)) {
+		if ( isset($name) && is_null($this->name) == false) {
 			$qualifiers[] = Qualifier::Equals( 'name', $name);
 		}
-		if ( isset($issue)) {
+		if ( isset($issue) && is_null($this->issue) == false) {
 			$qualifiers[] = Qualifier::Equals( 'issue', $issue);
 		}
-		if ( isset($year)) {
+		if ( isset($year) && is_null($this->year) == false) {
 			$qualifiers[] = Qualifier::Equals( 'year', $year);
 		}
 
@@ -461,13 +461,13 @@ abstract class _Pull_List_Item extends Model
 		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
 		$qualifiers[] = Qualifier::FK( 'pull_list_id', $pull_list);
-		if ( isset($name)) {
+		if ( isset($name) && is_null($this->name) == false) {
 			$qualifiers[] = Qualifier::Equals( 'name', $name);
 		}
-		if ( isset($issue)) {
+		if ( isset($issue) && is_null($this->issue) == false) {
 			$qualifiers[] = Qualifier::Equals( 'issue', $issue);
 		}
-		if ( isset($year)) {
+		if ( isset($year) && is_null($this->year) == false) {
 			$qualifiers[] = Qualifier::Equals( 'year', $year);
 		}
 
@@ -484,16 +484,16 @@ abstract class _Pull_List_Item extends Model
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
-		if ( isset($pull_list_id)) {
+		if ( isset($pull_list_id) && is_null($this->pull_list_id) == false) {
 			$qualifiers[] = Qualifier::Equals( 'pull_list_id', $pull_list_id);
 		}
-		if ( isset($name)) {
+		if ( isset($name) && is_null($this->name) == false) {
 			$qualifiers[] = Qualifier::Equals( 'name', $name);
 		}
-		if ( isset($issue)) {
+		if ( isset($issue) && is_null($this->issue) == false) {
 			$qualifiers[] = Qualifier::Equals( 'issue', $issue);
 		}
-		if ( isset($year)) {
+		if ( isset($year) && is_null($this->year) == false) {
 			$qualifiers[] = Qualifier::Equals( 'year', $year);
 		}
 

@@ -431,10 +431,10 @@ abstract class _Log extends Model
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
-		if ( isset($sessionId)) {
+		if ( isset($sessionId) && is_null($this->sessionId) == false) {
 			$qualifiers[] = Qualifier::Equals( 'session', $sessionId);
 		}
-		if ( isset($lastCheck)) {
+		if ( isset($lastCheck) && is_null($this->lastCheck) == false) {
 			$qualifiers[] = Qualifier::GreaterThan( 'created', $lastCheck);
 		}
 
@@ -451,22 +451,22 @@ abstract class _Log extends Model
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
-		if ( isset($trace)) {
+		if ( isset($trace) && is_null($this->trace) == false) {
 			$qualifiers[] = Qualifier::Like( 'trace', $trace, SQL::SQL_LIKE_AFTER);
 		}
-		if ( isset($trace_id)) {
+		if ( isset($trace_id) && is_null($this->trace_id) == false) {
 			$qualifiers[] = Qualifier::Like( 'trace_id', $trace_id, SQL::SQL_LIKE_AFTER);
 		}
-		if ( isset($context)) {
+		if ( isset($context) && is_null($this->context) == false) {
 			$qualifiers[] = Qualifier::Like( 'context', $context, SQL::SQL_LIKE_AFTER);
 		}
-		if ( isset($context_id)) {
+		if ( isset($context_id) && is_null($this->context_id) == false) {
 			$qualifiers[] = Qualifier::Like( 'context_id', $context_id, SQL::SQL_LIKE_AFTER);
 		}
-		if ( isset($message)) {
+		if ( isset($message) && is_null($this->message) == false) {
 			$qualifiers[] = Qualifier::Like( 'message', $message, SQL::SQL_LIKE_AFTER);
 		}
-		if ( isset($levelCode)) {
+		if ( isset($levelCode) && is_null($this->levelCode) == false) {
 			$qualifiers[] = Qualifier::Equals( 'level_code', $levelCode);
 		}
 

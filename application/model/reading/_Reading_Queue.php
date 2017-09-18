@@ -556,10 +556,10 @@ abstract class _Reading_Queue extends Model
 		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
 		$qualifiers[] = Qualifier::FK( 'user_id', $user);
-		if ( isset($favorite)) {
+		if ( isset($favorite) && is_null($this->favorite) == false) {
 			$qualifiers[] = Qualifier::Equals( 'favorite', $favorite);
 		}
-		if ( isset($read)) {
+		if ( isset($read) && is_null($this->read) == false) {
 			$qualifiers[] = Qualifier::Equals( 'read', $read);
 		}
 
