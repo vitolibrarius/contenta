@@ -38,9 +38,36 @@
 			<span><?php echo $rss->endpoint()->name(); ?></span>
 		</p>
 		<?php echo ($rss->enclosure_password == true ? "<em>**** password protected</em>" : ""); ?>
+
 		<?php $flux = $rss->flux(); if ($flux == false ) : ?>
+			<?php $pubs = $rss->publicationMatches(); if (is_array($pubs) && count($pubs) > 0) : ?>
+				<div class="mediaData">
+					<table width="100%">
+						<tr>
+							<th></th>
+							<th>Series</th>
+							<th>Issue</th>
+							<th>Year</th>
+							<th>Media</th>
+						</tr>
+						<?php foreach( $pubs as $idx => $pub ) : ?>
+						<tr>
+							<td><img class="thumbnail cbz" src="<?php echo Config::Web('/Image/icon/series', $pub->series_id ) ?>"></td>
+							<td><?php echo $pub->seriesName(); ?></td>
+							<td><?php echo $pub->issue_num; ?></td>
+							<td><?php echo $pub->publishedYear(); ?></td>
+							<td><?php $media = $pub->media(); $last = array_last_value($media);
+								foreach( $media as $m ) {
+								echo $m->type_code . " " . $m->formattedSize();
+								if ( $m != $last ) { echo "<hr>"; }
+							} ?></td>
+						</tr>
+						<?php endforeach; ?>
+					</table>
+				</div>
+			<?php endif; ?>
 			<?php if ($rss->endpoint() != false && $rss->endpoint()->isOverMaximum('daily_dnld_max') == false) : ?>
-				<div class="status flux" id="dnld_<?php echo $rss->safe_guid(); ?>">
+				<div class="status" id="dnld_<?php echo $rss->safe_guid(); ?>">
 				<a href="#" class="nzb button" style="white-space:nowrap;"
 					data-name="<?php echo htmlentities($rss->clean_name); ?>"
 					data-issue="<?php echo $rss->clean_issue; ?>"

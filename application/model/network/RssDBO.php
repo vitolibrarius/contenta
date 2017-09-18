@@ -42,6 +42,16 @@ class RssDBO extends _RssDBO
 		}
 		return false;
 	}
+
+	public function publicationMatches()
+	{
+		$model = Model::Named('Publication');
+		return $model->publicationsLike(
+			$this->clean_name,
+			$this->clean_issue,
+			(intval($this->clean_year) > 1900 ? $this->clean_year : null)
+		);
+	}
 }
 
 ?>

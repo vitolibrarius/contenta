@@ -170,8 +170,6 @@ class AdminPullList extends Admin
 				else {
 					$parameters->setValueForKey( PageParams::PAGE_SHOWN, $pageNum );
 				}
-				$count = SQL::Count( $model )->fetch();
-				$parameters->queryResults($count->count);
 			}
 
 			$select = SQL::Select($model);

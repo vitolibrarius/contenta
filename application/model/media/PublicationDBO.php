@@ -129,7 +129,7 @@ class PublicationDBO extends _PublicationDBO
 		return $model->objectsForNameIssueYear(
 			$this->series()->search_name,
 			$this->issue_num,
-			($this->publishedYear() > 1900 ? " " . $this->publishedYear() : '')
+			($this->publishedYear() > 1900 ? $this->publishedYear() : null)
 		);
 	}
 
