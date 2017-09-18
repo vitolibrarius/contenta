@@ -317,6 +317,10 @@ class ComicVineImporter extends ContentMetadataImporter
 					$record = $connection->personDetails( $xid );
 				}
 				catch (\Exception $e) {
+					$record = false;
+				}
+
+				if ( $record == false ) {
 					throw new Exception("Connection failed to find artist for " . $xid);
 				}
 

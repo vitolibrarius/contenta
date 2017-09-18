@@ -60,7 +60,7 @@ class EndpointRequestCounter
 		}
 
 		list($count, $mindate) = $this->count($type);
-		return ( $count > $max );
+		return ( $count >= $max );
 	}
 
 	public function markOverMaximum($type = 'daily_max')

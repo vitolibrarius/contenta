@@ -27,6 +27,7 @@
 		<?php $date = new DateTime('first day of this month');
 			$date->modify('-'.$offset.' months');
 		?>
+
 		<div class="row data">
 			<div class="grid_6">
 				<h2 style="display: inline">
@@ -72,6 +73,10 @@ $(document).ready(function(){
 				ajaxDisplay.hide();
 				ajaxDisplay.empty().append(msg);
 				ajaxDisplay.fadeIn('slow');
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(xhr.status);
+				alert(thrownError);
 			}
 		});
 		e.stopPropagation();
