@@ -415,7 +415,7 @@ abstract class _Publication_Artist extends Model
 		$qualifiers = array();
 		$qualifiers[] = Qualifier::FK( 'publication_id', $pub);
 		$qualifiers[] = Qualifier::FK( 'artist_id', $char);
-		if ( isset($role) && is_null($this->role) == false) {
+		if ( isset($role) && is_null($role) == false) {
 			$qualifiers[] = Qualifier::FK( 'role_code', $role);
 		}
 

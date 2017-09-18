@@ -508,13 +508,13 @@ abstract class _Rss extends Model
 		$select = SQL::Select( $this );
 		$select->orderBy( $this->sortOrder() );
 		$qualifiers = array();
-		if ( isset($name) && is_null($this->name) == false) {
+		if ( isset($name) && is_null($name) == false) {
 			$qualifiers[] = Qualifier::Like( 'clean_name', $name, SQL::SQL_LIKE_BOTH);
 		}
-		if ( isset($issue) && is_null($this->issue) == false) {
+		if ( isset($issue) && is_null($issue) == false) {
 			$qualifiers[] = Qualifier::Equals( 'clean_issue', $issue);
 		}
-		if ( isset($year) && is_null($this->year) == false) {
+		if ( isset($year) && is_null($year) == false) {
 			$qualifiers[] = Qualifier::Equals( 'clean_year', $year);
 		}
 
