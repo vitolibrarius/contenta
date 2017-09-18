@@ -2,14 +2,15 @@
 <?php
 	$seriesGroups = array();
 	foreach($this->listArray as $publication) {
-		$series_id = $publication->seriesName();
-		$seriesGroups[$series_id][] = $publication;
+		$oid = $publication->series_id;
+		$series_name = $publication->seriesName();
+		$seriesGroups[$series_name][] = $publication;
 	}
 	ksort($seriesGroups);
 ?>
 
-<?php foreach($seriesGroups as $series_id => $publicationArray): ?>
-	<h3><?php echo $series_id; ?></h3>
+<?php foreach($seriesGroups as $series_name => $publicationArray): ?>
+	<h3><a href="<?php echo Config::Web('/AdminSeries/editSeries/' . $oid); ?>"><?php echo $series_name; ?></a></h3>
 	<div class="row">
 		<?php foreach($publicationArray as $key => $publication): ?>
 		<div class="grid_4">
@@ -49,7 +50,10 @@
 								<h4><?php echo $rss->displayName(); ?></h4>
 								<span><?php echo date("M d, Y", $rss->pub_date); ?></span>
 								<span><?php echo formatSizeUnits($rss->enclosure_length); ?></span>
-								<p><?php echo $rss->endpoint()->name; ?></p>
+								<p>
+									<a href="<?php echo Config::Web('/netconfig/edit/'. $rss->endpoint()->id); ?>">
+										<?php echo $rss->endpoint()->name; ?></a>
+								</p>
 								<?php echo ($rss->enclosure_password == true ? "<em>**** password protected</em>" : ""); ?>
 							</td>
 							<td>
@@ -87,6 +91,25 @@
 								<span class="icon <?php echo ($flux->isFlux_error()?'false':'true'); ?>"></span>
 								<span class="break-word"><?php echo $flux->dest_status ; ?></span>
 							</div>
+							<?php if ($flux->isFlux_error() && $rss->endpoint() != false && $rss->endpoint()->isOverMaximum('daily_dnld_max') == false) : ?>
+								<div id="dnld_<?php echo $rss->safe_guid(); ?>">
+								<a href="#" class="nzb button" style="white-space:nowrap;"
+									data-name="<?php echo htmlentities($rss->clean_name); ?>"
+									data-issue="<?php echo $rss->clean_issue; ?>"
+									data-year="<?php echo $rss->clean_year; ?>"
+									data-endpoint_id="<?php echo $rss->endpoint_id; ?>"
+									data-guid="<?php echo $rss->guid; ?>"
+									data-url="<?php echo $rss->enclosure_url; ?>"
+									data-postedDate="<?php echo $rss->pub_date; ?>"
+									data-ref_guid="dnld_<?php echo $rss->safe_guid(); ?>"
+									>Retry</a>
+								</div>
+							<?php else : ?>
+								<div style="white-space: nowrap;">
+									<span class="icon false"></span>
+									<span class="break-word">Over Daily Maximum</span>
+								</div>
+							<?php endif; ?>
 						</div>
 					<?php endif; ?>
 							</td>
