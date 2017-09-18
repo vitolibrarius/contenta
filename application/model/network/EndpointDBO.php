@@ -50,9 +50,17 @@ class EndpointDBO extends _EndpointDBO
 			$maxCounter = new EndpointRequestCounter( $this );
 			list($daily_max_count, $minapidate) = $maxCounter->count('daily_max');
 			list($daily_dnld_count, $mindlnddate) = $maxCounter->count('daily_dnld_max');
+			$overAPI = ($daily_max_count >= $this->daily_max());
+			$overDNLD = ($daily_dnld_count >= $this->daily_dnld_max());
 
-			return "API " . $daily_max_count ."/". $this->daily_max() . " next in " . formattedTimeElapsed(time() - $minapidate)
-				. " Download " . $daily_dnld_count ."/". $this->daily_dnld_max() . " next in " . formattedTimeElapsed(time() - $mindlnddate) ;
+			return "API " . ($overAPI ?
+					"<em>" . $daily_max_count ."/". $this->daily_max() . " next in " . formattedTimeElapsed(time() - $minapidate) . "</em>"
+					: $daily_max_count ."/". $this->daily_max()
+				) . "<hr>"
+				. "Downloads " . ($overDNLD ?
+					"<em>" . $daily_dnld_count ."/". $this->daily_dnld_max() . " next in " . formattedTimeElapsed(time() - $mindlnddate) . "</em>"
+					: $daily_dnld_count ."/". $this->daily_dnld_max()
+				);
 		}
 		return "";
 	}
