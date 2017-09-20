@@ -55,7 +55,7 @@ function refreshAjax(page_url, page_num, data, resultsId) {
 		ajaxDisplay.innerHTML = msg;
 	})
 	.fail(function(jqXHR, textStatus, errorThrown) {
-		alert( "Error: " + textStatus );
+		alert( "Error: " + errorThrown );
 	});
 };
 
