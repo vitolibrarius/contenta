@@ -565,6 +565,14 @@ a.button:hover { background:#8dbc01; }
 	display: inline-block;
 }
 
+.nzbsearch.bigsize {
+	background: rgba(255, 150, 80, 0.28);
+}
+
+.nzbsearch.yikes {
+	background: rgba(255, 30, 0, 0.28);
+}
+
 .nzbsearch.match {
 	background: rgba(4, 206, 31, 0.28);
 }

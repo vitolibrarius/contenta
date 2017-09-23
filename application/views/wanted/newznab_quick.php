@@ -44,8 +44,14 @@
 				}
 				if ($item['len'] > (MEGABYTE * 10)) {
 					$sizeMatch = "close";
-					if ($item['len'] > (MEGABYTE * 25) && $item['len'] < (MEGABYTE * 75)) {
+					if ($item['len'] > (MEGABYTE * 25) && $item['len'] <= (MEGABYTE * 75)) {
 						$sizeMatch = "match";
+					}
+					else if ($item['len'] > (MEGABYTE * 75) && $item['len'] <= (MEGABYTE * 150)) {
+						$sizeMatch = "bigsize";
+					}
+					else if ($item['len'] > (MEGABYTE * 150)) {
+						$sizeMatch = "yikes";
 					}
 				}
 				if (isset($this->publication->pub_date)) {
