@@ -438,19 +438,21 @@ class ComicVineConnector extends JSON_EndpointConnector
 	public function series_searchFilteredForYear( $name, $year = 0)
 	{
 		$results = $this->series_search( null, $name );
-		if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) =" . count($results) . PHP_EOL;
-		$results = $this->series_filterForCloseName( $results, $name, 10 );
-		if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) close =" . count($results) . PHP_EOL;
-		$results = $this->series_filterForIssueYear( $results, $year );
-		if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) year =" . count($results) . PHP_EOL;
-		if ( is_array($results) == false || count($results) == 0 ) {
-			// try a fuzzy search
-			$results = $this->search( ComicVineConnector::RESOURCE_VOLUME, $name );
-			if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) fuzzy =" . count($results) . PHP_EOL;
+		if ( is_array($results) && count($results) > 0) {
+			if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) =" . count($results) . PHP_EOL;
 			$results = $this->series_filterForCloseName( $results, $name, 10 );
-			if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) fuzzy close =" . count($results) . PHP_EOL;
+			if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) close =" . count($results) . PHP_EOL;
 			$results = $this->series_filterForIssueYear( $results, $year );
-			if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) fuzzy year =" . count($results) . PHP_EOL;
+			if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) year =" . count($results) . PHP_EOL;
+			if ( is_array($results) == false || count($results) == 0 ) {
+				// try a fuzzy search
+				$results = $this->search( ComicVineConnector::RESOURCE_VOLUME, $name );
+				if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) fuzzy =" . count($results) . PHP_EOL;
+				$results = $this->series_filterForCloseName( $results, $name, 10 );
+				if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) fuzzy close =" . count($results) . PHP_EOL;
+				$results = $this->series_filterForIssueYear( $results, $year );
+				if ( $this->trace) echo "	series_searchFilteredForYear($name, $year) fuzzy year =" . count($results) . PHP_EOL;
+			}
 		}
 
 		return $results;
