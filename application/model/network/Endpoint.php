@@ -23,6 +23,16 @@ use \model\jobs\JobDBO as JobDBO;
 
 class Endpoint extends _Endpoint
 {
+	public function ComicVineEndpoint()
+	{
+		$points = $this->allForTypeCode(Endpoint_Type::ComicVine, true);
+		if ( $points == false || count($points) == 0) {
+			Logger::logError( "Failed to find endpoint for ComicVine" );
+			return false;
+		}
+		return $points[0];
+	}
+
 	/**
 	 *	Create/Update functions
 	 */

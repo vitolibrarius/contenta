@@ -3,6 +3,7 @@
 <?php use \html\Paginator as Paginator;
 	$p = new Paginator( $this->params, Config::Web('/AdminPullList/searchRss') );
 	echo $p->render();
+	$comicVine = Model::Named("Endpoint")->ComicVineEndpoint();
 ?>
 	</div></div>
 
@@ -15,6 +16,9 @@
 
 	<div class="grid_3">
 	<div class="<?php echo $this->model->tableName(); ?>">
+		<div style="float: right;">
+			<a target="comicvine" href="https://comicvine.gamespot.com/search/?q=<?php echo $rss->clean_name(); ?>&indices[]=volume"><img src="<?php echo $comicVine->endpointType()->favicon(); ?>"></a>
+		</div>
 		<h4><a href="#" class="togglable">
 			<div class="toggle_item" style="display:none; font-size: 0.75em">
 				<span class="nzbsearch title"><?php echo $rss->title; ?></span>
