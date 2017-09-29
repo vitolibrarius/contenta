@@ -53,19 +53,18 @@ class EndpointDBO extends _EndpointDBO
 			$overAPI = ($daily_max_count >= $this->daily_max());
 			$overDNLD = ($daily_dnld_count >= $this->daily_dnld_max());
 
-			return ($overAPI ?
-					"<em>" . "API disabled " . formattedTimeElapsed(($minapidate + (60 * 60 * 24)) - time())
-					. "<br>"
-					. ($overDNLD ?
-						"Downloads disabled " . formattedTimeElapsed(($mindlnddate + (60 * 60 * 24)) - time())
-						: ""
-					)
-					. "</em>"
-					: ($overDNLD ?
-						"<em>Downloads disabled " . formattedTimeElapsed(($mindlnddate + (60 * 60 * 24)) - time()) . "</em>"
-						: ""
-					)
-				);
+			$apiStr = ($overAPI ?
+						"<em>" . "API " . $daily_max_count . " / " . $this->daily_max()
+							. " disabled "  . formattedTimeElapsed(($minapidate + (60 * 60 * 24)) - time()) . "</em>"
+						: "API " . $daily_max_count . " / " . $this->daily_max()
+					);
+			$dnldStr = ($overDNLD ?
+						"<em>Downloads " . $daily_dnld_count . " / " . $this->daily_dnld_max()
+							." disabled " . formattedTimeElapsed(($mindlnddate + (60 * 60 * 24)) - time()) . "</em>"
+						: "DNLD " . $daily_dnld_count . " / " . $this->daily_dnld_max()
+					);
+
+			return $apiStr . "<br>" . $dnldStr;
 
 // 			return "<table><tr><th>🔍</th><td>"
 // 				. "<progress min='0' max='" .$this->daily_max(). "' value='" .  $daily_max_count . "'>"
