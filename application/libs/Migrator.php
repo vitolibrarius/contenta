@@ -52,7 +52,9 @@ class Migrator
 			// re-create data tables
 			Migrator::ApplyNeededMigrations($scratchDirectory);
 			// delete all the default users created by the migration since we are restoring the users_old
-			Database::instance()->execute_sql("delete from users");
+			if ( count($oldTableNames) > 0 ) {
+				 Database::instance()->execute_sql("delete from users");
+			}
 			Database::ResetConnection();
 
 			// reload old data

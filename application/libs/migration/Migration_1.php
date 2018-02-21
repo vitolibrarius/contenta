@@ -63,7 +63,7 @@ class Migration_1 extends Migrator
 			"email" => "vitolibrarius@gmail.com",
 			"active" => 1,
 			"account_type" => Users::AdministratorRole,
-			"creation_timestamp" => time(),
+			"created" => time(),
 			"failed_logins" => 0,
 			"api_hash" => "4bd3b2b9075571c95ade00002334e7b2"
 		);
@@ -72,5 +72,9 @@ class Migration_1 extends Migrator
 		$insert = SQL::Insert( $users_model );
 		$insert->addRecord( $values );
 		$success = $insert->commitTransaction();
+
+		$user = $users_model->objectForName('vito');
+		($user != false && $user->name == 'vito') || die("Could not find 'vito' user");
+		Logger::logInfo( "Created user ". $user, get_class(), 'Users');
 	}
 }

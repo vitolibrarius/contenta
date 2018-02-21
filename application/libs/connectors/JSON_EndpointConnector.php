@@ -55,7 +55,7 @@ abstract class JSON_EndpointConnector extends EndpointConnector
 					if ( $this->isDebuggingResponses() ) {
 						$this->debugData( $data, $this->cleanURLForLog($url) . ".data" );
 					}
-					throw new ResponseErrorException(jsonErrorString(json_last_error()));
+					throw new ResponseErrorException(jsonErrorString(json_last_error()) . ": " . data);
 				}
 
 				if ( $this->isDebuggingResponses() ) {
