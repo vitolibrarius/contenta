@@ -13,8 +13,8 @@ use \model\network\Endpoint_Type as Endpoint_Type;
 /* import related objects */
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
-use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
+use \model\pull_list\Pull_List_Excl as Pull_List_Excl;
+use \model\pull_list\Pull_List_ExclDBO as Pull_List_ExclDBO;
 use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
@@ -68,12 +68,12 @@ abstract class _Endpoint_TypeDBO extends DataObject
 	}
 
 	// to-many relationship
-	public function pull_list_exclusions($limit = SQL::SQL_DEFAULT_LIMIT)
+	public function pull_list_excls($limit = SQL::SQL_DEFAULT_LIMIT)
 	{
 		if ( isset( $this->code ) ) {
-			$model = Model::Named('Pull_List_Exclusion');
+			$model = Model::Named('Pull_List_Excl');
 			return $model->allObjectsForKeyValue(
-				Pull_List_Exclusion::endpoint_type_code,
+				Pull_List_Excl::endpoint_type_code,
 				$this->code,
 				null,
 				$limit

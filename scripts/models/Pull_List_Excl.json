@@ -9,8 +9,8 @@
     "primaryKeys": [ "id" ],
     "table": "pull_list_excl",
     "package": "pull_list",
-    "model": "Pull_List_Exclusion",
-    "dbo": "Pull_List_ExclusionDBO",
+    "model": "Pull_List_Excl",
+    "dbo": "Pull_List_ExclDBO",
 	"sort" : [
 		{ "asc": "pattern" }
 	],

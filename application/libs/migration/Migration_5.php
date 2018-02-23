@@ -14,7 +14,7 @@ use \model\network\Endpoint as Endpoint;
 use \model\pull_list\Pull_List as Pull_List;
 use \model\pull_list\Pull_List_Group as Pull_List_Group;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
+use \model\pull_list\Pull_List_Excl as Pull_List_Excl;
 use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 
 class Migration_5 extends Migrator
@@ -30,12 +30,12 @@ class Migration_5 extends Migrator
 	{
 		/** PULL_LIST_EXCL */
 		$sql = "CREATE TABLE IF NOT EXISTS pull_list_excl ( "
-			. Pull_List_Exclusion::id . " INTEGER PRIMARY KEY, "
-			. Pull_List_Exclusion::pattern . " TEXT, "
-			. Pull_List_Exclusion::type . " TEXT, "
-			. Pull_List_Exclusion::created . " INTEGER, "
-			. Pull_List_Exclusion::endpoint_type_code . " TEXT, "
-			. "FOREIGN KEY (". Pull_List_Exclusion::endpoint_type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
+			. Pull_List_Excl::id . " INTEGER PRIMARY KEY, "
+			. Pull_List_Excl::pattern . " TEXT, "
+			. Pull_List_Excl::type . " TEXT, "
+			. Pull_List_Excl::created . " INTEGER, "
+			. Pull_List_Excl::endpoint_type_code . " TEXT, "
+			. "FOREIGN KEY (". Pull_List_Excl::endpoint_type_code .") REFERENCES " . Endpoint_Type::TABLE . "(" . Endpoint_Type::code . ")"
 		. ")";
 		$this->sqlite_execute( "pull_list_excl", $sql, "Create table pull_list_excl" );
 
@@ -152,7 +152,7 @@ class Migration_5 extends Migrator
 			$inserts->commitTransaction(true);
 		}
 
-		$inserts = \SQL::Insert( Model::Named("Pull_List_Exclusion"), array(
+		$inserts = \SQL::Insert( Model::Named("Pull_List_Excl"), array(
 			"pattern",
 			"type",
 			"created",
@@ -207,7 +207,7 @@ class Migration_5 extends Migrator
 		);
 		foreach ($pl_exclusions as $type => $list) {
 			foreach( $list as $value ) {
-				$existing = \SQL::raw( "select id FROM " . Pull_List_Exclusion::TABLE . " where endpoint_type_code = :type_code and pattern = :pattern" ,
+				$existing = \SQL::raw( "select id FROM " . Pull_List_Excl::TABLE . " where endpoint_type_code = :type_code and pattern = :pattern" ,
 					array(":type_code" => $pw_endpoint_type->code, ":pattern" => $pattern));
 				if ( is_array($existing) == false || count($existing) == 0) {
 					$inserts->addRecord( array(

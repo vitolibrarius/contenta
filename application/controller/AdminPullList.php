@@ -27,7 +27,7 @@ use \model\user\Users as Users;
 use \model\media\Publisher as Publisher;
 use \model\network\Rss as Rss;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
+use \model\pull_list\Pull_List_Excl as Pull_List_Excl;
 
 /**
  * Class AdminPullList

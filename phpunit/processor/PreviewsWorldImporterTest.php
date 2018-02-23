@@ -54,7 +54,7 @@ class PreviewsWorldImporterTest extends PHPUnit_Framework_TestCase
 		$notQual = \db\Qualifier::NotEquals( "endpoint_type_code", $type->code);
 		$update = \SQL::Update(Model::Named("Pull_List_Expansion"), $notQual, $dict);
 		$update->commitTransaction();
-		$update = \SQL::Update(Model::Named("Pull_List_Exclusion"), $notQual, $dict);
+		$update = \SQL::Update(Model::Named("Pull_List_Excl"), $notQual, $dict);
 		$update->commitTransaction();
    }
 

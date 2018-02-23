@@ -30,8 +30,8 @@
             "isToMany" : true,
             "ownsDestination" : true
     	},
-    	"pull_list_exclusions" : {
-    		"destination" : "Pull_List_Exclusion",
+    	"pull_list_excls" : {
+    		"destination" : "Pull_List_Excl",
     		"destinationPackage" : "\\model\\pull_list\\",
     		"destinationTable" : "pull_list_excl",
     		"joins" : [

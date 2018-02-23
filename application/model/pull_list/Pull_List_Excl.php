@@ -7,13 +7,13 @@ use \Model as Model;
 use \Logger as Logger;
 use \Localized as Localized;
 
-use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
+use \model\pull_list\Pull_List_ExclDBO as Pull_List_ExclDBO;
 
 /* import related objects */
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
-class Pull_List_Exclusion extends _Pull_List_Exclusion
+class Pull_List_Excl extends _Pull_List_Excl
 {
 	const GROUP_TYPE = "group";
 	const ITEM_TYPE = "item";
@@ -31,7 +31,7 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 	}
 
 	public function updateObject(DataObject $object = null, array $values = array()) {
-		if (isset($object) && $object instanceof Pull_List_ExclusionDBO ) {
+		if (isset($object) && $object instanceof Pull_List_ExclDBO ) {
 			// massage values as necessary
 		}
 
@@ -40,10 +40,10 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 
 	public function attributesFor($object = null, $type = null) {
 		$attrFor = array(
-			Pull_List_Exclusion::pattern,
-			Pull_List_Exclusion::type,
-			Pull_List_Exclusion::created,
-			Pull_List_Exclusion::endpoint_type_code
+			Pull_List_Excl::pattern,
+			Pull_List_Excl::type,
+			Pull_List_Excl::created,
+			Pull_List_Excl::endpoint_type_code
 		);
 		return array_intersect_key($this->attributesMap(),array_flip($attrFor));
 	}
@@ -77,7 +77,7 @@ class Pull_List_Exclusion extends _Pull_List_Exclusion
 
 	public function attributeOptions($object = null, $type = null, $attr)
 	{
-		if ( Pull_List_Exclusion::endpoint_type_code == $attr ) {
+		if ( Pull_List_Excl::endpoint_type_code == $attr ) {
 			$model = Model::Named('Endpoint_Type');
 			return $model->allObjects();
 		}

@@ -13,7 +13,7 @@ use \interfaces\ProcessStatusReporter as ProcessStatusReporter;
 use \model\pull_list\Pull_List as Pull_List;
 use \model\pull_list\Pull_List_Group as Pull_List_Group;
 use \model\pull_list\Pull_List_Item as Pull_List_Item;
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
+use \model\pull_list\Pull_List_Excl as Pull_List_Excl;
 use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 
 use \model\network\Endpoint_Type as Endpoint_Type;
@@ -35,7 +35,7 @@ class PreviewsWorldImporter extends EndpointImporter
 	{
 		if ( $this->groups_excluded == null ) {
 			$type = $this->endpoint()->endpointType();
-			$this->groups_excluded = Model::Named( "Pull_List_Exclusion" )->objectsForTypeAndEndpointType( Pull_List_Exclusion::GROUP_TYPE, $type->code );
+			$this->groups_excluded = Model::Named( "Pull_List_Excl" )->objectsForTypeAndEndpointType( Pull_List_Excl::GROUP_TYPE, $type->code );
 		}
 
 		if (is_null($groupname) == false) {
@@ -52,7 +52,7 @@ class PreviewsWorldImporter extends EndpointImporter
 	{
 		if ( $this->items_excluded == null ) {
 			$type = $this->endpoint()->endpointType();
-			$this->items_excluded = Model::Named( "Pull_List_Exclusion" )->objectsForTypeAndEndpointType( Pull_List_Exclusion::ITEM_TYPE, $type->code );
+			$this->items_excluded = Model::Named( "Pull_List_Excl" )->objectsForTypeAndEndpointType( Pull_List_Excl::ITEM_TYPE, $type->code );
 		}
 
 		if (is_null($itemname) == false) {

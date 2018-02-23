@@ -6,13 +6,13 @@ use \DataObject as DataObject;
 use \Model as Model;
 use \Logger as Logger;
 
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
+use \model\pull_list\Pull_List_Excl as Pull_List_Excl;
 
 /* import related objects */
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
-class Pull_List_ExclusionDBO extends _Pull_List_ExclusionDBO
+class Pull_List_ExclDBO extends _Pull_List_ExclDBO
 {
 	public function isExcluded($source = '')
 	{

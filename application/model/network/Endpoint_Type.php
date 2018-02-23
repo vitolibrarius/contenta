@@ -12,8 +12,6 @@ use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 /* import related objects */
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
-use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
 use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 

@@ -8,13 +8,13 @@ use \Logger as Logger;
 use \SQL as SQL;
 use \db\Qualifier as Qualifier;
 
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
+use \model\pull_list\Pull_List_Excl as Pull_List_Excl;
 
 /* import related objects */
 use \model\network\Endpoint_Type as Endpoint_Type;
 use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 
-abstract class _Pull_List_ExclusionDBO extends DataObject
+abstract class _Pull_List_ExclDBO extends DataObject
 {
 	public $pattern;
 	public $type;
@@ -24,21 +24,21 @@ abstract class _Pull_List_ExclusionDBO extends DataObject
 
 	public function pkValue()
 	{
-		return $this->{Pull_List_Exclusion::id};
+		return $this->{Pull_List_Excl::id};
 	}
 
 	public function modelName()
 	{
-		return "Pull_List_Exclusion";
+		return "Pull_List_Excl";
 	}
 
 	public function dboName()
 	{
-		return "\model\pull_list\Pull_List_ExclusionDBO";
+		return "\model\pull_list\Pull_List_ExclDBO";
 	}
 
-	public function formattedDateTime_created() { return $this->formattedDate( Pull_List_Exclusion::created, "M d, Y H:i" ); }
-	public function formattedDate_created() {return $this->formattedDate( Pull_List_Exclusion::created, "M d, Y" ); }
+	public function formattedDateTime_created() { return $this->formattedDate( Pull_List_Excl::created, "M d, Y H:i" ); }
+	public function formattedDate_created() {return $this->formattedDate( Pull_List_Excl::created, "M d, Y" ); }
 
 
 	// to-one relationship
@@ -54,7 +54,7 @@ abstract class _Pull_List_ExclusionDBO extends DataObject
 	public function setEndpoint_type(Endpoint_TypeDBO $obj = null)
 	{
 		if ( isset($obj, $obj->code) && (isset($this->endpoint_type_code) == false || $obj->code != $this->endpoint_type_code) ) {
-			parent::storeChange( Pull_List_Exclusion::endpoint_type_code, $obj->code );
+			parent::storeChange( Pull_List_Excl::endpoint_type_code, $obj->code );
 			$this->saveChanges();
 		}
 	}
@@ -63,22 +63,22 @@ abstract class _Pull_List_ExclusionDBO extends DataObject
 	/** Attributes */
 	public function pattern()
 	{
-		return parent::changedValue( Pull_List_Exclusion::pattern, $this->pattern );
+		return parent::changedValue( Pull_List_Excl::pattern, $this->pattern );
 	}
 
 	public function setPattern( $value = null)
 	{
-		parent::storeChange( Pull_List_Exclusion::pattern, $value );
+		parent::storeChange( Pull_List_Excl::pattern, $value );
 	}
 
 	public function type()
 	{
-		return parent::changedValue( Pull_List_Exclusion::type, $this->type );
+		return parent::changedValue( Pull_List_Excl::type, $this->type );
 	}
 
 	public function setType( $value = null)
 	{
-		parent::storeChange( Pull_List_Exclusion::type, $value );
+		parent::storeChange( Pull_List_Excl::type, $value );
 	}
 
 

@@ -17,8 +17,8 @@ use \model\network\Endpoint_TypeDBO as Endpoint_TypeDBO;
 /* import related objects */
 use \model\network\Endpoint as Endpoint;
 use \model\network\EndpointDBO as EndpointDBO;
-use \model\pull_list\Pull_List_Exclusion as Pull_List_Exclusion;
-use \model\pull_list\Pull_List_ExclusionDBO as Pull_List_ExclusionDBO;
+use \model\pull_list\Pull_List_Excl as Pull_List_Excl;
+use \model\pull_list\Pull_List_ExclDBO as Pull_List_ExclDBO;
 use \model\pull_list\Pull_List_Expansion as Pull_List_Expansion;
 use \model\pull_list\Pull_List_ExpansionDBO as Pull_List_ExpansionDBO;
 
@@ -41,7 +41,7 @@ abstract class _Endpoint_Type extends Model
 
 	// relationship keys
 	const endpoints = 'endpoints';
-	const pull_list_exclusions = 'pull_list_exclusions';
+	const Pull_List_Excls = 'pull_list_excls';
 	const pull_list_expansions = 'pull_list_expansions';
 
 	public function modelName()
@@ -102,7 +102,7 @@ abstract class _Endpoint_Type extends Model
 	{
 		return array(
 			Endpoint_Type::endpoints,
-			Endpoint_Type::pull_list_exclusions,
+			Endpoint_Type::pull_list_excls,
 			Endpoint_Type::pull_list_expansions
 		);
 	}
@@ -131,8 +131,8 @@ abstract class _Endpoint_Type extends Model
 				'isToMany' => true,
 				'joins' => array( 'code' => 'type_code')
 			),
-			Endpoint_Type::pull_list_exclusions => array(
-				'destination' => 'Pull_List_Exclusion',
+			Endpoint_Type::pull_list_excls => array(
+				'destination' => 'Pull_List_Excl',
 				'ownsDestination' => true,
 				'isMandatory' => false,
 				'isToMany' => true,
@@ -386,8 +386,8 @@ abstract class _Endpoint_Type extends Model
 			if ( $endpoint_model->deleteAllForKeyValue(Endpoint::type_code, $object->code) == false ) {
 				return false;
 			}
-			$pull_list_excl_model = Model::Named('Pull_List_Exclusion');
-			if ( $pull_list_excl_model->deleteAllForKeyValue(Pull_List_Exclusion::endpoint_type_code, $object->code) == false ) {
+			$pull_list_excl_model = Model::Named('Pull_List_Excl');
+			if ( $pull_list_excl_model->deleteAllForKeyValue(Pull_List_Excl::endpoint_type_code, $object->code) == false ) {
 				return false;
 			}
 			$pull_list_expansion_model = Model::Named('Pull_List_Expansion');
