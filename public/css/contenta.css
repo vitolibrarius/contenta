@@ -178,18 +178,28 @@ span.icon.on:before 		{ color:red;}
 				no-repeat;
 }
 
+div.progress {
+	position: relative;
+}
 progress,
 progress[role]
 {
-	color: #0063a6;
-	font-size: .8em;
-/*
-	width: 80%;
- */
-	height: 1.8em;
-	border: 1px solid #0063a6;
-	background: #fff;
-	margin-top: .35em;
+  color: #0063a6;
+  width: 100%;
+  min-width: 3em;
+  height: 1.5em;
+  border: 1px solid #0063a6;
+  background: #fff;
+}
+.progress > span {
+    font-size: .8em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-left: .5em;
+    padding-right: .5em;
+    display: block;
+    width: 100%;
 }
 progress::-webkit-progress-bar { background: #fff; }
 progress::-webkit-progress-value { background: #0063a6; }

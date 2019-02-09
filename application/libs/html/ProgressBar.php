@@ -16,6 +16,7 @@ class ProgressBar
 		$min = (float)0;
 		$value = null;
 		$percentage = "unknown";
+		$spanStyle = "";
 
 		if ( is_null($object) == false && $object instanceof ObjectProgress) {
 			$max = max((float)$object->progressMaximum(), 1);
@@ -23,6 +24,9 @@ class ProgressBar
 			$value = (float)$object->progressCurrent();
 			if ( is_null($value) == false ) {
 				$percentage = (($value / ($max - $min)) * 100) . "%";
+			}
+			if ( (($value / ($max - $min)) * 100) > 25 ) {
+				$spanStyle .= "color:lightgray;";
 			}
 		}
 
@@ -35,10 +39,8 @@ class ProgressBar
 		}
 
 		$bar = H::div( array("class" => "progress"),
-			H::progress( $attributes,
-				H::em( null, "Progress: " . $percentage )
-			),
-			H::small( null, $value . " / " . $max )
+			H::progress( $attributes),
+			H::span( array( "style" => $spanStyle ), $value . " / " . $max )
 		);
 		return $bar;
 	}
