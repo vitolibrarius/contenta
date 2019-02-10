@@ -495,7 +495,7 @@ class AdminUploadRepair extends Admin
 						}
 					}
 					else if (isset($_POST['search'])) {
-						if ($processor->setSearchCriteria($_POST['series'], $_POST['issue'], $_POST['year']) == false) {
+						if ($processor->setSearchCriteria($_POST['series'], $_POST['issue'], $_POST['year'], $_POST['comicvineid']) == false) {
 							Session::addNegativeFeedback(Localized::Get("Upload", 'Failed to update metadata'));
 						}
 					}

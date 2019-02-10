@@ -35,6 +35,7 @@ class UploadImport extends Processor
 	const META_QUERY_YEAR = 'search/year';
 	const META_QUERY_ISSUE = 'search/issue';
 	const META_QUERY_NAME = 'search/name';
+	const META_QUERY_CVID = 'search/comicvineid';
 
 	const META_STATUS = 'status';
 	const META_IS_AUTOMATED = 'isAutomatedSelection';
@@ -233,7 +234,7 @@ class UploadImport extends Processor
 		return true;
 	}
 
-	function setSearchCriteria($seriesname = null, $issue = null, $year = null)
+	function setSearchCriteria($seriesname = null, $issue = null, $year = null, $comicvineid = null)
 	{
 		$this->setMeta(UploadImport::META_RESULTS, null);
 
@@ -247,6 +248,10 @@ class UploadImport extends Processor
 
 		if (isset($year)) {
 			$this->setMeta(UploadImport::META_QUERY_YEAR, $year);
+		}
+
+		if (isset($comicvineid)) {
+			$this->setMeta(UploadImport::META_QUERY_CVID, $comicvineid);
 		}
 
 		return true;
@@ -269,11 +274,24 @@ class UploadImport extends Processor
 		}
 
 		$connection = new ComicVineConnector($points[0]);
-		$issue = $connection->issue_searchFilteredForSeriesYear(
-			$this->getMeta(UploadImport::META_QUERY_ISSUE),
-			$this->getMeta(UploadImport::META_QUERY_NAME),
-			$this->getMeta(UploadImport::META_QUERY_YEAR)
-		);
+		if ( $this->isMeta(UploadImport::META_QUERY_CVID) == true ) {
+			$issue = $connection->issue_search(
+				null,
+				$this->getMeta(UploadImport::META_QUERY_CVID),
+				null,
+				null,
+				$this->getMeta(UploadImport::META_QUERY_YEAR),
+				$this->getMeta(UploadImport::META_QUERY_ISSUE)
+			);
+		}
+		else {
+			$issue = $connection->issue_searchFilteredForSeriesYear(
+				$this->getMeta(UploadImport::META_QUERY_ISSUE),
+				$this->getMeta(UploadImport::META_QUERY_NAME),
+				$this->getMeta(UploadImport::META_QUERY_YEAR)
+			);
+		}
+
 		if ( $issue == false )
 		{
 			$this->setStatusMetaData( "NO_MATCHES" );

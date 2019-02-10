@@ -20,7 +20,6 @@
 
 <div class="paging">
 	<ul>
-		<li><a href="<?php echo Config::Web('/AdminUploadRepair/editUnprocessedManually', $this->key); ?>">Manual Processing</a></li>
 		<li><a href="#" class="confirm"
 				data_action="<?php echo Config::Web('/AdminUploadRepair/deleteUnprocessed', $this->key); ?>"
 				data_key="<?php echo $this->key; ?>"

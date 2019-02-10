@@ -119,8 +119,8 @@
 				<div class="figure_details">
 					<div class="figure_detail_top">
 						<h3>
-							<?php if ( isset($item['site_detail_url'])) : ?>
-								<a target="comicvine" href="<?php echo $item['site_detail_url']; ?>">
+							<?php if ( isset($item['volume'], $item['volume']['site_detail_url'])) : ?>
+								<a target="comicvine" href="<?php echo $item['volume']['site_detail_url']; ?>">
 									<img class="icon" src="<?php echo Model::Named('Endpoint_Type')->ComicVine()->favicon_url; ?>"
 										alt="ComicVine">
 								</a>
@@ -137,7 +137,7 @@
 			<figcaption class="caption">
 				<h4><?php echo (isset($item['name']) ? $item['name'] : ""); ?></h4>
 				<div style="min-height: 100px; height: 100px; overflow-y : scroll;"><?php
-					if ( isset($item['deck']) && strlen($item['deck']) > 0) { echo strip_tags($item['deck']); }
+					if ( isset($item['deck']) && strlen(trim($item['deck'])) > 0) { echo 'deck' .strip_tags($item['deck']); }
 					else if (isset($item['description']) ) { echo strip_tags($item['description']); }
 				?></div>
 

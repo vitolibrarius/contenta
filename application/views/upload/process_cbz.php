@@ -1,3 +1,6 @@
+<?php use \html\Paginator as Paginator;
+	$comicVine = Model::Named("Endpoint")->ComicVineEndpoint();
+?>
 <style type="text/css">
 	#slideshow #leftArrow {
 		background:url('<?php echo Config::Web("/public/img/left.png"); ?>') no-repeat;
@@ -57,7 +60,12 @@ fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key)
 		<div class="grid_8">
 			<form action="<?php echo Config::Web('/AdminUploadRepair/cbz_updateMetadata/', $this->key) ?>" method="post">
 				<fieldset>
-					<legend><h3 class="path"><?php echo $this->source['name']; ?></h3></legend>
+					<legend>
+						<h3 class="path"><?php echo $this->source['name']; ?></h3>
+						<a target="comicvine" href="https://comicvine.gamespot.com/search/?q=<?php echo $this->search['name']; ?>&indices[]=volume">
+							<img src="<?php echo $comicVine->endpointType()->favicon(); ?>">
+						</a>
+					</legend>
 
 					<div class="half">
 						<label>File Size</label>
@@ -72,10 +80,15 @@ fullsizedURL="<?php echo Config::Web('/AdminUploadRepair/fullsized', $this->key)
 					</div>
 					<br>
 
-					<div class="">
+					<div class="half">
 						<label for="series">Series Name</label>
 						<input type="text" name="series" placeholder="Justice League United"
 							value="<?php echo (isset($this->search['name']) ? $this->search['name'] : ''); ?>" />
+					</div>
+					<div class="half omega">
+						<label for="year">Comic Vine Series Id</label>
+						<input type="text" name="comicvineid" placeholder=""
+							value="<?php echo (isset($this->search['comicvineid']) ? $this->search['comicvineid'] : ''); ?>" />
 					</div>
 
 					<div class="half">
