@@ -19,6 +19,7 @@
     "model": "Book",
     "dbo": "BookDBO",
 	"sort" : [
+		{ "asc": "author" },
 		{ "asc": "name" }
 	],
     "indexes" : [

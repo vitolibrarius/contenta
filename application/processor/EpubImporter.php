@@ -57,7 +57,27 @@ class EpubImporter extends UploadImport
 		foreach ($xml->getNamespaces(true) as $namespace) {
 			$ns_dc = $xml->metadata->children($namespace);
 			foreach ($ns_dc as $key => $item) {
-				$meta[$key] = $item->__toString();
+				if ( $key == "meta" ) {
+					$newKey = null;
+					$newValue = null;
+					foreach($item->attributes() as $a => $b) {
+						if ( $a == "name" ) {
+							$newKey = $b->__toString();
+						}
+						else {
+							$newValue = $b->__toString();
+						}
+
+						if ( $newKey != null && $newValue != null ) {
+							$meta[$newKey] = $newValue;
+							$newKey = null;
+							$newValue = null;
+						}
+					}
+				}
+				else {
+					$meta[$key] = $item->__toString();
+				}
 			}
 		}
 		return $meta;

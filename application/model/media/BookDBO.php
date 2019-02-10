@@ -19,6 +19,8 @@ class BookDBO extends _BookDBO
 		return (isset($this->size) ? formatSizeUnits($this->size) : '');
 	}
 
+	public function publisher() { return false; }
+
 	public function contentaPath()
 	{
 		return parent::mediaPath( $this->filename );

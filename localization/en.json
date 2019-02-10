@@ -155,6 +155,9 @@
         "PASSWORD_WRONG_3_TIMES": "Username or password mismatch.",
         "USERNAME_FIELD_EMPTY": "Please enter a user name"
     },
+    "DisplayBook": {
+        "title": "Books"
+    },
     "DisplaySeries": {
         "title": "Series"
     },
@@ -179,6 +182,7 @@
         "LoginButton": "Login",
         "Menu": {
             "Admin": "Admin",
+            "Books": "Books",
             "Login": "Login",
             "Logs": "Logs",
             "Profile": "Profile",
@@ -223,6 +227,14 @@
         "Series": {
             "SUCCESS_CREATE": {
                 "label": "Created new Series"
+            }
+        },
+        "book": {
+            "author": {
+                "search": "Author"
+            },
+            "name": {
+                "search": "Title"
             }
         },
         "character": {
@@ -904,6 +916,7 @@
         "Hash Exists": "Already uploaded",
         "IMPORTER_ERROR": "An error occurred while importing this media",
         "LARGE_FILE": "Unusually large content size.",
+        "MEDIA_CORRUPT": "Corrupt Media",
         "MULTIPLE_MATCHES": "Multiple matches found, please review",
         "NO_MATCHES": "Search failed to find series\/issue",
         "NO_METADATA_FOUND": "No matches found",

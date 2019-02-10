@@ -387,7 +387,7 @@ class epubFileWrapper extends zipFileWrapper
 		$content = $this->imageContents();
 		$cover = (count($content) > 0 ? $content[0] : null);
 		foreach( $content as $item ) {
-			$fname = file_ext_strip($item);
+			$fname = file_ext_strip(basename($item));
 			if ( in_array(strtolower($fname), array('cover')) == true ) {
 				$cover = $item;
 			}

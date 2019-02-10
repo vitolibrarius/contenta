@@ -57,6 +57,7 @@ abstract class _Book extends Model
 	public function sortOrder()
 	{
 		return array(
+			array( 'asc' => Book::author),
 			array( 'asc' => Book::name)
 		);
 	}

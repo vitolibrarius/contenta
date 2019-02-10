@@ -59,6 +59,7 @@
 						$menu->add( Localized::GlobalLabel("Menu", "Admin"), '/admin/index');
 						$menu->add( Localized::GlobalLabel("Menu", "Logs"), '/logs/index');
 					}
+					$menu->add( Localized::GlobalLabel("Menu", "Books"), '/DisplayBook/index' );
 					$menu->add( Localized::GlobalLabel("Menu", "Series"), '/DisplaySeries/index' );
 					$menu->add( Localized::GlobalLabel("Menu", "Story Arcs"), '/DisplayStories/index' );
 					$menu->add( Localized::GlobalLabel("Menu", "Profile"), '/profile/index' );

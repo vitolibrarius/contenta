@@ -19,6 +19,7 @@ use \SQL as SQL;
 use db\Qualifier as Qualifier;
 
 use \model\user\Users as Users;
+use \model\media\Book as Book;
 use \model\media\Publisher as Publisher;
 use \model\media\Character as Character;
 use \model\media\Story_Arc as Story_Arc;
@@ -43,6 +44,7 @@ class Api extends Controller
 
 	public function __call($modelName, $args)
 	{
+		Logger::logInfo(  "__call: " . $modelName . var_export($args, true) );
 // 		if (Auth::handleLogin()) {
 			$model = Model::Named($modelName);
 			switch ( $_SERVER['REQUEST_METHOD'] ) {
@@ -240,6 +242,55 @@ class Api extends Controller
 			}
 			else
 			{
+				header('location: error/index');
+			}
+		}
+	}
+
+	function bookPayload( $id, $userHash = null )
+	{
+		Logger::logError(  "bookPayload: " . $id );
+		if (Auth::handleLogin() || Auth::handleLoginWithAPI($userHash)) {
+			$book_model = Model::Named('Book');
+			$bookObj = $book_model->objectForId($id);
+			if ( $bookObj != false )
+			{
+				$path = $bookObj->contentaPath();
+				$etag = $bookObj->checksum;
+
+				if ( file_exists($path) == true )
+				{
+					if ( !empty($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag) {
+						header('HTTP/1.1 304 Not Modified');
+						header('Content-Length: 0');
+						exit;
+					}
+
+					$expiry = 604800; // (60*60*24*7)
+					header('ETag: ' . $etag);
+					header('Last-Modified: '. gmdate('D, d M Y H:i:s', time()) .' GMT');
+					header('Expires:'. gmdate('D, d M Y H:i:s', time() + $expiry) .' GMT');
+					header('Content-Description: File Transfer');
+					header('Content-Type: application/epub+zip');
+					header('Content-Disposition: attachment; filename=' . basename($path));
+					header('Pragma: public');
+					header('Content-Length: ' . filesize($path));
+
+					if ( ob_get_contents() != false ) {
+						ob_clean();
+						flush();
+					}
+					readfile($path);
+				}
+				else
+				{
+					Logger::logError(  "No file: " . $id . " - " . $path );
+					header('location: error/index');
+				}
+			}
+			else
+			{
+				Logger::logError(  "No book: " . $id );
 				header('location: error/index');
 			}
 		}

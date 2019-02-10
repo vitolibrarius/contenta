@@ -136,10 +136,13 @@ class UploadImport extends Processor
 	{
 		$wrapper = $this->sourceFileWrapper();
 		if ( $wrapper != null ) {
+			$this->setMeta("sourceFileWrapper", get_class($wrapper));
+
 			// small thumbnail
 			$thumbnail = $this->getMeta( UploadImport::META_THUMBNAIL );
 			if ( is_string($thumbnail) == false || file_exists($this->workingDirectory($thumbnail)) == false ) {
 				$imageFile = $wrapper->firstImageThumbnailName();
+				$this->setMeta("firstImageThumbnailName", $imageFile);
 				if ( is_null($imageFile) == false ) {
 					$mimeType = 'image/' . file_ext($imageFile);
 					$image = $wrapper->wrappedThumbnailForName($imageFile, 100, 100);
@@ -149,7 +152,6 @@ class UploadImport extends Processor
 					$this->setMeta(UploadImport::META_THUMBNAIL, $thumbnailFile);
 				}
 			}
-
 
 			// generate a bigger image for the first detail inspect page
 			$idx = 0;
