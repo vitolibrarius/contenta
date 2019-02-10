@@ -255,12 +255,17 @@ class Migrator
 						$success = $worker->performMigration();
 						if ( $success && $worker->reRunMigration() === false ) {
 							$version = $worker->targetVersionDBO();
-							list($patch, $errors) = $patch_model->createObject( array( "version" => $version, "name" => $migrationClass));
+							list($patch, $errors) = $patch_model->createObject( array(
+								"version" => $version,
+								"name" => $migrationClass
+							));
 							if ( ($patch instanceof PatchDBO ) == false) {
+								Logger::logInfo("Failed to create migration 'patch' record $migrationClass for " . $workerTargetVersion);
 								throw new MigrationFailedException("Failed to create migration 'patch' record " . $migrationClass);
 							}
 						}
 						else {
+							Logger::logInfo("Failed to migrate '" . ($success == true ? "success":"fail") ."' record $migrationClass for " . $workerTargetVersion);
 							break;
 						}
 					}
@@ -268,10 +273,12 @@ class Migrator
 				$number++;
 				$migrationClass = 'migration\\Migration_' . $number;
 			}
+			Logger::logInfo("Last not found $migrationClass for " . $workerTargetVersion);
 		}
 		catch (\Exception $e) {
 			if ( is_a( $e, "ClassNotFoundException" ) && $e->getMessage() === $migrationClass ) {
 				// this marks the end of the Migration
+					Logger::logInfo("Not found $migrationClass for " . $workerTargetVersion);
 			}
 			else {
 				// something else?

@@ -19,7 +19,9 @@ class Media_Type extends _Media_Type
 	const EPUB =	"epub";
 	const PDF =		"pdf";
 
-	public function cbz() 		{ return $this->objectForCode( Media_Type::CBZ ); }
+	public function cbz()		{ return $this->objectForCode( Media_Type::CBZ ); }
+
+	public function epub()		{ return $this->objectForCode( Media_Type::EPUB ); }
 
 	/**
 	 *	Create/Update functions

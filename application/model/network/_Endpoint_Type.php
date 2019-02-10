@@ -41,7 +41,7 @@ abstract class _Endpoint_Type extends Model
 
 	// relationship keys
 	const endpoints = 'endpoints';
-	const Pull_List_Excls = 'pull_list_excls';
+	const pull_list_excls = 'pull_list_excls';
 	const pull_list_expansions = 'pull_list_expansions';
 
 	public function modelName()

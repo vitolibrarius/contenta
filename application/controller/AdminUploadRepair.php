@@ -436,6 +436,52 @@ class AdminUploadRepair extends Admin
 	}
 
 
+	/*************** epub */
+	function epub_initial($processKey) {
+		$worker = new \migration\Migration_13("/tmp/");
+		if (Auth::handleLogin() && Auth::requireRole('admin')) {
+			if ( ImportManager::IsEditable($processKey) == true ) {
+				$processor = Processor::Named("EpubImporter", $processKey);
+				$wrapper = $processor->sourceFileWrapper();
+				$this->view->key = $processKey;
+				$this->view->wrapper = $wrapper;
+				$this->view->opf = $processor->epubOPF();
+				$this->view->render( '/upload/EpubContents', true);
+			}
+			else
+			{
+				Session::addNegativeFeedback(Localized::Get("Upload", 'Not Active'));
+				header('location: ' . Config::Web( get_short_class($this), 'index'));
+			}
+		}
+	}
+
+	function epub_accept($processKey) {
+
+		if (Auth::handleLogin() && Auth::requireRole('admin')) {
+			if ( ImportManager::IsEditable($processKey) == true ) {
+				$importMgr = Processor::Named("ImportManager", 0);
+				$importMgr->clearMetadataFor( $processKey );
+
+				$processor = Processor::Named("EpubImporter", $processKey);
+				if ( $processor != false ) {
+					Session::addPositiveFeedback(Localized::Get("Upload", 'Processing') . ' "' . $processKey . '"' );
+					$processor->daemonizeProcess();
+					sleep(2);
+					header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
+				}
+				else {
+					Session::addNegativeFeedback(Localized::Get("Upload", 'Failed to load processor'));
+					header('location: ' . Config::Web( get_short_class($this), 'index', $importMgr->chunkNumberFor($processKey)));
+				}
+			}
+			else {
+				Session::addNegativeFeedback(Localized::Get("Upload", 'Not Active'));
+				header('location: ' . Config::Web( get_short_class($this), 'index' ));
+			}
+		}
+	}
+
 	/*************** comic vine */
 	function cbz_updateMetadata($processKey)
 	{

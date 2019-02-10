@@ -97,7 +97,16 @@ abstract class DataObject implements JsonSerializable
 	public function hasAdditionalMedia()
 	{
 		$tbl = $this->tableName();
-		return in_array($tbl, array('series', 'publication', 'media', 'story_arc', 'character', 'publisher', 'artist'));
+		return in_array($tbl, array(
+			'book',
+			'series',
+			'publication',
+			'media',
+			'story_arc',
+			'character',
+			'publisher',
+			'artist'
+		));
 	}
 
 	public function hasIcons()

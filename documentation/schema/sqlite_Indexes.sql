@@ -20,6 +20,23 @@ DROP INDEX IF EXISTS artist_role_name;
 DROP INDEX IF EXISTS artist_role_name_01;
 CREATE  INDEX IF NOT EXISTS artist_role_name_01 on artist_role (name COLLATE NOCASE);
 
+/** BOOK */
+DROP INDEX IF EXISTS bookMedia_Type_fk;
+DROP INDEX IF EXISTS bookMedia_Type_type__01_fk;
+CREATE INDEX IF NOT EXISTS bookMedia_Type_type__01_fk on book (type_code);
+DROP INDEX IF EXISTS book_name;
+DROP INDEX IF EXISTS book_name_02;
+CREATE  INDEX IF NOT EXISTS book_name_02 on book (name COLLATE NOCASE);
+DROP INDEX IF EXISTS book_author;
+DROP INDEX IF EXISTS book_author_03;
+CREATE  INDEX IF NOT EXISTS book_author_03 on book (author COLLATE NOCASE);
+DROP INDEX IF EXISTS book_filename;
+DROP INDEX IF EXISTS book_filename_04;
+CREATE  INDEX IF NOT EXISTS book_filename_04 on book (filename);
+DROP INDEX IF EXISTS book_checksum;
+DROP INDEX IF EXISTS book_checksum_05;
+CREATE UNIQUE INDEX IF NOT EXISTS book_checksum_05 on book (checksum COLLATE NOCASE);
+
 /** CHARACTER */
 DROP INDEX IF EXISTS characterPublisher_fk;
 DROP INDEX IF EXISTS characterPublisher_p_01_fk;

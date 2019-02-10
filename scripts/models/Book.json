@@ -1,0 +1,43 @@
+{
+    "attributes": {
+        "id": { "column": "id", "type": "INTEGER" },
+        "type_code": { "column": "type_code", "length": 10, "type": "TEXT", "nullable": false },
+        "filename": { "column": "filename", "length": 4096, "type": "TEXT", "nullable": false },
+        "original_filename": { "column": "original_filename", "length": 4096, "type": "TEXT", "nullable": true },
+        "checksum": { "column": "checksum", "length": 256, "type": "TEXT" },
+        "created": { "column": "created", "type": "DATE" },
+        "size": { "column": "size", "type": "INTEGER" },
+        "name": { "column": "name", "length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": false },
+        "author": { "column": "author", "length": 256, "type": "TEXT",	"collate": "NOCASE", "nullable": false },
+        "desc": { "column": "desc", "length": 4096, "type": "TEXT",	"nullable": true },
+        "pub_date": { "column": "pub_date", "type": "DATE" },
+        "pub_order": { "column": "pub_order", "type": "INTEGER", "default": 0 }
+    },
+    "primaryKeys": [ "id" ],
+    "table": "book",
+    "package": "media",
+    "model": "Book",
+    "dbo": "BookDBO",
+	"sort" : [
+		{ "asc": "name" }
+	],
+    "indexes" : [
+    	{ "columns": ["name"], "unique": false },
+    	{ "columns": ["author"], "unique": false },
+    	{ "columns": ["filename"], "unique": false },
+    	{ "columns": ["checksum"], "unique": true }
+    ],
+    "relationships" :{
+    	"mediaType" : {
+    		"destination" : "Media_Type",
+    		"destinationPackage" : "\\model\\media\\",
+    		"destinationTable" : "media_type",
+    		"joins" : [
+    			{ "destinationAttribute": "code", "sourceAttribute" : "type_code" }
+    		],
+    		"isMandatory": true,
+            "isToMany" : false,
+            "ownsDestination" : false
+    	}
+    }
+}

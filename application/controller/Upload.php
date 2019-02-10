@@ -37,7 +37,7 @@ class Upload extends Controller
 
 	function allowedMimeTypes()
 	{
-		return array("application/octet-stream");
+		return array("application/octet-stream", "application/epub+zip");
 	}
 
 	function upload()
@@ -135,6 +135,13 @@ class Upload extends Controller
 					case 'cbr':
 						// check to see if it is actually a cbz
 						$rar_wrapper = FileWrapper::force($_FILES['mediaFile']['tmp_name'], 'cbz');
+						if ( $rar_wrapper->testWrapper() != null ) {
+							$validFormat = false;
+						}
+						break;
+					case 'epub':
+						// check to see if it is actually a zip
+						$rar_wrapper = FileWrapper::force($_FILES['mediaFile']['tmp_name'], 'epub');
 						if ( $rar_wrapper->testWrapper() != null ) {
 							$validFormat = false;
 						}

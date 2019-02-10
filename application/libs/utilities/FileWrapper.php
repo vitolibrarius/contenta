@@ -370,6 +370,32 @@ class cbzFileWrapper extends zipFileWrapper
 	}
 }
 
+class epubFileWrapper extends zipFileWrapper
+{
+	public function __construct($path)
+	{
+		parent::__construct($path);
+	}
+
+	public static function createWrapper($sourcePath = null, $destinationPath = null)
+	{
+		return parent::createWrapper($sourcePath, $destinationPath);
+	}
+
+	public function firstImageThumbnailName()
+	{
+		$content = $this->imageContents();
+		$cover = (count($content) > 0 ? $content[0] : null);
+		foreach( $content as $item ) {
+			$fname = file_ext_strip($item);
+			if ( in_array(strtolower($fname), array('cover')) == true ) {
+				$cover = $item;
+			}
+		}
+		return $cover;
+	}
+}
+
 class cbrFileWrapper extends FileWrapper
 {
 	public function __construct($path)
@@ -446,7 +472,5 @@ class cbrFileWrapper extends FileWrapper
 		return ($success == 0);
 	}
 }
-
-
 
 ?>

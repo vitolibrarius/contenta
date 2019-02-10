@@ -156,6 +156,23 @@ CREATE TABLE IF NOT EXISTS media_type (
 			name TEXT
 		);
 
+/** BOOK */
+CREATE TABLE IF NOT EXISTS book (
+			id INTEGER PRIMARY KEY,
+			type_code TEXT,
+			filename TEXT,
+			original_filename TEXT,
+			checksum TEXT,
+			created INTEGER,
+			size INTEGER,
+			name TEXT,
+			author TEXT,
+			desc TEXT,
+			pub_date INTEGER,
+			pub_order INTEGER,
+			FOREIGN KEY ( type_code ) REFERENCES media_type ( code )
+		);
+
 /** NETWORK */
 CREATE TABLE IF NOT EXISTS network (
 			id INTEGER PRIMARY KEY,

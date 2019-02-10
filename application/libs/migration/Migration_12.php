@@ -40,8 +40,6 @@ class Migration_12 extends Migrator
 		$this->sqlite_backupDatabase();
 	}
 
-	public function reRunMigration() { return true; }
-
 	public function sqlite_upgrade()
 	{
 		$table_fields = \SQL::pragma_TableInfo(Endpoint::TABLE);
