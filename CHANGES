@@ -1,3 +1,6 @@
+Version 0.9.0:
+
+
 Version 0.8.1:
 * 0718d78 -  (HEAD -> master) Added Daily maximum request counter (Wed Aug 16 22:21:08 2017 -0600) <Vito Librarius>
 * 8b60f0b -  (origin/master, origin/HEAD) Changed response code to 409 for already imported content (Fri Jul 28 11:20:02 2017 -0600) <Vito Librarius>
