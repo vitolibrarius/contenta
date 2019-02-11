@@ -30,7 +30,7 @@ class EpubImporter extends UploadImport
 		$this->workingDir = appendPath($processingRoot, $guid);
 	}
 
-	public function readXML(String $data = '') {
+	public function readXML($data = '') {
 		libxml_use_internal_errors(true);
 		$xml = simplexml_load_string($data);
 		$xmlErrors = libxml_get_errors();
