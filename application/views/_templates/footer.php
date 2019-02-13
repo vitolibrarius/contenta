@@ -7,7 +7,9 @@
 	<!-- footer area -->
 	<footer>
 		<div id="colophon" class="clearfix">
-			<div class="grid_6 left">
+    	<table width="100%">
+    	<tr>
+    	<td>
 				<a target="ContentWeb" href="https://github.com/vitolibrarius/contenta">
 					<?php echo Localized::GlobalLabel("WebsiteLink"); ?>
 				</a> |
@@ -20,22 +22,27 @@
 							$this->controllerAction : 'index'))); ?>"
 					><?php echo Localized::GlobalLabel("AddIssueLink"); ?>
 				</a>
-			</div>
-			<div class="grid_6 right">
+		</td>
+		<td style="text-align:right;">
 				<?php echo Localized::GlobalLabel("Release"); ?>: <?php echo currentVersionNumber(); ?>
-			</div>
-		</div>
+		</td>
+		</tr>
+		</table>
 	</footer>
 	<!-- #end footer area -->
 
 <!-- header area -->
     <header class="clearfix">
-        <div id="banner">
-        	<div id="logo"><a href="<?php echo Config::Web() ?>/">
-        		<img src="<?php echo Config::Web('/public/img/ContentaHeader.png'); ?>" alt="logo"></a>
-        	</div>
-        </div>
-
+    	<table width="100%">
+    	<tr>
+    	<td>
+			<div id="banner">
+				<div id="logo"><a href="<?php echo Config::Web() ?>/">
+					<img src="<?php echo Config::Web('/public/img/ContentaHeader.png'); ?>" alt="logo"></a>
+				</div>
+			</div>
+		</td>
+		<td>
         <!-- main navigation -->
         <nav id="topnav" role="navigation">
           <div class="toggle">Menu</div>
@@ -75,6 +82,9 @@
 				echo $menu;
 			?>
 		</nav><!-- end main navigation -->
+		</td>
+		</tr>
+		</table>
     </header><!-- end header -->
 </body>
 </html>

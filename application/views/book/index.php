@@ -5,13 +5,13 @@
 			<input type="text" name="searchName" id="searchName"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "name" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchName') : ''); ?>">
 		</div>
 		<div class="grid_3">
 			<input type="text" name="searchAuthor" id="searchAuthor"
 				class="text_input"
 				placeholder="<?php echo Localized::ModelSearch($this->model->tableName(), "author" ); ?>"
-				value="">
+				value="<?php echo (isset($this->params) ? $this->params->valueForKey('searchAuthor') : ''); ?>">
 		</div>
 	</div>
 	</form>
@@ -32,21 +32,12 @@ $(document).ready(function($) {
 	});
 
 	function refresh(change_count) {
-		var ajaxDisplay = document.getElementById('ajaxDiv');
-		ajaxDisplay.innerHTML = "<em>searching</em>";
-		$.ajax({
-			type: "GET",
-			url: "<?php echo Config::Web('/DisplayBook/searchBooks'); ?>",
-			data: {
-				name: $('input#searchName').val(),
-				author:  $('input#searchAuthor').val()
-			},
-			dataType: "text",
-			success: function(msg){
-				var ajaxDisplay = document.getElementById('ajaxDiv');
-				ajaxDisplay.innerHTML = msg;
-			}
-		});
+		var page_url = "<?php echo Config::Web('/DisplayBook/searchBooks'); ?>";
+		var resultsId = "ajaxDiv";
+		var inputValues = $("form#searchForm").serializeObject();
+		console.log( JSON.stringify(inputValues) );
+
+		refreshAjax( page_url, undefined, inputValues, resultsId );
 	};
 	refresh();
 });

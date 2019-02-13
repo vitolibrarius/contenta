@@ -11,6 +11,9 @@ use \Localized as Localized;
 use \Config as Config;
 
 use \http\Session as Session;;
+use \http\PageParams as PageParams;
+use \http\HttpGet as HttpGet;
+use \http\HttpPost as HttpPost;
 
 use \SQL as SQL;
 use db\Qualifier as Qualifier;
@@ -53,22 +56,49 @@ class DisplayBook extends Controller
 	function searchBooks($pageNum = 0)
 	{
 		if (Auth::handleLogin()) {
+			$parameters = Session::pageParameters( $this, "index" );
+			$parameters->setPageSize(12);
+			list( $hasNewValues, $query) = $parameters->updateParametersFromGET( array(
+				'searchName', 'searchAuthor' )
+			);
+
 			$model = Model::Named('Book');
 			$qualifiers = array();
-			if ( isset($_GET['name']) && strlen($_GET['name']) > 0) {
-				$qualifiers[] = Qualifier::Like( Book::name, normalizeSearchString($_GET['name']));
+			if ( isset($query['searchName']) && strlen($query['searchName']) > 0 ) {
+				$qualifiers[] = Qualifier::Like( Book::name, normalizeSearchString($query['searchName']));
 			}
-			if ( isset($_GET['author']) && strlen($_GET['author']) > 0 ) {
-				$qualifiers[] = Qualifier::Like( Book::author, normalizeSearchString($_GET['author']));
+			if ( isset($query['searchAuthor']) && strlen($query['searchAuthor']) > 0 ) {
+				$qualifiers[] = Qualifier::Like( Book::author, normalizeSearchString($query['searchAuthor']));
+			}
+
+			if ( count($qualifiers) > 0 ) {
+				$count = SQL::Count( $model, null, Qualifier::AndQualifier( $qualifiers ) )->fetch();
+			}
+			else {
+				$count = SQL::Count( $model )->fetch();
+			}
+
+			$parameters->queryResults($count->count);
+
+			if ( $hasNewValues == false ) {
+				if ( is_null( $pageNum) ) {
+					$pageNum = $parameters->valueForKey( PageParams::PAGE_SHOWN, 0 );
+				}
+				else {
+					$parameters->setValueForKey( PageParams::PAGE_SHOWN, $pageNum );
+				}
 			}
 
 			$select = SQL::Select($model);
 			if ( count($qualifiers) > 0 ) {
 				$select->where( Qualifier::AndQualifier( $qualifiers ));
 			}
+			$select->limit($parameters->pageSize());
+			$select->offset($parameters->pageShown());
 			$select->orderBy( $model->sortOrder() );
 
 			$this->view->model = $model;
+			$this->view->params = $parameters;
 			$this->view->listArray = $select->fetchAll();
 			$this->view->render( '/book/bookCards', true);
 		}

@@ -123,7 +123,6 @@ class Paginator
 			}
 
 			$pageSection = H::div( array( "class" => "pagination" ),
-				H::span(array("class" => "large"), $this->parameters->pageSize() . " / " . $this->parameters->querySize()),
 				H::ul( array( "class" => "page-numbers" ), function() use($liArray) { return $liArray; })
 			);
 

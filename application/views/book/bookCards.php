@@ -2,33 +2,35 @@
 
 <section>
 	<div class="row">
+<?php use \html\Paginator as Paginator;
+	if ( isset($this->params) ) {
+		$p = new Paginator( $this->params, Config::Web('/DisplayBook/searchBooks') );
+		echo $p->render();
+	}
+?>
+	</div>
+
+	<div class="row">
 <?php if (empty($this->listArray)): ?>
 	<div style="background:hsl(326,50%,75%)">
 		There are no matching records
 	</div>
 <?php else: ?>
-	<?php
-		$card = new html\Card();
-		$card->setDisplayDescriptionKey( "shortDescription" );
-		$card->setDetailKeys( array(
-			\model\media\Book::author => \model\media\Book::author
-			)
-		);
-		foreach($this->listArray as $key => $value) {
-
-			echo '<div class="grid_3">' . PHP_EOL;
-			echo $card->render($value, function() use($value) {
-					$c[] = H::em( $value->formattedSize(),
-						H::a( array( "href" => Config::Web("/Api/bookPayload/" . $value->id)),
-							H::img( array( "src" => Config::Web("/public/img/download.png" )))
-						)
-					);
-					return (isset($c) ? $c : null);
-				}
-			);
-			echo '<a class="button" href="' . Config::Web("/Api/bookPayload/" . $value->id) . '">Download</a></div>' . PHP_EOL;
-		}
-	?>
+	<table>
+<?php foreach($this->listArray as $key => $value): ?>
+	<tr style="vertical-align:top;">
+		<td>
+			<img src="<?php echo Config::Web( "Image", "thumbnail", "book", $value->id) ?>" class="thumbnail">
+		</td>
+		<td><h3><?php echo $value->name; ?> - <?php echo $value->author; ?></h3><hr>
+			<?php echo $value->shortDescription(); ?>
+			<a class="button" href="<?php echo Config::Web("/Api/bookPayload/" . $value->id);?>">
+				Download  <b><?php echo $value->formattedSize(); ?></b>
+			</a>
+		</td>
+	</tr>
+<?php endforeach; ?>
+	</table>
 <?php endif; ?>
 	</div>
 </section>

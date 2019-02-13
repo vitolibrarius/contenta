@@ -98,7 +98,9 @@ class EpubImporter extends UploadImport
 		try {
 			$bookMeta = $this->epubOPF();
 			$name = $bookMeta["title"];
-			$desc = $bookMeta["description"];
+			if (isset($bookMeta["description"]) && strlen($bookMeta["description"]) > 0) {
+				$desc = strip_tags ( $bookMeta["description"] );
+			}
 			$author = $bookMeta["creator"];
 
 			$epubType = Model::Named( "Media_Type" )->epub();
