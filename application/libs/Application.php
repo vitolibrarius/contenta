@@ -49,7 +49,7 @@ class Application
 				$traceParam .= $this->url_parameter_1;
 			}
 
-			Stopwatch::start( $traceName );
+// 			Stopwatch::start( $traceName );
 			Logger::instance()->setTrace( $traceName, $traceParam );
 
 			try {
@@ -111,10 +111,10 @@ class Application
 				header('location: ' . Config::Web('/error/index'));
 			}
 
-			$elapsed = Stopwatch::elapsed( $traceName );
-			if ( $elapsed > 15.0 ) {
-				Logger::logWarning( "Slow page response $elapsed seconds" );
-			}
+// 			$elapsed = Stopwatch::elapsed( $traceName );
+// 			if ( $elapsed > 15.0 ) {
+// 				Logger::logWarning( "Slow page response $elapsed seconds" );
+// 			}
 		}
 		else {
 			// invalid URL, so simply show home/index
