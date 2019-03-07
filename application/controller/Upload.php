@@ -79,29 +79,36 @@ class Upload extends Controller
 		{
 			switch ($_FILES["mediaFile"]["error"]) {
 				case UPLOAD_ERR_INI_SIZE:
-					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_INI_SIZE'));
+					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_INI_SIZE'),
+						$_FILES['mediaFile']['name'], $_FILES["mediaFile"]["error"]);
 					break;
 				case UPLOAD_ERR_FORM_SIZE:
-					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_FORM_SIZE'));
+					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_FORM_SIZE'),
+						$_FILES['mediaFile']['name'], $_FILES["mediaFile"]["error"]);
 					break;
 				case UPLOAD_ERR_PARTIAL:
-					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_PARTIAL'));
+					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_PARTIAL'),
+						$_FILES['mediaFile']['name'], $_FILES["mediaFile"]["error"]);
 					break;
 				case UPLOAD_ERR_NO_FILE:
-					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_NO_FILE'));
+					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_NO_FILE'),
+						$_FILES['mediaFile']['name'], $_FILES["mediaFile"]["error"]);
 					break;
 				case UPLOAD_ERR_NO_TMP_DIR:
-					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_NO_TMP_DIR'));
+					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_NO_TMP_DIR'),
+						$_FILES['mediaFile']['name'], $_FILES["mediaFile"]["error"]);
 					break;
 				case UPLOAD_ERR_CANT_WRITE:
-					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_CANT_WRITE'));
+					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_CANT_WRITE'),
+						$_FILES['mediaFile']['name'], $_FILES["mediaFile"]["error"]);
 					break;
 				case UPLOAD_ERR_EXTENSION:
-					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_EXTENSION'));
+					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_EXTENSION'),
+						$_FILES['mediaFile']['name'], $_FILES["mediaFile"]["error"]);
 					break;
-
 				default:
-					Session::addNegativeFeedback( Localized::Get("Upload", 'Upload Error'));
+					Session::addNegativeFeedback( Localized::Get("Upload", 'Upload Error'),
+						$_FILES['mediaFile']['name'], $_FILES["mediaFile"]["error"]);
 					break;
 			}
 

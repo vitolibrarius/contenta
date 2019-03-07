@@ -74,11 +74,15 @@ class Session
 		return self::adapter()->getArray('feedback_negative', null);
 	}
 
-	public static function addNegativeFeedback($message = null)
+	public static function addNegativeFeedback($message = null, $ctx = null, $ctxid = null)
 	{
 		if ( is_string($message) ) {
+			if (isset($ctx, $ctxid) == false) {
+				$ctx = Session::get('user_name');
+				$ctxid = Session::get('user_id');
+			}
 			self::adapter()->addToArray("feedback_negative", $message);
-			\Logger::logWarning( $message, Session::get('user_name'), Session::get('user_id'));
+			\Logger::logWarning( $message, $ctx, $ctxid);
 		}
 	}
 
