@@ -77,7 +77,7 @@ class Upload extends Controller
 		}
 		else if ($_FILES["mediaFile"]["error"] > 0)
 		{
-			switch ($code) {
+			switch ($_FILES["mediaFile"]["error"]) {
 				case UPLOAD_ERR_INI_SIZE:
 					Session::addNegativeFeedback( Localized::Get("Upload", 'UPLOAD_ERR_INI_SIZE'));
 					break;
