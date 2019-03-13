@@ -215,7 +215,10 @@ if ( is_null($debug) && is_sub_dir($workingDir, $config->processingDirectory()) 
 }
 
 $log = ob_get_clean();
-Logger::logInfo( $log_startup . $log, "OutputBuffer", $pid );
+if ( empty($log) == false ) {
+	// only log if something was generated after startup
+	Logger::logInfo( $log_startup . $log, "OutputBuffer", $pid );
+}
 
 // Logger::logInfo( 'finished daemon', $processorName, ($user ? $user->__toString() : $user_api));
 

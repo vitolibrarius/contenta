@@ -228,6 +228,7 @@ class FluxImporter extends EndpointImporter
 						else {
 							$FluxModel->updateObject( $flux,
 								array(
+									Flux::src_status => 'Delivery Failed',
 									Flux::flux_error => Model::TERTIARY_TRUE,
 									Flux::dest_endpoint => $this->endpoint()->id,
 									Flux::dest_status => 'Failed ' . var_export($upload, true)
